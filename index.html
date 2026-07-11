@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PACKSPIRE — Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">TACTICAL PACK ROGUELIKE</p>
+        <h1>PACK<span>SPIRE</span></h1>
+      </div>
+      <div class="run-stats">
+        <span>役職 <b id="roleName">未選択</b></span>
+        <span>階層 <b id="floor">1</b>/3</span>
+        <span>HP <b id="playerHp">42</b>/42</span>
+        <span>所持金 <b id="gold">24</b>G</span>
+        <button id="openMeta" class="archive-btn">記憶庫</button>
+      </div>
+    </header>
+
+    <section id="roleScreen" class="screen hidden role-screen">
+      <div class="section-head"><div><p class="eyebrow">CHOOSE YOUR CALLING</p><h2>役職を選択</h2></div><p class="hint">役職はカードと荷造りの得意分野を変えます。上級職と隠し職は一度発見すると次のランから選択できます。</p></div>
+      <div id="roleChoices" class="role-choices"></div>
+    </section>
+
+    <section id="expeditionScreen" class="screen hidden expedition-screen">
+      <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征条件</h2></div><p class="hint">鞄と契約の組み合わせでラン全体のルールが変化します。</p></div>
+      <h3>バックパックを選択</h3><div id="backpackChoices" class="compact-choices"></div>
+      <h3>周回契約</h3><div id="contractChoices" class="contract-choices"></div>
+      <div id="factionPreview" class="faction-preview"></div>
+      <button id="beginExpedition" class="primary">遠征を開始 <span>→</span></button>
+    </section>
+
+    <section id="prepScreen" class="screen">
+      <div class="section-head">
+        <div><p class="eyebrow">PACKING PHASE</p><h2>荷造り</h2></div>
+        <p class="hint">アイテムをドラッグして配置。配置後も移動できます。選択して回転すると形と向きが変わります。</p>
+      </div>
+      <div class="prep-layout">
+        <aside class="inventory panel">
+          <h3>所持品</h3>
+          <div id="inventory"></div>
+          <div class="legend">
+            <p><i class="dot weapon"></i> 武器</p><p><i class="dot armor"></i> 防具</p>
+            <p><i class="dot rune"></i> ルーン</p><p><i class="dot supply"></i> 道具</p>
+          </div>
+        </aside>
+        <div class="pack-wrap panel">
+          <div class="pack-title"><div><h3>6 × 4 バックパック</h3><div id="weightMeter" class="weight-meter"></div></div><div class="pack-actions"><button id="rotateItem" class="tool-btn" disabled>↻ 回転</button><button id="clearPack" class="text-btn">すべて外す</button></div></div>
+          <div id="pack" class="pack"></div>
+          <p id="packMessage" class="pack-message">アイテムを選択してください</p>
+        </div>
+        <aside class="deck-preview panel">
+          <h3>生成デッキ <span id="deckCount">0</span></h3>
+          <div id="deckPreview"></div>
+          <div id="synergies" class="synergies"></div>
+        </aside>
+      </div>
+      <button id="startBattle" class="primary">戦闘を開始 <span>→</span></button>
+    </section>
+
+    <section id="battleScreen" class="screen hidden">
+      <div class="battle-top">
+        <div class="combatant player-card">
+          <div id="playerPortrait" class="combat-portrait player-portrait"></div>
+          <p class="eyebrow">DELVER</p><h2>探索者</h2>
+          <div class="bar"><i id="playerBar"></i></div><p><b id="battlePlayerHp">42</b> / 42 HP　 <span class="block">◆ <b id="playerBlock">0</b> 防御</span></p>
+        </div>
+        <div class="versus">VS</div>
+        <div class="combatant enemy-card">
+          <div id="enemyPortrait" class="combat-portrait enemy-portrait"></div>
+          <p class="eyebrow" id="enemyType">FLOOR 1</p><h2 id="enemyName">鉄殻の番兵</h2>
+          <div class="bar enemy"><i id="enemyBar"></i></div><p><b id="enemyHp">34</b> / <span id="enemyMaxHp">34</span> HP</p>
+          <div id="intent" class="intent"></div>
+          <div id="bossParts" class="boss-parts"></div>
+        </div>
+      </div>
+      <div id="battleLog" class="battle-log">敵の行動を読み、カードを選べ。</div>
+      <div class="battle-bottom">
+        <div class="energy"><b id="energy">3</b><span>ENERGY</span></div>
+        <div id="hand" class="hand"></div>
+        <div class="battle-actions"><button id="organizePack" class="organize-btn">▦ 荷物整理<br><small>1 ENERGY / 各ターン1回</small></button><button id="endTurn" class="end-turn">ターン終了</button></div>
+      </div>
+      <div class="draw-info">山札 <b id="drawCount">0</b>　捨て札 <b id="discardCount">0</b></div>
+    </section>
+
+    <section id="mapScreen" class="screen hidden map-screen">
+      <div class="section-head"><div><p class="eyebrow">CHOOSE YOUR PATH</p><h2>次の区画</h2></div><p class="hint">安全を取るか、戦利品を求めるか。選んだ道は戻れません。</p></div>
+      <div class="map-path"><div class="map-line"></div><div id="mapNodes" class="map-nodes"></div></div>
+    </section>
+
+    <section id="eventScreen" class="screen hidden encounter-screen">
+      <p class="eyebrow">UNKNOWN ENCOUNTER</p><div id="eventIcon" class="event-icon">?</div><h2 id="eventTitle">奇妙な出来事</h2><p id="eventText"></p><div id="eventChoices" class="event-choices"></div>
+    </section>
+
+    <section id="shopScreen" class="screen hidden encounter-screen">
+      <p class="eyebrow">WANDERING MERCHANT</p><div class="event-icon">♜</div><h2>行商人の荷車</h2><p>「重さまで買い取ってはやれないよ」</p><div id="shopItems" class="rewards"></div><button id="leaveShop" class="text-btn leave-btn">何も買わず先へ進む →</button>
+    </section>
+
+    <section id="rewardScreen" class="screen hidden reward-screen">
+      <p class="eyebrow">ROOM CLEARED</p><h2>戦利品を選択</h2>
+      <p>一つだけバックパックへ持ち帰れます。</p>
+      <div id="rewards" class="rewards"></div>
+    </section>
+
+    <section id="gameOver" class="screen hidden reward-screen">
+      <p class="eyebrow">THE PACK FALLS SILENT</p><h2 id="endTitle">探索終了</h2>
+      <p id="endText"></p><button id="restart" class="primary">新しいラン</button>
+    </section>
+
+    <section id="metaScreen" class="screen hidden meta-screen">
+      <div class="section-head"><div><p class="eyebrow">THE ARCHIVE REMEMBERS</p><h2>記憶庫</h2></div><button id="closeMeta" class="text-btn">探索へ戻る →</button></div>
+      <div class="meta-summary"><div><b id="metaRuns">0</b><small>挑戦回数</small></div><div><b id="metaWins">0</b><small>踏破回数</small></div><div><b id="secretCount">0 / 0</b><small>秘密の発見</small></div></div>
+      <div class="meta-grid"><div class="panel"><h3>武器熟練度</h3><div id="masteryList"></div></div><div class="panel"><h3>秘密の記録</h3><div id="secretList" class="secret-list"></div></div></div>
+      <div class="panel role-archive"><h3>解禁済み役職</h3><div id="roleArchive" class="role-archive-list"></div></div>
+      <div class="panel role-archive"><h3>噂と発見の手掛かり</h3><div id="rumorList" class="rumor-list"></div></div>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="game.js"></script>
+</body>
+</html>
