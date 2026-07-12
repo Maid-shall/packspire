@@ -51,7 +51,11 @@
     <section id="factionScreen" class="screen hidden facility-screen">
       <button class="back-button back-to-hub">← 拠点へ戻る</button>
       <div class="section-head"><div><p class="eyebrow">AFFILIATION OFFICE</p><h2>勢力</h2></div><p class="hint">所属と各勢力への貢献度を管理します。</p></div>
-      <p id="factionChangeNote" class="facility-description"></p><div id="hubFactionChoices" class="faction-choices"></div>
+      <p id="factionChangeNote" class="facility-description"></p>
+      <div id="factionBoard" class="faction-board"><svg id="factionRelations" class="faction-relations" preserveAspectRatio="none" aria-hidden="true"></svg><div id="factionOrbs" class="faction-orbs"></div></div>
+      <div id="factionSituation" class="faction-situation"></div>
+      <div class="section-head faction-detail-head"><div><p class="eyebrow">REPUTATION & BENEFITS</p><h2>勢力内評価</h2></div><p class="hint">円を選択すると詳細を確認できます。</p></div>
+      <div id="hubFactionChoices" class="faction-detail-list"></div>
     </section>
 
     <section id="statusScreen" class="screen hidden status-screen">
@@ -101,6 +105,7 @@
       <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征準備</h2></div><p id="selectedDungeonSummary" class="hint"></p></div>
       <h3>持込保管装備 <small id="carryCount">0 / 3</small></h3><div id="hubCarryChoices" class="compact-choices"></div>
       <h3>支給品</h3><div id="hubSupplyChoices" class="compact-choices"></div>
+      <div id="mapFragmentSection"><h3>持ち込む地図断片</h3><div id="mapFragmentChoices" class="compact-choices"></div></div>
       <h3>周回契約</h3><div id="contractChoices" class="contract-choices"></div>
       <div id="factionPreview" class="faction-preview"></div>
       <button id="beginExpedition" class="primary">遠征を開始 <span>→</span></button>
@@ -160,8 +165,10 @@
     </section>
 
     <section id="mapScreen" class="screen hidden map-screen">
-      <div class="section-head"><div><p class="eyebrow">CHOOSE YOUR PATH</p><h2>次の区画</h2></div><p class="hint">安全を取るか、戦利品を求めるか。選んだ道は戻れません。</p></div>
-      <div class="map-path"><div class="map-line"></div><div id="mapNodes" class="map-nodes"></div></div>
+      <div class="section-head"><div><p class="eyebrow">EXPLORE THE UNKNOWN</p><h2>区画探索図</h2></div><div class="map-tools"><p id="mapIntel" class="hint"></p><button id="scoutMap" class="tool-btn">周辺を偵察</button><button id="extractDungeon" class="tool-btn hidden">入口から帰還</button></div></div>
+      <div class="map-legend"><span>● 現在地</span><span>◇ 進入可能</span><span>？ 情報不明</span><span>✦ 隠し道</span></div>
+      <div id="mapPath" class="map-path"><svg id="mapEdges" class="map-edges" preserveAspectRatio="none" aria-hidden="true"></svg><div id="mapNodes" class="map-nodes"></div></div>
+      <div id="mapActions" class="map-actions"></div>
     </section>
 
     <section id="eventScreen" class="screen hidden encounter-screen">
