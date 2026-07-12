@@ -16,27 +16,63 @@
       </div>
       <div class="run-stats">
         <span>役職 <b id="roleName">未選択</b></span>
-        <span>階層 <b id="floor">1</b>/3</span>
+        <span>戦闘 <b id="floor">1</b>/<b id="maxFloor">5</b></span>
         <span>HP <b id="playerHp">42</b>/42</span>
         <span>所持金 <b id="gold">24</b>G</span>
         <button id="openMeta" class="archive-btn">記憶庫</button>
       </div>
     </header>
 
+    <section id="hubScreen" class="screen hidden hub-screen">
+      <div class="hub-hero"><div><p class="eyebrow">BETWEEN EXPEDITIONS</p><h2>探索者の拠点</h2><p>目的を一つ選んでください。詳細は次の画面で表示されます。</p></div><div class="hub-wallet"><small>保管金</small><b id="hubGold">0</b><span>G</span></div></div>
+      <div class="hub-actions">
+        <button id="newExpedition" class="hub-action expedition-action"><span class="hub-action-icon">▲</span><b>遠征</b><small>ダンジョンを選んで出発準備へ</small><em>選択 →</em></button>
+        <button id="openFacilities" class="hub-action"><span class="hub-action-icon">⚒</span><b>施設</b><small>鍛冶場・保管庫を利用する</small><em>開く →</em></button>
+        <button id="openArchiveHub" class="hub-action"><span class="hub-action-icon">◇</span><b>記憶庫</b><small>熟練度・秘密・役職を確認する</small><em>開く →</em></button>
+      </div>
+    </section>
+
+    <section id="dungeonScreen" class="screen hidden destination-screen">
+      <button id="backToHubFromDungeon" class="back-button">← 拠点へ戻る</button>
+      <div class="journey-stepper"><span class="active"><b>1</b>行き先</span><span><b>2</b>遠征準備</span><span><b>3</b>荷造り</span></div>
+      <div class="section-head"><div><p class="eyebrow">SELECT DESTINATION</p><h2>遠征先を選択</h2></div><p class="hint">行き先を決めたあと、装備と契約の準備へ進みます。</p></div>
+      <div id="dungeonChoices" class="dungeon-choices destination-cards"></div>
+    </section>
+
+    <section id="forgeScreen" class="screen hidden facility-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">BLACKSMITH</p><h2>鍛冶場</h2></div><p class="hint">保管中の装備を選んで修理・鍛錬します。</p></div>
+      <div id="forgeItems" class="facility-list"></div>
+      <p id="emptyForge" class="empty-state">鍛えられる保管装備がありません。</p>
+    </section>
+
+    <section id="vaultScreen" class="screen hidden facility-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">VAULT</p><h2>保管庫 <small id="vaultStatus"></small></h2></div><button id="upgradeVault" class="facility-button">拡張する</button></div>
+      <p id="vaultUpgradeText" class="facility-description"></p>
+      <div id="hubStash" class="facility-list"></div>
+      <p id="emptyStash" class="empty-state">保護された装備はまだありません。</p>
+    </section>
+
     <section id="roleScreen" class="screen hidden role-screen">
-      <div class="section-head"><div><p class="eyebrow">CHOOSE YOUR CALLING</p><h2>役職を選択</h2></div><p class="hint">役職はカードと荷造りの得意分野を変えます。上級職と隠し職は一度発見すると次のランから選択できます。</p></div>
+      <div class="section-head"><div><p class="eyebrow">CHOOSE YOUR CALLING</p><h2>育成する役職を選択</h2></div><p id="jobSummary" class="hint">累計役職レベル 0 / 100</p></div>
       <div id="roleChoices" class="role-choices"></div>
     </section>
 
     <section id="expeditionScreen" class="screen hidden expedition-screen">
-      <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征条件</h2></div><p class="hint">鞄と契約の組み合わせでラン全体のルールが変化します。</p></div>
+      <button id="backToDungeon" class="back-button">← 遠征先を選び直す</button>
+      <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="active"><b>2</b>遠征準備</span><span><b>3</b>荷造り</span></div>
+      <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征準備</h2></div><p id="selectedDungeonSummary" class="hint"></p></div>
+      <h3>協力勢力を選択</h3><div id="factionChoices" class="faction-choices"></div>
       <h3>バックパックを選択</h3><div id="backpackChoices" class="compact-choices"></div>
+      <h3>家宝を1個選択</h3><div id="heirloomChoices" class="compact-choices"></div>
       <h3>周回契約</h3><div id="contractChoices" class="contract-choices"></div>
       <div id="factionPreview" class="faction-preview"></div>
       <button id="beginExpedition" class="primary">遠征を開始 <span>→</span></button>
     </section>
 
     <section id="prepScreen" class="screen">
+      <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="done"><b>✓</b>遠征準備</span><span class="active"><b>3</b>荷造り</span></div>
       <div class="section-head">
         <div><p class="eyebrow">PACKING PHASE</p><h2>荷造り</h2></div>
         <p class="hint">アイテムをドラッグして配置。配置後も移動できます。選択して回転すると形と向きが変わります。</p>
@@ -77,7 +113,6 @@
           <p class="eyebrow" id="enemyType">FLOOR 1</p><h2 id="enemyName">鉄殻の番兵</h2>
           <div class="bar enemy"><i id="enemyBar"></i></div><p><b id="enemyHp">34</b> / <span id="enemyMaxHp">34</span> HP</p>
           <div id="intent" class="intent"></div>
-          <div id="bossParts" class="boss-parts"></div>
         </div>
       </div>
       <div id="battleLog" class="battle-log">敵の行動を読み、カードを選べ。</div>
@@ -110,7 +145,7 @@
 
     <section id="gameOver" class="screen hidden reward-screen">
       <p class="eyebrow">THE PACK FALLS SILENT</p><h2 id="endTitle">探索終了</h2>
-      <p id="endText"></p><button id="restart" class="primary">新しいラン</button>
+      <p id="endText"></p><button id="restart" class="primary">拠点へ戻る</button>
     </section>
 
     <section id="metaScreen" class="screen hidden meta-screen">
@@ -121,6 +156,9 @@
       <div class="panel role-archive"><h3>噂と発見の手掛かり</h3><div id="rumorList" class="rumor-list"></div></div>
     </section>
   </main>
+  <div id="facilityModal" class="game-modal hidden" role="dialog" aria-modal="true" aria-labelledby="facilityModalTitle">
+    <div class="modal-panel"><button id="closeFacilities" class="modal-close">×</button><p class="eyebrow">BASE FACILITIES</p><h2 id="facilityModalTitle">利用する施設</h2><div class="modal-options"><button id="openForge" class="modal-option"><span>⚒</span><b>鍛冶場</b><small>装備の修理と恒久鍛錬</small></button><button id="openVault" class="modal-option"><span>▣</span><b>保管庫</b><small>家宝の確認と保管枠拡張</small></button></div></div>
+  </div>
   <div id="toast" class="toast"></div>
   <script src="game.js"></script>
 </body>
