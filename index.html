@@ -23,13 +23,49 @@
       </div>
     </header>
 
+    <section id="characterScreen" class="screen hidden character-screen">
+      <div class="section-head"><div><p class="eyebrow">CREATE YOUR DELVER</p><h2>探索者を作成</h2></div><p class="hint">体格と髪型は外見だけに影響します。あとから拠点で変更可能にする予定です。</p></div>
+      <div class="creator-layout"><div class="creator-preview"><canvas id="creatorCanvas" width="364" height="362"></canvas><div class="creator-glow"></div></div><div class="creator-controls"><h3>体格・顔</h3><div id="bodyChoices" class="appearance-choices"></div><h3>髪型</h3><div id="hairChoices" class="appearance-choices hair-choices"></div><button id="confirmCharacter" class="primary">この姿で始める <span>→</span></button></div></div>
+    </section>
+
     <section id="hubScreen" class="screen hidden hub-screen">
-      <div class="hub-hero"><div><p class="eyebrow">BETWEEN EXPEDITIONS</p><h2>探索者の拠点</h2><p>目的を一つ選んでください。詳細は次の画面で表示されます。</p></div><div class="hub-wallet"><small>保管金</small><b id="hubGold">0</b><span>G</span></div></div>
+      <div id="hubHero" class="hub-hero faction-iron"><div class="hub-copy"><p class="eyebrow">BETWEEN EXPEDITIONS</p><h2>探索者の拠点</h2><p id="hubAtmosphere">目的を一つ選んでください。</p></div><div class="hub-character-stage"><div id="hubRoleAura" class="hub-role-aura"></div><canvas id="hubCharacter" width="364" height="362"></canvas><div id="hubRolePlate" class="hub-role-plate"></div><div id="hubGear" class="hub-gear"></div></div><div class="hub-wallet"><small>保管金</small><b id="hubGold">0</b><span>G</span></div></div>
       <div class="hub-actions">
         <button id="newExpedition" class="hub-action expedition-action"><span class="hub-action-icon">▲</span><b>遠征</b><small>ダンジョンを選んで出発準備へ</small><em>選択 →</em></button>
-        <button id="openFacilities" class="hub-action"><span class="hub-action-icon">⚒</span><b>施設</b><small>鍛冶場・保管庫を利用する</small><em>開く →</em></button>
-        <button id="openArchiveHub" class="hub-action"><span class="hub-action-icon">◇</span><b>記憶庫</b><small>熟練度・秘密・役職を確認する</small><em>開く →</em></button>
+        <button id="openLoadoutHub" class="hub-action"><span class="hub-action-icon">▣</span><b>保管庫</b><small>保管装備・家宝・バックパックを管理する</small><em>開く →</em></button>
+        <button id="openStatusHub" class="hub-action"><span class="hub-action-icon">✦</span><b>ステータス</b><small>累計レベル・習得役職・成長内容を確認する</small><em>確認 →</em></button>
+        <button id="openCompendiumHub" class="hub-action"><span class="hub-action-icon">▤</span><b>図鑑</b><small>発見した役職・装備・敵を確認する</small><em>閲覧 →</em></button>
+        <button id="openFacilities" class="hub-action"><span class="hub-action-icon">⚒</span><b>施設</b><small>鍛冶場・勢力窓口を利用する</small><em>開く →</em></button>
+        <button id="openArchiveHub" class="hub-action"><span class="hub-action-icon">◇</span><b>記憶庫</b><small>熟練度と発見した秘密を確認する</small><em>開く →</em></button>
       </div>
+    </section>
+
+    <section id="loadoutScreen" class="screen hidden facility-screen loadout-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">VAULT & LEGACY</p><h2>保管庫</h2></div><div><p id="hubVaultStatus" class="hint"></p><button id="upgradeHubVault" class="facility-button">保管庫を拡張</button></div></div>
+      <h3>保管装備</h3><div id="hubVaultItems" class="facility-list"></div><p id="emptyHubVault" class="empty-state">保管装備がありません。</p>
+      <h3>バックパック</h3><div id="hubBackpackChoices" class="compact-choices"></div>
+      <h3>家宝 <small>認定済みから1個</small></h3><div id="hubHeirloomChoices" class="compact-choices"></div>
+    </section>
+
+    <section id="factionScreen" class="screen hidden facility-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">AFFILIATION OFFICE</p><h2>勢力</h2></div><p class="hint">所属と各勢力への貢献度を管理します。</p></div>
+      <p id="factionChangeNote" class="facility-description"></p><div id="hubFactionChoices" class="faction-choices"></div>
+    </section>
+
+    <section id="statusScreen" class="screen hidden status-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">ROLE RECORD</p><h2>探索者ステータス</h2></div><p id="statusJobSummary" class="hint"></p></div>
+      <div id="currentBuildSummary" class="current-build-summary"></div>
+      <div id="jobProgressList" class="job-progress-list"></div>
+    </section>
+
+    <section id="compendiumScreen" class="screen hidden compendium-screen">
+      <button class="back-button back-to-hub">← 拠点へ戻る</button>
+      <div class="section-head"><div><p class="eyebrow">DISCOVERY ARCHIVE</p><h2>探索図鑑</h2></div><p id="compendiumSummary" class="hint"></p></div>
+      <div id="compendiumTabs" class="compendium-tabs"><button data-tab="roles">役職</button><button data-tab="items">装備</button><button data-tab="enemies">敵</button></div>
+      <div id="compendiumEntries" class="compendium-entries"></div>
     </section>
 
     <section id="dungeonScreen" class="screen hidden destination-screen">
@@ -63,9 +99,8 @@
       <button id="backToDungeon" class="back-button">← 遠征先を選び直す</button>
       <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="active"><b>2</b>遠征準備</span><span><b>3</b>荷造り</span></div>
       <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征準備</h2></div><p id="selectedDungeonSummary" class="hint"></p></div>
-      <h3>協力勢力を選択</h3><div id="factionChoices" class="faction-choices"></div>
-      <h3>バックパックを選択</h3><div id="backpackChoices" class="compact-choices"></div>
-      <h3>家宝を1個選択</h3><div id="heirloomChoices" class="compact-choices"></div>
+      <h3>持込保管装備 <small id="carryCount">0 / 3</small></h3><div id="hubCarryChoices" class="compact-choices"></div>
+      <h3>支給品</h3><div id="hubSupplyChoices" class="compact-choices"></div>
       <h3>周回契約</h3><div id="contractChoices" class="contract-choices"></div>
       <div id="factionPreview" class="faction-preview"></div>
       <button id="beginExpedition" class="primary">遠征を開始 <span>→</span></button>
@@ -103,7 +138,7 @@
     <section id="battleScreen" class="screen hidden">
       <div class="battle-top">
         <div class="combatant player-card">
-          <div id="playerPortrait" class="combat-portrait player-portrait"></div>
+          <canvas id="playerPortrait" class="combat-portrait player-portrait" width="364" height="362"></canvas>
           <p class="eyebrow">DELVER</p><h2>探索者</h2>
           <div class="bar"><i id="playerBar"></i></div><p><b id="battlePlayerHp">42</b> / 42 HP　 <span class="block">◆ <b id="playerBlock">0</b> 防御</span></p>
         </div>
@@ -147,6 +182,12 @@
       <p class="eyebrow">THE PACK FALLS SILENT</p><h2 id="endTitle">探索終了</h2>
       <p id="endText"></p><button id="restart" class="primary">拠点へ戻る</button>
     </section>
+    <section id="recoveryScreen" class="screen hidden reward-screen recovery-screen">
+      <p class="eyebrow">CHOOSE YOUR SPOILS</p><h2>持ち帰る戦果を選択</h2>
+      <p>安全マスの戦利品とは別に、最大2個まで保管庫へ持ち帰れます。</p>
+      <div id="recoveryChoices" class="recovery-choices"></div>
+      <p id="recoveryCapacity" class="hint"></p><button id="confirmRecovery" class="primary">帰還する</button>
+    </section>
 
     <section id="metaScreen" class="screen hidden meta-screen">
       <div class="section-head"><div><p class="eyebrow">THE ARCHIVE REMEMBERS</p><h2>記憶庫</h2></div><button id="closeMeta" class="text-btn">探索へ戻る →</button></div>
@@ -157,7 +198,7 @@
     </section>
   </main>
   <div id="facilityModal" class="game-modal hidden" role="dialog" aria-modal="true" aria-labelledby="facilityModalTitle">
-    <div class="modal-panel"><button id="closeFacilities" class="modal-close">×</button><p class="eyebrow">BASE FACILITIES</p><h2 id="facilityModalTitle">利用する施設</h2><div class="modal-options"><button id="openForge" class="modal-option"><span>⚒</span><b>鍛冶場</b><small>装備の修理と恒久鍛錬</small></button><button id="openVault" class="modal-option"><span>▣</span><b>保管庫</b><small>家宝の確認と保管枠拡張</small></button></div></div>
+    <div class="modal-panel"><button id="closeFacilities" class="modal-close">×</button><p class="eyebrow">BASE FACILITIES</p><h2 id="facilityModalTitle">利用する施設</h2><div class="modal-options"><button id="openForge" class="modal-option"><span>⚒</span><b>鍛冶場</b><small>装備の修理と恒久鍛錬</small></button><button id="openFaction" class="modal-option"><span>⚑</span><b>勢力</b><small>所属変更と貢献度の確認</small></button></div></div>
   </div>
   <div id="toast" class="toast"></div>
   <script src="game.js"></script>
