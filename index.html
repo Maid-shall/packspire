@@ -32,6 +32,7 @@
       <div id="hubHero" class="hub-hero faction-iron"><div class="hub-copy"><p class="eyebrow">BETWEEN EXPEDITIONS</p><h2>探索者の拠点</h2><p id="hubAtmosphere">目的を一つ選んでください。</p></div><div class="hub-character-stage"><div id="hubRoleAura" class="hub-role-aura"></div><canvas id="hubCharacter" width="364" height="362"></canvas><div id="hubRolePlate" class="hub-role-plate"></div><div id="hubGear" class="hub-gear"></div></div><div class="hub-wallet"><small>保管金</small><b id="hubGold">0</b><span>G</span></div></div>
       <div class="hub-actions">
         <button id="newExpedition" class="hub-action expedition-action"><span class="hub-action-icon">▲</span><b>遠征</b><small>ダンジョンを選んで出発準備へ</small><em>選択 →</em></button>
+        <button id="openPackingHub" class="hub-action packing-action"><span class="hub-action-icon">▦</span><b>荷造り</b><small>装備の配置・属性色・LINKを編成して保存する</small><em>編成 →</em></button>
         <button id="openLoadoutHub" class="hub-action"><span class="hub-action-icon">▣</span><b>保管庫</b><small>保管装備・家宝・バックパックを管理する</small><em>開く →</em></button>
         <button id="openStatusHub" class="hub-action"><span class="hub-action-icon">✦</span><b>ステータス</b><small>累計レベル・習得役職・成長内容を確認する</small><em>確認 →</em></button>
         <button id="openCompendiumHub" class="hub-action"><span class="hub-action-icon">▤</span><b>図鑑</b><small>発見した役職・装備・敵を確認する</small><em>閲覧 →</em></button>
@@ -103,8 +104,8 @@
       <button id="backToDungeon" class="back-button">← 遠征先を選び直す</button>
       <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="active"><b>2</b>遠征準備</span><span><b>3</b>荷造り</span></div>
       <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征準備</h2></div><p id="selectedDungeonSummary" class="hint"></p></div>
-      <h3>持込保管装備 <small id="carryCount">0 / 3</small></h3><div id="hubCarryChoices" class="compact-choices"></div>
-      <h3>支給品</h3><div id="hubSupplyChoices" class="compact-choices"></div>
+      <div class="hidden"><span id="carryCount"></span><div id="hubCarryChoices"></div></div>
+      <h3>道具袋 <small id="consumableCount">0 / 5</small></h3><div id="hubSupplyChoices" class="compact-choices"></div>
       <div id="mapFragmentSection"><h3>持ち込む地図断片</h3><div id="mapFragmentChoices" class="compact-choices"></div></div>
       <h3>周回契約</h3><div id="contractChoices" class="contract-choices"></div>
       <div id="factionPreview" class="faction-preview"></div>
@@ -112,10 +113,11 @@
     </section>
 
     <section id="prepScreen" class="screen">
-      <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="done"><b>✓</b>遠征準備</span><span class="active"><b>3</b>荷造り</span></div>
+      <button id="backFromPacking" class="back-button hidden">← 保存せず拠点へ戻る</button>
+      <div id="packingStepper" class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="done"><b>✓</b>遠征準備</span><span class="active"><b>3</b>荷造り</span></div>
       <div class="section-head">
-        <div><p class="eyebrow">PACKING PHASE</p><h2>荷造り</h2></div>
-        <p class="hint">装備の◆を上辺へ触れさせるとカード化。同色マスで自身を強化し、装備同士の隣接でLINK効果が発動します。</p>
+        <div><p class="eyebrow">PACKING PHASE</p><h2 id="packingTitle">荷造り</h2></div>
+        <p id="packingHint" class="hint">配置した装備はすべてカード候補を出します。色一致とLINKを作り、装備カードを8枚まで選択します。</p>
       </div>
       <div class="prep-layout">
         <aside class="inventory panel">
@@ -156,6 +158,7 @@
         </div>
       </div>
       <div id="battleLog" class="battle-log">敵の行動を読み、カードを選べ。</div>
+      <div class="combat-consumables"><div><b>道具袋</b><small>カードとエネルギーを使わず発動</small></div><div id="combatConsumables" class="consumable-slots"></div></div>
       <div class="battle-bottom">
         <div class="energy"><b id="energy">3</b><span>ENERGY</span></div>
         <div id="hand" class="hand"></div>
@@ -166,6 +169,7 @@
 
     <section id="mapScreen" class="screen hidden map-screen">
       <div class="section-head"><div><p class="eyebrow">EXPLORE THE UNKNOWN</p><h2>区画探索図</h2></div><div class="map-tools"><p id="mapIntel" class="hint"></p><button id="scoutMap" class="tool-btn">周辺を偵察</button><button id="extractDungeon" class="tool-btn hidden">入口から帰還</button></div></div>
+      <section id="dungeonStatePanel" class="dungeon-state-panel hidden"><div class="state-radar"><svg viewBox="0 0 200 180" aria-label="ダンジョン状態三角図"><polygon class="radar-grid outer" points="100,15 185,160 15,160"/><polygon class="radar-grid neutral" points="100,57.5 142.5,130 57.5,130"/><line x1="100" y1="87" x2="100" y2="15"/><line x1="100" y1="87" x2="185" y2="160"/><line x1="100" y1="87" x2="15" y2="160"/><polygon id="dungeonStatePolygon" class="state-polygon" points="100,87 100,87 100,87"/><text x="100" y="10">警戒</text><text x="188" y="172">崩壊</text><text x="12" y="172">侵蝕</text></svg></div><div class="state-details"><div id="dungeonStateValues" class="state-values"></div><p id="dungeonStateForecast">状態を操作すると隠しイベントが発生します。</p><div id="dungeonStateEvent" class="state-event-log"></div></div></section>
       <div class="map-legend"><span>● 現在地</span><span>◇ 進入可能</span><span>？ 情報不明</span><span>✦ 隠し道</span></div>
       <div id="mapPath" class="map-path"><svg id="mapEdges" class="map-edges" preserveAspectRatio="none" aria-hidden="true"></svg><div id="mapNodes" class="map-nodes"></div></div>
       <div id="mapActions" class="map-actions"></div>
@@ -191,7 +195,7 @@
     </section>
     <section id="recoveryScreen" class="screen hidden reward-screen recovery-screen">
       <p class="eyebrow">CHOOSE YOUR SPOILS</p><h2>持ち帰る戦果を選択</h2>
-      <p>安全マスの戦利品とは別に、最大2個まで保管庫へ持ち帰れます。</p>
+      <p>戦利品袋から最大2個まで保管庫へ持ち帰れます。</p>
       <div id="recoveryChoices" class="recovery-choices"></div>
       <p id="recoveryCapacity" class="hint"></p><button id="confirmRecovery" class="primary">帰還する</button>
     </section>
