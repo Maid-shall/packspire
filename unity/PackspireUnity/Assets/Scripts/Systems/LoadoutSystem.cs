@@ -4,7 +4,12 @@ using System.Linq;
 namespace Packspire {
 public static class LoadoutSystem {
  public const int EquipmentCardLimit=8;
- public static LoadoutSave Active(MetaSave meta)=>meta.loadouts.First(x=>x.id==meta.selectedLoadoutId);
+ public static LoadoutSave Active(MetaSave meta){
+  meta.loadouts??=new();
+  var active=meta.loadouts.FirstOrDefault(x=>x.id==meta.selectedLoadoutId)??meta.loadouts.FirstOrDefault();
+  if(active==null){active=new LoadoutSave{id="loadout-1",name="編成 1",backpack="standard"};meta.loadouts.Add(active);}
+  meta.selectedLoadoutId=active.id;return active;
+ }
  public static void Select(MetaSave meta,string id){if(meta.loadouts.Any(x=>x.id==id))meta.selectedLoadoutId=id;}
  public static RunState CreateRun(MetaSave meta,string dungeon){
   var loadout=Active(meta);var run=new RunState{role=meta.currentRole,faction=meta.currentFaction,backpack=loadout.backpack,loadoutId=loadout.id,dungeon=dungeon,hp=42,maxHp=42,gold=0,heirloomUid=meta.selectedHeirloomUid};

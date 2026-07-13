@@ -13,6 +13,7 @@ public static class SaveSystem {
  public static MetaSave Import(string json)=>Migrate(JsonUtility.FromJson<MetaSave>(json)??new MetaSave());
  static MetaSave Migrate(MetaSave save){
   save.version=15;save.stash??=new();save.consumables??=new();save.dungeonDiscoveries??=new();save.loadouts??=new();
+  if(save.dungeonsUnlocked<1)save.dungeonsUnlocked=1;
   if(save.consumableCapacity<5)save.consumableCapacity=5;
   if(save.consumables.Count==0)save.consumables.AddRange(new[]{"heal","heal","guard","fire","energy"});
   var ids=new[]{"loadout-1","loadout-2","loadout-3"};
