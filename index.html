@@ -150,6 +150,7 @@
           <canvas id="playerPortrait" class="combat-portrait player-portrait" width="364" height="362"></canvas>
           <p class="eyebrow">DELVER</p><h2>探索者</h2>
           <div class="bar"><i id="playerBar"></i></div><p><b id="battlePlayerHp">42</b> / 42 HP　 <span class="block">◆ <b id="playerBlock">0</b> 防御</span></p>
+          <div id="playerStatuses" class="combat-statuses"></div>
         </div>
         <div class="versus">VS</div>
         <div class="combatant enemy-card">
@@ -157,6 +158,7 @@
           <p class="eyebrow" id="enemyType">FLOOR 1</p><h2 id="enemyName">鉄殻の番兵</h2>
           <div class="bar enemy"><i id="enemyBar"></i></div><p><b id="enemyHp">34</b> / <span id="enemyMaxHp">34</span> HP</p>
           <div id="intent" class="intent"></div>
+          <div id="enemyStatuses" class="combat-statuses enemy-statuses"></div>
         </div>
       </div>
       <div id="battleLog" class="battle-log">敵の行動を読み、カードを選べ。</div>
@@ -187,7 +189,7 @@
 
     <section id="rewardScreen" class="screen hidden reward-screen">
       <p class="eyebrow">ROOM CLEARED</p><h2>戦利品を選択</h2>
-      <p>一つを未鑑定のまま戦利品袋へ収めます。帰還時に最大2個を持ち帰れます。</p>
+      <p>一つを未鑑定のまま戦利品袋へ収めます。生還すれば袋の中身をすべて持ち帰れます。</p>
       <div id="rewards" class="rewards"></div>
     </section>
 
@@ -197,7 +199,7 @@
     </section>
     <section id="recoveryScreen" class="screen hidden reward-screen recovery-screen">
       <p class="eyebrow">CHOOSE YOUR SPOILS</p><h2>持ち帰る戦果を選択</h2>
-      <p>戦利品袋から最大2個まで保管庫へ持ち帰れます。</p>
+      <p>戦利品袋の中身をすべて保管庫へ持ち帰ります。</p>
       <div id="recoveryChoices" class="recovery-choices"></div>
       <p id="recoveryCapacity" class="hint"></p><button id="confirmRecovery" class="primary">帰還する</button>
     </section>
@@ -214,6 +216,7 @@
     <div class="modal-panel"><button id="closeFacilities" class="modal-close">×</button><p class="eyebrow">BASE FACILITIES</p><h2 id="facilityModalTitle">利用する施設</h2><div class="modal-options"><button id="openForge" class="modal-option"><span>⚒</span><b>鍛冶場</b><small>装備の修理と恒久鍛錬</small></button><button id="openFaction" class="modal-option"><span>⚑</span><b>勢力</b><small>所属変更と貢献度の確認</small></button></div></div>
   </div>
   <div id="toast" class="toast"></div>
+  <script src="content-data.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

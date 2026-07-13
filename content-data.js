@@ -1,0 +1,23 @@
+window.PACKSPIRE_CONTENT={
+  schemaVersion:1,
+  statuses:{
+    strength:{name:'強化',icon:'▲',desc:'与えるダメージが蓄積数だけ増加',kind:'buff'},
+    weak:{name:'弱体',icon:'▽',desc:'与えるダメージが25%低下',kind:'debuff'},
+    vulnerable:{name:'脆弱',icon:'◇',desc:'受けるダメージが50%増加',kind:'debuff'},
+    poison:{name:'毒',icon:'☠',desc:'ターン終了時に蓄積ダメージ。その後1減少',kind:'debuff',stack:true},
+    burn:{name:'火傷',icon:'♨',desc:'ターン終了時に蓄積ダメージ',kind:'debuff'},
+    regen:{name:'再生',icon:'✚',desc:'ターン終了時にHPを回復',kind:'buff'},
+    armorBreak:{name:'防具破壊',icon:'✥',desc:'得るブロックが蓄積数だけ減少',kind:'debuff'}
+  },
+  cardEffects:{
+    spark:[{type:'burn',amount:2,duration:2,target:'enemy'}],
+    acid:[{type:'poison',amount:3,target:'enemy'}],
+    brace:[{type:'regen',amount:2,duration:2,target:'self'}]
+  },
+  enemyMoveEffects:{
+    '胞子の魔術師':{0:[{type:'poison',amount:3,target:'player'}]},
+    '鎧喰い虫':{0:[{type:'armorBreak',amount:2,duration:2,target:'player'}]},
+    '虚ろな騎士':{1:[{type:'vulnerable',amount:1,duration:2,target:'player'}]},
+    '鉄殻の番兵':{1:[{type:'strength',amount:2,duration:3,target:'self'}]}
+  }
+};
