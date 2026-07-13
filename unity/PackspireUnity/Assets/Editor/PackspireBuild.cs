@@ -15,11 +15,11 @@ public static class PackspireBuild {
   var sword=new ItemInstance("sword");run.inventory.Add(sword);
   if(BackpackSystem.BuildDeck(run).Count!=4)throw new System.Exception("Role base deck must contain four cards");
   run.placements.Add(new Placement(sword.uid,0));
-  if(!BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Handle on outer edge must activate item");
-  if(BackpackSystem.BuildDeck(run).Count!=5)throw new System.Exception("Active equipment must add one card");
+  if(!BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Placed equipment must be active");
+  if(BackpackSystem.BuildDeck(run).Count!=6)throw new System.Exception("Sword must add its two card candidates");
   run.placements[0].anchor=8;
-  if(BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Interior handle must not activate item");
-  if(BackpackSystem.BuildDeck(run).Count!=4)throw new System.Exception("Interior equipment must not add cards");
+  if(!BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Interior equipment must remain active");
+  if(BackpackSystem.BuildDeck(run).Count!=6)throw new System.Exception("Card generation must not depend on an outer edge");
   run.placements[0].anchor=4;run.placements[0].rotation=1;
   if(!BackpackSystem.CanPlace(run,sword,4,1,sword.uid))throw new System.Exception("Rotated item should fit at tested edge");
   Debug.Log("PACKSPIRE_CORE_VALIDATION_OK");

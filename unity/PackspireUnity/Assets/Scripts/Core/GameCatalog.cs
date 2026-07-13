@@ -30,8 +30,9 @@ public static class GameCatalog {
  };
  public static readonly EnemyDef[] Enemies={new("sentinel","鉄殻の番兵",1,34,8,5),new("rats","洞穴ネズミの群れ",1,29,8,6),new("porter","錆びた荷運び人形",1,38,10,0),new("mage","胞子の魔導師",2,45,7,11),new("beast","鋼喰い獣",2,50,9,10),new("knight","虚ろな騎士",2,54,13,6),new("boss","荷喰らい",3,72,12,12,17)};
  public static readonly DungeonDef[] Dungeons={new("old_spire","古塔パックスパイア","36区画を自由探索する基準ダンジョン。",5,1,0,1),new("ash_forge","灰熱の鋳造坑","敵の密度と攻撃性が高い高熱坑道。",6,1.35f,2,1.25f),new("hollow_archive","虚ろなる大記憶庫","多数の精鋭が徘徊する最深記憶域。",8,1.7f,4,1.55f)};
- public static readonly BackpackDef[] Backpacks={new("standard","探索者の鞄","中央4マスが安全。",8,9,14,15),new("merchant","行商人の鞄","商店価格20%引き。",0,1,6),new("arcane","魔導鞄","四隅が安全。",0,5,18,23),new("coffin","棺型ケース","右端が安全。",5,11,17,23),new("living","生きている鞄","戦闘後に装備が回転。",8,14)};
+ public static readonly BackpackDef[] Backpacks={new("standard","探索者の鞄","標準的な6×4の色マス鞄。"),new("merchant","行商人の鞄","商店価格を軽減する取引向けの鞄。"),new("arcane","魔導鞄","ルーンと色一致を活かす魔導鞄。"),new("coffin","棺型ケース","縦長装備をまとめやすい棺型ケース。"),new("living","生きている鞄","特殊な変化を起こす生体鞄。")} ;
  public static readonly FactionDef[] Factions={new("iron","鉄殻軍","防具カードを強化。","従士","兵士","騎士","鉄将"),new("spore","胞子教団","勝利後の回復を強化。","芽吹き","培養士","導師","森の代行者"),new("guild","荷造り師組合","商店価格を割引。","見習い","組合員","商務官","大番頭"),new("void","虚無の巡礼者","獲得ゴールドと呪い装備が増加。","迷い子","巡礼者","使徒","深淵卿")};
+ static GameCatalog(){Items["sword"].linkRule="盾と隣接：剣+1ダメージ、盾+2防御。熾火と隣接：攻撃+2。";Items["shield"].linkRule="剣と隣接：防御+2。結晶と隣接：コスト-1。";Items["ember"].linkRule="武器と隣接：その攻撃+2。";Items["crystal"].linkRule="隣接装備のカードコスト-1。";}
  static CardDef C(string id,string name,CardType type,int cost,string text,int damage=0,int block=0,int heal=0,int buff=0,int energy=0,int self=0,bool exhaust=false)=>new(id,name,type,cost,text){damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=self,exhaust=exhaust};
  public static T Find<T>(IEnumerable<T> set,System.Func<T,string> id,string value)=>set.First(x=>id(x)==value);
 }
