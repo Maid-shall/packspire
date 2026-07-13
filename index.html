@@ -104,6 +104,7 @@
       <button id="backToDungeon" class="back-button">← 遠征先を選び直す</button>
       <div class="journey-stepper"><span class="done"><b>✓</b>行き先</span><span class="active"><b>2</b>遠征準備</span><span><b>3</b>荷造り</span></div>
       <div class="section-head"><div><p class="eyebrow">PREPARE THE EXPEDITION</p><h2>遠征準備</h2></div><p id="selectedDungeonSummary" class="hint"></p></div>
+      <h3>使用するバックパック編成</h3><div id="expeditionLoadoutChoices" class="compact-choices loadout-choices"></div>
       <div class="hidden"><span id="carryCount"></span><div id="hubCarryChoices"></div></div>
       <h3>道具袋 <small id="consumableCount">0 / 5</small></h3><div id="hubSupplyChoices" class="compact-choices"></div>
       <div id="mapFragmentSection"><h3>持ち込む地図断片</h3><div id="mapFragmentChoices" class="compact-choices"></div></div>
@@ -119,6 +120,7 @@
         <div><p class="eyebrow">PACKING PHASE</p><h2 id="packingTitle">荷造り</h2></div>
         <p id="packingHint" class="hint">配置した装備はすべてカード候補を出します。色一致とLINKを作り、装備カードを8枚まで選択します。</p>
       </div>
+      <div class="packing-settings panel"><div><h3>編成セット</h3><div id="packingLoadoutChoices" class="compact-choices loadout-choices"></div></div><div><h3>バックパック種類</h3><div id="packingBackpackChoices" class="compact-choices"></div></div></div>
       <div class="prep-layout">
         <aside class="inventory panel">
           <h3>所持品</h3>
