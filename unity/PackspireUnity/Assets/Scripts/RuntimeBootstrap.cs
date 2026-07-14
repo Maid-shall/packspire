@@ -1,2 +1,2 @@
 using UnityEngine;
-namespace Packspire { public static class RuntimeBootstrap { [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] static void Start(){if(Object.FindFirstObjectByType<PackspireGame>()==null)new GameObject("PackspireGame").AddComponent<PackspireGame>();} } }
+namespace Packspire { public static class RuntimeBootstrap { [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] static void Start(){var game=Object.FindFirstObjectByType<PackspireGame>();if(game==null)game=new GameObject("PackspireGame").AddComponent<PackspireGame>();if(Object.FindFirstObjectByType<PackspireUiFoundation>()==null)game.gameObject.AddComponent<PackspireUiFoundation>();} } }

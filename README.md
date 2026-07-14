@@ -4,7 +4,7 @@
 
 バックパック配置とデッキ構築を組み合わせた、1ラン5～8戦のローグライク・カードバトル試作版です。
 
-未実装・保留中の構想と今後の優先順位は [UNIMPLEMENTED_IDEAS.md](UNIMPLEMENTED_IDEAS.md) にまとめています。ノートはこのREADMEを含めた3ファイルへ統合しています。
+未実装・保留中の構想は [UNIMPLEMENTED_IDEAS.md](UNIMPLEMENTED_IDEAS.md)、Unity版をこれから改修する具体的な順序は [NEXT_STEPS.md](NEXT_STEPS.md) にまとめています。
 
 ## 起動
 

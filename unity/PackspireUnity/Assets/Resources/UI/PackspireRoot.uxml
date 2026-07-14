@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="packspire-runtime-root" picking-mode="Ignore" />
+</ui:UXML>
