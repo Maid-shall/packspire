@@ -29,7 +29,7 @@ public sealed partial class PackspireUiFoundation {
  void BuildVault(){
   var meta=game.UiMeta;if(string.IsNullOrEmpty(selectedVaultUid)||!meta.stash.Any(x=>x.uid==selectedVaultUid))selectedVaultUid=meta.stash.FirstOrDefault()?.uid??"";
   var shell=BookShell("保管庫",null);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("所持装備");var right=Page("装備の記録");pages.Add(left);pages.Add(right);
-  var active=LoadoutSystem.Active(meta);left.Add(PackspireUiFactory.Body($"使用中　{active.name}　／　{BackpackName(active.backpack)}\n保管数　{meta.stash.Count}　　所持金　{meta.baseGold}G"));
+  var active=LoadoutSystem.Active(meta);left.Add(PackspireUiFactory.Body($"使用中　{active.name}\n保管数　{meta.stash.Count}　　所持金　{meta.baseGold}G"));
   var grid=Container("ps-vault-grid");left.Add(grid);
   foreach(var item in meta.stash){var def=GameCatalog.Items[item.templateId];bool heir=item.uid==meta.selectedHeirloomUid;var tile=AtlasButton(game.UiEquipmentArt,ItemUv(def.id),(heir?"★ ":"")+def.name,item.uid==selectedVaultUid,()=>{selectedVaultUid=item.uid;BuildVaultAgain();});grid.Add(tile);}
   var selected=meta.stash.FirstOrDefault(x=>x.uid==selectedVaultUid);if(selected==null)right.Add(PackspireUiFactory.EmptyState("装備はまだありません","遠征から帰還すると、持ち帰った装備がここへ記録されます。"));else{

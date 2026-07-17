@@ -19,6 +19,12 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  string selectedVaultUid="",selectedFactionId="",selectedDungeonId="";
  string selectedPackingUid="",selectedRewardId="",selectedShopId="";
  int packingRotation;
+ bool packingFormulaOpen,packingCardsOpen;
+ string packingDragUid="";
+ bool packingDragging,packingTapWasSelected,packingDragFromList;
+ Vector2 packingDragStart;
+ VisualElement packingRootElement,packingGridElement,packingDragGhost;
+ float packingEquipScrollY,packingRightScrollY;
  int compendiumTab;
  Texture2D tabletopDesk;
  PackspirePresentationStage presentationStage;

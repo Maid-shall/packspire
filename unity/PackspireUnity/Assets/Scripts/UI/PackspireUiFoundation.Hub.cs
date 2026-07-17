@@ -26,7 +26,7 @@ public sealed partial class PackspireUiFoundation {
   profile.pickingMode=PickingMode.Ignore;
   profile.Add(PackspireUiFactory.Title(GameCatalog.Roles[meta.currentRole].name));
   profile.Add(PackspireUiFactory.Body(FactionName(meta.currentFaction)+"所属"));
-  profile.Add(PackspireUiFactory.Body($"所持金 {meta.baseGold}G　　遠征 {meta.wins}/{meta.runs}"));
+  profile.Add(PackspireUiFactory.Body($"{meta.baseGold}G　・　遠征 {meta.wins}/{meta.runs}"));
   shell.Add(profile);
 
   presentationFacilityLabel=new Label("拠点");
@@ -53,7 +53,7 @@ public sealed partial class PackspireUiFoundation {
 
   presentationEnterButton=null;
 
-  presentationHintLabel=new Label("← → / A D で街を歩く　／　施設付近で Enter または E");
+  presentationHintLabel=new Label("街を歩く");
   presentationHintLabel.AddToClassList("ps-v2-home-hint");
   presentationHintLabel.pickingMode=PickingMode.Ignore;
   shell.Add(presentationHintLabel);
@@ -140,7 +140,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  int NearestPresentationFacility(){
-  if(presentationStage==null)return 0;
+  if(presentationStage==null||presentationStage.Facilities.Count==0)return 0;
   float scroll=presentationStage.Scroll;
   int best=0;
   float bestDist=float.MaxValue;
@@ -160,7 +160,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshPresentationHud(){
-  if(presentationStage==null||!presentationHubBuilt)return;
+  if(presentationStage==null||!presentationHubBuilt||presentationStage.Facilities.Count==0)return;
   int focused=NearestPresentationFacility();
   presentationStage.SetFocusedFacilityHighlight(focused);
   bool ready=presentationStage.CanEnterAt(focused);
@@ -170,7 +170,7 @@ public sealed partial class PackspireUiFoundation {
   }
   if(presentationHintLabel!=null){
    var facility=presentationStage.Facilities[focused];
-   presentationHintLabel.text=ready?$"{facility.label}をタップ、または Enter / E で中へ入れます。":"← → / A D で街を歩く　／　建物をタップして入れます";
+   presentationHintLabel.text=ready?$"{facility.label}をタップで入る":"← → で街を歩く";
   }
   if(presentationFacilityLabel!=null){
    var facility=presentationStage.Facilities[focused];
@@ -198,13 +198,13 @@ public sealed partial class PackspireUiFoundation {
   screenRoot.schedule.Execute(()=>{
    presentationEntering=false;
    game.UiNavigate(target);
-  }).StartingIn(280);
+  }).StartingIn(220);
  }
 
- void AddPresentationTab(VisualElement parent,string label,ScreenId target){
-  var button=new Button(()=>game.UiNavigate(target)){text=label,tooltip=label};
+ void AddPresentationTab(VisualElement tabs,string label,ScreenId screen){
+  var button=PackspireUiFactory.Button(label,()=>game.UiNavigate(screen));
   button.AddToClassList("ps-v2-home-tab");
-  parent.Add(button);
+  tabs.Add(button);
  }
 }
 }

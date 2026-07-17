@@ -42,11 +42,13 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
  Transform characterRig;
  PackspireLayeredPuppet characterPuppet;
  float scrollX,targetScrollX,scrollVelocity;
+ float scrollMin,scrollMax;
  float moveInput;
  int focusedFacility,hoveredFacility=-1;
  bool pointerDragging;
  float pointerDragStartX,scrollDragStart;
  bool ready;
+ readonly List<HubFacilityDef> activeFacilities=new();
 
  public float OrthographicSize=>HubPresentationCatalog.OrthographicSize;
  public static float CharacterAnchorX=>HubPresentationCatalog.CharacterAnchorX;
@@ -63,7 +65,7 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
 
  public void SetFocusedFacility(int index){
   focusedFacility=Mathf.Clamp(index,0,facilitySlots.Count-1);
-  targetScrollX=Mathf.Clamp(SnapScrollFor(focusedFacility),HubPresentationCatalog.ScrollMin,HubPresentationCatalog.ScrollMax);
+  targetScrollX=Mathf.Clamp(SnapScrollFor(focusedFacility),scrollMin,scrollMax);
  }
 
  public void SetFocusedFacilityHighlight(int index){focusedFacility=Mathf.Clamp(index,0,facilitySlots.Count-1);}
@@ -103,7 +105,7 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
   float time=Time.unscaledTime;
 
   if(Mathf.Abs(moveInput)>.05f)
-   targetScrollX=Mathf.Clamp(targetScrollX+moveInput*dt*4.2f,HubPresentationCatalog.ScrollMin,HubPresentationCatalog.ScrollMax);
+   targetScrollX=Mathf.Clamp(targetScrollX+moveInput*dt*4.2f,scrollMin,scrollMax);
   else
    moveInput=Mathf.MoveTowards(moveInput,0f,dt*7f);
 
@@ -139,10 +141,10 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
  public void UpdatePointerDrag(float panelX,float panelWidth){
   if(!pointerDragging||panelWidth<=1f)return;
   float viewWidth=OrthographicSize*2f*(panelWidth/Mathf.Max(1f,720f));
-  targetScrollX=Mathf.Clamp(scrollDragStart-(panelX-pointerDragStartX)/panelWidth*viewWidth*1.08f,HubPresentationCatalog.ScrollMin,HubPresentationCatalog.ScrollMax);
+  targetScrollX=Mathf.Clamp(scrollDragStart-(panelX-pointerDragStartX)/panelWidth*viewWidth*1.08f,scrollMin,scrollMax);
  }
  public void EndPointerDrag(){pointerDragging=false;}
- public void ApplyWheelDelta(float delta){targetScrollX=Mathf.Clamp(targetScrollX-delta*2.6f,HubPresentationCatalog.ScrollMin,HubPresentationCatalog.ScrollMax);}
+ public void ApplyWheelDelta(float delta){targetScrollX=Mathf.Clamp(targetScrollX-delta*2.6f,scrollMin,scrollMax);}
 
  public void TriggerFacilityInteraction(int index,bool entering=false){
   index=Mathf.Clamp(index,0,buildings.Count-1);
@@ -162,6 +164,8 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
   actorLayer=null;
   backdrops.Clear();
   buildings.Clear();
+  facilitySlots.Clear();
+  activeFacilities.Clear();
   characterRig=null;
   characterPuppet=null;
   stageCamera=null;
@@ -185,8 +189,14 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
  void BuildStage(){
   TeardownStageContent();
 
-  foreach(var facility in HubPresentationCatalog.Facilities)
+  var meta=hostGame!=null?hostGame.UiMeta:null;
+  foreach(var facility in HubPresentationCatalog.Facilities){
+   if(!HubPresentationCatalog.IsFacilityUnlocked(facility,meta))continue;
+   activeFacilities.Add(facility);
    facilitySlots.Add(new FacilitySlot{id=facility.id,label=facility.label,worldX=facility.worldX,screen=facility.screen});
+  }
+  scrollMin=HubPresentationCatalog.ScrollMinFor(activeFacilities);
+  scrollMax=HubPresentationCatalog.ScrollMaxFor(activeFacilities);
 
   int rtW=Mathf.Max(1280,Screen.width),rtH=Mathf.Max(720,Screen.height);
   float aspect=(float)rtW/rtH;
@@ -215,7 +225,7 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
   actorLayer=NewLayer("Actor layer");
   AddCharacter();
 
-  focusedFacility=Mathf.Min(1,facilitySlots.Count-1);
+  focusedFacility=facilitySlots.Count==0?0:Mathf.Clamp(facilitySlots.Count/2,0,facilitySlots.Count-1);
   scrollX=SnapScrollFor(focusedFacility);
   targetScrollX=scrollX;
   scrollVelocity=0f;
@@ -241,16 +251,16 @@ public sealed class PackspirePresentationStage : MonoBehaviour {
  }
 
  void BuildBuildings(){
-  foreach(var def in HubPresentationCatalog.Facilities){
+  foreach(var def in activeFacilities){
    var building=new HubBuilding{zone=buildings.Count,worldX=def.worldX};
    building.root=new GameObject("facility-"+def.id).transform;
    building.root.SetParent(transform,false);
    SetLayer(building.root.gameObject);
-   if(def.id=="guild"){
+   if(def.HasPuppet){
     building.puppet=new PackspireLayeredPuppet(
      building.root,
-     "guild-puppet",
-     HubPresentationCatalog.GuildPuppet,
+     def.id+"-puppet",
+     def.puppetParts,
      def.height,
      StageLayer,
      sprites);

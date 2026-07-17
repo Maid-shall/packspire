@@ -31,11 +31,19 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiOpenPackingLoadout(string id){LoadoutSystem.Select(meta,id);OpenPacking();}
  public bool UiPackingPlace(string uid,int anchor,int rotation){if(run==null)return false;var item=run.inventory.FirstOrDefault(x=>x.uid==uid);if(item==null||!BackpackSystem.CanPlace(run,item,anchor,rotation,uid))return false;var old=run.placements.FirstOrDefault(x=>x.itemUid==uid);if(old!=null)run.placements.Remove(old);run.placements.Add(new Placement(uid,anchor,rotation));return true;}
  public void UiPackingRemove(string uid){if(run==null)return;var placement=run.placements.FirstOrDefault(x=>x.itemUid==uid);if(placement!=null)run.placements.Remove(placement);}
- public void UiPackingSetBackpack(string id){if(run==null||!GameCatalog.Backpacks.Any(x=>x.id==id))return;run.backpack=id;}
- public void UiPackingToggleCard(string slot){if(run==null)return;if(run.selectedCardSlots.Contains(slot))run.selectedCardSlots.Remove(slot);else if(run.selectedCardSlots.Count<LoadoutSystem.EquipmentCardLimit)run.selectedCardSlots.Add(slot);}
- public void UiPackingSave(){if(run==null)return;LoadoutSystem.Capture(meta,run);meta.selectedBackpack=run.backpack;SaveSystem.Save(meta);screen=packingAtBase?ScreenId.Hub:ScreenId.Map;}
- public void UiTakeReward(string itemId){if(run==null||!GameCatalog.Items.ContainsKey(itemId))return;run.lootBag.Add(new ItemInstance(itemId){identified=false});rewardSelectionId="";screen=ScreenId.Map;}
- public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;run.lootBag.Add(new ItemInstance(itemId){identified=false});message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
+ public void UiPackingSetBackpack(string id){UiPackingSetCore(id);}
+ public void UiPackingSetCore(string id){
+  if(run==null||!StorageFormulaCatalog.Cores.ContainsKey(id))return;
+  run.coreId=id;
+  run.backpack=id;
+ }
+ public void UiPackingSetConduit(string id){if(run==null||!StorageFormulaCatalog.Conduits.ContainsKey(id))return;run.conduitId=id;}
+ public void UiPackingSetResonance(string id){if(run==null||!StorageFormulaCatalog.Resonances.ContainsKey(id))return;run.resonanceId=id;}
+ public void UiPackingSetStability(string id){if(run==null||!StorageFormulaCatalog.Stabilities.ContainsKey(id))return;run.stabilityId=id;}
+ public void UiPackingToggleCard(string slot){if(run==null)return;if(run.selectedCardSlots.Contains(slot))run.selectedCardSlots.Remove(slot);else run.selectedCardSlots.Add(slot);}
+ public void UiPackingSave(){if(run==null)return;LoadoutSystem.Capture(meta,run);meta.selectedBackpack=run.coreId;SaveSystem.Save(meta);screen=packingAtBase?ScreenId.Hub:ScreenId.Map;}
+ public void UiTakeReward(string itemId){if(run==null||!GameCatalog.Items.ContainsKey(itemId))return;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);rewardSelectionId="";screen=ScreenId.Map;}
+ public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
  public void UiReturnToMap(){screen=ScreenId.Map;}
  public void UiResolveEvent(int choice){if(run==null)return;if(choice==0){run.hp=Mathf.Max(1,run.hp-6);run.gold+=24;}else if(choice==1)foreach(var item in run.inventory)item.durability=6;screen=ScreenId.Map;}
  public void UiReturnToHub(){run=null;screen=ScreenId.Hub;scroll=Vector2.zero;}
