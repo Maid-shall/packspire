@@ -24,6 +24,11 @@ public sealed class PackspireUiFoundation : MonoBehaviour {
  int packingRotation;
  int compendiumTab;
  Texture2D tabletopDesk;
+ PackspirePresentationStage presentationStage;
+ VisualElement presentationStageView;
+ Button presentationEnterButton;
+ Label presentationHintLabel;
+ bool presentationHubBuilt;
 
  void Awake(){
   if(Instance!=null&&Instance!=this){Destroy(this);return;}
@@ -37,10 +42,19 @@ public sealed class PackspireUiFoundation : MonoBehaviour {
  }
 
  IEnumerator Start(){for(int frame=0;frame<30;frame++){if(document!=null&&document.rootVisualElement!=null&&document.rootVisualElement.panel!=null)break;yield return null;}BuildRoot();if(uiReady)RefreshScreen(true);}
- void Update(){if(root!=null)RefreshScreen(false);}
+ void Update(){
+  if(root!=null)RefreshScreen(false);
+  if(presentationStage!=null&&renderedScreen==ScreenId.Hub&&game.UiHubVariant==PackspireGame.HubUiVariant.Presentation25D&&presentationHubBuilt){
+   presentationStage.SetMoveInput(ReadMoveInput());
+   presentationStage.Tick();
+   RefreshPresentationHud();
+  }
+ }
  void OnDestroy(){if(Instance==this)Instance=null;if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);}
 
- public bool Handles(ScreenId value)=>uiReady&&value!=ScreenId.Map&&value!=ScreenId.Battle;
+ public bool Handles(ScreenId value)=>uiReady&&value!=ScreenId.Map&&value!=ScreenId.Battle&&!(value==ScreenId.Hub&&game.UiHubVariant==PackspireGame.HubUiVariant.LegacyOnGui);
+
+ public void ForceRefreshScreen(){hasRenderedScreen=false;presentationHubBuilt=false;if(uiReady)RefreshScreen(true);}
 
  void BuildRoot(){
   root=document.rootVisualElement;if(root==null||root.panel==null){uiReady=false;Debug.LogWarning("Packspire UI Toolkit root is not ready; legacy UI remains active.");return;}
@@ -59,9 +73,13 @@ public sealed class PackspireUiFoundation : MonoBehaviour {
   if(!Handles(game.UiScreen)){screenRoot.style.display=DisplayStyle.None;hasRenderedScreen=false;return;}
   screenRoot.style.display=DisplayStyle.Flex;
   if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen)return;
+  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub)presentationHubBuilt=false;
   renderedScreen=game.UiScreen;hasRenderedScreen=true;screenRoot.Clear();
   if(renderedScreen==ScreenId.Character)BuildCharacter();
-  else if(renderedScreen==ScreenId.Hub)BuildHome();
+  else if(renderedScreen==ScreenId.Hub){
+   if(game.UiHubVariant==PackspireGame.HubUiVariant.TabletopToolkit)BuildHome();
+   else BuildPresentationHome();
+  }
   else if(renderedScreen==ScreenId.Status)BuildStatus();
   else if(renderedScreen==ScreenId.Vault)BuildVault();
   else if(renderedScreen==ScreenId.Faction)BuildFaction();
@@ -85,6 +103,163 @@ public sealed class PackspireUiFoundation : MonoBehaviour {
   var start=PackspireUiFactory.Button("この姿で物語を始める",()=>game.UiFinishCharacter());start.AddToClassList("ps-primary-action");right.Add(start);
  }
  void BuildCharacterAgain(){screenRoot.Clear();BuildCharacter();}
+
+ void BuildPresentationHome(){
+  var meta=game.UiMeta;
+  EnsurePresentationStage();
+  presentationStage.ConfigureCharacter(game.UiCharacterArt,meta.body,meta.hair);
+  var shell=Container("ps-v2-home");screenRoot.Add(shell);
+
+  presentationStageView=new VisualElement{name="hub-stage-view"};
+  presentationStageView.AddToClassList("ps-v2-stage-view");
+  presentationStageView.pickingMode=PickingMode.Position;
+  if(presentationStage.RenderTarget!=null){
+   var stageImage=new Image{image=presentationStage.RenderTarget,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
+   stageImage.AddToClassList("ps-v2-stage-image");
+   presentationStageView.Add(stageImage);
+  }
+  RegisterPresentationInput(presentationStageView);
+  shell.Add(presentationStageView);
+
+  var profile=Container("ps-v2-home-profile");
+  profile.pickingMode=PickingMode.Ignore;
+  profile.Add(PackspireUiFactory.Title(GameCatalog.Roles[meta.currentRole].name));
+  profile.Add(PackspireUiFactory.Body(FactionName(meta.currentFaction)+"所属"));
+  profile.Add(PackspireUiFactory.Body($"所持金 {meta.baseGold}G　　遠征 {meta.wins}/{meta.runs}"));
+  shell.Add(profile);
+
+  var dock=Container("ps-v2-home-dock");
+  var prev=PackspireUiFactory.Button("◀",()=>{presentationStage.SnapPrevious();RefreshPresentationHud();});prev.AddToClassList("ps-v2-home-nav");
+  var next=PackspireUiFactory.Button("▶",()=>{presentationStage.SnapNext();RefreshPresentationHud();});next.AddToClassList("ps-v2-home-nav");
+  dock.Add(prev);
+  var facilityRail=Container("ps-v2-facility-rail");
+  for(int i=0;i<presentationStage.Facilities.Count;i++){
+   int index=i;
+   var facility=presentationStage.Facilities[index];
+   var button=new Button(()=>{presentationStage.SnapToFacility(index);RefreshPresentationHud();}){text=facility.label,tooltip=facility.label};
+   button.AddToClassList("ps-v2-facility-button");
+   button.name="facility-"+facility.id;
+   facilityRail.Add(button);
+  }
+  dock.Add(facilityRail);
+  dock.Add(next);
+  shell.Add(dock);
+
+  presentationEnterButton=PackspireUiFactory.Button("ENTER BUILDING",EnterFocusedBuilding);
+  presentationEnterButton.AddToClassList("ps-v2-enter-building");
+  shell.Add(presentationEnterButton);
+
+  presentationHintLabel=new Label("← → / A D で街を歩く　／　施設付近で ENTER BUILDING");
+  presentationHintLabel.AddToClassList("ps-v2-home-hint");
+  presentationHintLabel.pickingMode=PickingMode.Ignore;
+  shell.Add(presentationHintLabel);
+
+  var tabs=Container("ps-v2-home-tabs");
+  AddPresentationTab(tabs,"荷造り",ScreenId.Pack);
+  AddPresentationTab(tabs,"図鑑",ScreenId.Compendium);
+  AddPresentationTab(tabs,"勢力",ScreenId.Faction);
+  shell.Add(tabs);
+  presentationHubBuilt=true;
+  RefreshPresentationHud();
+ }
+
+ void EnsurePresentationStage(){
+  if(presentationStage!=null)return;
+  var host=game.transform.Find("HubPresentationStage");
+  if(host==null){
+   var hostGo=new GameObject("HubPresentationStage");
+   hostGo.transform.SetParent(game.transform,false);
+   host=hostGo.transform;
+  }
+  presentationStage=host.GetComponent<PackspirePresentationStage>();
+  if(presentationStage==null)presentationStage=host.gameObject.AddComponent<PackspirePresentationStage>();
+ }
+
+ void RegisterPresentationInput(VisualElement stageView){
+  stageView.RegisterCallback<PointerDownEvent>(evt=>{
+   if(evt.button!=(int)MouseButton.LeftMouse)return;
+   stageView.CapturePointer(evt.pointerId);
+   presentationStage.BeginPointerDrag(evt.localPosition.x);
+   if(presentationStage.TryPickFacility(evt.localPosition,stageView.layout.size,out int index))presentationStage.SnapToFacility(index);
+   RefreshPresentationHud();
+  });
+  stageView.RegisterCallback<PointerMoveEvent>(evt=>{
+   if(!stageView.HasPointerCapture(evt.pointerId))return;
+   presentationStage.UpdatePointerDrag(evt.localPosition.x,stageView.layout.width);
+   presentationStage.SetFocusedFacilityHighlight(NearestPresentationFacility());
+   RefreshPresentationHud();
+  });
+  stageView.RegisterCallback<PointerUpEvent>(evt=>{
+   if(!stageView.HasPointerCapture(evt.pointerId))return;
+   stageView.ReleasePointer(evt.pointerId);
+   presentationStage.EndPointerDrag();
+   presentationStage.SetFocusedFacilityHighlight(NearestPresentationFacility());
+   RefreshPresentationHud();
+  });
+  stageView.RegisterCallback<WheelEvent>(evt=>{
+   presentationStage.ApplyWheelDelta(evt.delta.y*.01f);
+   presentationStage.SetFocusedFacilityHighlight(NearestPresentationFacility());
+   RefreshPresentationHud();
+   evt.StopPropagation();
+  });
+ }
+
+ int NearestPresentationFacility(){
+  float scroll=presentationStage.Scroll;
+  int best=0;
+  float bestDist=float.MaxValue;
+  for(int i=0;i<presentationStage.Facilities.Count;i++){
+   float snap=presentationStage.Facilities[i].worldX+PackspirePresentationStage.CharacterAnchorX;
+   float dist=Mathf.Abs(scroll-snap);
+   if(dist<bestDist){bestDist=dist;best=i;}
+  }
+  return best;
+ }
+
+ float ReadMoveInput(){
+  float value=0f;
+  if(Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.D))value+=1f;
+  if(Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.A))value-=1f;
+  return value;
+ }
+
+ void RefreshPresentationHud(){
+  if(presentationStage==null||!presentationHubBuilt)return;
+  int focused=NearestPresentationFacility();
+  presentationStage.SetFocusedFacilityHighlight(focused);
+  bool ready=presentationStage.CanEnterAt(focused);
+  if(presentationEnterButton!=null){
+   presentationEnterButton.SetEnabled(ready);
+   presentationEnterButton.EnableInClassList("ps-v2-enter-ready",ready);
+  }
+  if(presentationHintLabel!=null){
+   var facility=presentationStage.Facilities[focused];
+   presentationHintLabel.text=ready?$"{facility.label}の入口が光っています。ENTER BUILDING で中へ入れます。":"← → / A D で街を歩く　／　施設ボタン・ドラッグ・ホイールでも移動できます";
+  }
+  var rail=screenRoot.Q<VisualElement>(className:"ps-v2-facility-rail");
+  if(rail==null)return;
+  int index=0;
+  foreach(var child in rail.Children()){
+   if(child is not Button button){index++;continue;}
+   button.EnableInClassList("ps-v2-facility-hotspot-ready",ready&&index==focused);
+   button.EnableInClassList("ps-selected",index==focused);
+   index++;
+  }
+ }
+
+ void EnterFocusedBuilding(){
+  if(presentationStage==null)return;
+  int focused=NearestPresentationFacility();
+  if(!presentationStage.CanEnterAt(focused))return;
+  var target=presentationStage.Facilities[focused].screen;
+  game.UiNavigate(target);
+ }
+
+ void AddPresentationTab(VisualElement parent,string label,ScreenId target){
+  var button=new Button(()=>game.UiNavigate(target)){text=label,tooltip=label};
+  button.AddToClassList("ps-v2-home-tab");
+  parent.Add(button);
+ }
 
  void BuildHome(){
   var meta=game.UiMeta;var desk=TabletopDesk("ps-tabletop-home");screenRoot.Add(desk);
