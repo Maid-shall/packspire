@@ -7,11 +7,13 @@ public sealed partial class PackspireUiFoundation {
  VisualElement routeBattleRoot,routeBattleHand,routeBattleConsumables,routeRewardRoot;
  Label routeBattleLog,routeBattleHeroHud,routeBattleEnemyHud,routeBattleIntent,routeBattleEnergy;
  bool routeBattleUiOpen,routeRewardUiOpen;
+ int routeBattleHandSig=int.MinValue,routeBattleConsSig=int.MinValue;
 
  /// <summary>Drop overlay refs that no longer belong to the live explorationRoot (e.g. after screenRoot.Clear).</summary>
  void InvalidateRouteOverlayUi(){
   routeBattleUiOpen=false;
   routeRewardUiOpen=false;
+  routeBattleHandSig=int.MinValue;routeBattleConsSig=int.MinValue;
   routeBattleRoot=null;routeBattleHand=null;routeBattleConsumables=null;routeRewardRoot=null;
   routeBattleLog=null;routeBattleHeroHud=null;routeBattleEnemyHud=null;
   routeBattleIntent=null;routeBattleEnergy=null;
@@ -29,21 +31,25 @@ public sealed partial class PackspireUiFoundation {
   &&explorationRoot!=null
   &&routeRewardRoot.parent==explorationRoot;
 
- // --- Idempotent route encounter presentation API (P0-1) ---
+ // --- Idempotent route encounter presentation API ---
 
  /// <summary>Attach combat actors + battle HUD to the current explorationRoot. Safe to call repeatedly.</summary>
  public void BeginRouteBattle(){
   if(explorationRoot==null||game==null)return;
   if(game.UiBattle==null)return;
+  bool fresh=!RouteBattleUiAttached;
   EnsureRouteBattleUi();
   HideRouteRewardUi();
   explorationRouteStage?.EnterCombat(game.UiBattle.enemy);
   routeBattleUiOpen=true;
   if(routeBattleRoot!=null){
    routeBattleRoot.style.display=DisplayStyle.Flex;
-   routeBattleRoot.BringToFront();
+   if(fresh)routeBattleRoot.BringToFront();
   }
-  RefreshRouteBattleUi();
+  // Full rebuild only on (re)connect or battle start — never every frame.
+  RefreshRouteBattleLabels();
+  RebuildRouteBattleHand(force:true);
+  RebuildRouteConsumables(force:true);
  }
 
  /// <summary>Show reward overlay on the same 2.5D stage. Safe to call repeatedly.</summary>
@@ -57,8 +63,10 @@ public sealed partial class PackspireUiFoundation {
   routeRewardUiOpen=true;
   if(routeRewardRoot==null)return;
   routeRewardRoot.style.display=DisplayStyle.Flex;
-  routeRewardRoot.BringToFront();
-  if(needRebuild)RebuildRouteRewardPanel();
+  if(needRebuild){
+   routeRewardRoot.BringToFront();
+   RebuildRouteRewardPanel();
+  }
  }
 
  /// <summary>Apply loot via game, then reset presentation for further exploration.</summary>
@@ -85,6 +93,7 @@ public sealed partial class PackspireUiFoundation {
  public void ResetRouteEncounterPresentation(){
   routeBattleUiOpen=false;
   routeRewardUiOpen=false;
+  routeBattleHandSig=int.MinValue;routeBattleConsSig=int.MinValue;
   if(routeBattleRoot!=null){
    if(explorationRoot==null||routeBattleRoot.parent!=explorationRoot){
     routeBattleRoot.RemoveFromHierarchy();
@@ -107,13 +116,16 @@ public sealed partial class PackspireUiFoundation {
   if(explorationRoot==null)return;
   if(RouteBattleUiAttached)return;
   routeBattleUiOpen=false;
+  routeBattleHandSig=int.MinValue;routeBattleConsSig=int.MinValue;
   routeBattleRoot?.RemoveFromHierarchy();
   routeBattleRoot=null;routeBattleHand=null;routeBattleConsumables=null;
   routeBattleLog=null;routeBattleHeroHud=null;routeBattleEnemyHud=null;
   routeBattleIntent=null;routeBattleEnergy=null;
 
+  // Root ignores picks so the full-screen battle layer does not steal clicks;
+  // only the bottom rail / cards accept input.
   routeBattleRoot=Container("ps-route-battle");
-  routeBattleRoot.pickingMode=PickingMode.Position;
+  routeBattleRoot.pickingMode=PickingMode.Ignore;
   routeBattleRoot.style.display=DisplayStyle.None;
 
   routeBattleHeroHud=new Label(""){pickingMode=PickingMode.Ignore};
@@ -135,10 +147,13 @@ public sealed partial class PackspireUiFoundation {
   var bottom=Container("ps-route-battle-bottom");
   bottom.pickingMode=PickingMode.Position;
   routeBattleConsumables=Container("ps-route-battle-consumables");
+  routeBattleConsumables.pickingMode=PickingMode.Position;
   bottom.Add(routeBattleConsumables);
   routeBattleHand=Container("ps-route-battle-hand");
+  routeBattleHand.pickingMode=PickingMode.Position;
   bottom.Add(routeBattleHand);
   var rail=Container("ps-route-battle-rail");
+  rail.pickingMode=PickingMode.Position;
   routeBattleEnergy=new Label(""){pickingMode=PickingMode.Ignore};
   routeBattleEnergy.AddToClassList("ps-route-battle-energy");
   rail.Add(routeBattleEnergy);
@@ -146,10 +161,13 @@ public sealed partial class PackspireUiFoundation {
    explorationRouteStage?.NotifyEnemyAttack();
    explorationRouteStage?.NotifyHeroHit();
    if(game.UiRouteBattleEndTurn()){
-    // Defeat path: FinishRun already aborted encounter flags.
     ResetRouteEncounterPresentation();
     RefreshExplorationHud();
-   } else RefreshRouteBattleUi();
+   } else {
+    RefreshRouteBattleLabels();
+    RebuildRouteBattleHand(force:true);
+    RebuildRouteConsumables(force:true);
+   }
   });
   end.AddToClassList("ps-route-battle-end");
   rail.Add(end);
@@ -166,7 +184,7 @@ public sealed partial class PackspireUiFoundation {
   routeRewardRoot?.RemoveFromHierarchy();
   routeRewardRoot=null;
   routeRewardRoot=Container("ps-route-reward");
-  routeRewardRoot.pickingMode=PickingMode.Position;
+  routeRewardRoot.pickingMode=PickingMode.Ignore;
   routeRewardRoot.style.display=DisplayStyle.None;
   explorationRoot.Add(routeRewardRoot);
   routeRewardRoot.BringToFront();
@@ -176,6 +194,7 @@ public sealed partial class PackspireUiFoundation {
   if(routeRewardRoot==null)return;
   routeRewardRoot.Clear();
   var panel=Container("ps-route-reward-panel");
+  panel.pickingMode=PickingMode.Position;
   panel.Add(new Label("戦闘報酬"){pickingMode=PickingMode.Ignore});
   panel.Add(new Label("同じ地点で戦利品を選んでください"){pickingMode=PickingMode.Ignore});
   foreach(var id in RewardIds()){
@@ -188,26 +207,30 @@ public sealed partial class PackspireUiFoundation {
   routeRewardRoot.Add(panel);
  }
 
- void RefreshRouteBattleUi(){
-  if(!routeBattleUiOpen&&game?.CurrentRoutePresentationMode!=RoutePresentationMode.RouteCombat)return;
-  if(!RouteBattleUiAttached){
-   EnsureRouteBattleUi();
-   if(!RouteBattleUiAttached)return;
-   routeBattleRoot.style.display=DisplayStyle.Flex;
-  }
-  var run=game.UiRun;
-  var battle=game.UiBattle;
+ /// <summary>Labels / meters only — safe every frame if needed. Does not rebuild buttons.</summary>
+ void RefreshRouteBattleLabels(){
+  if(!RouteBattleUiAttached)return;
+  var run=game?.UiRun;
+  var battle=game?.UiBattle;
   if(run==null||battle==null)return;
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
   int intent=battle.enemy.damages[battle.move%battle.enemy.damages.Length]+dungeon.damage;
   string statuses=FormatStatuses(run.statuses);
   string enemySt=FormatStatuses(battle.enemyStatuses);
-  routeBattleHeroHud.text=$"HP {run.hp}/{run.maxHp}\n防御 {run.block}\n{statuses}";
-  routeBattleEnemyHud.text=$"{battle.enemy.name}\nHP {Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}\n防御 {battle.enemyBlock}\n{enemySt}";
-  routeBattleIntent.text=$"次行動  攻撃 {intent}";
-  routeBattleLog.text=battle.log??"";
-  routeBattleEnergy.text=$"EN {run.energy}/3   山札 {run.draw.Count}   捨て札 {run.discard.Count}";
+  if(routeBattleHeroHud!=null)routeBattleHeroHud.text=$"HP {run.hp}/{run.maxHp}\n防御 {run.block}\n{statuses}";
+  if(routeBattleEnemyHud!=null)routeBattleEnemyHud.text=$"{battle.enemy.name}\nHP {Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}\n防御 {battle.enemyBlock}\n{enemySt}";
+  if(routeBattleIntent!=null)routeBattleIntent.text=$"次行動  攻撃 {intent}";
+  if(routeBattleLog!=null)routeBattleLog.text=battle.log??"";
+  if(routeBattleEnergy!=null)routeBattleEnergy.text=$"EN {run.energy}/3   山札 {run.draw.Count}   捨て札 {run.discard.Count}";
+ }
 
+ void RebuildRouteBattleHand(bool force=false){
+  if(!RouteBattleUiAttached||routeBattleHand==null)return;
+  var run=game?.UiRun;
+  if(run==null)return;
+  int sig=HandSignature(run);
+  if(!force&&sig==routeBattleHandSig)return;
+  routeBattleHandSig=sig;
   routeBattleHand.Clear();
   for(int i=0;i<run.hand.Count;i++){
    int index=i;
@@ -222,13 +245,25 @@ public sealed partial class PackspireUiFoundation {
     if(attack){explorationRouteStage?.NotifyHeroAttack();explorationRouteStage?.NotifyEnemyHit();}
     else if(guard)explorationRouteStage?.NotifyHeroGuard();
     if(game.UiRouteBattlePlayCard(index))EnterRouteReward();
-    else RefreshRouteBattleUi();
+    else {
+     RefreshRouteBattleLabels();
+     RebuildRouteBattleHand(force:true);
+     RebuildRouteConsumables(force:true);
+    }
    });
    btn.AddToClassList("ps-route-battle-card");
    if(!ok)btn.SetEnabled(false);
    routeBattleHand.Add(btn);
   }
+ }
 
+ void RebuildRouteConsumables(bool force=false){
+  if(!RouteBattleUiAttached||routeBattleConsumables==null)return;
+  var run=game?.UiRun;
+  if(run==null)return;
+  int sig=ConsumableSignature(run);
+  if(!force&&sig==routeBattleConsSig)return;
+  routeBattleConsSig=sig;
   routeBattleConsumables.Clear();
   var cap=new Label("消耗品"){pickingMode=PickingMode.Ignore};
   cap.AddToClassList("ps-route-battle-cons-cap");
@@ -240,11 +275,46 @@ public sealed partial class PackspireUiFoundation {
     if(game.UiRouteBattleUseConsumable(index))EnterRouteReward();
     else {
      explorationRouteStage?.NotifyEnemyHit();
-     RefreshRouteBattleUi();
+     RefreshRouteBattleLabels();
+     RebuildRouteBattleHand(force:true);
+     RebuildRouteConsumables(force:true);
     }
    });
    btn.AddToClassList("ps-route-battle-cons");
    routeBattleConsumables.Add(btn);
+  }
+ }
+
+ /// <summary>Compatibility: rebuild labels + hands after a state-changing action.</summary>
+ void RefreshRouteBattleUi(){
+  if(!routeBattleUiOpen&&game?.CurrentRoutePresentationMode!=RoutePresentationMode.RouteCombat)return;
+  if(!RouteBattleUiAttached){
+   EnsureRouteBattleUi();
+   if(!RouteBattleUiAttached)return;
+   routeBattleRoot.style.display=DisplayStyle.Flex;
+   routeBattleRoot.BringToFront();
+  }
+  RefreshRouteBattleLabels();
+  RebuildRouteBattleHand(force:true);
+  RebuildRouteConsumables(force:true);
+ }
+
+ static int HandSignature(RunState run){
+  unchecked{
+   int h=run.hand.Count*397^run.energy*17;
+   for(int i=0;i<run.hand.Count;i++){
+    var c=run.hand[i];
+    h=h*31+(c?.name?.GetHashCode()??0)^(c?.cost??0)*13^i;
+   }
+   return h;
+  }
+ }
+
+ static int ConsumableSignature(RunState run){
+  unchecked{
+   int h=run.consumables.Count*223;
+   for(int i=0;i<run.consumables.Count;i++)h=h*31+(run.consumables[i]?.GetHashCode()??0)^i;
+   return h;
   }
  }
 
@@ -253,6 +323,10 @@ public sealed partial class PackspireUiFoundation {
   return string.Join(" ",list.Take(4).Select(s=>$"{s.type}:{s.amount}"));
  }
 
+ /// <summary>
+ /// Per-frame sync: reconnect / visibility / actors only.
+ /// Never rebuilds card buttons here (that kills in-flight clicks).
+ /// </summary>
  void TickRouteBattleSync(){
   if(!explorationMapBuilt||explorationRoot==null||game==null)return;
   game.UiSyncRoutePresentationMode();
@@ -262,18 +336,19 @@ public sealed partial class PackspireUiFoundation {
    else {
     if(explorationRouteStage!=null&&!explorationRouteStage.InCombat&&game.UiBattle!=null)
      explorationRouteStage.EnterCombat(game.UiBattle.enemy);
-    routeBattleRoot.style.display=DisplayStyle.Flex;
-    routeBattleRoot.BringToFront();
-    RefreshRouteBattleUi();
+    if(routeBattleRoot.style.display!=DisplayStyle.Flex)
+     routeBattleRoot.style.display=DisplayStyle.Flex;
+    // Labels every frame; hand/consumables only when their signatures change
+    // (never Clear mid-click while content is unchanged).
+    RefreshRouteBattleLabels();
+    RebuildRouteBattleHand(force:false);
+    RebuildRouteConsumables(force:false);
    }
   } else if(mode==RoutePresentationMode.RouteReward){
    if(!routeRewardUiOpen||!RouteRewardUiAttached)EnterRouteReward();
-   else {
+   else if(routeRewardRoot.style.display!=DisplayStyle.Flex)
     routeRewardRoot.style.display=DisplayStyle.Flex;
-    routeRewardRoot.BringToFront();
-   }
   } else {
-   // Visibility only — never clear routeBattleActive / battle from the sync path.
    if(routeBattleUiOpen&&RouteBattleUiAttached)routeBattleRoot.style.display=DisplayStyle.None;
    routeBattleUiOpen=false;
    if(routeRewardUiOpen&&RouteRewardUiAttached)routeRewardRoot.style.display=DisplayStyle.None;
@@ -281,7 +356,6 @@ public sealed partial class PackspireUiFoundation {
   }
  }
 
- // Compatibility shims used by older call sites during the audit migration.
  void ShowRouteBattleUi()=>BeginRouteBattle();
  void ShowRouteRewardUi()=>EnterRouteReward();
  void HideRouteRewardUi(){

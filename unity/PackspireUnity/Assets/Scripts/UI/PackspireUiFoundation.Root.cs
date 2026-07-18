@@ -42,6 +42,19 @@ public sealed partial class PackspireUiFoundation {
   AddDevAction(grid,"操作・breach開通",()=>{game.UiDevOpenBreach();ForceRefreshScreen();});
   AddDevAction(grid,"操作・hidden発見",()=>{game.UiDevRevealHidden();ForceRefreshScreen();});
   AddDevAction(grid,"操作・戦闘開始",()=>{game.UiDevOpenRouteBattle();ForceRefreshScreen();});
+  AddDevAction(grid,"軸・警戒+3",()=>DevAxisNudge(3,0,0));
+  AddDevAction(grid,"軸・崩壊+3",()=>DevAxisNudge(0,3,0));
+  AddDevAction(grid,"軸・侵蝕+3",()=>DevAxisNudge(0,0,3));
+  AddDevAction(grid,"軸・最低へ",()=>DevAxisSet(-15,-15,-15));
+  AddDevAction(grid,"軸・中央へ",()=>DevAxisSet(0,0,0));
+  AddDevAction(grid,"軸・限界直前",()=>DevAxisSet(13,13,13));
+  AddDevAction(grid,"軸・限界へ",()=>DevAxisSet(15,15,15));
+  AddDevAction(grid,"軸・予測表示",()=>DevAxisPreview(false));
+  AddDevAction(grid,"軸・予測不能",()=>DevAxisPreview(true));
+  AddDevAction(grid,"会話・通常",()=>DevRouteDialogue(3));
+  AddDevAction(grid,"会話・吹き出し",()=>DevRouteBubble());
+  AddDevAction(grid,"会話・2択",()=>DevRouteDialogue(2));
+  AddDevAction(grid,"会話・5択",()=>DevRouteDialogue(5));
   AddDevAction(grid,"表示・旧探索地図",()=>{game.UiDevOpenOldMap();ForceRefreshScreen();});
   AddDevAction(grid,"表示・術式図",()=>{game.UiDevOpenRiteDebug();ForceRefreshScreen();});
   AddDevAction(grid,"表示・旧戦闘",()=>{game.UiDevOpenOldBattle();ForceRefreshScreen();});
@@ -62,6 +75,66 @@ public sealed partial class PackspireUiFoundation {
  void DevJumpRoute(int cellId,bool interior=false){
   game.UiDevJumpExplorationCell(cellId,interior);
   ForceRefreshScreen();
+ }
+
+ void DevAxisNudge(int alert,int collapse,int corruption){
+  if(game.UiRun?.axes==null)return;
+  game.UiRun.axes.Change(alert,collapse,corruption);
+  DevRefreshAxes();
+ }
+
+ void DevAxisSet(int alert,int collapse,int corruption){
+  if(game.UiRun?.axes==null)return;
+  var ax=game.UiRun.axes;
+  ax.alert=ax.Clamp(alert);
+  ax.collapse=ax.Clamp(collapse);
+  ax.corruption=ax.Clamp(corruption);
+  DevRefreshAxes();
+ }
+
+ void DevRefreshAxes(){
+  var ax=game.UiRun?.axes;
+  routeAxisInstrument?.CommitAnimatedValue(ax);
+  RefreshExplorationHud();
+  if(ax!=null)
+   ShowToast($"DEV軸 警戒{ax.alert} 崩壊{ax.collapse} 侵蝕{ax.corruption}");
+ }
+
+ void DevAxisPreview(bool unknown){
+  if(routeAxisInstrument==null){ShowToast("遠征画面で開いてください");return;}
+  routeAxisInstrument.ShowPreview(unknown
+   ?RouteAxisForecast.Values.Of(0,0,0,true)
+   :RouteAxisForecast.Values.Of(3,2,1));
+  ShowToast(unknown?"DEV: 予測不能":"DEV: 予測表示");
+ }
+
+ void DevRouteDialogue(int choiceCount){
+  if(routeDialogue==null){ShowToast("遠征画面で開いてください");return;}
+  choiceCount=Mathf.Clamp(choiceCount,2,5);
+  var lines=new string[choiceCount];
+  for(int i=0;i<choiceCount;i++)lines[i]=$"選択肢 {i+1} — 観測器の反応を確認する";
+  routeDialogue.SetCallbacks(
+   i=>{
+    routeDialogue.Hide();
+    routeAxisInstrument?.ClearPreview();
+    routeAxisInstrument?.SetDimmed(false);
+    // Restore live event callbacks after DEV probe.
+    routeDialogue.SetCallbacks(ResolveRouteEventChoice,HoverRouteEventChoice,()=>routeAxisInstrument?.ClearPreview());
+    ShowToast($"DEV選択 {i+1}");
+   },
+   i=>routeAxisInstrument?.ShowPreview(i==choiceCount-1
+    ?RouteAxisForecast.Values.Of(0,0,0,true)
+    :RouteAxisForecast.ForEventChoice(i%3)),
+   ()=>routeAxisInstrument?.ClearPreview());
+  routeDialogue.ShowConversation("DEV会話",$"通常会話レイヤー（{choiceCount}択）。数値は出さず、三軸の予測だけが動きます。",lines);
+  routeAxisInstrument?.SetDimmed(true);
+  routeDialogue.Root?.BringToFront();
+  routeAxisInstrument?.Root?.BringToFront();
+ }
+
+ void DevRouteBubble(){
+  if(routeDialogue==null){ShowToast("遠征画面で開いてください");return;}
+  routeDialogue.ShowBubble("…この先で何かが動いた。");
  }
 
  void AddDevAction(VisualElement grid,string label,System.Action action){

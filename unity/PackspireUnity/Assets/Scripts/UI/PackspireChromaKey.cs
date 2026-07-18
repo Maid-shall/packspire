@@ -76,12 +76,56 @@ public static class PackspireChromaKey {
    return null;
   }
   tex.SetPixels(pixels);
-  tex.Apply(false,true);
+  // Keep readable so callers can crop transparent margins for cover scaling.
+  tex.Apply(false,false);
   if(readable!=source)Object.Destroy(readable);
+  var cropped=CropToOpaque(tex,.05f);
+  if(cropped!=null&&cropped!=tex){
+   Object.Destroy(tex);
+   tex=cropped;
+  } else if(tex.isReadable)tex.Apply(false,true);
   Cache[key]=tex;
   sink?.Add(tex);
   return tex;
- }
+}
+
+ /// <summary>
+ /// Trim fully-transparent margins so cover scale uses the painted content,
+ /// not empty padding left after chroma key.
+ /// </summary>
+ public static Texture2D CropToOpaque(Texture2D source,float alphaThreshold=.05f){
+  if(source==null)return null;
+  var readable=source.isReadable?source:EnsureReadable(source);
+  if(readable==null)return source;
+  int w=readable.width,h=readable.height;
+  var pixels=readable.GetPixels();
+  int minX=w,minY=h,maxX=-1,maxY=-1;
+  for(int y=0;y<h;y++)for(int x=0;x<w;x++){
+   if(pixels[y*w+x].a<=alphaThreshold)continue;
+   if(x<minX)minX=x;if(y<minY)minY=y;
+   if(x>maxX)maxX=x;if(y>maxY)maxY=y;
+  }
+  if(maxX<minX||maxY<minY){
+   if(readable!=source)Object.Destroy(readable);
+   return source;
+  }
+  // Pad 1px so bilinear edges do not clip.
+  minX=Mathf.Max(0,minX-1);minY=Mathf.Max(0,minY-1);
+  maxX=Mathf.Min(w-1,maxX+1);maxY=Mathf.Min(h-1,maxY+1);
+  int cw=maxX-minX+1,ch=maxY-minY+1;
+  if(cw>=w-2&&ch>=h-2){
+   if(readable!=source)Object.Destroy(readable);
+   return source;
+  }
+  var cropped=new Texture2D(cw,ch,TextureFormat.RGBA32,false){name=source.name+"_crop"};
+  var outPx=new Color[cw*ch];
+  for(int y=0;y<ch;y++)for(int x=0;x<cw;x++)
+   outPx[y*cw+x]=pixels[(minY+y)*w+(minX+x)];
+  cropped.SetPixels(outPx);
+  cropped.Apply(false,true);
+  if(readable!=source)Object.Destroy(readable);
+  return cropped;
+}
 
  static Texture2D EnsureReadable(Texture2D source){
   if(source==null)return null;

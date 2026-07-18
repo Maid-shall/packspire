@@ -4538,11 +4538,16 @@
 }
 
 /* --- 2.5D route exploration (full-bleed stage, mini HUD) --- */
+.ps-xmap-route {
+    background-color: rgb(178, 184, 204);
+}
+
 .ps-xmap-route .ps-xmap-view {
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+    background-color: rgb(178, 184, 204);
 }
 
 .ps-xmap-route .ps-xmap-view-frame {
@@ -4994,5 +4999,331 @@
 .ps-route-reward-choice {
     margin-top: 8px;
     min-height: 56px;
+    white-space: normal;
+}
+
+/* --- Large analog axis instrument (clipped into bottom-right) --- */
+.ps-axis-instrument {
+    position: absolute;
+    right: -110px;
+    bottom: -130px;
+    width: 320px;
+    height: 320px;
+    overflow: visible;
+}
+
+/* Visible NW sector only — keeps dialogue / choices from hitting the dial frame. */
+.ps-axis-instrument-hit {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 170px;
+    height: 170px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-axis-instrument-dim {
+    opacity: 0.55;
+}
+
+.ps-axis-instrument-preview-focus {
+    opacity: 1;
+}
+
+.ps-axis-instrument-danger .ps-axis-instrument-body {
+    border-left-color: rgb(210, 90, 70);
+    border-right-color: rgb(210, 90, 70);
+    border-top-color: rgb(210, 90, 70);
+    border-bottom-color: rgb(210, 90, 70);
+}
+
+.ps-axis-instrument-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-top-left-radius: 160px;
+    border-top-right-radius: 160px;
+    border-bottom-left-radius: 160px;
+    border-bottom-right-radius: 160px;
+    background-color: rgb(28, 24, 20);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(160, 130, 70);
+    border-right-color: rgb(160, 130, 70);
+    border-top-color: rgb(160, 130, 70);
+    border-bottom-color: rgb(160, 130, 70);
+    overflow: hidden;
+}
+
+.ps-axis-ring {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 18px;
+    bottom: 18px;
+    border-top-left-radius: 140px;
+    border-top-right-radius: 140px;
+    border-bottom-left-radius: 140px;
+    border-bottom-right-radius: 140px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(210, 180, 110, 0.35);
+    border-right-color: rgba(210, 180, 110, 0.35);
+    border-top-color: rgba(210, 180, 110, 0.35);
+    border-bottom-color: rgba(210, 180, 110, 0.35);
+}
+
+.ps-axis-ring-mid {
+    left: 42px;
+    right: 42px;
+    top: 42px;
+    bottom: 42px;
+    border-left-color: rgba(180, 90, 70, 0.4);
+    border-right-color: rgba(180, 90, 70, 0.4);
+    border-top-color: rgba(180, 90, 70, 0.4);
+    border-bottom-color: rgba(180, 90, 70, 0.4);
+}
+
+.ps-axis-ring-inner {
+    left: 68px;
+    right: 68px;
+    top: 68px;
+    bottom: 68px;
+    border-left-color: rgba(120, 90, 170, 0.45);
+    border-right-color: rgba(120, 90, 170, 0.45);
+    border-top-color: rgba(120, 90, 170, 0.45);
+    border-bottom-color: rgba(120, 90, 170, 0.45);
+}
+
+.ps-axis-marks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-axis-tick {
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    width: 2px;
+    height: 14px;
+    margin-left: -1px;
+    background-color: rgba(210, 185, 130, 0.55);
+    transform-origin: 50% 148px;
+}
+
+.ps-axis-stamp {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-axis-stamp-alert { left: 36px; top: 48px; }
+.ps-axis-stamp-collapse { right: 40px; top: 52px; }
+.ps-axis-stamp-corruption { left: 50%; bottom: 54px; margin-left: -14px; }
+
+.ps-axis-stamp-glyph {
+    font-size: 16px;
+    color: rgba(230, 210, 160, 0.85);
+    -unity-text-align: middle-center;
+}
+
+.ps-axis-needle,
+.ps-axis-ghost {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    width: 3px;
+    height: 118px;
+    margin-left: -1.5px;
+    transform-origin: 50% 100%;
+    background-color: rgb(220, 80, 50);
+}
+
+.ps-axis-needle-collapse { width: 2px; height: 104px; background-color: rgb(210, 150, 55); }
+.ps-axis-needle-corruption { width: 2px; height: 90px; background-color: rgb(140, 90, 190); }
+
+.ps-axis-ghost { opacity: 0.4; }
+.ps-axis-ghost.ps-axis-needle-alert { background-color: rgba(255, 140, 100, 0.7); }
+.ps-axis-ghost.ps-axis-needle-collapse { background-color: rgba(255, 200, 100, 0.65); }
+.ps-axis-ghost.ps-axis-needle-corruption { background-color: rgba(190, 150, 255, 0.65); }
+
+.ps-axis-glow {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    opacity: 0;
+}
+
+.ps-axis-glow-alert { left: 28px; top: 40px; background-color: rgba(220, 80, 50, 0.35); }
+.ps-axis-glow-collapse { right: 32px; top: 44px; background-color: rgba(210, 150, 55, 0.35); }
+.ps-axis-glow-corruption { left: 50%; bottom: 46px; margin-left: -24px; background-color: rgba(140, 90, 190, 0.35); }
+
+.ps-axis-glow-danger {
+    background-color: rgba(255, 90, 60, 0.55);
+}
+
+.ps-axis-crack {
+    position: absolute;
+    background-color: rgba(40, 30, 24, 0.85);
+    opacity: 0;
+}
+.ps-axis-crack-a { left: 70px; top: 90px; width: 2px; height: 70px; rotate: 18deg; }
+.ps-axis-crack-b { right: 80px; bottom: 100px; width: 2px; height: 60px; rotate: -24deg; }
+
+.ps-axis-noise {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 24px;
+    bottom: 24px;
+    border-top-left-radius: 130px;
+    border-top-right-radius: 130px;
+    border-bottom-left-radius: 130px;
+    border-bottom-right-radius: 130px;
+    background-color: rgba(255, 220, 160, 0.04);
+    opacity: 0;
+}
+
+.ps-axis-instrument-tip {
+    position: absolute;
+    left: -200px;
+    top: 10px;
+    width: 190px;
+    padding: 10px 12px;
+    background-color: rgba(12, 11, 14, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgb(180, 145, 75);
+    /* Tip must never expand the instrument hit box. */
+}
+
+.ps-axis-instrument-tip-body {
+    font-size: 11px;
+    color: rgba(230, 215, 180, 0.95);
+    white-space: normal;
+}
+
+/* Soft context HUD — not a heavy black panel */
+.ps-xmap-route .ps-xmap-mini {
+    background-color: rgba(10, 10, 12, 0.28);
+    border-left-width: 0;
+    padding: 6px 8px;
+    min-width: 100px;
+    max-width: 200px;
+}
+
+.ps-xmap-route .ps-xmap-mini-name {
+    font-size: 13px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.ps-xmap-route .ps-xmap-axis-meter {
+    display: none;
+}
+
+/* Bottom dialogue gradient layer */
+.ps-route-dialogue {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-route-dialogue-veil {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34%;
+    background-color: rgba(4, 3, 6, 0.72);
+}
+
+.ps-route-dialogue-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30%;
+    padding: 18px 28px 20px 28px;
+    flex-direction: column;
+    background-color: rgba(6, 5, 8, 0.55);
+}
+
+.ps-route-dialogue-speaker {
+    font-size: 14px;
+    color: rgb(220, 185, 110);
+    margin-bottom: 6px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-route-dialogue-body {
+    font-size: 15px;
+    color: rgb(235, 225, 200);
+    white-space: normal;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.ps-route-dialogue-choices {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.ps-route-choice-row {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    padding: 4px 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-route-choice-mark {
+    width: 22px;
+    font-size: 15px;
+    color: rgb(230, 190, 100);
+}
+
+.ps-route-choice-text {
+    flex-grow: 1;
+    font-size: 15px;
+    color: rgba(220, 210, 185, 0.88);
+    white-space: normal;
+}
+
+.ps-route-choice-hot .ps-route-choice-text {
+    color: rgb(255, 240, 200);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(220, 180, 90, 0.7);
+}
+
+.ps-route-bubble {
+    position: absolute;
+    left: 18%;
+    right: 30%;
+    bottom: 38%;
+    padding: 10px 14px;
+    background-color: rgba(12, 11, 16, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(200, 160, 80);
+}
+
+.ps-route-bubble-text {
+    font-size: 14px;
+    color: rgb(240, 230, 200);
     white-space: normal;
 }

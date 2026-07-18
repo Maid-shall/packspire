@@ -68,6 +68,8 @@ public static class ExplorationRouteCatalog {
  public const float GroundY=-1.45f;
  public const float ExitY=-0.55f;
  public const float MoveScrollDistance=4.2f;
+ /// <summary>Keep interactive exits out of the bottom-right axis instrument (panel UV 0–1).</summary>
+ public static readonly Rect InstrumentSafeArea=new(0.02f,0.08f,0.72f,0.78f);
  public static bool ShowRouteDebugGizmos;
 
  public static readonly int[] PrototypeCellIds={4,23,5,11,10,18,19,6,33,17};
@@ -96,7 +98,9 @@ public static class ExplorationRouteCatalog {
  }
 
  public static readonly RouteLayerDef[] BaseLayers={
-  new("sky","Art/Hub/hub-sky-band-v1","Art/RouteKeyed/far-background-v1",.04f,0f,8.2f,-120,new Color(.86f,.88f,.94f),true),
+  // Fully opaque fill under every parallax plate — never chroma-keyed.
+  new("base",null,null,0f,0f,12f,-140,new Color(.78f,.80f,.88f),true),
+  new("sky","Art/Hub/hub-sky-band-v1","Art/Hub/hub-sky-band-v1",.04f,0f,8.2f,-120,new Color(.86f,.88f,.94f),true),
   new("far","Art/RouteKeyed/far-background-v1",null,.12f,0.35f,6.8f,-110,new Color(.92f,.92f,.95f),true),
   new("mid","Art/Hub/hub-road-v1",null,.28f,0.05f,5.4f,-80,new Color(.78f,.74f,.68f),false),
   new("ground","Art/RouteKeyed/hub-street-floor-v1",null,.55f,-1.35f,2.35f,-50,new Color(.96f,.92f,.84f),false),
@@ -199,18 +203,19 @@ public static class ExplorationRouteCatalog {
   return result;
  }
 
+ /// <summary>Qualitative path copy only — never include numeric axis deltas for normal play.</summary>
  public static string ExpectedChangeLabel(ExplorationLinkKind kind,bool opened,bool investigate,ExplorationCellDef target){
-  if(investigate)return "調べると隠し道が開く";
-  if(kind==ExplorationLinkKind.Breach&&!opened)return "壁を破壊すると崩壊 +2";
+  if(investigate)return "壁の違和感を調べる";
+  if(kind==ExplorationLinkKind.Breach&&!opened)return "瓦礫を壊して進路を開く";
   if(kind==ExplorationLinkKind.Breach)return "崩れた通路を進む";
   if(kind==ExplorationLinkKind.Hidden)return "隠し道を進む";
-  if(target==null)return "状態変化は小さい";
+  if(target==null)return "この進路を進む";
   return target.type switch{
    "building_door"=>"建物へ入る",
-   "battle" or "boss"=>"初訪で警戒 +1 / 侵蝕 +1",
-   "event" or "treasure"=>"初訪で警戒 +1 / 侵蝕 +2",
-   "rest"=>"初訪で警戒 +1 / 崩壊 -1",
-   _=>"初訪で警戒 +1",
+   "battle" or "boss"=>"気配の強い地点へ向かう",
+   "event" or "treasure"=>"奇妙な気配の地点へ向かう",
+   "rest"=>"休息できそうな地点へ向かう",
+   _=>"この進路を進む",
   };
  }
 

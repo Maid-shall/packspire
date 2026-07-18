@@ -42,12 +42,14 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
 
  Camera stageCamera;
  RenderTexture renderTarget;
- Transform worldRoot,exitRoot,axisFxRoot;
+ Transform worldRoot,exitRoot,axisFxRoot,cameraBackdrop;
+ SpriteRenderer cameraBackdropRenderer;
  RouteCombatActor heroActor,enemyActor;
  readonly List<LayerInst> layers=new();
  readonly List<ExitInst> exits=new();
  readonly List<Sprite> sprites=new();
  readonly List<Texture2D> runtimeTextures=new();
+ Color routeBackdropColor=new(.72f,.74f,.82f,1f);
 
  ExplorationMapDef mapDef;
  ExplorationRunState runState;
@@ -149,10 +151,13 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   if(stageCamera!=null){
    stageCamera.orthographicSize=ExplorationRouteCatalog.OrthographicSize;
    stageCamera.transform.position=new Vector3(0f,ExplorationRouteCatalog.CameraCenterY,-10f);
-   stageCamera.backgroundColor=new Color(.16f,.18f,.22f);
+   stageCamera.backgroundColor=routeBackdropColor;
   }
   foreach(var layer in layers){
    if(layer.renderer!=null)layer.renderer.color=layer.baseColor;
+  }
+  if(cameraBackdropRenderer!=null){
+   var c=routeBackdropColor;c.a=1f;cameraBackdropRenderer.color=c;
   }
   RefreshExits();
   UpdateCoverLayers();
@@ -310,7 +315,8 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   ready=false;combatMode=false;
   layers.Clear();exits.Clear();
   heroActor=null;enemyActor=null;
-  worldRoot=null;exitRoot=null;axisFxRoot=null;stageCamera=null;
+  worldRoot=null;exitRoot=null;axisFxRoot=null;
+  cameraBackdrop=null;cameraBackdropRenderer=null;stageCamera=null;
   if(renderTarget!=null){
    if(RenderTexture.active==renderTarget)RenderTexture.active=null;
    renderTarget.Release();Destroy(renderTarget);renderTarget=null;
@@ -338,12 +344,15 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   stageCamera.orthographicSize=ExplorationRouteCatalog.OrthographicSize;
   stageCamera.transform.position=new Vector3(0f,ExplorationRouteCatalog.CameraCenterY,-10f);
   stageCamera.clearFlags=CameraClearFlags.SolidColor;
-  stageCamera.backgroundColor=new Color(.16f,.18f,.22f);
+  // Match warm plate — never leave the old blue clear as a visible band.
+  stageCamera.backgroundColor=routeBackdropColor;
   stageCamera.cullingMask=1<<StageLayer;
   stageCamera.targetTexture=renderTarget;
   stageCamera.enabled=false;
   stageCamera.nearClipPlane=.05f;
   stageCamera.farClipPlane=40f;
+  stageCamera.aspect=ViewAspect;
+  EnsureCameraBackdrop(routeBackdropColor);
 
   worldRoot=new GameObject("World").transform;
   worldRoot.SetParent(transform,false);
@@ -398,7 +407,13 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
 
  void BuildLayers(ExplorationCellDef cell,RouteCellPresentation pres){
   bool interior=mapDef!=null&&mapDef.IsInterior;
+  routeBackdropColor=Color.Lerp(new Color(.70f,.72f,.80f,1f),pres.grade,.22f);
+  routeBackdropColor.a=1f;
+  EnsureCameraBackdrop(routeBackdropColor);
+  if(stageCamera!=null)stageCamera.backgroundColor=routeBackdropColor;
   foreach(var def in ExplorationRouteCatalog.BaseLayers){
+   // "base" is the camera-locked plate (EnsureCameraBackdrop), not a parallax sprite.
+   if(def.id=="base")continue;
    if(interior&&def.id is "far")continue;
    string res=def.resource;
    bool keyGreen=false,keyBlack=false;
@@ -419,7 +434,10 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
     if(string.IsNullOrEmpty(pres.foregroundResource))continue;
     res=pres.foregroundResource;keyBlack=pres.keyForegroundBlack;
    }
-   var tex=LoadKeyed(res,keyGreen,keyBlack)??LoadKeyed(def.fallback,false,true);
+   // Sky / base never use keyed far as fallback — that leaves transparent margins.
+   Texture2D tex;
+   if(def.id=="sky")tex=LoadKeyed(res,false,false)??LoadKeyed(def.fallback,false,false);
+   else tex=LoadKeyed(res,keyGreen,keyBlack)??LoadKeyed(def.fallback,false,true);
    if(tex==null){
     Debug.LogWarning($"[ExplorationRouteStage] Missing/failed layer '{def.id}' ({res}) — skipped.");
     continue;
@@ -428,7 +446,69 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   }
  }
 
+ /// <summary>
+ /// Opaque plate parented to the stage camera so it always fills the live frustum
+ /// (parallax / world scroll cannot leave clear-colour bands).
+ /// </summary>
+ void EnsureCameraBackdrop(Color color){
+  if(stageCamera==null)return;
+  color.a=1f;
+  routeBackdropColor=color;
+  if(cameraBackdrop==null||cameraBackdropRenderer==null){
+   var go=new GameObject("BaseBackground");
+   go.transform.SetParent(stageCamera.transform,false);
+   SetLayer(go);
+   cameraBackdrop=go.transform;
+   // Behind world content (world at z≈0 → distance 10). Must not occlude actors.
+   cameraBackdrop.localPosition=new Vector3(0f,0f,24f);
+   cameraBackdrop.localRotation=Quaternion.identity;
+   var tex=new Texture2D(8,8,TextureFormat.RGBA32,false){name="route-cam-backdrop",filterMode=FilterMode.Bilinear,wrapMode=TextureWrapMode.Clamp};
+   var cols=new Color[64];
+   for(int i=0;i<64;i++)cols[i]=Color.white;
+   tex.SetPixels(cols);tex.Apply(false,true);
+   runtimeTextures.Add(tex);
+   var sp=Sprite.Create(tex,new Rect(0,0,8,8),new Vector2(.5f,.5f),100f);
+   sprites.Add(sp);
+   cameraBackdropRenderer=go.AddComponent<SpriteRenderer>();
+   cameraBackdropRenderer.sprite=sp;
+   cameraBackdropRenderer.sortingOrder=-1000;
+   cameraBackdropRenderer.color=color;
+  } else cameraBackdropRenderer.color=color;
+  FitCameraBackdrop();
+ }
+
+ void FitCameraBackdrop(){
+  if(stageCamera==null||cameraBackdrop==null||cameraBackdropRenderer==null||cameraBackdropRenderer.sprite==null)return;
+  SyncCameraAspect();
+  float aspect=Mathf.Max(.5f,stageCamera.aspect);
+  float viewH=stageCamera.orthographicSize*2f*1.12f;
+  float viewW=viewH*aspect;
+  var size=cameraBackdropRenderer.sprite.bounds.size;
+  cameraBackdrop.localScale=new Vector3(
+   viewW/Mathf.Max(.01f,size.x),
+   viewH/Mathf.Max(.01f,size.y),
+   1f);
+  cameraBackdrop.localPosition=new Vector3(0f,0f,24f);
+  if(cameraBackdropRenderer.color.a<1f){
+   var c=cameraBackdropRenderer.color;c.a=1f;cameraBackdropRenderer.color=c;
+  }
+ }
+
+ void SyncCameraAspect(){
+  if(stageCamera==null)return;
+  float a=ViewAspect;
+  if(a>0.1f)stageCamera.aspect=a;
+ }
+
  void SpawnLayer(ExplorationRouteCatalog.RouteLayerDef def,Texture2D tex,Color grade,float baseX){
+  // Cover plates must scale against painted content, not transparent padding.
+  if(def.cover){
+   var cropped=PackspireChromaKey.CropToOpaque(PackspireChromaKey.Readable(tex,runtimeTextures),.05f);
+   if(cropped!=null&&cropped!=tex){
+    if(!runtimeTextures.Contains(cropped))runtimeTextures.Add(cropped);
+    tex=cropped;
+   }
+  }
   var sp=Sprite.Create(tex,new Rect(0,0,tex.width,tex.height),new Vector2(.5f,.5f),PixelsPerUnit);
   sprites.Add(sp);
   var go=new GameObject(def.id);
@@ -443,11 +523,12 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   float spriteW=sp.bounds.size.x;
   float scale=worldH/Mathf.Max(.01f,spriteH);
   if(def.cover&&stageCamera!=null){
-   float aspect=CoverAspect();
+   SyncCameraAspect();
+   float aspect=Mathf.Max(.5f,stageCamera.aspect);
    float viewW=stageCamera.orthographicSize*2f*aspect;
    float viewH=stageCamera.orthographicSize*2f;
    float cover=Mathf.Max(viewW/Mathf.Max(.01f,spriteW),viewH/Mathf.Max(.01f,spriteH));
-   scale=cover*1.05f;
+   scale=cover*1.15f;
   } else if(def.id=="ground"){
    scale=worldH/Mathf.Max(.01f,spriteH);
    go.transform.localScale=new Vector3(scale*2.8f,scale,1f);
@@ -550,7 +631,9 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   float camY=Mathf.Lerp(ExplorationRouteCatalog.CameraCenterY,ExplorationRouteCatalog.CombatCameraY,blend);
   stageCamera.transform.position=new Vector3(0f,camY,-10f);
   stageCamera.orthographicSize=Mathf.Lerp(ExplorationRouteCatalog.OrthographicSize,ExplorationRouteCatalog.CombatOrtho,blend);
-  stageCamera.backgroundColor=Color.Lerp(new Color(.16f,.18f,.22f),new Color(.08f,.07f,.1f),blend*.65f);
+  var dimBg=Color.Lerp(routeBackdropColor,new Color(.12f,.11f,.14f,1f),blend*.55f);dimBg.a=1f;
+  stageCamera.backgroundColor=dimBg;
+  if(cameraBackdropRenderer!=null)cameraBackdropRenderer.color=dimBg;
   if(heroActor?.Root!=null){
    var from=new Vector3(ExplorationRouteCatalog.CharacterAnchorX,ExplorationRouteCatalog.CharacterGroundY,0f);
    var to=new Vector3(ExplorationRouteCatalog.HeroCombatX,ExplorationRouteCatalog.CharacterGroundY,0f);
@@ -722,22 +805,29 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   UpdateCoverLayers();
  }
 
- float CoverAspect()=>Mathf.Max(1.2f,ViewAspect);
+ float CoverAspect(){
+  SyncCameraAspect();
+  return Mathf.Max(.5f,stageCamera!=null?stageCamera.aspect:ViewAspect);
+ }
 
  /// <summary>
- /// Re-fit cover (and wide strip) layers to the live camera frustum after zoom,
- /// combat framing, parallax scroll, or RT aspect changes. Overscan keeps the
- /// camera clear colour from leaking as blue bands at the edges.
+ /// Re-fit cover / ground / mid to the live camera frustum. The opaque camera
+ /// backdrop is fitted separately so keyed transparent margins never reveal
+ /// the old blue clear colour.
  /// </summary>
  void UpdateCoverLayers(){
   if(stageCamera==null)return;
   EnsureRenderTargetSize();
-  float aspect=CoverAspect();
+  SyncCameraAspect();
+  FitCameraBackdrop();
+  float aspect=Mathf.Max(.5f,stageCamera.aspect);
   float viewW=stageCamera.orthographicSize*2f*aspect;
   float viewH=stageCamera.orthographicSize*2f;
-  Vector3 cam=stageCamera.transform.localPosition;
-  const float overscan=1.05f;
+  Vector3 cam=stageCamera.transform.position;
+  const float overscan=1.15f;
   const float maxPan=0.75f;
+  float camBottom=cam.y-viewH*.5f;
+  float camTop=cam.y+viewH*.5f;
   foreach(var layer in layers){
    if(layer.transform==null||layer.renderer==null||layer.renderer.sprite==null)continue;
    var size=layer.renderer.sprite.bounds.size;
@@ -752,14 +842,32 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
      requiredW/Mathf.Max(.01f,size.x),
      requiredH/Mathf.Max(.01f,size.y));
     layer.transform.localScale=new Vector3(scale,scale,1f);
+    // Keep cover plates centered on the camera Y so transparent margins stay off-screen.
+    layer.transform.localPosition=new Vector3(layerX,cam.y,0f);
     continue;
    }
-   // Mid/ground strips: keep vertical authoring scale, but always span the frustum width.
-   if(layer.def.id is "mid" or "ground"){
+   if(layer.def.id=="ground"){
+    // Stretch the street plate from below the frustum bottom up past the walk line.
+    float needW=(viewW+dx*2f)*overscan;
+    float bottom=camBottom-viewH*.06f;
+    float top=Mathf.Max(layer.def.y+.6f,cam.y-.15f);
+    float needH=Mathf.Max(.5f,top-bottom);
+    float scaleY=needH/Mathf.Max(.01f,size.y);
+    float scaleX=Mathf.Max(needW/Mathf.Max(.01f,size.x),scaleY*2.4f);
+    layer.transform.localScale=new Vector3(scaleX,scaleY,1f);
+    layer.transform.localPosition=new Vector3(layerX,(bottom+top)*.5f,0f);
+    continue;
+   }
+   if(layer.def.id=="mid"){
     float baseScale=layer.authoredScaleY>0.01f?layer.authoredScaleY:layer.def.height/Mathf.Max(.01f,size.y);
     float needW=(viewW+dx*2f)*overscan;
-    float scaleX=Mathf.Max(baseScale*(layer.def.id=="ground"?2.8f:2.4f),needW/Mathf.Max(.01f,size.x));
-    layer.transform.localScale=new Vector3(scaleX,baseScale,1f);
+    float scaleX=Mathf.Max(baseScale*2.4f,needW/Mathf.Max(.01f,size.x));
+    // Tall enough that mid cannot leave a slit above the ground plate.
+    float midBottom=camBottom+viewH*.08f;
+    float midTop=Mathf.Min(camTop-viewH*.05f,layer.def.y+baseScale*size.y*.55f);
+    float scaleY=Mathf.Max(baseScale,(midTop-midBottom)/Mathf.Max(.01f,size.y));
+    layer.transform.localScale=new Vector3(scaleX,scaleY,1f);
+    layer.transform.localPosition=new Vector3(layerX,(midBottom+midTop)*.5f,0f);
    }
   }
  }
@@ -769,6 +877,7 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   int w=viewPixelSize.x>=64f?Mathf.RoundToInt(viewPixelSize.x):Mathf.Max(1280,Screen.width);
   int h=viewPixelSize.y>=64f?Mathf.RoundToInt(viewPixelSize.y):Mathf.Max(720,Screen.height);
   w=Mathf.Clamp(w,64,3840);h=Mathf.Clamp(h,64,2160);
+  SyncCameraAspect();
   if(renderTarget.width==w&&renderTarget.height==h)return;
   if(RenderTexture.active==renderTarget)RenderTexture.active=null;
   renderTarget.Release();
@@ -778,6 +887,8 @@ public sealed class ExplorationRouteStage : MonoBehaviour {
   };
   renderTarget.Create();
   stageCamera.targetTexture=renderTarget;
+  stageCamera.aspect=(float)w/Mathf.Max(1,h);
+  FitCameraBackdrop();
  }
 
  void RenderStage(){

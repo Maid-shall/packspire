@@ -18,6 +18,8 @@ public sealed partial class PackspireUiFoundation {
  Label explorationMiniName,explorationMiniDistrict,explorationMiniBearing,explorationDetailBody;
  Label explorationConfirmTitle,explorationConfirmKind,explorationConfirmBody,explorationConfirmDelta,explorationAxisTipBody;
  Button explorationViewModeButton,explorationFocusButton,explorationFinishButton,explorationInfoButton;
+ RouteAxisInstrument routeAxisInstrument;
+ RouteDialoguePresenter routeDialogue;
  bool explorationMapBuilt;
  bool explorationUseRiteView;
  Vector2 explorationPointerDown;
@@ -25,6 +27,7 @@ public sealed partial class PackspireUiFoundation {
  int explorationPointerId=-1;
  int explorationLastAlert,explorationLastCollapse,explorationLastCorruption;
  int explorationPendingConfirmId=-1;
+ int explorationHoverExitId=-1;
  float explorationAnomalyT,explorationAxisDeltaT;
  string explorationAxisDeltaText="";
 
@@ -67,6 +70,9 @@ public sealed partial class PackspireUiFoundation {
   explorationNeedleAlert=null;
   explorationNeedleCollapse=null;
   explorationNeedleCorruption=null;
+  routeAxisInstrument?.Detach();routeAxisInstrument=null;
+  routeDialogue?.Detach();routeDialogue=null;
+  explorationHoverExitId=-1;
   explorationTitleLabel=null;
   explorationTypeLabel=null;
   explorationStatusLabel=null;
@@ -106,7 +112,7 @@ public sealed partial class PackspireUiFoundation {
    if(explorationMapNameLabel!=null)explorationMapNameLabel.text=ExplorationMapSystem.Breadcrumb(run);
    ShowToast(game.UiMessage);
   } else if(encounter==ExplorationEncounter.Event){
-   ShowExplorationMist();
+   ShowRouteEventDialogue();
    ShowToast(game.UiMessage);
   } else if(encounter==ExplorationEncounter.Battle){
    ShowToast("敵影と接触した");
@@ -170,17 +176,24 @@ public sealed partial class PackspireUiFoundation {
   if(explorationMiniHud!=null)
    explorationMiniHud.style.display=route&&explore&&!rite?DisplayStyle.Flex:DisplayStyle.None;
   if(explorationAxisMeter!=null)
-   explorationAxisMeter.style.display=route&&explore&&!rite?DisplayStyle.Flex:DisplayStyle.None;
+   explorationAxisMeter.style.display=DisplayStyle.None;
+  if(routeAxisInstrument?.Root!=null){
+   // Hide during combat/reward so the instrument never steals card clicks.
+   bool showInstrument=route&&!rite&&mode is RoutePresentationMode.RouteExploration
+    or RoutePresentationMode.RouteTransition
+    or RoutePresentationMode.RouteEvent;
+   routeAxisInstrument.Root.style.display=showInstrument?DisplayStyle.Flex:DisplayStyle.None;
+   // Root stays Ignore; only the compact hit pad accepts hover (see RouteAxisInstrument).
+   routeAxisInstrument.Root.pickingMode=PickingMode.Ignore;
+  }
   if(explorationDetailPopup!=null&&!(route&&explore))
    explorationDetailPopup.style.display=DisplayStyle.None;
   if(explorationConfirmPopup!=null&&(combat||reward||rite||!explore))
    ClearExplorationConfirm();
   if(combat){
    if(game.UiBattle!=null&&(!routeBattleUiOpen||!RouteBattleUiAttached))BeginRouteBattle();
-   else if(routeBattleRoot!=null&&RouteBattleUiAttached){
+   else if(routeBattleRoot!=null&&RouteBattleUiAttached)
     routeBattleRoot.style.display=DisplayStyle.Flex;
-    routeBattleRoot.BringToFront();
-   }
   } else if(routeBattleRoot!=null&&RouteBattleUiAttached){
    routeBattleRoot.style.display=DisplayStyle.None;
   }
@@ -310,7 +323,8 @@ public sealed partial class PackspireUiFoundation {
   explorationRoot.Add(explorationHintGuide);
 
   BuildRouteMiniHud();
-  BuildRouteAxisMeter();
+  BuildRouteAxisInstrument();
+  BuildRouteDialogueLayer();
   BuildRouteDetailPopup();
   BuildRouteConfirmPopup();
 
@@ -352,11 +366,12 @@ public sealed partial class PackspireUiFoundation {
   explorationLastCollapse=axes0?.collapse??0;
   explorationLastCorruption=axes0?.corruption??0;
 
-  if(game.UiExplorationEventActive)ShowExplorationMist();
+  if(game.UiExplorationEventActive)ShowRouteEventDialogue();
   TickRouteBattleSync();
   RefreshExplorationHud();
   RefreshExplorationSketch();
   ApplyRouteModeVisibility();
+  routeAxisInstrument?.SetCurrent(game.UiRun?.axes);
  }
 
  void BuildRouteMiniHud(){
@@ -384,30 +399,25 @@ public sealed partial class PackspireUiFoundation {
   explorationRoot.Add(explorationMiniHud);
  }
 
- void BuildRouteAxisMeter(){
-  explorationAxisMeter=Container("ps-xmap-axis-meter");
-  explorationAxisMeter.pickingMode=PickingMode.Position;
-  var dial=Container("ps-xmap-axis-meter-dial");
-  dial.pickingMode=PickingMode.Ignore;
-  explorationAxisMeter.Add(dial);
-  explorationNeedleAlert=Container("ps-xmap-needle ps-xmap-needle-alert ps-xmap-needle-mini");
-  explorationNeedleAlert.pickingMode=PickingMode.Ignore;
-  explorationAxisMeter.Add(explorationNeedleAlert);
-  explorationNeedleCollapse=Container("ps-xmap-needle ps-xmap-needle-collapse ps-xmap-needle-mini");
-  explorationNeedleCollapse.pickingMode=PickingMode.Ignore;
-  explorationAxisMeter.Add(explorationNeedleCollapse);
-  explorationNeedleCorruption=Container("ps-xmap-needle ps-xmap-needle-corruption ps-xmap-needle-mini");
-  explorationNeedleCorruption.pickingMode=PickingMode.Ignore;
-  explorationAxisMeter.Add(explorationNeedleCorruption);
-  explorationAxisTip=Container("ps-xmap-axis-tip");
-  explorationAxisTip.style.display=DisplayStyle.None;
-  explorationAxisTipBody=new Label(""){pickingMode=PickingMode.Ignore};
-  explorationAxisTipBody.AddToClassList("ps-xmap-axis-tip-body");
-  explorationAxisTip.Add(explorationAxisTipBody);
-  explorationAxisMeter.Add(explorationAxisTip);
-  explorationAxisMeter.RegisterCallback<PointerEnterEvent>(_=>ShowAxisTip(true));
-  explorationAxisMeter.RegisterCallback<PointerLeaveEvent>(_=>ShowAxisTip(false));
-  explorationRoot.Add(explorationAxisMeter);
+ void BuildRouteAxisInstrument(){
+  // Keep legacy mini-meter refs null-safe for rite path; route uses the large instrument.
+  explorationAxisMeter=null;
+  explorationNeedleAlert=null;explorationNeedleCollapse=null;explorationNeedleCorruption=null;
+  explorationAxisTip=null;explorationAxisTipBody=null;
+  routeAxisInstrument?.Detach();
+  routeAxisInstrument=new RouteAxisInstrument();
+  routeAxisInstrument.Build(explorationRoot);
+  routeAxisInstrument.SetCurrent(game.UiRun?.axes);
+ }
+
+ void BuildRouteDialogueLayer(){
+  routeDialogue?.Detach();
+  routeDialogue=new RouteDialoguePresenter();
+  routeDialogue.Build(explorationRoot);
+  routeDialogue.SetCallbacks(
+   ResolveRouteEventChoice,
+   HoverRouteEventChoice,
+   ()=>routeAxisInstrument?.ClearPreview());
  }
 
  void BuildRouteDetailPopup(){
@@ -465,21 +475,12 @@ public sealed partial class PackspireUiFoundation {
   explorationDetailPopup.style.display=show?DisplayStyle.Flex:DisplayStyle.None;
  }
 
- void ShowAxisTip(bool show){
-  if(explorationAxisTip==null)return;
-  if(show||explorationAxisDeltaT>0f){
-   var ax=game.UiRun?.axes;
-   string delta=explorationAxisDeltaT>0f&&!string.IsNullOrEmpty(explorationAxisDeltaText)
-    ?$"\n{explorationAxisDeltaText}":"";
-   if(explorationAxisTipBody!=null)
-    explorationAxisTipBody.text=$"警戒 {FormatAxis(ax?.alert??0)}\n崩壊 {FormatAxis(ax?.collapse??0)}\n侵蝕 {FormatAxis(ax?.corruption??0)}{delta}";
-   explorationAxisTip.style.display=DisplayStyle.Flex;
-  } else explorationAxisTip.style.display=DisplayStyle.None;
- }
+ void ShowAxisTip(bool show){/* RouteAxisInstrument owns hover copy; no numeric tip. */}
 
  void ClearExplorationConfirm(){
   explorationPendingConfirmId=-1;
   if(explorationConfirmPopup!=null)explorationConfirmPopup.style.display=DisplayStyle.None;
+  routeAxisInstrument?.ClearPreview();
  }
 
  void ShowExplorationConfirm(ExplorationRouteStage.RouteExitPick pick){
@@ -495,13 +496,29 @@ public sealed partial class PackspireUiFoundation {
    :pick.kind==ExplorationLinkKind.Breach&&!pick.opened?"瓦礫を壊して通路を開く"
    :target?.type=="building_door"?"建物の入口から中へ進む"
    :"この進路を進む";
-  explorationConfirmDelta.text=ExplorationRouteCatalog.ExpectedChangeLabel(pick.kind,pick.opened,pick.investigateOnly,target);
+  // No numeric axis deltas in normal play — instrument preview carries the forecast.
+  if(explorationConfirmDelta!=null){
+   explorationConfirmDelta.text="";
+   explorationConfirmDelta.style.display=DisplayStyle.None;
+  }
+  PreviewAxesForExit(pick);
   var size=ExplorationPanelSize();
-  float left=Mathf.Clamp(pick.panelAnchor.x-90f,12f,Mathf.Max(12f,size.x-220f));
-  float top=Mathf.Clamp(pick.panelAnchor.y-140f,70f,Mathf.Max(70f,size.y-200f));
+  // Keep confirm away from the bottom-right instrument (safe area).
+  float left=Mathf.Clamp(pick.panelAnchor.x-90f,12f,Mathf.Max(12f,size.x-280f));
+  float top=Mathf.Clamp(pick.panelAnchor.y-140f,70f,Mathf.Max(70f,size.y-260f));
   explorationConfirmPopup.style.left=left;
   explorationConfirmPopup.style.top=top;
   explorationConfirmPopup.style.display=DisplayStyle.Flex;
+ }
+
+ void PreviewAxesForExit(ExplorationRouteStage.RouteExitPick pick){
+  var run=game.UiExploration;
+  if(run==null||routeAxisInstrument==null)return;
+  var def=ExplorationMapSystem.Def(run);
+  var target=ExplorationMapSystem.Node(def,pick.nodeId);
+  bool visited=ExplorationMapSystem.IsCleared(run,pick.nodeId);
+  var forecast=RouteAxisForecast.ForExit(pick.kind,pick.opened,pick.investigateOnly,target,visited);
+  routeAxisInstrument.ShowPreview(forecast);
  }
 
  void ConfirmExplorationPending(){
@@ -540,33 +557,36 @@ public sealed partial class PackspireUiFoundation {
   explorationFinishDialog=null;
  }
 
- void ShowExplorationMist(){
-  if(explorationRoot==null||explorationMist!=null)return;
-  explorationAnomalyT=1.4f;
-  explorationMist=Container("ps-xmap-mist");
-  var veil=Container("ps-xmap-mist-veil");
-  veil.pickingMode=PickingMode.Ignore;
-  explorationMist.Add(veil);
-  for(int i=0;i<4;i++){
-   var cloud=Container($"ps-xmap-mist-cloud ps-xmap-mist-cloud-{i}");
-   cloud.pickingMode=PickingMode.Ignore;
-   explorationMist.Add(cloud);
+ void ShowExplorationMist()=>ShowRouteEventDialogue();
+
+ void ShowRouteEventDialogue(){
+  if(explorationRoot==null)return;
+  // Drop legacy central mist panel if it somehow remains.
+  if(explorationMist!=null){
+   explorationMist.RemoveFromHierarchy();
+   explorationMist=null;
   }
-  var dialog=Container("ps-event-panel");
-  dialog.AddToClassList("ps-xmap-mist-panel");
-  dialog.Add(PackspireUiFactory.Title("記憶の揺らぎ"));
-  dialog.Add(PackspireUiFactory.Body("周囲の道が黒い靄に沈み、まだ記されていない選択だけが浮かび上がる。道のうえで決断せよ。"));
-  dialog.Add(MistChoice("代償を支払う","HP -6　／　24Gを獲得",0));
-  dialog.Add(MistChoice("残響を修復する","所持装備の耐久をすべて回復",1));
-  dialog.Add(MistChoice("靄を振り払う","何も得ず、探索へ戻る",2));
-  explorationMist.Add(dialog);
-  explorationRoot.Add(explorationMist);
+  explorationAnomalyT=1.4f;
+  if(routeDialogue==null)BuildRouteDialogueLayer();
+  routeDialogue.ShowConversation(
+   "記憶の揺らぎ",
+   "周囲の道が黒い靄に沈み、まだ記されていない選択だけが浮かび上がる。道のうえで決断せよ。",
+   new[]{
+    "代償を支払う",
+    "残響を修復する",
+    "靄を振り払う",
+   });
+  routeAxisInstrument?.SetDimmed(true);
+  routeDialogue.Root?.BringToFront();
+  routeAxisInstrument?.Root?.BringToFront();
  }
 
- VisualElement MistChoice(string title,string description,int choice){
-  var button=PackspireUiFactory.Card(title,description,()=>ResolveExplorationMist(choice));
-  button.AddToClassList("ps-event-choice");
-  return button;
+ void HoverRouteEventChoice(int choice){
+  routeAxisInstrument?.ShowPreview(RouteAxisForecast.ForEventChoice(choice));
+ }
+
+ void ResolveRouteEventChoice(int choice){
+  ResolveExplorationMist(choice);
  }
 
  void ResolveExplorationMist(int choice){
@@ -575,6 +595,10 @@ public sealed partial class PackspireUiFoundation {
    explorationMist.RemoveFromHierarchy();
    explorationMist=null;
   }
+  routeDialogue?.Hide();
+  routeAxisInstrument?.ClearPreview();
+  routeAxisInstrument?.SetDimmed(false);
+  routeAxisInstrument?.CommitAnimatedValue(game.UiRun?.axes);
   if(!string.IsNullOrEmpty(game.UiMessage))ShowToast(game.UiMessage);
   RefreshExplorationHud();
   RefreshExplorationSketch();
@@ -586,10 +610,12 @@ public sealed partial class PackspireUiFoundation {
   TickRouteBattleSync();
   ApplyRouteModeVisibility();
   TickExplorationCompass(Time.unscaledDeltaTime);
+  routeDialogue?.Tick(Time.unscaledDeltaTime);
   float x=0f,y=0f;
   var mode=game.CurrentRoutePresentationMode;
+  bool dialogueOpen=routeDialogue!=null&&routeDialogue.IsOpen&&!routeDialogue.IsBubbleOnly;
   bool blockInput=mode is RoutePresentationMode.RouteCombat or RoutePresentationMode.RouteReward or RoutePresentationMode.RouteEvent
-   ||game.UiExplorationEventActive||explorationFinishDialog!=null||explorationPendingConfirmId>=0;
+   ||game.UiExplorationEventActive||dialogueOpen||explorationFinishDialog!=null||explorationPendingConfirmId>=0;
   if(!blockInput){
    if(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow))x-=1f;
    if(Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow))x+=1f;
@@ -694,30 +720,28 @@ public sealed partial class PackspireUiFoundation {
 
  void TickExplorationCompass(float dt){
   var axes=game.UiRun?.axes;
-  if(axes==null||explorationNeedleAlert==null)return;
+  if(axes==null)return;
   if(axes.alert!=explorationLastAlert||axes.collapse!=explorationLastCollapse||axes.corruption!=explorationLastCorruption){
-   int dA=axes.alert-explorationLastAlert,dC=axes.collapse-explorationLastCollapse,dE=axes.corruption-explorationLastCorruption;
-   explorationAxisDeltaText="";
-   if(dA!=0)explorationAxisDeltaText+=$"警戒 {FormatAxis(dA)} ";
-   if(dC!=0)explorationAxisDeltaText+=$"崩壊 {FormatAxis(dC)} ";
-   if(dE!=0)explorationAxisDeltaText+=$"侵蝕 {FormatAxis(dE)}";
-   explorationAxisDeltaT=2.8f;
    if(IsAxisThresholdCross(explorationLastAlert,axes.alert)||IsAxisThresholdCross(explorationLastCollapse,axes.collapse)||IsAxisThresholdCross(explorationLastCorruption,axes.corruption))
     explorationAnomalyT=1.25f;
    else explorationAnomalyT=Mathf.Max(explorationAnomalyT,.45f);
    explorationLastAlert=axes.alert;explorationLastCollapse=axes.collapse;explorationLastCorruption=axes.corruption;
-   ShowAxisTip(true);
+   // No numeric delta flash in normal play — animate the instrument only.
+   routeAxisInstrument?.CommitAnimatedValue(axes);
   }
   if(explorationAnomalyT>0f)explorationAnomalyT=Mathf.Max(0f,explorationAnomalyT-dt);
-  if(explorationAxisDeltaT>0f){
-   explorationAxisDeltaT=Mathf.Max(0f,explorationAxisDeltaT-dt);
-   if(explorationAxisDeltaT<=0f){explorationAxisDeltaText="";ShowAxisTip(false);}
+  routeAxisInstrument?.Tick(dt);
+  bool dim=routeDialogue!=null&&routeDialogue.IsOpen&&!routeDialogue.IsBubbleOnly;
+  routeAxisInstrument?.SetDimmed(dim);
+
+  // Rite dock chips still show exact values (DEV / rite path only).
+  if(explorationNeedleAlert!=null){
+   float t=Time.unscaledTime;
+   float anomaly=explorationAnomalyT;
+   SetNeedle(explorationNeedleAlert,axes.alert,t,1.15f,anomaly,1f);
+   SetNeedle(explorationNeedleCollapse,axes.collapse,t*1.13f,.85f,anomaly,.78f);
+   SetNeedle(explorationNeedleCorruption,axes.corruption,t*.91f,.55f,anomaly,.58f);
   }
-  float t=Time.unscaledTime;
-  float anomaly=explorationAnomalyT;
-  SetNeedle(explorationNeedleAlert,axes.alert,t,1.15f,anomaly,1f);
-  SetNeedle(explorationNeedleCollapse,axes.collapse,t*1.13f,.85f,anomaly,.78f);
-  SetNeedle(explorationNeedleCorruption,axes.corruption,t*.91f,.55f,anomaly,.58f);
  }
 
  static float GaugeAngle(float axis){
@@ -795,9 +819,7 @@ public sealed partial class PackspireUiFoundation {
    if(ExplorationMapSystem.TryUnlockEdge(run,run.currentNodeId,nodeId)){
     if(kind==ExplorationLinkKind.Breach&&game.UiRun?.axes!=null){
      game.UiRun.axes.Change(0,2,0);
-     explorationAxisDeltaText="崩壊 +2";
-     explorationAxisDeltaT=2.8f;
-     ShowAxisTip(true);
+     routeAxisInstrument?.CommitAnimatedValue(game.UiRun.axes);
     }
     ShowToast(kind==ExplorationLinkKind.Breach?"封鎖を破った":"隠し道を見つけた");
     if(ExplorationRouteActive)explorationRouteStage.Bind(run,true);
@@ -853,6 +875,7 @@ public sealed partial class PackspireUiFoundation {
 
  void OnExplorationPointerDown(PointerDownEvent evt){
   if(explorationView==null||game.UiRouteBattleActive||game.UiRouteRewardPending||game.UiExplorationEventActive||explorationFinishDialog!=null)return;
+  if(routeDialogue!=null&&routeDialogue.IsOpen&&!routeDialogue.IsBubbleOnly)return;
   if(evt.button!=0&&evt.button!=2)return;
   Vector2 local=(Vector2)evt.localPosition;
   explorationPointerDown=local;
@@ -867,9 +890,22 @@ public sealed partial class PackspireUiFoundation {
 
  void OnExplorationPointerMove(PointerMoveEvent evt){
   if(explorationView==null||game.UiExplorationEventActive||game.UiRouteBattleActive||game.UiRouteRewardPending)return;
+  if(routeDialogue!=null&&routeDialogue.IsOpen&&!routeDialogue.IsBubbleOnly)return;
   if(explorationPointerId>=0&&evt.pointerId!=explorationPointerId)return;
   Vector2 local=(Vector2)evt.localPosition;
-  if(ExplorationRouteActive)explorationRouteStage.SetHoverAt(local,ExplorationPanelSize());
+  if(ExplorationRouteActive){
+   explorationRouteStage.SetHoverAt(local,ExplorationPanelSize());
+   // Axis preview on exit hover (no numeric labels).
+   if(explorationPendingConfirmId<0&&explorationRouteStage.TryPickExit(local,ExplorationPanelSize(),out var hoverPick)){
+    if(hoverPick.nodeId!=explorationHoverExitId){
+     explorationHoverExitId=hoverPick.nodeId;
+     PreviewAxesForExit(hoverPick);
+    }
+   } else if(explorationHoverExitId>=0&&explorationPendingConfirmId<0){
+    explorationHoverExitId=-1;
+    routeAxisInstrument?.ClearPreview();
+   }
+  }
   if((local-explorationPointerDown).sqrMagnitude>12f){
    explorationDragging=true;
    if(ExplorationRouteActive)explorationRouteStage.UpdatePan(local,ExplorationPanelSize(),true);
@@ -885,7 +921,8 @@ public sealed partial class PackspireUiFoundation {
    explorationView.ReleasePointer(evt.pointerId);
   if(ExplorationRouteActive)explorationRouteStage.EndPan();
   else explorationStage?.EndPan();
-  if(!game.UiRouteBattleActive&&!game.UiRouteRewardPending&&!game.UiExplorationEventActive&&explorationFinishDialog==null&&!explorationDragging){
+  bool dialogueBlocks=routeDialogue!=null&&routeDialogue.IsOpen&&!routeDialogue.IsBubbleOnly;
+  if(!game.UiRouteBattleActive&&!game.UiRouteRewardPending&&!game.UiExplorationEventActive&&!dialogueBlocks&&explorationFinishDialog==null&&!explorationDragging){
    if(ExplorationRouteActive&&explorationRouteStage.TryPickExit(local,ExplorationPanelSize(),out var pick)){
     if(pick.requireConfirm)ShowExplorationConfirm(pick);
     else{ClearExplorationConfirm();ExecuteExplorationPath(pick.nodeId,true);}
