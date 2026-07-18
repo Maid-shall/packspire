@@ -10,13 +10,17 @@ public static class StorageFormulaCatalog {
  public const string DefaultStabilityId="stable";
 
  static readonly Element[] ClassicBoard=GameCatalog.Board.ToArray();
+ static readonly Element[] MerchantBoard=ShiftBoard(ClassicBoard,1);
+ static readonly Element[] ArcaneBoard=ShiftBoard(ClassicBoard,2);
+ static readonly Element[] CoffinBoard=ShiftBoard(ClassicBoard,3);
+ static readonly Element[] LivingBoard=MirrorBoard(ClassicBoard);
 
  public static readonly Dictionary<string,StorageCoreDef> Cores=new(){
   ["standard"]=new("standard","標準術核","6×4の基本魔方陣。装備を自由に回転できる。",6,4,ClassicBoard,RotationCapability.FullTurn),
-  ["merchant"]=new("merchant","交易術核","取引向きの標準盤面。回転はフル。",6,4,ClassicBoard,RotationCapability.FullTurn),
-  ["arcane"]=new("arcane","魔導術核","ルーン向けの標準盤面。回転はフル。",6,4,ClassicBoard,RotationCapability.FullTurn),
-  ["coffin"]=new("coffin","棺型術核","縦長配置向け。90度単位の回転のみ。",6,4,ClassicBoard,RotationCapability.QuarterTurn),
-  ["living"]=new("living","生体術核","変化しやすい盤面。反転（0°/180°）のみ。",6,4,ClassicBoard,RotationCapability.FlipOnly),
+  ["merchant"]=new("merchant","交易術核","流通向きの属性配置。回転はフル。",6,4,MerchantBoard,RotationCapability.FullTurn),
+  ["arcane"]=new("arcane","魔導術核","ルーン向けに偏った属性配置。回転はフル。",6,4,ArcaneBoard,RotationCapability.FullTurn),
+  ["coffin"]=new("coffin","棺型術核","縦長配置向け。90度単位の回転のみ。",6,4,CoffinBoard,RotationCapability.QuarterTurn),
+  ["living"]=new("living","生体術核","反転した属性配置。反転（0°/180°）のみ。",6,4,LivingBoard,RotationCapability.FlipOnly),
  };
 
  public static readonly Dictionary<string,AttributeConduitDef> Conduits=new(){
@@ -76,5 +80,17 @@ public static class StorageFormulaCatalog {
 
  /// <summary>Legacy backpack ids map 1:1 onto storage cores.</summary>
  public static string CoreIdFromBackpack(string backpackId)=>Cores.ContainsKey(backpackId??"")?backpackId:DefaultCoreId;
+
+ static Element[] ShiftBoard(Element[] source,int shift){
+  var result=new Element[source.Length];
+  for(int i=0;i<source.Length;i++)result[i]=source[(i+shift)%source.Length];
+  return result;
+ }
+
+ static Element[] MirrorBoard(Element[] source){
+  var result=new Element[source.Length];
+  for(int i=0;i<source.Length;i++)result[i]=source[source.Length-1-i];
+  return result;
+ }
 }
 }

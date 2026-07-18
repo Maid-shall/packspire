@@ -38,6 +38,12 @@ public partial class PackspireGame : MonoBehaviour {
  void DrawRoleArt(Rect target,string role){if(roleArt==null)return;int index=RoleArtIndex(role),col=index%4,row=index/4;Rect uv=new(col*.25f,(2-row)/3f,.25f,1f/3f);float aspect=(uv.width*roleArt.width)/(uv.height*roleArt.height);GUI.DrawTextureWithTexCoords(FitAspect(target,aspect),roleArt,uv,true);}
  int RoleArtIndex(string role)=>role=="warrior"?0:role=="guardian"?1:role=="scout"?2:role=="artificer"?3:role=="blade_master"?4:role=="bulwark"?5:role=="hunter"?6:role=="grand_artificer"?7:role=="arsenal_lord"?8:role=="pack_saint"?9:role=="rune_weaver"?10:role=="grid_dancer"?11:role.Contains("knight")?5:role.Contains("druid")?6:role.Contains("artificer")||role.Contains("channeler")?7:0;
  void DrawFantasyText(Rect rect,string text,int fontSize,TextAnchor alignment,Color color){var outline=new GUIStyle(GUI.skin.label){font=gameFont??titleFont??uiFont,fontSize=fontSize,fontStyle=FontStyle.Bold,alignment=alignment,clipping=TextClipping.Clip,normal={textColor=new Color(.015f,.012f,.008f,.96f)}};for(int y=-2;y<=2;y++)for(int x=-2;x<=2;x++)if(x!=0||y!=0)GUI.Label(new Rect(rect.x+x,rect.y+y,rect.width,rect.height),text,outline);var face=new GUIStyle(outline){normal={textColor=color}};GUI.Label(rect,text,face);}
- void OnGUI(){if(screen!=ScreenId.Map&&screen!=ScreenId.Battle)return;LoadIllustratedUi();EnsureBook();EnsureResponsiveTextures();InitStyles();EnsureSocialStyles();ApplyIllustratedStyles();TuneIllustratedText();ApplyScreenTheme();ApplyResponsiveTypography();DrawScreenBackground();if(screen==ScreenId.Map){MapScrollScreen();if(mapLoadoutOverlay)DrawMapLoadoutOverlay();if(mapEventOverlay)DrawMapEventOverlay();return;}BattleTableScreen();}
+ void OnGUI(){
+  if(screen==ScreenId.Map&&PackspireUiFoundation.Instance!=null&&PackspireUiFoundation.Instance.Handles(ScreenId.Map))return;
+  if(screen!=ScreenId.Map&&screen!=ScreenId.Battle)return;
+  LoadIllustratedUi();EnsureBook();EnsureResponsiveTextures();InitStyles();EnsureSocialStyles();ApplyIllustratedStyles();TuneIllustratedText();ApplyScreenTheme();ApplyResponsiveTypography();DrawScreenBackground();
+  if(screen==ScreenId.Map){MapScrollScreen();if(mapLoadoutOverlay)DrawMapLoadoutOverlay();if(mapEventOverlay)DrawMapEventOverlay();return;}
+  BattleTableScreen();
+ }
 }
 }

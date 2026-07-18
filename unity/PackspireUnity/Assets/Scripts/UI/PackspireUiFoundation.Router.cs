@@ -4,10 +4,23 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void RefreshScreen(bool force){
   if(game==null||screenRoot==null)return;
-  if(!Handles(game.UiScreen)){screenRoot.style.display=DisplayStyle.None;hasRenderedScreen=false;return;}
+  if(!Handles(game.UiScreen)){
+   // Keep exploration stage alive under OnGUI Battle; only hide UITK root.
+   if(game.UiScreen==ScreenId.Battle&&explorationStage!=null)SuspendExplorationStage();
+   screenRoot.style.display=DisplayStyle.None;
+   hasRenderedScreen=false;
+   return;
+  }
   screenRoot.style.display=DisplayStyle.Flex;
   if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen)return;
-  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub)ReleasePresentationStage();
+  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub&&game.UiScreen!=ScreenId.Pack)ReleasePresentationStage();
+  if(renderedScreen==ScreenId.Pack&&game.UiScreen!=ScreenId.Pack&&game.UiScreen!=ScreenId.Hub)ReleasePresentationStage();
+  if(renderedScreen==ScreenId.Map&&game.UiScreen!=ScreenId.Map){
+   if(game.UiScreen==ScreenId.Battle||game.UiScreen==ScreenId.Reward)SuspendExplorationStage();
+   else ReleaseExplorationStage();
+  }
+  if(renderedScreen==ScreenId.Reward&&game.UiScreen!=ScreenId.Reward&&game.UiScreen!=ScreenId.Map&&game.UiScreen!=ScreenId.Battle)
+   ReleaseExplorationStage();
   renderedScreen=game.UiScreen;hasRenderedScreen=true;screenRoot.Clear();
   if(renderedScreen==ScreenId.Character)BuildCharacter();
   else if(renderedScreen==ScreenId.Hub)BuildPresentationHome();
@@ -16,10 +29,11 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.Faction)BuildFaction();
   else if(renderedScreen==ScreenId.Expedition)BuildExpedition();
   else if(renderedScreen==ScreenId.Pack)BuildPacking();
+  else if(renderedScreen==ScreenId.Map)BuildExplorationMap();
   else if(renderedScreen==ScreenId.Reward)BuildReward();
   else if(renderedScreen==ScreenId.Shop)BuildShop();
   else if(renderedScreen==ScreenId.Event)BuildEvent();
-  else if(renderedScreen==ScreenId.GameOver)BuildGameOver();
+  else if(renderedScreen==ScreenId.GameOver){ReleaseExplorationStage();BuildGameOver();}
   else BuildCompendium();
   AnimateScreenIn();
  }

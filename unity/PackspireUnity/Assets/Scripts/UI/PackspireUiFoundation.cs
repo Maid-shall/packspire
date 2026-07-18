@@ -20,7 +20,10 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  string selectedPackingUid="",selectedRewardId="",selectedShopId="";
  int packingRotation;
  bool packingFormulaOpen,packingCardsOpen;
+ string packingFormulaSection="";
+ bool packingTemplateCommitted;
  string packingDragUid="";
+ string packingEquipFilter="";
  bool packingDragging,packingTapWasSelected,packingDragFromList;
  Vector2 packingDragStart;
  VisualElement packingRootElement,packingGridElement,packingDragGhost;
@@ -36,6 +39,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  Vector2 presentationPointerDownPosition;
  int presentationTapFacility=-1;
  int savedHubFacility=1;
+ // exploration fields live in PackspireUiFoundation.ExplorationMap.cs
 
  void Awake(){
   if(Instance!=null&&Instance!=this){Destroy(this);return;}
@@ -60,17 +64,24 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  void Update(){
   if(root!=null)RefreshScreen(false);
   RefreshDeveloperOverlay();
-  if(presentationStage!=null&&renderedScreen==ScreenId.Hub&&presentationHubBuilt){
-   presentationStage.SetMoveInput(ReadMoveInput());
+  if(presentationStage!=null&&((renderedScreen==ScreenId.Hub&&presentationHubBuilt)||renderedScreen==ScreenId.Pack)){
+   presentationStage.SetMoveInput(renderedScreen==ScreenId.Hub?ReadMoveInput():0f);
    presentationStage.Tick();
-   RefreshPresentationHud();
-   if((Input.GetKeyDown(KeyCode.Return)||Input.GetKeyDown(KeyCode.KeypadEnter)||Input.GetKeyDown(KeyCode.E))&&presentationStage.CanEnterAt(NearestPresentationFacility()))
-    EnterFocusedBuilding();
+   if(renderedScreen==ScreenId.Hub&&presentationHubBuilt){
+    RefreshPresentationHud();
+    if((Input.GetKeyDown(KeyCode.Return)||Input.GetKeyDown(KeyCode.KeypadEnter)||Input.GetKeyDown(KeyCode.E))&&presentationStage.CanEnterAt(NearestPresentationFacility()))
+     EnterFocusedBuilding();
+   }
   }
+  if(renderedScreen==ScreenId.Map&&explorationMapBuilt)TickExplorationMap();
  }
- void OnDestroy(){if(Instance==this)Instance=null;if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);}
+ void OnDestroy(){
+  if(Instance==this)Instance=null;
+  ReleaseExplorationStage();
+  if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);
+ }
 
- public bool Handles(ScreenId value)=>uiReady&&value!=ScreenId.Map&&value!=ScreenId.Battle;
- public void ForceRefreshScreen(){hasRenderedScreen=false;presentationHubBuilt=false;if(uiReady)RefreshScreen(true);}
+ public bool Handles(ScreenId value)=>uiReady&&value!=ScreenId.Battle&&(value!=ScreenId.Map||(game!=null&&game.UiUsesExplorationMap));
+ public void ForceRefreshScreen(){hasRenderedScreen=false;presentationHubBuilt=false;explorationMapBuilt=false;if(uiReady)RefreshScreen(true);}
 }
 }

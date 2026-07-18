@@ -24,6 +24,12 @@ public sealed partial class PackspireUiFoundation {
   var grid=Container("ps-dev-current-grid");
   AddDeveloperDestination(grid,"2.5D拠点",ScreenId.Hub);
   AddDeveloperDestination(grid,"遠征準備",ScreenId.Expedition);
+  var xmap=PackspireUiFactory.Button("巨大マップ試作",()=>{
+   game.UiOpenExplorationMap();
+   if(game.UiDeveloperPanelOpen)game.UiToggleDeveloperPanel();
+  });
+  xmap.AddToClassList("ps-dev-current-button");
+  grid.Add(xmap);
   AddDeveloperDestination(grid,"荷造り",ScreenId.Pack);
   AddDeveloperDestination(grid,"保管庫",ScreenId.Vault);
   AddDeveloperDestination(grid,"役職",ScreenId.Status);

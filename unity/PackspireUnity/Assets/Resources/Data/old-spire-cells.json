@@ -1,0 +1,3852 @@
+{
+  "id": "old_spire_iso",
+  "name": "古塔パックスパイア",
+  "artResource": "Art/Map/old-spire-iso-v1",
+  "mapWidth": 20.48,
+  "mapHeight": 11.52,
+  "districts": [
+    {
+      "id": "bailey_outer",
+      "name": "外郭",
+      "locked": false
+    },
+    {
+      "id": "bailey_market",
+      "name": "城下",
+      "locked": true
+    },
+    {
+      "id": "bailey_inner",
+      "name": "内郭",
+      "locked": true
+    },
+    {
+      "id": "spire_base",
+      "name": "主塔裾",
+      "locked": true
+    },
+    {
+      "id": "undercroft",
+      "name": "地下水路口",
+      "locked": true
+    }
+  ],
+  "cells": [
+    {
+      "id": 0,
+      "districtId": "bailey_outer",
+      "name": "外郭0",
+      "type": "empty",
+      "gx": 0,
+      "gy": 0,
+      "u": 0.5493,
+      "v": 0.497,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        6,
+        22,
+        28
+      ]
+    },
+    {
+      "id": 1,
+      "districtId": "bailey_outer",
+      "name": "外郭1",
+      "type": "empty",
+      "gx": 1,
+      "gy": 0,
+      "u": 0.6861,
+      "v": 0.4393,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        25,
+        34
+      ]
+    },
+    {
+      "id": 2,
+      "districtId": "bailey_outer",
+      "name": "外郭2",
+      "type": "empty",
+      "gx": 2,
+      "gy": 0,
+      "u": 0.482,
+      "v": 0.499,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        13,
+        24,
+        28,
+        32
+      ]
+    },
+    {
+      "id": 3,
+      "districtId": "bailey_outer",
+      "name": "野営跡",
+      "type": "rest",
+      "gx": 3,
+      "gy": 0,
+      "u": 0.4257,
+      "v": 0.3834,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        19
+      ]
+    },
+    {
+      "id": 4,
+      "districtId": "bailey_outer",
+      "name": "遠征入口",
+      "type": "entrance",
+      "gx": 4,
+      "gy": 0,
+      "u": 0.4998,
+      "v": 0.7875,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        23
+      ]
+    },
+    {
+      "id": 5,
+      "districtId": "bailey_outer",
+      "name": "外郭5",
+      "type": "empty",
+      "gx": 5,
+      "gy": 0,
+      "u": 0.4815,
+      "v": 0.7116,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        11,
+        12,
+        23,
+        30
+      ]
+    },
+    {
+      "id": 6,
+      "districtId": "bailey_outer",
+      "name": "兵舎の扉",
+      "type": "building_door",
+      "gx": 6,
+      "gy": 0,
+      "u": 0.5692,
+      "v": 0.4645,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "barracks_interior",
+      "links": [
+        0,
+        22,
+        27
+      ]
+    },
+    {
+      "id": 7,
+      "districtId": "bailey_outer",
+      "name": "外郭7",
+      "type": "empty",
+      "gx": 7,
+      "gy": 0,
+      "u": 0.4205,
+      "v": 0.5344,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        13,
+        16,
+        31
+      ]
+    },
+    {
+      "id": 8,
+      "districtId": "bailey_outer",
+      "name": "外郭8",
+      "type": "empty",
+      "gx": 0,
+      "gy": 1,
+      "u": 0.3713,
+      "v": 0.6239,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        9,
+        29
+      ]
+    },
+    {
+      "id": 9,
+      "districtId": "bailey_outer",
+      "name": "外郭9",
+      "type": "empty",
+      "gx": 1,
+      "gy": 1,
+      "u": 0.3616,
+      "v": 0.6001,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        8,
+        17
+      ]
+    },
+    {
+      "id": 10,
+      "districtId": "bailey_outer",
+      "name": "中庭の影",
+      "type": "battle",
+      "gx": 2,
+      "gy": 1,
+      "u": 0.4759,
+      "v": 0.5678,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        13,
+        20,
+        24,
+        31
+      ]
+    },
+    {
+      "id": 11,
+      "districtId": "bailey_outer",
+      "name": "外郭11",
+      "type": "empty",
+      "gx": 3,
+      "gy": 1,
+      "u": 0.4923,
+      "v": 0.6834,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        5,
+        12,
+        14,
+        23,
+        30
+      ]
+    },
+    {
+      "id": 12,
+      "districtId": "bailey_outer",
+      "name": "外郭12",
+      "type": "empty",
+      "gx": 4,
+      "gy": 1,
+      "u": 0.4303,
+      "v": 0.6845,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        5,
+        11,
+        29,
+        30
+      ]
+    },
+    {
+      "id": 13,
+      "districtId": "bailey_outer",
+      "name": "外郭13",
+      "type": "empty",
+      "gx": 5,
+      "gy": 1,
+      "u": 0.4684,
+      "v": 0.5367,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        2,
+        7,
+        10,
+        24,
+        31
+      ]
+    },
+    {
+      "id": 14,
+      "districtId": "bailey_outer",
+      "name": "朽ちた石橋",
+      "type": "empty",
+      "gx": 6,
+      "gy": 1,
+      "u": 0.4763,
+      "v": 0.6435,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        11,
+        20
+      ]
+    },
+    {
+      "id": 15,
+      "districtId": "bailey_outer",
+      "name": "外郭15",
+      "type": "empty",
+      "gx": 7,
+      "gy": 1,
+      "u": 0.4942,
+      "v": 0.4398,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        19,
+        32
+      ]
+    },
+    {
+      "id": 16,
+      "districtId": "bailey_outer",
+      "name": "外郭16",
+      "type": "empty",
+      "gx": 0,
+      "gy": 2,
+      "u": 0.3829,
+      "v": 0.5101,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        7,
+        21,
+        26,
+        35
+      ]
+    },
+    {
+      "id": 17,
+      "districtId": "bailey_outer",
+      "name": "小さな祠",
+      "type": "event",
+      "gx": 1,
+      "gy": 2,
+      "u": 0.3447,
+      "v": 0.5477,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        9,
+        26,
+        35
+      ]
+    },
+    {
+      "id": 18,
+      "districtId": "bailey_outer",
+      "name": "外郭18",
+      "type": "empty",
+      "gx": 2,
+      "gy": 2,
+      "u": 0.2988,
+      "v": 0.453,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        21,
+        33
+      ]
+    },
+    {
+      "id": 19,
+      "districtId": "bailey_outer",
+      "name": "外郭19",
+      "type": "empty",
+      "gx": 3,
+      "gy": 2,
+      "u": 0.4541,
+      "v": 0.3969,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        3,
+        15
+      ]
+    },
+    {
+      "id": 20,
+      "districtId": "bailey_outer",
+      "name": "外郭20",
+      "type": "empty",
+      "gx": 4,
+      "gy": 2,
+      "u": 0.479,
+      "v": 0.6081,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        10,
+        14,
+        31
+      ]
+    },
+    {
+      "id": 21,
+      "districtId": "bailey_outer",
+      "name": "外郭21",
+      "type": "empty",
+      "gx": 5,
+      "gy": 2,
+      "u": 0.3323,
+      "v": 0.4832,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        16,
+        18,
+        26
+      ]
+    },
+    {
+      "id": 22,
+      "districtId": "bailey_outer",
+      "name": "外郭22",
+      "type": "empty",
+      "gx": 6,
+      "gy": 2,
+      "u": 0.5951,
+      "v": 0.4771,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        0,
+        6,
+        27
+      ]
+    },
+    {
+      "id": 23,
+      "districtId": "bailey_outer",
+      "name": "外郭23",
+      "type": "empty",
+      "gx": 7,
+      "gy": 2,
+      "u": 0.4988,
+      "v": 0.741,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        4,
+        5,
+        11
+      ]
+    },
+    {
+      "id": 24,
+      "districtId": "bailey_outer",
+      "name": "外郭24",
+      "type": "empty",
+      "gx": 0,
+      "gy": 3,
+      "u": 0.5061,
+      "v": 0.5279,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        2,
+        10,
+        13,
+        28
+      ]
+    },
+    {
+      "id": 25,
+      "districtId": "bailey_outer",
+      "name": "外郭25",
+      "type": "empty",
+      "gx": 1,
+      "gy": 3,
+      "u": 0.6643,
+      "v": 0.4609,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        1,
+        27
+      ]
+    },
+    {
+      "id": 26,
+      "districtId": "bailey_outer",
+      "name": "外郭26",
+      "type": "empty",
+      "gx": 2,
+      "gy": 3,
+      "u": 0.3568,
+      "v": 0.4986,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        16,
+        17,
+        21,
+        35
+      ]
+    },
+    {
+      "id": 27,
+      "districtId": "bailey_outer",
+      "name": "外郭27",
+      "type": "empty",
+      "gx": 3,
+      "gy": 3,
+      "u": 0.6331,
+      "v": 0.4651,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        6,
+        22,
+        25
+      ]
+    },
+    {
+      "id": 28,
+      "districtId": "bailey_outer",
+      "name": "外郭28",
+      "type": "empty",
+      "gx": 4,
+      "gy": 3,
+      "u": 0.5143,
+      "v": 0.4985,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        0,
+        2,
+        24,
+        32
+      ]
+    },
+    {
+      "id": 29,
+      "districtId": "bailey_outer",
+      "name": "外郭29",
+      "type": "empty",
+      "gx": 5,
+      "gy": 3,
+      "u": 0.3863,
+      "v": 0.656,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        8,
+        12
+      ]
+    },
+    {
+      "id": 30,
+      "districtId": "bailey_outer",
+      "name": "外郭30",
+      "type": "empty",
+      "gx": 6,
+      "gy": 3,
+      "u": 0.4505,
+      "v": 0.7087,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        5,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 31,
+      "districtId": "bailey_outer",
+      "name": "外郭31",
+      "type": "empty",
+      "gx": 7,
+      "gy": 3,
+      "u": 0.452,
+      "v": 0.5585,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        7,
+        10,
+        13,
+        20
+      ]
+    },
+    {
+      "id": 32,
+      "districtId": "bailey_outer",
+      "name": "外郭32",
+      "type": "empty",
+      "gx": 0,
+      "gy": 4,
+      "u": 0.4879,
+      "v": 0.4724,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        2,
+        15,
+        28
+      ]
+    },
+    {
+      "id": 33,
+      "districtId": "bailey_outer",
+      "name": "鍛造所の扉",
+      "type": "building_door",
+      "gx": 1,
+      "gy": 4,
+      "u": 0.2798,
+      "v": 0.4302,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "forge_interior",
+      "links": [
+        18
+      ]
+    },
+    {
+      "id": 34,
+      "districtId": "bailey_outer",
+      "name": "監視塔下",
+      "type": "battle",
+      "gx": 2,
+      "gy": 4,
+      "u": 0.7348,
+      "v": 0.422,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": true,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        1
+      ]
+    },
+    {
+      "id": 35,
+      "districtId": "bailey_outer",
+      "name": "外郭35",
+      "type": "empty",
+      "gx": 3,
+      "gy": 4,
+      "u": 0.3692,
+      "v": 0.5413,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": false,
+      "interiorMapId": "",
+      "links": [
+        16,
+        17,
+        26
+      ]
+    },
+    {
+      "id": 36,
+      "districtId": "bailey_market",
+      "name": "城下0",
+      "type": "empty",
+      "gx": 0,
+      "gy": 0,
+      "u": 0.7419,
+      "v": 0.273,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        44,
+        50
+      ]
+    },
+    {
+      "id": 37,
+      "districtId": "bailey_market",
+      "name": "城下1",
+      "type": "empty",
+      "gx": 1,
+      "gy": 0,
+      "u": 0.578,
+      "v": 0.265,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        42,
+        43
+      ]
+    },
+    {
+      "id": 38,
+      "districtId": "bailey_market",
+      "name": "城下2",
+      "type": "empty",
+      "gx": 2,
+      "gy": 0,
+      "u": 0.6002,
+      "v": 0.3515,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        55,
+        59
+      ]
+    },
+    {
+      "id": 39,
+      "districtId": "bailey_market",
+      "name": "城下3",
+      "type": "empty",
+      "gx": 3,
+      "gy": 0,
+      "u": 0.6887,
+      "v": 0.2591,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        40,
+        45,
+        50
+      ]
+    },
+    {
+      "id": 40,
+      "districtId": "bailey_market",
+      "name": "城下4",
+      "type": "empty",
+      "gx": 4,
+      "gy": 0,
+      "u": 0.6567,
+      "v": 0.2825,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        39,
+        45,
+        50,
+        72,
+        73
+      ]
+    },
+    {
+      "id": 41,
+      "districtId": "bailey_market",
+      "name": "城下5",
+      "type": "empty",
+      "gx": 5,
+      "gy": 0,
+      "u": 0.6326,
+      "v": 0.3153,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        64,
+        65,
+        68
+      ]
+    },
+    {
+      "id": 42,
+      "districtId": "bailey_market",
+      "name": "城下6",
+      "type": "empty",
+      "gx": 6,
+      "gy": 0,
+      "u": 0.5617,
+      "v": 0.2394,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        37
+      ]
+    },
+    {
+      "id": 43,
+      "districtId": "bailey_market",
+      "name": "城下7",
+      "type": "empty",
+      "gx": 7,
+      "gy": 0,
+      "u": 0.5794,
+      "v": 0.2909,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        37,
+        48,
+        49,
+        72
+      ]
+    },
+    {
+      "id": 44,
+      "districtId": "bailey_market",
+      "name": "城下8",
+      "type": "empty",
+      "gx": 0,
+      "gy": 1,
+      "u": 0.7151,
+      "v": 0.3055,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        36,
+        45,
+        50
+      ]
+    },
+    {
+      "id": 45,
+      "districtId": "bailey_market",
+      "name": "城下9",
+      "type": "empty",
+      "gx": 1,
+      "gy": 1,
+      "u": 0.6957,
+      "v": 0.289,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        39,
+        40,
+        44,
+        50,
+        72,
+        73
+      ]
+    },
+    {
+      "id": 46,
+      "districtId": "bailey_market",
+      "name": "城下10",
+      "type": "empty",
+      "gx": 2,
+      "gy": 1,
+      "u": 0.6079,
+      "v": 0.3222,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        58,
+        61,
+        64
+      ]
+    },
+    {
+      "id": 47,
+      "districtId": "bailey_market",
+      "name": "城下11",
+      "type": "empty",
+      "gx": 3,
+      "gy": 1,
+      "u": 0.5801,
+      "v": 0.3615,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "id": 48,
+      "districtId": "bailey_market",
+      "name": "城下12",
+      "type": "empty",
+      "gx": 4,
+      "gy": 1,
+      "u": 0.5992,
+      "v": 0.3017,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        43,
+        63,
+        64,
+        67,
+        69
+      ]
+    },
+    {
+      "id": 49,
+      "districtId": "bailey_market",
+      "name": "城下13",
+      "type": "empty",
+      "gx": 5,
+      "gy": 1,
+      "u": 0.6349,
+      "v": 0.293,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        43,
+        70,
+        72
+      ]
+    },
+    {
+      "id": 50,
+      "districtId": "bailey_market",
+      "name": "城下14",
+      "type": "empty",
+      "gx": 6,
+      "gy": 1,
+      "u": 0.7183,
+      "v": 0.2822,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        36,
+        39,
+        40,
+        44,
+        45
+      ]
+    },
+    {
+      "id": 51,
+      "districtId": "bailey_market",
+      "name": "城下15",
+      "type": "empty",
+      "gx": 7,
+      "gy": 1,
+      "u": 0.5768,
+      "v": 0.3697,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        47,
+        52
+      ]
+    },
+    {
+      "id": 52,
+      "districtId": "bailey_market",
+      "name": "城下16",
+      "type": "empty",
+      "gx": 0,
+      "gy": 2,
+      "u": 0.5794,
+      "v": 0.3612,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        47,
+        51,
+        54
+      ]
+    },
+    {
+      "id": 53,
+      "districtId": "bailey_market",
+      "name": "城下17",
+      "type": "empty",
+      "gx": 1,
+      "gy": 2,
+      "u": 0.5832,
+      "v": 0.3595,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        47,
+        54,
+        55
+      ]
+    },
+    {
+      "id": 54,
+      "districtId": "bailey_market",
+      "name": "城下18",
+      "type": "empty",
+      "gx": 2,
+      "gy": 2,
+      "u": 0.58,
+      "v": 0.3609,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        47,
+        52,
+        53,
+        57
+      ]
+    },
+    {
+      "id": 55,
+      "districtId": "bailey_market",
+      "name": "城下19",
+      "type": "empty",
+      "gx": 3,
+      "gy": 2,
+      "u": 0.5867,
+      "v": 0.353,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        38,
+        53
+      ]
+    },
+    {
+      "id": 56,
+      "districtId": "bailey_market",
+      "name": "城下20",
+      "type": "empty",
+      "gx": 4,
+      "gy": 2,
+      "u": 0.5911,
+      "v": 0.3357,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        57,
+        59,
+        60
+      ]
+    },
+    {
+      "id": 57,
+      "districtId": "bailey_market",
+      "name": "城下21",
+      "type": "empty",
+      "gx": 5,
+      "gy": 2,
+      "u": 0.5984,
+      "v": 0.3349,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        54,
+        56,
+        58,
+        59,
+        60,
+        62,
+        65
+      ]
+    },
+    {
+      "id": 58,
+      "districtId": "bailey_market",
+      "name": "城下22",
+      "type": "empty",
+      "gx": 6,
+      "gy": 2,
+      "u": 0.6062,
+      "v": 0.3337,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        46,
+        57,
+        60,
+        62
+      ]
+    },
+    {
+      "id": 59,
+      "districtId": "bailey_market",
+      "name": "城下23",
+      "type": "empty",
+      "gx": 7,
+      "gy": 2,
+      "u": 0.5945,
+      "v": 0.3373,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        38,
+        56,
+        57,
+        60
+      ]
+    },
+    {
+      "id": 60,
+      "districtId": "bailey_market",
+      "name": "城下24",
+      "type": "empty",
+      "gx": 0,
+      "gy": 3,
+      "u": 0.6081,
+      "v": 0.3364,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        56,
+        57,
+        58,
+        59,
+        62
+      ]
+    },
+    {
+      "id": 61,
+      "districtId": "bailey_market",
+      "name": "城下25",
+      "type": "empty",
+      "gx": 1,
+      "gy": 3,
+      "u": 0.6136,
+      "v": 0.3216,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        46,
+        62,
+        64
+      ]
+    },
+    {
+      "id": 62,
+      "districtId": "bailey_market",
+      "name": "城下26",
+      "type": "empty",
+      "gx": 2,
+      "gy": 3,
+      "u": 0.6204,
+      "v": 0.3338,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        57,
+        58,
+        60,
+        61
+      ]
+    },
+    {
+      "id": 63,
+      "districtId": "bailey_market",
+      "name": "城下27",
+      "type": "empty",
+      "gx": 3,
+      "gy": 3,
+      "u": 0.6202,
+      "v": 0.3149,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        48,
+        64,
+        65,
+        66,
+        68
+      ]
+    },
+    {
+      "id": 64,
+      "districtId": "bailey_market",
+      "name": "城下28",
+      "type": "empty",
+      "gx": 4,
+      "gy": 3,
+      "u": 0.614,
+      "v": 0.3159,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        41,
+        46,
+        48,
+        61,
+        63
+      ]
+    },
+    {
+      "id": 65,
+      "districtId": "bailey_market",
+      "name": "城下29",
+      "type": "empty",
+      "gx": 5,
+      "gy": 3,
+      "u": 0.6288,
+      "v": 0.3143,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        41,
+        57,
+        63,
+        66,
+        68,
+        73
+      ]
+    },
+    {
+      "id": 66,
+      "districtId": "bailey_market",
+      "name": "城下30",
+      "type": "empty",
+      "gx": 6,
+      "gy": 3,
+      "u": 0.622,
+      "v": 0.3101,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        63,
+        65,
+        71
+      ]
+    },
+    {
+      "id": 67,
+      "districtId": "bailey_market",
+      "name": "城下31",
+      "type": "empty",
+      "gx": 7,
+      "gy": 3,
+      "u": 0.6316,
+      "v": 0.3054,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        48,
+        69,
+        70,
+        71
+      ]
+    },
+    {
+      "id": 68,
+      "districtId": "bailey_market",
+      "name": "城下32",
+      "type": "empty",
+      "gx": 0,
+      "gy": 4,
+      "u": 0.6292,
+      "v": 0.3151,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        41,
+        63,
+        65
+      ]
+    },
+    {
+      "id": 69,
+      "districtId": "bailey_market",
+      "name": "城下33",
+      "type": "empty",
+      "gx": 1,
+      "gy": 4,
+      "u": 0.6301,
+      "v": 0.3016,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        48,
+        67,
+        70
+      ]
+    },
+    {
+      "id": 70,
+      "districtId": "bailey_market",
+      "name": "城下34",
+      "type": "empty",
+      "gx": 2,
+      "gy": 4,
+      "u": 0.6361,
+      "v": 0.298,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        49,
+        67,
+        69,
+        71
+      ]
+    },
+    {
+      "id": 71,
+      "districtId": "bailey_market",
+      "name": "城下35",
+      "type": "empty",
+      "gx": 3,
+      "gy": 4,
+      "u": 0.6433,
+      "v": 0.3075,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        66,
+        67,
+        70
+      ]
+    },
+    {
+      "id": 72,
+      "districtId": "bailey_market",
+      "name": "城下36",
+      "type": "empty",
+      "gx": 4,
+      "gy": 4,
+      "u": 0.6364,
+      "v": 0.2893,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        40,
+        43,
+        45,
+        49,
+        73
+      ]
+    },
+    {
+      "id": 73,
+      "districtId": "bailey_market",
+      "name": "城下37",
+      "type": "empty",
+      "gx": 5,
+      "gy": 4,
+      "u": 0.6421,
+      "v": 0.2856,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        40,
+        45,
+        65,
+        72
+      ]
+    },
+    {
+      "id": 74,
+      "districtId": "bailey_inner",
+      "name": "内郭0",
+      "type": "empty",
+      "gx": 0,
+      "gy": 0,
+      "u": 0.6639,
+      "v": 0.1228,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        76,
+        84
+      ]
+    },
+    {
+      "id": 75,
+      "districtId": "bailey_inner",
+      "name": "内郭1",
+      "type": "empty",
+      "gx": 1,
+      "gy": 0,
+      "u": 0.7334,
+      "v": 0.2182,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        83,
+        94,
+        95,
+        98,
+        102
+      ]
+    },
+    {
+      "id": 76,
+      "districtId": "bailey_inner",
+      "name": "内郭2",
+      "type": "empty",
+      "gx": 2,
+      "gy": 0,
+      "u": 0.695,
+      "v": 0.1495,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        74,
+        79,
+        81,
+        84
+      ]
+    },
+    {
+      "id": 77,
+      "districtId": "bailey_inner",
+      "name": "内郭3",
+      "type": "empty",
+      "gx": 3,
+      "gy": 0,
+      "u": 0.6913,
+      "v": 0.2145,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        95,
+        97
+      ]
+    },
+    {
+      "id": 78,
+      "districtId": "bailey_inner",
+      "name": "内郭4",
+      "type": "empty",
+      "gx": 4,
+      "gy": 0,
+      "u": 0.7836,
+      "v": 0.1887,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        83
+      ]
+    },
+    {
+      "id": 79,
+      "districtId": "bailey_inner",
+      "name": "内郭5",
+      "type": "empty",
+      "gx": 5,
+      "gy": 0,
+      "u": 0.7253,
+      "v": 0.166,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        76,
+        81,
+        109,
+        111
+      ]
+    },
+    {
+      "id": 80,
+      "districtId": "bailey_inner",
+      "name": "内郭6",
+      "type": "empty",
+      "gx": 6,
+      "gy": 0,
+      "u": 0.7082,
+      "v": 0.1953,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        101,
+        102,
+        104
+      ]
+    },
+    {
+      "id": 81,
+      "districtId": "bailey_inner",
+      "name": "内郭7",
+      "type": "empty",
+      "gx": 7,
+      "gy": 0,
+      "u": 0.7537,
+      "v": 0.1451,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        76,
+        79,
+        111
+      ]
+    },
+    {
+      "id": 82,
+      "districtId": "bailey_inner",
+      "name": "内郭8",
+      "type": "empty",
+      "gx": 0,
+      "gy": 1,
+      "u": 0.6623,
+      "v": 0.2389,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        85,
+        86,
+        89,
+        90
+      ]
+    },
+    {
+      "id": 83,
+      "districtId": "bailey_inner",
+      "name": "内郭9",
+      "type": "empty",
+      "gx": 1,
+      "gy": 1,
+      "u": 0.7549,
+      "v": 0.2081,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        75,
+        78
+      ]
+    },
+    {
+      "id": 84,
+      "districtId": "bailey_inner",
+      "name": "内郭10",
+      "type": "empty",
+      "gx": 2,
+      "gy": 1,
+      "u": 0.673,
+      "v": 0.1442,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        74,
+        76
+      ]
+    },
+    {
+      "id": 85,
+      "districtId": "bailey_inner",
+      "name": "内郭11",
+      "type": "empty",
+      "gx": 3,
+      "gy": 1,
+      "u": 0.6643,
+      "v": 0.2434,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        82,
+        86
+      ]
+    },
+    {
+      "id": 86,
+      "districtId": "bailey_inner",
+      "name": "内郭12",
+      "type": "empty",
+      "gx": 4,
+      "gy": 1,
+      "u": 0.6677,
+      "v": 0.2409,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        82,
+        85
+      ]
+    },
+    {
+      "id": 87,
+      "districtId": "bailey_inner",
+      "name": "内郭13",
+      "type": "empty",
+      "gx": 5,
+      "gy": 1,
+      "u": 0.6676,
+      "v": 0.2302,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        88,
+        90,
+        91
+      ]
+    },
+    {
+      "id": 88,
+      "districtId": "bailey_inner",
+      "name": "内郭14",
+      "type": "empty",
+      "gx": 6,
+      "gy": 1,
+      "u": 0.6675,
+      "v": 0.2314,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        87,
+        90
+      ]
+    },
+    {
+      "id": 89,
+      "districtId": "bailey_inner",
+      "name": "内郭15",
+      "type": "empty",
+      "gx": 7,
+      "gy": 1,
+      "u": 0.68,
+      "v": 0.2263,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        82,
+        91,
+        94,
+        98
+      ]
+    },
+    {
+      "id": 90,
+      "districtId": "bailey_inner",
+      "name": "内郭16",
+      "type": "empty",
+      "gx": 0,
+      "gy": 2,
+      "u": 0.6693,
+      "v": 0.2337,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        82,
+        87,
+        88
+      ]
+    },
+    {
+      "id": 91,
+      "districtId": "bailey_inner",
+      "name": "内郭17",
+      "type": "empty",
+      "gx": 1,
+      "gy": 2,
+      "u": 0.6849,
+      "v": 0.2266,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        87,
+        89,
+        94
+      ]
+    },
+    {
+      "id": 92,
+      "districtId": "bailey_inner",
+      "name": "内郭18",
+      "type": "empty",
+      "gx": 2,
+      "gy": 2,
+      "u": 0.6838,
+      "v": 0.214,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        93,
+        95,
+        97
+      ]
+    },
+    {
+      "id": 93,
+      "districtId": "bailey_inner",
+      "name": "内郭19",
+      "type": "empty",
+      "gx": 3,
+      "gy": 2,
+      "u": 0.6831,
+      "v": 0.2103,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        92,
+        96
+      ]
+    },
+    {
+      "id": 94,
+      "districtId": "bailey_inner",
+      "name": "内郭20",
+      "type": "empty",
+      "gx": 4,
+      "gy": 2,
+      "u": 0.6884,
+      "v": 0.2226,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        75,
+        89,
+        91
+      ]
+    },
+    {
+      "id": 95,
+      "districtId": "bailey_inner",
+      "name": "内郭21",
+      "type": "empty",
+      "gx": 5,
+      "gy": 2,
+      "u": 0.686,
+      "v": 0.2176,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        75,
+        77,
+        92
+      ]
+    },
+    {
+      "id": 96,
+      "districtId": "bailey_inner",
+      "name": "内郭22",
+      "type": "empty",
+      "gx": 6,
+      "gy": 2,
+      "u": 0.6872,
+      "v": 0.2059,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        93,
+        97,
+        98
+      ]
+    },
+    {
+      "id": 97,
+      "districtId": "bailey_inner",
+      "name": "内郭23",
+      "type": "empty",
+      "gx": 7,
+      "gy": 2,
+      "u": 0.6894,
+      "v": 0.2141,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        77,
+        92,
+        96
+      ]
+    },
+    {
+      "id": 98,
+      "districtId": "bailey_inner",
+      "name": "内郭24",
+      "type": "empty",
+      "gx": 0,
+      "gy": 3,
+      "u": 0.7002,
+      "v": 0.2004,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        75,
+        89,
+        96,
+        99,
+        104,
+        105
+      ]
+    },
+    {
+      "id": 99,
+      "districtId": "bailey_inner",
+      "name": "内郭25",
+      "type": "empty",
+      "gx": 1,
+      "gy": 3,
+      "u": 0.6929,
+      "v": 0.1973,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        98,
+        100,
+        101,
+        104
+      ]
+    },
+    {
+      "id": 100,
+      "districtId": "bailey_inner",
+      "name": "内郭26",
+      "type": "empty",
+      "gx": 2,
+      "gy": 3,
+      "u": 0.6988,
+      "v": 0.1923,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        99,
+        101,
+        102
+      ]
+    },
+    {
+      "id": 101,
+      "districtId": "bailey_inner",
+      "name": "内郭27",
+      "type": "empty",
+      "gx": 3,
+      "gy": 3,
+      "u": 0.6924,
+      "v": 0.1956,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        80,
+        99,
+        100
+      ]
+    },
+    {
+      "id": 102,
+      "districtId": "bailey_inner",
+      "name": "内郭28",
+      "type": "empty",
+      "gx": 4,
+      "gy": 3,
+      "u": 0.7116,
+      "v": 0.1937,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        75,
+        80,
+        100,
+        106
+      ]
+    },
+    {
+      "id": 103,
+      "districtId": "bailey_inner",
+      "name": "内郭29",
+      "type": "empty",
+      "gx": 5,
+      "gy": 3,
+      "u": 0.7174,
+      "v": 0.1842,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        106,
+        107,
+        108
+      ]
+    },
+    {
+      "id": 104,
+      "districtId": "bailey_inner",
+      "name": "内郭30",
+      "type": "empty",
+      "gx": 6,
+      "gy": 3,
+      "u": 0.7045,
+      "v": 0.1995,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        80,
+        98,
+        99
+      ]
+    },
+    {
+      "id": 105,
+      "districtId": "bailey_inner",
+      "name": "内郭31",
+      "type": "empty",
+      "gx": 7,
+      "gy": 3,
+      "u": 0.7212,
+      "v": 0.1791,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        98,
+        107,
+        108,
+        109,
+        110,
+        111
+      ]
+    },
+    {
+      "id": 106,
+      "districtId": "bailey_inner",
+      "name": "内郭32",
+      "type": "empty",
+      "gx": 0,
+      "gy": 4,
+      "u": 0.7119,
+      "v": 0.187,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        102,
+        103,
+        108
+      ]
+    },
+    {
+      "id": 107,
+      "districtId": "bailey_inner",
+      "name": "内郭33",
+      "type": "empty",
+      "gx": 1,
+      "gy": 4,
+      "u": 0.7191,
+      "v": 0.184,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        103,
+        105,
+        108
+      ]
+    },
+    {
+      "id": 108,
+      "districtId": "bailey_inner",
+      "name": "内郭34",
+      "type": "empty",
+      "gx": 2,
+      "gy": 4,
+      "u": 0.7276,
+      "v": 0.185,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        103,
+        105,
+        106,
+        107
+      ]
+    },
+    {
+      "id": 109,
+      "districtId": "bailey_inner",
+      "name": "内郭35",
+      "type": "empty",
+      "gx": 3,
+      "gy": 4,
+      "u": 0.7241,
+      "v": 0.1752,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        79,
+        105,
+        110,
+        111
+      ]
+    },
+    {
+      "id": 110,
+      "districtId": "bailey_inner",
+      "name": "内郭36",
+      "type": "empty",
+      "gx": 4,
+      "gy": 4,
+      "u": 0.7184,
+      "v": 0.1764,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        105,
+        109
+      ]
+    },
+    {
+      "id": 111,
+      "districtId": "bailey_inner",
+      "name": "内郭37",
+      "type": "empty",
+      "gx": 5,
+      "gy": 4,
+      "u": 0.735,
+      "v": 0.1668,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        79,
+        81,
+        105,
+        109
+      ]
+    },
+    {
+      "id": 112,
+      "districtId": "spire_base",
+      "name": "主塔裾0",
+      "type": "empty",
+      "gx": 0,
+      "gy": 0,
+      "u": 0.8474,
+      "v": 0.1081,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        148,
+        149,
+        150,
+        151
+      ]
+    },
+    {
+      "id": 113,
+      "districtId": "spire_base",
+      "name": "主塔裾1",
+      "type": "empty",
+      "gx": 1,
+      "gy": 0,
+      "u": 0.7986,
+      "v": 0.1448,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        129,
+        132
+      ]
+    },
+    {
+      "id": 114,
+      "districtId": "spire_base",
+      "name": "主塔裾2",
+      "type": "empty",
+      "gx": 2,
+      "gy": 0,
+      "u": 0.8146,
+      "v": 0.0568,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        119
+      ]
+    },
+    {
+      "id": 115,
+      "districtId": "spire_base",
+      "name": "主塔裾3",
+      "type": "empty",
+      "gx": 3,
+      "gy": 0,
+      "u": 0.8569,
+      "v": 0.0825,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        119,
+        122,
+        151
+      ]
+    },
+    {
+      "id": 116,
+      "districtId": "spire_base",
+      "name": "主塔裾4",
+      "type": "empty",
+      "gx": 4,
+      "gy": 0,
+      "u": 0.8672,
+      "v": 0.1528,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        118,
+        120
+      ]
+    },
+    {
+      "id": 117,
+      "districtId": "spire_base",
+      "name": "主塔裾5",
+      "type": "empty",
+      "gx": 5,
+      "gy": 0,
+      "u": 0.8278,
+      "v": 0.1322,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        118,
+        137,
+        138,
+        139,
+        145
+      ]
+    },
+    {
+      "id": 118,
+      "districtId": "spire_base",
+      "name": "主塔裾6",
+      "type": "empty",
+      "gx": 6,
+      "gy": 0,
+      "u": 0.8419,
+      "v": 0.1543,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        116,
+        117,
+        127
+      ]
+    },
+    {
+      "id": 119,
+      "districtId": "spire_base",
+      "name": "主塔裾7",
+      "type": "empty",
+      "gx": 7,
+      "gy": 0,
+      "u": 0.8421,
+      "v": 0.0616,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        114,
+        115
+      ]
+    },
+    {
+      "id": 120,
+      "districtId": "spire_base",
+      "name": "主塔裾8",
+      "type": "empty",
+      "gx": 0,
+      "gy": 1,
+      "u": 0.8822,
+      "v": 0.1359,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        116,
+        150
+      ]
+    },
+    {
+      "id": 121,
+      "districtId": "spire_base",
+      "name": "主塔裾9",
+      "type": "empty",
+      "gx": 1,
+      "gy": 1,
+      "u": 0.7786,
+      "v": 0.1622,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        124,
+        125,
+        126,
+        133
+      ]
+    },
+    {
+      "id": 122,
+      "districtId": "spire_base",
+      "name": "主塔裾10",
+      "type": "empty",
+      "gx": 2,
+      "gy": 1,
+      "u": 0.8812,
+      "v": 0.0921,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        115,
+        151
+      ]
+    },
+    {
+      "id": 123,
+      "districtId": "spire_base",
+      "name": "主塔裾11",
+      "type": "empty",
+      "gx": 3,
+      "gy": 1,
+      "u": 0.8211,
+      "v": 0.1108,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        143,
+        145,
+        146
+      ]
+    },
+    {
+      "id": 124,
+      "districtId": "spire_base",
+      "name": "主塔裾12",
+      "type": "empty",
+      "gx": 4,
+      "gy": 1,
+      "u": 0.7848,
+      "v": 0.1636,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        121,
+        125,
+        127
+      ]
+    },
+    {
+      "id": 125,
+      "districtId": "spire_base",
+      "name": "主塔裾13",
+      "type": "empty",
+      "gx": 5,
+      "gy": 1,
+      "u": 0.7828,
+      "v": 0.1648,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        121,
+        124,
+        126,
+        127
+      ]
+    },
+    {
+      "id": 126,
+      "districtId": "spire_base",
+      "name": "主塔裾14",
+      "type": "empty",
+      "gx": 6,
+      "gy": 1,
+      "u": 0.7752,
+      "v": 0.1591,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        121,
+        125,
+        127
+      ]
+    },
+    {
+      "id": 127,
+      "districtId": "spire_base",
+      "name": "主塔裾15",
+      "type": "empty",
+      "gx": 7,
+      "gy": 1,
+      "u": 0.79,
+      "v": 0.1589,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        118,
+        124,
+        125,
+        126
+      ]
+    },
+    {
+      "id": 128,
+      "districtId": "spire_base",
+      "name": "主塔裾16",
+      "type": "empty",
+      "gx": 0,
+      "gy": 2,
+      "u": 0.7907,
+      "v": 0.1432,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        129,
+        130,
+        132
+      ]
+    },
+    {
+      "id": 129,
+      "districtId": "spire_base",
+      "name": "主塔裾17",
+      "type": "empty",
+      "gx": 1,
+      "gy": 2,
+      "u": 0.7953,
+      "v": 0.1439,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        113,
+        128,
+        132
+      ]
+    },
+    {
+      "id": 130,
+      "districtId": "spire_base",
+      "name": "主塔裾18",
+      "type": "empty",
+      "gx": 2,
+      "gy": 2,
+      "u": 0.7871,
+      "v": 0.14,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        128,
+        131,
+        133
+      ]
+    },
+    {
+      "id": 131,
+      "districtId": "spire_base",
+      "name": "主塔裾19",
+      "type": "empty",
+      "gx": 3,
+      "gy": 2,
+      "u": 0.794,
+      "v": 0.1388,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        130,
+        133,
+        134
+      ]
+    },
+    {
+      "id": 132,
+      "districtId": "spire_base",
+      "name": "主塔裾20",
+      "type": "empty",
+      "gx": 4,
+      "gy": 2,
+      "u": 0.7962,
+      "v": 0.1429,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        113,
+        128,
+        129,
+        133
+      ]
+    },
+    {
+      "id": 133,
+      "districtId": "spire_base",
+      "name": "主塔裾21",
+      "type": "empty",
+      "gx": 5,
+      "gy": 2,
+      "u": 0.7977,
+      "v": 0.1405,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        121,
+        130,
+        131,
+        132,
+        147
+      ]
+    },
+    {
+      "id": 134,
+      "districtId": "spire_base",
+      "name": "主塔裾22",
+      "type": "empty",
+      "gx": 6,
+      "gy": 2,
+      "u": 0.8092,
+      "v": 0.1374,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        131,
+        135,
+        137
+      ]
+    },
+    {
+      "id": 135,
+      "districtId": "spire_base",
+      "name": "主塔裾23",
+      "type": "empty",
+      "gx": 7,
+      "gy": 2,
+      "u": 0.8124,
+      "v": 0.1351,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        134,
+        136,
+        139
+      ]
+    },
+    {
+      "id": 136,
+      "districtId": "spire_base",
+      "name": "主塔裾24",
+      "type": "empty",
+      "gx": 0,
+      "gy": 3,
+      "u": 0.8114,
+      "v": 0.1265,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        135,
+        137,
+        138,
+        141
+      ]
+    },
+    {
+      "id": 137,
+      "districtId": "spire_base",
+      "name": "主塔裾25",
+      "type": "empty",
+      "gx": 1,
+      "gy": 3,
+      "u": 0.8058,
+      "v": 0.1289,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        117,
+        134,
+        136,
+        138
+      ]
+    },
+    {
+      "id": 138,
+      "districtId": "spire_base",
+      "name": "主塔裾26",
+      "type": "empty",
+      "gx": 2,
+      "gy": 3,
+      "u": 0.8171,
+      "v": 0.1273,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        117,
+        136,
+        137,
+        139
+      ]
+    },
+    {
+      "id": 139,
+      "districtId": "spire_base",
+      "name": "主塔裾27",
+      "type": "empty",
+      "gx": 3,
+      "gy": 3,
+      "u": 0.821,
+      "v": 0.1333,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        117,
+        135,
+        138
+      ]
+    },
+    {
+      "id": 140,
+      "districtId": "spire_base",
+      "name": "主塔裾28",
+      "type": "empty",
+      "gx": 4,
+      "gy": 3,
+      "u": 0.8086,
+      "v": 0.1141,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        141,
+        142,
+        146
+      ]
+    },
+    {
+      "id": 141,
+      "districtId": "spire_base",
+      "name": "主塔裾29",
+      "type": "empty",
+      "gx": 5,
+      "gy": 3,
+      "u": 0.809,
+      "v": 0.1218,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        136,
+        140,
+        144
+      ]
+    },
+    {
+      "id": 142,
+      "districtId": "spire_base",
+      "name": "主塔裾30",
+      "type": "empty",
+      "gx": 6,
+      "gy": 3,
+      "u": 0.8175,
+      "v": 0.1147,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        140,
+        143,
+        145,
+        150
+      ]
+    },
+    {
+      "id": 143,
+      "districtId": "spire_base",
+      "name": "主塔裾31",
+      "type": "empty",
+      "gx": 7,
+      "gy": 3,
+      "u": 0.8174,
+      "v": 0.1091,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        123,
+        142,
+        149
+      ]
+    },
+    {
+      "id": 144,
+      "districtId": "spire_base",
+      "name": "主塔裾32",
+      "type": "empty",
+      "gx": 0,
+      "gy": 4,
+      "u": 0.8321,
+      "v": 0.1202,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        141,
+        145,
+        147
+      ]
+    },
+    {
+      "id": 145,
+      "districtId": "spire_base",
+      "name": "主塔裾33",
+      "type": "empty",
+      "gx": 1,
+      "gy": 4,
+      "u": 0.8224,
+      "v": 0.1156,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        117,
+        123,
+        142,
+        144,
+        147,
+        150
+      ]
+    },
+    {
+      "id": 146,
+      "districtId": "spire_base",
+      "name": "主塔裾34",
+      "type": "empty",
+      "gx": 2,
+      "gy": 4,
+      "u": 0.8382,
+      "v": 0.111,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        123,
+        140,
+        148,
+        149
+      ]
+    },
+    {
+      "id": 147,
+      "districtId": "spire_base",
+      "name": "主塔裾35",
+      "type": "empty",
+      "gx": 3,
+      "gy": 4,
+      "u": 0.8283,
+      "v": 0.1177,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        133,
+        144,
+        145,
+        151
+      ]
+    },
+    {
+      "id": 148,
+      "districtId": "spire_base",
+      "name": "主塔裾36",
+      "type": "empty",
+      "gx": 4,
+      "gy": 4,
+      "u": 0.8432,
+      "v": 0.1078,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        112,
+        146,
+        149,
+        151
+      ]
+    },
+    {
+      "id": 149,
+      "districtId": "spire_base",
+      "name": "主塔裾37",
+      "type": "empty",
+      "gx": 5,
+      "gy": 4,
+      "u": 0.8423,
+      "v": 0.1084,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        112,
+        143,
+        146,
+        148
+      ]
+    },
+    {
+      "id": 150,
+      "districtId": "spire_base",
+      "name": "主塔裾38",
+      "type": "empty",
+      "gx": 6,
+      "gy": 4,
+      "u": 0.8494,
+      "v": 0.1151,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        112,
+        120,
+        142,
+        145
+      ]
+    },
+    {
+      "id": 151,
+      "districtId": "spire_base",
+      "name": "主塔裾39",
+      "type": "empty",
+      "gx": 7,
+      "gy": 4,
+      "u": 0.85,
+      "v": 0.1073,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        112,
+        115,
+        122,
+        147,
+        148
+      ]
+    },
+    {
+      "id": 152,
+      "districtId": "undercroft",
+      "name": "地下水路口0",
+      "type": "empty",
+      "gx": 0,
+      "gy": 0,
+      "u": 0.1737,
+      "v": 0.2954,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        176,
+        177,
+        179
+      ]
+    },
+    {
+      "id": 153,
+      "districtId": "undercroft",
+      "name": "地下水路口1",
+      "type": "empty",
+      "gx": 1,
+      "gy": 0,
+      "u": 0.1251,
+      "v": 0.1614,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        159,
+        168
+      ]
+    },
+    {
+      "id": 154,
+      "districtId": "undercroft",
+      "name": "地下水路口2",
+      "type": "empty",
+      "gx": 2,
+      "gy": 0,
+      "u": 0.1589,
+      "v": 0.2609,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        157,
+        184,
+        186,
+        187
+      ]
+    },
+    {
+      "id": 155,
+      "districtId": "undercroft",
+      "name": "地下水路口3",
+      "type": "empty",
+      "gx": 3,
+      "gy": 0,
+      "u": 0.2454,
+      "v": 0.2369,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        164,
+        167
+      ]
+    },
+    {
+      "id": 156,
+      "districtId": "undercroft",
+      "name": "地下水路口4",
+      "type": "empty",
+      "gx": 4,
+      "gy": 0,
+      "u": 0.1384,
+      "v": 0.2023,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        161,
+        162,
+        168
+      ]
+    },
+    {
+      "id": 157,
+      "districtId": "undercroft",
+      "name": "地下水路口5",
+      "type": "empty",
+      "gx": 5,
+      "gy": 0,
+      "u": 0.1527,
+      "v": 0.237,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        154,
+        161,
+        186
+      ]
+    },
+    {
+      "id": 158,
+      "districtId": "undercroft",
+      "name": "地下水路口6",
+      "type": "empty",
+      "gx": 6,
+      "gy": 0,
+      "u": 0.2048,
+      "v": 0.2684,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        164,
+        166,
+        184,
+        185
+      ]
+    },
+    {
+      "id": 159,
+      "districtId": "undercroft",
+      "name": "地下水路口7",
+      "type": "empty",
+      "gx": 7,
+      "gy": 0,
+      "u": 0.1505,
+      "v": 0.1369,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        153
+      ]
+    },
+    {
+      "id": 160,
+      "districtId": "undercroft",
+      "name": "地下水路口8",
+      "type": "empty",
+      "gx": 0,
+      "gy": 1,
+      "u": 0.1979,
+      "v": 0.3371,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        169,
+        170,
+        171,
+        173
+      ]
+    },
+    {
+      "id": 161,
+      "districtId": "undercroft",
+      "name": "地下水路口9",
+      "type": "empty",
+      "gx": 1,
+      "gy": 1,
+      "u": 0.1603,
+      "v": 0.2084,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        156,
+        157,
+        162
+      ]
+    },
+    {
+      "id": 162,
+      "districtId": "undercroft",
+      "name": "地下水路口10",
+      "type": "empty",
+      "gx": 2,
+      "gy": 1,
+      "u": 0.1723,
+      "v": 0.1883,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        156,
+        161,
+        168
+      ]
+    },
+    {
+      "id": 163,
+      "districtId": "undercroft",
+      "name": "地下水路口11",
+      "type": "empty",
+      "gx": 3,
+      "gy": 1,
+      "u": 0.1838,
+      "v": 0.3181,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        173,
+        174,
+        175
+      ]
+    },
+    {
+      "id": 164,
+      "districtId": "undercroft",
+      "name": "地下水路口12",
+      "type": "empty",
+      "gx": 4,
+      "gy": 1,
+      "u": 0.2247,
+      "v": 0.2534,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        155,
+        158,
+        166
+      ]
+    },
+    {
+      "id": 165,
+      "districtId": "undercroft",
+      "name": "地下水路口13",
+      "type": "empty",
+      "gx": 5,
+      "gy": 1,
+      "u": 0.1552,
+      "v": 0.283,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        166,
+        180,
+        181,
+        182
+      ]
+    },
+    {
+      "id": 166,
+      "districtId": "undercroft",
+      "name": "地下水路口14",
+      "type": "empty",
+      "gx": 6,
+      "gy": 1,
+      "u": 0.183,
+      "v": 0.2753,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        158,
+        164,
+        165,
+        179,
+        183
+      ]
+    },
+    {
+      "id": 167,
+      "districtId": "undercroft",
+      "name": "地下水路口15",
+      "type": "empty",
+      "gx": 7,
+      "gy": 1,
+      "u": 0.2632,
+      "v": 0.2145,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        155
+      ]
+    },
+    {
+      "id": 168,
+      "districtId": "undercroft",
+      "name": "地下水路口16",
+      "type": "empty",
+      "gx": 0,
+      "gy": 2,
+      "u": 0.1216,
+      "v": 0.1874,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        153,
+        156,
+        162
+      ]
+    },
+    {
+      "id": 169,
+      "districtId": "undercroft",
+      "name": "地下水路口17",
+      "type": "empty",
+      "gx": 1,
+      "gy": 2,
+      "u": 0.2077,
+      "v": 0.3306,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        160,
+        170,
+        171,
+        172
+      ]
+    },
+    {
+      "id": 170,
+      "districtId": "undercroft",
+      "name": "地下水路口18",
+      "type": "empty",
+      "gx": 2,
+      "gy": 2,
+      "u": 0.2014,
+      "v": 0.3279,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        160,
+        169,
+        172,
+        174
+      ]
+    },
+    {
+      "id": 171,
+      "districtId": "undercroft",
+      "name": "地下水路口19",
+      "type": "empty",
+      "gx": 3,
+      "gy": 2,
+      "u": 0.1922,
+      "v": 0.3321,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        160,
+        169,
+        172
+      ]
+    },
+    {
+      "id": 172,
+      "districtId": "undercroft",
+      "name": "地下水路口20",
+      "type": "empty",
+      "gx": 4,
+      "gy": 2,
+      "u": 0.1896,
+      "v": 0.3285,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        169,
+        170,
+        171,
+        175
+      ]
+    },
+    {
+      "id": 173,
+      "districtId": "undercroft",
+      "name": "地下水路口21",
+      "type": "empty",
+      "gx": 5,
+      "gy": 2,
+      "u": 0.1841,
+      "v": 0.3129,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        160,
+        163,
+        175,
+        176,
+        178,
+        181
+      ]
+    },
+    {
+      "id": 174,
+      "districtId": "undercroft",
+      "name": "地下水路口22",
+      "type": "empty",
+      "gx": 6,
+      "gy": 2,
+      "u": 0.1756,
+      "v": 0.324,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        163,
+        170,
+        175
+      ]
+    },
+    {
+      "id": 175,
+      "districtId": "undercroft",
+      "name": "地下水路口23",
+      "type": "empty",
+      "gx": 7,
+      "gy": 2,
+      "u": 0.1809,
+      "v": 0.323,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        163,
+        172,
+        173,
+        174
+      ]
+    },
+    {
+      "id": 176,
+      "districtId": "undercroft",
+      "name": "地下水路口24",
+      "type": "empty",
+      "gx": 0,
+      "gy": 3,
+      "u": 0.1756,
+      "v": 0.3057,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        152,
+        173,
+        178
+      ]
+    },
+    {
+      "id": 177,
+      "districtId": "undercroft",
+      "name": "地下水路口25",
+      "type": "empty",
+      "gx": 1,
+      "gy": 3,
+      "u": 0.169,
+      "v": 0.2951,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        152,
+        178,
+        181
+      ]
+    },
+    {
+      "id": 178,
+      "districtId": "undercroft",
+      "name": "地下水路口26",
+      "type": "empty",
+      "gx": 2,
+      "gy": 3,
+      "u": 0.1635,
+      "v": 0.3085,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        173,
+        176,
+        177
+      ]
+    },
+    {
+      "id": 179,
+      "districtId": "undercroft",
+      "name": "地下水路口27",
+      "type": "empty",
+      "gx": 3,
+      "gy": 3,
+      "u": 0.1748,
+      "v": 0.2859,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        152,
+        166,
+        180,
+        182
+      ]
+    },
+    {
+      "id": 180,
+      "districtId": "undercroft",
+      "name": "地下水路口28",
+      "type": "empty",
+      "gx": 4,
+      "gy": 3,
+      "u": 0.1707,
+      "v": 0.2856,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        165,
+        179,
+        181
+      ]
+    },
+    {
+      "id": 181,
+      "districtId": "undercroft",
+      "name": "地下水路口29",
+      "type": "empty",
+      "gx": 5,
+      "gy": 3,
+      "u": 0.1646,
+      "v": 0.2914,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        165,
+        173,
+        177,
+        180,
+        182,
+        186
+      ]
+    },
+    {
+      "id": 182,
+      "districtId": "undercroft",
+      "name": "地下水路口30",
+      "type": "empty",
+      "gx": 6,
+      "gy": 3,
+      "u": 0.1574,
+      "v": 0.2868,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        165,
+        179,
+        181
+      ]
+    },
+    {
+      "id": 183,
+      "districtId": "undercroft",
+      "name": "地下水路口31",
+      "type": "empty",
+      "gx": 7,
+      "gy": 3,
+      "u": 0.166,
+      "v": 0.272,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        166,
+        185,
+        187
+      ]
+    },
+    {
+      "id": 184,
+      "districtId": "undercroft",
+      "name": "地下水路口32",
+      "type": "empty",
+      "gx": 0,
+      "gy": 4,
+      "u": 0.1511,
+      "v": 0.2661,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        154,
+        158,
+        187
+      ]
+    },
+    {
+      "id": 185,
+      "districtId": "undercroft",
+      "name": "地下水路口33",
+      "type": "empty",
+      "gx": 1,
+      "gy": 4,
+      "u": 0.1628,
+      "v": 0.2702,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        158,
+        183,
+        187
+      ]
+    },
+    {
+      "id": 186,
+      "districtId": "undercroft",
+      "name": "地下水路口34",
+      "type": "empty",
+      "gx": 2,
+      "gy": 4,
+      "u": 0.1546,
+      "v": 0.2534,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        154,
+        157,
+        181
+      ]
+    },
+    {
+      "id": 187,
+      "districtId": "undercroft",
+      "name": "地下水路口35",
+      "type": "empty",
+      "gx": 3,
+      "gy": 4,
+      "u": 0.162,
+      "v": 0.2611,
+      "tileU": 0.016,
+      "tileV": 0.012,
+      "landmark": false,
+      "locked": true,
+      "interiorMapId": "",
+      "links": [
+        154,
+        183,
+        184,
+        185
+      ]
+    }
+  ]
+}
