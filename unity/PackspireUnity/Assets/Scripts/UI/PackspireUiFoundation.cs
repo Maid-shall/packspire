@@ -81,7 +81,17 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);
  }
 
- public bool Handles(ScreenId value)=>uiReady&&value!=ScreenId.Battle&&(value!=ScreenId.Map||(game!=null&&game.UiUsesExplorationMap));
+ public bool IsRouteTransitioning=>explorationRouteStage!=null&&explorationRouteStage.IsMoving;
+ public bool Handles(ScreenId value){
+  if(!uiReady||game==null)return false;
+  if(value==ScreenId.Battle)return false;
+  if(value!=ScreenId.Map)return true;
+  if(game.ShouldDrawLegacyOnGui)return false;
+  if(game.UsesRoutePresentation)return true;
+  if(game.CurrentRoutePresentationMode==RoutePresentationMode.RiteDebug)return true;
+  return game.UiUsesExplorationMap;
+ }
  public void ForceRefreshScreen(){hasRenderedScreen=false;presentationHubBuilt=false;explorationMapBuilt=false;if(uiReady)RefreshScreen(true);}
+ public void ApplyRoutePresentationVisibility(){ApplyRouteModeVisibility();}
 }
 }

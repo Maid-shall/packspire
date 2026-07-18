@@ -218,6 +218,7 @@ public static class ExplorationMapCatalog {
  }
 
  public static ExplorationMapDef Get(string id){
+  if(id==ExplorationRouteCatalog.SliceMapId)return ExplorationRouteCatalog.SliceMap;
   if(id==ForgeInteriorId)return ForgeInterior;
   if(id==BarracksInteriorId)return BarracksInterior;
   return OldSpireIso;
@@ -237,22 +238,6 @@ public static class ExplorationMapSystem {
   };
   MarkVisited(run,entrance.id);
   Reveal(run,def,entrance.id);
-  // One demo hidden path is known at start so the ghost conduit is visible in the rite diagram.
-  bool hiddenSeeded=false;
-  foreach(var cell in def.cells){
-   if(hiddenSeeded||cell.locked||cell.links==null)continue;
-   foreach(int n in cell.links){
-    if(n<cell.id)continue;
-    if(LinkKind(def,cell.id,n)!=ExplorationLinkKind.Hidden)continue;
-    RevealHiddenEdge(run,cell.id,n);
-    string nk=NodeKey(run.activeMapId,n);
-    if(!run.revealed.Contains(nk))run.revealed.Add(nk);
-    string ck=NodeKey(run.activeMapId,cell.id);
-    if(!run.revealed.Contains(ck))run.revealed.Add(ck);
-    hiddenSeeded=true;
-    break;
-   }
-  }
   return run;
  }
 
@@ -455,10 +440,10 @@ public static class ExplorationMapSystem {
   if(run==null)return false;
   var current=Def(run);
   if(current==null||!current.IsInterior)return false;
-  string outdoorId=current.outdoorMapId??run.mapId;
+  // Prefer the run's outdoor map (slice / full) so interiors don't yank players onto another graph.
+  string outdoorId=!string.IsNullOrEmpty(run.mapId)?run.mapId:(current.outdoorMapId??ExplorationMapCatalog.DefaultMapId);
   int doorNode=run.outdoorNodeId;
   run.activeMapId=outdoorId;
-  run.mapId=outdoorId;
   var outdoor=ExplorationMapCatalog.Get(outdoorId);
   if(doorNode<0||Node(outdoor,doorNode)==null){
    var door=outdoor.cells.FirstOrDefault(n=>n.type=="building_door"&&n.interiorMapId==current.id)

@@ -14,22 +14,37 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void BuildDeveloperOverlay(){
-  developerAccessButton=PackspireUiFactory.Button("DEV",()=>game.UiToggleDeveloperPanel());
+  // Normal play: F10 only. Dev builds keep a tiny corner hint (not a DEV dock).
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+  developerAccessButton=PackspireUiFactory.Button("F10 DEV",()=>game.UiToggleDeveloperPanel());
   developerAccessButton.AddToClassList("ps-dev-access-global");
+  developerAccessButton.AddToClassList("ps-dev-access-hint");
   root.Add(developerAccessButton);
+#else
+  developerAccessButton=null;
+#endif
 
   developerPanelRoot=Container("ps-dev-panel-current");
   developerPanelRoot.Add(PackspireUiFactory.Title("開発者メニュー"));
-  developerPanelRoot.Add(PackspireUiFactory.Body("現行UIの画面だけを直接確認します。"));
+  developerPanelRoot.Add(PackspireUiFactory.Body("F10で開閉。閉じると直前の画面へ戻ります。ジャンプは状態を勝手に全解放しません。"));
   var grid=Container("ps-dev-current-grid");
   AddDeveloperDestination(grid,"2.5D拠点",ScreenId.Hub);
   AddDeveloperDestination(grid,"遠征準備",ScreenId.Expedition);
-  var xmap=PackspireUiFactory.Button("巨大マップ試作",()=>{
-   game.UiOpenExplorationMap();
-   if(game.UiDeveloperPanelOpen)game.UiToggleDeveloperPanel();
-  });
-  xmap.AddToClassList("ps-dev-current-button");
-  grid.Add(xmap);
+  AddDevAction(grid,"新規ルート試作",()=>{game.UiDevFreshRouteSlice();ForceRefreshScreen();});
+  AddDevAction(grid,"地点・入口",()=>DevJumpRoute(ExplorationRouteCatalog.CellEntrance));
+  AddDevAction(grid,"地点・分岐",()=>DevJumpRoute(ExplorationRouteCatalog.CellFork));
+  AddDevAction(grid,"地点・breach前",()=>DevJumpRoute(ExplorationRouteCatalog.CellBreachFrom));
+  AddDevAction(grid,"地点・hidden前",()=>DevJumpRoute(ExplorationRouteCatalog.CellHiddenFrom));
+  AddDevAction(grid,"地点・戦闘1",()=>DevJumpRoute(ExplorationRouteCatalog.CellBattle));
+  AddDevAction(grid,"地点・戦闘2",()=>DevJumpRoute(ExplorationRouteCatalog.CellBattle2));
+  AddDevAction(grid,"地点・戦闘3",()=>DevJumpRoute(ExplorationRouteCatalog.CellBattle3));
+  AddDevAction(grid,"地点・建物内部",()=>DevJumpRoute(ExplorationRouteCatalog.CellBreachTo,true));
+  AddDevAction(grid,"操作・breach開通",()=>{game.UiDevOpenBreach();ForceRefreshScreen();});
+  AddDevAction(grid,"操作・hidden発見",()=>{game.UiDevRevealHidden();ForceRefreshScreen();});
+  AddDevAction(grid,"操作・戦闘開始",()=>{game.UiDevOpenRouteBattle();ForceRefreshScreen();});
+  AddDevAction(grid,"表示・旧探索地図",()=>{game.UiDevOpenOldMap();ForceRefreshScreen();});
+  AddDevAction(grid,"表示・術式図",()=>{game.UiDevOpenRiteDebug();ForceRefreshScreen();});
+  AddDevAction(grid,"表示・旧戦闘",()=>{game.UiDevOpenOldBattle();ForceRefreshScreen();});
   AddDeveloperDestination(grid,"荷造り",ScreenId.Pack);
   AddDeveloperDestination(grid,"保管庫",ScreenId.Vault);
   AddDeveloperDestination(grid,"役職",ScreenId.Status);
@@ -37,26 +52,41 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"図鑑",ScreenId.Compendium);
   AddDeveloperDestination(grid,"人物作成",ScreenId.Character);
   developerPanelRoot.Add(grid);
-  var close=PackspireUiFactory.Button("閉じる",()=>game.UiToggleDeveloperPanel());
+  var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());
   close.AddToClassList("ps-dev-current-close");
   developerPanelRoot.Add(close);
   root.Add(developerPanelRoot);
   RefreshDeveloperOverlay();
  }
 
+ void DevJumpRoute(int cellId,bool interior=false){
+  game.UiDevJumpExplorationCell(cellId,interior);
+  ForceRefreshScreen();
+ }
+
+ void AddDevAction(VisualElement grid,string label,System.Action action){
+  var button=PackspireUiFactory.Button(label,action);
+  button.AddToClassList("ps-dev-current-button");
+  grid.Add(button);
+ }
+
  void AddDeveloperDestination(VisualElement grid,string label,ScreenId target){
   var button=PackspireUiFactory.Button(label,()=>{
    game.UiNavigate(target);
-   if(game.UiDeveloperPanelOpen)game.UiToggleDeveloperPanel();
+   game.UiDevCloseWithoutRestore();
+   ForceRefreshScreen();
   });
   button.AddToClassList("ps-dev-current-button");
   grid.Add(button);
  }
 
  void RefreshDeveloperOverlay(){
-  if(developerAccessButton==null||developerPanelRoot==null||game==null)return;
+  if(developerPanelRoot==null||game==null)return;
   bool open=game.UiDeveloperPanelOpen;
-  developerAccessButton.text=open?"DEV ×":"DEV";
+  if(developerAccessButton!=null){
+   developerAccessButton.text=open?"F10 ×":"F10 DEV";
+   developerAccessButton.style.display=DisplayStyle.Flex;
+  }
   developerPanelRoot.style.display=open?DisplayStyle.Flex:DisplayStyle.None;
  }
 

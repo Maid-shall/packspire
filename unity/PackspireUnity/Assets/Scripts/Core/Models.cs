@@ -28,5 +28,9 @@ public enum ScreenId { Character, Hub, Status, Vault, Faction, Expedition, Pack,
 [Serializable] public class IdInt { public string id; public int value; public IdInt(string id,int value){this.id=id;this.value=value;} }
 [Serializable] public class IdFloat { public string id; public float value; public IdFloat(string id,float value){this.id=id;this.value=value;} }
 [Serializable] public class DungeonAxes { public int alert,collapse,corruption; public int Clamp(int value)=>Mathf.Clamp(value,-15,15); public void Change(int alertDelta=0,int collapseDelta=0,int corruptionDelta=0){alert=Clamp(alert+alertDelta);collapse=Clamp(collapse+collapseDelta);corruption=Clamp(corruption+corruptionDelta);} }
+/// <summary>
+/// Expedition run. Persistent: hp/gold/inventory/lootBag/axes/battlesWon/consumables/ids.
+/// Battle-ephemeral (reset in BattleSystem.ResetBattleEphemeral): energy, block, attackBuff, statuses, hand/draw/discard.
+/// </summary>
 [Serializable] public class RunState { public int hp=42,maxHp=42,gold=24,energy=3,block,attackBuff,battlesWon,mapPosition; public string role,dungeon="old_spire",faction,backpack="standard",loadoutId="loadout-1",heirloomUid="",coreId="",conduitId="",resonanceId="",stabilityId=""; public List<ItemInstance> inventory=new(),lootBag=new(); public List<Placement> placements=new(); public List<string> selectedCardSlots=new(),consumables=new(); public List<StatusState> statuses=new(); public DungeonAxes axes=new(); public List<CardInstance> deck=new(),draw=new(),discard=new(),hand=new(); }
 }
