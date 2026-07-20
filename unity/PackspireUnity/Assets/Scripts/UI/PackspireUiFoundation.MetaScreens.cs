@@ -6,9 +6,9 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void BuildStatus(){
   var meta=game.UiMeta;var learned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
-  if(learned.Count==0){screenRoot.Add(BookShell("役職記録",PackspireUiFactory.EmptyState("役職記録なし","役職を習得するとここへ記録されます。")));return;}
+  if(learned.Count==0){screenRoot.Add(BookShell("役職記録",PackspireUiFactory.EmptyState("役職記録なし","役職を習得するとここへ記録されます。"),true));return;}
   if(string.IsNullOrEmpty(selectedRoleId)||!learned.Any(x=>x.id==selectedRoleId))selectedRoleId=learned.FirstOrDefault(x=>x.id==meta.currentRole)?.id??learned[0].id;
-  var shell=BookShell("役職記録",null);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("習得役職");var right=Page("選択中の役職");pages.Add(left);pages.Add(right);
+  var shell=BookShell("役職記録",null,true);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("習得役職");var right=Page("選択中の役職");pages.Add(left);pages.Add(right);
   var list=Container("ps-record-list");left.Add(list);
   foreach(var level in learned){var role=GameCatalog.Roles[level.id];var row=RecordButton(role.name,$"Lv.{level.value}/{role.maxLevel}　{role.kind}",Atlas(game.UiRoleArt,RoleUv(role.id),"ps-record-thumb"),level.id==selectedRoleId,()=>{selectedRoleId=level.id;BuildStatusAgain();});list.Add(row);}
   var selectedLevel=learned.First(x=>x.id==selectedRoleId);var selected=GameCatalog.Roles[selectedRoleId];right.Add(Atlas(game.UiRoleArt,RoleUv(selected.id),"ps-detail-art"));right.Add(PackspireUiFactory.Title($"{selected.name}　Lv.{selectedLevel.value}/{selected.maxLevel}"));right.Add(PackspireUiFactory.Body(selected.kind+"\n"+selected.description));
@@ -47,7 +47,7 @@ public sealed partial class PackspireUiFoundation {
  void BuildFactionAgain(){screenRoot.Clear();BuildFaction();}
 
  void BuildCompendium(){
-  var shell=BookShell("図鑑",null);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("記録一覧");var right=Page("選択中の記録");pages.Add(left);pages.Add(right);
+  var shell=BookShell("図鑑",null,true);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("記録一覧");var right=Page("選択中の記録");pages.Add(left);pages.Add(right);
   var tabs=Container("ps-category-tabs");string[] names={"装備","役職","敵"};for(int i=0;i<3;i++){int tab=i;var b=PackspireUiFactory.Button(names[i],()=>{compendiumTab=tab;selectedCompendiumId="";BuildCompendiumAgain();});if(i==compendiumTab)b.AddToClassList("ps-selected");b.Add(InkRule());tabs.Add(b);}left.Add(tabs);
   var gridBody=Container("ps-compendium-grid");left.Add(gridBody);
   if(compendiumTab==0)BuildItemCompendium(gridBody,right);else if(compendiumTab==1)BuildRoleCompendium(gridBody,right);else BuildEnemyCompendium(gridBody,right);
@@ -56,6 +56,25 @@ public sealed partial class PackspireUiFoundation {
  void BuildCompendiumAgain(){screenRoot.Clear();BuildCompendium();}
  void BuildItemCompendium(VisualElement grid,VisualElement detail){var values=GameCatalog.Items.Values.ToArray();if(string.IsNullOrEmpty(selectedCompendiumId)||!GameCatalog.Items.ContainsKey(selectedCompendiumId))selectedCompendiumId=values[0].id;foreach(var item in values)grid.Add(AtlasButton(game.UiEquipmentArt,ItemUv(item.id),item.name,item.id==selectedCompendiumId,()=>{selectedCompendiumId=item.id;BuildCompendiumAgain();}));var selected=GameCatalog.Items[selectedCompendiumId];detail.Add(Atlas(game.UiEquipmentArt,ItemUv(selected.id),"ps-detail-art"));detail.Add(PackspireUiFactory.Title(selected.name));detail.Add(PackspireUiFactory.Body(selected.description));detail.Add(PackspireUiFactory.Body($"分類　{ItemTypeLabel(selected.type)}\n形状　{selected.cells.Length}マス\n属性　{string.Join("・",selected.cells.Select(x=>ElementLabel(x.element)))}"));if(!string.IsNullOrEmpty(selected.linkRule)){detail.Add(PackspireUiFactory.Title("LINK効果"));detail.Add(PackspireUiFactory.Body(selected.linkRule));}}
  void BuildRoleCompendium(VisualElement grid,VisualElement detail){var values=GameCatalog.Roles.Values.ToArray();if(string.IsNullOrEmpty(selectedCompendiumId)||!GameCatalog.Roles.ContainsKey(selectedCompendiumId))selectedCompendiumId=values[0].id;foreach(var role in values){bool known=game.UiMeta.jobLevels.Any(x=>x.id==role.id&&x.value>0);var tile=AtlasButton(game.UiRoleArt,RoleUv(role.id),known?role.name:"？？？",role.id==selectedCompendiumId,()=>{selectedCompendiumId=role.id;BuildCompendiumAgain();});if(!known)tile.AddToClassList("ps-unknown");grid.Add(tile);}var selected=GameCatalog.Roles[selectedCompendiumId];detail.Add(Atlas(game.UiRoleArt,RoleUv(selected.id),"ps-detail-art"));detail.Add(PackspireUiFactory.Title(selected.name));detail.Add(PackspireUiFactory.Body(selected.kind+"\n"+selected.description));detail.Add(PackspireUiFactory.Body($"最大レベル　{selected.maxLevel}\nLv.7　{game.UiRoleMilestone(selected.id,false)}\nLv.{selected.maxLevel}　{game.UiRoleMilestone(selected.id,true)}"));}
- void BuildEnemyCompendium(VisualElement grid,VisualElement detail){var values=GameCatalog.Enemies;if(string.IsNullOrEmpty(selectedCompendiumId)||!values.Any(x=>x.id==selectedCompendiumId))selectedCompendiumId=values[0].id;foreach(var enemy in values)grid.Add(AtlasButton(game.UiEnemyArt,EnemyUv(enemy.id),enemy.name,enemy.id==selectedCompendiumId,()=>{selectedCompendiumId=enemy.id;BuildCompendiumAgain();}));var selected=values.First(x=>x.id==selectedCompendiumId);detail.Add(Atlas(game.UiEnemyArt,EnemyUv(selected.id),"ps-detail-art"));detail.Add(PackspireUiFactory.Title(selected.name));detail.Add(PackspireUiFactory.Body($"危険度　{selected.tier}\n基礎HP　{selected.hp}\n行動候補　{string.Join("・",selected.damages.Select(x=>x==0?"特殊行動":$"攻撃{x}"))}"));}
+ void BuildEnemyCompendium(VisualElement grid,VisualElement detail){
+  var values=GameCatalog.Enemies;
+  if(string.IsNullOrEmpty(selectedCompendiumId)||!values.Any(x=>x.id==selectedCompendiumId))selectedCompendiumId=values[0].id;
+  foreach(var enemy in values){
+   var captured=enemy;
+   var button=new Button(()=>{selectedCompendiumId=captured.id;BuildCompendiumAgain();}){tooltip=captured.name};
+   button.AddToClassList("ps-atlas-button");
+   if(captured.id==selectedCompendiumId)button.AddToClassList("ps-selected");
+   button.Add(EnemyPortrait(captured,"ps-atlas-image"));
+   var name=new Label(captured.name);
+   name.AddToClassList("ps-atlas-label");
+   button.Add(name);
+   if(captured.id==selectedCompendiumId)button.Add(SelectionBadge());
+   grid.Add(button);
+  }
+  var selected=values.First(x=>x.id==selectedCompendiumId);
+  detail.Add(EnemyPortrait(selected,"ps-detail-art"));
+  detail.Add(PackspireUiFactory.Title(selected.name));
+  detail.Add(PackspireUiFactory.Body($"危険度　{selected.tier}\n基礎HP　{selected.hp}\n行動候補　{string.Join("・",selected.damages.Select(x=>x==0?"特殊行動":$"攻撃{x}"))}"));
+}
 }
 }

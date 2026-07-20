@@ -28,7 +28,15 @@ public static class GameCatalog {
   ["blade_master"]=new("blade_master","剣聖","上級職","剣と短剣を大幅強化。"),["bulwark"]=new("bulwark","城塞騎士","上級職","防御カードを大幅強化。"),["hunter"]=new("hunter","魔獣狩り","上級職","短剣と槍を大幅強化。"),["grand_artificer"]=new("grand_artificer","錬装導師","上級職","道具を大幅強化。"),
   ["arsenal_lord"]=new("arsenal_lord","万刃の王","隠し職","すべての武器を強化。",15),["pack_saint"]=new("pack_saint","不動の聖者","隠し職","防御と回復を強化。",15),["rune_weaver"]=new("rune_weaver","境界の織手","隠し職","ルーンカードを0コスト化。",15),["grid_dancer"]=new("grid_dancer","盤上舞踏家","隠し職","0コストカードを強化。",15),["quickblade"]=new("quickblade","瞬刃士","複合職","風色一致の攻撃を強化。",15),["anchor_knight"]=new("anchor_knight","定錨騎士","複合職","土色一致の防御を強化。",15),["siege_channeler"]=new("siege_channeler","攻城導師","複合職","複数色一致を高出力化。",15),["right_hand_swordsman"]=new("right_hand_swordsman","片手剣鬼","配置隠し職","右側の片手武器を強化。",15),["iron_vanguard"]=new("iron_vanguard","鉄屑前衛","勢力職","防具を強化。",15),["spore_druid"]=new("spore_druid","胞子森導師","勢力職","回復を強化。",15),["guild_factor"]=new("guild_factor","荷造商務官","勢力職","道具を強化。",15),["void_apostle"]=new("void_apostle","虚無の使徒","勢力職","呪い武器を強化。",15)
  };
- public static readonly EnemyDef[] Enemies={new("sentinel","鉄殻の番兵",1,34,8,5),new("rats","洞穴ネズミの群れ",1,29,8,6),new("porter","錆びた荷運び人形",1,38,10,0),new("mage","胞子の魔導師",2,45,7,11),new("beast","鋼喰い獣",2,50,9,10),new("knight","虚ろな騎士",2,54,13,6),new("boss","荷喰らい",3,72,12,12,17)};
+ public static readonly EnemyDef[] Enemies={
+  new("sentinel","鉄殻の番兵",1,34,8,5),
+  new("rats","洞穴ネズミの群れ",1,29,8,6),
+  new("porter","錆びた荷運び人形",1,38,10,0),
+  new("mage","胞子の魔導師",2,45,7,11),
+  new("beast","鋼喰い獣",2,50,9,10),
+  new("knight","虚ろな騎士",2,54,13,6),
+  new EnemyDef("dragon","劫火竜",2,62,14,10,16).WithPortrait("Art/Portraits/enemy-dragon-v1"),
+  new("boss","荷喰らい",3,72,12,12,17)};
  public static readonly DungeonDef[] Dungeons={new("old_spire","古塔パックスパイア","36区画を自由探索する基準ダンジョン。",5,1,0,1),new("ash_forge","灰熱の鋳造坑","敵の密度と攻撃性が高い高熱坑道。",6,1.35f,2,1.25f),new("hollow_archive","虚ろなる大記憶庫","多数の精鋭が徘徊する最深記憶域。",8,1.7f,4,1.55f)};
  public static readonly BackpackDef[] Backpacks={new("standard","探索者の鞄","標準的な6×4の色マス鞄。"),new("merchant","行商人の鞄","商店価格を軽減する取引向けの鞄。"),new("arcane","魔導鞄","ルーンと色一致を活かす魔導鞄。"),new("coffin","棺型ケース","縦長装備をまとめやすい棺型ケース。"),new("living","生きている鞄","特殊な変化を起こす生体鞄。")} ;
  public static readonly FactionDef[] Factions={new("iron","鉄殻軍","防具カードを強化。","従士","兵士","騎士","鉄将"),new("spore","胞子教団","勝利後の回復を強化。","芽吹き","培養士","導師","森の代行者"),new("guild","荷造り師組合","商店価格を割引。","見習い","組合員","商務官","大番頭"),new("void","虚無の巡礼者","獲得ゴールドと呪い装備が増加。","迷い子","巡礼者","使徒","深淵卿")};

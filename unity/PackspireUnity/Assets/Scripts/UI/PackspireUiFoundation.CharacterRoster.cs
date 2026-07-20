@@ -26,10 +26,8 @@ public sealed partial class PackspireUiFoundation {
   left.Add(grid);
   foreach(var character in CharacterCatalog.Roster){
    var def=character;
-   var tile=AtlasButton(
-    game.UiCharacterArt,
-    CharacterUv(def.portraitBody,def.portraitHair),
-    def.name,
+   var tile=CharacterPortraitButton(
+    def,
     def.id==selectedCharacterId,
     ()=>{selectedCharacterId=def.id;game.UiSelectCharacter(def.id);BuildCharacterAgain();});
    tile.AddToClassList("ps-character-roster-tile");
@@ -37,7 +35,7 @@ public sealed partial class PackspireUiFoundation {
   }
 
   var selected=CharacterCatalog.Get(selectedCharacterId);
-  right.Add(Atlas(game.UiCharacterArt,CharacterUv(selected.portraitBody,selected.portraitHair),"ps-character-preview"));
+  right.Add(CharacterPortrait(selected,"ps-character-preview"));
   right.Add(PackspireUiFactory.Title($"{selected.name}　{selected.title}"));
   right.Add(PackspireUiFactory.Body(selected.description));
 

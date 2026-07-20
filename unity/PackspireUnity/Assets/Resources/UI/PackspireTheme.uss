@@ -208,12 +208,29 @@
     background-color: rgb(49, 34, 23);
 }
 
+.ps-book-screen.ps-book-white {
+    background-color: rgb(255, 255, 255);
+}
+
 .ps-book-background {
     position: absolute;
     left: 4%;
     right: 4%;
     top: 1%;
     bottom: 1%;
+}
+
+.ps-book-screen.ps-book-white .ps-book-pages {
+    left: 4%;
+    right: 4%;
+    top: 6%;
+    bottom: 6%;
+}
+
+.ps-book-screen.ps-book-white .ps-book-page {
+    background-color: rgb(255, 255, 255);
+    padding-left: 28px;
+    padding-right: 28px;
 }
 
 .ps-book-heading {
@@ -511,16 +528,12 @@
 .ps-character-preview {
     flex-grow: 1;
     min-height: 470px;
-    margin: 8px 24px 10px 24px;
-    background-color: rgba(125, 82, 34, 0.10);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: rgba(111, 66, 25, 0.62);
-    border-right-color: rgba(111, 66, 25, 0.62);
-    border-top-color: rgba(111, 66, 25, 0.62);
-    border-bottom-color: rgba(111, 66, 25, 0.62);
+    margin: 8px 16px 10px 16px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 .ps-choice-grid,
@@ -5514,6 +5527,7 @@
     bottom: 0;
 }
 
+.ps-battle-bg-scene { opacity: 1; }
 .ps-battle-bg-far { opacity: 1; }
 .ps-battle-bg-mid { opacity: 0.7; }
 
@@ -5523,37 +5537,122 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(6, 8, 12, 0.32);
+    background-color: rgba(6, 8, 12, 0.18);
 }
 
-/* Large items 窶・top left */
+.ps-battle-bg-ground-veil {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 52%;
+    bottom: 0;
+    background-color: rgba(28, 20, 12, 0.12);
+}
+
+.ps-battle-start-banner {
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    top: 38%;
+    height: 92px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 3, 2, 0.9);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(212, 176, 88);
+    border-right-color: rgb(140, 108, 48);
+    border-top-color: rgb(232, 196, 110);
+    border-bottom-color: rgb(90, 68, 28);
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.94 0.94 1;
+    transition-property: opacity, translate, scale;
+    transition-duration: 0.28s;
+    transition-timing-function: ease-out;
+    z-index: 40;
+}
+
+.ps-battle-start-banner-in {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1 1 1;
+}
+
+.ps-battle-start-banner-out {
+    opacity: 0;
+    translate: 0 -18px;
+    scale: 1.04 1.04 1;
+}
+
+.ps-battle-start-title {
+    font-size: 42px;
+    color: rgb(236, 196, 96);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-align: middle-center;
+    letter-spacing: 3px;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+}
+
+.ps-battle-start-sub {
+    margin-top: 2px;
+    font-size: 18px;
+    color: rgb(232, 188, 88);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    letter-spacing: 2px;
+}
+
+/* Items — solid black panel from top-left corner */
 .ps-battle-items {
     position: absolute;
-    left: 1.5%;
-    top: 2%;
+    left: 0;
+    top: 0;
     flex-direction: row;
     align-items: center;
+    padding: 14px 18px 14px 14px;
+    background-color: rgb(0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 10px;
     z-index: 20;
 }
 
 .ps-battle-cons {
-    width: 68px;
-    height: 68px;
+    width: 72px;
+    height: 72px;
     margin-right: 8px;
-    padding: 4px;
-    background-color: rgba(12, 10, 8, 0.88);
+    padding: 6px;
+    background-color: rgba(6, 5, 4, 0.9);
     border-left-width: 2px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(212, 168, 72);
-    border-right-color: rgba(160, 130, 80, 0.55);
-    border-top-color: rgba(160, 130, 80, 0.55);
-    border-bottom-color: rgba(160, 130, 80, 0.55);
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(196, 156, 72);
+    border-right-color: rgb(120, 92, 40);
+    border-top-color: rgb(212, 176, 88);
+    border-bottom-color: rgb(90, 68, 28);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 
 .ps-battle-cons:hover {
-    background-color: rgba(36, 28, 18, 0.96);
+    background-color: rgba(18, 14, 8, 0.96);
+    border-left-color: rgb(255, 214, 120);
+    border-top-color: rgb(255, 220, 140);
 }
 
 .ps-battle-cons-art {
@@ -5569,16 +5668,16 @@
 }
 
 .ps-battle-actor-enemy {
-    left: 34%;
-    right: 14%;
-    top: 5%;
-    height: 42%;
+    left: 32%;
+    right: 16%;
+    top: 6%;
+    height: 50%;
     opacity: 0.92;
 }
 
 .ps-battle-actor-player {
-    left: 6%;
-    width: 28%;
+    left: 15%;
+    width: 26%;
     bottom: 4%;
     height: 58%;
 }
@@ -5594,101 +5693,311 @@
 
 .ps-battle-actor-image {
     position: absolute;
-    left: 8%;
-    right: 8%;
+    left: 4%;
+    right: 4%;
     top: 0;
-    bottom: 8%;
+    bottom: 4%;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-/* Player HUD: vertical bars left of character */
-.ps-battle-hud-player {
+.ps-battle-fx-layer {
     position: absolute;
-    left: 1%;
-    bottom: 8%;
-    width: 88px;
-    flex-direction: column;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: visible;
+}
+
+.ps-battle-floater {
+    position: absolute;
+    flex-direction: row;
     align-items: center;
-    padding: 6px 4px;
-    background-color: rgba(10, 8, 6, 0.72);
+    padding: 6px 12px 6px 8px;
+    opacity: 0;
+    translate: 0 18px;
+    scale: 0.86 0.86 1;
+    background-color: rgba(6, 4, 2, 0.72);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    transition-property: opacity, translate, scale;
+    transition-duration: 0.28s;
+    transition-timing-function: ease-out;
+}
+
+.ps-battle-floater-pop {
+    opacity: 1;
+    translate: 0 -8px;
+    scale: 1.08 1.08 1;
+}
+
+.ps-battle-floater-out {
+    opacity: 0;
+    translate: 0 -56px;
+    scale: 0.92 0.92 1;
+}
+
+.ps-battle-floater-icon-art {
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-battle-floater-value {
+    font-size: 30px;
+    color: rgb(255, 244, 214);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(20, 10, 4, 0.85);
+}
+
+.ps-battle-floater-damage .ps-battle-floater-value {
+    color: rgb(255, 140, 110);
+}
+
+.ps-battle-floater-block .ps-battle-floater-value {
+    color: rgb(140, 205, 255);
+}
+
+.ps-battle-floater-heal .ps-battle-floater-value {
+    color: rgb(140, 230, 150);
+}
+
+.ps-battle-floater-energy .ps-battle-floater-value {
+    color: rgb(255, 220, 120);
+}
+
+.ps-battle-floater-self .ps-battle-floater-value {
+    color: rgb(230, 160, 120);
+}
+
+.ps-battle-floater-power .ps-battle-floater-value,
+.ps-battle-floater-skill .ps-battle-floater-value {
+    color: rgb(240, 210, 140);
+    font-size: 22px;
+}
+
+.ps-battle-actor-hit {
+    translate: 10px 0;
+    transition-property: translate;
+    transition-duration: 0.08s;
+}
+
+.ps-battle-actor-player.ps-battle-actor-hit {
+    translate: -8px 0;
+}
+
+.ps-battle-actor-guard {
+    scale: 1.04 1.04 1;
+    transition-property: scale;
+    transition-duration: 0.12s;
+}
+
+.ps-battle-actor-heal {
+    translate: 0 -6px;
+    transition-property: translate;
+    transition-duration: 0.12s;
+}
+
+.ps-battle-card-flight {
+    position: absolute;
+    width: 120px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(28, 20, 12, 0.92);
     border-left-width: 2px;
     border-left-color: rgb(212, 168, 72);
-    z-index: 14;
+    opacity: 1;
+    transition-property: left, top, opacity, scale;
+    transition-duration: 0.24s;
+    transition-timing-function: ease-in;
 }
 
-.ps-battle-player-meta {
-    width: 100%;
-    margin-bottom: 6px;
-    align-items: center;
+.ps-battle-card-flight-attack {
+    border-left-color: rgb(240, 120, 90);
 }
 
-.ps-battle-hud-player .ps-battle-hud-name {
-    font-size: 13px;
+.ps-battle-card-flight-support {
+    border-left-color: rgb(120, 180, 230);
+}
+
+.ps-battle-card-flight-name {
+    font-size: 14px;
     color: rgb(255, 236, 196);
-    -unity-text-align: middle-center;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
 }
 
-.ps-battle-hud-player .ps-battle-hud-meta {
+/* Player / Enemy meter plates — same chrome layout */
+.ps-battle-hud-player,
+.ps-battle-hud-enemy {
+    position: absolute;
+    width: 132px;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px 10px 8px;
+    background-color: rgba(18, 14, 10, 0.92);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(196, 156, 72);
+    border-right-color: rgb(120, 92, 40);
+    border-top-color: rgb(212, 176, 88);
+    border-bottom-color: rgb(90, 68, 28);
+}
+
+.ps-battle-hud-player {
+    left: 1%;
+    bottom: 8%;
+    z-index: 14;
+}
+
+.ps-battle-hud-enemy {
+    right: 1.2%;
+    top: 2%;
+    z-index: 18;
+}
+
+.ps-battle-player-meta,
+.ps-battle-enemy-meta {
+    width: 100%;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.ps-battle-hud-player .ps-battle-hud-name,
+.ps-battle-hud-enemy .ps-battle-hud-name {
+    font-size: 20px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    letter-spacing: 1px;
+}
+
+.ps-battle-hud-player .ps-battle-hud-meta,
+.ps-battle-hud-enemy .ps-battle-hud-meta {
     position: relative;
     right: auto;
     top: auto;
-    font-size: 11px;
-    color: rgb(210, 195, 160);
+    font-size: 13px;
+    color: rgb(232, 188, 88);
     -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    letter-spacing: 1px;
 }
 
 .ps-battle-vbars {
     flex-direction: row;
     align-items: flex-end;
     justify-content: center;
-    height: 220px;
-    margin-bottom: 6px;
+    height: 248px;
+    margin-bottom: 4px;
 }
 
-/* Enemy HUD: vertical bars on the right */
-.ps-battle-hud-enemy {
+/* Intent badge — separate from meter plates, left of enemy HUD */
+.ps-battle-intent-badge {
     position: absolute;
-    right: 2%;
-    top: 4%;
-    width: 96px;
+    right: 148px;
+    top: 6%;
+    width: 128px;
+    min-width: 128px;
+    height: auto;
+    padding: 12px 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(18, 14, 10, 0.92);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(212, 176, 88);
+    border-right-color: rgb(120, 92, 40);
+    border-top-color: rgb(232, 196, 110);
+    border-bottom-color: rgb(90, 68, 28);
+    z-index: 18;
+}
+
+.ps-battle-intent-next {
+    font-size: 12px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+}
+
+.ps-battle-intent-row {
     flex-direction: column;
     align-items: center;
-    padding: 6px 4px;
-    background-color: rgba(10, 8, 6, 0.72);
-    border-left-width: 2px;
-    border-left-color: rgb(212, 168, 72);
-    z-index: 16;
+    justify-content: center;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
-.ps-battle-enemy-meta {
-    width: 100%;
-    margin-bottom: 6px;
-    align-items: center;
+.ps-battle-intent-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 0;
+    margin-bottom: 4px;
 }
 
-.ps-battle-hud-enemy .ps-battle-hud-name {
+.ps-battle-intent-value {
+    font-size: 36px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    letter-spacing: 0;
+}
+
+.ps-battle-intent-value-special {
+    color: rgb(170, 210, 255);
+}
+
+.ps-battle-intent-kind {
+    font-size: 15px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+}
+
+.ps-battle-intent-hint {
+    margin-top: 6px;
     font-size: 12px;
-    color: rgb(255, 236, 196);
+    color: rgb(232, 188, 88);
     -unity-text-align: middle-center;
     white-space: normal;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
-.ps-battle-hud-enemy .ps-battle-hud-meta {
-    position: relative;
-    right: auto;
-    top: auto;
-    font-size: 11px;
-    color: rgb(210, 195, 160);
-    -unity-text-align: middle-center;
-}
-
-.ps-battle-intent {
-    color: rgb(255, 130, 100);
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-}
-
-/* Horizontal meters (unused; vertical is default in battle) */
 .ps-battle-meter {
     margin-top: 4px;
     height: 20px;
@@ -5701,15 +6010,15 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(20, 14, 10, 0.95);
+    background-color: rgba(0, 0, 0, 0.88);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(120, 90, 50, 0.7);
-    border-right-color: rgba(120, 90, 50, 0.7);
-    border-top-color: rgba(120, 90, 50, 0.7);
-    border-bottom-color: rgba(120, 90, 50, 0.7);
+    border-left-color: rgba(140, 110, 50, 0.7);
+    border-right-color: rgba(140, 110, 50, 0.7);
+    border-top-color: rgba(140, 110, 50, 0.7);
+    border-bottom-color: rgba(140, 110, 50, 0.7);
 }
 
 .ps-battle-meter-fill {
@@ -5720,30 +6029,16 @@
     width: 0%;
 }
 
-.ps-battle-meter-hp .ps-battle-meter-fill {
-    background-color: rgb(168, 48, 38);
-}
-
-.ps-battle-meter-block .ps-battle-meter-fill {
-    background-color: rgb(56, 112, 142);
-}
+.ps-battle-meter-hp .ps-battle-meter-fill { background-color: rgb(232, 54, 48); }
+.ps-battle-meter-block .ps-battle-meter-fill { background-color: rgb(56, 176, 232); }
 
 .ps-battle-meter-label {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    font-size: 12px;
-    color: rgb(250, 240, 214);
-    -unity-text-align: middle-center;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    display: none;
 }
 
-/* Vertical meters */
 .ps-battle-meter-v {
-    width: 28px;
-    height: 220px;
+    width: 52px;
+    height: 248px;
     margin-top: 0;
     margin-left: 4px;
     margin-right: 4px;
@@ -5753,23 +6048,59 @@
     left: 0;
     right: 0;
     top: 0;
-    bottom: 18px;
+    bottom: 22px;
+}
+
+.ps-battle-meter-framed { background-color: rgba(0, 0, 0, 0); }
+
+.ps-battle-meter-framed .ps-battle-meter-track {
+    left: 30%;
+    right: 30%;
+    top: 14%;
+    bottom: 26%;
+    background-color: rgba(4, 3, 2, 0.95);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+}
+
+.ps-battle-meter-frame {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .ps-battle-meter-v .ps-battle-meter-fill {
-    left: 2px;
-    right: 2px;
+    left: 1px;
+    right: 1px;
     width: auto;
     top: auto;
-    bottom: 2px;
+    bottom: 1px;
     height: 0%;
 }
 
-.ps-battle-meter-v .ps-battle-meter-label {
-    top: auto;
-    bottom: 0;
-    height: 16px;
-    font-size: 10px;
+.ps-battle-meter-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1%;
+    height: 14%;
+    font-size: 14px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    letter-spacing: 1px;
 }
 
 .ps-battle-status-row {
@@ -5789,30 +6120,34 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background-color: rgba(20, 16, 12, 0.95);
+    background-color: rgba(8, 6, 4, 0.96);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
+    border-left-color: rgb(176, 140, 64);
+    border-right-color: rgb(120, 92, 40);
+    border-top-color: rgb(196, 156, 72);
+    border-bottom-color: rgb(90, 68, 28);
 }
 
 .ps-battle-status-buff {
-    border-left-color: rgb(88, 140, 82);
-    border-right-color: rgb(88, 140, 82);
-    border-top-color: rgb(88, 140, 82);
-    border-bottom-color: rgb(88, 140, 82);
+    border-left-color: rgb(120, 168, 96);
+    border-right-color: rgb(88, 128, 72);
+    border-top-color: rgb(148, 196, 110);
+    border-bottom-color: rgb(70, 100, 55);
 }
 
 .ps-battle-status-debuff {
-    border-left-color: rgb(160, 82, 78);
-    border-right-color: rgb(160, 82, 78);
-    border-top-color: rgb(160, 82, 78);
-    border-bottom-color: rgb(160, 82, 78);
+    border-left-color: rgb(196, 96, 82);
+    border-right-color: rgb(140, 70, 60);
+    border-top-color: rgb(220, 120, 100);
+    border-bottom-color: rgb(100, 50, 42);
 }
 
 .ps-battle-status-chip Label {
     font-size: 13px;
-    color: rgb(246, 228, 186);
+    color: rgb(255, 230, 170);
 }
 
 .ps-battle-status-count {
@@ -5822,95 +6157,179 @@
     min-width: 13px;
     height: 13px;
     font-size: 9px;
-    color: rgb(28, 18, 8);
-    background-color: rgb(212, 168, 72);
+    color: rgb(12, 8, 4);
+    background-color: rgb(212, 176, 88);
     -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
 }
 
-/* Skill between character and hand */
+/* Skill / End Turn — black-gold chrome plates */
 .ps-battle-skill-col {
     position: absolute;
-    left: 32%;
-    bottom: 8%;
-    width: 132px;
+    left: 34%;
+    bottom: 78px;
+    width: 170px;
     flex-direction: column;
-    align-items: stretch;
-    z-index: 18;
+    align-items: center;
+    z-index: 30;
 }
 
 .ps-battle-btn,
 .ps-battle .ps-button.ps-battle-btn {
     min-width: 0;
+    min-height: 0;
     width: 100%;
-    height: 40px;
+    height: 46px;
     margin-right: 0;
     margin-bottom: 0;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: rgba(28, 22, 14, 0.95);
-    color: rgb(246, 228, 186);
-    border-left-width: 2px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(212, 168, 72);
-    border-right-color: rgba(160, 130, 80, 0.55);
-    border-top-color: rgba(160, 130, 80, 0.55);
-    border-bottom-color: rgba(160, 130, 80, 0.55);
-    font-size: 13px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    color: rgb(236, 196, 96);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 20px;
+    letter-spacing: 2px;
     white-space: normal;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    translate: 0 0;
 }
 
 .ps-battle-btn:hover,
 .ps-battle .ps-button.ps-battle-btn:hover {
-    background-color: rgba(48, 36, 20, 0.98);
-    color: rgb(255, 244, 214);
+    translate: 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 220, 130);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 .ps-battle-btn:disabled,
 .ps-battle .ps-button.ps-battle-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.42;
+}
+
+.ps-battle-btn-skill,
+.ps-battle .ps-button.ps-battle-btn-skill {
+    width: 150px;
+    height: 150px;
+    min-width: 150px;
+    min-height: 150px;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/Battle/Chrome/btn-plate-hex");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: visible;
+}
+
+.ps-battle-btn-skill:hover,
+.ps-battle .ps-button.ps-battle-btn-skill:hover {
+    color: rgb(255, 220, 130);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-battle-hand-meta {
+    position: absolute;
+    right: 3%;
+    bottom: 4px;
+    max-width: 68%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 6px 10px;
+    background-color: rgb(8, 6, 4);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(196, 156, 72);
+    border-right-color: rgb(120, 92, 40);
+    border-top-color: rgb(212, 176, 88);
+    border-bottom-color: rgb(90, 68, 28);
+    z-index: 32;
+}
+
+.ps-battle-hand-meta-info {
+    margin-right: 10px;
+    margin-bottom: 0;
+    font-size: 15px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-right;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    letter-spacing: 1px;
 }
 
 .ps-battle-btn-end,
 .ps-battle .ps-button.ps-battle-btn-end {
-    width: auto;
-    min-width: 148px;
-    height: 38px;
-    margin-left: 12px;
+    width: 200px;
+    min-width: 200px;
+    height: 56px;
+    min-height: 56px;
+    margin-left: 0;
     margin-bottom: 0;
-    background-color: rgba(48, 32, 14, 0.98);
-    border-left-color: rgb(240, 196, 96);
-    font-size: 14px;
-}
-
-/* EN / deck / end turn — above hand, right-aligned */
-.ps-battle-hand-meta {
-    position: absolute;
-    right: 6%;
-    bottom: 308px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    z-index: 19;
-}
-
-.ps-battle-hand-meta-info {
-    font-size: 13px;
-    color: rgb(220, 200, 160);
-    -unity-text-align: middle-right;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: rgb(236, 196, 96);
+    -unity-text-align: middle-center;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    background-image: resource("Art/Battle/Chrome/btn-plate-wide");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
-/* Fan hand */
+/* Fan hand — sits above the bottom chrome; draws over enemy HUD when overlapping */
 .ps-battle-hand {
     position: absolute;
-    right: 5%;
-    bottom: 1%;
-    width: 70%;
+    right: 4%;
+    bottom: 78px;
+    width: 72%;
     height: 300px;
     overflow: visible;
+    z-index: 28;
 }
 
 .ps-battle-card {
@@ -5930,6 +6349,7 @@
     transition-property: translate, scale;
     transition-duration: 0.14s;
     transition-timing-function: ease-out;
+    z-index: 28;
 }
 
 .ps-battle-card:hover {
@@ -5945,10 +6365,13 @@
     top: 2%;
     width: 24%;
     height: 24%;
-    font-size: 20px;
-    color: rgb(255, 236, 196);
+    font-size: 22px;
+    color: rgb(236, 196, 96);
     -unity-text-align: middle-center;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
 .ps-battle-card-art {
@@ -5971,10 +6394,13 @@
     right: 12%;
     top: 62%;
     height: 8%;
-    font-size: 15px;
-    color: rgb(246, 228, 186);
+    font-size: 16px;
+    color: rgb(236, 196, 96);
     -unity-text-align: middle-center;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
 .ps-battle-card-text {
@@ -5983,9 +6409,12 @@
     right: 11%;
     top: 70.5%;
     height: 16%;
-    font-size: 13px;
-    color: rgb(198, 186, 158);
+    font-size: 14px;
+    color: rgb(232, 188, 88);
     white-space: normal;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
 .ps-battle-card-foot {
@@ -6000,18 +6429,24 @@
 .ps-battle-card-source {
     flex-grow: 1;
     font-size: 11px;
-    color: rgb(212, 168, 72);
+    color: rgb(236, 196, 96);
     -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
 .ps-battle-card-durability {
     width: 30%;
     font-size: 11px;
-    color: rgb(180, 165, 130);
+    color: rgb(232, 188, 88);
     -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
-.ps-battle-card-durability-low { color: rgb(255, 107, 82); }
+.ps-battle-card-durability-low { color: rgb(255, 130, 100); }
 
 .ps-battle-card-lock {
     position: absolute;
@@ -6023,8 +6458,11 @@
     padding-right: 5px;
     background-color: rgba(102, 36, 42, 0.95);
     font-size: 11px;
-    color: rgb(255, 236, 196);
+    color: rgb(236, 196, 96);
     -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
 }
 
 .ps-hub-home-character-portrait {

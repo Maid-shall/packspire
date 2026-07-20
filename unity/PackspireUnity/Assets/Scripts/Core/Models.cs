@@ -19,7 +19,16 @@ public enum ScreenId { Character, Hub, Status, Vault, Faction, Expedition, Pack,
 [Serializable] public class ItemInstance { public string uid,templateId,origin="loot",traitId=""; public int durability=6,uses,temper; public List<Element> colors=new(); public List<ScarRecord> scars=new(); public HeirloomHistory history=new(); public bool insured,heirloomCertified,identified=true; public ItemInstance(string id,string origin="loot"){uid=Guid.NewGuid().ToString("N");templateId=id;this.origin=origin;} }
 [Serializable] public class Placement { public string itemUid; public int anchor,rotation; public Placement(string uid,int anchor,int rotation=0){itemUid=uid;this.anchor=anchor;this.rotation=rotation;} }
 [Serializable] public class RoleDef { public string id,name,kind,description; public int maxLevel; public RoleDef(string id,string name,string kind,string desc,int max=10){this.id=id;this.name=name;this.kind=kind;description=desc;maxLevel=max;} }
-[Serializable] public class EnemyDef { public string id,name; public int tier,hp; public int[] damages; public EnemyDef(string id,string name,int tier,int hp,params int[] moves){this.id=id;this.name=name;this.tier=tier;this.hp=hp;damages=moves;} }
+[Serializable] public class EnemyDef {
+ public string id,name;
+ public int tier,hp;
+ public int[] damages;
+ /// <summary>Optional Resources path (no extension) for a dedicated square portrait.</summary>
+ public string portraitResource;
+ public EnemyDef(string id,string name,int tier,int hp,params int[] moves){this.id=id;this.name=name;this.tier=tier;this.hp=hp;damages=moves;portraitResource="";}
+ public EnemyDef WithPortrait(string resource){portraitResource=resource;return this;}
+ public bool HasPortraitAsset=>!string.IsNullOrEmpty(portraitResource);
+}
 [Serializable] public class DungeonDef { public string id,name,description; public int battles; public float hpScale,goldScale; public int damage; public DungeonDef(string id,string name,string desc,int battles,float hpScale,int damage,float goldScale){this.id=id;this.name=name;description=desc;this.battles=battles;this.hpScale=hpScale;this.damage=damage;this.goldScale=goldScale;} }
 [Serializable] public class FactionDef { public string id,name,description; public string[] ranks; public FactionDef(string id,string name,string desc,params string[] ranks){this.id=id;this.name=name;description=desc;this.ranks=ranks;} }
 [Serializable] public class BackpackDef { public string id,name,description; public int[] safeCells; public BackpackDef(string id,string name,string desc,params int[] safe){this.id=id;this.name=name;description=desc;safeCells=safe;} }

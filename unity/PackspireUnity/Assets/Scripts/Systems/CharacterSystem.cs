@@ -5,10 +5,11 @@ public readonly struct CharacterSkillResult {
  public readonly bool success;
  public readonly bool enemyDefeated;
  public readonly string logLine;
- public CharacterSkillResult(bool success,bool enemyDefeated,string logLine){
-  this.success=success;this.enemyDefeated=enemyDefeated;this.logLine=logLine;
+ public readonly BattleActionFx fx;
+ public CharacterSkillResult(bool success,bool enemyDefeated,string logLine,BattleActionFx fx=default){
+  this.success=success;this.enemyDefeated=enemyDefeated;this.logLine=logLine;this.fx=fx;
  }
- public static CharacterSkillResult Fail=>new(false,false,"");
+ public static CharacterSkillResult Fail=>new(false,false,"",BattleActionFx.Fail);
 }
 
 public static class CharacterSystem {
@@ -72,6 +73,7 @@ public static class CharacterSystem {
   if(run==null||battle==null||run.activeSkillUsed)
    return CharacterSkillResult.Fail;
   var def=OfRun(run);
+  var fx=new BattleActionFx{ok=true,cardName=def.activeSkillName,cardType=CardType.Skill};
   string logLine;
   switch(def.activeSkillId){
    case "ren_rush":{
@@ -79,28 +81,45 @@ public static class CharacterSystem {
     int dealt=Mathf.Max(0,raw-battle.enemyBlock);
     battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
     battle.enemyHp-=dealt;
+    fx.damageToEnemy=dealt;
+    fx.cardType=CardType.Attack;
     logLine=$"{def.activeSkillName}：{dealt}ダメージ";
     break;
    }
    case "mio_read":
     run.block+=BattleSystem.Block(8,run.statuses);
     BattleSystem.Draw(run,1);
+    fx.blockGained=8;
     logLine=$"{def.activeSkillName}：8ブロック / 1枚ドロー";
     break;
    case "kuro_bulwark":
     run.block+=BattleSystem.Block(14,run.statuses);
+    fx.blockGained=14;
     logLine=$"{def.activeSkillName}：14ブロック";
     break;
    case "hina_repair":
+    int before=run.hp;
     run.hp=Mathf.Min(run.maxHp,run.hp+10);
+    fx.healGained=run.hp-before;
     logLine=$"{def.activeSkillName}：HP+10（{run.hp}/{run.maxHp}）";
     break;
+   case "sena_kick":{
+    int raw=BattleSystem.Damage(14,run.statuses,battle.enemyStatuses);
+    int dealt=Mathf.Max(0,raw-battle.enemyBlock);
+    battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
+    battle.enemyHp-=dealt;
+    fx.damageToEnemy=dealt;
+    fx.cardType=CardType.Attack;
+    logLine=$"{def.activeSkillName}：{dealt}ダメージ";
+    break;
+   }
    default:
     return CharacterSkillResult.Fail;
   }
   run.activeSkillUsed=true;
   battle.log=logLine;
-  return new CharacterSkillResult(true,battle.enemyHp<=0,logLine);
+  fx.enemyDefeated=battle.enemyHp<=0;
+  return new CharacterSkillResult(true,fx.enemyDefeated,logLine,fx);
  }
 
  public static string ActiveSkillTooltip(RunState run){

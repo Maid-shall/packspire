@@ -6,16 +6,19 @@ namespace Packspire {
 public class CharacterDef {
  public string id,name,title,description;
  public int portraitBody,portraitHair;
+ /// <summary>Optional Resources path (no extension). When set, used instead of the creator sheet cell.</summary>
+ public string portraitResource;
  public string traitName,traitText;
  public string traitKind;
  public int traitValue;
  public string activeSkillId,activeSkillName,activeSkillText;
- public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText){
+ public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText,string portraitResource=""){
   this.id=id;this.name=name;this.title=title;this.description=description;
-  this.portraitBody=portraitBody;this.portraitHair=portraitHair;
+  this.portraitBody=portraitBody;this.portraitHair=portraitHair;this.portraitResource=portraitResource;
   this.traitName=traitName;this.traitText=traitText;this.traitKind=traitKind;this.traitValue=traitValue;
   this.activeSkillId=activeSkillId;this.activeSkillName=activeSkillName;this.activeSkillText=activeSkillText;
  }
+ public bool HasPortraitAsset=>!string.IsNullOrEmpty(portraitResource);
 }
 
 public static class CharacterCatalog {
@@ -37,6 +40,11 @@ public static class CharacterCatalog {
    "hina","陽菜","錬装の技師","装備と道具の扱いに長けた工匠。",
    3,2,"整備","戦闘勝利時の所持金+3","winGold",3,
    "hina_repair","応急修理","HPを10回復（1戦1回）"),
+  ["sena"]=new CharacterDef(
+   "sena","瀬名","灼脚の闘士","褐色の肌に白髪をなびかせ、蹴りで戦場を割る筋肉質の遠征者。",
+   0,0,"灼脚","最大HP+2","maxHpBonus",2,
+   "sena_kick","廻旋脚","敵に14ダメージ（1戦1回）",
+   "Art/Portraits/hero-sena-kick-v1"),
  };
 
  public static CharacterDef Get(string id){

@@ -52,7 +52,7 @@ public sealed partial class PackspireUiFoundation {
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
   var strip=Container("ps-hub-home-character");
   strip.pickingMode=PickingMode.Ignore;
-  strip.Add(Atlas(game.UiCharacterArt,CharacterUv(character.portraitBody,character.portraitHair),"ps-hub-home-character-portrait"));
+  strip.Add(CharacterPortrait(character,"ps-hub-home-character-portrait"));
   return strip;
  }
 }

@@ -8,11 +8,16 @@ public partial class PackspireGame : MonoBehaviour {
 
 
  public static PackspireGame Instance { get; private set; }
- MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; Vector2 scroll; string selectedUid="",message="",selectedRoleId="",selectedFactionId="",selectedDungeonId="",selectedCompendiumId=""; int selectedRotation,compendiumTab,packingDetailTab; bool packingAtBase,illustratedStylesApplied,developerPanel; GUIStyle title,header,body,button,card,hotspot,hubLabel,hubLabelHover,topChip,cellButton,navButton,navSelected,screenTitle,screenSubtitle,badge,centerBody,bookEntryStyle,bookEntryHoverStyle,bookEntrySelectedStyle; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,menuBackdrop,panelTex,buttonTex,hoverTex,cellClearTex,navTex,navSelectedTex,badgeTex,homeTileTex,homeTileHoverTex,homePrimaryTex,homePrimaryHoverTex,uiActionNormal,uiActionHover,uiActionDanger,uiBackCard,uiNavNormal,uiNavSelected,uiTabCard,uiChipCard,minimalButtonTex,minimalHoverTex,infoChipTex,homeBarPrimary,homeBarSecondary,mapTerrain,mapRoad,bookSpread,bookClearTex,bookHoverTex,bookSelectedTex,bookChipTex,scrollMapUi,battleTableUi,backpackLeatherTex,backpackPocketTex; Texture2D[] homeCardArt,navIconArt,combatCardFrames; Font uiFont,titleFont,gameFont;
+ MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; Vector2 scroll; string selectedUid="",message="",selectedRoleId="",selectedFactionId="",selectedDungeonId="",selectedCompendiumId=""; int selectedRotation,compendiumTab,packingDetailTab; bool packingAtBase,illustratedStylesApplied,developerPanel; GUIStyle title,header,body,button,card,hotspot,hubLabel,hubLabelHover,topChip,cellButton,navButton,navSelected,screenTitle,screenSubtitle,badge,centerBody,bookEntryStyle,bookEntryHoverStyle,bookEntrySelectedStyle; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,menuBackdrop,panelTex,buttonTex,hoverTex,cellClearTex,navTex,navSelectedTex,badgeTex,homeTileTex,homeTileHoverTex,homePrimaryTex,homePrimaryHoverTex,uiActionNormal,uiActionHover,uiActionDanger,uiBackCard,uiNavNormal,uiNavSelected,uiTabCard,uiChipCard,minimalButtonTex,minimalHoverTex,infoChipTex,homeBarPrimary,homeBarSecondary,mapTerrain,mapRoad,bookSpread,bookClearTex,bookHoverTex,bookSelectedTex,bookChipTex,scrollMapUi,battleTableUi,backpackLeatherTex,backpackPocketTex;
+ Texture2D showcaseHeroArt,showcaseDragonArt;
+ Texture2D[] homeCardArt,navIconArt,combatCardFrames; Font uiFont,titleFont,gameFont;
  readonly Color bg=new(.09f,.12f,.095f),panel=new(.16f,.20f,.165f),gold=new(.94f,.75f,.35f),ink=new(.97f,.95f,.88f);
  ScreenId lastVisualScreen; bool visualScreenTracked;
  Texture2D bookButtonTex,bookButtonHoverTex,bookButtonSelectedTex,bookRuleTex,bookScrollTrackTex,bookScrollThumbTex,battleMeterTrackTex,battleHpTex,battleBlockTex,battleStatusBuffTex,battleStatusDebuffTex;
+ /// <summary>Temporary art-preview lock: battle always shows 瀬名 + 劫火竜 portraits.</summary>
+ public const bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
+ public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
  public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase;
  public ExplorationRunState UiExploration=>exploration;
  public bool UiUsesExplorationMap=>exploration!=null;
@@ -28,7 +33,7 @@ public partial class PackspireGame : MonoBehaviour {
  ScreenId developerReturnScreen; bool developerHasReturn;
 
  public void SetRoutePresentationMode(RoutePresentationMode mode){routePresentationMode=mode;}
- void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");menuBackdrop=Resources.Load<Texture2D>("Art/UI/fantasy-menu-backdrop-v1");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");uiFont=Resources.Load<Font>("Fonts/KleeOne-Regular");titleFont=Resources.Load<Font>("Fonts/KleeOne-SemiBold");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
+ void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");menuBackdrop=Resources.Load<Texture2D>("Art/UI/fantasy-menu-backdrop-v1");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroArt=Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1");showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");uiFont=Resources.Load<Font>("Fonts/KleeOne-Regular");titleFont=Resources.Load<Font>("Fonts/KleeOne-SemiBold");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
  void OnDestroy(){if(Instance==this)Instance=null;}
  void Update(){if(Input.GetKeyDown(KeyCode.F10))UiToggleDeveloperPanel();if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}if(lastVisualScreen==screen)return;var previous=lastVisualScreen;lastVisualScreen=screen;PackspireUiFoundation.Instance?.PlayFor(previous,screen);}
  public void UiNavigate(ScreenId target){
@@ -130,6 +135,20 @@ public partial class PackspireGame : MonoBehaviour {
   UiDevCloseWithoutRestore();
  }
  public string UiRoleMilestone(string roleId,bool maximum)=>RoleMilestoneText(roleId,maximum);
+ public Texture2D ResolveCharacterPortrait(CharacterDef def){
+  if(def!=null&&def.HasPortraitAsset){
+   var tex=Resources.Load<Texture2D>(def.portraitResource);
+   if(tex!=null)return tex;
+  }
+  return characterArt;
+ }
+ public Texture2D ResolveEnemyPortrait(EnemyDef def){
+  if(def!=null&&def.HasPortraitAsset){
+   var tex=Resources.Load<Texture2D>(def.portraitResource);
+   if(tex!=null)return tex;
+  }
+  return enemyArt;
+ }
  public void UiSelectHeirloom(string uid){if(meta.stash.Any(x=>x.uid==uid)){meta.selectedHeirloomUid=uid;SaveSystem.Save(meta);}}
  public bool UiTemper(string uid){var item=meta.stash.FirstOrDefault(x=>x.uid==uid);if(item==null||item.temper>=5)return false;int price=30*(item.temper+1);if(meta.baseGold<price)return false;meta.baseGold-=price;item.temper++;SaveSystem.Save(meta);return true;}
  public bool UiChangeFaction(string id){if(meta.currentFaction==id)return true;if(!GameCatalog.Factions.Any(x=>x.id==id)||meta.baseGold<20)return false;meta.baseGold-=20;meta.currentFaction=id;SaveSystem.Save(meta);return true;}
@@ -158,27 +177,35 @@ public partial class PackspireGame : MonoBehaviour {
   if(run==null||battle==null||run.activeSkillUsed)return false;
   var result=CharacterSystem.UseActiveSkill(run,battle);
   if(!result.success)return false;
+  PackspireUiFoundation.Instance?.PlayBattleActionFx(result.fx);
   if(result.enemyDefeated){WinBattle();return true;}
   PackspireUiFoundation.Instance?.RefreshBattleUi();
   return true;
  }
  public bool UiPlayBattleCard(int handIndex){
   if(run==null||battle==null)return false;
-  if(BattleSystem.Play(run,battle,handIndex)){WinBattle();return true;}
+  var fx=BattleSystem.PlayCard(run,battle,handIndex);
+  if(!fx.ok)return false;
+  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  if(fx.enemyDefeated){WinBattle();return true;}
   PackspireUiFoundation.Instance?.RefreshBattleUi();
   return true;
  }
  public bool UiEndBattleTurn(){
   if(run==null||battle==null)return false;
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
-  if(BattleSystem.EndTurn(run,battle,dungeon.damage)){FinishRun(false);return true;}
+  var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage);
+  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  if(fx.playerDefeated){FinishRun(false);return true;}
   PackspireUiFoundation.Instance?.RefreshBattleUi();
   return true;
  }
  public bool UiUseBattleConsumable(int index){
   if(run==null||battle==null)return false;
-  if(!ConsumableSystem.Use(run,battle,index))return false;
-  if(battle.enemyHp<=0){WinBattle();return true;}
+  var fx=ConsumableSystem.UseFx(run,battle,index);
+  if(!fx.ok)return false;
+  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  if(fx.enemyDefeated){WinBattle();return true;}
   PackspireUiFoundation.Instance?.RefreshBattleUi();
   return true;
  }
@@ -257,8 +284,15 @@ public partial class PackspireGame : MonoBehaviour {
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
-  var pool=GameCatalog.Enemies.Where(x=>boss?x.tier==3:x.tier==Mathf.Min(2,1+run.battlesWon/3)).ToArray();
-  battle=BattleSystem.Begin(run,pool[UnityEngine.Random.Range(0,pool.Length)],dungeon.hpScale);
+  EnemyDef enemy;
+  if(LockBattleShowcaseArt){
+   enemy=GameCatalog.Enemies.FirstOrDefault(x=>x.id=="dragon")
+    ??GameCatalog.Enemies.First(x=>x.tier==(boss?3:Mathf.Min(2,1+run.battlesWon/3)));
+  } else {
+   var pool=GameCatalog.Enemies.Where(x=>boss?x.tier==3:x.tier==Mathf.Min(2,1+run.battlesWon/3)).ToArray();
+   enemy=pool[UnityEngine.Random.Range(0,pool.Length)];
+  }
+  battle=BattleSystem.Begin(run,enemy,dungeon.hpScale);
   screen=ScreenId.Battle;
   SetRoutePresentationMode(RoutePresentationMode.None);
  }

@@ -10,16 +10,56 @@ public sealed partial class PackspireUiFoundation {
  void ShowToast(string message){if(toast==null)return;toast.Clear();toast.Add(new Label(message));toast.style.display=DisplayStyle.Flex;toast.style.opacity=0f;toast.style.translate=new Translate(0,-10,0);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=1f;toast.style.translate=new Translate(0,0,0);}).StartingIn(16);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=0f;toast.style.translate=new Translate(0,-8,0);}).StartingIn(1700);toast.schedule.Execute(()=>{if(toast!=null)toast.style.display=DisplayStyle.None;}).StartingIn(1950);}
  VisualElement Milestone(int required,int current,string title,string description){var item=Container(current>=required?"ps-milestone ps-unlocked":"ps-milestone ps-locked");item.Add(PackspireUiFactory.Title($"Lv.{required}　{title}"));item.Add(PackspireUiFactory.Body(description));return item;}
 
- VisualElement BookShell(string title,VisualElement singleContent){nextPageIsLeft=true;var shell=Container("ps-book-screen");if(game.UiBookArt!=null)shell.Add(Image(game.UiBookArt,new Rect(0,0,1,1),"ps-book-background",ScaleMode.StretchToFill));var heading=new Label(title);heading.AddToClassList("ps-book-heading");shell.Add(heading);var pages=Container("ps-book-pages");pages.name="book-pages";shell.Add(pages);if(singleContent!=null)pages.Add(singleContent);return shell;}
+ VisualElement BookShell(string title,VisualElement singleContent,bool whitePaper=false){
+  nextPageIsLeft=true;
+  var shell=Container(whitePaper?"ps-book-screen ps-book-white":"ps-book-screen");
+  if(!whitePaper&&game.UiBookArt!=null)
+   shell.Add(Image(game.UiBookArt,new Rect(0,0,1,1),"ps-book-background",ScaleMode.StretchToFill));
+  var heading=new Label(title);
+  heading.AddToClassList("ps-book-heading");
+  shell.Add(heading);
+  var pages=Container("ps-book-pages");
+  pages.name="book-pages";
+  shell.Add(pages);
+  if(singleContent!=null)pages.Add(singleContent);
+  return shell;
+ }
  VisualElement Page(string title){var page=new ScrollView();page.AddToClassList("ps-book-page");page.AddToClassList(nextPageIsLeft?"ps-page-left":"ps-page-right");nextPageIsLeft=!nextPageIsLeft;var heading=Container("ps-page-heading");var label=PackspireUiFactory.Title(title);label.AddToClassList("ps-page-heading-title");heading.Add(label);heading.Add(InkRule());page.Add(heading);return page;}
  void AddBookTabs(VisualElement shell,ScreenId current){var tabs=Container("ps-book-tabs");(string,ScreenId)[] values={("拠点",ScreenId.Hub),("遠征",ScreenId.Expedition),("荷造り",ScreenId.Pack),("保管",ScreenId.Vault),("役職",ScreenId.Status),("勢力",ScreenId.Faction),("図鑑",ScreenId.Compendium)};foreach(var entry in values){var target=entry.Item2;var button=new Button(()=>game.UiNavigate(target)){tooltip=entry.Item1};button.AddToClassList("ps-book-tab");var label=new Label(entry.Item1);label.AddToClassList("ps-book-tab-label");button.Add(label);if(target==current){button.AddToClassList("ps-selected");button.SetEnabled(false);}tabs.Add(button);}shell.Add(tabs);}
 
  VisualElement RecordButton(string title,string subtitle,VisualElement art,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=title+"\n"+subtitle};button.AddToClassList("ps-record-button");if(selected)button.AddToClassList("ps-selected");button.Add(art);var copy=Container("ps-record-copy");copy.Add(PackspireUiFactory.Title(title));copy.Add(PackspireUiFactory.Body(subtitle));button.Add(copy);if(selected)button.Add(SelectionBadge());button.Add(InkRule());return button;}
  VisualElement AtlasButton(Texture2D texture,Rect uv,string label,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=label};button.AddToClassList("ps-atlas-button");if(selected)button.AddToClassList("ps-selected");button.Add(Atlas(texture,uv,"ps-atlas-image"));var name=new Label(label);name.AddToClassList("ps-atlas-label");button.Add(name);if(selected)button.Add(SelectionBadge());return button;}
+ VisualElement CharacterPortrait(CharacterDef def,string className){
+  if(def!=null&&def.HasPortraitAsset){
+   var tex=game.ResolveCharacterPortrait(def);
+   if(tex!=null&&tex!=game.UiCharacterArt)return Atlas(tex,new Rect(0,0,1,1),className);
+  }
+  return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
+ }
+ VisualElement CharacterPortraitButton(CharacterDef def,bool selected,System.Action clicked){
+  if(def!=null&&def.HasPortraitAsset){
+   var tex=game.ResolveCharacterPortrait(def);
+   if(tex!=null&&tex!=game.UiCharacterArt)
+    return AtlasButton(tex,new Rect(0,0,1,1),def.name,selected,clicked);
+  }
+  return AtlasButton(game.UiCharacterArt,CharacterUv(def.portraitBody,def.portraitHair),def.name,selected,clicked);
+ }
+ VisualElement EnemyPortrait(EnemyDef def,string className){
+  if(def!=null&&def.HasPortraitAsset){
+   var tex=game.ResolveEnemyPortrait(def);
+   if(tex!=null&&tex!=game.UiEnemyArt)return Atlas(tex,new Rect(0,0,1,1),className);
+  }
+  return Atlas(game.UiEnemyArt,EnemyUv(def?.id??""),className);
+ }
  VisualElement SelectionBadge(){var badge=new Label("選択");badge.AddToClassList("ps-selection-badge");return badge;}
  VisualElement InkRule(){var rule=Container("ps-ink-rule");rule.pickingMode=PickingMode.Ignore;return rule;}
  VisualElement Container(string classes){var element=new VisualElement();foreach(var value in classes.Split(' '))element.AddToClassList(value);return element;}
- Image Image(Texture2D texture,Rect uv,string className,ScaleMode mode){var image=new Image{image=texture,uv=uv,scaleMode=mode,pickingMode=PickingMode.Ignore};image.AddToClassList(className);return image;}
+ Image Image(Texture2D texture,Rect uv,string className,ScaleMode mode){
+  var image=new Image{image=texture,uv=uv,scaleMode=mode,pickingMode=PickingMode.Ignore};
+  foreach(var value in className.Split(' '))
+   if(!string.IsNullOrEmpty(value))image.AddToClassList(value);
+  return image;
+ }
  Image Atlas(Texture2D texture,Rect uv,string className)=>Image(texture,uv,className,ScaleMode.ScaleToFit);
 
  string FactionName(string id)=>GameCatalog.Factions.FirstOrDefault(x=>x.id==id)?.name??id;
