@@ -218,7 +218,6 @@ public static class ExplorationMapCatalog {
  }
 
  public static ExplorationMapDef Get(string id){
-  if(id==ExplorationRouteCatalog.SliceMapId)return ExplorationRouteCatalog.SliceMap;
   if(id==ForgeInteriorId)return ForgeInterior;
   if(id==BarracksInteriorId)return BarracksInterior;
   return OldSpireIso;

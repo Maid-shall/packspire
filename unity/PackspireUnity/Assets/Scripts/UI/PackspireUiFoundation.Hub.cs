@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void BuildHub(){
-  ReleasePresentationStage();
   var meta=game.UiMeta;
   var shell=Container("ps-hub-home");
   screenRoot.Add(shell);
@@ -55,29 +54,6 @@ public sealed partial class PackspireUiFoundation {
   strip.pickingMode=PickingMode.Ignore;
   strip.Add(Atlas(game.UiCharacterArt,CharacterUv(character.portraitBody,character.portraitHair),"ps-hub-home-character-portrait"));
   return strip;
- }
-
- void ReleasePresentationStage(){
-  presentationHubBuilt=false;
-  presentationStageView=null;
-  presentationEnterButton=null;
-  presentationHintLabel=null;
-  presentationFacilityLabel=null;
-  presentationEntering=false;
-  if(presentationStage!=null)savedHubFacility=presentationStage.FocusedFacility;
-  if(presentationStage==null)return;
-  var host=presentationStage.gameObject;
-  presentationStage=null;
-  if(host!=null)Destroy(host);
- }
-
- void EnsurePresentationStage(){
-  if(presentationStage!=null)return;
-  var stale=game.transform.Find("HubPresentationStage");
-  if(stale!=null)Destroy(stale.gameObject);
-  var hostGo=new GameObject("HubPresentationStage");
-  hostGo.transform.SetParent(game.transform,false);
-  presentationStage=hostGo.AddComponent<PackspirePresentationStage>();
  }
 }
 }

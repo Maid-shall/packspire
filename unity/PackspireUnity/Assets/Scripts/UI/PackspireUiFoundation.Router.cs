@@ -4,25 +4,16 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void RefreshScreen(bool force){
   if(game==null||screenRoot==null)return;
-  game.UiSyncRoutePresentationMode();
   if(!Handles(game.UiScreen)){
-   if(game.UiScreen==ScreenId.Battle&&(explorationStage!=null||explorationRouteStage!=null))SuspendExplorationStage();
+   if(game.UiScreen==ScreenId.Battle&&explorationStage!=null)SuspendExplorationStage();
    screenRoot.style.display=DisplayStyle.None;
    hasRenderedScreen=false;
    return;
   }
   screenRoot.style.display=DisplayStyle.Flex;
-  // RouteReward stays on Map — do not tear down the 2.5D stage for book Reward.
-  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen){
-   if(renderedScreen==ScreenId.Map)ApplyRouteModeVisibility();
-   return;
-  }
-  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub)ReleasePresentationStage();
-  if(renderedScreen==ScreenId.Pack&&game.UiScreen!=ScreenId.Pack)ReleasePresentationStage();
+  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen)return;
   if(renderedScreen==ScreenId.Map&&game.UiScreen!=ScreenId.Map){
    if(game.UiScreen==ScreenId.Battle)SuspendExplorationStage();
-   else if(game.UiScreen==ScreenId.Reward&&game.UsesRoutePresentation){/* keep stage */}
-   else if(game.UiScreen==ScreenId.Reward)SuspendExplorationStage();
    else ReleaseExplorationStage();
   }
   if(renderedScreen==ScreenId.Reward&&game.UiScreen!=ScreenId.Reward&&game.UiScreen!=ScreenId.Map&&game.UiScreen!=ScreenId.Battle)

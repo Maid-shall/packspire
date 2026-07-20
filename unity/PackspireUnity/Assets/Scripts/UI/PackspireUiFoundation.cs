@@ -30,15 +30,8 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  float packingEquipScrollY,packingRightScrollY;
  int compendiumTab;
  Texture2D tabletopDesk;
- PackspirePresentationStage presentationStage;
- VisualElement presentationStageView;
- Button presentationEnterButton,developerAccessButton;
+ Button developerAccessButton;
  VisualElement developerPanelRoot;
- Label presentationHintLabel,presentationFacilityLabel;
- bool presentationHubBuilt,presentationEntering;
- Vector2 presentationPointerDownPosition;
- int presentationTapFacility=-1;
- int savedHubFacility=1;
  // exploration fields live in PackspireUiFoundation.ExplorationMap.cs
 
  void Awake(){
@@ -72,17 +65,12 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);
  }
 
- public bool IsRouteTransitioning=>explorationRouteStage!=null&&explorationRouteStage.IsMoving;
  public bool Handles(ScreenId value){
   if(!uiReady||game==null)return false;
   if(value==ScreenId.Battle)return false;
   if(value!=ScreenId.Map)return true;
-  if(game.ShouldDrawLegacyOnGui)return false;
-  if(game.UsesRoutePresentation)return true;
-  if(game.CurrentRoutePresentationMode==RoutePresentationMode.RiteDebug)return true;
   return game.UiUsesExplorationMap;
  }
- public void ForceRefreshScreen(){hasRenderedScreen=false;presentationHubBuilt=false;explorationMapBuilt=false;if(uiReady)RefreshScreen(true);}
- public void ApplyRoutePresentationVisibility(){ApplyRouteModeVisibility();}
+ public void ForceRefreshScreen(){hasRenderedScreen=false;explorationMapBuilt=false;if(uiReady)RefreshScreen(true);}
 }
 }
