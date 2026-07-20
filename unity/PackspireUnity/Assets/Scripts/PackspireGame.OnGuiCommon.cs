@@ -40,14 +40,7 @@ public partial class PackspireGame : MonoBehaviour {
  void DrawFantasyText(Rect rect,string text,int fontSize,TextAnchor alignment,Color color){var outline=new GUIStyle(GUI.skin.label){font=gameFont??titleFont??uiFont,fontSize=fontSize,fontStyle=FontStyle.Bold,alignment=alignment,clipping=TextClipping.Clip,normal={textColor=new Color(.015f,.012f,.008f,.96f)}};for(int y=-2;y<=2;y++)for(int x=-2;x<=2;x++)if(x!=0||y!=0)GUI.Label(new Rect(rect.x+x,rect.y+y,rect.width,rect.height),text,outline);var face=new GUIStyle(outline){normal={textColor=color}};GUI.Label(rect,text,face);}
  void OnGUI(){
   if(!ShouldDrawLegacyOnGui)return;
-  if(screen!=ScreenId.Battle)return;
-  LoadIllustratedUi();EnsureBook();EnsureResponsiveTextures();InitStyles();EnsureSocialStyles();ApplyIllustratedStyles();TuneIllustratedText();ApplyScreenTheme();ApplyResponsiveTypography();DrawScreenBackground();
-  if(developerPanel){
-   DrawLegacyDeveloperOverlay();
-   return;
-  }
-  BattleTableScreen();
-  DrawLegacyDeveloperOverlay();
+  if(developerPanel)DrawLegacyDeveloperOverlay();
  }
 }
 }

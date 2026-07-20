@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Packspire {
-/// <summary>Retained-mode UI host for all current screens except Map and Battle.</summary>
+/// <summary>Retained-mode UI host for all current screens.</summary>
 public sealed partial class PackspireUiFoundation : MonoBehaviour {
  public static PackspireUiFoundation Instance { get; private set; }
 
@@ -33,6 +33,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  Button developerAccessButton;
  VisualElement developerPanelRoot;
  // exploration fields live in PackspireUiFoundation.ExplorationMap.cs
+ // battle fields live in PackspireUiFoundation.Battle.cs
 
  void Awake(){
   if(Instance!=null&&Instance!=this){Destroy(this);return;}
@@ -67,10 +68,14 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
 
  public bool Handles(ScreenId value){
   if(!uiReady||game==null)return false;
-  if(value==ScreenId.Battle)return false;
-  if(value!=ScreenId.Map)return true;
-  return game.UiUsesExplorationMap;
+  if(value==ScreenId.Map)return game.UiUsesExplorationMap;
+  return true;
  }
- public void ForceRefreshScreen(){hasRenderedScreen=false;explorationMapBuilt=false;if(uiReady)RefreshScreen(true);}
+ public void ForceRefreshScreen(){
+  hasRenderedScreen=false;
+  explorationMapBuilt=false;
+  battleUiBuilt=false;
+  if(uiReady)RefreshScreen(true);
+ }
 }
 }

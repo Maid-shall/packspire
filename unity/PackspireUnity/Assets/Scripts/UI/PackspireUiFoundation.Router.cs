@@ -16,6 +16,8 @@ public sealed partial class PackspireUiFoundation {
    if(game.UiScreen==ScreenId.Battle)SuspendExplorationStage();
    else ReleaseExplorationStage();
   }
+  if(renderedScreen==ScreenId.Battle&&game.UiScreen!=ScreenId.Battle)
+   SuspendBattleUi();
   if(renderedScreen==ScreenId.Reward&&game.UiScreen!=ScreenId.Reward&&game.UiScreen!=ScreenId.Map&&game.UiScreen!=ScreenId.Battle)
    ReleaseExplorationStage();
   renderedScreen=game.UiScreen;hasRenderedScreen=true;screenRoot.Clear();
@@ -27,6 +29,7 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.Expedition)BuildExpedition();
   else if(renderedScreen==ScreenId.Pack)BuildPacking();
   else if(renderedScreen==ScreenId.Map)BuildExplorationMap();
+  else if(renderedScreen==ScreenId.Battle)BuildBattle();
   else if(renderedScreen==ScreenId.Reward)BuildReward();
   else if(renderedScreen==ScreenId.Shop)BuildShop();
   else if(renderedScreen==ScreenId.Event)BuildEvent();

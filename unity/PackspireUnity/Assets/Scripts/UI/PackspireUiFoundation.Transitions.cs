@@ -11,7 +11,7 @@ public sealed partial class PackspireUiFoundation {
   if(from==ScreenId.Hub&&to!=ScreenId.Map&&to!=ScreenId.Battle)return TabletopTransitionKind.Fade;
   if(to==ScreenId.Hub&&from!=ScreenId.Map&&from!=ScreenId.Battle)return TabletopTransitionKind.Fade;
   if(to==ScreenId.Map)return TabletopTransitionKind.ScrollUnfurl;
-  if(to==ScreenId.Battle)return TabletopTransitionKind.BattleTable;
+  if(to==ScreenId.Battle)return TabletopTransitionKind.Fade;
   if(IsBook(from)&&IsBook(to))return TabletopTransitionKind.PageTurn;
   return TabletopTransitionKind.Fade;
  }

@@ -21,7 +21,7 @@ public partial class PackspireGame : MonoBehaviour {
  public BattleState UiBattle=>battle;
  public ScreenId UiDeveloperReturnScreen=>developerReturnScreen;
  public RoutePresentationMode CurrentRoutePresentationMode=>routePresentationMode;
- public bool ShouldDrawLegacyOnGui=>screen==ScreenId.Battle;
+ public bool ShouldDrawLegacyOnGui=>false;
  string rewardSelectionId="",shopSelectionId="";
  bool explorationEventActive; int explorationEventNodeId=-1;
  RoutePresentationMode routePresentationMode;
@@ -159,6 +159,27 @@ public partial class PackspireGame : MonoBehaviour {
   var result=CharacterSystem.UseActiveSkill(run,battle);
   if(!result.success)return false;
   if(result.enemyDefeated){WinBattle();return true;}
+  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  return true;
+ }
+ public bool UiPlayBattleCard(int handIndex){
+  if(run==null||battle==null)return false;
+  if(BattleSystem.Play(run,battle,handIndex)){WinBattle();return true;}
+  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  return true;
+ }
+ public bool UiEndBattleTurn(){
+  if(run==null||battle==null)return false;
+  var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
+  if(BattleSystem.EndTurn(run,battle,dungeon.damage)){FinishRun(false);return true;}
+  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  return true;
+ }
+ public bool UiUseBattleConsumable(int index){
+  if(run==null||battle==null)return false;
+  if(!ConsumableSystem.Use(run,battle,index))return false;
+  if(battle.enemyHp<=0){WinBattle();return true;}
+  PackspireUiFoundation.Instance?.RefreshBattleUi();
   return true;
  }
  public bool UiActiveSkillAvailable=>run!=null&&battle!=null&&!run.activeSkillUsed;
