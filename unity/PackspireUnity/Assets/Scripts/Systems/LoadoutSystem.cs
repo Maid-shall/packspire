@@ -21,6 +21,7 @@ public static class LoadoutSystem {
   run.placements=loadout.slots.Where(x=>ids.Contains(x.itemUid)).Select(x=>new Placement(x.itemUid,x.anchor,x.rotation)).ToList();
   run.selectedCardSlots=loadout.deck.ToList();
   run.consumables=meta.consumables.Take(meta.consumableCapacity).ToList();
+  CharacterSystem.ApplyTraitToRun(meta,run);
   return run;
  }
  public static void Capture(MetaSave meta,RunState run){

@@ -12,7 +12,13 @@ public partial class PackspireGame : MonoBehaviour {
  void DrawEnemyArt(Rect target,string enemy){if(enemyArt==null)return;Rect uv=enemy=="sentinel"?new Rect(0,.5f,.174f,.5f):enemy=="rats"?new Rect(.174f,.5f,.172f,.5f):enemy=="porter"?new Rect(.346f,.5f,.172f,.5f):enemy=="mage"?new Rect(.518f,.5f,.172f,.5f):enemy=="beast"?new Rect(0,0,.344f,.5f):enemy=="knight"?new Rect(.344f,0,.347f,.5f):new Rect(.69f,0,.31f,1);float aspect=(uv.width*enemyArt.width)/(uv.height*enemyArt.height);GUI.DrawTextureWithTexCoords(FitAspect(target,aspect),enemyArt,uv,true);}
  void BattleTableScreen(){
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);Color warm=new(.96f,.85f,.59f),paperInk=new(.22f,.12f,.055f);
-  GUI.Label(new Rect(Us(62),Us(18),Screen.width*.45f,Us(48)),$"戦闘　―　{dungeon.name}",new GUIStyle(screenTitle){fontSize=Fs(30),fontStyle=FontStyle.Bold,normal={textColor=warm}});
+  var character=CharacterSystem.OfRun(run);
+  string battleTitle=character!=null?$"戦闘　―　{dungeon.name}　／　{character.name}":$"戦闘　―　{dungeon.name}";
+  GUI.Label(new Rect(Us(62),Us(18),Screen.width*.45f,Us(48)),battleTitle,new GUIStyle(screenTitle){fontSize=Fs(30),fontStyle=FontStyle.Bold,normal={textColor=warm}});
+  if(character!=null){
+   string traitLine=$"特性 {character.traitName}：{character.traitText}　　スキル {character.activeSkillName}";
+   GUI.Label(new Rect(Us(62),Us(58),Screen.width*.72f,Us(22)),traitLine,new GUIStyle(body){fontSize=Fs(13),normal={textColor=new Color(.82f,.74f,.58f)}});
+  }
   GUI.Label(new Rect(Screen.width-Us(390),Us(21),Us(330),Us(42)),$"行動 {battle.move+1}　　EN {run.energy}/3",new GUIStyle(header){fontSize=Fs(21),alignment=TextAnchor.MiddleRight,normal={textColor=warm}});
   float portraitW=Mathf.Clamp(Screen.width*.31f,370f,590f),portraitH=Mathf.Clamp(Screen.height*.39f,250f,390f);Rect playerRect=new(Screen.width*.075f,Screen.height*.085f,portraitW,portraitH),enemyRect=new(Screen.width-playerRect.x-portraitW,playerRect.y,portraitW,portraitH);DrawCombatPortrait(playerRect,true);DrawCombatPortrait(enemyRect,false);
   Rect versus=new(Screen.width*.5f-70,playerRect.y+portraitH*.32f,140,72);GUI.Box(versus,GUIContent.none,new GUIStyle(){normal={background=bookChipTex},border=new RectOffset(14,14,14,14)});GUI.Label(versus,"対",new GUIStyle(header){fontSize=34,alignment=TextAnchor.MiddleCenter,fontStyle=FontStyle.Bold,normal={textColor=paperInk}});
@@ -21,7 +27,19 @@ public partial class PackspireGame : MonoBehaviour {
   Rect rail=new(Screen.width*.025f,Screen.height*.905f,Screen.width*.95f,Screen.height*.082f);DrawBattleActionRail(rail,dungeon);
  }
  bool DrawLargeBattleHand(Rect area,out bool won){won=false;int count=run.hand.Count;if(count==0){GUI.Label(area,"手札がありません",new GUIStyle(body){fontSize=Fs(20),fontStyle=FontStyle.Bold,alignment=TextAnchor.MiddleCenter,normal={textColor=new Color(.90f,.82f,.62f)}});return false;}float cardWidth=Mathf.Clamp(Screen.width*.16f,Us(190),Us(255)),cardHeight=Mathf.Min(area.height-Us(6),cardWidth*1.36f),naturalStep=cardWidth+Us(10),step=count<=1?0f:Mathf.Min(naturalStep,(area.width-cardWidth)/(count-1)),total=cardWidth+step*(count-1),x=area.center.x-total*.5f;for(int i=0;i<count;i++){int index=i;var c=run.hand[index];bool affordable=c.cost<=run.energy;Rect baseRect=new(x+i*step,area.y+area.height-cardHeight,cardWidth,cardHeight);bool hover=baseRect.Contains(UnityEngine.Event.current.mousePosition);Rect drawRect=hover?new Rect(baseRect.x-Us(8),baseRect.y-Us(20),baseRect.width+Us(16),baseRect.height+Us(20)):baseRect;DrawCombatCardV2(drawRect,c,affordable);GUI.enabled=affordable;if(GUI.Button(baseRect,GUIContent.none,hotspot)){GUI.enabled=true;won=BattleSystem.Play(run,battle,index);return true;}GUI.enabled=true;}return false;}
- void DrawBattleActionRail(Rect rail,DungeonDef dungeon){GUI.Box(rail,GUIContent.none,new GUIStyle(){normal={background=infoChipTex},border=new RectOffset(8,8,8,8)});float x=rail.x+Us(14);if(run.consumables.Count>0){GUI.Label(new Rect(x,rail.y+Us(4),Us(70),rail.height-Us(8)),"道具",new GUIStyle(body){fontSize=Fs(17),fontStyle=FontStyle.Bold,alignment=TextAnchor.MiddleLeft});x+=Us(72);for(int i=0;i<run.consumables.Count;i++){int index=i;Rect r=new(x,rail.y+Us(5),rail.height-Us(10),rail.height-Us(10));if(DrawConsumableAt(r,run.consumables[i])){ConsumableSystem.Use(run,battle,index);if(battle.enemyHp<=0)WinBattle();return;}x+=r.width+Us(7);}}
+ void DrawBattleActionRail(Rect rail,DungeonDef dungeon){GUI.Box(rail,GUIContent.none,new GUIStyle(){normal={background=infoChipTex},border=new RectOffset(8,8,8,8)});float x=rail.x+Us(14);
+  var skillDef=CharacterSystem.OfRun(run);
+  string skillLabel=UiActiveSkillAvailable?(skillDef?.activeSkillName??"スキル"):"スキル済";
+  Rect skillRect=new(x,rail.y+Us(7),Us(168),rail.height-Us(14));
+  var skillStyle=new GUIStyle(button){fontSize=Fs(16),fontStyle=FontStyle.Bold};
+  if(!UiActiveSkillAvailable)skillStyle.normal.textColor=new Color(.55f,.52f,.48f);
+  GUI.enabled=UiActiveSkillAvailable;
+  if(GUI.Button(skillRect,new GUIContent(skillLabel,UiActiveSkillTooltip),skillStyle)){
+   if(UiUseActiveSkill())return;
+  }
+  GUI.enabled=true;
+  x+=Us(178);
+  if(run.consumables.Count>0){GUI.Label(new Rect(x,rail.y+Us(4),Us(70),rail.height-Us(8)),"道具",new GUIStyle(body){fontSize=Fs(17),fontStyle=FontStyle.Bold,alignment=TextAnchor.MiddleLeft});x+=Us(72);for(int i=0;i<run.consumables.Count;i++){int index=i;Rect r=new(x,rail.y+Us(5),rail.height-Us(10),rail.height-Us(10));if(DrawConsumableAt(r,run.consumables[i])){ConsumableSystem.Use(run,battle,index);if(battle.enemyHp<=0)WinBattle();return;}x+=r.width+Us(7);}}
   GUI.Label(new Rect(rail.center.x-Us(245),rail.y+Us(4),Us(490),rail.height-Us(8)),$"EN {run.energy}/3　　山札 {run.draw.Count}　　捨て札 {run.discard.Count}",new GUIStyle(body){fontSize=Fs(19),fontStyle=FontStyle.Bold,alignment=TextAnchor.MiddleCenter,normal={textColor=new Color(.94f,.85f,.65f)}});
   Rect endRect=new(rail.xMax-Us(246),rail.y+Us(7),Us(232),rail.height-Us(14));if(GUI.Button(endRect,"ターンを終了",new GUIStyle(button){fontSize=Fs(20),fontStyle=FontStyle.Bold})){if(BattleSystem.EndTurn(run,battle,dungeon.damage))FinishRun(false);}
  }

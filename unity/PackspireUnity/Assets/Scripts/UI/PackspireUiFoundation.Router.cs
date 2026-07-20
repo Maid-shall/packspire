@@ -17,8 +17,8 @@ public sealed partial class PackspireUiFoundation {
    if(renderedScreen==ScreenId.Map)ApplyRouteModeVisibility();
    return;
   }
-  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub&&game.UiScreen!=ScreenId.Pack)ReleasePresentationStage();
-  if(renderedScreen==ScreenId.Pack&&game.UiScreen!=ScreenId.Pack&&game.UiScreen!=ScreenId.Hub)ReleasePresentationStage();
+  if(renderedScreen==ScreenId.Hub&&game.UiScreen!=ScreenId.Hub)ReleasePresentationStage();
+  if(renderedScreen==ScreenId.Pack&&game.UiScreen!=ScreenId.Pack)ReleasePresentationStage();
   if(renderedScreen==ScreenId.Map&&game.UiScreen!=ScreenId.Map){
    if(game.UiScreen==ScreenId.Battle)SuspendExplorationStage();
    else if(game.UiScreen==ScreenId.Reward&&game.UsesRoutePresentation){/* keep stage */}
@@ -29,7 +29,7 @@ public sealed partial class PackspireUiFoundation {
    ReleaseExplorationStage();
   renderedScreen=game.UiScreen;hasRenderedScreen=true;screenRoot.Clear();
   if(renderedScreen==ScreenId.Character)BuildCharacter();
-  else if(renderedScreen==ScreenId.Hub)BuildPresentationHome();
+  else if(renderedScreen==ScreenId.Hub)BuildHub();
   else if(renderedScreen==ScreenId.Status)BuildStatus();
   else if(renderedScreen==ScreenId.Vault)BuildVault();
   else if(renderedScreen==ScreenId.Faction)BuildFaction();

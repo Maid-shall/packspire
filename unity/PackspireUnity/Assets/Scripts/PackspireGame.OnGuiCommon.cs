@@ -42,8 +42,13 @@ public partial class PackspireGame : MonoBehaviour {
   if(!ShouldDrawLegacyOnGui)return;
   if(screen!=ScreenId.Map&&screen!=ScreenId.Battle)return;
   LoadIllustratedUi();EnsureBook();EnsureResponsiveTextures();InitStyles();EnsureSocialStyles();ApplyIllustratedStyles();TuneIllustratedText();ApplyScreenTheme();ApplyResponsiveTypography();DrawScreenBackground();
-  if(screen==ScreenId.Map){MapScrollScreen();if(mapLoadoutOverlay)DrawMapLoadoutOverlay();if(mapEventOverlay)DrawMapEventOverlay();return;}
+  if(developerPanel){
+   DrawLegacyDeveloperOverlay();
+   return;
+  }
+  if(screen==ScreenId.Map){MapScrollScreen();if(mapLoadoutOverlay)DrawMapLoadoutOverlay();if(mapEventOverlay)DrawMapEventOverlay();DrawLegacyDeveloperOverlay();return;}
   BattleTableScreen();
+  DrawLegacyDeveloperOverlay();
  }
 }
 }

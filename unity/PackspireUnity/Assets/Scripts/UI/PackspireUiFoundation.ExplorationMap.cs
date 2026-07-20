@@ -34,6 +34,17 @@ public sealed partial class PackspireUiFoundation {
  bool ExplorationRouteActive=>!explorationUseRiteView&&explorationRouteStage!=null;
  bool ExplorationAnyMoving=>ExplorationRouteActive?explorationRouteStage.IsMoving:(explorationStage!=null&&explorationStage.IsMoving);
 
+ RenderTexture ActiveExplorationRenderTarget(){
+  if(ExplorationRouteActive)return explorationRouteStage?.RenderTarget;
+  return explorationStage?.RenderTarget;
+ }
+
+ void SyncExplorationViewImage(){
+  if(explorationView==null)return;
+  var rt=ActiveExplorationRenderTarget();
+  if(rt!=null&&explorationView.image!=rt)explorationView.image=rt;
+ }
+
  void EnsureExplorationStage(){
   if(explorationRouteStage==null){
    var routeHost=new GameObject("ExplorationRouteHost");
@@ -170,7 +181,7 @@ public sealed partial class PackspireUiFoundation {
   if(explorationViewModeButton!=null)
    explorationViewModeButton.style.display=DisplayStyle.None;
   if(explorationFocusButton!=null)
-   explorationFocusButton.style.display=rite&&explore?DisplayStyle.Flex:DisplayStyle.None;
+   explorationFocusButton.style.display=rite&&!combat&&!reward?DisplayStyle.Flex:DisplayStyle.None;
   if(explorationFinishButton!=null)
    explorationFinishButton.style.display=explore&&!combat&&!reward?DisplayStyle.Flex:DisplayStyle.None;
   if(explorationMiniHud!=null)
@@ -225,7 +236,7 @@ public sealed partial class PackspireUiFoundation {
  void BuildExplorationMap(){
   var run=game.UiExploration;
   if(run==null){
-   game.UiOpenExplorationMap();
+   game.UiDevOpenExplorationMap();
    run=game.UiExploration;
   }
   // screenRoot.Clear() already dropped the previous tree; drop stale overlay refs too.
@@ -245,7 +256,7 @@ public sealed partial class PackspireUiFoundation {
   screenRoot.Add(explorationRoot);
 
   explorationView=new Image{
-   image=explorationRouteStage!=null?explorationRouteStage.RenderTarget:explorationStage?.RenderTarget,
+   image=ActiveExplorationRenderTarget(),
    // RT aspect tracks this view; StretchToFill is safe when aspects match (no warp).
    scaleMode=ScaleMode.StretchToFill,
    pickingMode=PickingMode.Position,
@@ -259,6 +270,7 @@ public sealed partial class PackspireUiFoundation {
   explorationView.RegisterCallback<PointerCaptureOutEvent>(_=>explorationDragging=false);
   explorationView.RegisterCallback<WheelEvent>(OnExplorationWheel,TrickleDown.TrickleDown);
   explorationRoot.Add(explorationView);
+  SyncExplorationViewImage();
   SyncExplorationViewSize();
 
   explorationSketch=Container("ps-xmap-sketch");
@@ -278,7 +290,7 @@ public sealed partial class PackspireUiFoundation {
   explorationMapNameLabel=new Label(ExplorationMapSystem.Breadcrumb(run)){pickingMode=PickingMode.Ignore};
   explorationMapNameLabel.AddToClassList("ps-rite-top-name");
   titleBlock.Add(explorationMapNameLabel);
-  var topSub=new Label("術式図（DEV）"){pickingMode=PickingMode.Ignore};
+  var topSub=new Label("探索地図"){pickingMode=PickingMode.Ignore};
   topSub.AddToClassList("ps-xmap-top-sub");
   titleBlock.Add(topSub);
   brand.Add(titleBlock);
@@ -339,14 +351,19 @@ public sealed partial class PackspireUiFoundation {
   var panel=Container("ps-xmap-panel");
   DressRiteFrame(panel);
   explorationTypeLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  explorationTypeLabel.AddToClassList("ps-xmap-panel-type");
   panel.Add(explorationTypeLabel);
   explorationTitleLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  explorationTitleLabel.AddToClassList("ps-xmap-panel-title");
   panel.Add(explorationTitleLabel);
   explorationStatusLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  explorationStatusLabel.AddToClassList("ps-xmap-panel-status");
   panel.Add(explorationStatusLabel);
   explorationBodyLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  explorationBodyLabel.AddToClassList("ps-xmap-panel-body");
   panel.Add(explorationBodyLabel);
   explorationHintLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  explorationHintLabel.AddToClassList("ps-xmap-panel-hint");
   panel.Add(explorationHintLabel);
   dock.Add(panel);
   var compass=Container("ps-xmap-compass");
@@ -368,6 +385,9 @@ public sealed partial class PackspireUiFoundation {
 
   if(game.UiExplorationEventActive)ShowRouteEventDialogue();
   TickRouteBattleSync();
+  BindActiveExplorationView(run,true);
+  SyncExplorationViewImage();
+  SyncExplorationViewSize();
   RefreshExplorationHud();
   RefreshExplorationSketch();
   ApplyRouteModeVisibility();
@@ -624,10 +644,11 @@ public sealed partial class PackspireUiFoundation {
   }
   if(ExplorationRouteActive){
    explorationRouteStage.Tick(x,y);
-   if(explorationView!=null&&explorationRouteStage.RenderTarget!=null
-    &&explorationView.image!=explorationRouteStage.RenderTarget)
-    explorationView.image=explorationRouteStage.RenderTarget;
-  } else explorationStage?.Tick(x,y);
+   SyncExplorationViewImage();
+  } else {
+   explorationStage?.Tick(x,y);
+   SyncExplorationViewImage();
+  }
  }
 
  Label AddAxisChip(VisualElement row,string name,string toneClass){
@@ -864,13 +885,15 @@ public sealed partial class PackspireUiFoundation {
  void OnExplorationViewGeometryChanged(GeometryChangedEvent evt)=>SyncExplorationViewSize();
 
  void SyncExplorationViewSize(){
-  if(explorationView==null||explorationRouteStage==null)return;
+  if(explorationView==null)return;
   var size=ExplorationPanelSize();
   if(size.x<2f||size.y<2f)return;
   float spp=explorationView.panel!=null?explorationView.panel.scaledPixelsPerPoint:1f;
-  explorationRouteStage.SetViewPixelSize(new Vector2(size.x*spp,size.y*spp));
-  if(explorationView.image!=explorationRouteStage.RenderTarget)
-   explorationView.image=explorationRouteStage.RenderTarget;
+  var pixels=new Vector2(size.x*spp,size.y*spp);
+  if(ExplorationRouteActive&&explorationRouteStage!=null)
+   explorationRouteStage.SetViewPixelSize(pixels);
+  else explorationStage?.SetViewPixelSize(pixels);
+  SyncExplorationViewImage();
  }
 
  void OnExplorationPointerDown(PointerDownEvent evt){

@@ -64,15 +64,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  void Update(){
   if(root!=null)RefreshScreen(false);
   RefreshDeveloperOverlay();
-  if(presentationStage!=null&&((renderedScreen==ScreenId.Hub&&presentationHubBuilt)||renderedScreen==ScreenId.Pack)){
-   presentationStage.SetMoveInput(renderedScreen==ScreenId.Hub?ReadMoveInput():0f);
-   presentationStage.Tick();
-   if(renderedScreen==ScreenId.Hub&&presentationHubBuilt){
-    RefreshPresentationHud();
-    if((Input.GetKeyDown(KeyCode.Return)||Input.GetKeyDown(KeyCode.KeypadEnter)||Input.GetKeyDown(KeyCode.E))&&presentationStage.CanEnterAt(NearestPresentationFacility()))
-     EnterFocusedBuilding();
-   }
-  }
   if(renderedScreen==ScreenId.Map&&explorationMapBuilt)TickExplorationMap();
  }
  void OnDestroy(){

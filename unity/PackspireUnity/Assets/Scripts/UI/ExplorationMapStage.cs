@@ -40,6 +40,8 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  float orthoSize=DefaultOrtho;
  bool ready;
  Font labelFont;
+ Material spriteMaterial;
+ Vector2 viewPixelSize;
  public System.Action<int,bool> Arrived;
  public bool Suspended{get;private set;}
 
@@ -67,6 +69,25 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    ApplyCamera();
   }
   SetSuspended(false);
+  RenderStage();
+ }
+
+ public void SetViewPixelSize(Vector2 pixels){
+  if(pixels.x<64f||pixels.y<64f)return;
+  if(Mathf.Abs(viewPixelSize.x-pixels.x)<2f&&Mathf.Abs(viewPixelSize.y-pixels.y)<2f)return;
+  viewPixelSize=pixels;
+  if(!ready)return;
+  int w=Mathf.Max(640,Mathf.RoundToInt(pixels.x));
+  int h=Mathf.Max(360,Mathf.RoundToInt(pixels.y));
+  if(renderTarget==null||renderTarget.width!=w||renderTarget.height!=h){
+   if(renderTarget!=null){
+    if(RenderTexture.active==renderTarget)RenderTexture.active=null;
+    renderTarget.Release();Destroy(renderTarget);
+   }
+   renderTarget=new RenderTexture(w,h,16,RenderTextureFormat.ARGB32){name="PackspireExplorationRite",filterMode=FilterMode.Bilinear};
+   renderTarget.Create();
+   if(stageCamera!=null)stageCamera.targetTexture=renderTarget;
+  }
   RenderStage();
  }
 
@@ -196,8 +217,8 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    var cell=ExplorationMapSystem.Node(mapDef,id);
    bool locked=cell!=null&&cell.locked;
    bool revealed=!locked&&ExplorationMapSystem.IsRevealed(runState,id);
-   kv.Value.enabled=revealed;
-   if(nodeRings.TryGetValue(id,out var ring))ring.enabled=revealed;
+   kv.Value.enabled=!locked;
+   if(nodeRings.TryGetValue(id,out var ring))ring.enabled=!locked;
    var marker=kv.Value.transform.parent;
    if(marker!=null){
     var label=marker.Find("label");
@@ -208,8 +229,16 @@ public sealed class ExplorationMapStage : MonoBehaviour {
      if(csr!=null)csr.enabled=revealed&&ExplorationMapSystem.IsCleared(runState,id);
     }
    }
-   if(lockVeils.TryGetValue(id,out var veil))veil.enabled=locked;
-   if(!revealed)continue;
+   if(lockVeils.TryGetValue(id,out var veil))veil.enabled=false;
+   if(!revealed){
+    kv.Value.color=new Color(.44f,.36f,.26f,.32f);
+    if(ring!=null){
+     ring.enabled=true;
+     ring.color=new Color(.58f,.48f,.32f,.18f);
+     ring.transform.localScale=Vector3.one*.4f;
+    }
+    continue;
+   }
    bool selected=id==selectedId;
    bool current=id==runState.currentNodeId;
    bool reachable=ExplorationMapSystem.CanMove(runState,id);
@@ -243,7 +272,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  void OnDestroy(){Teardown();}
 
  void Teardown(){
-  ready=false;boundMapId=null;
+  ready=false;boundMapId=null;spriteMaterial=null;viewPixelSize=default;
   nodeMarkers.Clear();edgeLines.Clear();nodeRenderers.Clear();nodeRings.Clear();edgeByKey.Clear();edgeKindByKey.Clear();lockVeils.Clear();
   if(renderTarget!=null){
    if(RenderTexture.active==renderTarget)RenderTexture.active=null;
@@ -284,7 +313,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   stageCamera.orthographic=true;
   stageCamera.orthographicSize=orthoSize;
   stageCamera.clearFlags=CameraClearFlags.SolidColor;
-  stageCamera.backgroundColor=new Color(.04f,.035f,.045f);
+  stageCamera.backgroundColor=new Color(.36f,.27f,.17f);
   stageCamera.cullingMask=1<<StageLayer;
   stageCamera.targetTexture=renderTarget;
   stageCamera.enabled=false;
@@ -306,31 +335,19 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void BuildMapSurface(){
-  if(mapRoot==null||mapDef==null)return;
-  // Always rite board — fort plate is intentionally unused.
-  var tex=mapDef.IsInterior?MakeRiteInteriorTexture(mapDef.interiorTone):MakeRiteBoardTexture();
-  var mapSprite=Sprite.Create(tex,new Rect(0,0,tex.width,tex.height),new Vector2(.5f,.5f),100f);
-  sprites.Add(mapSprite);
-  var mapGo=new GameObject(mapDef.IsInterior?"RiteInterior":"RiteBoard");
-  mapGo.transform.SetParent(mapRoot,false);
-  SetLayer(mapGo);
-  mapRenderer=mapGo.AddComponent<SpriteRenderer>();
-  mapRenderer.sprite=mapSprite;
-  mapRenderer.sortingOrder=0;
-  float spriteW=mapSprite.bounds.size.x,spriteH=mapSprite.bounds.size.y;
-  mapGo.transform.localScale=new Vector3(mapDef.mapWidth/Mathf.Max(.01f,spriteW),mapDef.mapHeight/Mathf.Max(.01f,spriteH),1f);
+  // Flat map: nodes and edges only (no rite plate / terrain backdrop).
  }
 
  void BuildEdges(){
   if(mapDef==null)return;
   var seen=new HashSet<int>();
   foreach(var cell in mapDef.cells){
-   if(cell.links==null)continue;
+   if(cell.locked||cell.links==null)continue;
    foreach(int to in cell.links){
     int key=EdgeKey(cell.id,to);
     if(!seen.Add(key))continue;
     var other=ExplorationMapSystem.Node(mapDef,to);
-    if(other==null)continue;
+    if(other==null||other.locked)continue;
     if(cell.locked&&other.locked)continue;
     var kind=ExplorationMapSystem.LinkKind(mapDef,cell.id,to);
     edgeKindByKey[key]=kind;
@@ -375,31 +392,20 @@ public sealed class ExplorationMapStage : MonoBehaviour {
 
  void BuildNodes(){
   foreach(var cell in mapDef.cells){
+   if(cell.locked)continue;
+
    var root=new GameObject($"cell-{cell.id}");
    root.transform.SetParent(overlayRoot,false);
    SetLayer(root);
    Vector3 p=ExplorationMapSystem.WorldPos(mapDef,cell);p.z=-0.05f;
    root.transform.position=p;
 
-   if(cell.locked){
-    var veilGo=new GameObject("lock");
-    veilGo.transform.SetParent(root.transform,false);
-    SetLayer(veilGo);
-    var veil=veilGo.AddComponent<SpriteRenderer>();
-    veil.sprite=CircleSprite();
-    veil.sortingOrder=4;
-    veil.color=new Color(0.06f,0.05f,0.09f,.45f);
-    veilGo.transform.localScale=Vector3.one*.5f;
-    lockVeils[cell.id]=veil;
-    nodeMarkers.Add(root.transform);
-    continue;
-   }
-
    var ringGo=new GameObject("ring");
    ringGo.transform.SetParent(root.transform,false);
    SetLayer(ringGo);
    var ring=ringGo.AddComponent<SpriteRenderer>();
    ring.sprite=RingSprite();ring.sortingOrder=3;ring.color=new Color(.85f,.7f,.4f,.35f);
+   AssignSpriteMaterial(ring);
    ringGo.transform.localScale=Vector3.one*.48f;
    nodeRings[cell.id]=ring;
 
@@ -408,6 +414,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    SetLayer(bodyGo);
    var sr=bodyGo.AddComponent<SpriteRenderer>();
    sr.sprite=NodeIconSprite(cell.type);sr.sortingOrder=5;sr.color=NodeColor(cell.type);
+   AssignSpriteMaterial(sr);
    bodyGo.transform.localScale=Vector3.one*.3f;
    nodeRenderers[cell.id]=sr;
 
@@ -418,6 +425,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    checkGo.transform.localScale=Vector3.one*.18f;
    var check=checkGo.AddComponent<SpriteRenderer>();
    check.sprite=CircleSprite();check.sortingOrder=7;check.color=new Color(.95f,.8f,.4f,.95f);check.enabled=false;
+   AssignSpriteMaterial(check);
 
    if(cell.landmark||cell.type is "entrance" or "battle" or "event" or "building_door" or "rest"){
     var labelGo=new GameObject("label");
@@ -440,6 +448,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   SetLayer(shadowGo);
   pieceShadow=shadowGo.AddComponent<SpriteRenderer>();
   pieceShadow.sprite=CircleSprite();pieceShadow.sortingOrder=6;pieceShadow.color=new Color(0,0,0,.5f);
+  AssignSpriteMaterial(pieceShadow);
   shadowGo.transform.localScale=new Vector3(.4f,.2f,1f);
 
   var go=new GameObject("PlayerPiece");
@@ -448,6 +457,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   pieceTransform=go.transform;
   pieceRenderer=go.AddComponent<SpriteRenderer>();
   pieceRenderer.sprite=PawnSprite();pieceRenderer.sortingOrder=9;
+  AssignSpriteMaterial(pieceRenderer);
   go.transform.localScale=Vector3.one*.55f;
  }
 
@@ -653,5 +663,20 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void SetLayer(GameObject go){go.layer=StageLayer;foreach(Transform child in go.transform)SetLayer(child.gameObject);}
+
+ Material EnsureSpriteMaterial(){
+  if(spriteMaterial!=null)return spriteMaterial;
+  var shader=Shader.Find("Sprites/Default")??Shader.Find("Unlit/Color");
+  if(shader==null)return null;
+  spriteMaterial=new Material(shader);
+  materials.Add(spriteMaterial);
+  return spriteMaterial;
+ }
+
+ void AssignSpriteMaterial(SpriteRenderer sr){
+  if(sr==null)return;
+  var mat=EnsureSpriteMaterial();
+  if(mat!=null)sr.sharedMaterial=mat;
+ }
 }
 }

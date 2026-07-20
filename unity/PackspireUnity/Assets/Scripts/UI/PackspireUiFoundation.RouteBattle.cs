@@ -6,6 +6,7 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  VisualElement routeBattleRoot,routeBattleHand,routeBattleConsumables,routeRewardRoot;
  Label routeBattleLog,routeBattleHeroHud,routeBattleEnemyHud,routeBattleIntent,routeBattleEnergy;
+ Button routeBattleSkillButton;
  bool routeBattleUiOpen,routeRewardUiOpen;
  int routeBattleHandSig=int.MinValue,routeBattleConsSig=int.MinValue;
 
@@ -16,7 +17,7 @@ public sealed partial class PackspireUiFoundation {
   routeBattleHandSig=int.MinValue;routeBattleConsSig=int.MinValue;
   routeBattleRoot=null;routeBattleHand=null;routeBattleConsumables=null;routeRewardRoot=null;
   routeBattleLog=null;routeBattleHeroHud=null;routeBattleEnemyHud=null;
-  routeBattleIntent=null;routeBattleEnergy=null;
+  routeBattleIntent=null;routeBattleEnergy=null;routeBattleSkillButton=null;
  }
 
  bool RouteBattleUiAttached=>
@@ -99,7 +100,7 @@ public sealed partial class PackspireUiFoundation {
     routeBattleRoot.RemoveFromHierarchy();
     routeBattleRoot=null;routeBattleHand=null;routeBattleConsumables=null;
     routeBattleLog=null;routeBattleHeroHud=null;routeBattleEnemyHud=null;
-    routeBattleIntent=null;routeBattleEnergy=null;
+    routeBattleIntent=null;routeBattleEnergy=null;routeBattleSkillButton=null;
    } else routeBattleRoot.style.display=DisplayStyle.None;
   }
   if(routeRewardRoot!=null){
@@ -120,7 +121,7 @@ public sealed partial class PackspireUiFoundation {
   routeBattleRoot?.RemoveFromHierarchy();
   routeBattleRoot=null;routeBattleHand=null;routeBattleConsumables=null;
   routeBattleLog=null;routeBattleHeroHud=null;routeBattleEnemyHud=null;
-  routeBattleIntent=null;routeBattleEnergy=null;
+  routeBattleIntent=null;routeBattleEnergy=null;routeBattleSkillButton=null;
 
   // Root ignores picks so the full-screen battle layer does not steal clicks;
   // only the bottom rail / cards accept input.
@@ -157,6 +158,19 @@ public sealed partial class PackspireUiFoundation {
   routeBattleEnergy=new Label(""){pickingMode=PickingMode.Ignore};
   routeBattleEnergy.AddToClassList("ps-route-battle-energy");
   rail.Add(routeBattleEnergy);
+  routeBattleSkillButton=PackspireUiFactory.Button("スキル",()=>{
+   if(!game.UiActiveSkillAvailable)return;
+   explorationRouteStage?.NotifyHeroAttack();
+   if(game.UiRouteBattleUseActiveSkill())EnterRouteReward();
+   else {
+    RefreshRouteBattleLabels();
+    RefreshRouteBattleSkillButton();
+    RebuildRouteBattleHand(force:true);
+    RebuildRouteConsumables(force:true);
+   }
+  });
+  routeBattleSkillButton.AddToClassList("ps-route-battle-skill");
+  rail.Add(routeBattleSkillButton);
   var end=PackspireUiFactory.Button("ターン終了",()=>{
    explorationRouteStage?.NotifyEnemyAttack();
    explorationRouteStage?.NotifyHeroHit();
@@ -217,11 +231,27 @@ public sealed partial class PackspireUiFoundation {
   int intent=battle.enemy.damages[battle.move%battle.enemy.damages.Length]+dungeon.damage;
   string statuses=FormatStatuses(run.statuses);
   string enemySt=FormatStatuses(battle.enemyStatuses);
-  if(routeBattleHeroHud!=null)routeBattleHeroHud.text=$"HP {run.hp}/{run.maxHp}\n防御 {run.block}\n{statuses}";
+  if(routeBattleHeroHud!=null){
+   var character=CharacterSystem.OfRun(run);
+   string who=character!=null?$"{character.name}　{character.traitName}：{character.traitText}\n":"";
+   routeBattleHeroHud.text=$"{who}HP {run.hp}/{run.maxHp}\n防御 {run.block}\n{statuses}";
+  }
   if(routeBattleEnemyHud!=null)routeBattleEnemyHud.text=$"{battle.enemy.name}\nHP {Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}\n防御 {battle.enemyBlock}\n{enemySt}";
   if(routeBattleIntent!=null)routeBattleIntent.text=$"次行動  攻撃 {intent}";
   if(routeBattleLog!=null)routeBattleLog.text=battle.log??"";
   if(routeBattleEnergy!=null)routeBattleEnergy.text=$"EN {run.energy}/3   山札 {run.draw.Count}   捨て札 {run.discard.Count}";
+  RefreshRouteBattleSkillButton();
+ }
+
+ void RefreshRouteBattleSkillButton(){
+  if(routeBattleSkillButton==null||game==null)return;
+  var run=game.UiRun;
+  var def=CharacterSystem.OfRun(run);
+  string label=def?.activeSkillName??"スキル";
+  if(run!=null&&run.activeSkillUsed)label+="（済）";
+  routeBattleSkillButton.text=label;
+  routeBattleSkillButton.tooltip=game.UiActiveSkillTooltip;
+  routeBattleSkillButton.SetEnabled(game.UiActiveSkillAvailable);
  }
 
  void RebuildRouteBattleHand(bool force=false){

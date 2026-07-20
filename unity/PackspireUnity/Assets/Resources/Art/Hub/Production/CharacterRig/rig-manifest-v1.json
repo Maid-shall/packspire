@@ -1,0 +1,569 @@
+﻿{
+    "id":  "hub-adventurer-rig-v1",
+    "status":  "manifest-driven-neutral-pose",
+    "reference":  "Assets/Resources/Art/RouteKeyed/character-v1.png",
+    "partsRoot":  "Art/Hub/Production/CharacterRig/Parts",
+    "canvas":  {
+                   "pixelsPerUnit":  100,
+                   "origin":  "top-left-image-space",
+                   "width":  864,
+                   "height":  1821,
+                   "footBaselineY":  1750
+               },
+    "parts":  [
+                  {
+                      "id":  "coat-tail-center",
+                      "file":  "coat-tail-center-v1",
+                      "parentBone":  null,
+                      "sortOrder":  20,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  272,
+                                         "width":  133,
+                                         "height":  301,
+                                         "x":  184
+                                     },
+                      "trimRect":  {
+                                       "y":  13,
+                                       "width":  133,
+                                       "height":  301,
+                                       "x":  13
+                                   },
+                      "textureSize":  {
+                                          "height":  324,
+                                          "width":  156
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.767985,
+                                          "x":  0.289931
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "coat-tail-right",
+                      "file":  "coat-tail-right-v1",
+                      "parentBone":  null,
+                      "sortOrder":  21,
+                      "matchScore":  0.9947,
+                      "canvasRect":  {
+                                         "y":  228,
+                                         "width":  149,
+                                         "height":  520,
+                                         "x":  176
+                                     },
+                      "trimRect":  {
+                                       "y":  17,
+                                       "width":  149,
+                                       "height":  520,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  548,
+                                          "width":  176
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.732015,
+                                          "x":  0.289931
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "hair-back",
+                      "file":  "hair-back-v1",
+                      "parentBone":  null,
+                      "sortOrder":  22,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  264,
+                                         "width":  177,
+                                         "height":  179,
+                                         "x":  160
+                                     },
+                      "trimRect":  {
+                                       "y":  11,
+                                       "width":  177,
+                                       "height":  179,
+                                       "x":  12
+                                   },
+                      "textureSize":  {
+                                          "height":  204,
+                                          "width":  200
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.805876,
+                                          "x":  0.287616
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "upper-arm-rear",
+                      "file":  "upper-arm-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  23,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  0,
+                                         "width":  89,
+                                         "height":  168,
+                                         "x":  184
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  89,
+                                       "height":  168,
+                                       "x":  0
+                                   },
+                      "textureSize":  {
+                                          "height":  168,
+                                          "width":  100
+                                      },
+                      "pivot":  {
+                                    "Y":  0.92,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.992619,
+                                          "x":  0.264468
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "forearm-rear",
+                      "file":  "forearm-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  24,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  0,
+                                         "width":  66,
+                                         "height":  192,
+                                         "x":  172
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  66,
+                                       "height":  192,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  204,
+                                          "width":  92
+                                      },
+                      "pivot":  {
+                                    "Y":  0.92,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.991565,
+                                          "x":  0.237269
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "hand-rear",
+                      "file":  "hand-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  25,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  0,
+                                         "width":  57,
+                                         "height":  122,
+                                         "x":  176
+                                     },
+                      "trimRect":  {
+                                       "y":  15,
+                                       "width":  57,
+                                       "height":  122,
+                                       "x":  14
+                                   },
+                      "textureSize":  {
+                                          "height":  148,
+                                          "width":  84
+                                      },
+                      "pivot":  {
+                                    "Y":  0.82,
+                                    "X":  0.45
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.987941,
+                                          "x":  0.233391
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "shoulder-rear",
+                      "file":  "shoulder-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  26,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  0,
+                                         "width":  102,
+                                         "height":  153,
+                                         "x":  164
+                                     },
+                      "trimRect":  {
+                                       "y":  11,
+                                       "width":  102,
+                                       "height":  153,
+                                       "x":  13
+                                   },
+                      "textureSize":  {
+                                          "height":  164,
+                                          "width":  128
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.95799,
+                                          "x":  0.248843
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "thigh-rear",
+                      "file":  "thigh-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  27,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  268,
+                                         "width":  109,
+                                         "height":  265,
+                                         "x":  204
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  109,
+                                       "height":  265,
+                                       "x":  14
+                                   },
+                      "textureSize":  {
+                                          "height":  276,
+                                          "width":  124
+                                      },
+                      "pivot":  {
+                                    "Y":  0.92,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.841186,
+                                          "x":  0.29919
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "shin-rear",
+                      "file":  "shin-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  28,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  264,
+                                         "width":  94,
+                                         "height":  356,
+                                         "x":  184
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  94,
+                                       "height":  356,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  356,
+                                          "width":  120
+                                      },
+                      "pivot":  {
+                                    "Y":  0.92,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.839385,
+                                          "x":  0.267361
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "foot-rear",
+                      "file":  "foot-rear-v1",
+                      "parentBone":  null,
+                      "sortOrder":  29,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  0,
+                                         "width":  78,
+                                         "height":  194,
+                                         "x":  168
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  78,
+                                       "height":  194,
+                                       "x":  14
+                                   },
+                      "textureSize":  {
+                                          "height":  204,
+                                          "width":  104
+                                      },
+                      "pivot":  {
+                                    "Y":  0.82,
+                                    "X":  0.45
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.980824,
+                                          "x":  0.235069
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "pelvis-connector",
+                      "file":  "pelvis-connector-v1",
+                      "parentBone":  null,
+                      "sortOrder":  30,
+                      "matchScore":  0.9924,
+                      "canvasRect":  {
+                                         "y":  532,
+                                         "width":  231,
+                                         "height":  193,
+                                         "x":  116
+                                     },
+                      "trimRect":  {
+                                       "y":  15,
+                                       "width":  231,
+                                       "height":  193,
+                                       "x":  16
+                                   },
+                      "textureSize":  {
+                                          "height":  220,
+                                          "width":  256
+                                      },
+                      "pivot":  {
+                                    "Y":  0.55,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.660159,
+                                          "x":  0.26794
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "pelvis-shorts",
+                      "file":  "pelvis-shorts-v1",
+                      "parentBone":  null,
+                      "sortOrder":  31,
+                      "matchScore":  0.9874,
+                      "canvasRect":  {
+                                         "y":  540,
+                                         "width":  279,
+                                         "height":  207,
+                                         "x":  116
+                                     },
+                      "trimRect":  {
+                                       "y":  14,
+                                       "width":  279,
+                                       "height":  207,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  232,
+                                          "width":  308
+                                      },
+                      "pivot":  {
+                                    "Y":  0.55,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.652306,
+                                          "x":  0.295718
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "torso-upper",
+                      "file":  "torso-upper-v1",
+                      "parentBone":  null,
+                      "sortOrder":  32,
+                      "matchScore":  0.9811,
+                      "canvasRect":  {
+                                         "y":  528,
+                                         "width":  275,
+                                         "height":  384,
+                                         "x":  124
+                                     },
+                      "trimRect":  {
+                                       "y":  12,
+                                       "width":  275,
+                                       "height":  384,
+                                       "x":  12
+                                   },
+                      "textureSize":  {
+                                          "height":  396,
+                                          "width":  300
+                                      },
+                      "pivot":  {
+                                    "Y":  0.05,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.50972,
+                                          "x":  0.302662
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "waist-corset",
+                      "file":  "waist-corset-v1",
+                      "parentBone":  null,
+                      "sortOrder":  33,
+                      "matchScore":  0.9918,
+                      "canvasRect":  {
+                                         "y":  708,
+                                         "width":  200,
+                                         "height":  199,
+                                         "x":  48
+                                     },
+                      "trimRect":  {
+                                       "y":  0,
+                                       "width":  200,
+                                       "height":  199,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  212,
+                                          "width":  228
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.556562,
+                                          "x":  0.171296
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "chest-harness",
+                      "file":  "chest-harness-v1",
+                      "parentBone":  null,
+                      "sortOrder":  34,
+                      "matchScore":  0.9926,
+                      "canvasRect":  {
+                                         "y":  776,
+                                         "width":  279,
+                                         "height":  232,
+                                         "x":  80
+                                     },
+                      "trimRect":  {
+                                       "y":  13,
+                                       "width":  279,
+                                       "height":  232,
+                                       "x":  17
+                                   },
+                      "textureSize":  {
+                                          "height":  256,
+                                          "width":  308
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.510159,
+                                          "x":  0.254051
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "neck-collar",
+                      "file":  "neck-collar-v1",
+                      "parentBone":  null,
+                      "sortOrder":  35,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  4,
+                                         "width":  126,
+                                         "height":  189,
+                                         "x":  152
+                                     },
+                      "trimRect":  {
+                                       "y":  12,
+                                       "width":  126,
+                                       "height":  189,
+                                       "x":  15
+                                   },
+                      "textureSize":  {
+                                          "height":  212,
+                                          "width":  152
+                                      },
+                      "pivot":  {
+                                    "Y":  0.5,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.945909,
+                                          "x":  0.248843
+                                      },
+                      "rotatesWithBone":  false
+                  },
+                  {
+                      "id":  "head-face-neck",
+                      "file":  "head-face-neck-v1",
+                      "parentBone":  null,
+                      "sortOrder":  36,
+                      "matchScore":  1,
+                      "canvasRect":  {
+                                         "y":  264,
+                                         "width":  175,
+                                         "height":  224,
+                                         "x":  156
+                                     },
+                      "trimRect":  {
+                                       "y":  14,
+                                       "width":  175,
+                                       "height":  224,
+                                       "x":  14
+                                   },
+                      "textureSize":  {
+                                          "height":  248,
+                                          "width":  200
+                                      },
+                      "pivot":  {
+                                    "Y":  0.08,
+                                    "X":  0.5
+                                },
+                      "canvasPivot":  {
+                                          "y":  0.741856,
+                                          "x":  0.281829
+                                      },
+                      "rotatesWithBone":  false
+                  }
+              ],
+    "validation":  {
+                       "requiredBeforePromotion":  [
+                                                       "neutral-pose-matches-reference",
+                                                       "no-joint-gaps-at-plus-minus-20-degrees",
+                                                       "feet-remain-grounded-during-test-cycle",
+                                                       "outfit-overlays-follow-shared-bones",
+                                                       "no-green-fringe-at-1920x1080"
+                                                   ],
+                       "replaceCurrentHubRig":  false
+                   }
+}

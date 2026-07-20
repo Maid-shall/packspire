@@ -4,8 +4,8 @@ using System.Linq;
 using UnityEngine;
 namespace Packspire {
 public static class SaveSystem {
- const string Key="packspire_unity_save_v16";
- const string LegacyKey="packspire_unity_save_v15";
+ const string Key="packspire_unity_save_v17";
+ const string LegacyKey="packspire_unity_save_v16";
  const string LegacyKeyV1="packspire_unity_save_v1";
  public static MetaSave Load(){try{var json=PlayerPrefs.GetString(Key,PlayerPrefs.GetString(LegacyKey,PlayerPrefs.GetString(LegacyKeyV1,"")));return Migrate(string.IsNullOrEmpty(json)?new MetaSave():JsonUtility.FromJson<MetaSave>(json)??new MetaSave());}catch{return Migrate(new MetaSave());}}
  public static void Save(MetaSave data){PlayerPrefs.SetString(Key,JsonUtility.ToJson(data));PlayerPrefs.Save();}
@@ -13,7 +13,11 @@ public static class SaveSystem {
  public static string Export(MetaSave data)=>JsonUtility.ToJson(data,true);
  public static MetaSave Import(string json)=>Migrate(JsonUtility.FromJson<MetaSave>(json)??new MetaSave());
  static MetaSave Migrate(MetaSave save){
-  save.version=16;save.stash??=new();save.consumables??=new();save.dungeonDiscoveries??=new();save.loadouts??=new();
+  save.version=17;save.stash??=new();save.consumables??=new();save.dungeonDiscoveries??=new();save.loadouts??=new();
+  if(string.IsNullOrEmpty(save.selectedCharacterId)||!CharacterCatalog.All.ContainsKey(save.selectedCharacterId))
+   save.selectedCharacterId=CharacterCatalog.DefaultId;
+  if(save.characterMade&&string.IsNullOrEmpty(save.selectedCharacterId))
+   save.selectedCharacterId=CharacterCatalog.DefaultId;
   if(save.dungeonsUnlocked<1)save.dungeonsUnlocked=1;
   if(save.consumableCapacity<5)save.consumableCapacity=5;
   if(save.consumables.Count==0)save.consumables.AddRange(new[]{"heal","heal","guard","fire","energy"});

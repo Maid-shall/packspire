@@ -1521,7 +1521,119 @@
 .ps-equipment-tray .ps-title, .ps-equipment-tray .ps-body { color: rgb(237, 216, 173); }
 .ps-equipment-tray .ps-atlas-label { color: rgb(235, 216, 174); }
 
-/* 2.5D hub presentation layer */
+/* Simple hub home (character left, menu right) */
+.ps-hub-home {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 20px 24px;
+    background-color: rgb(92, 68, 44);
+}
+
+.ps-hub-home-row {
+    flex-direction: row;
+    flex-grow: 1;
+    height: 100%;
+    min-height: 0;
+    align-items: stretch;
+}
+
+.ps-hub-home-stage {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-hub-home-character {
+    width: 92%;
+    max-width: 540px;
+    height: 96%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-hub-home-char-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-hub-home-char-far { opacity: 0.72; }
+.ps-hub-home-char-mid { opacity: 0.92; }
+.ps-hub-home-char-near { opacity: 1; }
+.ps-hub-home-char-front { opacity: 1; }
+
+.ps-hub-home-menu {
+    width: 280px;
+    min-width: 240px;
+    max-width: 320px;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding: 20px 18px;
+    background-color: rgba(54, 38, 24, 0.92);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(160, 118, 72);
+    border-right-color: rgba(120, 88, 52, 0.7);
+    border-top-color: rgba(120, 88, 52, 0.7);
+    border-bottom-color: rgba(120, 88, 52, 0.7);
+}
+
+.ps-hub-home-title {
+    font-size: 28px;
+    color: rgb(255, 236, 196);
+    margin-bottom: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-hub-home-meta {
+    font-size: 13px;
+    color: rgb(220, 200, 164);
+    margin-bottom: 4px;
+    white-space: normal;
+}
+
+.ps-hub-home-btn {
+    height: 46px;
+    min-height: 46px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-left;
+    background-color: rgba(72, 52, 34, 0.96);
+    color: rgb(255, 236, 196);
+    border-left-width: 3px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(210, 168, 96);
+    border-right-color: rgba(150, 110, 68, 0.65);
+    border-top-color: rgba(150, 110, 68, 0.65);
+    border-bottom-color: rgba(150, 110, 68, 0.65);
+}
+
+.ps-hub-home-btn:hover {
+    background-color: rgba(96, 68, 40, 0.98);
+    color: rgb(255, 244, 214);
+    border-left-color: rgb(240, 204, 120);
+}
+
+.ps-hub-home-menu > .ps-hub-home-btn:first-of-type {
+    margin-top: 18px;
+}
+
+/* 2.5D hub presentation layer (legacy) */
 .ps-v2-home {
     position: absolute;
     left: 0;
@@ -1798,7 +1910,7 @@
     bottom: 0;
     flex-direction: column;
     padding: 12px 14px 10px 14px;
-    background-color: rgb(6, 6, 8);
+    background-color: rgb(92, 68, 44);
 }
 
 .ps-rite-stage-bg {
@@ -2345,7 +2457,18 @@
     white-space: normal;
 }
 
+.ps-rite-left-header {
+    flex-shrink: 0;
+    flex-direction: column;
+}
+
+.ps-rite-left-header > .ps-rite-panel-head {
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
 .ps-rite-filters {
+    flex-shrink: 0;
     margin-bottom: 8px;
 }
 
@@ -2436,6 +2559,8 @@
 
 .ps-rite-center {
     flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
     margin-left: 10px;
     margin-right: 10px;
     padding: 4px 4px;
@@ -3419,7 +3544,6 @@
 .ps-rite-left,
 .ps-rite-right-shell,
 .ps-rite-popup,
-.ps-rite-select-dock,
 .ps-rite-kiln-rail {
     position: relative;
     overflow: hidden;
@@ -3620,6 +3744,7 @@
 }
 
 .ps-rite-kiln-rail {
+    flex-shrink: 0;
     justify-content: flex-start;
     align-items: center;
     min-height: 44px;
@@ -3655,8 +3780,10 @@
 }
 
 .ps-rite-select-dock {
+    position: absolute;
     right: 12px;
     top: 16px;
+    z-index: 40;
     width: 78px;
     min-width: 78px;
     padding: 8px 6px 6px 6px;
@@ -3966,11 +4093,11 @@
     top: 0;
     bottom: 0;
     flex-direction: column;
-    background-color: rgb(6, 5, 8);
+    background-color: rgb(92, 68, 44);
 }
 
 .ps-xmap-rite {
-    background-color: rgb(5, 4, 7);
+    background-color: rgb(92, 68, 44);
 }
 
 .ps-xmap-view {
@@ -3979,7 +4106,7 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgb(4, 3, 6);
+    background-color: rgb(92, 68, 44);
 }
 
 .ps-xmap-top-sub {
@@ -4086,9 +4213,9 @@
     width: 372px;
     padding: 76px 16px 10px 16px;
     flex-direction: column;
-    background-color: rgb(12, 10, 14);
+    background-color: rgb(72, 52, 34);
     border-right-width: 1px;
-    border-right-color: rgba(170, 135, 70, 0.4);
+    border-right-color: rgba(170, 135, 70, 0.55);
 }
 
 .ps-xmap-top {
@@ -4101,7 +4228,7 @@
     flex-direction: row;
     align-items: center;
     padding: 0 14px;
-    background-color: rgba(10, 9, 12, 0.94);
+    background-color: rgba(54, 38, 24, 0.96);
     border-left-width: 2px;
     border-left-color: rgb(212, 168, 72);
     border-right-width: 1px;
@@ -4132,7 +4259,7 @@
     min-height: 220px;
     padding: 18px 18px 16px 18px;
     flex-direction: column;
-    background-color: rgba(18, 15, 20, 0.92);
+    background-color: rgba(54, 38, 24, 0.94);
     border-left-width: 2px;
     border-left-color: rgb(212, 168, 72);
     border-right-width: 1px;
@@ -4945,6 +5072,8 @@
     background-color: rgb(4, 4, 6);
 }
 
+.ps-route-battle-skill,
+.ps-route-battle .ps-button.ps-route-battle-skill,
 .ps-route-battle-end,
 .ps-route-battle .ps-button.ps-route-battle-end {
     min-width: 140px;
@@ -4956,6 +5085,15 @@
     border-right-color: rgb(196, 160, 90);
     border-top-color: rgb(196, 160, 90);
     border-bottom-color: rgb(196, 160, 90);
+}
+
+.ps-route-battle-skill:disabled,
+.ps-route-battle .ps-button.ps-route-battle-skill:disabled {
+    color: rgba(180, 170, 150, 0.45);
+    border-left-color: rgba(120, 100, 70, 0.45);
+    border-right-color: rgba(120, 100, 70, 0.45);
+    border-top-color: rgba(120, 100, 70, 0.45);
+    border-bottom-color: rgba(120, 100, 70, 0.45);
 }
 
 
@@ -5326,4 +5464,41 @@
     font-size: 14px;
     color: rgb(240, 230, 200);
     white-space: normal;
+}
+
+/* ===== Playable character roster ===== */
+.ps-character-roster-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.ps-character-roster-grid .ps-atlas-button,
+.ps-character-roster-tile {
+    width: 118px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.ps-character-trait-box,
+.ps-character-skill-box {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background-color: rgba(54, 38, 24, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgb(212, 168, 72);
+}
+
+.ps-character-trait-name,
+.ps-character-skill-name {
+    font-size: 16px;
+    color: rgb(255, 226, 160);
+    margin-bottom: 4px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-hub-home-character-portrait {
+    width: 88%;
+    height: 88%;
+    -unity-background-scale-mode: scale-to-fit;
 }

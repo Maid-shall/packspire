@@ -4,15 +4,6 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
- void BuildCharacter(){
-  var meta=game.UiMeta;var shell=BookShell("探索者の作成",null);screenRoot.Add(shell);var pages=shell.Q<VisualElement>("book-pages");var left=Page("探索者の肖像");var right=Page("最初の一頁");pages.Add(left);pages.Add(right);
-  left.Add(Atlas(game.UiCharacterArt,CharacterUv(meta.body,meta.hair),"ps-character-preview"));left.Add(PackspireUiFactory.Body($"{(meta.body<2?"男性":"女性")}タイプ {(meta.body%2)+1}　／　{new[]{"短髪","ミディアム","結び髪"}[meta.hair]}"));
-  right.Add(PackspireUiFactory.Title("体格"));var bodies=Container("ps-choice-grid");for(int i=0;i<4;i++){int value=i;var choice=AtlasButton(game.UiCharacterArt,CharacterUv(value,meta.hair),$"{(value<2?"男性":"女性")} {(value%2)+1}",value==meta.body,()=>{game.UiSetAppearance(value,meta.hair);BuildCharacterAgain();});bodies.Add(choice);}right.Add(bodies);
-  right.Add(PackspireUiFactory.Title("髪型"));var hairs=Container("ps-choice-row");string[] names={"短髪","ミディアム","結び髪"};for(int i=0;i<3;i++){int value=i;var choice=AtlasButton(game.UiCharacterArt,CharacterUv(meta.body,value),names[value],value==meta.hair,()=>{game.UiSetAppearance(meta.body,value);BuildCharacterAgain();});hairs.Add(choice);}right.Add(hairs);
-  var start=PackspireUiFactory.Button("この姿で物語を始める",()=>game.UiFinishCharacter());start.AddToClassList("ps-primary-action");right.Add(start);
- }
- void BuildCharacterAgain(){screenRoot.Clear();BuildCharacter();}
-
  void BuildStatus(){
   var meta=game.UiMeta;var learned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
   if(learned.Count==0){screenRoot.Add(BookShell("役職記録",PackspireUiFactory.EmptyState("役職記録なし","役職を習得するとここへ記録されます。")));return;}

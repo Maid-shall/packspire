@@ -8,7 +8,13 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void BuildExpedition(){
   var meta=game.UiMeta;int unlocked=Mathf.Clamp(meta.dungeonsUnlocked,1,GameCatalog.Dungeons.Length);if(string.IsNullOrEmpty(selectedDungeonId)||!GameCatalog.Dungeons.Take(unlocked).Any(x=>x.id==selectedDungeonId))selectedDungeonId=GameCatalog.Dungeons[0].id;
-  var desk=TabletopDesk("ps-expedition-workspace");screenRoot.Add(desk);var tray=Container("ps-expedition-case");desk.Add(tray);var selected=GameCatalog.Dungeons.First(x=>x.id==selectedDungeonId);tray.Add(PackspireUiFactory.Title("遠征準備"));tray.Add(Atlas(game.UiDungeonArt,DungeonUv(selected.id),"ps-expedition-selected-art"));tray.Add(PackspireUiFactory.Title(selected.name));tray.Add(PackspireUiFactory.Body(selected.description));tray.Add(PackspireUiFactory.Body($"敵HP ×{selected.hpScale:0.00}　追加攻撃 {selected.damage}　報酬 ×{selected.goldScale:0.00}"));
+  var desk=TabletopDesk("ps-expedition-workspace");screenRoot.Add(desk);var tray=Container("ps-expedition-case");desk.Add(tray);var selected=GameCatalog.Dungeons.First(x=>x.id==selectedDungeonId);
+  var character=CharacterCatalog.Get(meta.selectedCharacterId);
+  tray.Add(PackspireUiFactory.Title("遠征準備"));
+  tray.Add(PackspireUiFactory.Body($"{character.name}　{character.title}"));
+  tray.Add(PackspireUiFactory.Body($"特性 {character.traitName}：{character.traitText}"));
+  tray.Add(PackspireUiFactory.Body($"スキル {character.activeSkillName}：{character.activeSkillText}"));
+  tray.Add(Atlas(game.UiDungeonArt,DungeonUv(selected.id),"ps-expedition-selected-art"));tray.Add(PackspireUiFactory.Title(selected.name));tray.Add(PackspireUiFactory.Body(selected.description));tray.Add(PackspireUiFactory.Body($"敵HP ×{selected.hpScale:0.00}　追加攻撃 {selected.damage}　報酬 ×{selected.goldScale:0.00}"));
   tray.Add(PackspireUiFactory.Title("使用する荷造り"));var loadouts=Container("ps-loadout-tabs");foreach(var loadout in meta.loadouts){var entry=loadout;var button=PackspireUiFactory.Button(entry.name,()=>{game.UiSelectLoadout(entry.id);BuildExpeditionAgain();});if(entry.id==meta.selectedLoadoutId)button.AddToClassList("ps-selected");loadouts.Add(button);}tray.Add(loadouts);var active=LoadoutSystem.Active(meta);tray.Add(PackspireUiFactory.Body($"{active.name}　配置 {active.slots.Count}　カード {active.deck.Count}"));var launch=PackspireUiFactory.Button("この地図へ遠征する",()=>game.UiStartExpedition(selected.id));launch.AddToClassList("ps-primary-action");tray.Add(launch);
   var rack=new ScrollView();rack.AddToClassList("ps-map-roll-rack");desk.Add(rack);for(int i=0;i<GameCatalog.Dungeons.Length;i++){var dungeon=GameCatalog.Dungeons[i];bool available=i<unlocked;var roll=new Button(()=>{if(available){selectedDungeonId=dungeon.id;BuildExpeditionAgain();}});roll.AddToClassList("ps-map-roll");if(dungeon.id==selectedDungeonId)roll.AddToClassList("ps-selected");if(!available)roll.AddToClassList("ps-locked");roll.Add(Atlas(game.UiDungeonArt,DungeonUv(dungeon.id),"ps-map-roll-seal"));roll.Add(new Label(available?dungeon.name:"封印された地図"));rack.Add(roll);}desk.Add(TabletopBack());
  }
@@ -28,40 +34,11 @@ public sealed partial class PackspireUiFoundation {
   packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,packingRotation);
   var build=BackpackSystem.Build(run);
 
-  EnsurePresentationStage();
-  int forgeIndex=2;
-  for(int i=0;i<HubPresentationCatalog.Facilities.Length;i++){
-   if(HubPresentationCatalog.Facilities[i].id=="forge"){forgeIndex=i;break;}
-  }
-  if(presentationStage!=null)presentationStage.SnapToFacility(forgeIndex);
-
   var root=Container("ps-rite");
   root.pickingMode=PickingMode.Position;
   packingRootElement=root;
   screenRoot.Add(root);
   RegisterPackingDrag(root);
-
-  // Live 2.5D forge backdrop (layered puppet stage RT)
-  if(presentationStage?.RenderTarget!=null){
-   var stageBg=new Image{image=presentationStage.RenderTarget,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
-   stageBg.AddToClassList("ps-rite-stage-bg");
-   root.Add(stageBg);
-  }
-  var veil=Container("ps-rite-veil");
-  veil.pickingMode=PickingMode.Ignore;
-  root.Add(veil);
-  var vignetteL=Container("ps-rite-vignette-l");
-  vignetteL.pickingMode=PickingMode.Ignore;
-  root.Add(vignetteL);
-  var vignetteR=Container("ps-rite-vignette-r");
-  vignetteR.pickingMode=PickingMode.Ignore;
-  root.Add(vignetteR);
-  var vignetteB=Container("ps-rite-vignette-b");
-  vignetteB.pickingMode=PickingMode.Ignore;
-  root.Add(vignetteB);
-
-  // Character layer strip (Live2D parts stacked)
-  root.Add(BuildPackingCharacterLayers());
 
   var top=Container("ps-rite-top");
   DressRiteFrame(top);
@@ -97,11 +74,13 @@ public sealed partial class PackspireUiFoundation {
   var body=Container("ps-rite-body");
   root.Add(body);
 
-  // Left: floating equip tray
+  // Left: floating equip tray (header + filters pinned above scroll)
   var left=Container("ps-rite-left");
   DressRiteFrame(left);
-  left.Add(RiteSectionHead("01","術装"));
-  left.Add(BuildPackingFilterRow());
+  var leftHeader=Container("ps-rite-left-header");
+  leftHeader.Add(RiteSectionHead("01","術装"));
+  leftHeader.Add(BuildPackingFilterRow());
+  left.Add(leftHeader);
   var listScroll=new ScrollView(ScrollViewMode.Vertical);
   listScroll.AddToClassList("ps-rite-equip-scroll");
   listScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -152,9 +131,9 @@ public sealed partial class PackspireUiFoundation {
   circle.RegisterCallback<ClickEvent>(OnPackingCircleClick);
   circle.Add(BuildRiteGrid(run,formula));
   kiln.Add(circle);
-  kilnRow.Add(kiln);
   if(!string.IsNullOrEmpty(selectedPackingUid))
-   kilnRow.Add(BuildPackingSelectDock(run,formula));
+   kiln.Add(BuildPackingSelectDock(run,formula));
+  kilnRow.Add(kiln);
   center.Add(kilnRow);
 
   var kilnRail=Container("ps-rite-kiln-rail");
@@ -512,7 +491,13 @@ public sealed partial class PackspireUiFoundation {
  VisualElement BuildPackingFilterRow(){
   var row=Container("ps-rite-filters");
   void AddFilter(string id,string label){
-   var button=PackspireUiFactory.Button(label,()=>{packingEquipFilter=id;BuildPackingAgain();});
+   var button=PackspireUiFactory.Button(label,()=>{
+    if(packingEquipFilter!=id){
+     packingEquipFilter=id;
+     packingEquipScrollY=0;
+    }
+    BuildPackingAgain();
+   });
    button.AddToClassList("ps-rite-filter");
    if(packingEquipFilter==id)button.AddToClassList("ps-selected");
    row.Add(button);
