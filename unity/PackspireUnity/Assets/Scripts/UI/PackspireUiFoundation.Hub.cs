@@ -5,9 +5,7 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  const int HubReelSlotHeight=68;
- const int HubFacilityVisibleSlots=5;
 
- int facilityReelIndex;
  int hubReelIndex;
  bool hubStreetGuideOpen;
  string hubStreetGuideCategory="all";
@@ -399,101 +397,5 @@ public sealed partial class PackspireUiFoundation {
   }
  }
 
- VisualElement ArchiveShell(string eyebrow,string title,ScreenId current,out VisualElement gridHost,out VisualElement detailHost){
-  var shell=Container("ps-archive-screen");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)shell.Add(Image(bg,new Rect(0,0,1,1),"ps-archive-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-archive-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  shell.Add(shade);
-
-  var top=Container("ps-archive-top");
-  top.Add(ChromeBrand(eyebrow,title));
-  var back=new Button(()=>game.UiNavigate(ScreenId.Hub)){text="拠点へ戻る"};
-  back.AddToClassList("ps-archive-back");
-  back.AddToClassList("ps-chrome-action");
-  top.Add(back);
-  shell.Add(top);
-
-  var body=Container("ps-archive-body");
-  gridHost=Container("ps-archive-grid-host");
-  detailHost=Container("ps-archive-detail-host");
-  body.Add(gridHost);
-  body.Add(detailHost);
-  shell.Add(body);
-
-  return shell;
- }
-
- VisualElement BuildFacilityReel(ScreenId current){
-  var facilities=HubFacilityCatalog.All;
-  if(facilities.Length==0)return Container("ps-facility-reel");
-  facilityReelIndex=HubFacilityCatalog.IndexOfScreen(current);
-
-  var root=Container("ps-facility-reel");
-  var prev=new Button(()=>RotateFacilityReel(root,-1)){text="‹"};
-  prev.AddToClassList("ps-facility-reel-arrow");
-  root.Add(prev);
-
-  var viewport=Container("ps-facility-reel-viewport");
-  viewport.name="facility-reel-viewport";
-  root.Add(viewport);
-
-  var next=new Button(()=>RotateFacilityReel(root,1)){text="›"};
-  next.AddToClassList("ps-facility-reel-arrow");
-  root.Add(next);
-
-  viewport.RegisterCallback<WheelEvent>(evt=>{
-   float dy=evt.delta.y;
-   if(Mathf.Abs(dy)<0.01f)return;
-   RotateFacilityReel(root,dy>0?1:-1);
-   evt.StopPropagation();
-  });
-
-  RefreshFacilityReel(root);
-  return root;
- }
-
- void RotateFacilityReel(VisualElement root,int delta){
-  int n=HubFacilityCatalog.All.Length;
-  if(n<=0)return;
-  facilityReelIndex=((facilityReelIndex+delta)%n+n)%n;
-  RefreshFacilityReel(root);
- }
-
- void RefreshFacilityReel(VisualElement root){
-  var viewport=root.Q<VisualElement>("facility-reel-viewport");
-  if(viewport==null)return;
-  viewport.Clear();
-  var facilities=HubFacilityCatalog.All;
-  int n=facilities.Length;
-  int slots=Mathf.Min(HubFacilityVisibleSlots,n);
-  int half=slots/2;
-  for(int slot=0;slot<slots;slot++){
-   int index=((facilityReelIndex-half+slot)%n+n)%n;
-   var entry=facilities[index];
-   int offset=slot-half;
-   bool center=offset==0;
-   var card=new Button(()=>{
-    if(center)game.UiNavigate(entry.screen);
-    else{
-     facilityReelIndex=index;
-     RefreshFacilityReel(root);
-    }
-   });
-   card.AddToClassList("ps-facility-reel-card");
-   if(center)card.AddToClassList("ps-facility-reel-card-center");
-   if(entry.screen==ScreenId.Expedition)card.AddToClassList("ps-facility-reel-card-primary");
-   if(Mathf.Abs(offset)>=2)card.AddToClassList("ps-facility-reel-card-far");
-   var eye=new Label(entry.eyebrow){pickingMode=PickingMode.Ignore};
-   eye.AddToClassList("ps-facility-reel-eye");
-   card.Add(eye);
-   var name=new Label(entry.label){pickingMode=PickingMode.Ignore};
-   name.AddToClassList("ps-facility-reel-name");
-   card.Add(name);
-   viewport.Add(card);
-  }
- }
 }
 }

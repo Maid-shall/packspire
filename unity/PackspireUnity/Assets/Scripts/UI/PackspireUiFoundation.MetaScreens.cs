@@ -79,7 +79,7 @@ public sealed partial class PackspireUiFoundation {
 
  void BuildStatusAgain(){RefreshStatusScreen();}
  void RefreshStatusScreen(){
-  if(mgmtListScroll==null||renderedScreen!=ScreenId.Status){screenRoot.Clear();BuildStatus();return;}
+  if(mgmtListScroll==null||renderedScreen!=ScreenId.Status){RebuildScreen(BuildStatus);return;}
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
   var learned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
@@ -182,7 +182,7 @@ public sealed partial class PackspireUiFoundation {
 
  void BuildVaultAgain(){RefreshVaultScreen(false);}
  void RefreshVaultScreen(bool rebuildList){
-  if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){screenRoot.Clear();BuildVault();return;}
+  if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
   var meta=game.UiMeta;
   var stash=FilteredVaultStash(meta).ToList();
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0){
@@ -210,7 +210,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshCompendiumScreen(bool rebuildList){
-  if(mgmtListScroll==null||renderedScreen!=ScreenId.Compendium){screenRoot.Clear();BuildCompendium();return;}
+  if(mgmtListScroll==null||renderedScreen!=ScreenId.Compendium){RebuildScreen(BuildCompendium);return;}
   var meta=game.UiMeta;
   if(rebuildList){
    mgmtListHeader.Clear();
@@ -402,6 +402,6 @@ public sealed partial class PackspireUiFoundation {
   if(selected.id!=meta.currentFaction&&meta.baseGold<20)change.SetEnabled(false);detail.Add(change);
   var requests=Container("ps-request-rail");requests.Add(PackspireUiFactory.Body("依頼書留め　—　新しい依頼は遠征準備へ記録されます"));board.Add(requests);desk.Add(TabletopBack());
  }
- void BuildFactionAgain(){screenRoot.Clear();BuildFaction();}
+ void BuildFactionAgain()=>RebuildScreen(BuildFaction);
 }
 }

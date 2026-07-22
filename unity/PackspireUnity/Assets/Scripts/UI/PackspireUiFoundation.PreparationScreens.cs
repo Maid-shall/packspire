@@ -65,7 +65,7 @@ public sealed partial class PackspireUiFoundation {
   }
   desk.Add(TabletopBack());
  }
- void BuildExpeditionAgain(){screenRoot.Clear();BuildExpedition();}
+ void BuildExpeditionAgain()=>RebuildScreen(BuildExpedition);
 
  void BuildPacking(){
   var run=game.UiRun;
@@ -1454,7 +1454,7 @@ public sealed partial class PackspireUiFoundation {
 
  void BuildPackingAgain(){
   CapturePackingScroll();
-  screenRoot.Clear();
+  ClearScreenTree();
   BuildPacking();
  }
 

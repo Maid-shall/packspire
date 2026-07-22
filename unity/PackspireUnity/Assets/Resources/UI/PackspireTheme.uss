@@ -493,7 +493,6 @@
     height: 74%;
     flex-direction: column;
     justify-content: flex-start;
-    z-index: 20;
 }
 
 .ps-book-tab {
@@ -1641,7 +1640,7 @@
 
 .ps-chrome-section {
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-end;
     margin-top: 12px;
     margin-bottom: 6px;
     flex-shrink: 0;
@@ -2096,7 +2095,6 @@
 }
 
 .ps-hub-home-fog,
-.ps-archive-fog,
 .ps-tabletop-fog {
     display: none;
 }
@@ -2237,258 +2235,6 @@
     background-color: rgba(0, 0, 0, 0);
     -unity-background-image-tint-color: rgb(255, 230, 210);
     color: rgb(255, 210, 160);
-}
-
-/* Archive gallery + looping facility reel on destination pages */
-.ps-archive-screen {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    flex-direction: column;
-    padding: 18px 22px 12px 22px;
-    background-color: rgb(22, 16, 48);
-    overflow: hidden;
-}
-
-.ps-archive-bg {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.ps-archive-shade {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(26, 20, 56, 0.58);
-}
-
-.ps-archive-top {
-    position: relative;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-shrink: 0;
-    z-index: 2;
-    margin-bottom: 10px;
-}
-
-.ps-archive-back {
-    width: 160px;
-    height: 42px;
-    min-height: 42px;
-}
-
-.ps-archive-body {
-    position: relative;
-    flex-grow: 1;
-    flex-direction: row;
-    min-height: 0;
-    z-index: 2;
-    margin-bottom: 8px;
-}
-
-.ps-archive-grid-host {
-    flex-grow: 1;
-    flex-shrink: 1;
-    width: 58%;
-    min-width: 0;
-    margin-right: 14px;
-    padding: 12px;
-    background-color: rgba(12, 8, 5, 0.92);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: rgb(82, 54, 34);
-    border-right-color: rgb(46, 30, 18);
-    border-top-color: rgb(148, 108, 52);
-    border-bottom-color: rgb(30, 20, 12);
-}
-
-.ps-archive-detail-host {
-    width: 36%;
-    min-width: 260px;
-    flex-shrink: 0;
-}
-
-.ps-archive-filters {
-    flex-direction: row;
-    margin-bottom: 10px;
-    flex-shrink: 0;
-}
-
-.ps-archive-filter {
-    height: 36px;
-    min-height: 36px;
-    margin-right: 8px;
-    padding-left: 14px;
-    padding-right: 14px;
-    background-image: resource("Art/UI/PopDark/btn-wide-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(210, 180, 110);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-}
-
-.ps-archive-filter.ps-selected {
-    color: rgb(210, 180, 110);
-}
-
-.ps-archive-grid {
-    flex-grow: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    overflow: hidden;
-}
-
-.ps-archive-tile {
-    width: 22%;
-    height: 118px;
-    margin: 1.5%;
-}
-
-.ps-archive-detail {
-    flex-grow: 1;
-    padding: 16px;
-    background-color: rgba(12, 8, 5, 0.94);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: rgb(82, 54, 34);
-    border-right-color: rgb(46, 30, 18);
-    border-top-color: rgb(148, 108, 52);
-    border-bottom-color: rgb(30, 20, 12);
-}
-
-.ps-archive-detail .ps-title {
-    color: rgb(196, 168, 98);
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: rgba(8, 4, 2, 0.92);
-}
-
-.ps-archive-detail .ps-body {
-    color: rgb(210, 190, 150);
-}
-
-.ps-archive-detail-art {
-    height: 180px;
-    margin-bottom: 10px;
-}
-
-.ps-facility-reel {
-    position: relative;
-    flex-shrink: 0;
-    height: 112px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-    padding-top: 4px;
-}
-
-.ps-facility-reel-viewport {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-    flex-grow: 1;
-    height: 100%;
-}
-
-.ps-facility-reel-arrow {
-    width: 42px;
-    height: 64px;
-    min-width: 42px;
-    min-height: 64px;
-    margin-left: 4px;
-    margin-right: 4px;
-    font-size: 28px;
-    color: rgb(196, 168, 98);
-    background-color: rgba(8, 7, 6, 0.92);
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(82, 54, 34);
-    border-right-color: rgb(46, 30, 18);
-    border-top-color: rgb(148, 108, 52);
-    border-bottom-color: rgb(30, 20, 12);
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-}
-
-.ps-facility-reel-card {
-    width: 118px;
-    height: 84px;
-    margin-left: 6px;
-    margin-right: 6px;
-    padding: 8px 6px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.82;
-    background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/UI/PopDark/btn-card-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    -unity-background-image-tint-color: rgb(255, 255, 255);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-.ps-facility-reel-card-center {
-    width: 148px;
-    height: 104px;
-    opacity: 1;
-    margin-bottom: 2px;
-}
-
-.ps-facility-reel-card-far {
-    opacity: 0.42;
-    width: 96px;
-    height: 72px;
-}
-
-.ps-facility-reel-card-primary.ps-facility-reel-card-center {
-    width: 164px;
-}
-
-.ps-facility-reel-eye {
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: rgb(255, 140, 120);
-    margin-bottom: 4px;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: rgba(12, 8, 32, 0.9);
-}
-
-.ps-facility-reel-name {
-    font-size: 16px;
-    color: rgb(255, 228, 180);
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-    -unity-font-style: bold;
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: rgba(12, 8, 32, 0.9);
-}
-
-.ps-facility-reel-card-center .ps-facility-reel-name {
-    font-size: 20px;
 }
 
 /* 2.5D hub presentation layer (legacy) */
@@ -3096,7 +2842,6 @@
     flex-direction: row;
     min-height: 0;
     position: relative;
-    z-index: 5;
 }
 
 .ps-rite-left {
@@ -3482,7 +3227,6 @@
     position: absolute;
     right: 10px;
     top: 14px;
-    z-index: 40;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -3550,7 +3294,6 @@
     align-items: center;
     flex-shrink: 0;
     margin-bottom: 4px;
-    z-index: 3;
 }
 
 .ps-rite-color-orb {
@@ -3726,7 +3469,6 @@
     align-items: center;
     align-self: center;
     padding: 28px 18px 32px 18px;
-    z-index: 2;
 }
 
 .ps-rite-kiln-rail,
@@ -3852,7 +3594,6 @@
 .ps-rite-cell-art {
     width: 68%;
     height: 68%;
-    z-index: 2;
 }
 
 .ps-rite-status {
@@ -4233,10 +3974,6 @@
     height: 100%;
 }
 
-.ps-rite-equip-placed {
-    opacity: 0.55;
-}
-
 .ps-rite-detail-art {
     width: 132px;
     height: 132px;
@@ -4396,7 +4133,6 @@
     background-color: rgba(3, 3, 5, 0.94);
     border-left-width: 0;
     border-bottom-color: rgba(212, 168, 72, 0.38);
-    z-index: 5;
 }
 
 .ps-rite-top-eyebrow {
@@ -4668,7 +4404,6 @@
     position: absolute;
     right: 12px;
     top: 16px;
-    z-index: 40;
     width: 78px;
     min-width: 78px;
     padding: 8px 6px 6px 6px;
@@ -6668,7 +6403,6 @@
     transition-property: opacity, translate, scale;
     transition-duration: 0.28s;
     transition-timing-function: ease-out;
-    z-index: 40;
 }
 
 .ps-battle-start-banner-in {
@@ -6722,7 +6456,6 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 10px;
-    z-index: 20;
 }
 
 .ps-battle-cons {
@@ -6955,13 +6688,11 @@
 .ps-battle-hud-player {
     left: 1%;
     bottom: 8%;
-    z-index: 14;
 }
 
 .ps-battle-hud-enemy {
     right: 1.2%;
     top: 2%;
-    z-index: 18;
 }
 
 .ps-battle-player-meta,
@@ -7027,7 +6758,6 @@
     border-right-color: rgb(120, 92, 40);
     border-top-color: rgb(232, 196, 110);
     border-bottom-color: rgb(90, 68, 28);
-    z-index: 18;
 }
 
 .ps-battle-intent-next {
@@ -7267,7 +6997,6 @@
     width: 170px;
     flex-direction: column;
     align-items: center;
-    z-index: 30;
 }
 
 .ps-battle-btn,
@@ -7372,7 +7101,6 @@
     border-right-color: rgb(120, 92, 40);
     border-top-color: rgb(118, 82, 44);
     border-bottom-color: rgb(90, 68, 28);
-    z-index: 32;
 }
 
 .ps-battle-hand-meta-info {
@@ -7425,7 +7153,6 @@
     width: 72%;
     height: 300px;
     overflow: visible;
-    z-index: 28;
 }
 
 .ps-battle-card {
@@ -7445,7 +7172,6 @@
     transition-property: translate, scale;
     transition-duration: 0.14s;
     transition-timing-function: ease-out;
-    z-index: 28;
 }
 
 .ps-battle-card:hover {
@@ -7570,35 +7296,20 @@
 
 .ps-chrome-eyebrow,
 .ps-hub-dest-card-eye,
-.ps-facility-reel-eye,
 .ps-chrome-section-en {
     color: rgb(255, 140, 120);
     -unity-text-outline-color: rgba(12, 8, 32, 0.9);
 }
 
 .ps-chrome-title,
-.ps-hub-dest-card-name,
-.ps-facility-reel-name,
-.ps-archive-detail .ps-title {
+.ps-hub-dest-card-name {
     color: rgb(255, 228, 180);
     -unity-text-outline-color: rgba(12, 8, 32, 0.9);
 }
 
 .ps-hub-home-meta,
-.ps-archive-detail .ps-body,
 .ps-chrome-section-jp {
     color: rgb(200, 190, 230);
-}
-
-.ps-facility-reel-card-center {
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-color: rgb(255, 140, 120);
-    border-bottom-color: rgb(72, 196, 180);
-    border-left-color: rgb(200, 160, 255);
-    border-right-color: rgb(200, 160, 255);
 }
 
 .ps-chrome-action,
@@ -7606,9 +7317,7 @@
 .ps-chrome-plate-btn,
 .ps-battle-btn-end,
 .ps-battle .ps-button.ps-battle-btn-end,
-.ps-battle-btn-skill,
-.ps-archive-filter,
-.ps-archive-back {
+.ps-battle-btn-skill {
     background-image: resource("Art/UI/PopDark/btn-wide-v1");
     -unity-background-image-tint-color: rgb(170, 150, 210);
     color: rgb(255, 228, 180);
@@ -7617,13 +7326,11 @@
 
 .ps-chrome-action:hover,
 .ps-tabletop-back:hover,
-.ps-chrome-plate-btn:hover,
-.ps-archive-back:hover {
+.ps-chrome-plate-btn:hover {
     -unity-background-image-tint-color: rgb(255, 220, 200);
     color: rgb(255, 210, 160);
 }
 
-.ps-archive-screen,
 .ps-dd-roster-overlay,
 .ps-book-screen,
 .ps-tabletop-desk,
@@ -7648,8 +7355,6 @@
     border-bottom-width: 0;
 }
 
-.ps-archive-grid-host,
-.ps-archive-detail,
 .ps-expedition-case,
 .ps-expanded-corkboard,
 .ps-detail-journal,
@@ -7664,10 +7369,6 @@
 }
 
 /* ===== Hub pop-dark asset chrome (final override) ===== */
-.ps-hub-home {
-    background-color: rgb(26, 20, 56);
-}
-
 .ps-hub-home-bg {
     display: flex;
     opacity: 1;
@@ -7762,7 +7463,6 @@
 }
 
 /* ===== Pop-dark rollout — shared chrome (non-hub screens) ===== */
-.ps-archive-bg,
 .ps-dd-roster-bg,
 .ps-book-scene-bg,
 .ps-rite-scene-bg {
@@ -7770,34 +7470,20 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-.ps-archive-filter,
-.ps-archive-back,
 .ps-dd-roster-overlay .ps-atlas-button,
 .ps-dd-roster-overlay .ps-character-roster-tile,
 .ps-dd-roster-overlay .ps-dd-roster-name-plate,
 .ps-dd-roster-overlay .ps-dd-roster-confirm,
-.ps-facility-reel-card,
 .ps-battle-btn-end,
 .ps-battle .ps-button.ps-battle-btn-end,
 .ps-battle-btn-skill {
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-.ps-archive-filter:hover,
 .ps-dd-roster-overlay .ps-atlas-button:hover,
 .ps-dd-roster-overlay .ps-character-roster-tile:hover,
-.ps-dd-roster-overlay .ps-dd-roster-name-plate:hover,
-.ps-facility-reel-card:hover {
+.ps-dd-roster-overlay .ps-dd-roster-name-plate:hover {
     -unity-background-image-tint-color: rgb(255, 230, 210);
-}
-
-.ps-facility-reel-card-center {
-    -unity-background-image-tint-color: rgb(255, 220, 200);
-}
-
-.ps-archive-filter.ps-selected {
-    -unity-background-image-tint-color: rgb(255, 210, 180);
-    color: rgb(255, 200, 140);
 }
 
 .ps-dd-roster-overlay .ps-dd-roster-name-plate.ps-selected {
@@ -7868,7 +7554,6 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-shrink: 0;
-    z-index: 2;
     margin-bottom: 8px;
     min-height: 52px;
 }
@@ -7884,7 +7569,6 @@
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
-    z-index: 2;
     margin-bottom: 6px;
 }
 
@@ -8140,12 +7824,6 @@
     min-height: 38px;
 }
 
- .ps-mgmt-screen .ps-facility-reel {
-    flex-shrink: 0;
-    min-height: 72px;
-    max-height: 72px;
-}
-
 /* --- Hub v3: 3-region pop-dark layout --- */
 .ps-hub-v3 {
     --ps-hub-accent-gold: rgb(255, 200, 120);
@@ -8193,7 +7871,6 @@
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
-    z-index: 3;
 }
 
 .ps-hub-v3-columns {
@@ -8302,13 +7979,11 @@
 .ps-hub-reel-fade-top {
     top: 0;
     background-color: rgba(14, 10, 32, 0.55);
-    z-index: 2;
 }
 
 .ps-hub-reel-fade-inner-bottom {
     bottom: 0;
     background-color: rgba(14, 10, 32, 0.45);
-    z-index: 2;
 }
 
 .ps-hub-reel-slot {
@@ -8634,7 +8309,6 @@
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 50;
 }
 
 .ps-hub-modal-backdrop {

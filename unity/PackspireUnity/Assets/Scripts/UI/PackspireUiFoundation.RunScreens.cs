@@ -33,7 +33,7 @@ public sealed partial class PackspireUiFoundation {
   back.AddToClassList("ps-chrome-action");
   right.Add(back);
  }
- void BuildRewardAgain(){screenRoot.Clear();BuildReward();}
+ void BuildRewardAgain()=>RebuildScreen(BuildReward);
 
  void BuildShop(){
   string[] stock=GameCatalog.Items.Keys.Take(5).ToArray();
@@ -63,7 +63,7 @@ public sealed partial class PackspireUiFoundation {
   back.AddToClassList("ps-chrome-action");
   right.Add(back);
  }
- void BuildShopAgain(){screenRoot.Clear();BuildShop();}
+ void BuildShopAgain()=>RebuildScreen(BuildShop);
  void AddItemDetail(VisualElement page,string id){var item=GameCatalog.Items[id];page.Add(Atlas(game.UiEquipmentArt,ItemUv(id),"ps-detail-art"));page.Add(PackspireUiFactory.Title(item.name));page.Add(PackspireUiFactory.Body(item.description));page.Add(PackspireUiFactory.Body($"{ItemTypeLabel(item.type)}　{item.cells.Length}マス\n属性　{string.Join("・",item.cells.Select(x=>ElementLabel(x.element)))}"));if(!string.IsNullOrEmpty(item.linkRule))page.Add(PackspireUiFactory.Body("LINK　"+item.linkRule));}
 
  void BuildEvent(){

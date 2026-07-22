@@ -69,21 +69,6 @@ public static class HubFacilityCatalog {
   return list;
  }
 
- public static int IndexOfId(string id){
-  for(int i=0;i<All.Length;i++)if(All[i].id==id)return i;
-  return 0;
- }
-
- public static int IndexOfScreen(ScreenId screen){
-  for(int i=0;i<All.Length;i++)if(All[i].screen==screen)return i;
-  return 0;
- }
-
- public static HubFacilityDef Get(int index){
-  if(index<0||index>=All.Length)return All[0];
-  return All[index];
- }
-
  public static HubFacilityDef GetReel(int index){
   var reel=ReelFacilities();
   if(reel.Length==0)return All[0];

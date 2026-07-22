@@ -99,6 +99,6 @@ public sealed partial class PackspireUiFoundation {
   body.Add(detail);
  }
 
- void BuildCharacterAgain(){screenRoot.Clear();BuildCharacter();}
+ void BuildCharacterAgain()=>RebuildScreen(BuildCharacter);
 }
 }
