@@ -1,0 +1,851 @@
+/* Shared product layers plus expedition detail, roster and heirloom screens. */
+/* Layer hosts */
+.ps-layer-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-layer-content {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
+/* Dark-surface readability (minimum contrast) */
+.ps-dark-surface .ps-title {
+    color: rgb(255, 240, 215);
+    font-size: 28px;
+}
+
+.ps-dark-surface .ps-body {
+    color: rgb(230, 218, 195);
+    font-size: 17px;
+    white-space: normal;
+}
+
+.ps-dark-surface .ps-mgmt-section-title {
+    font-size: 20px;
+    color: rgb(255, 210, 150);
+}
+
+.ps-dark-surface .ps-mgmt-section .ps-body {
+    font-size: 16px;
+    color: rgb(220, 210, 190);
+}
+
+.ps-dark-surface .ps-mgmt-list-sub,
+.ps-dark-surface .ps-mgmt-section-dim .ps-body {
+    color: rgb(180, 170, 200);
+    opacity: 1;
+}
+
+.ps-dark-surface .ps-button:disabled {
+    color: rgb(190, 180, 165);
+    opacity: 0.72;
+}
+
+.ps-dark-surface .ps-chrome-eyebrow {
+    color: rgb(200, 190, 210);
+    font-size: 14px;
+}
+
+.ps-dark-surface .ps-chrome-title {
+    color: rgb(255, 240, 215);
+    font-size: 28px;
+}
+
+.ps-dark-surface .ps-chrome-section-en {
+    color: rgb(255, 200, 140);
+    font-size: 14px;
+}
+
+.ps-dark-surface .ps-chrome-section-jp {
+    color: rgb(230, 218, 195);
+    font-size: 20px;
+    -unity-font-style: bold;
+}
+
+.ps-nav-visible .ps-mgmt-header {
+    padding-left: 120px;
+    padding-top: 48px;
+    min-height: 56px;
+}
+
+.ps-exp-detail-body {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-stack {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-exp-info-stack-label {
+    font-size: 14px;
+    color: rgb(255, 200, 140);
+    white-space: normal;
+    margin-bottom: 2px;
+}
+
+.ps-exp-info-stack-value {
+    font-size: 16px;
+    color: rgb(230, 218, 195);
+    white-space: normal;
+}
+
+.ps-book-screen .ps-title {
+    color: rgb(255, 240, 215);
+    font-size: 28px;
+}
+
+.ps-book-screen .ps-body {
+    color: rgb(230, 218, 195);
+    font-size: 17px;
+}
+
+.ps-book-screen .ps-record-copy .ps-title {
+    color: rgb(255, 240, 215);
+    font-size: 20px;
+}
+
+.ps-book-screen .ps-record-copy .ps-body {
+    color: rgb(200, 190, 210);
+    font-size: 15px;
+}
+
+.ps-book-screen .ps-chrome-section-en {
+    color: rgb(255, 200, 140);
+}
+
+.ps-book-screen .ps-chrome-section-jp {
+    color: rgb(230, 218, 195);
+}
+
+.ps-book-screen .ps-chrome-eyebrow {
+    color: rgb(200, 190, 210);
+}
+
+.ps-nav-hud {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+}
+
+.ps-nav-back {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    min-width: 110px;
+    min-height: 40px;
+    font-size: 17px;
+}
+
+.ps-nav-menu-btn {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 20px;
+    padding: 0;
+}
+
+.ps-nav-menu-backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(8, 6, 18, 0.35);
+}
+
+.ps-nav-menu-drawer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 240px;
+    padding: 56px 12px 16px 12px;
+    background-color: rgba(18, 14, 38, 0.96);
+    border-right-width: 2px;
+    border-right-color: rgba(120, 90, 180, 0.65);
+    flex-direction: column;
+}
+
+.ps-nav-menu-title {
+    font-size: 20px;
+    color: rgb(255, 228, 180);
+    margin-bottom: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-nav-menu-item {
+    min-height: 42px;
+    margin-bottom: 4px;
+    font-size: 17px;
+    -unity-text-align: middle-left;
+}
+
+.ps-nav-menu-item.ps-selected {
+    border-left-color: rgb(120, 220, 200);
+}
+
+/* Expedition detail column fix */
+.ps-expedition-detail-column {
+    flex-direction: column;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ps-expedition-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.ps-exp-section {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 14px;
+}
+
+.ps-exp-dungeon-name {
+    font-size: 24px;
+    color: rgb(255, 240, 215);
+    white-space: normal;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+    -unity-font-style: bold;
+}
+
+.ps-exp-dungeon-desc {
+    font-size: 16px;
+    color: rgb(220, 210, 190);
+    white-space: normal;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-row {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+    min-height: 22px;
+}
+
+.ps-exp-info-label {
+    width: 96px;
+    min-width: 96px;
+    font-size: 14px;
+    color: rgb(255, 200, 140);
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-value {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 16px;
+    color: rgb(230, 218, 195);
+    white-space: normal;
+}
+
+.ps-exp-loadout-detail {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    background-color: rgba(22, 18, 44, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 220, 200, 0.45);
+}
+
+.ps-exp-loadout-detail-heading {
+    font-size: 18px;
+    color: rgb(255, 228, 180);
+    white-space: normal;
+    margin-bottom: 6px;
+    -unity-font-style: bold;
+}
+
+.departure-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.ps-exp-loadout-edit {
+    flex-shrink: 0;
+    margin-top: 4px;
+    margin-bottom: 0;
+    align-self: flex-start;
+}
+
+/* Character roster screen */
+.ps-roster-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.ps-roster-body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 8px 12px 12px 12px;
+}
+
+.ps-roster-col-reel {
+    width: 20%;
+    min-width: 200px;
+    max-width: 24%;
+    flex-shrink: 0;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-roster-col-art {
+    width: 40%;
+    min-width: 320px;
+    flex-shrink: 0;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-roster-col-detail {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 280px;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.ps-roster-reel-heading {
+    font-size: 14px;
+    color: rgb(255, 228, 180);
+    margin-bottom: 6px;
+    -unity-font-style: bold;
+}
+
+.ps-roster-reel-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.45);
+    padding: 4px;
+}
+
+.ps-roster-reel {
+    flex-direction: column;
+}
+
+.ps-roster-art-host {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(12, 10, 28, 0.45);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.45);
+    border-right-color: rgba(120, 90, 180, 0.45);
+    border-top-color: rgba(120, 90, 180, 0.45);
+    border-bottom-color: rgba(120, 90, 180, 0.45);
+}
+
+.ps-roster-art-image {
+    width: 72%;
+    height: 92%;
+    max-height: 720px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-roster-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.55);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+}
+
+.ps-roster-detail-body {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-roster-footer {
+    flex-shrink: 0;
+}
+
+.ps-roster-confirm {
+    min-height: 48px;
+    font-size: 17px;
+}
+
+/* Heirloom screen */
+.ps-heirloom-screen {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-heirloom-header {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-slot {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    margin-left: 12px;
+    margin-right: 8px;
+    padding: 0;
+    flex-shrink: 0;
+    align-self: flex-start;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(28, 22, 48, 0.88);
+    border-width: 1px;
+    border-color: rgba(210, 180, 120, 0.55);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    overflow: hidden;
+}
+
+.ps-heirloom-slot-empty {
+    border-color: rgba(170, 150, 210, 0.45);
+    background-color: rgba(18, 14, 32, 0.72);
+}
+
+.ps-heirloom-slot-art {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+}
+
+.ps-heirloom-slot-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-heirloom-slot-glyph {
+    font-size: 28px;
+    color: rgb(210, 190, 255);
+    -unity-text-align: middle-center;
+}
+
+.ps-heirloom-slot-crest {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+
+.ps-heirloom-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: 16px;
+}
+
+.ps-heirloom-col-portrait {
+    width: 30%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 220px;
+    max-width: 420px;
+    padding-right: 16px;
+    flex-direction: column;
+}
+
+.ps-heirloom-col-growth {
+    width: 70%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    padding-left: 8px;
+    overflow: hidden;
+}
+
+.ps-heirloom-portrait-host {
+    flex-grow: 1;
+    flex-direction: column;
+    min-height: 0;
+    padding: 12px;
+    background-color: rgba(14, 10, 28, 0.42);
+    border-width: 1px;
+    border-color: rgba(180, 150, 220, 0.22);
+    overflow: hidden;
+}
+
+.ps-heirloom-portrait-art {
+    width: 100%;
+    height: 220px;
+    min-height: 180px;
+    max-height: 280px;
+    margin-bottom: 12px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.35);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-portrait-image {
+    width: 88%;
+    height: 88%;
+}
+
+.ps-heirloom-name-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-name-row .ps-title {
+    margin-right: 8px;
+}
+
+.ps-heirloom-name-row .ps-mgmt-heirloom-mark {
+    position: relative;
+    right: auto;
+    top: auto;
+}
+
+.ps-heirloom-stat {
+    flex-direction: column;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-stat-label {
+    font-size: 13px;
+    color: rgb(180, 160, 210);
+    margin-bottom: 2px;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-stat-value {
+    font-size: 17px;
+    color: rgb(245, 232, 210);
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-growth-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    height: 100%;
+    background-color: rgba(12, 10, 28, 0.45);
+    border-left-width: 2px;
+    border-left-color: rgba(160, 120, 200, 0.4);
+    padding: 8px 10px 16px 12px;
+}
+
+.ps-heirloom-growth-body {
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 100%;
+    padding-bottom: 24px;
+}
+
+.ps-heirloom-board-section {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background-color: rgba(16, 12, 30, 0.35);
+    border-width: 1px;
+    border-color: rgba(160, 140, 190, 0.16);
+}
+
+.ps-heirloom-board-title {
+    font-size: 16px;
+    color: rgb(255, 210, 150);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+    white-space: normal;
+}
+
+.ps-heirloom-board-body {
+    font-size: 15px;
+    color: rgb(225, 214, 195);
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-locked {
+    background-color: rgba(10, 8, 20, 0.45);
+    border-color: rgba(110, 100, 140, 0.28);
+}
+
+.ps-heirloom-locked .ps-heirloom-board-body,
+.ps-heirloom-locked .ps-heirloom-board-title {
+    color: rgb(170, 162, 185);
+}
+
+.ps-heirloom-progress {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background-color: rgba(16, 12, 30, 0.35);
+    border-width: 1px;
+    border-color: rgba(160, 140, 190, 0.16);
+}
+
+.ps-heirloom-progress-track {
+    height: 10px;
+    min-height: 10px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background-color: rgba(8, 6, 18, 0.7);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.3);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-progress-fill {
+    height: 100%;
+    background-color: rgba(170, 130, 220, 0.55);
+}
+
+.ps-heirloom-candidate {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    padding: 8px;
+    min-height: 64px;
+    background-color: rgba(16, 12, 30, 0.28);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.18);
+}
+
+.ps-heirloom-candidate-silhouette {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin-right: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.55);
+    border-width: 1px;
+    border-color: rgba(120, 110, 150, 0.35);
+    flex-shrink: 0;
+}
+
+.ps-heirloom-candidate-lock {
+    font-size: 14px;
+    color: rgb(170, 160, 190);
+}
+
+.ps-heirloom-candidate-copy {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ps-heirloom-scar-list,
+.ps-heirloom-history {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-heirloom-scar-row {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+    padding: 6px 8px;
+    background-color: rgba(14, 10, 26, 0.3);
+}
+
+.ps-heirloom-scar-type {
+    min-width: 72px;
+    font-size: 14px;
+    color: rgb(255, 210, 150);
+    margin-right: 10px;
+}
+
+.ps-heirloom-scar-detail {
+    font-size: 14px;
+    color: rgb(225, 214, 195);
+    white-space: normal;
+}
+
+.ps-layer-modal {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-heirloom-modal-backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(6, 4, 14, 0.72);
+    border-width: 0;
+}
+
+.ps-heirloom-picker {
+    position: absolute;
+    left: 16%;
+    right: 16%;
+    top: 12%;
+    bottom: 14%;
+    padding: 16px;
+    background-color: rgba(18, 14, 34, 0.96);
+    border-width: 1px;
+    border-color: rgba(200, 170, 120, 0.4);
+    flex-direction: column;
+}
+
+.ps-heirloom-picker-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.ps-heirloom-picker-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ps-heirloom-picker-card {
+    width: 112px;
+    min-height: 132px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 8px;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(28, 22, 48, 0.88);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.28);
+}
+
+.ps-heirloom-picker-card.ps-selected {
+    border-color: rgba(255, 210, 140, 0.85);
+    background-color: rgba(48, 36, 72, 0.95);
+}
+
+.ps-heirloom-picker-card.ps-heirloom-picker-current {
+    border-color: rgba(210, 170, 110, 0.7);
+}
+
+.ps-heirloom-picker-art {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 6px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: rgba(8, 6, 18, 0.45);
+}
+
+.ps-heirloom-picker-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-heirloom-picker-art .ps-mgmt-heirloom-mark {
+    position: absolute;
+    right: -2px;
+    top: -2px;
+}
+
+.ps-heirloom-picker-name {
+    font-size: 13px;
+    color: rgb(245, 232, 210);
+    white-space: normal;
+    -unity-text-align: upper-center;
+    margin-bottom: 2px;
+}
+
+.ps-heirloom-picker-sub {
+    font-size: 11px;
+    color: rgb(180, 170, 200);
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.ps-heirloom-picker-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-picker-footer .ps-chrome-action {
+    min-width: 120px;
+    margin-left: 10px;
+}
+
+.ps-mgmt-detail-name-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-mgmt-detail-name-row .ps-mgmt-heirloom-mark {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin-left: 8px;
+}

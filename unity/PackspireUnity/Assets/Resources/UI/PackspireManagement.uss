@@ -1,0 +1,1114 @@
+/* Management screens: status, vault, compendium, faction and expedition. */
+/* --- Management screens (1920x1080 baseline) --- */
+.ps-mgmt-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    padding: 16px 20px 10px 20px;
+    background-color: rgb(22, 16, 48);
+    overflow: hidden;
+}
+
+.ps-mgmt-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-mgmt-shade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(26, 20, 56, 0.58);
+}
+
+.ps-mgmt-header {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    min-height: 52px;
+}
+
+.ps-mgmt-back {
+    width: 150px;
+    min-height: 40px;
+}
+
+.ps-mgmt-body {
+    position: relative;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin-bottom: 6px;
+}
+
+/* Status: overview 32% | roles 28% | detail 40% */
+.ps-mgmt-layout-status .ps-mgmt-col-overview {
+    flex: 0 0 32%;
+    width: 32%;
+    max-width: 32%;
+    min-width: 32%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-layout-status .ps-mgmt-col-list {
+    flex: 0 0 28%;
+    width: 28%;
+    max-width: 28%;
+    min-width: 28%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-layout-status .ps-mgmt-col-detail {
+    flex: 0 0 40%;
+    width: 40%;
+    max-width: 40%;
+    min-width: 40%;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Vault: grid 57% | detail 43% */
+.ps-mgmt-layout-vault .ps-mgmt-col-list {
+    flex: 0 0 57%;
+    width: 57%;
+    max-width: 57%;
+    min-width: 57%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-layout-vault .ps-mgmt-col-detail {
+    flex: 0 0 43%;
+    width: 43%;
+    max-width: 43%;
+    min-width: 43%;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.ps-vault-grid-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.45);
+    padding: 6px 4px;
+}
+
+.ps-vault-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2px;
+}
+
+.ps-vault-grid-card {
+    flex-direction: column;
+    align-items: stretch;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 196px;
+    min-height: 196px;
+    max-height: 196px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 6px;
+    background-color: rgba(22, 18, 44, 0.82);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(120, 100, 70, 0.35);
+    border-right-color: rgba(120, 100, 70, 0.35);
+    border-top-color: rgba(120, 100, 70, 0.35);
+    border-bottom-color: rgba(120, 100, 70, 0.35);
+}
+
+.ps-vault-grid-card.ps-selected {
+    border-left-color: rgb(120, 220, 200);
+    border-top-color: rgb(120, 220, 200);
+    border-right-color: rgb(72, 196, 180);
+    border-bottom-color: rgb(72, 196, 180);
+    background-color: rgba(48, 36, 92, 0.92);
+}
+
+.ps-vault-grid-card.ps-vault-heirloom {
+    border-top-color: rgba(255, 200, 120, 0.95);
+}
+
+.ps-vault-grid-card.ps-vault-inuse {
+    border-left-color: rgba(255, 140, 120, 0.75);
+}
+
+.ps-vault-grid-art {
+    position: relative;
+    width: 100%;
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4px;
+    overflow: visible;
+}
+
+.ps-vault-grid-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-grid-badges {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    flex-direction: row;
+}
+
+.ps-vault-grid-badge {
+    min-width: 18px;
+    height: 18px;
+    margin-right: 2px;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.ps-vault-grid-badge Label {
+    font-size: 9px;
+    padding: 0;
+    margin: 0;
+}
+
+.ps-vault-badge-heirloom {
+    background-color: rgba(255, 200, 120, 0.95);
+}
+
+.ps-vault-badge-heirloom Label {
+    color: rgb(40, 24, 8);
+}
+
+.ps-vault-badge-inuse {
+    background-color: rgba(255, 140, 120, 0.88);
+}
+
+.ps-vault-badge-inuse Label {
+    color: rgb(40, 16, 12);
+}
+
+.ps-vault-badge-protected {
+    background-color: rgba(120, 220, 200, 0.82);
+}
+
+.ps-vault-badge-protected Label {
+    color: rgb(12, 40, 36);
+}
+
+.ps-vault-grid-name {
+    font-size: 12px;
+    color: rgb(255, 228, 180);
+    max-height: 32px;
+    white-space: normal;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+
+.ps-vault-grid-sub {
+    font-size: 10px;
+    color: rgba(200, 185, 150, 0.88);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Compendium: reel 27% | detail 73% */
+.ps-mgmt-layout-compendium .ps-mgmt-col-list {
+    flex: 0 0 27%;
+    width: 27%;
+    max-width: 27%;
+    min-width: 27%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-layout-compendium .ps-mgmt-col-detail {
+    flex: 0 0 73%;
+    width: 73%;
+    max-width: 73%;
+    min-width: 73%;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.ps-mgmt-overview-host {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 220, 200, 0.45);
+    padding: 8px 10px;
+    overflow: hidden;
+}
+
+.ps-mgmt-char-overview {
+    flex-direction: column;
+}
+
+.ps-mgmt-overview-portrait {
+    align-self: center;
+    margin-bottom: 8px;
+    max-height: 240px;
+}
+
+.ps-mgmt-char-overview .ps-title {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.ps-mgmt-char-overview .ps-body {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.ps-mgmt-list-header {
+    flex-shrink: 0;
+    flex-direction: column;
+    margin-bottom: 6px;
+    min-height: 52px;
+}
+
+.ps-mgmt-list-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.45);
+    padding: 4px 2px;
+}
+
+.ps-mgmt-detail-hero {
+    flex-shrink: 0;
+    flex-direction: row;
+    min-height: 220px;
+    max-height: 42%;
+    margin-bottom: 6px;
+    background-color: rgba(8, 6, 20, 0.42);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 200, 140, 0.35);
+    padding: 8px;
+}
+
+.ps-mgmt-detail-art-host {
+    flex: 0 0 42%;
+    width: 42%;
+    max-width: 42%;
+    min-width: 42%;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+}
+
+.ps-mgmt-detail-summary-host {
+    flex: 1 1 58%;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.ps-mgmt-detail-art-frame {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.ps-mgmt-detail-art-frame .ps-mgmt-detail-art-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-mgmt-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.55);
+    padding: 8px 10px;
+}
+
+.ps-mgmt-filter-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.ps-mgmt-filter {
+    min-height: 32px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgba(30, 22, 62, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.55);
+    color: rgb(255, 228, 180);
+}
+
+.ps-mgmt-filter.ps-selected {
+    background-color: rgba(48, 36, 92, 0.96);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-list-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 52px;
+    height: 52px;
+    margin-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: rgba(22, 18, 44, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-mgmt-list-row.ps-selected {
+    background-color: rgba(48, 36, 92, 0.88);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-list-row.ps-mgmt-list-unknown,
+.ps-mgmt-reel-row.ps-mgmt-list-unknown {
+    opacity: 0.72;
+}
+
+.ps-mgmt-list-icon-wrap {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.ps-mgmt-heirloom-mark {
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 200, 120, 0.92);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.ps-mgmt-heirloom-mark Label {
+    font-size: 9px;
+    color: rgb(40, 24, 8);
+    padding: 0;
+    margin: 0;
+}
+
+.ps-mgmt-reel-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 40px;
+    height: 40px;
+    margin-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: rgba(22, 18, 44, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-mgmt-reel-row.ps-selected {
+    background-color: rgba(48, 36, 92, 0.88);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-reel-mark {
+    width: 22px;
+    min-width: 22px;
+    font-size: 11px;
+    color: rgba(200, 185, 150, 0.9);
+    margin-right: 6px;
+}
+
+.ps-mgmt-reel-name {
+    flex-grow: 1;
+    font-size: 14px;
+    color: rgb(255, 228, 180);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-mgmt-list-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.ps-mgmt-thumb {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-mgmt-thumb-unknown {
+    opacity: 0.35;
+}
+
+.ps-mgmt-list-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ps-mgmt-list-name {
+    font-size: 14px;
+    color: rgb(255, 228, 180);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-mgmt-list-sub {
+    font-size: 11px;
+    color: rgba(200, 185, 150, 0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-mgmt-char-header {
+    flex-direction: column;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-mgmt-char-header .ps-title {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.ps-mgmt-char-header .ps-body {
+    font-size: 12px;
+    margin-bottom: 1px;
+}
+
+.ps-mgmt-section {
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.ps-mgmt-section-dim {
+    opacity: 0.48;
+}
+
+.ps-mgmt-section-title {
+    font-size: 13px;
+    margin-bottom: 2px;
+    color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-section .ps-body {
+    font-size: 12px;
+    white-space: normal;
+}
+
+.ps-mgmt-action {
+    margin-top: 8px;
+    min-height: 38px;
+}
+
+/* --- Faction screen: graph 68% | detail 32% --- */
+.ps-faction-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    padding: 0;
+    background-color: rgb(22, 16, 48);
+    overflow: hidden;
+}
+
+.ps-faction-body {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 8px 12px 12px 12px;
+}
+
+.ps-faction-col-graph {
+    flex: 0 0 68%;
+    width: 68%;
+    max-width: 68%;
+    min-width: 68%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-faction-col-detail {
+    flex: 0 0 32%;
+    width: 32%;
+    max-width: 32%;
+    min-width: 32%;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.ps-faction-graph-host {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.45);
+    overflow: hidden;
+}
+
+.ps-faction-graph-edges {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-faction-graph-nodes {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-faction-edge {
+    position: absolute;
+    height: 2px;
+    min-height: 2px;
+    transform-origin: left center;
+}
+
+.ps-faction-edge-friendly {
+    background-color: rgba(120, 220, 200, 0.75);
+}
+
+.ps-faction-edge-hostile {
+    background-color: rgba(255, 120, 100, 0.75);
+    height: 3px;
+    min-height: 3px;
+}
+
+.ps-faction-edge-neutral {
+    background-color: rgba(180, 170, 200, 0.55);
+}
+
+.ps-faction-graph-node {
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    background-color: rgba(22, 18, 44, 0.88);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(120, 100, 70, 0.55);
+    border-right-color: rgba(120, 100, 70, 0.55);
+    border-top-color: rgba(120, 100, 70, 0.55);
+    border-bottom-color: rgba(120, 100, 70, 0.55);
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+.ps-faction-graph-node.ps-faction-affiliated {
+    border-left-color: rgba(255, 200, 140, 0.95);
+    border-top-color: rgba(255, 200, 140, 0.95);
+    border-right-color: rgba(255, 140, 120, 0.75);
+    border-bottom-color: rgba(255, 140, 120, 0.75);
+}
+
+.ps-faction-graph-node.ps-selected {
+    border-left-color: rgb(120, 220, 200);
+    border-top-color: rgb(120, 220, 200);
+    border-right-color: rgb(72, 196, 180);
+    border-bottom-color: rgb(72, 196, 180);
+}
+
+.ps-faction-graph-node.ps-faction-discovered {
+    opacity: 1;
+}
+
+.ps-faction-graph-node.ps-faction-preview-undiscovered {
+    opacity: 0.55;
+}
+
+.ps-faction-graph-emblem {
+    width: 56%;
+    height: 56%;
+    min-height: 36px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-graph-name {
+    font-size: 11px;
+    color: rgb(255, 228, 180);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.ps-faction-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.55);
+    padding: 8px 10px;
+}
+
+.ps-faction-detail-scroll .ps-faction-detail-art {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    margin-bottom: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* ── Expedition preparation (3-column) ── */
+.ps-expedition-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.ps-expedition-body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 8px 12px 12px 12px;
+}
+
+.ps-exp-col-dest {
+    width: 22%;
+    min-width: 200px;
+    max-width: 26%;
+    flex-shrink: 0;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-exp-col-art {
+    width: 40%;
+    min-width: 320px;
+    flex-shrink: 0;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-exp-col-detail {
+    width: 38%;
+    min-width: 360px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.ps-exp-dest-heading {
+    font-size: 14px;
+    color: rgb(255, 228, 180);
+    margin-bottom: 6px;
+    padding-left: 2px;
+    -unity-font-style: bold;
+}
+
+.ps-exp-dest-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.45);
+    padding: 4px;
+}
+
+.ps-exp-dest-list {
+    flex-direction: column;
+}
+
+.ps-exp-dest-row {
+    flex-direction: row;
+    align-items: center;
+    height: 72px;
+    min-height: 72px;
+    max-height: 72px;
+    margin-bottom: 4px;
+    padding: 6px 8px;
+    background-color: rgba(22, 18, 44, 0.82);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(90, 70, 110, 0.55);
+    border-right-color: rgba(90, 70, 110, 0.55);
+    border-top-color: rgba(90, 70, 110, 0.55);
+    border-bottom-color: rgba(90, 70, 110, 0.55);
+}
+
+.ps-exp-dest-row.ps-selected {
+    border-left-color: rgb(120, 220, 200);
+    border-top-color: rgb(120, 220, 200);
+    border-right-color: rgb(72, 196, 180);
+    border-bottom-color: rgb(72, 196, 180);
+}
+
+.ps-exp-dest-row.ps-exp-dest-locked {
+    opacity: 0.72;
+}
+
+.ps-exp-dest-row.ps-exp-dest-preview {
+}
+
+.ps-exp-dest-thumb {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-exp-dest-copy {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ps-exp-dest-name {
+    font-size: 13px;
+    color: rgb(255, 228, 180);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-exp-dest-sub {
+    font-size: 10px;
+    color: rgb(180, 170, 200);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-exp-dest-state {
+    font-size: 10px;
+    color: rgb(160, 150, 180);
+    margin-left: 6px;
+    min-width: 36px;
+    -unity-text-align: middle-right;
+}
+
+.ps-exp-art-host {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    position: relative;
+    background-color: rgba(12, 10, 28, 0.45);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.45);
+    border-right-color: rgba(120, 90, 180, 0.45);
+    border-top-color: rgba(120, 90, 180, 0.45);
+    border-bottom-color: rgba(120, 90, 180, 0.45);
+}
+
+.ps-exp-art-image-host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-exp-art-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-exp-art-lock {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.72);
+    padding: 16px;
+    flex-direction: column;
+}
+
+.ps-exp-art-lock-title {
+    font-size: 18px;
+    color: rgb(255, 200, 140);
+    margin-bottom: 8px;
+    -unity-font-style: bold;
+}
+
+.ps-exp-art-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 12px;
+    background-color: rgba(8, 6, 18, 0.78);
+    flex-direction: column;
+}
+
+.ps-exp-art-caption-name {
+    font-size: 15px;
+    color: rgb(255, 228, 180);
+    -unity-font-style: bold;
+}
+
+.ps-exp-art-caption-sub {
+    font-size: 11px;
+    color: rgb(180, 170, 200);
+    margin-top: 2px;
+}
+
+.ps-exp-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.55);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+}
+
+.ps-exp-footer {
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 4px;
+}
+
+.ps-exp-depart-reason {
+    font-size: 11px;
+    color: rgb(255, 160, 140);
+    margin-bottom: 6px;
+    min-height: 14px;
+    white-space: normal;
+}
+
+.ps-exp-depart-btn {
+    min-height: 48px;
+    font-size: 16px;
+}
+
+.ps-exp-character-banner {
+    position: relative;
+    width: 100%;
+    height: 116px;
+    min-height: 100px;
+    max-height: 130px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ps-exp-character-eye-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.ps-exp-character-eye-image {
+    position: absolute;
+    opacity: 0.32;
+}
+
+.ps-exp-character-banner-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* UI Toolkit does not support CSS gradient functions in background-image.
+       Keep this as a valid translucent veil until the final gradient PNG is supplied. */
+    background-color: rgba(12, 10, 28, 0.45);
+}
+
+.ps-exp-character-banner-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    padding-left: 18px;
+    padding-right: 14px;
+}
+
+.ps-exp-character-trait-block,
+.ps-exp-character-skill-block {
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.ps-exp-character-name {
+    font-size: 26px;
+    color: rgb(255, 240, 215);
+    white-space: normal;
+    margin-bottom: 4px;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(8, 6, 18, 0.85);
+}
+
+.ps-exp-character-title {
+    font-size: 16px;
+    color: rgb(180, 170, 200);
+    white-space: normal;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(8, 6, 18, 0.75);
+}
+
+.ps-exp-loadout-list {
+    flex-direction: column;
+    margin-bottom: 6px;
+}
+
+.ps-exp-loadout-row {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    margin-bottom: 4px;
+    padding: 6px 10px;
+    background-color: rgba(22, 18, 44, 0.72);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(90, 70, 110, 0.55);
+    border-right-color: rgba(90, 70, 110, 0.55);
+    border-top-color: rgba(90, 70, 110, 0.55);
+    border-bottom-color: rgba(90, 70, 110, 0.55);
+}
+
+.ps-exp-loadout-row.ps-selected {
+    border-left-color: rgb(120, 220, 200);
+    border-top-color: rgb(120, 220, 200);
+    border-right-color: rgb(72, 196, 180);
+    border-bottom-color: rgb(72, 196, 180);
+}
+
+.ps-exp-loadout-name {
+    font-size: 13px;
+    color: rgb(255, 228, 180);
+}
+
+.ps-exp-loadout-sub {
+    font-size: 10px;
+    color: rgb(180, 170, 200);
+    margin-top: 2px;
+}
+
+.ps-exp-loadout-edit {
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.ps-exp-loadout-summary {
+    flex-direction: column;
+}

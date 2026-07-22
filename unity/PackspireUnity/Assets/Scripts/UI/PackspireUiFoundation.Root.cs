@@ -13,6 +13,9 @@ public sealed partial class PackspireUiFoundation {
    "UI/PackspireRoster",
    "UI/PackspireBattle",
    "UI/PackspirePolish",
+   "UI/PackspireManagement",
+   "UI/PackspireMeta",
+   "UI/PackspireCommerce",
    "UI/PackspireHub"
   };
   foreach(var path in styleSheetPaths){
