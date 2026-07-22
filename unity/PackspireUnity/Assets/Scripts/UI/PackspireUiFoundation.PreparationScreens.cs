@@ -76,6 +76,7 @@ public sealed partial class PackspireUiFoundation {
   packingTapWasSelected=false;
   packingDragFromList=false;
   packingDragGhost=null;
+  packingPopupElement=null;
 
   var formula=BackpackSystem.Formula(run);
   packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,packingRotation);
@@ -134,9 +135,11 @@ public sealed partial class PackspireUiFoundation {
   DressRiteFrame(left);
   var leftHeader=Container("ps-rite-left-header");
   leftHeader.Add(RiteSectionHead("01","術装"));
-  leftHeader.Add(BuildPackingFilterRow());
+  packingFilterRowElement=BuildPackingFilterRow();
+  leftHeader.Add(packingFilterRowElement);
   left.Add(leftHeader);
   var listScroll=new ScrollView(ScrollViewMode.Vertical);
+  packingEquipScrollElement=listScroll;
   listScroll.AddToClassList("ps-rite-equip-scroll");
   listScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   listScroll.scrollOffset=new Vector2(0,packingEquipScrollY);
@@ -179,6 +182,7 @@ public sealed partial class PackspireUiFoundation {
   var center=Container("ps-rite-center");
   var kilnRow=Container("ps-rite-kiln-row");
   var kiln=Container("ps-rite-kiln");
+  packingKilnElement=kiln;
   kiln.AddToClassList("ps-rite-core-"+formula.core.id);
   kiln.Add(BuildMagicCircleLayers(formula));
   var circle=Container("ps-rite-circle");
@@ -192,6 +196,7 @@ public sealed partial class PackspireUiFoundation {
   center.Add(kilnRow);
 
   var kilnRail=Container("ps-rite-kiln-rail");
+  packingKilnRailElement=kilnRail;
   DressRiteFrame(kilnRail);
   kilnRail.Add(BuildPackingColorCounters(build));
   var railSpacer=Container("ps-rite-rail-spacer");
@@ -207,6 +212,7 @@ public sealed partial class PackspireUiFoundation {
   var rightShell=Container("ps-rite-right-shell");
   DressRiteFrame(rightShell);
   var right=new ScrollView(ScrollViewMode.Vertical);
+  packingRightScrollElement=right;
   right.AddToClassList("ps-rite-right");
   right.scrollOffset=new Vector2(0,packingRightScrollY);
   if(!packingTemplateCommitted){
@@ -220,8 +226,8 @@ public sealed partial class PackspireUiFoundation {
   rightShell.Add(right);
   body.Add(rightShell);
 
-  if(packingFormulaOpen)root.Add(BuildFormulaPopup(run,formula));
-  if(packingCardsOpen)root.Add(BuildCardsPopup(run,build));
+  if(packingFormulaOpen){packingPopupElement=BuildFormulaPopup(run,formula);root.Add(packingPopupElement);}
+  if(packingCardsOpen){packingPopupElement=BuildCardsPopup(run,build);root.Add(packingPopupElement);}
 
   RestorePackingScroll(listScroll,right);
  }
@@ -1453,16 +1459,80 @@ public sealed partial class PackspireUiFoundation {
  };
 
  void BuildPackingAgain(){
+  if(!PackingScreenAlive()){
+   RebuildScreen(BuildPacking);
+   return;
+  }
+  RefreshPackingContent();
+ }
+
+ bool PackingScreenAlive(){
+  return packingRootElement!=null&&packingRootElement.panel!=null&&
+   packingFilterRowElement!=null&&packingEquipScrollElement!=null&&
+   packingKilnElement!=null&&packingKilnRailElement!=null&&packingRightScrollElement!=null;
+ }
+
+ void RefreshPackingContent(){
   CapturePackingScroll();
-  ClearScreenTree();
+
+  var stableRoot=packingRootElement;
+  var stableFilter=packingFilterRowElement;
+  var stableEquip=packingEquipScrollElement;
+  var stableKiln=packingKilnElement;
+  var stableRail=packingKilnRailElement;
+  var stableRight=packingRightScrollElement;
+  var stablePopup=packingPopupElement;
+
+  // Build the next state synchronously, then transplant only the mutable contents.
+  // The screen shell and its layout stay alive, so selection changes do not flash or
+  // reset the fixed packing layout. Card/formula popups intentionally remain swappable.
   BuildPacking();
+  var stagedRoot=packingRootElement;
+  var stagedFilter=packingFilterRowElement;
+  var stagedEquip=packingEquipScrollElement;
+  var stagedKiln=packingKilnElement;
+  var stagedRail=packingKilnRailElement;
+  var stagedRight=packingRightScrollElement;
+  var stagedPopup=packingPopupElement;
+
+  MovePackingChildren(stagedFilter,stableFilter);
+  MovePackingChildren(stagedEquip,stableEquip);
+  MovePackingChildren(stagedKiln,stableKiln);
+  MovePackingChildren(stagedRail,stableRail);
+  MovePackingChildren(stagedRight,stableRight);
+
+  stablePopup?.RemoveFromHierarchy();
+  if(stagedPopup!=null){
+   stagedPopup.RemoveFromHierarchy();
+   stableRoot.Add(stagedPopup);
+  }
+  stagedRoot?.RemoveFromHierarchy();
+
+  packingRootElement=stableRoot;
+  packingFilterRowElement=stableFilter;
+  packingEquipScrollElement=stableEquip;
+  packingKilnElement=stableKiln;
+  packingKilnRailElement=stableRail;
+  packingRightScrollElement=stableRight;
+  packingPopupElement=stagedPopup;
+  RestorePackingScroll(stableEquip,stableRight);
+ }
+
+ static void MovePackingChildren(VisualElement source,VisualElement destination){
+  if(source==null||destination==null)return;
+  destination.Clear();
+  while(source.childCount>0){
+   var child=source[0];
+   child.RemoveFromHierarchy();
+   destination.Add(child);
+  }
  }
 
  void CapturePackingScroll(){
   if(screenRoot==null)return;
-  var left=screenRoot.Q<ScrollView>(className:"ps-rite-equip-scroll");
+  var left=packingEquipScrollElement??screenRoot.Q<ScrollView>(className:"ps-rite-equip-scroll");
   if(left!=null)packingEquipScrollY=left.scrollOffset.y;
-  var right=screenRoot.Q<ScrollView>(className:"ps-rite-right");
+  var right=packingRightScrollElement??screenRoot.Q<ScrollView>(className:"ps-rite-right");
   if(right!=null)packingRightScrollY=right.scrollOffset.y;
  }
 

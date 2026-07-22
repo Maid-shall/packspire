@@ -27,6 +27,8 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  bool packingDragging,packingTapWasSelected,packingDragFromList;
  Vector2 packingDragStart;
  VisualElement packingRootElement,packingGridElement,packingDragGhost;
+ VisualElement packingFilterRowElement,packingKilnElement,packingKilnRailElement,packingPopupElement;
+ ScrollView packingEquipScrollElement,packingRightScrollElement;
  float packingEquipScrollY,packingRightScrollY;
  int compendiumTab;
  Texture2D tabletopDesk;

@@ -47,6 +47,15 @@ public sealed partial class PackspireUiFoundation {
   hubShell=null;
   hubReelScroll=null;
   hubStreetGuideModal=null;
+  packingRootElement=null;
+  packingGridElement=null;
+  packingDragGhost=null;
+  packingFilterRowElement=null;
+  packingKilnElement=null;
+  packingKilnRailElement=null;
+  packingPopupElement=null;
+  packingEquipScrollElement=null;
+  packingRightScrollElement=null;
   screenRoot.Clear();
  }
 
