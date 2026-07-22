@@ -7,16 +7,63 @@ namespace Packspire {
 	// COMPILE_FIX:2 // COMPILE_FIX_20260718
 public sealed partial class PackspireUiFoundation {
  void BuildExpedition(){
-  var meta=game.UiMeta;int unlocked=Mathf.Clamp(meta.dungeonsUnlocked,1,GameCatalog.Dungeons.Length);if(string.IsNullOrEmpty(selectedDungeonId)||!GameCatalog.Dungeons.Take(unlocked).Any(x=>x.id==selectedDungeonId))selectedDungeonId=GameCatalog.Dungeons[0].id;
-  var desk=TabletopDesk("ps-expedition-workspace");screenRoot.Add(desk);var tray=Container("ps-expedition-case");desk.Add(tray);var selected=GameCatalog.Dungeons.First(x=>x.id==selectedDungeonId);
+  var meta=game.UiMeta;
+  int unlocked=Mathf.Clamp(meta.dungeonsUnlocked,1,GameCatalog.Dungeons.Length);
+  if(string.IsNullOrEmpty(selectedDungeonId)||!GameCatalog.Dungeons.Take(unlocked).Any(x=>x.id==selectedDungeonId))
+   selectedDungeonId=GameCatalog.Dungeons[0].id;
+  var selected=GameCatalog.Dungeons.First(x=>x.id==selectedDungeonId);
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  tray.Add(PackspireUiFactory.Title("遠征準備"));
+  var desk=TabletopDesk("ps-expedition-workspace");
+  screenRoot.Add(desk);
+
+  var tray=Container("ps-expedition-case");
+  desk.Add(tray);
+  tray.Add(ChromeBrand("EXPEDITION  /  BRIEF","遠征準備"));
   tray.Add(PackspireUiFactory.Body($"{character.name}　{character.title}"));
   tray.Add(PackspireUiFactory.Body($"特性 {character.traitName}：{character.traitText}"));
   tray.Add(PackspireUiFactory.Body($"スキル {character.activeSkillName}：{character.activeSkillText}"));
-  tray.Add(Atlas(game.UiDungeonArt,DungeonUv(selected.id),"ps-expedition-selected-art"));tray.Add(PackspireUiFactory.Title(selected.name));tray.Add(PackspireUiFactory.Body(selected.description));tray.Add(PackspireUiFactory.Body($"敵HP ×{selected.hpScale:0.00}　追加攻撃 {selected.damage}　報酬 ×{selected.goldScale:0.00}"));
-  tray.Add(PackspireUiFactory.Title("使用する荷造り"));var loadouts=Container("ps-loadout-tabs");foreach(var loadout in meta.loadouts){var entry=loadout;var button=PackspireUiFactory.Button(entry.name,()=>{game.UiSelectLoadout(entry.id);BuildExpeditionAgain();});if(entry.id==meta.selectedLoadoutId)button.AddToClassList("ps-selected");loadouts.Add(button);}tray.Add(loadouts);var active=LoadoutSystem.Active(meta);tray.Add(PackspireUiFactory.Body($"{active.name}　配置 {active.slots.Count}　カード {active.deck.Count}"));var launch=PackspireUiFactory.Button("この地図へ遠征する",()=>game.UiStartExpedition(selected.id));launch.AddToClassList("ps-primary-action");tray.Add(launch);
-  var rack=new ScrollView();rack.AddToClassList("ps-map-roll-rack");desk.Add(rack);for(int i=0;i<GameCatalog.Dungeons.Length;i++){var dungeon=GameCatalog.Dungeons[i];bool available=i<unlocked;var roll=new Button(()=>{if(available){selectedDungeonId=dungeon.id;BuildExpeditionAgain();}});roll.AddToClassList("ps-map-roll");if(dungeon.id==selectedDungeonId)roll.AddToClassList("ps-selected");if(!available)roll.AddToClassList("ps-locked");roll.Add(Atlas(game.UiDungeonArt,DungeonUv(dungeon.id),"ps-map-roll-seal"));roll.Add(new Label(available?dungeon.name:"封印された地図"));rack.Add(roll);}desk.Add(TabletopBack());
+
+  tray.Add(ChromeSection("DESTINATION","目的地"));
+  tray.Add(Atlas(game.UiDungeonArt,DungeonUv(selected.id),"ps-expedition-selected-art"));
+  tray.Add(PackspireUiFactory.Title(selected.name));
+  tray.Add(PackspireUiFactory.Body(selected.description));
+  tray.Add(PackspireUiFactory.Body($"敵HP ×{selected.hpScale:0.00}　追加攻撃 {selected.damage}　報酬 ×{selected.goldScale:0.00}"));
+
+  tray.Add(ChromeSection("LOADOUT","荷造り"));
+  var loadouts=Container("ps-loadout-tabs");
+  foreach(var loadout in meta.loadouts){
+   var entry=loadout;
+   var button=PackspireUiFactory.Button(entry.name,()=>{game.UiSelectLoadout(entry.id);BuildExpeditionAgain();});
+   button.AddToClassList("ps-chrome-action");
+   if(entry.id==meta.selectedLoadoutId)button.AddToClassList("ps-selected");
+   loadouts.Add(button);
+  }
+  tray.Add(loadouts);
+  var active=LoadoutSystem.Active(meta);
+  tray.Add(PackspireUiFactory.Body($"{active.name}　配置 {active.slots.Count}　カード {active.deck.Count}"));
+
+  tray.Add(ChromeSection("DEPART","出立"));
+  var launch=PackspireUiFactory.Button("この地図へ遠征する",()=>game.UiStartExpedition(selected.id));
+  launch.AddToClassList("ps-primary-action");
+  launch.AddToClassList("ps-chrome-action");
+  tray.Add(launch);
+
+  var rack=new ScrollView();
+  rack.AddToClassList("ps-map-roll-rack");
+  desk.Add(rack);
+  rack.Add(ChromeSection("MAPS","地図"));
+  for(int i=0;i<GameCatalog.Dungeons.Length;i++){
+   var dungeon=GameCatalog.Dungeons[i];
+   bool available=i<unlocked;
+   var roll=new Button(()=>{if(available){selectedDungeonId=dungeon.id;BuildExpeditionAgain();}});
+   roll.AddToClassList("ps-map-roll");
+   if(dungeon.id==selectedDungeonId)roll.AddToClassList("ps-selected");
+   if(!available)roll.AddToClassList("ps-locked");
+   roll.Add(Atlas(game.UiDungeonArt,DungeonUv(dungeon.id),"ps-map-roll-seal"));
+   roll.Add(new Label(available?dungeon.name:"封印された地図"));
+   rack.Add(roll);
+  }
+  desk.Add(TabletopBack());
  }
  void BuildExpeditionAgain(){screenRoot.Clear();BuildExpedition();}
 
@@ -38,6 +85,12 @@ public sealed partial class PackspireUiFoundation {
   root.pickingMode=PickingMode.Position;
   packingRootElement=root;
   screenRoot.Add(root);
+  var courtyard=HubBackgroundArt();
+  if(courtyard!=null)
+   root.Add(Image(courtyard,new Rect(0,0,1,1),"ps-rite-scene-bg",ScaleMode.ScaleAndCrop));
+  var shade=Container("ps-rite-scene-shade");
+  shade.pickingMode=PickingMode.Ignore;
+  root.Add(shade);
   RegisterPackingDrag(root);
 
   var top=Container("ps-rite-top");
@@ -49,9 +102,11 @@ public sealed partial class PackspireUiFoundation {
   var topTitle=Container("ps-rite-top-title");
   var topEyebrow=new Label("ATELIER  /  FORGE"){pickingMode=PickingMode.Ignore};
   topEyebrow.AddToClassList("ps-rite-top-eyebrow");
+  topEyebrow.AddToClassList("ps-chrome-eyebrow");
   topTitle.Add(topEyebrow);
   var topName=new Label("収納術式"){pickingMode=PickingMode.Ignore};
   topName.AddToClassList("ps-rite-top-name");
+  topName.AddToClassList("ps-chrome-title");
   topTitle.Add(topName);
   var topSub=new Label("鍛冶場の窯で術装を編む"){pickingMode=PickingMode.Ignore};
   topSub.AddToClassList("ps-rite-top-sub");

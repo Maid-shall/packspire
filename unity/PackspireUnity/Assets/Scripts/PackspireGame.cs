@@ -142,6 +142,37 @@ public partial class PackspireGame : MonoBehaviour {
   }
   return characterArt;
  }
+ public Texture2D ResolveCharacterPortraitFront(CharacterDef def){
+  if(def!=null){
+   if(!string.IsNullOrEmpty(def.portraitFrontResource)&&!def.portraitFrontResource.Contains("/DD/")){
+    var front=Resources.Load<Texture2D>(def.portraitFrontResource);
+    if(front!=null)return front;
+   }
+   if(!string.IsNullOrEmpty(def.id)){
+    var popCutout=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
+    if(popCutout!=null)return popCutout;
+    var popFront=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
+    if(popFront!=null)return popFront;
+    var popHub=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
+    if(popHub!=null)return popHub;
+   }
+   var showcase=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-cutout-v1")
+    ??Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-hub-v1")
+    ??Resources.Load<Texture2D>("Art/Portraits/hero-courier-hub-v1");
+   if(showcase!=null)return showcase;
+  }
+  return characterArt;
+ }
+ public Texture2D ResolveCharacterPortraitHub(CharacterDef def){
+  if(def!=null){
+   if(def.HasHubPortraitAsset&&!def.portraitHubResource.Contains("/DD/")){
+    var hub=Resources.Load<Texture2D>(def.portraitHubResource);
+    if(hub!=null)return hub;
+   }
+   return ResolveCharacterPortraitFront(def);
+  }
+  return characterArt;
+ }
  public Texture2D ResolveEnemyPortrait(EnemyDef def){
   if(def!=null&&def.HasPortraitAsset){
    var tex=Resources.Load<Texture2D>(def.portraitResource);

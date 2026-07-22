@@ -4,44 +4,172 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
- VisualElement TabletopDesk(string extraClass){var desk=Container("ps-tabletop-desk "+extraClass);if(tabletopDesk!=null)desk.Add(Image(tabletopDesk,new Rect(0,0,1,1),"ps-tabletop-desk-art",ScaleMode.ScaleAndCrop));return desk;}
- Button TabletopBack(){var button=new Button(()=>game.UiNavigate(ScreenId.Hub)){text="机の中央へ戻る"};button.AddToClassList("ps-tabletop-back");return button;}
+ Texture2D sharedCourtyardArt;
+ Texture2D sharedHubBackgroundArt;
+ Texture2D sharedHubShowcasePortrait;
+
+ Texture2D CourtyardArt(){
+  if(sharedCourtyardArt==null)sharedCourtyardArt=Resources.Load<Texture2D>("Art/UI/hub-courtyard-v1");
+  return sharedCourtyardArt;
+ }
+
+ Texture2D HubBackgroundArt(){
+  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=Resources.Load<Texture2D>("Art/UI/PopDark/hub-bg-v1");
+  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=Resources.Load<Texture2D>("Art/UI/HubDD/hub-bg-v1");
+  return sharedHubBackgroundArt;
+ }
+
+ Texture2D HubShowcasePortraitArt(){
+  if(sharedHubShowcasePortrait==null){
+   sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-cutout-v1");
+   if(sharedHubShowcasePortrait==null)
+    sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-hub-v1");
+   if(sharedHubShowcasePortrait==null)
+    sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/hero-courier-hub-v1");
+   if(sharedHubShowcasePortrait==null)
+    Debug.LogWarning("Packspire: missing hub showcase portrait (PopDark/hero-courier-cutout-v1)");
+  }
+  return sharedHubShowcasePortrait;
+ }
+
+ Texture2D HubPortraitFrameArt()=>Resources.Load<Texture2D>("Art/UI/PopDark/portrait-frame-v1");
+
+ VisualElement TabletopDesk(string extraClass){
+  var desk=Container("ps-tabletop-desk "+extraClass);
+  var bg=HubBackgroundArt();
+  if(bg!=null)desk.Add(Image(bg,new Rect(0,0,1,1),"ps-tabletop-desk-art",ScaleMode.ScaleAndCrop));
+  else if(tabletopDesk!=null)desk.Add(Image(tabletopDesk,new Rect(0,0,1,1),"ps-tabletop-desk-art",ScaleMode.ScaleAndCrop));
+  var shade=Container("ps-tabletop-shade");
+  shade.pickingMode=PickingMode.Ignore;
+  desk.Add(shade);
+  return desk;
+ }
+ Button TabletopBack(){var button=new Button(()=>game.UiNavigate(ScreenId.Hub)){text="拠点へ戻る"};button.AddToClassList("ps-tabletop-back");button.AddToClassList("ps-chrome-plate-btn");return button;}
 
  void ShowToast(string message){if(toast==null)return;toast.Clear();toast.Add(new Label(message));toast.style.display=DisplayStyle.Flex;toast.style.opacity=0f;toast.style.translate=new Translate(0,-10,0);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=1f;toast.style.translate=new Translate(0,0,0);}).StartingIn(16);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=0f;toast.style.translate=new Translate(0,-8,0);}).StartingIn(1700);toast.schedule.Execute(()=>{if(toast!=null)toast.style.display=DisplayStyle.None;}).StartingIn(1950);}
  VisualElement Milestone(int required,int current,string title,string description){var item=Container(current>=required?"ps-milestone ps-unlocked":"ps-milestone ps-locked");item.Add(PackspireUiFactory.Title($"Lv.{required}　{title}"));item.Add(PackspireUiFactory.Body(description));return item;}
 
- VisualElement BookShell(string title,VisualElement singleContent,bool whitePaper=false){
+ VisualElement ChromeBrand(string eyebrow,string title){
+  var brand=Container("ps-chrome-brand");
+  if(!string.IsNullOrEmpty(eyebrow)){
+   var eye=new Label(eyebrow){pickingMode=PickingMode.Ignore};
+   eye.AddToClassList("ps-chrome-eyebrow");
+   brand.Add(eye);
+  }
+  var heading=PackspireUiFactory.Title(title);
+  heading.AddToClassList("ps-chrome-title");
+  brand.Add(heading);
+  return brand;
+ }
+
+ VisualElement ChromeSection(string english,string japanese){
+  var section=Container("ps-chrome-section");
+  var en=new Label(english){pickingMode=PickingMode.Ignore};
+  en.AddToClassList("ps-chrome-section-en");
+  section.Add(en);
+  var jp=new Label(japanese){pickingMode=PickingMode.Ignore};
+  jp.AddToClassList("ps-chrome-section-jp");
+  section.Add(jp);
+  return section;
+ }
+
+ VisualElement BookShell(string title,VisualElement singleContent,bool whitePaper=false,string eyebrow=null){
   nextPageIsLeft=true;
   var shell=Container(whitePaper?"ps-book-screen ps-book-white":"ps-book-screen");
+  var bg=HubBackgroundArt();
+  if(bg!=null)shell.Add(Image(bg,new Rect(0,0,1,1),"ps-book-scene-bg",ScaleMode.ScaleAndCrop));
+  var shade=Container("ps-book-scene-shade");
+  shade.pickingMode=PickingMode.Ignore;
+  shell.Add(shade);
   if(!whitePaper&&game.UiBookArt!=null)
    shell.Add(Image(game.UiBookArt,new Rect(0,0,1,1),"ps-book-background",ScaleMode.StretchToFill));
-  var heading=new Label(title);
-  heading.AddToClassList("ps-book-heading");
-  shell.Add(heading);
+  var frame=Container("ps-book-frame");
+  frame.Add(ChromeBrand(string.IsNullOrEmpty(eyebrow)?"ARCHIVE  /  LEDGER":eyebrow,title));
   var pages=Container("ps-book-pages");
   pages.name="book-pages";
-  shell.Add(pages);
+  frame.Add(pages);
+  shell.Add(frame);
   if(singleContent!=null)pages.Add(singleContent);
   return shell;
  }
  VisualElement Page(string title){var page=new ScrollView();page.AddToClassList("ps-book-page");page.AddToClassList(nextPageIsLeft?"ps-page-left":"ps-page-right");nextPageIsLeft=!nextPageIsLeft;var heading=Container("ps-page-heading");var label=PackspireUiFactory.Title(title);label.AddToClassList("ps-page-heading-title");heading.Add(label);heading.Add(InkRule());page.Add(heading);return page;}
- void AddBookTabs(VisualElement shell,ScreenId current){var tabs=Container("ps-book-tabs");(string,ScreenId)[] values={("拠点",ScreenId.Hub),("遠征",ScreenId.Expedition),("荷造り",ScreenId.Pack),("保管",ScreenId.Vault),("役職",ScreenId.Status),("勢力",ScreenId.Faction),("図鑑",ScreenId.Compendium)};foreach(var entry in values){var target=entry.Item2;var button=new Button(()=>game.UiNavigate(target)){tooltip=entry.Item1};button.AddToClassList("ps-book-tab");var label=new Label(entry.Item1);label.AddToClassList("ps-book-tab-label");button.Add(label);if(target==current){button.AddToClassList("ps-selected");button.SetEnabled(false);}tabs.Add(button);}shell.Add(tabs);}
+ void AddBookTabs(VisualElement shell,ScreenId current){var tabs=Container("ps-book-tabs");(string,ScreenId)[] values={("拠点",ScreenId.Hub),("遠征",ScreenId.Expedition),("荷造り",ScreenId.Pack),("保管",ScreenId.Vault),("ステータス",ScreenId.Status),("勢力",ScreenId.Faction),("図鑑",ScreenId.Compendium)};foreach(var entry in values){var target=entry.Item2;var button=new Button(()=>game.UiNavigate(target)){tooltip=entry.Item1};button.AddToClassList("ps-book-tab");var label=new Label(entry.Item1);label.AddToClassList("ps-book-tab-label");button.Add(label);if(target==current){button.AddToClassList("ps-selected");button.SetEnabled(false);}tabs.Add(button);}shell.Add(tabs);}
 
  VisualElement RecordButton(string title,string subtitle,VisualElement art,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=title+"\n"+subtitle};button.AddToClassList("ps-record-button");if(selected)button.AddToClassList("ps-selected");button.Add(art);var copy=Container("ps-record-copy");copy.Add(PackspireUiFactory.Title(title));copy.Add(PackspireUiFactory.Body(subtitle));button.Add(copy);if(selected)button.Add(SelectionBadge());button.Add(InkRule());return button;}
  VisualElement AtlasButton(Texture2D texture,Rect uv,string label,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=label};button.AddToClassList("ps-atlas-button");if(selected)button.AddToClassList("ps-selected");button.Add(Atlas(texture,uv,"ps-atlas-image"));var name=new Label(label);name.AddToClassList("ps-atlas-label");button.Add(name);if(selected)button.Add(SelectionBadge());return button;}
- VisualElement CharacterPortrait(CharacterDef def,string className){
-  if(def!=null&&def.HasPortraitAsset){
-   var tex=game.ResolveCharacterPortrait(def);
-   if(tex!=null&&tex!=game.UiCharacterArt)return Atlas(tex,new Rect(0,0,1,1),className);
+
+ Texture2D PopDarkPortraitArt(CharacterDef def){
+  if(def!=null&&!string.IsNullOrEmpty(def.id)){
+   var cutout=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
+   if(cutout!=null)return cutout;
+   var front=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
+   if(front!=null)return front;
+   var hub=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
+   if(hub!=null)return hub;
   }
+  if(def!=null&&!string.IsNullOrEmpty(def.portraitFrontResource)&&!def.portraitFrontResource.Contains("/DD/")){
+   var legacy=Resources.Load<Texture2D>(def.portraitFrontResource);
+   if(legacy!=null)return legacy;
+  }
+  return HubShowcasePortraitArt();
+ }
+
+ void FitPortraitAspect(VisualElement image,float aspect){
+  var frame=image.parent;
+  if(frame==null||aspect<=0f)return;
+  var host=frame.parent;
+  var maxH=frame.contentRect.height;
+  var maxW=frame.contentRect.width;
+  if(host!=null){
+   if(maxH<=1f)maxH=host.contentRect.height;
+   if(maxW<=1f)maxW=host.contentRect.width;
+  }
+  if(maxH<=1f||maxW<=1f)return;
+  const float inset=0.94f;
+  var fitH=Mathf.Min(maxH*inset,(maxW*inset)/aspect);
+  image.style.height=fitH;
+  image.style.width=fitH*aspect;
+ }
+
+ VisualElement BuildPortraitDisplay(Texture2D tex,string className){
+  var aspect=(float)tex.width/tex.height;
+  var image=Image(tex,new Rect(0,0,1,1),"ps-portrait-display-image",ScaleMode.ScaleToFit);
+  if(!string.IsNullOrEmpty(className))
+   foreach(var token in className.Split(' '))
+    if(!string.IsNullOrEmpty(token))image.AddToClassList(token);
+  image.pickingMode=PickingMode.Ignore;
+  image.style.flexGrow=0;
+  image.style.flexShrink=0;
+  image.style.alignSelf=Align.Center;
+  image.style.opacity=1f;
+  void Sync(){FitPortraitAspect(image,aspect);}
+  image.RegisterCallback<GeometryChangedEvent>(_=>Sync());
+  image.RegisterCallback<AttachToPanelEvent>(_=>{
+   image.schedule.Execute(Sync).ExecuteLater(0);
+   image.schedule.Execute(Sync).ExecuteLater(120);
+  });
+  return image;
+ }
+
+ VisualElement CharacterPortrait(CharacterDef def,string className){
+  var tex=PopDarkPortraitArt(def);
+  if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
+  return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
+ }
+ VisualElement CharacterPortraitFront(CharacterDef def,string className){
+  var tex=PopDarkPortraitArt(def);
+  if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
+  return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
+ }
+ VisualElement CharacterPortraitHub(CharacterDef def,string className){
+  var tex=PopDarkPortraitArt(def);
+  if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
   return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
  }
  VisualElement CharacterPortraitButton(CharacterDef def,bool selected,System.Action clicked){
-  if(def!=null&&def.HasPortraitAsset){
-   var tex=game.ResolveCharacterPortrait(def);
-   if(tex!=null&&tex!=game.UiCharacterArt)
-    return AtlasButton(tex,new Rect(0,0,1,1),def.name,selected,clicked);
-  }
+  var tex=PopDarkPortraitArt(def);
+  if(tex!=null&&tex!=game.UiCharacterArt)
+   return AtlasButton(tex,new Rect(0,0,1,1),def.name,selected,clicked);
   return AtlasButton(game.UiCharacterArt,CharacterUv(def.portraitBody,def.portraitHair),def.name,selected,clicked);
  }
  VisualElement EnemyPortrait(EnemyDef def,string className){

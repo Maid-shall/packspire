@@ -32,7 +32,9 @@ public sealed partial class PackspireUiFoundation {
   battleIconHeal=Resources.Load<Texture2D>("Art/Battle/Icons/icon-heal");
   battleIconEnergy=Resources.Load<Texture2D>("Art/Battle/Icons/icon-energy");
   battleIconClaw=Resources.Load<Texture2D>("Art/Battle/Icons/icon-claw");
-  battlePlateWide=Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-wide");
+  battlePlateWide=Resources.Load<Texture2D>("Art/UI/PopDark/btn-wide-v1")
+   ??Resources.Load<Texture2D>("Art/UI/ChromeDD/btn-plate-wide")
+   ??Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-wide");
   battlePlateHex=Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
   battleMeterFrame=Resources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
   for(int i=0;i<3;i++)battleCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
@@ -65,11 +67,11 @@ public sealed partial class PackspireUiFoundation {
 
   // EN / END TURN sit under the card fan
   var handMeta=Container("ps-battle-hand-meta");
-  handMeta.style.backgroundColor=new Color(0.02f,0.02f,0.015f,0.94f);
-  handMeta.style.borderTopColor=new Color(0.83f,0.69f,0.35f,1f);
-  handMeta.style.borderBottomColor=new Color(0.35f,0.27f,0.11f,1f);
-  handMeta.style.borderLeftColor=new Color(0.77f,0.61f,0.28f,1f);
-  handMeta.style.borderRightColor=new Color(0.47f,0.36f,0.16f,1f);
+  handMeta.style.backgroundColor=new Color(0.05f,0.035f,0.02f,0.94f);
+  handMeta.style.borderTopColor=new Color(0.46f,0.32f,0.17f,1f);
+  handMeta.style.borderBottomColor=new Color(0.12f,0.08f,0.05f,1f);
+  handMeta.style.borderLeftColor=new Color(0.32f,0.21f,0.13f,1f);
+  handMeta.style.borderRightColor=new Color(0.18f,0.12f,0.07f,1f);
   handMeta.style.borderTopWidth=2;
   handMeta.style.borderBottomWidth=2;
   handMeta.style.borderLeftWidth=2;
@@ -93,8 +95,8 @@ public sealed partial class PackspireUiFoundation {
   battleEndTurnButton.style.minWidth=200;
   battleEndTurnButton.style.minHeight=56;
   battleEndTurnButton.style.fontSize=18;
-  battleEndTurnButton.style.color=new Color(0.925f,0.769f,0.376f,1f);
-  battleEndTurnButton.style.unityTextOutlineColor=Color.white;
+  battleEndTurnButton.style.color=new Color(0.77f,0.66f,0.38f,1f);
+  battleEndTurnButton.style.unityTextOutlineColor=new Color(0.03f,0.015f,0.01f,0.95f);
   battleEndTurnButton.style.unityTextOutlineWidth=1;
   handMeta.Add(battleEndTurnButton);
   battleRoot.Add(handMeta);
@@ -113,8 +115,8 @@ public sealed partial class PackspireUiFoundation {
   battleSkillButton.style.minWidth=150;
   battleSkillButton.style.minHeight=150;
   battleSkillButton.style.fontSize=22;
-  battleSkillButton.style.color=new Color(0.925f,0.769f,0.376f,1f);
-  battleSkillButton.style.unityTextOutlineColor=Color.white;
+  battleSkillButton.style.color=new Color(0.77f,0.66f,0.38f,1f);
+  battleSkillButton.style.unityTextOutlineColor=new Color(0.03f,0.015f,0.01f,0.95f);
   battleSkillButton.style.unityTextOutlineWidth=1;
   skillCol.Add(battleSkillButton);
   battleRoot.Add(skillCol);

@@ -126,8 +126,9 @@ public sealed partial class PackspireUiFoundation {
   mark.pickingMode=PickingMode.Ignore;
   brand.Add(mark);
   var titleBlock=Container("ps-rite-top-title");
-  var eye=new Label("遠征"){pickingMode=PickingMode.Ignore};
+  var eye=new Label("EXPEDITION  /  MAP"){pickingMode=PickingMode.Ignore};
   eye.AddToClassList("ps-rite-top-eyebrow");
+  eye.AddToClassList("ps-chrome-eyebrow");
   titleBlock.Add(eye);
   explorationMapNameLabel=new Label(ExplorationMapSystem.Breadcrumb(run)){pickingMode=PickingMode.Ignore};
   explorationMapNameLabel.AddToClassList("ps-rite-top-name");

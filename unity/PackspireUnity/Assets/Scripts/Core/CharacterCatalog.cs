@@ -6,19 +6,26 @@ namespace Packspire {
 public class CharacterDef {
  public string id,name,title,description;
  public int portraitBody,portraitHair;
- /// <summary>Optional Resources path (no extension). When set, used instead of the creator sheet cell.</summary>
+ /// <summary>Battle/action portrait Resources path (no extension).</summary>
  public string portraitResource;
+ /// <summary>Front-facing portrait for roster/select screens.</summary>
+ public string portraitFrontResource;
+ /// <summary>Side/profile portrait for hub display.</summary>
+ public string portraitHubResource;
  public string traitName,traitText;
  public string traitKind;
  public int traitValue;
  public string activeSkillId,activeSkillName,activeSkillText;
- public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText,string portraitResource=""){
+ public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText,string portraitResource="",string portraitFrontResource="",string portraitHubResource=""){
   this.id=id;this.name=name;this.title=title;this.description=description;
   this.portraitBody=portraitBody;this.portraitHair=portraitHair;this.portraitResource=portraitResource;
+  this.portraitFrontResource=portraitFrontResource;this.portraitHubResource=portraitHubResource;
   this.traitName=traitName;this.traitText=traitText;this.traitKind=traitKind;this.traitValue=traitValue;
   this.activeSkillId=activeSkillId;this.activeSkillName=activeSkillName;this.activeSkillText=activeSkillText;
  }
  public bool HasPortraitAsset=>!string.IsNullOrEmpty(portraitResource);
+ public bool HasFrontPortraitAsset=>!string.IsNullOrEmpty(portraitFrontResource)||HasPortraitAsset;
+ public bool HasHubPortraitAsset=>!string.IsNullOrEmpty(portraitHubResource);
 }
 
 public static class CharacterCatalog {

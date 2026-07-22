@@ -39,7 +39,7 @@ public partial class PackspireGame : MonoBehaviour {
   if(LegacyDevButton(new Rect(x0,y,btnW,btnH),"荷造り",devButton)){UiNavigate(ScreenId.Pack);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}
   if(LegacyDevButton(new Rect(x1,y,btnW,btnH),"保管庫",devButton)){UiNavigate(ScreenId.Vault);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}
   y+=btnH+Us(10);
-  if(LegacyDevButton(new Rect(x0,y,btnW,btnH),"役職",devButton)){UiNavigate(ScreenId.Status);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}
+  if(LegacyDevButton(new Rect(x0,y,btnW,btnH),"ステータス",devButton)){UiNavigate(ScreenId.Status);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}
   if(LegacyDevButton(new Rect(x1,y,btnW,btnH),"勢力",devButton)){UiNavigate(ScreenId.Faction);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}
   y+=btnH+Us(10);
   if(LegacyDevButton(new Rect(x0,y,btnW,btnH),"図鑑",devButton)){UiNavigate(ScreenId.Compendium);UiDevCloseWithoutRestore();PackspireUiFoundation.Instance?.ForceRefreshScreen();}

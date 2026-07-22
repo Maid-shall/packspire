@@ -20,7 +20,10 @@ public sealed partial class PackspireUiFoundation {
    SuspendBattleUi();
   if(renderedScreen==ScreenId.Reward&&game.UiScreen!=ScreenId.Reward&&game.UiScreen!=ScreenId.Map&&game.UiScreen!=ScreenId.Battle)
    ReleaseExplorationStage();
-  renderedScreen=game.UiScreen;hasRenderedScreen=true;screenRoot.Clear();
+  renderedScreen=game.UiScreen;hasRenderedScreen=true;
+  mgmtListScroll=null;mgmtArtHost=null;mgmtDetailScroll=null;mgmtListHeader=null;
+  hubShell=null;hubReelScroll=null;hubStreetGuideModal=null;
+  screenRoot.Clear();
   if(renderedScreen==ScreenId.Character)BuildCharacter();
   else if(renderedScreen==ScreenId.Hub)BuildHub();
   else if(renderedScreen==ScreenId.Status)BuildStatus();

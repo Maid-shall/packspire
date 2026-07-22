@@ -33,7 +33,7 @@ public sealed partial class PackspireUiFoundation {
   AddDevAction(grid,"戦闘（カード）",()=>{game.UiDevOpenOldBattle();ForceRefreshScreen();});
   AddDeveloperDestination(grid,"荷造り",ScreenId.Pack);
   AddDeveloperDestination(grid,"保管庫",ScreenId.Vault);
-  AddDeveloperDestination(grid,"役職",ScreenId.Status);
+  AddDeveloperDestination(grid,"ステータス",ScreenId.Status);
   AddDeveloperDestination(grid,"勢力",ScreenId.Faction);
   AddDeveloperDestination(grid,"図鑑",ScreenId.Compendium);
   AddDeveloperDestination(grid,"キャラ選択",ScreenId.Character);
