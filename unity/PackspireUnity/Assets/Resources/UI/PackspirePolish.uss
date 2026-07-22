@@ -2102,3 +2102,761 @@
     top: auto;
     margin-left: 8px;
 }
+
+/* ===== Shop ===== */
+.ps-shop-screen {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-shop-header {
+    position: relative;
+    flex-shrink: 0;
+    padding-left: 18px;
+    padding-right: 24px;
+    padding-bottom: 8px;
+}
+
+.ps-shop-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    padding-left: 18px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+}
+
+.ps-shop-col-list {
+    width: 28%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 220px;
+    min-height: 0;
+    flex-direction: column;
+    padding-right: 10px;
+}
+
+.ps-shop-col-detail {
+    width: 32%;
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 240px;
+    min-height: 0;
+    flex-direction: column;
+    padding-right: 10px;
+}
+
+.ps-shop-col-merchant {
+    width: 40%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 280px;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.ps-shop-filter-host {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-shop-filter {
+    min-width: 54px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.ps-shop-filter.ps-selected {
+    border-color: rgba(255, 210, 140, 0.8);
+}
+
+.ps-shop-product-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.5);
+    padding: 8px;
+}
+
+.ps-shop-product-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.ps-shop-product-card {
+    width: 76px;
+    min-height: 96px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    padding: 6px;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(24, 18, 42, 0.88);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.28);
+}
+
+.ps-shop-product-card.ps-selected {
+    border-color: rgba(255, 210, 140, 0.85);
+    background-color: rgba(48, 36, 72, 0.95);
+}
+
+.ps-shop-product-art {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 4px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.45);
+    flex-shrink: 0;
+}
+
+.ps-shop-product-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-shop-product-price {
+    font-size: 12px;
+    color: rgb(255, 220, 160);
+    flex-shrink: 0;
+}
+
+.ps-shop-detail-host {
+    flex-grow: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    padding: 10px;
+}
+
+.ps-shop-detail-scroll {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.ps-shop-detail-art {
+    width: 100%;
+    height: 160px;
+    min-height: 140px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.4);
+    flex-shrink: 0;
+}
+
+.ps-shop-detail-image {
+    width: 70%;
+    height: 70%;
+}
+
+.ps-shop-detail-block {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.ps-shop-detail-label {
+    font-size: 13px;
+    color: rgb(255, 200, 140);
+    margin-bottom: 2px;
+    flex-shrink: 0;
+}
+
+.ps-shop-detail-body {
+    font-size: 15px;
+    color: rgb(230, 218, 195);
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-shop-dev-hint {
+    position: absolute;
+    right: 28px;
+    top: 10px;
+    font-size: 11px;
+    color: rgba(180, 170, 200, 0.7);
+    background-color: rgba(8, 6, 18, 0.45);
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.ps-shop-merchant-scene {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(12, 10, 24);
+}
+
+.ps-shop-merchant-backdrop-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-shop-merchant-bg,
+.ps-shop-merchant-bg-fallback {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-shop-merchant-bg-fallback {
+    background-color: rgba(28, 20, 48, 0.95);
+}
+
+.ps-shop-merchant-character-viewport {
+    position: absolute;
+    left: 6%;
+    right: 2%;
+    top: 2%;
+    height: 68%;
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.ps-shop-merchant-character-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-shop-merchant-dialogue-layer {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 34%;
+    max-height: 72px;
+    align-items: stretch;
+    justify-content: flex-end;
+}
+
+.ps-shop-merchant-dialogue {
+    flex-shrink: 1;
+    max-height: 72px;
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: rgb(240, 228, 205);
+    white-space: normal;
+    overflow: hidden;
+    background-color: rgba(8, 6, 18, 0.78);
+    border-width: 1px;
+    border-color: rgba(160, 130, 200, 0.28);
+}
+
+.ps-shop-merchant-counter-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 35%;
+    overflow: hidden;
+}
+
+.ps-shop-merchant-counter-art {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-shop-merchant-counter-face {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+}
+
+.ps-shop-merchant-counter-top {
+    flex-shrink: 0;
+    height: 18%;
+    background-color: rgba(92, 68, 42, 0.96);
+    border-top-width: 2px;
+    border-top-color: rgba(210, 170, 110, 0.55);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(40, 24, 12, 0.7);
+}
+
+.ps-shop-merchant-counter-body {
+    flex-grow: 1;
+    background-color: rgba(48, 34, 22, 0.96);
+    border-top-width: 1px;
+    border-top-color: rgba(140, 100, 60, 0.35);
+}
+
+.ps-shop-merchant-transaction-layer {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 4%;
+    height: 30%;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8px 10px;
+    background-color: rgba(10, 8, 18, 0.55);
+    border-width: 1px;
+    border-color: rgba(180, 150, 110, 0.28);
+}
+
+.ps-shop-tx-name,
+.ps-shop-tx-gold,
+.ps-shop-tx-total {
+    font-size: 14px;
+    color: rgb(255, 230, 180);
+    margin-bottom: 2px;
+    flex-shrink: 0;
+}
+
+.ps-shop-tx-reason {
+    font-size: 12px;
+    color: rgb(255, 160, 140);
+    min-height: 14px;
+    margin-bottom: 6px;
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-shop-tx-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.ps-shop-buy-btn {
+    min-height: 40px;
+    min-width: 140px;
+    margin-right: 8px;
+}
+
+.ps-shop-leave-btn {
+    min-height: 40px;
+}
+
+.ps-shop-future-merchant-actions {
+    flex-shrink: 0;
+    min-height: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* ===== Reward ===== */
+.ps-reward-screen {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-reward-shade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(4, 3, 10, 0.55);
+}
+
+.ps-reward-header {
+    flex-shrink: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 10px;
+    flex-direction: column;
+}
+
+.ps-reward-header-type {
+    font-size: 14px;
+    color: rgb(255, 180, 120);
+    margin-bottom: 2px;
+}
+
+.ps-reward-header-place {
+    font-size: 26px;
+    color: rgb(255, 240, 215);
+    margin-bottom: 4px;
+    white-space: normal;
+}
+
+.ps-reward-header-text {
+    font-size: 15px;
+    color: rgb(210, 200, 185);
+    white-space: normal;
+}
+
+.ps-reward-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.ps-reward-col-candidates {
+    width: 45%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 280px;
+    min-height: 0;
+    padding-right: 12px;
+    flex-direction: column;
+}
+
+.ps-reward-col-detail {
+    width: 55%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    background-color: rgba(12, 10, 28, 0.62);
+    padding: 12px;
+    border-width: 1px;
+    border-color: rgba(160, 130, 200, 0.28);
+}
+
+.ps-reward-candidate-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    background-color: rgba(10, 8, 22, 0.55);
+    padding: 8px;
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.25);
+}
+
+.ps-reward-candidate-list {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-reward-candidate-row {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    min-height: 72px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: rgba(22, 16, 40, 0.88);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.28);
+}
+
+.ps-reward-candidate-row.ps-selected {
+    border-color: rgba(255, 210, 140, 0.9);
+    background-color: rgba(48, 34, 70, 0.95);
+}
+
+.ps-reward-candidate-art {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    margin-right: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 18, 0.5);
+    flex-shrink: 0;
+}
+
+.ps-reward-candidate-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-reward-candidate-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ps-reward-candidate-name {
+    font-size: 17px;
+    color: rgb(255, 240, 215);
+    white-space: normal;
+    margin-bottom: 2px;
+}
+
+.ps-reward-candidate-sub {
+    font-size: 13px;
+    color: rgb(190, 180, 205);
+    white-space: normal;
+}
+
+.ps-reward-detail-art-host {
+    width: 100%;
+    height: 180px;
+    min-height: 160px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(20, 14, 36, 0.7);
+    flex-shrink: 0;
+}
+
+.ps-reward-detail-image {
+    width: 55%;
+    height: 85%;
+}
+
+.ps-reward-detail-scroll {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.ps-reward-detail-block {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.ps-reward-detail-label {
+    font-size: 13px;
+    color: rgb(255, 200, 140);
+    margin-bottom: 2px;
+}
+
+.ps-reward-detail-body {
+    font-size: 15px;
+    color: rgb(230, 218, 195);
+    white-space: normal;
+}
+
+.ps-reward-footer {
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 10px;
+    padding-bottom: 24px;
+}
+
+.ps-reward-selection-status {
+    flex-grow: 1;
+    font-size: 15px;
+    color: rgb(220, 210, 190);
+    margin-right: 12px;
+    white-space: normal;
+}
+
+.ps-reward-footer .ps-chrome-action {
+    min-width: 150px;
+    margin-left: 8px;
+}
+
+/* ===== Run Result (GameOver / GameClear) ===== */
+.ps-result-screen {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-result-shade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(6, 4, 12, 0.5);
+}
+
+.ps-result-clear .ps-result-shade {
+    background-color: rgba(18, 14, 8, 0.28);
+}
+
+.ps-result-defeat .ps-result-shade {
+    background-color: rgba(4, 3, 10, 0.62);
+}
+
+.ps-result-body {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+}
+
+.ps-result-col-visual {
+    width: 58%;
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 360px;
+    min-height: 0;
+    flex-direction: column;
+    padding-right: 16px;
+    position: relative;
+}
+
+.ps-result-col-summary {
+    width: 42%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 300px;
+    min-height: 0;
+    flex-direction: column;
+    background-color: rgba(12, 10, 26, 0.72);
+    padding: 14px;
+    border-width: 1px;
+    border-color: rgba(150, 130, 190, 0.28);
+}
+
+.ps-result-clear .ps-result-col-summary {
+    background-color: rgba(24, 18, 12, 0.68);
+    border-color: rgba(200, 160, 90, 0.4);
+}
+
+.ps-result-visual-host {
+    flex-grow: 1;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+    background-color: rgba(8, 6, 18, 0.55);
+    border-width: 1px;
+    border-color: rgba(140, 120, 180, 0.3);
+}
+
+.ps-result-visual-art {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-result-visual-fallback {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(28, 20, 48, 0.8);
+}
+
+.ps-result-visual-place {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    font-size: 18px;
+    color: rgb(255, 240, 215);
+    background-color: rgba(8, 6, 18, 0.55);
+    padding: 6px 10px;
+}
+
+.ps-result-title-overlay {
+    flex-shrink: 0;
+    margin-top: 10px;
+    flex-direction: column;
+}
+
+.ps-result-title {
+    font-size: 34px;
+    color: rgb(255, 240, 215);
+    margin-bottom: 4px;
+    white-space: normal;
+}
+
+.ps-result-clear .ps-result-title {
+    color: rgb(255, 228, 170);
+}
+
+.ps-result-defeat .ps-result-title {
+    color: rgb(210, 200, 220);
+}
+
+.ps-result-subtitle {
+    font-size: 16px;
+    color: rgb(190, 180, 205);
+    white-space: normal;
+}
+
+.ps-result-cause {
+    font-size: 15px;
+    color: rgb(230, 200, 180);
+    white-space: normal;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.ps-result-primary-stats {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.ps-result-record-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin-bottom: 8px;
+}
+
+.ps-result-unlock-host,
+.ps-result-heirloom-host {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-result-stat-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+    padding: 6px 8px;
+    background-color: rgba(8, 6, 18, 0.35);
+}
+
+.ps-result-stat-label {
+    font-size: 14px;
+    color: rgb(190, 180, 205);
+    margin-right: 12px;
+    white-space: normal;
+    flex-shrink: 1;
+}
+
+.ps-result-stat-value {
+    font-size: 16px;
+    color: rgb(255, 240, 215);
+    white-space: normal;
+    -unity-text-align: upper-right;
+    flex-shrink: 0;
+}
+
+.ps-result-body-line {
+    font-size: 15px;
+    color: rgb(220, 210, 190);
+    white-space: normal;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.ps-result-footer {
+    flex-shrink: 0;
+    padding-top: 8px;
+}
+
+.ps-result-return-btn {
+    min-height: 48px;
+    width: 100%;
+}

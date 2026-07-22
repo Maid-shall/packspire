@@ -39,6 +39,10 @@ public sealed partial class PackspireUiFoundation {
   developerPanelRoot=Container("ps-dev-panel-current");
   developerPanelRoot.Add(PackspireUiFactory.Title("開発者メニュー"));
   developerPanelRoot.Add(PackspireUiFactory.Body("F10で開閉。閉じると直前の画面へ戻ります。"));
+  var scroll=new ScrollView(ScrollViewMode.Vertical);
+  scroll.AddToClassList("ps-dev-current-scroll");
+  scroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
+  scroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
   var grid=Container("ps-dev-current-grid");
   AddDeveloperDestination(grid,"拠点",ScreenId.Hub);
   AddDeveloperDestination(grid,"遠征準備",ScreenId.Expedition);
@@ -49,7 +53,12 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"勢力",ScreenId.Faction);
   AddDeveloperDestination(grid,"図鑑",ScreenId.Compendium);
   AddDeveloperDestination(grid,"キャラ選択",ScreenId.Character);
-  developerPanelRoot.Add(grid);
+  AddDevAction(grid,"商店(DEV)",OpenShopPreviewFromDev);
+  AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
+  AddDevAction(grid,"ゲームオーバー(DEV)",OpenGameOverPreviewFromDev);
+  AddDevAction(grid,"ゲームクリア(DEV)",OpenGameClearPreviewFromDev);
+  scroll.Add(grid);
+  developerPanelRoot.Add(scroll);
   var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());
   close.AddToClassList("ps-dev-current-close");
   developerPanelRoot.Add(close);
@@ -64,13 +73,26 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void AddDeveloperDestination(VisualElement grid,string label,ScreenId target){
-  var button=PackspireUiFactory.Button(label,()=>{
-   game.UiNavigate(target);
-   game.UiDevCloseWithoutRestore();
-   ForceRefreshScreen();
-  });
+  var button=PackspireUiFactory.Button(label,()=>DevNavigate(target));
   button.AddToClassList("ps-dev-current-button");
   grid.Add(button);
+ }
+
+ /// <summary>QA jump: one navigate + one rebuild. Skips PlayFor and AnimateScreenIn to avoid flash/double build.</summary>
+ public void DevNavigate(ScreenId target,System.Action prepare=null){
+  prepare?.Invoke();
+  skipNextTransition=true;
+  skipNextAnimateIn=true;
+  game.UiNavigate(target);
+  game.UiDevCloseWithoutRestore();
+  if(uiReady)RefreshScreen(true);
+ }
+
+ /// <summary>QA rebuild of current screen without transition flash (map/battle open helpers).</summary>
+ public void DevRefreshCurrent(){
+  skipNextTransition=true;
+  skipNextAnimateIn=true;
+  ForceRefreshScreen();
  }
 
  void RefreshDeveloperOverlay(){

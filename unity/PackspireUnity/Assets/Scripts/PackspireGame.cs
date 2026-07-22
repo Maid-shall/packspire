@@ -114,6 +114,12 @@ public partial class PackspireGame : MonoBehaviour {
   }
  }
  public void UiDevCloseWithoutRestore(){developerPanel=false;developerHasReturn=false;}
+ public void UiDevOpenOldBattle(){
+  if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
+  SetRoutePresentationMode(RoutePresentationMode.None);
+  StartBattle(false);
+  UiDevCloseWithoutRestore();
+ }
  public void UiDevOpenExplorationMap(){
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
   packingAtBase=false;
@@ -355,7 +361,7 @@ public partial class PackspireGame : MonoBehaviour {
   exploration=null;explorationEventActive=false;explorationEventNodeId=-1;
   SetRoutePresentationMode(RoutePresentationMode.None);
   message=win?"遠征成功。戦利品をすべて保管しました":"探索終了。戦利品と獲得ゴールドは持ち帰れません";
-  screen=ScreenId.GameOver;
+  screen=win?ScreenId.GameClear:ScreenId.GameOver;
  }
  string RoleMilestoneText(string id,bool maximum){if(id.Contains("guardian")||id.Contains("bulwark")||id.Contains("knight"))return maximum?"戦闘開始時に防御を得て、余剰防御を次のターンへ一部持ち越す。":"防御カードを連続使用すると次の防御効果が上昇する。";if(id.Contains("scout")||id.Contains("hunter")||id.Contains("blade")||id.Contains("dancer"))return maximum?"各戦闘で最初に使う0コストカードを複製する。":"異なる装備由来のカードを続けて使うと追加ドロー。";if(id.Contains("artificer")||id.Contains("rune")||id.Contains("channeler"))return maximum?"戦闘中に最初に使うルーン・道具カードの耐久を消費しない。":"属性一致が3色以上なら戦闘開始時にエネルギーを得る。";return maximum?"武器カードを一定回数使うたび、ラン中の攻撃力が成長する。":"同じ武器由来のカードを続けて使うと追加ダメージ。";}
  ItemInstance CloneItem(ItemInstance x)=>JsonUtility.FromJson<ItemInstance>(JsonUtility.ToJson(x));

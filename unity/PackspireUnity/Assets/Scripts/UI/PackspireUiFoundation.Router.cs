@@ -1,4 +1,5 @@
-using UnityEngine.UIElements;
+ using UnityEngine;
+ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
@@ -27,6 +28,10 @@ public sealed partial class PackspireUiFoundation {
    ReleaseExplorationStage();
   renderedScreen=game.UiScreen;hasRenderedScreen=true;
   ClearScreenTree();
+#if UNITY_EDITOR
+  qaRefreshScreenBuilds++;
+  Debug.Log($"[PackspireQA] RefreshScreen build #{qaRefreshScreenBuilds} screen={renderedScreen}");
+#endif
   if(renderedScreen==ScreenId.Character)BuildCharacter();
   else if(renderedScreen==ScreenId.Hub)BuildHub();
   else if(renderedScreen==ScreenId.Status)BuildStatus();
@@ -41,6 +46,7 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.Shop)BuildShop();
   else if(renderedScreen==ScreenId.Event)BuildEvent();
   else if(renderedScreen==ScreenId.GameOver){ReleaseExplorationStage();BuildGameOver();}
+  else if(renderedScreen==ScreenId.GameClear){ReleaseExplorationStage();BuildGameClear();}
   else BuildCompendium();
   AnimateScreenIn();
   UpdateNavHud();
@@ -105,6 +111,54 @@ public sealed partial class PackspireUiFoundation {
   packingPopupElement=null;
   packingEquipScrollElement=null;
   packingRightScrollElement=null;
+  shopShell=null;
+  shopProductGrid=null;
+  shopProductScroll=null;
+  shopDetailHost=null;
+  shopDetailScroll=null;
+  shopMerchantScene=null;
+  shopMerchantBackdropLayer=null;
+  shopMerchantCharacterViewport=null;
+  shopMerchantCharacterImage=null;
+  shopMerchantDialogueLayer=null;
+  shopMerchantDialogue=null;
+  shopMerchantCounterLayer=null;
+  shopMerchantTransactionLayer=null;
+  shopFutureMerchantActionLayer=null;
+  shopGoldLabel=null;
+  shopTotalLabel=null;
+  shopSelectedNameLabel=null;
+  shopPurchaseReason=null;
+  shopBuyButton=null;
+  shopLeaveButton=null;
+  shopFilterHost=null;
+  shopDevHintLabel=null;
+  shopMerchantCharacterTex=null;
+#if UNITY_EDITOR
+  qaClearScreenTreeCount++;
+#endif
+  rewardShell=null;
+  rewardCandidateList=null;
+  rewardCandidateScroll=null;
+  rewardDetailArtHost=null;
+  rewardDetailScroll=null;
+  rewardHeaderType=null;
+  rewardHeaderPlace=null;
+  rewardHeaderText=null;
+  rewardSelectionStatus=null;
+  rewardConfirmButton=null;
+  rewardReturnButton=null;
+  resultShell=null;
+  resultVisualHost=null;
+  resultTitleOverlay=null;
+  resultTitleLabel=null;
+  resultSubtitleLabel=null;
+  resultCauseLabel=null;
+  resultPrimaryStatsHost=null;
+  resultRecordScroll=null;
+  resultUnlockHost=null;
+  resultHeirloomHost=null;
+  resultReturnButton=null;
   screenRoot.Clear();
  }
 
@@ -114,6 +168,24 @@ public sealed partial class PackspireUiFoundation {
   builder();
  }
 
- void AnimateScreenIn(){if(screenRoot==null)return;float x=renderedScreen==ScreenId.Faction?70f:renderedScreen==ScreenId.Expedition?-70f:renderedScreen==ScreenId.Pack?-45f:0f;float y=renderedScreen==ScreenId.Pack?55f:12f;screenRoot.style.opacity=.01f;screenRoot.style.translate=new Translate(x,y,0);screenRoot.schedule.Execute(()=>{if(screenRoot==null)return;screenRoot.style.opacity=1f;screenRoot.style.translate=new Translate(0,0,0);}).StartingIn(16);}
+ void AnimateScreenIn(){
+  if(screenRoot==null)return;
+  if(skipNextAnimateIn){
+   skipNextAnimateIn=false;
+   screenRoot.style.opacity=1f;
+   screenRoot.style.translate=new Translate(0,0,0);
+   return;
+  }
+  float x=renderedScreen==ScreenId.Faction?70f:renderedScreen==ScreenId.Expedition?-70f:renderedScreen==ScreenId.Pack?-45f:0f;
+  float y=renderedScreen==ScreenId.Pack?55f:12f;
+  screenRoot.style.opacity=.01f;
+  screenRoot.style.translate=new Translate(x,y,0);
+  screenRoot.schedule.Execute(()=>{
+   if(screenRoot==null)return;
+   screenRoot.style.opacity=1f;
+   screenRoot.style.translate=new Translate(0,0,0);
+  }).StartingIn(16);
+ }
 }
 }
+

@@ -1,71 +1,7 @@
-using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
- string[] RewardIds(){string[] pool={"dagger","plate","crystal","bomb","spear","buckler","flask","charm"};int start=((game.UiRun?.battlesWon??0)*3)%pool.Length;return Enumerable.Range(0,3).Select(i=>pool[(start+i)%pool.Length]).ToArray();}
- void BuildReward(){
-  var rewards=RewardIds();
-  if(string.IsNullOrEmpty(selectedRewardId)||!rewards.Contains(selectedRewardId))selectedRewardId=rewards[0];
-  string place=ExplorationMapSystem.Breadcrumb(game.UiExploration);
-  var shell=BookShell($"戦闘報酬 ― {place}",null,false,"LOOT  /  SPOILS");
-  screenRoot.Add(shell);
-  var pages=shell.Q<VisualElement>("book-pages");
-  var left=Page("獲得候補");
-  var right=Page("戦利品の記録");
-  pages.Add(left);pages.Add(right);
-  left.Add(PackspireUiFactory.Body($"{place}での戦いのあと、机上へ戦利品の候補が並んだ。"));
-  foreach(var id in rewards){
-   string value=id;
-   var item=GameCatalog.Items[value];
-   left.Add(RecordButton(item.name,$"{ItemTypeLabel(item.type)}　{item.cells.Length}マス　／　未鑑定",Atlas(game.UiEquipmentArt,ItemUv(value),"ps-record-thumb"),value==selectedRewardId,()=>{selectedRewardId=value;BuildRewardAgain();}));
-  }
-  AddItemDetail(right,selectedRewardId);
-  var take=PackspireUiFactory.Button("この戦利品を獲得する",()=>{
-   string name=GameCatalog.Items.TryGetValue(selectedRewardId,out var it)?it.name:selectedRewardId;
-   game.UiTakeReward(selectedRewardId);
-   ShowToast($"{name}を持ち帰った");
-  });
-  take.AddToClassList("ps-primary-action");
-  take.AddToClassList("ps-chrome-action");
-  right.Add(take);
-  var back=PackspireUiFactory.Button("地図へ戻る",()=>game.UiReturnToMap());
-  back.AddToClassList("ps-chrome-action");
-  right.Add(back);
- }
- void BuildRewardAgain()=>RebuildScreen(BuildReward);
-
- void BuildShop(){
-  string[] stock=GameCatalog.Items.Keys.Take(5).ToArray();
-  if(string.IsNullOrEmpty(selectedShopId)||!stock.Contains(selectedShopId))selectedShopId=stock[0];
-  var shell=BookShell("行商人",null,false,"MERCHANT  /  BAZAAR");
-  screenRoot.Add(shell);
-  var pages=shell.Q<VisualElement>("book-pages");
-  var left=Page("本日の品書き");
-  var right=Page("商品の記録");
-  pages.Add(left);pages.Add(right);
-  left.Add(PackspireUiFactory.Body($"所持金　{game.UiRun?.gold??0}G"));
-  foreach(var id in stock){
-   string value=id;
-   var item=GameCatalog.Items[value];
-   int price=14+item.cells.Length*4;
-   left.Add(RecordButton(item.name,$"{ItemTypeLabel(item.type)}　{item.cells.Length}マス　／　{price}G",Atlas(game.UiEquipmentArt,ItemUv(value),"ps-record-thumb"),value==selectedShopId,()=>{selectedShopId=value;BuildShopAgain();}));
-  }
-  AddItemDetail(right,selectedShopId);
-  var selected=GameCatalog.Items[selectedShopId];
-  int cost=14+selected.cells.Length*4;
-  var buy=PackspireUiFactory.Button((game.UiRun?.gold??0)>=cost?$"{cost}Gで購入する":"所持金が足りません",()=>{if(game.UiBuy(selectedShopId))ShowToast(selected.name+"を購入しました");BuildShopAgain();});
-  buy.SetEnabled((game.UiRun?.gold??0)>=cost);
-  buy.AddToClassList("ps-primary-action");
-  buy.AddToClassList("ps-chrome-action");
-  right.Add(buy);
-  var back=PackspireUiFactory.Button("地図へ戻る",()=>game.UiReturnToMap());
-  back.AddToClassList("ps-chrome-action");
-  right.Add(back);
- }
- void BuildShopAgain()=>RebuildScreen(BuildShop);
- void AddItemDetail(VisualElement page,string id){var item=GameCatalog.Items[id];page.Add(Atlas(game.UiEquipmentArt,ItemUv(id),"ps-detail-art"));page.Add(PackspireUiFactory.Title(item.name));page.Add(PackspireUiFactory.Body(item.description));page.Add(PackspireUiFactory.Body($"{ItemTypeLabel(item.type)}　{item.cells.Length}マス\n属性　{string.Join("・",item.cells.Select(x=>ElementLabel(x.element)))}"));if(!string.IsNullOrEmpty(item.linkRule))page.Add(PackspireUiFactory.Body("LINK　"+item.linkRule));}
-
  void BuildEvent(){
   var run=game.UiRun;
   var screen=Container("ps-event-screen");
@@ -82,29 +18,10 @@ public sealed partial class PackspireUiFoundation {
   dialog.Add(Choice("残響を修復する","所持装備の耐久をすべて回復",()=>game.UiResolveEvent(1)));
   dialog.Add(Choice("立ち去る","何も変えず探索へ戻る",()=>game.UiResolveEvent(2)));
  }
- VisualElement Choice(string title,string description,System.Action action){var button=PackspireUiFactory.Card(title,description,action);button.AddToClassList("ps-event-choice");return button;}
-
- void BuildGameOver(){
-  var run=game.UiRun;
-  bool success=run!=null&&run.hp>0;
-  var shell=BookShell(success?"遠征完了":"探索終了",null,false,success?"QUEST  /  CLEAR":"REPORT  /  FALLEN");
-  screenRoot.Add(shell);
-  var pages=shell.Q<VisualElement>("book-pages");
-  var left=Page(success?"帰還の章":"断章");
-  var right=Page("遠征の記録");
-  pages.Add(left);pages.Add(right);
-  left.Add(Atlas(game.UiDungeonArt,DungeonUv(run?.dungeon??"old_spire"),"ps-result-art"));
-  left.Add(PackspireUiFactory.Title(success?"QUEST CLEAR":"EXPEDITION END"));
-  left.Add(PackspireUiFactory.Body(success?"冒険者は戦利品とともに、次の頁へ続く経験を持ち帰った。":"物語は途中で閉じられた。それでも残された記録が次の遠征へ繋がる。"));
-  right.Add(PackspireUiFactory.Body(string.IsNullOrEmpty(game.UiMessage)?"遠征の記録を閉じます。":game.UiMessage));
-  right.Add(ResultRow("戦闘勝利",(run?.battlesWon??0).ToString()));
-  right.Add(ResultRow("獲得ゴールド",$"{run?.gold??0}G"));
-  right.Add(ResultRow("戦利品",$"{run?.lootBag.Count??0}個"));
-  var home=PackspireUiFactory.Button("拠点へ戻る",()=>game.UiReturnToHub());
-  home.AddToClassList("ps-primary-action");
-  home.AddToClassList("ps-chrome-action");
-  right.Add(home);
+ VisualElement Choice(string title,string description,System.Action action){
+  var button=PackspireUiFactory.Card(title,description,action);
+  button.AddToClassList("ps-event-choice");
+  return button;
  }
- VisualElement ResultRow(string label,string value){var row=Container("ps-result-row");row.Add(PackspireUiFactory.Body(label));row.Add(PackspireUiFactory.Title(value));return row;}
 }
 }

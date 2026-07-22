@@ -14,7 +14,13 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  Coroutine transitionRoutine;
  ScreenId renderedScreen;
  bool hasRenderedScreen;
+ bool skipNextTransition;
+ bool skipNextAnimateIn;
  bool nextPageIsLeft;
+#if UNITY_EDITOR
+ int qaRefreshScreenBuilds;
+ int qaClearScreenTreeCount;
+#endif
  string selectedRoleId="",selectedCompendiumId="";
  string selectedVaultUid="",selectedFactionId="",selectedDungeonId="",selectedCharacterId="";
  string selectedPackingUid="",selectedRewardId="",selectedShopId="";
@@ -78,5 +84,16 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   battleUiBuilt=false;
   if(uiReady)RefreshScreen(true);
  }
+
+#if UNITY_EDITOR
+ public void QaResetBuildCounters(){
+  qaRefreshScreenBuilds=0;
+  qaClearScreenTreeCount=0;
+  shopBuildCount=0;
+  shopDetailRefreshCount=0;
+  rewardBuildCount=0;
+  resultBuildCount=0;
+ }
+#endif
 }
 }

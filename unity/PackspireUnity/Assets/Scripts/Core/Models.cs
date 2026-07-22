@@ -6,7 +6,7 @@ namespace Packspire {
 public enum ItemType { Weapon, Armor, Rune, Supply }
 public enum Element { Fire, Water, Wind, Earth }
 public enum CardType { Attack, Skill, Power }
-public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedition, Pack, Map, Battle, Reward, Shop, Event, Compendium, GameOver }
+public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedition, Pack, Map, Battle, Reward, Shop, Event, Compendium, GameOver, GameClear }
 
 [Serializable] public struct CellDef { public int x,y; public Element element; public int value; public CellDef(int x,int y,Element e,int value=1){this.x=x;this.y=y;element=e;this.value=value;} }
 [Serializable] public class ItemDef { public string id,name,description,cardId,linkRule; public string[] cardIds; public ItemType type; public CellDef[] cells; public int handle; public ItemDef(string id,string name,ItemType type,string card,string description,params CellDef[] cells){this.id=id;this.name=name;this.type=type;cardId=card;cardIds=(id=="sword"||id=="shield"||id=="dagger")?new[]{card,card}:new[]{card};this.description=description;this.cells=cells;handle=0;} }

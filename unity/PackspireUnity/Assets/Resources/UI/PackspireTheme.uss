@@ -1569,8 +1569,11 @@
     position: absolute;
     right: 14px;
     top: 14px;
+    bottom: 58px;
     width: 390px;
+    max-height: none;
     padding: 18px;
+    flex-direction: column;
     background-color: rgba(18, 21, 24, 0.98);
     border-left-width: 2px;
     border-right-width: 2px;
@@ -1582,10 +1585,17 @@
     border-bottom-color: rgb(190, 139, 56);
 }
 
+.ps-dev-current-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin-top: 12px;
+}
+
 .ps-dev-current-grid {
     flex-direction: row;
     flex-wrap: wrap;
-    margin-top: 12px;
+    flex-shrink: 0;
 }
 
 .ps-dev-current-button {
@@ -1597,4 +1607,5 @@
 .ps-dev-current-close {
     height: 38px;
     margin-top: 12px;
+    flex-shrink: 0;
 }

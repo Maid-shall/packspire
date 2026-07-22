@@ -110,6 +110,7 @@ public sealed partial class PackspireUiFoundation {
    case ScreenId.Shop:
    case ScreenId.Event:
    case ScreenId.GameOver:
+   case ScreenId.GameClear:
     return false;
    case ScreenId.Pack:
     return game.UiPackingAtBase;
