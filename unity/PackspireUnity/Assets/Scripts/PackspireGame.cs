@@ -8,13 +8,10 @@ public partial class PackspireGame : MonoBehaviour {
 
 
  public static PackspireGame Instance { get; private set; }
- MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; Vector2 scroll; string selectedUid="",message="",selectedRoleId="",selectedFactionId="",selectedDungeonId="",selectedCompendiumId=""; int selectedRotation,compendiumTab,packingDetailTab; bool packingAtBase,illustratedStylesApplied,developerPanel; GUIStyle title,header,body,button,card,hotspot,hubLabel,hubLabelHover,topChip,cellButton,navButton,navSelected,screenTitle,screenSubtitle,badge,centerBody,bookEntryStyle,bookEntryHoverStyle,bookEntrySelectedStyle; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,menuBackdrop,panelTex,buttonTex,hoverTex,cellClearTex,navTex,navSelectedTex,badgeTex,homeTileTex,homeTileHoverTex,homePrimaryTex,homePrimaryHoverTex,uiActionNormal,uiActionHover,uiActionDanger,uiBackCard,uiNavNormal,uiNavSelected,uiTabCard,uiChipCard,minimalButtonTex,minimalHoverTex,infoChipTex,homeBarPrimary,homeBarSecondary,mapTerrain,mapRoad,bookSpread,bookClearTex,bookHoverTex,bookSelectedTex,bookChipTex,scrollMapUi,battleTableUi,backpackLeatherTex,backpackPocketTex;
+ MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; string selectedUid="",message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
- Texture2D[] homeCardArt,navIconArt,combatCardFrames; Font uiFont,titleFont,gameFont;
- readonly Color bg=new(.09f,.12f,.095f),panel=new(.16f,.20f,.165f),gold=new(.94f,.75f,.35f),ink=new(.97f,.95f,.88f);
  ScreenId lastVisualScreen; bool visualScreenTracked;
- Texture2D bookButtonTex,bookButtonHoverTex,bookButtonSelectedTex,bookRuleTex,bookScrollTrackTex,bookScrollThumbTex,battleMeterTrackTex,battleHpTex,battleBlockTex,battleStatusBuffTex,battleStatusDebuffTex;
  /// <summary>Temporary art-preview lock: battle always shows 瀬名 + 劫火竜 portraits.</summary>
  public const bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
@@ -27,14 +24,13 @@ public partial class PackspireGame : MonoBehaviour {
  public BattleState UiBattle=>battle;
  public ScreenId UiDeveloperReturnScreen=>developerReturnScreen;
  public RoutePresentationMode CurrentRoutePresentationMode=>routePresentationMode;
- public bool ShouldDrawLegacyOnGui=>false;
  string rewardSelectionId="",shopSelectionId="";
  bool explorationEventActive; int explorationEventNodeId=-1;
  RoutePresentationMode routePresentationMode;
  ScreenId developerReturnScreen; bool developerHasReturn;
 
  public void SetRoutePresentationMode(RoutePresentationMode mode){routePresentationMode=mode;}
- void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");menuBackdrop=Resources.Load<Texture2D>("Art/UI/fantasy-menu-backdrop-v1");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroSprite=Resources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");showcaseHeroArt=showcaseHeroSprite==null?Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1"):null;showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");uiFont=Resources.Load<Font>("Fonts/KleeOne-Regular");titleFont=Resources.Load<Font>("Fonts/KleeOne-SemiBold");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
+ void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroSprite=Resources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");showcaseHeroArt=showcaseHeroSprite==null?Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1"):null;showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
  void OnDestroy(){if(Instance==this)Instance=null;}
  void Update(){if(Input.GetKeyDown(KeyCode.F10))UiToggleDeveloperPanel();if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}if(lastVisualScreen==screen)return;var previous=lastVisualScreen;lastVisualScreen=screen;PackspireUiFoundation.Instance?.PlayFor(previous,screen);}
  public void UiNavigate(ScreenId target){
@@ -44,7 +40,7 @@ public partial class PackspireGame : MonoBehaviour {
    if(target==ScreenId.Hub||target==ScreenId.Status||target==ScreenId.Vault||target==ScreenId.Faction||target==ScreenId.Expedition||target==ScreenId.Compendium){
     run=null;exploration=null;SetRoutePresentationMode(RoutePresentationMode.None);
    }
-   screen=target;scroll=Vector2.zero;
+   screen=target;
   }
  }
  public void UiExplorationSelect(int nodeId){
@@ -118,12 +114,6 @@ public partial class PackspireGame : MonoBehaviour {
   }
  }
  public void UiDevCloseWithoutRestore(){developerPanel=false;developerHasReturn=false;}
- public void UiDevOpenOldBattle(){
-  if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
-  SetRoutePresentationMode(RoutePresentationMode.None);
-  StartBattle(false);
-  UiDevCloseWithoutRestore();
- }
  public void UiDevOpenExplorationMap(){
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
   packingAtBase=false;
@@ -207,7 +197,6 @@ public partial class PackspireGame : MonoBehaviour {
   meta.characterMade=true;
   SaveSystem.Save(meta);
   screen=ScreenId.Hub;
-  scroll=Vector2.zero;
  }
  public CharacterDef UiSelectedCharacter=>CharacterSystem.Selected(meta);
  public bool UiUseActiveSkill(){
@@ -313,10 +302,10 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiResolveEvent(int choice){if(run==null)return;if(choice==0){run.hp=Mathf.Max(1,run.hp-6);run.gold+=24;}else if(choice==1)foreach(var item in run.inventory)item.durability=6;screen=ScreenId.Map;}
  public void UiReturnToHub(){
   run=null;exploration=null;explorationEventActive=false;explorationEventNodeId=-1;
-  SetRoutePresentationMode(RoutePresentationMode.None);screen=ScreenId.Hub;scroll=Vector2.zero;
+  SetRoutePresentationMode(RoutePresentationMode.None);screen=ScreenId.Hub;
  }
  void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;selectedUid="";message="荷造りセットを編集";screen=ScreenId.Pack;}
- void StartRun(string dungeon){try{message="ダンジョンを生成中…";run=LoadoutSystem.CreateRun(meta,dungeon);packingAtBase=false;exploration=ExplorationMapSystem.CreateRun(ExplorationMapCatalog.DefaultMapId);selectedUid="";explorationEventActive=false;explorationEventNodeId=-1;scroll=Vector2.zero;message=$"{ExplorationMapSystem.Def(exploration)?.name??"探索"}へ進入";screen=ScreenId.Map;SetRoutePresentationMode(RoutePresentationMode.RiteDebug);}catch(Exception ex){run=null;exploration=null;screen=ScreenId.Expedition;message="遠征開始エラー："+ex.Message;Debug.LogException(ex);}}
+ void StartRun(string dungeon){try{message="ダンジョンを生成中…";run=LoadoutSystem.CreateRun(meta,dungeon);packingAtBase=false;exploration=ExplorationMapSystem.CreateRun(ExplorationMapCatalog.DefaultMapId);selectedUid="";explorationEventActive=false;explorationEventNodeId=-1;message=$"{ExplorationMapSystem.Def(exploration)?.name??"探索"}へ進入";screen=ScreenId.Map;SetRoutePresentationMode(RoutePresentationMode.RiteDebug);}catch(Exception ex){run=null;exploration=null;screen=ScreenId.Expedition;message="遠征開始エラー："+ex.Message;Debug.LogException(ex);}}
  void StartBattle(bool boss){
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);

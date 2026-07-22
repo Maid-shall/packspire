@@ -31,7 +31,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  ScrollView packingEquipScrollElement,packingRightScrollElement;
  float packingEquipScrollY,packingRightScrollY;
  int compendiumTab;
- Texture2D tabletopDesk;
  Button developerAccessButton;
  VisualElement developerPanelRoot;
  // exploration fields live in PackspireUiFoundation.ExplorationMap.cs
@@ -40,7 +39,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  void Awake(){
   if(Instance!=null&&Instance!=this){Destroy(this);return;}
   Instance=this;game=GetComponent<PackspireGame>();
-  tabletopDesk=Resources.Load<Texture2D>("Art/UI/tabletop-desk-v1");
   document=gameObject.GetComponent<UIDocument>()??gameObject.AddComponent<UIDocument>();
   panelSettings=Resources.Load<PanelSettings>("UI/PackspirePanelSettings");
   if(panelSettings==null){

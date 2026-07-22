@@ -34,18 +34,6 @@ public sealed partial class PackspireUiFoundation {
 
  Texture2D HubPortraitFrameArt()=>Resources.Load<Texture2D>("Art/UI/PopDark/portrait-frame-v1");
 
- VisualElement TabletopDesk(string extraClass){
-  var desk=Container("ps-tabletop-desk "+extraClass);
-  var bg=HubBackgroundArt();
-  if(bg!=null)desk.Add(Image(bg,new Rect(0,0,1,1),"ps-tabletop-desk-art",ScaleMode.ScaleAndCrop));
-  else if(tabletopDesk!=null)desk.Add(Image(tabletopDesk,new Rect(0,0,1,1),"ps-tabletop-desk-art",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-tabletop-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  desk.Add(shade);
-  return desk;
- }
- Button TabletopBack(){var button=new Button(()=>game.UiNavigate(ScreenId.Hub)){text="拠点へ戻る"};button.AddToClassList("ps-tabletop-back");button.AddToClassList("ps-chrome-plate-btn");return button;}
-
  void ShowToast(string message){if(toast==null)return;toast.Clear();toast.Add(new Label(message));toast.style.display=DisplayStyle.Flex;toast.style.opacity=0f;toast.style.translate=new Translate(0,-10,0);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=1f;toast.style.translate=new Translate(0,0,0);}).StartingIn(16);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=0f;toast.style.translate=new Translate(0,-8,0);}).StartingIn(1700);toast.schedule.Execute(()=>{if(toast!=null)toast.style.display=DisplayStyle.None;}).StartingIn(1950);}
  VisualElement Milestone(int required,int current,string title,string description){var item=Container(current>=required?"ps-milestone ps-unlocked":"ps-milestone ps-locked");item.Add(PackspireUiFactory.Title($"Lv.{required}　{title}"));item.Add(PackspireUiFactory.Body(description));return item;}
 

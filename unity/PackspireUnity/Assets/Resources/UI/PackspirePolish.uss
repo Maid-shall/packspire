@@ -17,7 +17,6 @@
 }
 
 .ps-chrome-action,
-.ps-tabletop-back,
 .ps-chrome-plate-btn,
 .ps-battle-btn-end,
 .ps-battle .ps-button.ps-battle-btn-end,
@@ -29,7 +28,6 @@
 }
 
 .ps-chrome-action:hover,
-.ps-tabletop-back:hover,
 .ps-chrome-plate-btn:hover {
     -unity-background-image-tint-color: rgb(255, 220, 200);
     color: rgb(255, 210, 160);
@@ -37,7 +35,6 @@
 
 .ps-dd-roster-overlay,
 .ps-book-screen,
-.ps-tabletop-desk,
 .ps-rite,
 .ps-battle-screen {
     background-color: rgb(22, 16, 48);

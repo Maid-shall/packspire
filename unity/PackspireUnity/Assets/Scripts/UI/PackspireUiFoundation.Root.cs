@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void BuildRoot(){
-  root=document.rootVisualElement;if(root==null||root.panel==null){uiReady=false;Debug.LogWarning("Packspire UI Toolkit root is not ready; legacy UI remains active.");return;}
+  root=document.rootVisualElement;if(root==null||root.panel==null){uiReady=false;Debug.LogWarning("Packspire UI Toolkit root is not ready.");return;}
   root.name="packspire-ui-root";root.AddToClassList("packspire-root");root.pickingMode=PickingMode.Ignore;
   string[] styleSheetPaths={
    "UI/PackspireTheme",
@@ -42,8 +42,6 @@ public sealed partial class PackspireUiFoundation {
   var grid=Container("ps-dev-current-grid");
   AddDeveloperDestination(grid,"拠点",ScreenId.Hub);
   AddDeveloperDestination(grid,"遠征準備",ScreenId.Expedition);
-  AddDevAction(grid,"遠征マップ",()=>{game.UiDevOpenExplorationMap();ForceRefreshScreen();});
-  AddDevAction(grid,"戦闘（カード）",()=>{game.UiDevOpenOldBattle();ForceRefreshScreen();});
   AddDeveloperDestination(grid,"荷造り",ScreenId.Pack);
   AddDeveloperDestination(grid,"保管庫",ScreenId.Vault);
   AddDeveloperDestination(grid,"ステータス",ScreenId.Status);
@@ -77,13 +75,12 @@ public sealed partial class PackspireUiFoundation {
  void RefreshDeveloperOverlay(){
   if(developerPanelRoot==null||game==null)return;
   bool open=game.UiDeveloperPanelOpen;
-  bool legacy=game.ShouldDrawLegacyOnGui;
   if(developerAccessButton!=null){
    developerAccessButton.text=open?"F10 ×":"F10 DEV";
-   developerAccessButton.style.display=legacy?DisplayStyle.None:DisplayStyle.Flex;
+   developerAccessButton.style.display=DisplayStyle.Flex;
   }
-  developerPanelRoot.style.display=open&&!legacy?DisplayStyle.Flex:DisplayStyle.None;
-  if(open&&!legacy){
+  developerPanelRoot.style.display=open?DisplayStyle.Flex:DisplayStyle.None;
+  if(open){
    developerPanelRoot.BringToFront();
    if(developerAccessButton!=null)developerAccessButton.BringToFront();
   }
