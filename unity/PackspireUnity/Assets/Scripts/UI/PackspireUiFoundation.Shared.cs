@@ -75,7 +75,7 @@ public sealed partial class PackspireUiFoundation {
 
  VisualElement BookShell(string title,VisualElement singleContent,bool whitePaper=false,string eyebrow=null){
   nextPageIsLeft=true;
-  var shell=Container(whitePaper?"ps-book-screen ps-book-white":"ps-book-screen");
+  var shell=Container(whitePaper?"ps-book-screen ps-book-white ps-dark-surface":"ps-book-screen ps-dark-surface");
   var bg=HubBackgroundArt();
   if(bg!=null)shell.Add(Image(bg,new Rect(0,0,1,1),"ps-book-scene-bg",ScaleMode.ScaleAndCrop));
   var shade=Container("ps-book-scene-shade");
@@ -95,6 +95,45 @@ public sealed partial class PackspireUiFoundation {
  VisualElement Page(string title){var page=new ScrollView();page.AddToClassList("ps-book-page");page.AddToClassList(nextPageIsLeft?"ps-page-left":"ps-page-right");nextPageIsLeft=!nextPageIsLeft;var heading=Container("ps-page-heading");var label=PackspireUiFactory.Title(title);label.AddToClassList("ps-page-heading-title");heading.Add(label);heading.Add(InkRule());page.Add(heading);return page;}
  VisualElement RecordButton(string title,string subtitle,VisualElement art,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=title+"\n"+subtitle};button.AddToClassList("ps-record-button");if(selected)button.AddToClassList("ps-selected");button.Add(art);var copy=Container("ps-record-copy");copy.Add(PackspireUiFactory.Title(title));copy.Add(PackspireUiFactory.Body(subtitle));button.Add(copy);if(selected)button.Add(SelectionBadge());button.Add(InkRule());return button;}
  VisualElement AtlasButton(Texture2D texture,Rect uv,string label,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=label};button.AddToClassList("ps-atlas-button");if(selected)button.AddToClassList("ps-selected");button.Add(Atlas(texture,uv,"ps-atlas-image"));var name=new Label(label);name.AddToClassList("ps-atlas-label");button.Add(name);if(selected)button.Add(SelectionBadge());return button;}
+
+ static Sprite LoadPortraitSprite(string path){
+  return string.IsNullOrEmpty(path)?null:Resources.Load<Sprite>(path);
+ }
+
+ static Texture2D LoadPortraitTexture(string path){
+  if(string.IsNullOrEmpty(path))return null;
+  var tex=Resources.Load<Texture2D>(path);
+  if(tex!=null)return tex;
+  return null;
+ }
+
+ void ApplyCharacterPortraitImage(Image target,CharacterDef character){
+  if(target==null||character==null)return;
+  var sprite=game.ResolveCharacterPortraitSprite(character);
+  if(sprite!=null){
+   target.sprite=sprite;
+   target.uv=new Rect(0,0,1,1);
+   return;
+  }
+  if(character.HasPortraitAsset){
+   var tex=LoadPortraitTexture(character.portraitResource);
+   if(tex!=null){
+    target.image=tex;
+    target.uv=new Rect(0,0,1,1);
+    return;
+   }
+  }
+  var meta=game.UiMeta;
+  target.image=game.UiCharacterArt;
+  target.uv=CharacterUv(meta.body,meta.hair);
+ }
+
+ Image SpriteImage(Sprite sprite,Rect uv,string className,ScaleMode mode){
+  var image=new Image{sprite=sprite,uv=uv,scaleMode=mode,pickingMode=PickingMode.Ignore};
+  foreach(var value in className.Split(' '))
+   if(!string.IsNullOrEmpty(value))image.AddToClassList(value);
+  return image;
+ }
 
  Texture2D PopDarkPortraitArt(CharacterDef def){
   if(def!=null&&!string.IsNullOrEmpty(def.id)){

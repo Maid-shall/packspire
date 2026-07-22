@@ -10,6 +10,7 @@ public partial class PackspireGame : MonoBehaviour {
  public static PackspireGame Instance { get; private set; }
  MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; Vector2 scroll; string selectedUid="",message="",selectedRoleId="",selectedFactionId="",selectedDungeonId="",selectedCompendiumId=""; int selectedRotation,compendiumTab,packingDetailTab; bool packingAtBase,illustratedStylesApplied,developerPanel; GUIStyle title,header,body,button,card,hotspot,hubLabel,hubLabelHover,topChip,cellButton,navButton,navSelected,screenTitle,screenSubtitle,badge,centerBody,bookEntryStyle,bookEntryHoverStyle,bookEntrySelectedStyle; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,menuBackdrop,panelTex,buttonTex,hoverTex,cellClearTex,navTex,navSelectedTex,badgeTex,homeTileTex,homeTileHoverTex,homePrimaryTex,homePrimaryHoverTex,uiActionNormal,uiActionHover,uiActionDanger,uiBackCard,uiNavNormal,uiNavSelected,uiTabCard,uiChipCard,minimalButtonTex,minimalHoverTex,infoChipTex,homeBarPrimary,homeBarSecondary,mapTerrain,mapRoad,bookSpread,bookClearTex,bookHoverTex,bookSelectedTex,bookChipTex,scrollMapUi,battleTableUi,backpackLeatherTex,backpackPocketTex;
  Texture2D showcaseHeroArt,showcaseDragonArt;
+ Sprite showcaseHeroSprite;
  Texture2D[] homeCardArt,navIconArt,combatCardFrames; Font uiFont,titleFont,gameFont;
  readonly Color bg=new(.09f,.12f,.095f),panel=new(.16f,.20f,.165f),gold=new(.94f,.75f,.35f),ink=new(.97f,.95f,.88f);
  ScreenId lastVisualScreen; bool visualScreenTracked;
@@ -17,7 +18,7 @@ public partial class PackspireGame : MonoBehaviour {
  /// <summary>Temporary art-preview lock: battle always shows 瀬名 + 劫火竜 portraits.</summary>
  public const bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
- public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
+ public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
  public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase;
  public ExplorationRunState UiExploration=>exploration;
  public bool UiUsesExplorationMap=>exploration!=null;
@@ -33,7 +34,7 @@ public partial class PackspireGame : MonoBehaviour {
  ScreenId developerReturnScreen; bool developerHasReturn;
 
  public void SetRoutePresentationMode(RoutePresentationMode mode){routePresentationMode=mode;}
- void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");menuBackdrop=Resources.Load<Texture2D>("Art/UI/fantasy-menu-backdrop-v1");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroArt=Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1");showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");uiFont=Resources.Load<Font>("Fonts/KleeOne-Regular");titleFont=Resources.Load<Font>("Fonts/KleeOne-SemiBold");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
+ void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");menuBackdrop=Resources.Load<Texture2D>("Art/UI/fantasy-menu-backdrop-v1");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroSprite=Resources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");showcaseHeroArt=showcaseHeroSprite==null?Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1"):null;showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");uiFont=Resources.Load<Font>("Fonts/KleeOne-Regular");titleFont=Resources.Load<Font>("Fonts/KleeOne-SemiBold");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
  void OnDestroy(){if(Instance==this)Instance=null;}
  void Update(){if(Input.GetKeyDown(KeyCode.F10))UiToggleDeveloperPanel();if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}if(lastVisualScreen==screen)return;var previous=lastVisualScreen;lastVisualScreen=screen;PackspireUiFoundation.Instance?.PlayFor(previous,screen);}
  public void UiNavigate(ScreenId target){
@@ -141,6 +142,11 @@ public partial class PackspireGame : MonoBehaviour {
    if(tex!=null)return tex;
   }
   return characterArt;
+ }
+ public Sprite ResolveCharacterPortraitSprite(CharacterDef def){
+  if(def!=null&&def.HasPortraitAsset)
+   return Resources.Load<Sprite>(def.portraitResource);
+  return null;
  }
  public Texture2D ResolveCharacterPortraitFront(CharacterDef def){
   if(def!=null){

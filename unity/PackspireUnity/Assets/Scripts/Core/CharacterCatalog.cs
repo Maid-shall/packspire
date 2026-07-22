@@ -1,5 +1,7 @@
 using System;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Packspire {
 [Serializable]
@@ -16,6 +18,8 @@ public class CharacterDef {
  public string traitKind;
  public int traitValue;
  public string activeSkillId,activeSkillName,activeSkillText;
+ /// <summary>Normalized UV for expedition banner eye background (x,y,w,h). Empty = catalog default.</summary>
+ public Rect expeditionBannerUv;
  public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText,string portraitResource="",string portraitFrontResource="",string portraitHubResource=""){
   this.id=id;this.name=name;this.title=title;this.description=description;
   this.portraitBody=portraitBody;this.portraitHair=portraitHair;this.portraitResource=portraitResource;
@@ -53,6 +57,16 @@ public static class CharacterCatalog {
    "sena_kick","廻旋脚","敵に14ダメージ（1戦1回）",
    "Art/Portraits/hero-sena-kick-v1"),
  };
+ static CharacterCatalog(){
+  SetExpeditionBannerUv("ren",new Rect(0.08f,0.72f,0.84f,0.22f));
+  SetExpeditionBannerUv("mio",new Rect(0.12f,0.74f,0.76f,0.20f));
+  SetExpeditionBannerUv("kuro",new Rect(0.06f,0.71f,0.88f,0.23f));
+  SetExpeditionBannerUv("hina",new Rect(0.10f,0.73f,0.80f,0.21f));
+  SetExpeditionBannerUv("sena",new Rect(0.22f,0.76f,0.56f,0.20f));
+ }
+ static void SetExpeditionBannerUv(string id,Rect uv){
+  if(All.TryGetValue(id,out var def))def.expeditionBannerUv=uv;
+ }
 
  public static CharacterDef Get(string id){
   if(!string.IsNullOrEmpty(id)&&All.TryGetValue(id,out var def))return def;

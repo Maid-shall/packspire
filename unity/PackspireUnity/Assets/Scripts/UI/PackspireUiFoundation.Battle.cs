@@ -167,7 +167,9 @@ public sealed partial class PackspireUiFoundation {
   wrap.pickingMode=PickingMode.Ignore;
   if(player)battlePlayerActor=wrap;else battleEnemyActor=wrap;
   if(player){
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null)
+   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null)
+    battlePlayerPortrait=SpriteImage(game.UiShowcaseHeroSprite,new Rect(0,0,1,1),"ps-battle-actor-image",ScaleMode.ScaleToFit);
+   else if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null)
     battlePlayerPortrait=Atlas(game.UiShowcaseHeroArt,new Rect(0,0,1,1),"ps-battle-actor-image");
    else
     battlePlayerPortrait=Atlas(game.UiCharacterArt,new Rect(0,0,1,1),"ps-battle-actor-image");
@@ -296,19 +298,15 @@ public sealed partial class PackspireUiFoundation {
   else
    battlePlayerName.text=CharacterCatalog.Get(run.characterId).name;
   if(battlePlayerPortrait!=null){
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null){
+   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null){
+    battlePlayerPortrait.sprite=game.UiShowcaseHeroSprite;
+    battlePlayerPortrait.uv=new Rect(0,0,1,1);
+   } else if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null){
     battlePlayerPortrait.image=game.UiShowcaseHeroArt;
     battlePlayerPortrait.uv=new Rect(0,0,1,1);
    } else {
     var character=CharacterCatalog.Get(run.characterId);
-    if(character.HasPortraitAsset){
-     battlePlayerPortrait.image=game.ResolveCharacterPortrait(character);
-     battlePlayerPortrait.uv=new Rect(0,0,1,1);
-    } else {
-     var meta=game.UiMeta;
-     battlePlayerPortrait.image=game.UiCharacterArt;
-     battlePlayerPortrait.uv=CharacterUv(meta.body,meta.hair);
-    }
+    ApplyCharacterPortraitImage(battlePlayerPortrait,character);
    }
    battlePlayerPortrait.style.display=DisplayStyle.Flex;
   }

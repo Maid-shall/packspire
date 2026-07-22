@@ -16,7 +16,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  bool hasRenderedScreen;
  bool nextPageIsLeft;
  string selectedRoleId="",selectedCompendiumId="";
- string selectedVaultUid="",selectedFactionId="",selectedDungeonId="";
+ string selectedVaultUid="",selectedFactionId="",selectedDungeonId="",selectedCharacterId="";
  string selectedPackingUid="",selectedRewardId="",selectedShopId="";
  int packingRotation;
  bool packingFormulaOpen,packingCardsOpen;
@@ -59,6 +59,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  IEnumerator Start(){for(int frame=0;frame<30;frame++){if(document!=null&&document.rootVisualElement!=null&&document.rootVisualElement.panel!=null)break;yield return null;}BuildRoot();if(uiReady)RefreshScreen(true);}
  void Update(){
   if(root!=null)RefreshScreen(false);
+  HandleNavInput();
   RefreshDeveloperOverlay();
   if(renderedScreen==ScreenId.Map&&explorationMapBuilt)TickExplorationMap();
  }

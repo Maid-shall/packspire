@@ -11,7 +11,12 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   screenRoot.style.display=DisplayStyle.Flex;
-  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen)return;
+  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen){
+   UpdateNavHud();
+   return;
+  }
+  if(hasRenderedScreen&&renderedScreen!=game.UiScreen&&!navSuppressHistory)
+   RecordNavHistory(renderedScreen,game.UiScreen);
   if(renderedScreen==ScreenId.Map&&game.UiScreen!=ScreenId.Map){
    if(game.UiScreen==ScreenId.Battle)SuspendExplorationStage();
    else ReleaseExplorationStage();
@@ -37,13 +42,45 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.GameOver){ReleaseExplorationStage();BuildGameOver();}
   else BuildCompendium();
   AnimateScreenIn();
+  UpdateNavHud();
  }
 
  void ClearScreenTree(){
   mgmtListScroll=null;
-  mgmtArtHost=null;
+  mgmtVaultGrid=null;
+  mgmtOverviewHost=null;
+  mgmtDetailHero=null;
+  mgmtDetailArtHost=null;
+  mgmtDetailSummaryHost=null;
   mgmtDetailScroll=null;
   mgmtListHeader=null;
+  factionShell=null;
+  factionGraphHost=null;
+  factionGraphEdges=null;
+  factionGraphNodes=null;
+  factionDetailScroll=null;
+  expeditionShell=null;
+  expeditionDestScroll=null;
+  expeditionDestList=null;
+  expeditionArtHost=null;
+  expeditionArtImageHost=null;
+  expeditionArtLockOverlay=null;
+  expeditionArtCaptionName=null;
+  expeditionArtCaptionSub=null;
+  expeditionDungeonInfoHost=null;
+  expeditionCharacterHost=null;
+  expeditionLoadoutHost=null;
+  expeditionLoadoutList=null;
+  expeditionDetailScroll=null;
+  expeditionDepartButton=null;
+  expeditionDepartReason=null;
+  expeditionLoadoutDetailHost=null;
+  rosterShell=null;
+  rosterReelScroll=null;
+  rosterArtHost=null;
+  rosterDetailScrollHost=null;
+  rosterDetailBody=null;
+  rosterConfirmButton=null;
   hubShell=null;
   hubReelScroll=null;
   hubStreetGuideModal=null;
