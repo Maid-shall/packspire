@@ -18,6 +18,7 @@ public sealed partial class PackspireUiFoundation {
   (ScreenId.Expedition,"遠征準備"),
   (ScreenId.Pack,"荷造り"),
   (ScreenId.Vault,"保管庫"),
+  (ScreenId.Heirloom,"家宝"),
   (ScreenId.Status,"ステータス"),
   (ScreenId.Faction,"勢力"),
   (ScreenId.Compendium,"図鑑"),
@@ -70,7 +71,10 @@ public sealed partial class PackspireUiFoundation {
 
  void HandleNavInput(){
   if(!uiReady||game==null||!ShouldShowNavHud())return;
-  if(Input.GetKeyDown(KeyCode.Escape))NavGoBack();
+  if(Input.GetKeyDown(KeyCode.Escape)){
+   if(TryCloseHeirloomPickerFromInput())return;
+   NavGoBack();
+  }
  }
 
  void RecordNavHistory(ScreenId from,ScreenId to){
@@ -87,7 +91,7 @@ public sealed partial class PackspireUiFoundation {
 
  bool IsNavHistoryScreen(ScreenId id){
   if(id==ScreenId.Pack)return game!=null&&game.UiPackingAtBase;
-  return id is ScreenId.Hub or ScreenId.Status or ScreenId.Vault or ScreenId.Faction
+  return id is ScreenId.Hub or ScreenId.Status or ScreenId.Vault or ScreenId.Heirloom or ScreenId.Faction
    or ScreenId.Expedition or ScreenId.Compendium or ScreenId.Character;
  }
 
@@ -142,6 +146,7 @@ public sealed partial class PackspireUiFoundation {
 
  void NavGoBack(){
   if(navMenuOpen){CloseNavMenu();return;}
+  if(TryCloseHeirloomPickerFromInput())return;
   if(navBackStack.Count==0)return;
   NavNavigate(navBackStack.Pop(),true);
  }

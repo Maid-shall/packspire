@@ -582,6 +582,7 @@
 .ps-hub-theme-strata { background-color: rgba(80, 40, 100, 0.18); }
 .ps-hub-theme-forge { background-color: rgba(120, 60, 40, 0.16); }
 .ps-hub-theme-vault { background-color: rgba(40, 60, 100, 0.16); }
+.ps-hub-theme-heirloom { background-color: rgba(90, 55, 110, 0.18); }
 .ps-hub-theme-codex { background-color: rgba(50, 80, 90, 0.16); }
 .ps-hub-theme-guild { background-color: rgba(90, 70, 40, 0.14); }
 .ps-hub-theme-embassy { background-color: rgba(70, 50, 90, 0.14); }

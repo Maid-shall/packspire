@@ -38,6 +38,8 @@ public static class HubFacilityCatalog {
    "装備と術式を整える。","Art/UI/PopDark/btn-card-v1","forge",0.42f,0.48f),
   new("vault","VAULT","保管",ScreenId.Vault,HubFacilityKind.Archive,true,
    "持ち帰った装備を確認する。","Art/UI/PopDark/btn-card-v1","vault",0.28f,0.56f),
+  new("heirloom","HEIRLOOM","家宝",ScreenId.Heirloom,HubFacilityKind.Archive,true,
+   "一つの装備を長期育成する。","Art/UI/PopDark/btn-card-v1","heirloom",0.22f,0.42f),
   new("codex","INDEX","図鑑",ScreenId.Compendium,HubFacilityKind.Archive,true,
    "遭遇記録と未解明の索引。","Art/UI/PopDark/btn-card-v1","codex",0.56f,0.62f),
   new("guild","RANK","ステータス",ScreenId.Status,HubFacilityKind.Archive,true,

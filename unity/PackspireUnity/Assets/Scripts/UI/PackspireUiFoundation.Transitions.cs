@@ -15,7 +15,7 @@ public sealed partial class PackspireUiFoundation {
   if(IsBook(from)&&IsBook(to))return TabletopTransitionKind.PageTurn;
   return TabletopTransitionKind.Fade;
  }
- bool IsBook(ScreenId value)=>value==ScreenId.Character||value==ScreenId.Status||value==ScreenId.Vault||value==ScreenId.Reward||value==ScreenId.Shop||value==ScreenId.Event||value==ScreenId.Compendium||value==ScreenId.GameOver;
+ bool IsBook(ScreenId value)=>value==ScreenId.Character||value==ScreenId.Status||value==ScreenId.Vault||value==ScreenId.Heirloom||value==ScreenId.Reward||value==ScreenId.Shop||value==ScreenId.Event||value==ScreenId.Compendium||value==ScreenId.GameOver;
 
  IEnumerator Play(TabletopTransitionKind kind){transitionRoot.style.display=DisplayStyle.Flex;ResetLayers();const float duration=.54f;float elapsed=0f;while(elapsed<duration){elapsed+=Time.unscaledDeltaTime;float t=Mathf.Clamp01(elapsed/duration),ease=1f-Mathf.Pow(1f-t,3f);ApplyFrame(kind,ease);yield return null;}HideTransition();transitionRoutine=null;}
  void ResetLayers(){dim.style.display=DisplayStyle.Flex;dim.style.opacity=.68f;leftPaper.style.display=DisplayStyle.None;rightPaper.style.display=DisplayStyle.None;scrollPaper.style.display=DisplayStyle.None;battleShade.style.display=DisplayStyle.None;}

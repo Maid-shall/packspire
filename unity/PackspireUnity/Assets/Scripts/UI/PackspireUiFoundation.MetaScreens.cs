@@ -88,6 +88,7 @@ public sealed partial class PackspireUiFoundation {
 
  void BuildVault(){
   var meta=game.UiMeta;
+  if(vaultFilter!=0&&vaultFilter!=1)vaultFilter=0;
   var stash=FilteredVaultStash(meta).ToList();
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0)vaultFilter=0;
   if(string.IsNullOrEmpty(selectedVaultUid)||!meta.stash.Any(x=>x.uid==selectedVaultUid))
@@ -100,8 +101,7 @@ public sealed partial class PackspireUiFoundation {
 
  System.Collections.Generic.IEnumerable<ItemInstance> FilteredVaultStash(MetaSave meta){
   if(meta.stash==null)return System.Array.Empty<ItemInstance>();
-  if(vaultFilter==1)return meta.stash.Where(x=>x.uid==meta.selectedHeirloomUid);
-  if(vaultFilter==2)return meta.stash.Where(x=>VaultItemInLoadout(meta,x.uid));
+  if(vaultFilter==1)return meta.stash.Where(x=>VaultItemInLoadout(meta,x.uid));
   return meta.stash;
  }
 
@@ -136,8 +136,11 @@ public sealed partial class PackspireUiFoundation {
   }
   var def=GameCatalog.Items[selected.templateId];
   SetMgmtDetailHeroArt(Atlas(game.UiEquipmentArt,ItemUv(def.id),"ps-mgmt-detail-art-image"));
+  var nameBlock=Container("ps-mgmt-detail-name-row");
+  nameBlock.Add(PackspireUiFactory.Title(def.name));
+  if(selected.uid==meta.selectedHeirloomUid)nameBlock.Add(HeirloomMark());
   SetMgmtDetailHeroSummary(
-   PackspireUiFactory.Title(def.name),
+   nameBlock,
    PackspireUiFactory.Body($"{ItemTypeLabel(def.type)}　{def.cells.Length}マス"),
    PackspireUiFactory.Body($"鍛錬 +{selected.temper}　耐久 {selected.durability}/6")
   );
@@ -154,34 +157,8 @@ public sealed partial class PackspireUiFoundation {
   var loadoutName=VaultLoadoutName(meta,selected.uid);
   if(!string.IsNullOrEmpty(loadoutName))
    mgmtDetailScroll.Add(ManagementSection("使用中の荷造り",loadoutName));
-  if(selected.uid==meta.selectedHeirloomUid){
-   mgmtDetailScroll.Add(ManagementSection("家宝","現在の家宝"));
-   if(selected.history!=null&&(selected.history.battles>0||selected.history.bosses>0||selected.history.defeats>0))
-    mgmtDetailScroll.Add(ManagementSection("戦歴",$"戦闘 {selected.history.battles}　ボス {selected.history.bosses}　敗北 {selected.history.defeats}"));
-   if(selected.scars!=null&&selected.scars.Count>0){
-    var scarLines=selected.scars.Take(6).Select(s=>$"{s.type}　{s.dungeon} L{s.floor}");
-    mgmtDetailScroll.Add(ManagementSection("傷跡",string.Join("\n",scarLines)));
-   }
-  }
   if(selected.insured||selected.heirloomCertified)
    mgmtDetailScroll.Add(ManagementSection("保護",selected.insured?"保険加入":selected.heirloomCertified?"家宝認証済":""));
-
-  string heirLabel;
-  bool heirActive=selected.uid==meta.selectedHeirloomUid;
-  if(heirActive)heirLabel="家宝に設定中";
-  else if(string.IsNullOrEmpty(meta.selectedHeirloomUid))heirLabel="家宝に指定";
-  else heirLabel="家宝を変更";
-  var heirButton=PackspireUiFactory.Button(heirLabel,()=>{
-   if(heirActive)return;
-   game.UiSelectHeirloom(selected.uid);
-   UpdateMgmtVaultGridBadges(game.UiMeta);
-   RefreshVaultDetail(game.UiMeta);
-   ShowToast("家宝として記録しました");
-  });
-  heirButton.AddToClassList("ps-chrome-action");
-  heirButton.AddToClassList("ps-mgmt-action");
-  if(heirActive)heirButton.SetEnabled(false);
-  mgmtDetailScroll.Add(heirButton);
  }
 
  void BuildVaultAgain(){RefreshVaultScreen(false);}
@@ -189,6 +166,7 @@ public sealed partial class PackspireUiFoundation {
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
   var meta=game.UiMeta;
   var stash=FilteredVaultStash(meta).ToList();
+  if(vaultFilter!=0&&vaultFilter!=1)vaultFilter=0;
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0){
    vaultFilter=0;
    stash=meta.stash.ToList();
@@ -196,7 +174,7 @@ public sealed partial class PackspireUiFoundation {
   if(!stash.Any(x=>x.uid==selectedVaultUid))selectedVaultUid=stash.FirstOrDefault()?.uid??meta.stash.FirstOrDefault()?.uid??"";
   if(rebuildList){
    mgmtListHeader.Clear();
-   mgmtListHeader.Add(ManagementFilterBar(new[]{"すべて","家宝","使用中"},vaultFilter,index=>{
+   mgmtListHeader.Add(ManagementFilterBar(new[]{"すべて","使用中"},vaultFilter,index=>{
     vaultFilter=index;
     RefreshVaultScreen(true);
    }));

@@ -31,6 +31,7 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.Hub)BuildHub();
   else if(renderedScreen==ScreenId.Status)BuildStatus();
   else if(renderedScreen==ScreenId.Vault)BuildVault();
+  else if(renderedScreen==ScreenId.Heirloom)BuildHeirloom();
   else if(renderedScreen==ScreenId.Faction)BuildFaction();
   else if(renderedScreen==ScreenId.Expedition)BuildExpedition();
   else if(renderedScreen==ScreenId.Pack)BuildPacking();
@@ -75,6 +76,17 @@ public sealed partial class PackspireUiFoundation {
   expeditionDepartButton=null;
   expeditionDepartReason=null;
   expeditionLoadoutDetailHost=null;
+  heirloomShell=null;
+  heirloomSlotButton=null;
+  heirloomSlotArt=null;
+  heirloomSlotGlyph=null;
+  heirloomPortraitHost=null;
+  heirloomGrowthScroll=null;
+  heirloomGrowthBody=null;
+  heirloomModalLayer=null;
+  heirloomPickerGrid=null;
+  heirloomPickerConfirm=null;
+  heirloomPickerOpen=false;
   rosterShell=null;
   rosterReelScroll=null;
   rosterArtHost=null;

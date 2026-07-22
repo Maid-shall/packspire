@@ -44,6 +44,7 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"遠征準備",ScreenId.Expedition);
   AddDeveloperDestination(grid,"荷造り",ScreenId.Pack);
   AddDeveloperDestination(grid,"保管庫",ScreenId.Vault);
+  AddDeveloperDestination(grid,"家宝",ScreenId.Heirloom);
   AddDeveloperDestination(grid,"ステータス",ScreenId.Status);
   AddDeveloperDestination(grid,"勢力",ScreenId.Faction);
   AddDeveloperDestination(grid,"図鑑",ScreenId.Compendium);

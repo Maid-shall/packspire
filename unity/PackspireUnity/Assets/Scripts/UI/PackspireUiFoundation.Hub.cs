@@ -268,7 +268,7 @@ public sealed partial class PackspireUiFoundation {
  void UpdateHubCenterPanel(){
   var facility=HubFacilityCatalog.GetReel(hubReelIndex);
   if(hubCenterBg!=null){
-   string[] themes={"default","strata","forge","vault","codex","guild","embassy","roster"};
+   string[] themes={"default","strata","forge","vault","heirloom","codex","guild","embassy","roster"};
    foreach(var theme in themes)
     hubCenterBg.EnableInClassList("ps-hub-theme-"+theme,theme==facility.themeKey);
   }
