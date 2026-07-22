@@ -27,6 +27,15 @@ Later files may override earlier files. Preserve this order unless the ownership
 - UI Toolkit unsupported CSS such as `z-index`, `last-child`, and `border-*-style` must not be added.
 - Prefer hierarchy order for front/back placement and solid border colors or opacity for preview states.
 
-## Safe cleanup boundary
+## Selective-frame foundation (2026-07-23)
 
-The 2026-07-22 split preserved the exact original `PackspirePolish.uss` cascade. Only eight unsupported dashed-border declarations were removed. No screen dimensions, colors, or interaction states were intentionally changed.
+Shared classes live in `PackspirePolish.uss`:
+
+- Surfaces: `ps-surface-quiet`, `ps-surface-outer`, `ps-frame-focal`
+- List: `ps-list-item` (+ `ps-selected` / `ps-locked` / `ps-list-item-mark`)
+- Type: `ps-typo-screen|section|item|body|secondary|value|eyebrow`
+- Actions: `ps-action-primary|secondary|nav`
+- Separator: `ps-sep-ink`
+
+Expedition preparation is the first product screen using this system. Other screens keep legacy chrome until a follow-up rollout.
+

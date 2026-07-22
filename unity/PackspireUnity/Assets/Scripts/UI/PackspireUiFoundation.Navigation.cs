@@ -22,6 +22,7 @@ public sealed partial class PackspireUiFoundation {
   (ScreenId.Status,"ステータス"),
   (ScreenId.Faction,"勢力"),
   (ScreenId.Compendium,"図鑑"),
+  (ScreenId.Shop,"商店"),
   (ScreenId.Character,"キャラクター"),
  };
 
@@ -32,13 +33,13 @@ public sealed partial class PackspireUiFoundation {
 
   navBackButton=new Button(NavGoBack){text="← 戻る"};
   navBackButton.AddToClassList("ps-nav-back");
-  navBackButton.AddToClassList("ps-chrome-action");
+  navBackButton.AddToClassList("ps-action-nav");
   navBackButton.pickingMode=PickingMode.Position;
   navHudRoot.Add(navBackButton);
 
-  navMenuButton=new Button(ToggleNavMenu){text="☰"};
+  navMenuButton=new Button(ToggleNavMenu){text="☰ メニュー"};
   navMenuButton.AddToClassList("ps-nav-menu-btn");
-  navMenuButton.AddToClassList("ps-chrome-action");
+  navMenuButton.AddToClassList("ps-action-nav");
   navMenuButton.tooltip="管理メニュー";
   navMenuButton.pickingMode=PickingMode.Position;
   navHudRoot.Add(navMenuButton);
@@ -62,7 +63,7 @@ public sealed partial class PackspireUiFoundation {
    var entry=dest;
    var item=new Button(()=>NavMenuGo(entry.id)){text=entry.label,userData=entry.id};
    item.AddToClassList("ps-nav-menu-item");
-   item.AddToClassList("ps-chrome-action");
+   item.AddToClassList("ps-list-item");
    navMenuDrawer.Add(item);
   }
   navHudRoot.Add(navMenuDrawer);
@@ -92,7 +93,7 @@ public sealed partial class PackspireUiFoundation {
  bool IsNavHistoryScreen(ScreenId id){
   if(id==ScreenId.Pack)return game!=null&&game.UiPackingAtBase;
   return id is ScreenId.Hub or ScreenId.Status or ScreenId.Vault or ScreenId.Heirloom or ScreenId.Faction
-   or ScreenId.Expedition or ScreenId.Compendium or ScreenId.Character;
+   or ScreenId.Expedition or ScreenId.Compendium or ScreenId.Character or ScreenId.Shop;
  }
 
  bool IsManagementNavScreen(ScreenId id)=>IsNavHistoryScreen(id)&&id!=ScreenId.Hub;
@@ -107,11 +108,12 @@ public sealed partial class PackspireUiFoundation {
    case ScreenId.Map:
    case ScreenId.Battle:
    case ScreenId.Reward:
-   case ScreenId.Shop:
    case ScreenId.Event:
    case ScreenId.GameOver:
    case ScreenId.GameClear:
     return false;
+   case ScreenId.Shop:
+    return shopPreviewMode;
    case ScreenId.Pack:
     return game.UiPackingAtBase;
    default:
@@ -142,6 +144,7 @@ public sealed partial class PackspireUiFoundation {
  bool NavDestinationAvailable(ScreenId id){
   if(id==ScreenId.Character&&!game.UiMeta.characterMade)return false;
   if(id==ScreenId.Pack)return game.UiPackingAtBase||game.UiScreen==ScreenId.Hub||game.UiRun==null;
+  if(id==ScreenId.Shop)return true;
   return true;
  }
 

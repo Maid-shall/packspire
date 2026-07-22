@@ -823,21 +823,22 @@
 
 .ps-dev-access-hint {
     left: auto;
-    right: 10px;
-    bottom: 10px;
+    right: 16px;
+    top: 14px;
+    bottom: auto;
     width: 72px;
-    height: 26px;
+    height: 28px;
     font-size: 11px;
     background-color: rgba(18, 20, 24, 0.55);
-    color: rgba(210, 190, 140, 0.75);
+    color: rgba(210, 190, 140, 0.72);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(160, 130, 70, 0.45);
-    border-right-color: rgba(160, 130, 70, 0.45);
-    border-top-color: rgba(160, 130, 70, 0.45);
-    border-bottom-color: rgba(160, 130, 70, 0.45);
+    border-left-color: rgba(160, 130, 70, 0.4);
+    border-right-color: rgba(160, 130, 70, 0.4);
+    border-top-color: rgba(160, 130, 70, 0.4);
+    border-bottom-color: rgba(160, 130, 70, 0.4);
 }
 
 .ps-route-battle {

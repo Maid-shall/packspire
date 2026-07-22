@@ -1,54 +1,51 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
- const int HubReelSlotHeight=68;
-
- int hubReelIndex;
- bool hubStreetGuideOpen;
- string hubStreetGuideCategory="all";
+ float hubFacilityScrollY;
  int hubStreetGuideSelectedIndex;
- float hubReelScrollY;
+ string hubStreetGuideCategory="all";
+ bool hubStreetGuideOpen;
 
  VisualElement hubShell;
- ScrollView hubReelScroll;
- VisualElement hubCenterBg;
- VisualElement hubCenterCharacterHost;
- VisualElement hubCenterInfo;
- Label hubCenterFacilityName;
- Label hubCenterFacilityDesc;
- Label hubCenterHint;
- Label hubCenterMeta;
+ ScrollView hubFacilityScroll;
+ VisualElement hubCharacterHost;
+ VisualElement hubBriefingHost;
+ Label hubGoldLabel;
  Button hubStreetGuideEntry;
  VisualElement hubStreetGuideModal;
  VisualElement hubStreetGuideList;
  VisualElement hubStreetGuideDetail;
  ScrollView hubStreetGuideFacilityScroll;
 
+ // Legacy reel scroll ref kept null (v4 uses hubFacilityScroll).
+ ScrollView hubReelScroll;
+
  void BuildHub(){
   hubStreetGuideOpen=false;
   var meta=game.UiMeta;
-  var facilities=HubFacilityCatalog.ReelFacilities();
-  if(hubReelIndex<0||hubReelIndex>=facilities.Length)hubReelIndex=0;
+  var facilities=HubFacilityCatalog.NavFacilities();
 
-  hubShell=Container("ps-hub-v3");
+  hubShell=Container("ps-hub-v4");
   screenRoot.Add(hubShell);
 
   var bgLayer=Container("ps-hub-layer-bg");
   bgLayer.pickingMode=PickingMode.Ignore;
   var hubBg=HubBackgroundArt();
-  if(hubBg!=null)bgLayer.Add(Image(hubBg,new Rect(0,0,1,1),"ps-hub-v3-bg",ScaleMode.ScaleAndCrop));
-  bgLayer.Add(Container("ps-hub-v3-shade"));
+  if(hubBg!=null)bgLayer.Add(Image(hubBg,new Rect(0,0,1,1),"ps-hub-v4-bg",ScaleMode.ScaleAndCrop));
+  bgLayer.Add(Container("ps-hub-v4-shade-left"));
+  bgLayer.Add(Container("ps-hub-v4-shade-center"));
+  bgLayer.Add(Container("ps-hub-v4-shade-right"));
   foreach(var child in bgLayer.Children())child.pickingMode=PickingMode.Ignore;
   hubShell.Add(bgLayer);
 
-  var hudLayer=Container("ps-hub-layer-hud ps-hub-v3-columns");
-  var leftCol=BuildHubLeftColumn(facilities);
-  var stageCol=BuildHubStageColumn(meta);
-  hudLayer.Add(leftCol);
-  hudLayer.Add(stageCol);
+  var hudLayer=Container("ps-hub-layer-hud ps-hub-v4-columns");
+  hudLayer.Add(BuildHubNavColumn(facilities));
+  hudLayer.Add(BuildHubCharacterColumn(meta));
+  hudLayer.Add(BuildHubBriefingColumn(meta));
   hubShell.Add(hudLayer);
 
   hubStreetGuideModal=BuildHubStreetGuideModal();
@@ -60,115 +57,230 @@ public sealed partial class PackspireUiFoundation {
   hubShell.focusable=true;
   hubShell.schedule.Execute(()=>hubShell?.Focus()).StartingIn(1);
 
-  UpdateHubReelVisuals();
-  UpdateHubCenterPanel();
+  RefreshHubGold(meta);
+  RefreshHubBriefing(meta);
+  hubShell.schedule.Execute(()=>{
+   if(hubFacilityScroll!=null&&hubFacilityScrollY>0f)
+    hubFacilityScroll.scrollOffset=new Vector2(0,hubFacilityScrollY);
+  }).StartingIn(16);
  }
 
- VisualElement BuildHubLeftColumn(HubFacilityDef[] facilities){
-  var col=Container("ps-hub-col-left");
+ VisualElement BuildHubNavColumn(HubFacilityDef[] facilities){
+  var col=Container("ps-hub-col-nav");
+  var header=Container("ps-hub-nav-header");
+  header.pickingMode=PickingMode.Ignore;
+  var eyebrow=new Label("HOME  /  FACILITIES"){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-hub-nav-eyebrow");
+  var title=new Label("施設"){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-hub-nav-title");
+  header.Add(eyebrow);
+  header.Add(title);
+  col.Add(header);
 
-  var reelStack=Container("ps-hub-reel-stack");
-  var reelWrap=Container("ps-hub-reel-wrap");
-  var fadeTop=Container("ps-hub-reel-fade ps-hub-reel-fade-top");
-  fadeTop.pickingMode=PickingMode.Ignore;
-  var fadeBottom=Container("ps-hub-reel-fade ps-hub-reel-fade-inner-bottom");
-  fadeBottom.pickingMode=PickingMode.Ignore;
-
-  hubReelScroll=new ScrollView(ScrollViewMode.Vertical);
-  hubReelScroll.AddToClassList("ps-hub-reel-scroll");
-  hubReelScroll.name="hub-reel-scroll";
-  hubReelScroll.verticalScrollerVisibility=ScrollerVisibility.Hidden;
-  hubReelScroll.RegisterCallback<WheelEvent>(evt=>{evt.StopPropagation();hubShell?.schedule.Execute(UpdateHubReelFade);});
-  hubReelScroll.RegisterCallback<GeometryChangedEvent>(_=>UpdateHubReelFade());
+  var surface=Container("ps-hub-nav-surface");
+  hubFacilityScroll=new ScrollView(ScrollViewMode.Vertical);
+  hubFacilityScroll.AddToClassList("ps-hub-nav-scroll");
+  hubFacilityScroll.name="hub-nav-scroll";
+  hubFacilityScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
+  hubFacilityScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
+  StretchMgmtScrollContent(hubFacilityScroll,false);
 
   for(int i=0;i<facilities.Length;i++){
-   int index=i;
    var facility=facilities[i];
-   var row=BuildHubChromeFacility(facility,index,index==hubReelIndex,()=>OnHubReelRowClick(index));
-   row.AddToClassList("ps-hub-reel-slot");
-   hubReelScroll.Add(row);
+   var row=BuildHubNavFacilityRow(facility,()=>EnterHubFacility(facility));
+   hubFacilityScroll.Add(row);
+   if(i<facilities.Length-1){
+    var rule=Container("ps-hub-nav-rule");
+    rule.pickingMode=PickingMode.Ignore;
+    hubFacilityScroll.Add(rule);
+   }
   }
 
-  reelWrap.Add(fadeTop);
-  reelWrap.Add(hubReelScroll);
-  reelWrap.Add(fadeBottom);
-  reelStack.Add(reelWrap);
+  surface.Add(hubFacilityScroll);
+  col.Add(surface);
 
-  var enter=BuildHubChromePrimary("施設へ入る",ConfirmHubReelSelection);
-  enter.AddToClassList("ps-hub-reel-enter");
-  reelStack.Add(enter);
-  col.Add(reelStack);
-
+  // Street guide stays at the bottom of the left column, separate from the facility list.
   var guideFooter=Container("ps-hub-guide-footer");
   hubStreetGuideEntry=BuildHubChromeStreetGuide(OpenHubStreetGuide) as Button;
   guideFooter.Add(hubStreetGuideEntry);
   col.Add(guideFooter);
-
-  hubShell?.schedule.Execute(()=>{
-   ScrollHubReelToSelection();
-   if(hubReelScroll!=null&&hubReelScrollY>0f)
-    hubReelScroll.scrollOffset=new Vector2(0,hubReelScrollY);
-   UpdateHubReelFade();
-  }).StartingIn(32);
   return col;
  }
 
- void OnHubReelRowClick(int index){
-  if(index==hubReelIndex)ConfirmHubReelSelection();
-  else SelectHubReel(index);
+ VisualElement BuildHubNavFacilityRow(HubFacilityDef facility,System.Action onClick){
+  var button=new Button(onClick){name=$"hub-nav-{facility.id}",userData=facility.id,tooltip=facility.description};
+  button.AddToClassList("ps-hub-nav-row");
+  if(!facility.unlocked){
+   button.AddToClassList("ps-locked");
+   button.SetEnabled(false);
+  }
+
+  var accent=Container("ps-hub-nav-accent");
+  accent.pickingMode=PickingMode.Ignore;
+  button.Add(accent);
+
+  var seal=Container("ps-hub-nav-seal");
+  seal.pickingMode=PickingMode.Ignore;
+  seal.Add(new Label(facility.seal){pickingMode=PickingMode.Ignore});
+  button.Add(seal);
+
+  var copy=Container("ps-hub-nav-copy");
+  copy.pickingMode=PickingMode.Ignore;
+  var name=new Label(facility.label){pickingMode=PickingMode.Ignore};
+  name.AddToClassList("ps-hub-nav-name");
+  var desc=new Label(facility.description){pickingMode=PickingMode.Ignore};
+  desc.AddToClassList("ps-hub-nav-desc");
+  copy.Add(name);
+  copy.Add(desc);
+  button.Add(copy);
+  return button;
  }
 
- VisualElement BuildHubStageColumn(MetaSave meta){
-  var col=Container("ps-hub-col-stage ps-hub-layer-world");
-  hubCenterBg=Container("ps-hub-center-bg");
-  hubCenterBg.pickingMode=PickingMode.Ignore;
-  col.Add(hubCenterBg);
+ void EnterHubFacility(HubFacilityDef facility){
+  if(!facility.unlocked)return;
+  if(hubFacilityScroll!=null)hubFacilityScrollY=hubFacilityScroll.scrollOffset.y;
+  game.UiNavigate(facility.screen);
+ }
 
-  var metaChip=Container("ps-hub-stage-meta-chip");
-  metaChip.pickingMode=PickingMode.Ignore;
+ VisualElement BuildHubCharacterColumn(MetaSave meta){
+  var col=Container("ps-hub-col-character");
+  var stage=Container("ps-hub-character-stage");
+  stage.pickingMode=PickingMode.Ignore;
+
+  var vignette=Container("ps-hub-character-vignette");
+  vignette.pickingMode=PickingMode.Ignore;
+  stage.Add(vignette);
+
+  hubCharacterHost=Container("ps-hub-character-host");
+  hubCharacterHost.pickingMode=PickingMode.Ignore;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var goldLabel=new Label($"{meta.baseGold} G"){pickingMode=PickingMode.Ignore};
-  goldLabel.AddToClassList("ps-hub-stage-gold");
-  metaChip.Add(goldLabel);
-  col.Add(metaChip);
+  hubCharacterHost.Add(BuildHubCharacterPortrait(character));
+  stage.Add(hubCharacterHost);
 
-  hubCenterCharacterHost=Container("ps-hub-center-character");
-  hubCenterCharacterHost.pickingMode=PickingMode.Ignore;
-  hubCenterCharacterHost.Add(BuildHubCenterPortrait(character));
-  col.Add(hubCenterCharacterHost);
-
-  hubCenterMeta=PackspireUiFactory.Body("");
-  hubCenterMeta.AddToClassList("ps-hub-center-meta");
-  hubCenterMeta.pickingMode=PickingMode.Ignore;
-  col.Add(hubCenterMeta);
-
-  hubCenterInfo=Container("ps-hub-center-info");
-  hubCenterFacilityName=new Label(""){pickingMode=PickingMode.Ignore};
-  hubCenterFacilityName.AddToClassList("ps-hub-center-facility-name");
-  hubCenterFacilityDesc=new Label(""){pickingMode=PickingMode.Ignore};
-  hubCenterFacilityDesc.AddToClassList("ps-hub-center-facility-desc");
-  hubCenterHint=new Label(""){pickingMode=PickingMode.Ignore};
-  hubCenterHint.AddToClassList("ps-hub-center-hint");
-  hubCenterInfo.Add(hubCenterFacilityName);
-  hubCenterInfo.Add(hubCenterFacilityDesc);
-  hubCenterInfo.Add(hubCenterHint);
-  col.Add(hubCenterInfo);
-
-  RefreshHubCenterMeta(meta,character);
+  var ground=Container("ps-hub-character-ground");
+  ground.pickingMode=PickingMode.Ignore;
+  stage.Add(ground);
+  col.Add(stage);
   return col;
  }
 
- VisualElement BuildHubCenterPortrait(CharacterDef character){
-  var frame=Container("ps-hub-center-portrait-frame");
-  var portrait=CharacterPortraitFront(character,"ps-hub-center-portrait");
-  frame.Add(portrait);
+ VisualElement BuildHubCharacterPortrait(CharacterDef character){
+  var frame=Container("ps-hub-character-portrait-frame");
+  frame.pickingMode=PickingMode.Ignore;
+  var rim=Container("ps-hub-character-rim");
+  rim.pickingMode=PickingMode.Ignore;
+  frame.Add(rim);
+  frame.Add(CharacterPortraitFront(character,"ps-hub-character-portrait"));
   return frame;
  }
 
- void RefreshHubCenterMeta(MetaSave meta,CharacterDef character){
-  if(hubCenterMeta==null)return;
-  var roleName=GameCatalog.Roles.ContainsKey(meta.currentRole)?GameCatalog.Roles[meta.currentRole].name:meta.currentRole;
-  hubCenterMeta.text=$"{character.name}　{character.title}　|　{roleName}　|　Week {meta.runs+1}";
+ VisualElement BuildHubBriefingColumn(MetaSave meta){
+  var col=Container("ps-hub-col-briefing");
+
+  var goldChip=Container("ps-hub-gold-chip");
+  goldChip.pickingMode=PickingMode.Ignore;
+  hubGoldLabel=new Label($"{meta.baseGold} G"){pickingMode=PickingMode.Ignore};
+  hubGoldLabel.AddToClassList("ps-hub-gold-label");
+  goldChip.Add(hubGoldLabel);
+  col.Add(goldChip);
+
+  var spacer=Container("ps-hub-briefing-spacer");
+  spacer.pickingMode=PickingMode.Ignore;
+  col.Add(spacer);
+
+  var board=Container("ps-hub-briefing-board");
+  var header=Container("ps-hub-briefing-header");
+  header.pickingMode=PickingMode.Ignore;
+  var eyebrow=new Label("BRIEFING"){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-hub-briefing-eyebrow");
+  var title=new Label("目的と通知"){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-hub-briefing-title");
+  header.Add(eyebrow);
+  header.Add(title);
+  board.Add(header);
+
+  hubBriefingHost=Container("ps-hub-briefing-host");
+  board.Add(hubBriefingHost);
+  col.Add(board);
+  return col;
+ }
+
+ void RefreshHubGold(MetaSave meta){
+  if(hubGoldLabel!=null)hubGoldLabel.text=$"{meta.baseGold} G";
+ }
+
+ void RefreshHubBriefing(MetaSave meta){
+  if(hubBriefingHost==null)return;
+  hubBriefingHost.Clear();
+  var items=BuildHubBriefingItems(meta).Take(3).ToList();
+  if(items.Count==0){
+   var empty=new Label("受注中の依頼はありません"){pickingMode=PickingMode.Ignore};
+   empty.AddToClassList("ps-hub-briefing-empty");
+   hubBriefingHost.Add(empty);
+   var cta=new Button(()=>EnterHubFacility(HubFacilityCatalog.Find("gate"))){text="遠征準備を開く"};
+   cta.AddToClassList("ps-hub-briefing-cta");
+   cta.AddToClassList("ps-action-secondary");
+   hubBriefingHost.Add(cta);
+   return;
+  }
+  foreach(var item in items)
+   hubBriefingHost.Add(BuildHubBriefingItem(item));
+ }
+
+ readonly struct HubBriefingItem {
+  public readonly string kind;
+  public readonly string title;
+  public readonly string body;
+  public readonly string facilityId;
+  public HubBriefingItem(string kind,string title,string body,string facilityId=""){
+   this.kind=kind;this.title=title;this.body=body;this.facilityId=facilityId;
+  }
+ }
+
+ IEnumerable<HubBriefingItem> BuildHubBriefingItems(MetaSave meta){
+  var active=LoadoutSystem.Active(meta);
+  int loadoutCount=active?.slots?.Count??0;
+  if(loadoutCount<=0)
+   yield return new HubBriefingItem("recommend","遠征準備","荷造りが空です。装備を整えてから門へ向かいましょう。","forge");
+  else
+   yield return new HubBriefingItem("objective","次の目的",$"荷造り「{active.name}」で遠征準備へ進める。","gate");
+
+  if(string.IsNullOrEmpty(meta.selectedHeirloomUid))
+   yield return new HubBriefingItem("notice","家宝未設定","長期育成する装備を家宝画面で選べます。","heirloom");
+  else {
+   var heir=meta.stash?.FirstOrDefault(x=>x.uid==meta.selectedHeirloomUid);
+   if(heir!=null&&GameCatalog.Items.ContainsKey(heir.templateId))
+    yield return new HubBriefingItem("notice","家宝",GameCatalog.Items[heir.templateId].name+"を育成中。","heirloom");
+  }
+
+  int discovery=meta.discoveredItems.Count+meta.discoveredEnemies.Count;
+  if(discovery>0)
+   yield return new HubBriefingItem("progress","図鑑の記録",$"装備 {meta.discoveredItems.Count}　／　敵 {meta.discoveredEnemies.Count}","codex");
+  else
+   yield return new HubBriefingItem("progress","拠点の推奨","ステータスで役職の進捗を確認できます。","guild");
+ }
+
+ VisualElement BuildHubBriefingItem(HubBriefingItem item){
+  var row=Container("ps-hub-briefing-item");
+  row.pickingMode=PickingMode.Ignore;
+  var mark=Container("ps-hub-briefing-mark ps-hub-briefing-mark-"+item.kind);
+  mark.pickingMode=PickingMode.Ignore;
+  row.Add(mark);
+  var copy=Container("ps-hub-briefing-copy");
+  copy.pickingMode=PickingMode.Ignore;
+  var title=new Label(item.title){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-hub-briefing-item-title");
+  var body=new Label(item.body){pickingMode=PickingMode.Ignore};
+  body.AddToClassList("ps-hub-briefing-item-body");
+  copy.Add(title);
+  copy.Add(body);
+  row.Add(copy);
+  if(!string.IsNullOrEmpty(item.facilityId)){
+   var link=new Button(()=>EnterHubFacility(HubFacilityCatalog.Find(item.facilityId))){text="開く"};
+   link.AddToClassList("ps-hub-briefing-link");
+   row.Add(link);
+  }
+  return row;
  }
 
  VisualElement BuildHubStreetGuideModal(){
@@ -221,73 +333,9 @@ public sealed partial class PackspireUiFoundation {
   host.Add(button);
  }
 
- void SelectHubReel(int index){
-  if(index==hubReelIndex)return;
-  SaveHubReelScroll();
-  hubReelIndex=index;
-  UpdateHubReelVisuals();
-  UpdateHubCenterPanel();
-  ScrollHubReelToSelection();
- }
-
- void SaveHubReelScroll(){if(hubReelScroll!=null)hubReelScrollY=hubReelScroll.scrollOffset.y;}
-
- void UpdateHubReelVisuals(){
-  if(hubReelScroll==null)return;
-  int i=0;
-  foreach(var child in hubReelScroll.Children()){
-   if(child is not Button row)continue;
-   bool selected=i==hubReelIndex;
-   int distance=Mathf.Abs(i-hubReelIndex);
-   row.EnableInClassList("ps-selected",selected);
-   row.EnableInClassList("ps-hub-reel-near",!selected&&distance==1);
-   row.EnableInClassList("ps-hub-reel-far",distance>=2);
-   i++;
-  }
- }
-
- void ScrollHubReelToSelection(){
-  if(hubReelScroll==null)return;
-  if(hubReelIndex<0||hubReelIndex>=hubReelScroll.childCount)return;
-  var target=hubReelScroll.ElementAt(hubReelIndex);
-  hubReelScroll.ScrollTo(target);
-  UpdateHubReelFade();
- }
-
- void UpdateHubReelFade(){
-  if(hubShell==null)return;
-  var wrap=hubShell.Q(className:"ps-hub-reel-wrap");
-  if(wrap==null)return;
-  float maxScroll=Mathf.Max(0,hubReelScroll.contentContainer.layout.height-hubReelScroll.layout.height);
-  float y=hubReelScroll.scrollOffset.y;
-  wrap.EnableInClassList("ps-hub-reel-has-above",y>4f);
-  wrap.EnableInClassList("ps-hub-reel-has-below",y<maxScroll-4f);
-  wrap.EnableInClassList("ps-hub-reel-has-inner-bottom",y<maxScroll-4f);
- }
-
- void UpdateHubCenterPanel(){
-  var facility=HubFacilityCatalog.GetReel(hubReelIndex);
-  if(hubCenterBg!=null){
-   string[] themes={"default","strata","forge","vault","heirloom","codex","guild","embassy","roster"};
-   foreach(var theme in themes)
-    hubCenterBg.EnableInClassList("ps-hub-theme-"+theme,theme==facility.themeKey);
-  }
-  if(hubCenterFacilityName!=null)hubCenterFacilityName.text=facility.label;
-  if(hubCenterFacilityDesc!=null)hubCenterFacilityDesc.text=string.IsNullOrEmpty(facility.description)?facility.eyebrow:facility.description;
-  if(hubCenterHint!=null)hubCenterHint.text=facility.unlocked?"Enter / 再クリックで入室":"未解放";
- }
-
- void ConfirmHubReelSelection(){
-  var facility=HubFacilityCatalog.GetReel(hubReelIndex);
-  if(!facility.unlocked)return;
-  SaveHubReelScroll();
-  game.UiNavigate(facility.screen);
- }
-
  void OpenHubStreetGuide(){
   hubStreetGuideOpen=true;
-  if(hubStreetGuideSelectedIndex<0||hubStreetGuideSelectedIndex>=HubFacilityCatalog.All.Length)
-   hubStreetGuideSelectedIndex=hubReelIndex;
+  if(hubStreetGuideSelectedIndex<0)hubStreetGuideSelectedIndex=0;
   hubStreetGuideModal.style.display=DisplayStyle.Flex;
   hubStreetGuideModal.pickingMode=PickingMode.Position;
   RefreshHubStreetGuideCategories();
@@ -302,7 +350,6 @@ public sealed partial class PackspireUiFoundation {
    hubStreetGuideModal.pickingMode=PickingMode.Ignore;
   }
   hubShell?.Focus();
-  UpdateHubReelFade();
  }
 
  void RefreshHubStreetGuideCategories(){
@@ -358,17 +405,9 @@ public sealed partial class PackspireUiFoundation {
   hubStreetGuideDetail.Add(PackspireUiFactory.Title(facility.label));
   hubStreetGuideDetail.Add(PackspireUiFactory.Body(facility.CategoryLabel+"　"+facility.eyebrow));
   hubStreetGuideDetail.Add(PackspireUiFactory.Body(facility.description));
-  hubStreetGuideDetail.Add(PackspireUiFactory.Body($"地図座標　{facility.mapX:0.00}, {facility.mapY:0.00}"));
   var enter=BuildHubChromePrimary("ここへ向かう",()=>{
-   int reelIdx=HubFacilityCatalog.IndexInReel(facility.id);
-   if(reelIdx>=0)hubReelIndex=reelIdx;
    CloseHubStreetGuide();
-   if(reelIdx>=0){
-    UpdateHubReelVisuals();
-    UpdateHubCenterPanel();
-    ScrollHubReelToSelection();
-   }
-   game.UiNavigate(facility.screen);
+   EnterHubFacility(facility);
   });
   enter.AddToClassList("ps-hub-street-guide-enter");
   hubStreetGuideDetail.Add(enter);
@@ -380,22 +419,10 @@ public sealed partial class PackspireUiFoundation {
    if(evt.keyCode==KeyCode.Escape){CloseHubStreetGuide();evt.StopPropagation();}
    return;
   }
-  int n=HubFacilityCatalog.ReelFacilities().Length;
-  if(n<=0)return;
-  if(evt.keyCode==KeyCode.UpArrow||evt.keyCode==KeyCode.W){
-   SelectHubReel((hubReelIndex-1+n)%n);
-   evt.StopPropagation();
-  }else if(evt.keyCode==KeyCode.DownArrow||evt.keyCode==KeyCode.S){
-   SelectHubReel((hubReelIndex+1)%n);
-   evt.StopPropagation();
-  }else if(evt.keyCode==KeyCode.Return||evt.keyCode==KeyCode.KeypadEnter){
-   ConfirmHubReelSelection();
-   evt.StopPropagation();
-  }else if(evt.keyCode==KeyCode.M){
+  if(evt.keyCode==KeyCode.M){
    OpenHubStreetGuide();
    evt.StopPropagation();
-  }
+  }else if(evt.keyCode==KeyCode.Escape)evt.StopPropagation();
  }
-
 }
 }

@@ -208,7 +208,8 @@ public sealed partial class PackspireUiFoundation {
  VisualElement InkRule(){var rule=Container("ps-ink-rule");rule.pickingMode=PickingMode.Ignore;return rule;}
  VisualElement Container(string classes){var element=new VisualElement();foreach(var value in classes.Split(' '))element.AddToClassList(value);return element;}
  Image Image(Texture2D texture,Rect uv,string className,ScaleMode mode){
-  var image=new Image{image=texture,uv=uv,scaleMode=mode,pickingMode=PickingMode.Ignore};
+  var image=new Image{uv=uv,scaleMode=mode,pickingMode=PickingMode.Ignore};
+  if(texture!=null)image.image=texture;
   foreach(var value in className.Split(' '))
    if(!string.IsNullOrEmpty(value))image.AddToClassList(value);
   return image;

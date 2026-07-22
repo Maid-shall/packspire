@@ -1,3 +1,8 @@
+/* Selective-frame + PopDark tokens (reference):
+   ink rgb(10,10,16) | grape rgb(18,14,36) | navy rgb(16,20,36)
+   ivory rgb(244,234,214) | coral rgb(255,120,140) | cyan rgb(88,210,196)
+   glow-purple rgb(120,60,140) | danger rgb(220,80,70) | brass rgb(122,98,68)
+*/
 .packspire-root {
     position: absolute;
     left: 0;
@@ -6,6 +11,10 @@
     bottom: 0;
     -unity-font-definition: resource("Fonts/KleeOne-Regular");
     color: rgb(48, 30, 16);
+    --ps-pop-coral: rgb(255, 120, 140);
+    --ps-pop-cyan: rgb(88, 210, 196);
+    --ps-pop-ivory: rgb(244, 234, 214);
+    --ps-pop-grape: rgb(18, 14, 36);
 }
 
 .ps-screen-host,
@@ -345,13 +354,13 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
-    margin-top: 12px;
 }
 
 .ps-vault-grid .ps-atlas-button {
-    width: 23%;
-    height: 138px;
-    margin: 1%;
+    /* Legacy atlas-button sizing retired; vault uses .ps-vault-grid-card */
+    width: auto;
+    height: auto;
+    margin: 0;
 }
 
 .ps-detail-actions,
@@ -1548,21 +1557,23 @@
 
 .ps-dev-access-global {
     position: absolute;
-    left: 14px;
-    bottom: 12px;
-    width: 76px;
-    height: 38px;
-    font-size: 13px;
-    background-color: rgb(22, 25, 29);
-    color: rgb(255, 220, 135);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: rgb(190, 139, 56);
-    border-right-color: rgb(190, 139, 56);
-    border-top-color: rgb(190, 139, 56);
-    border-bottom-color: rgb(190, 139, 56);
+    right: 16px;
+    top: 14px;
+    left: auto;
+    bottom: auto;
+    width: 72px;
+    height: 28px;
+    font-size: 11px;
+    background-color: rgba(18, 20, 24, 0.55);
+    color: rgba(210, 190, 140, 0.72);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(160, 130, 70, 0.4);
+    border-right-color: rgba(160, 130, 70, 0.4);
+    border-top-color: rgba(160, 130, 70, 0.4);
+    border-bottom-color: rgba(160, 130, 70, 0.4);
 }
 
 .ps-dev-panel-current {

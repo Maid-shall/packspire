@@ -1,5 +1,4 @@
 using System;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,8 +17,15 @@ public class CharacterDef {
  public string traitKind;
  public int traitValue;
  public string activeSkillId,activeSkillName,activeSkillText;
- /// <summary>Normalized UV for expedition banner eye background (x,y,w,h). Empty = catalog default.</summary>
+ /// <summary>Legacy UV crop (unused by focus banner). Kept for data compatibility.</summary>
  public Rect expeditionBannerUv;
+ /// <summary>Banner focus in image space, top-left origin (0-1). Eyes should sit near this point.</summary>
+ public float portraitFocusX=0.5f;
+ public float portraitFocusY=0.28f;
+ /// <summary>How much larger the art image is than the banner clip.</summary>
+ public float portraitZoom=2.2f;
+ public float portraitBannerOffsetX;
+ public float portraitBannerOffsetY;
  public CharacterDef(string id,string name,string title,string description,int portraitBody,int portraitHair,string traitName,string traitText,string traitKind,int traitValue,string activeSkillId,string activeSkillName,string activeSkillText,string portraitResource="",string portraitFrontResource="",string portraitHubResource=""){
   this.id=id;this.name=name;this.title=title;this.description=description;
   this.portraitBody=portraitBody;this.portraitHair=portraitHair;this.portraitResource=portraitResource;
@@ -58,14 +64,20 @@ public static class CharacterCatalog {
    "Art/Portraits/hero-sena-kick-v1"),
  };
  static CharacterCatalog(){
-  SetExpeditionBannerUv("ren",new Rect(0.08f,0.72f,0.84f,0.22f));
-  SetExpeditionBannerUv("mio",new Rect(0.12f,0.74f,0.76f,0.20f));
-  SetExpeditionBannerUv("kuro",new Rect(0.06f,0.71f,0.88f,0.23f));
-  SetExpeditionBannerUv("hina",new Rect(0.10f,0.73f,0.80f,0.21f));
-  SetExpeditionBannerUv("sena",new Rect(0.22f,0.76f,0.56f,0.20f));
+  // Top-left focus for banner (measured against hero-sena-kick-v1 eye position).
+  SetPortraitFocus("sena",0.39f,0.22f,2.65f,0f,0.02f);
+  SetPortraitFocus("ren",0.50f,0.26f,2.2f);
+  SetPortraitFocus("mio",0.50f,0.26f,2.2f);
+  SetPortraitFocus("kuro",0.50f,0.26f,2.2f);
+  SetPortraitFocus("hina",0.50f,0.26f,2.2f);
  }
- static void SetExpeditionBannerUv(string id,Rect uv){
-  if(All.TryGetValue(id,out var def))def.expeditionBannerUv=uv;
+ static void SetPortraitFocus(string id,float focusX,float focusY,float zoom,float offsetX=0f,float offsetY=0f){
+  if(!All.TryGetValue(id,out var def))return;
+  def.portraitFocusX=Mathf.Clamp01(focusX);
+  def.portraitFocusY=Mathf.Clamp01(focusY);
+  def.portraitZoom=Mathf.Max(1.1f,zoom);
+  def.portraitBannerOffsetX=offsetX;
+  def.portraitBannerOffsetY=offsetY;
  }
 
  public static CharacterDef Get(string id){

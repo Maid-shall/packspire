@@ -37,7 +37,7 @@ public partial class PackspireGame : MonoBehaviour {
   explorationEventActive=false;explorationEventNodeId=-1;
   if(target==ScreenId.Pack)OpenPacking();
   else{
-   if(target==ScreenId.Hub||target==ScreenId.Status||target==ScreenId.Vault||target==ScreenId.Heirloom||target==ScreenId.Faction||target==ScreenId.Expedition||target==ScreenId.Compendium){
+   if(target==ScreenId.Hub||target==ScreenId.Status||target==ScreenId.Vault||target==ScreenId.Heirloom||target==ScreenId.Faction||target==ScreenId.Expedition||target==ScreenId.Compendium||target==ScreenId.Character){
     run=null;exploration=null;SetRoutePresentationMode(RoutePresentationMode.None);
    }
    screen=target;

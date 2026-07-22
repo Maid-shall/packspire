@@ -16,56 +16,58 @@
     flex-direction: column;
 }
 
-/* Dark-surface readability (minimum contrast) */
+/* Dark-surface readability (minimum contrast) — aligned with Polish typography */
 .ps-dark-surface .ps-title {
-    color: rgb(255, 240, 215);
+    color: rgb(244, 234, 214);
     font-size: 28px;
 }
 
 .ps-dark-surface .ps-body {
-    color: rgb(230, 218, 195);
+    color: rgb(232, 222, 204);
     font-size: 17px;
     white-space: normal;
 }
 
 .ps-dark-surface .ps-mgmt-section-title {
     font-size: 20px;
-    color: rgb(255, 210, 150);
+    color: rgb(210, 176, 118);
 }
 
+.ps-dark-surface .ps-mgmt-section-body,
 .ps-dark-surface .ps-mgmt-section .ps-body {
-    font-size: 16px;
-    color: rgb(220, 210, 190);
+    font-size: 17px;
+    color: rgb(232, 222, 204);
 }
 
 .ps-dark-surface .ps-mgmt-list-sub,
+.ps-dark-surface .ps-mgmt-section-dim .ps-mgmt-section-body,
 .ps-dark-surface .ps-mgmt-section-dim .ps-body {
-    color: rgb(180, 170, 200);
+    color: rgb(178, 168, 188);
     opacity: 1;
 }
 
 .ps-dark-surface .ps-button:disabled {
-    color: rgb(190, 180, 165);
-    opacity: 0.72;
+    color: rgb(150, 142, 158);
+    opacity: 1;
 }
 
 .ps-dark-surface .ps-chrome-eyebrow {
-    color: rgb(200, 190, 210);
-    font-size: 14px;
+    color: rgb(186, 176, 196);
+    font-size: 13px;
 }
 
 .ps-dark-surface .ps-chrome-title {
-    color: rgb(255, 240, 215);
-    font-size: 28px;
+    color: rgb(244, 234, 214);
+    font-size: 36px;
 }
 
 .ps-dark-surface .ps-chrome-section-en {
-    color: rgb(255, 200, 140);
-    font-size: 14px;
+    color: rgb(210, 176, 118);
+    font-size: 13px;
 }
 
 .ps-dark-surface .ps-chrome-section-jp {
-    color: rgb(230, 218, 195);
+    color: rgb(232, 222, 204);
     font-size: 20px;
     -unity-font-style: bold;
 }
@@ -76,6 +78,7 @@
     min-height: 56px;
 }
 
+.ps-expedition-detail-body,
 .ps-exp-detail-body {
     flex-direction: column;
     flex-shrink: 0;
@@ -88,15 +91,15 @@
 }
 
 .ps-exp-info-stack-label {
-    font-size: 14px;
-    color: rgb(255, 200, 140);
+    font-size: 15px;
+    color: rgb(168, 158, 178);
     white-space: normal;
-    margin-bottom: 2px;
+    margin-bottom: 6px;
 }
 
 .ps-exp-info-stack-value {
-    font-size: 16px;
-    color: rgb(230, 218, 195);
+    font-size: 17px;
+    color: rgb(220, 210, 192);
     white-space: normal;
 }
 
@@ -143,23 +146,28 @@
 
 .ps-nav-back {
     position: absolute;
-    left: 16px;
-    top: 16px;
-    min-width: 110px;
-    min-height: 40px;
-    font-size: 17px;
+    left: 24px;
+    top: 20px;
+    min-width: 88px;
+    min-height: 36px;
+    font-size: 15px;
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 .ps-nav-menu-btn {
     position: absolute;
-    left: 16px;
-    bottom: 16px;
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    min-height: 48px;
-    font-size: 20px;
-    padding: 0;
+    left: 24px;
+    bottom: 22px;
+    width: auto;
+    height: 40px;
+    min-width: 108px;
+    min-height: 40px;
+    font-size: 14px;
+    padding-left: 8px;
+    padding-right: 10px;
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
 .ps-nav-menu-backdrop {
@@ -178,15 +186,15 @@
     bottom: 0;
     width: 240px;
     padding: 56px 12px 16px 12px;
-    background-color: rgba(18, 14, 38, 0.96);
-    border-right-width: 2px;
-    border-right-color: rgba(120, 90, 180, 0.65);
+    background-color: rgba(12, 14, 24, 0.96);
+    border-right-width: 1px;
+    border-right-color: rgba(148, 118, 78, 0.45);
     flex-direction: column;
 }
 
 .ps-nav-menu-title {
-    font-size: 20px;
-    color: rgb(255, 228, 180);
+    font-size: 18px;
+    color: rgb(236, 226, 208);
     margin-bottom: 10px;
     -unity-font-style: bold;
 }
@@ -202,57 +210,46 @@
     border-left-color: rgb(120, 220, 200);
 }
 
-/* Expedition detail column fix */
-.ps-expedition-detail-column {
-    flex-direction: column;
-    min-height: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
-.ps-expedition-detail-scroll {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 0;
-    max-height: 100%;
-}
+/* Expedition detail column ownership moved to PackspireManagement.uss.
+   Keep only non-conflicting content styles here. Do not reintroduce
+   absolute footers, max-height scroll fights, or margin-top:auto footers. */
 
 .ps-exp-section {
     flex-direction: column;
     flex-shrink: 0;
-    margin-bottom: 14px;
+    margin-bottom: 28px;
 }
 
 .ps-exp-dungeon-name {
-    font-size: 24px;
-    color: rgb(255, 240, 215);
+    font-size: 28px;
+    color: rgb(236, 226, 208);
     white-space: normal;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     flex-shrink: 0;
     -unity-font-style: bold;
 }
 
 .ps-exp-dungeon-desc {
-    font-size: 16px;
-    color: rgb(220, 210, 190);
+    font-size: 17px;
+    color: rgb(210, 200, 185);
     white-space: normal;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     flex-shrink: 0;
 }
 
 .ps-exp-info-row {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     flex-shrink: 0;
-    margin-bottom: 6px;
-    min-height: 22px;
+    margin-bottom: 12px;
+    min-height: 24px;
 }
 
 .ps-exp-info-label {
     width: 96px;
     min-width: 96px;
-    font-size: 14px;
-    color: rgb(255, 200, 140);
+    font-size: 13px;
+    color: rgb(168, 158, 178);
     white-space: normal;
     flex-shrink: 0;
 }
@@ -261,7 +258,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     font-size: 16px;
-    color: rgb(230, 218, 195);
+    color: rgb(236, 226, 208);
     white-space: normal;
 }
 
@@ -270,23 +267,20 @@
     flex-shrink: 0;
     margin-top: 8px;
     margin-bottom: 8px;
-    padding: 8px 10px;
-    background-color: rgba(22, 18, 44, 0.72);
-    border-left-width: 2px;
-    border-left-color: rgba(120, 220, 200, 0.45);
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 .ps-exp-loadout-detail-heading {
-    font-size: 18px;
-    color: rgb(255, 228, 180);
+    font-size: 16px;
+    color: rgb(236, 226, 208);
     white-space: normal;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     -unity-font-style: bold;
-}
-
-.departure-footer {
-    flex-shrink: 0;
-    margin-top: auto;
 }
 
 .ps-exp-loadout-edit {
@@ -354,10 +348,9 @@
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
-    background-color: rgba(12, 10, 28, 0.55);
-    border-left-width: 2px;
-    border-left-color: rgba(120, 90, 180, 0.45);
-    padding: 4px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    padding: 4px 0;
 }
 
 .ps-roster-reel {
@@ -370,15 +363,12 @@
     min-height: 0;
     justify-content: center;
     align-items: center;
-    background-color: rgba(12, 10, 28, 0.45);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-color: rgba(120, 90, 180, 0.45);
-    border-right-color: rgba(120, 90, 180, 0.45);
-    border-top-color: rgba(120, 90, 180, 0.45);
-    border-bottom-color: rgba(120, 90, 180, 0.45);
+    background-color: rgba(8, 10, 16, 0.22);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
 }
 
 .ps-roster-art-image {
@@ -392,10 +382,9 @@
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
-    background-color: rgba(12, 10, 28, 0.55);
-    border-left-width: 2px;
-    border-left-color: rgba(120, 90, 180, 0.55);
-    padding: 8px 10px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    padding: 8px 4px;
     margin-bottom: 8px;
 }
 
@@ -516,10 +505,12 @@
     flex-grow: 1;
     flex-direction: column;
     min-height: 0;
-    padding: 12px;
-    background-color: rgba(14, 10, 28, 0.42);
-    border-width: 1px;
-    border-color: rgba(180, 150, 220, 0.22);
+    padding: 18px 12px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
     overflow: hidden;
 }
 
@@ -531,7 +522,15 @@
     margin-bottom: 12px;
     justify-content: center;
     align-items: center;
-    background-color: rgba(8, 6, 18, 0.35);
+    background-color: rgba(10, 12, 18, 0.15);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(168, 136, 90, 0.78);
+    border-right-color: rgba(148, 118, 78, 0.62);
+    border-top-color: rgba(198, 164, 108, 0.82);
+    border-bottom-color: rgba(122, 98, 68, 0.62);
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -565,15 +564,15 @@
 }
 
 .ps-heirloom-stat-label {
-    font-size: 13px;
-    color: rgb(180, 160, 210);
+    font-size: 14px;
+    color: rgb(168, 158, 178);
     margin-bottom: 2px;
     flex-shrink: 0;
 }
 
 .ps-heirloom-stat-value {
     font-size: 17px;
-    color: rgb(245, 232, 210);
+    color: rgb(220, 210, 192);
     white-space: normal;
     flex-shrink: 0;
 }
@@ -583,10 +582,9 @@
     flex-shrink: 1;
     min-height: 0;
     height: 100%;
-    background-color: rgba(12, 10, 28, 0.45);
-    border-left-width: 2px;
-    border-left-color: rgba(160, 120, 200, 0.4);
-    padding: 8px 10px 16px 12px;
+    background-color: rgba(12, 16, 28, 0.82);
+    border-left-width: 0;
+    padding: 18px 22px 24px 22px;
 }
 
 .ps-heirloom-growth-body {
@@ -600,24 +598,26 @@
 .ps-heirloom-board-section {
     flex-direction: column;
     flex-shrink: 0;
-    margin-bottom: 10px;
-    padding: 10px 12px;
-    background-color: rgba(16, 12, 30, 0.35);
-    border-width: 1px;
-    border-color: rgba(160, 140, 190, 0.16);
+    margin-bottom: 18px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 .ps-heirloom-board-title {
-    font-size: 16px;
-    color: rgb(255, 210, 150);
-    margin-bottom: 4px;
+    font-size: 20px;
+    color: rgb(198, 164, 108);
+    margin-bottom: 6px;
     flex-shrink: 0;
     white-space: normal;
 }
 
 .ps-heirloom-board-body {
-    font-size: 15px;
-    color: rgb(225, 214, 195);
+    font-size: 16px;
+    color: rgb(220, 210, 192);
     white-space: normal;
     flex-shrink: 0;
 }
