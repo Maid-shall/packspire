@@ -6,7 +6,20 @@ public sealed partial class PackspireUiFoundation {
  void BuildRoot(){
   root=document.rootVisualElement;if(root==null||root.panel==null){uiReady=false;Debug.LogWarning("Packspire UI Toolkit root is not ready; legacy UI remains active.");return;}
   root.name="packspire-ui-root";root.AddToClassList("packspire-root");root.pickingMode=PickingMode.Ignore;
-  var theme=Resources.Load<StyleSheet>("UI/PackspireTheme");if(theme!=null)root.styleSheets.Add(theme);
+  string[] styleSheetPaths={
+   "UI/PackspireTheme",
+   "UI/PackspirePacking",
+   "UI/PackspireRoute",
+   "UI/PackspireRoster",
+   "UI/PackspireBattle",
+   "UI/PackspirePolish",
+   "UI/PackspireHub"
+  };
+  foreach(var path in styleSheetPaths){
+   var sheet=Resources.Load<StyleSheet>(path);
+   if(sheet!=null)root.styleSheets.Add(sheet);
+   else Debug.LogWarning($"Missing Packspire style sheet: {path}");
+  }
   screenRoot=new VisualElement{name="screen-root",pickingMode=PickingMode.Position};screenRoot.AddToClassList("ps-screen-host");root.Add(screenRoot);
   transitionRoot=new VisualElement{name="transition-root",pickingMode=PickingMode.Ignore};transitionRoot.AddToClassList("ps-transition-host");root.Add(transitionRoot);
   dim=Layer("transition-dim");leftPaper=Layer("transition-paper transition-paper-left");rightPaper=Layer("transition-paper transition-paper-right");scrollPaper=Layer("transition-scroll");battleShade=Layer("transition-battle");

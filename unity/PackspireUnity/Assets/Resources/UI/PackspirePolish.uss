@@ -1,0 +1,440 @@
+/* ===== Pop-dark shared chrome ===== */
+.ps-chrome-eyebrow,
+.ps-hub-dest-card-eye,
+.ps-chrome-section-en {
+    color: rgb(255, 140, 120);
+    -unity-text-outline-color: rgba(12, 8, 32, 0.9);
+}
+
+.ps-chrome-title,
+.ps-hub-dest-card-name {
+    color: rgb(255, 228, 180);
+    -unity-text-outline-color: rgba(12, 8, 32, 0.9);
+}
+
+.ps-chrome-section-jp {
+    color: rgb(200, 190, 230);
+}
+
+.ps-chrome-action,
+.ps-tabletop-back,
+.ps-chrome-plate-btn,
+.ps-battle-btn-end,
+.ps-battle .ps-button.ps-battle-btn-end,
+.ps-battle-btn-skill {
+    background-image: resource("Art/UI/PopDark/btn-wide-v1");
+    -unity-background-image-tint-color: rgb(170, 150, 210);
+    color: rgb(255, 228, 180);
+    -unity-text-outline-color: rgba(12, 8, 32, 0.9);
+}
+
+.ps-chrome-action:hover,
+.ps-tabletop-back:hover,
+.ps-chrome-plate-btn:hover {
+    -unity-background-image-tint-color: rgb(255, 220, 200);
+    color: rgb(255, 210, 160);
+}
+
+.ps-dd-roster-overlay,
+.ps-book-screen,
+.ps-tabletop-desk,
+.ps-rite,
+.ps-battle-screen {
+    background-color: rgb(22, 16, 48);
+}
+
+.ps-expedition-case,
+.ps-expanded-corkboard,
+.ps-detail-journal,
+.ps-map-roll-rack,
+.ps-event-panel,
+.ps-battle-hand-meta {
+    background-color: rgba(30, 22, 62, 0.94);
+    border-left-color: rgb(120, 90, 180);
+    border-right-color: rgb(60, 44, 110);
+    border-top-color: rgb(255, 140, 120);
+    border-bottom-color: rgb(40, 30, 80);
+}
+
+.ps-hub-chrome-btn {
+    background-image: resource("Art/UI/PopDark/btn-wide-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ps-hub-chrome-btn:hover {
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 230, 210);
+    color: rgb(255, 210, 160);
+}
+
+/* ===== Pop-dark rollout — shared chrome (non-hub screens) ===== */
+.ps-dd-roster-bg,
+.ps-book-scene-bg,
+.ps-rite-scene-bg {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-dd-roster-overlay .ps-atlas-button,
+.ps-dd-roster-overlay .ps-character-roster-tile,
+.ps-dd-roster-overlay .ps-dd-roster-name-plate,
+.ps-dd-roster-overlay .ps-dd-roster-confirm,
+.ps-battle-btn-end,
+.ps-battle .ps-button.ps-battle-btn-end,
+.ps-battle-btn-skill {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-dd-roster-overlay .ps-atlas-button:hover,
+.ps-dd-roster-overlay .ps-character-roster-tile:hover,
+.ps-dd-roster-overlay .ps-dd-roster-name-plate:hover {
+    -unity-background-image-tint-color: rgb(255, 230, 210);
+}
+
+.ps-dd-roster-overlay .ps-dd-roster-name-plate.ps-selected {
+    -unity-background-image-tint-color: rgb(255, 210, 180);
+    color: rgb(255, 200, 140);
+}
+
+.ps-expanded-corkboard,
+.ps-expedition-case,
+.ps-detail-journal,
+.ps-map-roll-rack,
+.ps-event-panel {
+    border-top-color: rgb(255, 140, 120);
+    border-left-color: rgb(120, 90, 180);
+    border-right-color: rgb(60, 44, 110);
+    border-bottom-color: rgb(40, 30, 80);
+}
+
+.ps-book-tab {
+    background-color: rgba(30, 22, 62, 0.92);
+    border-left-color: rgb(255, 140, 120);
+    border-top-color: rgb(255, 200, 140);
+    border-bottom-color: rgb(72, 196, 180);
+}
+
+.ps-book-tab.ps-selected {
+    background-color: rgba(48, 36, 92, 0.96);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-book-tab-label {
+    color: rgb(255, 228, 180);
+}
+
+/* --- Management screens: 3-column layout (1920x1080 baseline) --- */
+.ps-mgmt-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    padding: 16px 20px 10px 20px;
+    background-color: rgb(22, 16, 48);
+    overflow: hidden;
+}
+
+.ps-mgmt-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-mgmt-shade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(26, 20, 56, 0.58);
+}
+
+.ps-mgmt-header {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    min-height: 52px;
+}
+
+.ps-mgmt-back {
+    width: 150px;
+    min-height: 40px;
+}
+
+.ps-mgmt-body {
+    position: relative;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin-bottom: 6px;
+}
+
+.ps-mgmt-col-list {
+    flex: 0 0 29%;
+    width: 29%;
+    max-width: 29%;
+    min-width: 29%;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-col-art {
+    flex: 0 0 41%;
+    width: 41%;
+    max-width: 41%;
+    min-width: 41%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+    margin-right: 10px;
+}
+
+.ps-mgmt-col-detail {
+    flex: 0 0 30%;
+    width: 30%;
+    max-width: 30%;
+    min-width: 30%;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.ps-mgmt-list-header {
+    flex-shrink: 0;
+    flex-direction: column;
+    margin-bottom: 6px;
+}
+
+.ps-mgmt-list-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.45);
+    padding: 4px 2px;
+}
+
+.ps-mgmt-detail-scroll {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(12, 10, 28, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 90, 180, 0.55);
+    padding: 8px 10px;
+}
+
+.ps-mgmt-art-host {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 20, 0.42);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(255, 200, 140, 0.22);
+    border-right-color: rgba(60, 44, 110, 0.55);
+    border-bottom-color: rgba(40, 30, 80, 0.65);
+    border-left-color: rgba(255, 140, 120, 0.35);
+}
+
+.ps-mgmt-art-frame {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
+.ps-mgmt-art-frame.ps-mgmt-art-square {
+    max-width: 92%;
+    max-height: 92%;
+}
+
+.ps-mgmt-art-frame.ps-mgmt-art-portrait {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.ps-mgmt-art-image {
+    flex-grow: 0;
+    flex-shrink: 0;
+    opacity: 1;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-mgmt-art-frame.ps-mgmt-art-square .ps-mgmt-art-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-portrait-display-image {
+    flex-grow: 0;
+    flex-shrink: 0;
+    opacity: 1;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-mgmt-art-unknown .ps-portrait-display-image {
+    opacity: 0.32;
+}
+
+.ps-mgmt-art-unknown {
+    opacity: 0.32;
+}
+
+.ps-mgmt-filter-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.ps-mgmt-filter {
+    min-height: 32px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgba(30, 22, 62, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgba(255, 140, 120, 0.55);
+    color: rgb(255, 228, 180);
+}
+
+.ps-mgmt-filter.ps-selected {
+    background-color: rgba(48, 36, 92, 0.96);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-list-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 52px;
+    height: 52px;
+    margin-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: rgba(22, 18, 44, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-mgmt-list-row.ps-selected {
+    background-color: rgba(48, 36, 92, 0.88);
+    border-left-color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-list-row.ps-mgmt-list-unknown {
+    opacity: 0.72;
+}
+
+.ps-mgmt-list-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.ps-mgmt-thumb {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-mgmt-thumb-unknown {
+    opacity: 0.35;
+}
+
+.ps-mgmt-list-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ps-mgmt-list-name {
+    font-size: 14px;
+    color: rgb(255, 228, 180);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-mgmt-list-sub {
+    font-size: 11px;
+    color: rgba(200, 185, 150, 0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-mgmt-char-header {
+    flex-direction: column;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-mgmt-char-header .ps-title {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.ps-mgmt-char-header .ps-body {
+    font-size: 12px;
+    margin-bottom: 1px;
+}
+
+.ps-mgmt-section {
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.ps-mgmt-section-dim {
+    opacity: 0.48;
+}
+
+.ps-mgmt-section-title {
+    font-size: 13px;
+    margin-bottom: 2px;
+    color: rgb(255, 200, 140);
+}
+
+.ps-mgmt-section .ps-body {
+    font-size: 12px;
+    white-space: normal;
+}
+
+.ps-mgmt-action {
+    margin-top: 8px;
+    min-height: 38px;
+}

@@ -1,0 +1,254 @@
+/* ===== Playable character roster (DD popup) ===== */
+.ps-dd-roster-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(18, 14, 42);
+    overflow: hidden;
+}
+
+.ps-dd-roster-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-dd-roster-dim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(18, 12, 42, 0.45);
+}
+
+.ps-dd-roster-modal {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    top: 6%;
+    bottom: 6%;
+    padding: 20px 24px 18px 24px;
+    flex-direction: column;
+    background-image: none;
+    background-color: rgba(30, 22, 62, 0.94);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(72, 196, 180);
+    border-right-color: rgb(255, 140, 120);
+    border-top-color: rgb(255, 200, 140);
+    border-bottom-color: rgb(120, 90, 200);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.ps-dd-roster-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.ps-dd-roster-close {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    font-size: 22px;
+    color: rgb(196, 168, 98);
+}
+
+.ps-dd-roster-body {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 0;
+}
+
+.ps-dd-roster-name-reel-host {
+    width: 168px;
+    min-width: 168px;
+    padding-right: 14px;
+    justify-content: center;
+}
+
+.ps-dd-roster-name-reel-scroll {
+    flex-grow: 1;
+    max-height: 100%;
+}
+
+.ps-dd-roster-name-reel {
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.ps-dd-roster-name-plate {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(8, 4, 2, 0.92);
+}
+
+.ps-dd-roster-center {
+    width: 36%;
+    min-width: 280px;
+    padding-left: 8px;
+    padding-right: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-dd-roster-detail {
+    width: 0;
+    flex-grow: 1;
+    padding-left: 14px;
+    flex-direction: column;
+    border-left-width: 2px;
+    border-left-color: rgba(110, 36, 28, 0.55);
+}
+
+.ps-dd-roster-detail > .ps-title {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.ps-dd-roster-detail > .ps-body {
+    font-size: 13px;
+    margin-bottom: 8px;
+    white-space: normal;
+}
+
+.ps-dd-roster-origin-box {
+    margin-top: 12px;
+    min-height: 72px;
+    padding: 12px 14px;
+    flex-grow: 1;
+    background-color: rgba(14, 9, 6, 0.72);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(110, 36, 28);
+    border-right-color: rgb(46, 30, 18);
+    border-top-color: rgb(118, 82, 44);
+    border-bottom-color: rgb(30, 20, 12);
+}
+
+.ps-dd-roster-actions {
+    margin-top: 12px;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.ps-dd-roster-overlay .ps-dd-roster-confirm,
+.ps-dd-roster-overlay .ps-hub-chrome-btn {
+    background-image: resource("Art/UI/PopDark/btn-wide-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: rgb(196, 168, 98);
+}
+
+.ps-dd-roster-confirm {
+    min-width: 220px;
+    height: 44px;
+    min-height: 44px;
+    font-size: 16px;
+}
+
+.ps-character-preview {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    max-width: 420px;
+    height: 100%;
+    min-height: 360px;
+    margin-bottom: 0;
+    align-self: center;
+}
+
+.ps-character-roster-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.ps-character-roster-grid .ps-atlas-button,
+.ps-character-roster-tile {
+    width: 108px;
+    height: 132px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-image: resource("Art/UI/PopDark/btn-card-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 18px 8px 10px 8px;
+}
+
+.ps-character-roster-grid .ps-atlas-image {
+    flex-grow: 1;
+    min-height: 88px;
+}
+
+.ps-character-trait-box,
+.ps-character-skill-box {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background-color: rgba(14, 9, 6, 0.92);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(148, 108, 52);
+    border-right-color: rgb(46, 30, 18);
+    border-top-color: rgb(140, 110, 48);
+    border-bottom-color: rgb(30, 20, 12);
+}
+
+.ps-character-trait-name,
+.ps-character-skill-name {
+    font-size: 16px;
+    color: rgb(196, 168, 98);
+    margin-bottom: 4px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(8, 4, 2, 0.92);
+}
