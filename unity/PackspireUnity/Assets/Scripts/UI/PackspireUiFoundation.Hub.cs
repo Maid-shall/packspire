@@ -147,10 +147,6 @@ public sealed partial class PackspireUiFoundation {
   var stage=Container("ps-hub-character-stage");
   stage.pickingMode=PickingMode.Ignore;
 
-  var vignette=Container("ps-hub-character-vignette");
-  vignette.pickingMode=PickingMode.Ignore;
-  stage.Add(vignette);
-
   hubCharacterHost=Container("ps-hub-character-host");
   hubCharacterHost.pickingMode=PickingMode.Ignore;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
@@ -167,9 +163,6 @@ public sealed partial class PackspireUiFoundation {
  VisualElement BuildHubCharacterPortrait(CharacterDef character){
   var frame=Container("ps-hub-character-portrait-frame");
   frame.pickingMode=PickingMode.Ignore;
-  var rim=Container("ps-hub-character-rim");
-  rim.pickingMode=PickingMode.Ignore;
-  frame.Add(rim);
   frame.Add(CharacterPortraitFront(character,"ps-hub-character-portrait"));
   return frame;
  }

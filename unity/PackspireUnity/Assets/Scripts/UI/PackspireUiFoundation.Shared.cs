@@ -150,10 +150,14 @@ public sealed partial class PackspireUiFoundation {
    if(maxW<=1f)maxW=host.contentRect.width;
   }
   if(maxH<=1f||maxW<=1f)return;
-  const float inset=0.94f;
+  // Hub stage is tall; keep natural silhouette and avoid stretch-to-fill squash.
+  var inset=image.ClassListContains("ps-hub-character-portrait")?0.98f:0.94f;
   var fitH=Mathf.Min(maxH*inset,(maxW*inset)/aspect);
-  image.style.height=fitH;
   image.style.width=fitH*aspect;
+  image.style.height=fitH;
+  image.style.maxWidth=StyleKeyword.None;
+  image.style.maxHeight=StyleKeyword.None;
+  if(image is Image img)img.scaleMode=ScaleMode.ScaleToFit;
  }
 
  VisualElement BuildPortraitDisplay(Texture2D tex,string className){

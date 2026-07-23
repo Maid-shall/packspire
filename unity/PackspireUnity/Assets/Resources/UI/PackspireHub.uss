@@ -822,15 +822,6 @@
     overflow: hidden;
 }
 
-.ps-hub-character-vignette {
-    position: absolute;
-    left: 6%;
-    right: 6%;
-    top: 8%;
-    bottom: 2%;
-    background-color: rgba(20, 28, 40, 0.18);
-}
-
 .ps-hub-character-host {
     flex-grow: 1;
     flex-shrink: 1;
@@ -853,19 +844,16 @@
     overflow: visible;
 }
 
-.ps-hub-character-rim {
-    position: absolute;
-    left: 4%;
-    right: 4%;
-    top: 6%;
-    bottom: 2%;
-    background-color: rgba(180, 200, 220, 0.05);
-}
-
 .ps-hub-character-portrait,
 .ps-hub-character-portrait.ps-portrait-display-image {
-    width: 100%;
-    height: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    align-self: center;
+    background-color: rgba(0, 0, 0, 0);
     -unity-background-scale-mode: scale-to-fit;
 }
 
