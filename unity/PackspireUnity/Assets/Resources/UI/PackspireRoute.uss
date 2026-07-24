@@ -1,0 +1,2155 @@
+/* ===== Seal grid board (left detail / right map; hero where axes were) ===== */
+.ps-gboard {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(34, 28, 24);
+}
+
+.ps-gboard-top {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    height: 54px;
+    min-height: 54px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 14px;
+    background-color: rgba(54, 38, 24, 0.96);
+    border-left-width: 2px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(140, 115, 75, 0.32);
+    border-top-color: rgba(140, 115, 75, 0.32);
+    border-bottom-color: rgba(140, 115, 75, 0.32);
+}
+
+.ps-gboard-top-sub {
+    font-size: 11px;
+    color: rgba(170, 145, 95, 0.78);
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.ps-gboard-phase {
+    font-size: 13px;
+    color: rgb(210, 180, 110);
+    margin-left: 18px;
+}
+
+.ps-gboard-ink {
+    font-size: 13px;
+    color: rgb(160, 210, 220);
+    margin-left: auto;
+}
+
+.ps-gboard-dock {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 372px;
+    padding: 76px 16px 10px 16px;
+    flex-direction: column;
+    background-color: rgb(72, 52, 34);
+    border-right-width: 1px;
+    border-right-color: rgba(170, 135, 70, 0.55);
+}
+
+.ps-gboard-panel {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    min-height: 180px;
+    padding: 18px 18px 12px 18px;
+    flex-direction: column;
+    background-color: rgba(54, 38, 24, 0.94);
+    border-left-width: 2px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(140, 115, 75, 0.32);
+    border-top-color: rgba(140, 115, 75, 0.32);
+    border-bottom-color: rgba(140, 115, 75, 0.32);
+}
+
+.ps-gboard-panel-type {
+    font-size: 12px;
+    color: rgb(210, 175, 95);
+    margin-bottom: 4px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-panel-title {
+    font-size: 26px;
+    color: rgb(255, 238, 200);
+    margin-bottom: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-panel-status {
+    font-size: 13px;
+    color: rgb(230, 205, 145);
+    margin-bottom: 10px;
+    white-space: normal;
+}
+
+.ps-gboard-panel-body {
+    font-size: 14px;
+    color: rgba(210, 195, 160, 0.95);
+    white-space: normal;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.ps-gboard-panel-hint {
+    font-size: 11px;
+    color: rgba(145, 135, 112, 0.88);
+    margin-bottom: 10px;
+    white-space: normal;
+}
+
+.ps-gboard-hero {
+    flex-shrink: 0;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 12px 10px 12px;
+    flex-direction: column;
+    background-color: rgba(16, 13, 18, 0.9);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(150, 120, 70, 0.35);
+    border-right-color: rgba(150, 120, 70, 0.35);
+    border-top-color: rgba(150, 120, 70, 0.35);
+    border-bottom-color: rgba(150, 120, 70, 0.35);
+}
+
+.ps-gboard-hero-row {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.ps-gboard-portrait {
+    width: 88px;
+    height: 88px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background-color: rgba(28, 22, 18, 0.95);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(180, 145, 80, 0.45);
+    border-right-color: rgba(180, 145, 80, 0.45);
+    border-top-color: rgba(180, 145, 80, 0.45);
+    border-bottom-color: rgba(180, 145, 80, 0.45);
+}
+
+.ps-gboard-portrait-image {
+    width: 100%;
+    height: 100%;
+}
+
+.ps-gboard-portrait-blank {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(40, 32, 28, 0.9);
+}
+
+.ps-gboard-hero-meta {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.ps-gboard-hero-name {
+    font-size: 18px;
+    color: rgb(255, 232, 186);
+    margin-bottom: 6px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-hp-label {
+    font-size: 12px;
+    color: rgb(220, 190, 140);
+    margin-bottom: 6px;
+}
+
+.ps-gboard-hp-track {
+    width: 100%;
+    height: 10px;
+    background-color: rgba(30, 22, 18, 0.95);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(120, 90, 55, 0.5);
+    border-right-color: rgba(120, 90, 55, 0.5);
+    border-top-color: rgba(120, 90, 55, 0.5);
+    border-bottom-color: rgba(120, 90, 55, 0.5);
+}
+
+.ps-gboard-hp-fill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(180, 70, 70);
+}
+
+.ps-gboard-stage {
+    position: absolute;
+    left: 372px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 76px 0 0 0;
+    flex-direction: column;
+    background-color: rgb(92, 68, 44);
+    border-left-width: 1px;
+    border-left-color: rgba(198, 158, 78, 0.28);
+    overflow: hidden;
+}
+
+.ps-gboard-viewport {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background-color: rgba(12, 10, 10, 0.55);
+}
+
+.ps-gboard-grid {
+    position: absolute;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8px;
+    background-color: rgba(8, 7, 7, 0.35);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(160, 130, 70, 0.4);
+    border-right-color: rgba(160, 130, 70, 0.4);
+    border-top-color: rgba(160, 130, 70, 0.4);
+    border-bottom-color: rgba(160, 130, 70, 0.4);
+}
+
+.ps-gboard-zoom {
+    position: absolute;
+    right: 14px;
+    top: 84px;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 6px;
+    background-color: rgba(18, 14, 12, 0.88);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(170, 135, 70, 0.45);
+    border-right-color: rgba(170, 135, 70, 0.45);
+    border-top-color: rgba(170, 135, 70, 0.45);
+    border-bottom-color: rgba(170, 135, 70, 0.45);
+}
+
+.ps-gboard-zoom > .ps-gboard-action {
+    width: 34px;
+    min-height: 28px;
+    margin-bottom: 0;
+    margin-right: 4px;
+    padding: 0;
+    font-size: 16px;
+}
+
+.ps-gboard-zoom-label {
+    min-width: 48px;
+    margin-right: 4px;
+    font-size: 12px;
+    color: rgb(210, 190, 140);
+    -unity-text-align: middle-center;
+}
+
+.ps-gboard-top-finish {
+    margin-left: 12px;
+    min-height: 28px;
+    font-size: 12px;
+}
+
+.ps-gboard-context {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+
+.ps-gboard-combat-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 76px;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(28, 18, 22, 0.96);
+}
+
+.ps-gboard-combat-portrait {
+    width: 280px;
+    height: 280px;
+    margin-bottom: 8px;
+}
+
+.ps-gboard-combat-title {
+    font-size: 28px;
+    color: rgb(255, 220, 180);
+    margin-bottom: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-combat-hp {
+    font-size: 16px;
+    color: rgb(230, 170, 150);
+    margin-bottom: 8px;
+}
+
+.ps-gboard-combat-intent {
+    font-size: 15px;
+    color: rgb(255, 200, 140);
+    margin-bottom: 12px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-fx-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-gboard-consumables {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.ps-gboard-consumable {
+    min-width: 72px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.ps-gboard-combat-leave {
+    min-width: 140px;
+}
+
+.ps-gboard-en-rail {
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
+    width: 460px;
+    min-height: 40px;
+    padding: 4px 8px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(12, 10, 14, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(200, 160, 80);
+}
+
+.ps-gboard-en-label {
+    font-size: 16px;
+    color: rgb(255, 220, 140);
+    letter-spacing: 1px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    margin-right: 12px;
+}
+
+.ps-gboard-combat-rail {
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+}
+
+.ps-gboard-skill,
+.ps-gboard-endturn {
+    min-height: 34px;
+    margin-bottom: 0;
+    margin-left: 6px;
+    font-size: 12px;
+}
+
+.ps-battle-hand.ps-gboard-hand-fan {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    bottom: 52px;
+    width: 460px;
+    height: 56px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    transition-property: height;
+    transition-duration: 0.16s;
+    transition-timing-function: ease-out;
+}
+
+.ps-battle-hand.ps-gboard-hand-fan.ps-gboard-hand-open {
+    height: 310px;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-gboard-fan-peek:hover {
+    translate: 0 0;
+    scale: 1 1 1;
+}
+
+.ps-gboard-fan-selected {
+    translate: 0 -18px;
+    scale: 1.04 1.04 1;
+}
+
+.ps-gboard-selected {
+    position: absolute;
+    right: 28px;
+    top: 96px;
+    width: 252px;
+    height: 354px;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-battle-card.ps-gboard-selected-card {
+    position: relative;
+    width: 252px;
+    height: 354px;
+    min-width: 252px;
+    min-height: 354px;
+    max-width: 252px;
+    max-height: 354px;
+}
+
+.ps-gboard-selected-card .ps-gboard-card-glyph {
+    font-size: 56px;
+}
+
+.ps-gboard-selected-card .ps-battle-card-name {
+    font-size: 20px;
+}
+
+.ps-gboard-selected-card .ps-battle-card-text {
+    font-size: 14px;
+}
+
+.ps-gboard-card-glyph {
+    font-size: 42px;
+    color: rgb(255, 230, 170);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-row {
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.ps-gboard-cell {
+    width: 56px;
+    height: 56px;
+    margin: 1px;
+    padding: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(58, 48, 38);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(140, 120, 80, 0.55);
+    border-right-color: rgba(140, 120, 80, 0.55);
+    border-top-color: rgba(140, 120, 80, 0.55);
+    border-bottom-color: rgba(140, 120, 80, 0.55);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ps-gboard-cell-mark {
+    font-size: 14px;
+    color: rgb(240, 225, 190);
+    -unity-text-align: middle-center;
+}
+
+.ps-gboard-floor {
+    background-color: rgb(58, 48, 38);
+}
+
+.ps-gboard-blocked {
+    background-color: rgb(28, 24, 22);
+    border-left-color: rgba(60, 50, 40, 0.8);
+    border-right-color: rgba(60, 50, 40, 0.8);
+    border-top-color: rgba(60, 50, 40, 0.8);
+    border-bottom-color: rgba(60, 50, 40, 0.8);
+}
+
+.ps-gboard-start {
+    background-color: rgb(48, 70, 88);
+    border-left-color: rgb(120, 180, 210);
+    border-right-color: rgb(120, 180, 210);
+    border-top-color: rgb(120, 180, 210);
+    border-bottom-color: rgb(120, 180, 210);
+}
+
+.ps-gboard-goal {
+    background-color: rgb(78, 58, 36);
+    border-left-color: rgb(230, 180, 80);
+    border-right-color: rgb(230, 180, 80);
+    border-top-color: rgb(230, 180, 80);
+    border-bottom-color: rgb(230, 180, 80);
+}
+
+.ps-gboard-lamp {
+    background-color: rgb(88, 62, 28);
+}
+
+.ps-gboard-fog {
+    background-color: rgb(52, 64, 78);
+}
+
+.ps-gboard-seal {
+    background-color: rgb(72, 36, 48);
+}
+
+.ps-gboard-enemy {
+    background-color: rgb(68, 40, 78);
+}
+
+.ps-gboard-event {
+    background-color: rgb(48, 58, 92);
+}
+
+.ps-gboard-next {
+    background-color: rgb(40, 78, 68);
+}
+
+.ps-gboard-return {
+    background-color: rgb(88, 68, 36);
+}
+
+.ps-gboard-gate {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top-width: 1px;
+    border-top-color: rgba(200, 160, 80, 0.45);
+}
+
+.ps-gboard-gate-title {
+    font-size: 15px;
+    color: rgb(255, 220, 160);
+    margin-bottom: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-gboard-gate > .ps-gboard-action {
+    margin-bottom: 6px;
+}
+
+.ps-gboard-path {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(80, 210, 230);
+    border-right-color: rgb(80, 210, 230);
+    border-top-color: rgb(80, 210, 230);
+    border-bottom-color: rgb(80, 210, 230);
+}
+
+.ps-gboard-piece {
+    background-color: rgb(120, 92, 36);
+}
+
+.ps-gboard-actions {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-gboard-dirs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.ps-gboard-dir {
+    width: 52px;
+    height: 40px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-size: 18px;
+    background-color: rgba(40, 34, 28, 0.95);
+    color: rgb(230, 210, 160);
+}
+
+.ps-gboard-dir-hot {
+    border-left-color: rgb(100, 210, 230);
+    border-right-color: rgb(100, 210, 230);
+    border-top-color: rgb(100, 210, 230);
+    border-bottom-color: rgb(100, 210, 230);
+    color: rgb(200, 245, 255);
+}
+
+.ps-gboard-preview {
+    border-left-color: rgba(100, 200, 220, 0.45);
+    border-right-color: rgba(100, 200, 220, 0.45);
+    border-top-color: rgba(100, 200, 220, 0.45);
+    border-bottom-color: rgba(100, 200, 220, 0.45);
+    background-color: rgb(48, 58, 68);
+}
+
+.ps-gboard-action {
+    margin-bottom: 5px;
+    min-height: 30px;
+    font-size: 12px;
+}
+
+.ps-gboard-hand {
+    flex-shrink: 0;
+    min-height: 118px;
+    padding: 10px 12px;
+    flex-direction: column;
+    background-color: rgba(18, 14, 28, 0.94);
+    border-left-width: 2px;
+    border-left-color: rgb(80, 210, 220);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(90, 160, 170, 0.4);
+    border-top-color: rgba(90, 160, 170, 0.4);
+    border-bottom-color: rgba(90, 160, 170, 0.4);
+}
+
+.ps-gboard-hand-title {
+    font-size: 13px;
+    color: rgb(180, 240, 245);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.ps-gboard-hand-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.ps-gboard-card {
+    width: 148px;
+    min-height: 72px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    padding: 8px;
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: upper-left;
+    background-color: rgba(28, 36, 48, 0.96);
+    color: rgb(220, 235, 240);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(90, 180, 190, 0.55);
+    border-right-color: rgba(90, 180, 190, 0.55);
+    border-top-color: rgba(90, 180, 190, 0.55);
+    border-bottom-color: rgba(90, 180, 190, 0.55);
+}
+
+.ps-gboard-card.ps-selected {
+    background-color: rgba(24, 70, 78, 0.98);
+    border-left-color: rgb(120, 240, 250);
+    border-right-color: rgb(120, 240, 250);
+    border-top-color: rgb(120, 240, 250);
+    border-bottom-color: rgb(120, 240, 250);
+}
+
+.ps-gboard-hand-empty {
+    font-size: 12px;
+    color: rgba(170, 190, 200, 0.75);
+    padding: 12px 4px;
+}
+
+
+.ps-xmap-rite {
+    background-color: rgb(92, 68, 44);
+}
+
+.ps-xmap-view {
+    position: absolute;
+    left: 372px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(92, 68, 44);
+}
+
+.ps-xmap-top-sub {
+    font-size: 11px;
+    color: rgba(170, 145, 95, 0.78);
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.ps-xmap-sketch {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 220px;
+    height: 150px;
+    padding: 8px 10px;
+    background-color: rgba(12, 10, 14, 0.78);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(180, 145, 80, 0.35);
+    border-right-color: rgba(180, 145, 80, 0.35);
+    border-top-color: rgba(180, 145, 80, 0.35);
+    border-bottom-color: rgba(180, 145, 80, 0.35);
+}
+
+.ps-xmap-sketch-title {
+    font-size: 10px;
+    color: rgba(190, 165, 110, 0.85);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+
+.ps-xmap-sketch-canvas {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    height: 110px;
+    background-color: rgba(20, 18, 24, 0.5);
+}
+
+.ps-xmap-sketch-link {
+    position: absolute;
+    height: 2px;
+    margin-left: 0;
+    margin-top: -1px;
+    background-color: rgba(210, 175, 95, 0.55);
+    transform-origin: 0% 50%;
+}
+
+.ps-xmap-sketch-link-hidden {
+    background-color: rgba(150, 130, 210, 0.55);
+}
+
+.ps-xmap-sketch-link-breach {
+    background-color: rgba(180, 90, 120, 0.65);
+}
+
+.ps-xmap-sketch-pip {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -4px;
+    background-color: rgba(230, 200, 140, 0.9);
+    border-radius: 0;
+}
+
+.ps-xmap-sketch-pip-mark {
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    margin-top: -5px;
+    background-color: rgba(200, 140, 230, 0.95);
+}
+
+.ps-xmap-sketch-pip-current {
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    margin-top: -6px;
+    background-color: rgba(255, 210, 90, 1);
+}
+
+.ps-xmap-view-frame {
+    position: absolute;
+    left: 372px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-left-width: 1px;
+    border-left-color: rgba(198, 158, 78, 0.28);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-xmap-dock {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 372px;
+    padding: 76px 16px 10px 16px;
+    flex-direction: column;
+    background-color: rgb(72, 52, 34);
+    border-right-width: 1px;
+    border-right-color: rgba(170, 135, 70, 0.55);
+}
+
+.ps-xmap-maphand {
+    position: absolute;
+    left: 388px;
+    right: 16px;
+    bottom: 14px;
+    min-height: 118px;
+    padding: 10px 12px;
+    flex-direction: column;
+    background-color: rgba(18, 14, 28, 0.94);
+    border-left-width: 2px;
+    border-left-color: rgb(80, 210, 220);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(90, 160, 170, 0.4);
+    border-top-color: rgba(90, 160, 170, 0.4);
+    border-bottom-color: rgba(90, 160, 170, 0.4);
+}
+
+.ps-xmap-maphand-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.ps-xmap-maphand-title {
+    font-size: 13px;
+    color: rgb(180, 240, 245);
+    letter-spacing: 1px;
+}
+
+.ps-xmap-maphand-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.ps-xmap-mapcard {
+    width: 148px;
+    min-height: 72px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    padding: 8px;
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: upper-left;
+    background-color: rgba(28, 36, 48, 0.96);
+    color: rgb(220, 235, 240);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(90, 180, 190, 0.55);
+    border-right-color: rgba(90, 180, 190, 0.55);
+    border-top-color: rgba(90, 180, 190, 0.55);
+    border-bottom-color: rgba(90, 180, 190, 0.55);
+}
+
+.ps-xmap-mapcard.ps-selected {
+    background-color: rgba(24, 70, 78, 0.98);
+    border-left-color: rgb(120, 240, 250);
+    border-right-color: rgb(120, 240, 250);
+    border-top-color: rgb(120, 240, 250);
+    border-bottom-color: rgb(120, 240, 250);
+    color: rgb(230, 255, 255);
+}
+
+.ps-xmap-maphand-empty {
+    font-size: 12px;
+    color: rgba(170, 190, 200, 0.75);
+    padding: 12px 4px;
+}
+
+.ps-xmap-top {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    height: 54px;
+    min-height: 54px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 14px;
+    background-color: rgba(54, 38, 24, 0.96);
+    border-left-width: 2px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(150, 125, 80, 0.35);
+    border-top-color: rgba(150, 125, 80, 0.35);
+    border-bottom-color: rgba(150, 125, 80, 0.35);
+}
+
+.ps-xmap-top-actions {
+    margin-left: auto;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-xmap-top-actions > .ps-rite-chip {
+    margin-right: 0;
+    margin-left: 6px;
+    margin-bottom: 0;
+    min-width: 96px;
+}
+
+.ps-xmap-panel {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    min-height: 220px;
+    padding: 18px 18px 16px 18px;
+    flex-direction: column;
+    background-color: rgba(54, 38, 24, 0.94);
+    border-left-width: 2px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(140, 115, 75, 0.32);
+    border-top-color: rgba(140, 115, 75, 0.32);
+    border-bottom-color: rgba(140, 115, 75, 0.32);
+}
+
+.ps-xmap-panel-eye {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(170, 150, 105, 0.72);
+    margin-bottom: 8px;
+}
+
+.ps-xmap-panel-type {
+    font-size: 12px;
+    color: rgb(210, 175, 95);
+    margin-bottom: 4px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-xmap-panel-title {
+    font-size: 26px;
+    color: rgb(255, 238, 200);
+    margin-bottom: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-xmap-panel-status {
+    font-size: 13px;
+    color: rgb(230, 205, 145);
+    margin-bottom: 12px;
+    white-space: normal;
+}
+
+.ps-xmap-panel-rule {
+    height: 1px;
+    margin-bottom: 12px;
+    background-color: rgba(180, 145, 75, 0.35);
+    flex-shrink: 0;
+}
+
+.ps-xmap-panel-body {
+    font-size: 14px;
+    color: rgba(210, 195, 160, 0.95);
+    white-space: normal;
+    margin-bottom: 14px;
+    flex-grow: 1;
+}
+
+.ps-xmap-panel-hint {
+    font-size: 11px;
+    color: rgba(145, 135, 112, 0.88);
+    margin-bottom: 0;
+    padding-top: 10px;
+    border-top-width: 1px;
+    border-top-color: rgba(120, 100, 65, 0.28);
+    white-space: normal;
+}
+
+.ps-xmap-compass {
+    flex-shrink: 0;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 10px 6px 10px;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(16, 13, 18, 0.9);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(150, 120, 70, 0.35);
+    border-right-color: rgba(150, 120, 70, 0.35);
+    border-top-color: rgba(150, 120, 70, 0.35);
+    border-bottom-color: rgba(150, 120, 70, 0.35);
+}
+
+.ps-xmap-compass-head {
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 4px;
+}
+
+.ps-xmap-compass-title {
+    font-size: 16px;
+    color: rgb(255, 232, 186);
+    margin-bottom: 2px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-xmap-compass-sub {
+    font-size: 10px;
+    color: rgba(160, 145, 110, 0.8);
+    margin-bottom: 2px;
+}
+
+.ps-xmap-axis-row {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 6px;
+    margin-bottom: 2px;
+}
+
+.ps-xmap-axis-chip {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 6px 8px;
+    background-color: rgba(8, 7, 10, 0.75);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(120, 100, 65, 0.35);
+    border-right-color: rgba(120, 100, 65, 0.35);
+    border-top-color: rgba(120, 100, 65, 0.35);
+    border-bottom-color: rgba(120, 100, 65, 0.35);
+}
+
+.ps-xmap-axis-swatch {
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: rgb(200, 180, 120);
+}
+
+.ps-xmap-axis-alert > .ps-xmap-axis-swatch {
+    background-color: rgb(210, 68, 42);
+}
+
+.ps-xmap-axis-collapse > .ps-xmap-axis-swatch {
+    background-color: rgb(210, 150, 55);
+}
+
+.ps-xmap-axis-corruption > .ps-xmap-axis-swatch {
+    background-color: rgb(140, 78, 190);
+}
+
+.ps-xmap-axis-name {
+    font-size: 10px;
+    color: rgba(180, 165, 130, 0.9);
+    margin-right: 4px;
+}
+
+.ps-xmap-axis-value {
+    font-size: 13px;
+    color: rgb(245, 220, 160);
+    margin-left: auto;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-xmap-actions {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-xmap-move {
+    flex-grow: 1;
+    margin-right: 8px;
+    margin-bottom: 0;
+    min-width: 140px;
+}
+
+.ps-xmap-mist {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 3, 6, 0.62);
+}
+
+.ps-xmap-mist-veil {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(2, 2, 4, 0.35);
+}
+
+.ps-xmap-mist-cloud {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.42);
+    border-top-left-radius: 120px;
+    border-top-right-radius: 120px;
+    border-bottom-left-radius: 120px;
+    border-bottom-right-radius: 120px;
+}
+
+.ps-xmap-mist-cloud-0 {
+    left: -8%;
+    top: 8%;
+    width: 48%;
+    height: 34%;
+}
+
+.ps-xmap-mist-cloud-1 {
+    right: -6%;
+    top: 4%;
+    width: 46%;
+    height: 36%;
+}
+
+.ps-xmap-mist-cloud-2 {
+    left: -10%;
+    bottom: 6%;
+    width: 52%;
+    height: 38%;
+}
+
+.ps-xmap-mist-cloud-3 {
+    right: -8%;
+    bottom: 8%;
+    width: 48%;
+    height: 34%;
+}
+
+.ps-xmap-mist-panel {
+    width: 52%;
+    max-width: 680px;
+    margin: 0;
+}
+
+.ps-xmap-stats {
+    margin-left: 14px;
+    margin-right: 10px;
+    font-size: 12px;
+    color: rgb(220, 198, 150);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    flex-shrink: 1;
+    white-space: normal;
+}
+
+/* Shallow viewport: circle diameter ~300, center ~50px under the bottom edge */
+.ps-xmap-gauge {
+    width: 300px;
+    height: 110px;
+    align-self: center;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.ps-xmap-gauge-dial {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    left: 0;
+    bottom: -190px;
+    background-color: rgba(34, 26, 16, 0.96);
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
+    border-bottom-right-radius: 150px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-color: rgb(212, 168, 72);
+    border-top-color: rgb(212, 168, 72);
+    border-bottom-color: rgb(212, 168, 72);
+}
+
+.ps-xmap-gauge-rim {
+    position: absolute;
+    width: 276px;
+    height: 276px;
+    left: 12px;
+    bottom: -178px;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 138px;
+    border-top-right-radius: 138px;
+    border-bottom-left-radius: 138px;
+    border-bottom-right-radius: 138px;
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    border-left-color: rgba(210, 170, 90, 0.28);
+    border-right-color: rgba(210, 170, 90, 0.28);
+    border-top-color: rgba(210, 170, 90, 0.28);
+    border-bottom-color: rgba(210, 170, 90, 0.28);
+}
+
+.ps-xmap-gauge-tick {
+    position: absolute;
+    left: 50%;
+    bottom: -40px;
+    width: 2px;
+    height: 130px;
+    margin-left: -1px;
+    background-color: rgba(190, 160, 95, 0.4);
+    transform-origin: 50% 100%;
+}
+
+.ps-xmap-gauge-tick-major {
+    width: 3px;
+    height: 138px;
+    margin-left: -1.5px;
+    background-color: rgba(235, 200, 120, 0.95);
+}
+
+.ps-xmap-gauge-num {
+    position: absolute;
+    width: 36px;
+    margin-left: -18px;
+    margin-top: -10px;
+    font-size: 12px;
+    color: rgb(245, 220, 160);
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.ps-xmap-needle {
+    position: absolute;
+    left: 50%;
+    bottom: -40px;
+    width: 3px;
+    height: 132px;
+    margin-left: -1.5px;
+    transform-origin: 50% 100%;
+}
+
+.ps-xmap-needle-alert {
+    background-color: rgb(210, 68, 42);
+    height: 136px;
+    width: 3px;
+}
+
+.ps-xmap-needle-collapse {
+    background-color: rgb(210, 150, 55);
+    height: 112px;
+    width: 2px;
+}
+
+.ps-xmap-needle-corruption {
+    background-color: rgb(140, 78, 190);
+    height: 88px;
+    width: 2px;
+}
+
+.ps-xmap-gauge-hub {
+    position: absolute;
+    left: 50%;
+    bottom: -47px;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    background-color: rgb(220, 190, 120);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(90, 70, 40);
+    border-right-color: rgb(90, 70, 40);
+    border-top-color: rgb(90, 70, 40);
+    border-bottom-color: rgb(90, 70, 40);
+}
+
+.ps-xmap-finish {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 3, 6, 0.62);
+}
+
+.ps-xmap-finish-dialog {
+    width: 48%;
+    max-width: 560px;
+    padding: 24px 26px;
+    background-color: rgba(14, 12, 16, 0.97);
+    border-left-width: 3px;
+    border-left-color: rgb(212, 168, 72);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-right-color: rgba(150, 125, 80, 0.35);
+    border-top-color: rgba(150, 125, 80, 0.35);
+    border-bottom-color: rgba(150, 125, 80, 0.35);
+}
+
+/* --- 2.5D route exploration (full-bleed stage, mini HUD) --- */
+.ps-xmap-route {
+    background-color: rgb(178, 184, 204);
+}
+
+.ps-xmap-route .ps-xmap-view {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(178, 184, 204);
+}
+
+.ps-xmap-route .ps-xmap-view-frame {
+    left: 0;
+    display: none;
+}
+
+.ps-xmap-route .ps-xmap-top {
+    display: none;
+}
+
+.ps-xmap-route .ps-xmap-dock {
+    display: none;
+}
+
+.ps-xmap-hud {
+    display: none;
+}
+
+.ps-xmap-mini {
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    min-width: 120px;
+    max-width: 220px;
+    padding: 6px 8px;
+    background-color: rgba(8, 9, 12, 0.52);
+    border-left-width: 2px;
+    border-left-color: rgba(212, 168, 72, 0.7);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(120, 100, 70, 0.25);
+    border-right-color: rgba(120, 100, 70, 0.25);
+    border-bottom-color: rgba(120, 100, 70, 0.25);
+}
+
+.ps-xmap-mini-name {
+    font-size: 14px;
+    color: rgb(245, 230, 190);
+    margin-bottom: 2px;
+}
+
+.ps-xmap-mini-district {
+    font-size: 11px;
+    color: rgba(200, 185, 150, 0.85);
+    margin-bottom: 4px;
+    white-space: normal;
+}
+
+.ps-xmap-mini-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-xmap-mini-bearing {
+    font-size: 11px;
+    color: rgba(180, 200, 210, 0.9);
+    width: 22px;
+    margin-right: 6px;
+}
+
+.ps-xmap-mini-info {
+    width: 28px;
+    height: 24px;
+    min-width: 28px;
+    font-size: 12px;
+    padding: 0;
+    background-color: rgba(30, 28, 24, 0.7);
+    color: rgb(230, 210, 160);
+}
+
+.ps-xmap-detail {
+    position: absolute;
+    left: 14px;
+    top: 86px;
+    width: 240px;
+    padding: 10px 12px;
+    background-color: rgba(10, 10, 14, 0.88);
+    border-left-width: 2px;
+    border-left-color: rgba(212, 168, 72, 0.65);
+}
+
+.ps-xmap-detail-body {
+    font-size: 12px;
+    color: rgba(230, 215, 180, 0.92);
+    white-space: normal;
+}
+
+.ps-xmap-axis-meter {
+    position: absolute;
+    right: 14px;
+    bottom: 16px;
+    width: 84px;
+    height: 84px;
+    background-color: rgba(8, 9, 12, 0.45);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(140, 120, 80, 0.35);
+    border-right-color: rgba(140, 120, 80, 0.35);
+    border-bottom-color: rgba(140, 120, 80, 0.35);
+    border-left-color: rgba(140, 120, 80, 0.35);
+    border-radius: 42px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-xmap-axis-meter-dial {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    bottom: 10px;
+    border-radius: 32px;
+    background-color: rgba(20, 22, 28, 0.55);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(180, 150, 90, 0.35);
+    border-right-color: rgba(180, 150, 90, 0.35);
+    border-bottom-color: rgba(180, 150, 90, 0.35);
+    border-left-color: rgba(180, 150, 90, 0.35);
+}
+
+.ps-xmap-axis-meter .ps-xmap-needle {
+    bottom: 42px;
+    height: 34px;
+    width: 2px;
+    margin-left: -1px;
+}
+
+.ps-xmap-axis-meter .ps-xmap-needle-alert {
+    height: 36px;
+}
+
+.ps-xmap-axis-meter .ps-xmap-needle-collapse {
+    height: 30px;
+}
+
+.ps-xmap-axis-meter .ps-xmap-needle-corruption {
+    height: 24px;
+}
+
+.ps-xmap-axis-tip {
+    position: absolute;
+    right: 92px;
+    bottom: 8px;
+    min-width: 120px;
+    padding: 8px 10px;
+    background-color: rgba(10, 10, 14, 0.9);
+    border-left-width: 2px;
+    border-left-color: rgba(212, 168, 72, 0.7);
+}
+
+.ps-xmap-axis-tip-body {
+    font-size: 11px;
+    color: rgba(230, 215, 180, 0.95);
+    white-space: normal;
+}
+
+.ps-xmap-confirm {
+    position: absolute;
+    width: 200px;
+    padding: 12px 12px 10px 12px;
+    background-color: rgba(12, 11, 16, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgba(212, 168, 72, 0.8);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(140, 120, 80, 0.35);
+    border-right-color: rgba(140, 120, 80, 0.35);
+    border-bottom-color: rgba(140, 120, 80, 0.35);
+}
+
+.ps-xmap-confirm-title {
+    font-size: 15px;
+    color: rgb(245, 230, 190);
+    margin-bottom: 4px;
+}
+
+.ps-xmap-confirm-kind {
+    font-size: 12px;
+    color: rgba(200, 170, 110, 0.95);
+    margin-bottom: 6px;
+}
+
+.ps-xmap-confirm-body {
+    font-size: 12px;
+    color: rgba(220, 205, 170, 0.9);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.ps-xmap-confirm-delta {
+    font-size: 11px;
+    color: rgba(255, 180, 140, 0.95);
+    white-space: normal;
+    margin-bottom: 10px;
+}
+
+.ps-xmap-confirm-actions {
+    flex-direction: row;
+}
+
+.ps-xmap-confirm-go {
+    flex-grow: 1;
+    margin-right: 6px;
+    height: 32px;
+    font-size: 13px;
+}
+
+.ps-xmap-confirm-back {
+    flex-grow: 1;
+    height: 32px;
+    font-size: 13px;
+    background-color: rgba(40, 38, 44, 0.9);
+}
+
+.ps-xmap-finish-chip {
+    position: absolute;
+    left: 14px;
+    bottom: 16px;
+    width: 96px;
+    height: 30px;
+    font-size: 12px;
+    background-color: rgba(12, 12, 16, 0.55);
+    color: rgba(220, 200, 160, 0.9);
+}
+
+.ps-dev-access-hint {
+    left: auto;
+    right: 16px;
+    top: 14px;
+    bottom: auto;
+    width: 72px;
+    height: 28px;
+    font-size: 11px;
+    background-color: rgba(18, 20, 24, 0.55);
+    color: rgba(210, 190, 140, 0.72);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(160, 130, 70, 0.4);
+    border-right-color: rgba(160, 130, 70, 0.4);
+    border-top-color: rgba(160, 130, 70, 0.4);
+    border-bottom-color: rgba(160, 130, 70, 0.4);
+}
+
+.ps-route-battle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-route-battle-hero-hud {
+    position: absolute;
+    left: 18px;
+    top: 58%;
+    width: 160px;
+    padding: 8px 10px;
+    background-color: rgb(8, 10, 14);
+    color: rgb(235, 225, 200);
+    font-size: 13px;
+    white-space: normal;
+}
+
+.ps-route-battle-enemy-hud {
+    position: absolute;
+    right: 18px;
+    top: 58%;
+    width: 180px;
+    padding: 8px 10px;
+    background-color: rgb(14, 8, 10);
+    color: rgb(245, 210, 200);
+    font-size: 13px;
+    white-space: normal;
+}
+
+.ps-route-battle-intent {
+    position: absolute;
+    right: 18px;
+    top: 18%;
+    min-width: 160px;
+    padding: 6px 10px;
+    background-color: rgb(28, 10, 12);
+    color: rgb(255, 190, 160);
+    font-size: 13px;
+}
+
+.ps-route-battle-log {
+    position: absolute;
+    left: 22%;
+    right: 22%;
+    top: 52%;
+    padding: 6px 10px;
+    background-color: rgb(10, 10, 14);
+    color: rgb(230, 220, 190);
+    font-size: 13px;
+    -unity-text-align: middle-center;
+}
+
+.ps-route-battle-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 42%;
+    padding: 8px 14px 10px 14px;
+    background-color: rgb(3, 3, 5);
+    border-top-width: 1px;
+    border-top-color: rgb(180, 140, 70);
+    flex-direction: column;
+}
+
+.ps-route-battle-consumables {
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 6px;
+    background-color: rgb(5, 5, 7);
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.ps-route-battle-cons-cap {
+    margin-right: 8px;
+    color: rgb(210, 190, 140);
+    font-size: 12px;
+}
+
+.ps-route-battle-cons,
+.ps-route-battle .ps-button.ps-route-battle-cons {
+    min-width: 72px;
+    height: 34px;
+    margin-right: 6px;
+    background-color: rgb(7, 7, 9);
+    background-image: none;
+    color: rgb(238, 228, 202);
+    border-left-color: rgb(160, 130, 70);
+    border-right-color: rgb(160, 130, 70);
+    border-top-color: rgb(160, 130, 70);
+    border-bottom-color: rgb(160, 130, 70);
+}
+
+.ps-route-battle-hand {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    background-color: rgb(3, 3, 5);
+}
+
+.ps-route-battle-card,
+.ps-route-battle .ps-button.ps-route-battle-card {
+    width: 132px;
+    height: 168px;
+    margin-left: 4px;
+    margin-right: 4px;
+    white-space: normal;
+    font-size: 11px;
+    -unity-text-align: upper-center;
+    background-color: rgb(6, 6, 8);
+    background-image: none;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(196, 160, 90);
+    border-right-color: rgb(196, 160, 90);
+    border-top-color: rgb(196, 160, 90);
+    border-bottom-color: rgb(196, 160, 90);
+    color: rgb(238, 228, 202);
+}
+
+.ps-route-battle-rail {
+    flex-direction: row;
+    align-items: center;
+    height: 44px;
+    margin-top: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: rgb(4, 4, 6);
+}
+
+.ps-route-battle-energy {
+    flex-grow: 1;
+    color: rgb(235, 210, 150);
+    font-size: 14px;
+    background-color: rgb(4, 4, 6);
+}
+
+.ps-route-battle-skill,
+.ps-route-battle .ps-button.ps-route-battle-skill,
+.ps-route-battle-end,
+.ps-route-battle .ps-button.ps-route-battle-end {
+    min-width: 140px;
+    height: 38px;
+    background-color: rgb(8, 8, 10);
+    background-image: none;
+    color: rgb(238, 228, 202);
+    border-left-color: rgb(196, 160, 90);
+    border-right-color: rgb(196, 160, 90);
+    border-top-color: rgb(196, 160, 90);
+    border-bottom-color: rgb(196, 160, 90);
+}
+
+.ps-route-battle-skill:disabled,
+.ps-route-battle .ps-button.ps-route-battle-skill:disabled {
+    color: rgba(180, 170, 150, 0.45);
+    border-left-color: rgba(120, 100, 70, 0.45);
+    border-right-color: rgba(120, 100, 70, 0.45);
+    border-top-color: rgba(120, 100, 70, 0.45);
+    border-bottom-color: rgba(120, 100, 70, 0.45);
+}
+
+
+.ps-xmap-hint-guide {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    width: 260px;
+    padding: 8px 10px;
+    background-color: rgba(8, 8, 12, 0.55);
+    border-left-width: 2px;
+    border-left-color: rgba(200, 160, 70, 0.65);
+}
+
+.ps-xmap-hint-guide-label {
+    font-size: 11px;
+    color: rgba(230, 215, 180, 0.9);
+    white-space: normal;
+}
+
+.ps-route-reward {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 4, 8, 0.35);
+}
+
+.ps-route-reward-panel {
+    width: 420px;
+    padding: 18px 20px;
+    background-color: rgba(12, 11, 16, 0.92);
+    border-left-width: 3px;
+    border-left-color: rgb(212, 168, 72);
+    flex-direction: column;
+}
+
+.ps-route-reward-choice {
+    margin-top: 8px;
+    min-height: 56px;
+    white-space: normal;
+}
+
+/* --- Large analog axis instrument (clipped into bottom-right) --- */
+.ps-axis-instrument {
+    position: absolute;
+    right: -110px;
+    bottom: -130px;
+    width: 320px;
+    height: 320px;
+    overflow: visible;
+}
+
+/* Visible NW sector only 窶・keeps dialogue / choices from hitting the dial frame. */
+.ps-axis-instrument-hit {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 170px;
+    height: 170px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-axis-instrument-dim {
+    opacity: 0.55;
+}
+
+.ps-axis-instrument-preview-focus {
+    opacity: 1;
+}
+
+.ps-axis-instrument-danger .ps-axis-instrument-body {
+    border-left-color: rgb(210, 90, 70);
+    border-right-color: rgb(210, 90, 70);
+    border-top-color: rgb(210, 90, 70);
+    border-bottom-color: rgb(210, 90, 70);
+}
+
+.ps-axis-instrument-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-top-left-radius: 160px;
+    border-top-right-radius: 160px;
+    border-bottom-left-radius: 160px;
+    border-bottom-right-radius: 160px;
+    background-color: rgb(28, 24, 20);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(160, 130, 70);
+    border-right-color: rgb(160, 130, 70);
+    border-top-color: rgb(160, 130, 70);
+    border-bottom-color: rgb(160, 130, 70);
+    overflow: hidden;
+}
+
+.ps-axis-ring {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 18px;
+    bottom: 18px;
+    border-top-left-radius: 140px;
+    border-top-right-radius: 140px;
+    border-bottom-left-radius: 140px;
+    border-bottom-right-radius: 140px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(210, 180, 110, 0.35);
+    border-right-color: rgba(210, 180, 110, 0.35);
+    border-top-color: rgba(210, 180, 110, 0.35);
+    border-bottom-color: rgba(210, 180, 110, 0.35);
+}
+
+.ps-axis-ring-mid {
+    left: 42px;
+    right: 42px;
+    top: 42px;
+    bottom: 42px;
+    border-left-color: rgba(180, 90, 70, 0.4);
+    border-right-color: rgba(180, 90, 70, 0.4);
+    border-top-color: rgba(180, 90, 70, 0.4);
+    border-bottom-color: rgba(180, 90, 70, 0.4);
+}
+
+.ps-axis-ring-inner {
+    left: 68px;
+    right: 68px;
+    top: 68px;
+    bottom: 68px;
+    border-left-color: rgba(120, 90, 170, 0.45);
+    border-right-color: rgba(120, 90, 170, 0.45);
+    border-top-color: rgba(120, 90, 170, 0.45);
+    border-bottom-color: rgba(120, 90, 170, 0.45);
+}
+
+.ps-axis-marks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-axis-tick {
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    width: 2px;
+    height: 14px;
+    margin-left: -1px;
+    background-color: rgba(210, 185, 130, 0.55);
+    transform-origin: 50% 148px;
+}
+
+.ps-axis-stamp {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-axis-stamp-alert { left: 36px; top: 48px; }
+.ps-axis-stamp-collapse { right: 40px; top: 52px; }
+.ps-axis-stamp-corruption { left: 50%; bottom: 54px; margin-left: -14px; }
+
+.ps-axis-stamp-glyph {
+    font-size: 16px;
+    color: rgba(230, 210, 160, 0.85);
+    -unity-text-align: middle-center;
+}
+
+.ps-axis-needle,
+.ps-axis-ghost {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    width: 3px;
+    height: 118px;
+    margin-left: -1.5px;
+    transform-origin: 50% 100%;
+    background-color: rgb(220, 80, 50);
+}
+
+.ps-axis-needle-collapse { width: 2px; height: 104px; background-color: rgb(210, 150, 55); }
+.ps-axis-needle-corruption { width: 2px; height: 90px; background-color: rgb(140, 90, 190); }
+
+.ps-axis-ghost { opacity: 0.4; }
+.ps-axis-ghost.ps-axis-needle-alert { background-color: rgba(255, 140, 100, 0.7); }
+.ps-axis-ghost.ps-axis-needle-collapse { background-color: rgba(255, 200, 100, 0.65); }
+.ps-axis-ghost.ps-axis-needle-corruption { background-color: rgba(190, 150, 255, 0.65); }
+
+.ps-axis-glow {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    opacity: 0;
+}
+
+.ps-axis-glow-alert { left: 28px; top: 40px; background-color: rgba(220, 80, 50, 0.35); }
+.ps-axis-glow-collapse { right: 32px; top: 44px; background-color: rgba(210, 150, 55, 0.35); }
+.ps-axis-glow-corruption { left: 50%; bottom: 46px; margin-left: -24px; background-color: rgba(140, 90, 190, 0.35); }
+
+.ps-axis-glow-danger {
+    background-color: rgba(255, 90, 60, 0.55);
+}
+
+.ps-axis-crack {
+    position: absolute;
+    background-color: rgba(40, 30, 24, 0.85);
+    opacity: 0;
+}
+.ps-axis-crack-a { left: 70px; top: 90px; width: 2px; height: 70px; rotate: 18deg; }
+.ps-axis-crack-b { right: 80px; bottom: 100px; width: 2px; height: 60px; rotate: -24deg; }
+
+.ps-axis-noise {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 24px;
+    bottom: 24px;
+    border-top-left-radius: 130px;
+    border-top-right-radius: 130px;
+    border-bottom-left-radius: 130px;
+    border-bottom-right-radius: 130px;
+    background-color: rgba(255, 220, 160, 0.04);
+    opacity: 0;
+}
+
+.ps-axis-instrument-tip {
+    position: absolute;
+    left: -200px;
+    top: 10px;
+    width: 190px;
+    padding: 10px 12px;
+    background-color: rgba(12, 11, 14, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgb(180, 145, 75);
+    /* Tip must never expand the instrument hit box. */
+}
+
+.ps-axis-instrument-tip-body {
+    font-size: 11px;
+    color: rgba(230, 215, 180, 0.95);
+    white-space: normal;
+}
+
+/* Soft context HUD 窶・not a heavy black panel */
+.ps-xmap-route .ps-xmap-mini {
+    background-color: rgba(10, 10, 12, 0.28);
+    border-left-width: 0;
+    padding: 6px 8px;
+    min-width: 100px;
+    max-width: 200px;
+}
+
+.ps-xmap-route .ps-xmap-mini-name {
+    font-size: 13px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.ps-xmap-route .ps-xmap-axis-meter {
+    display: none;
+}
+
+/* Bottom dialogue gradient layer */
+.ps-route-dialogue {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-route-dialogue-veil {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34%;
+    background-color: rgba(4, 3, 6, 0.72);
+}
+
+.ps-route-dialogue-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30%;
+    padding: 18px 28px 20px 28px;
+    flex-direction: column;
+    background-color: rgba(6, 5, 8, 0.55);
+}
+
+.ps-route-dialogue-speaker {
+    font-size: 14px;
+    color: rgb(220, 185, 110);
+    margin-bottom: 6px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-route-dialogue-body {
+    font-size: 15px;
+    color: rgb(235, 225, 200);
+    white-space: normal;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.ps-route-dialogue-choices {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.ps-route-choice-row {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    padding: 4px 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-route-choice-mark {
+    width: 22px;
+    font-size: 15px;
+    color: rgb(230, 190, 100);
+}
+
+.ps-route-choice-text {
+    flex-grow: 1;
+    font-size: 15px;
+    color: rgba(220, 210, 185, 0.88);
+    white-space: normal;
+}
+
+.ps-route-choice-hot .ps-route-choice-text {
+    color: rgb(255, 240, 200);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(220, 180, 90, 0.7);
+}
+
+.ps-route-bubble {
+    position: absolute;
+    left: 18%;
+    right: 30%;
+    bottom: 38%;
+    padding: 10px 14px;
+    background-color: rgba(12, 11, 16, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(200, 160, 80);
+}
+
+.ps-route-bubble-text {
+    font-size: 14px;
+    color: rgb(240, 230, 200);
+    white-space: normal;
+}

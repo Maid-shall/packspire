@@ -1,1 +1,8 @@
 unity-*.log
+/tmp-unity-*.log
+/tmp-unity-*.png
+
+# Local image-generation and verification intermediates
+tools/__pycache__/
+tools/_map_parts/
+tools/_*.png
