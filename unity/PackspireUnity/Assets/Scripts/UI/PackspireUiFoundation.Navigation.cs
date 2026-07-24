@@ -103,9 +103,11 @@ public sealed partial class PackspireUiFoundation {
   if(game.UiScreen==ScreenId.Hub)return false;
   if(!game.UiMeta.characterMade&&game.UiScreen==ScreenId.Character)return false;
   if(game.UiExploration!=null)return false;
+  if(game.UiGridBoard!=null&&game.UiScreen==ScreenId.GridBoard)return false;
   if(game.UiExplorationEventActive)return false;
   switch(game.UiScreen){
    case ScreenId.Map:
+   case ScreenId.GridBoard:
    case ScreenId.Battle:
    case ScreenId.Reward:
    case ScreenId.Event:

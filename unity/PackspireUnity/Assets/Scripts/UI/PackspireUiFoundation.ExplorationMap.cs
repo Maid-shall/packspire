@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,6 +11,7 @@ public sealed partial class PackspireUiFoundation {
  VisualElement explorationNeedleAlert,explorationNeedleCollapse,explorationNeedleCorruption;
  VisualElement explorationSketch,explorationDock,explorationHud,explorationTopActions;
  VisualElement explorationDetailPopup,explorationConfirmPopup;
+ VisualElement explorationMapHandBar;
  Label explorationTitleLabel,explorationTypeLabel,explorationStatusLabel,explorationBodyLabel,explorationHintLabel;
  Label explorationAxisAlert,explorationAxisCollapse,explorationAxisCorruption,explorationMapNameLabel,explorationStatsLabel;
  Label explorationConfirmTitle,explorationConfirmKind,explorationConfirmBody;
@@ -39,6 +41,7 @@ public sealed partial class PackspireUiFoundation {
   explorationView=null;explorationRoot=null;explorationMist=null;explorationFinishDialog=null;
   explorationCompassFace=null;explorationSketch=null;explorationDock=null;explorationHud=null;
   explorationDetailPopup=null;explorationConfirmPopup=null;
+  explorationMapHandBar=null;
   explorationTitleLabel=null;explorationTypeLabel=null;explorationStatusLabel=null;
   explorationBodyLabel=null;explorationHintLabel=null;
   explorationAxisAlert=null;explorationAxisCollapse=null;explorationAxisCorruption=null;
@@ -91,6 +94,7 @@ public sealed partial class PackspireUiFoundation {
    game.UiDevOpenExplorationMap();
    run=game.UiExploration;
   }
+  MapCombatSystem.EnsureProto(run);
   bool hadStage=explorationStage!=null;
   EnsureExplorationStage();
   explorationStage.SetSuspended(false);
@@ -195,6 +199,8 @@ public sealed partial class PackspireUiFoundation {
   compass.Add(axisRow);
   dock.Add(compass);
   explorationRoot.Add(dock);
+
+  RebuildMapHandBar();
 
   var axes0=game.UiRun?.axes;
   explorationLastAlert=axes0?.alert??0;
@@ -412,8 +418,15 @@ public sealed partial class PackspireUiFoundation {
   if(explorationStatusLabel!=null)explorationStatusLabel.text=status;
   if(explorationBodyLabel!=null)
    explorationBodyLabel.text=$"現在地　{current?.name??"—"}\n地区　{ExplorationMapSystem.Breadcrumb(run)}\n\n{(selected==null?"前方の道・門・脇道を選ぶと、詳細がここに表示されます。":selected.landmark?"目印のある地点です。到着すると出来事が起きることがあります。":"道沿いの地点です。出口を選んで探索を広げましょう。")}";
-  if(explorationHintLabel!=null)
-   explorationHintLabel.text=game.UiExplorationEventActive?"靄のあいだで選択":"";
+  if(explorationHintLabel!=null){
+   if(game.UiExplorationEventActive)explorationHintLabel.text="靄のあいだで選択";
+   else if(run.mapCombatProto){
+    var card=MapCombatSystem.SelectedCard(run);
+    explorationHintLabel.text=card==null
+     ?"【MapDeck試作】下のカードを選び、敵地点をタップで射撃。隣接接触は従来どおり戦闘卓へ。"
+     :$"選択中：{card.name}（射程{MapCombatSystem.RangeFor(card)}）→ シアンの地点の敵をタップ";
+   } else explorationHintLabel.text="";
+  }
 
   var axes=gameRun?.axes;
   if(explorationAxisAlert!=null){
@@ -421,7 +434,54 @@ public sealed partial class PackspireUiFoundation {
    explorationAxisCollapse.text=FormatAxis(axes?.collapse??0);
    explorationAxisCorruption.text=FormatAxis(axes?.corruption??0);
   }
-  explorationStage?.SetSelectedVisual(run.selectedNodeId);
+  explorationStage?.RefreshMapCombatVisuals();
+ }
+
+ void RebuildMapHandBar(){
+  if(explorationRoot==null)return;
+  explorationMapHandBar?.RemoveFromHierarchy();
+  explorationMapHandBar=null;
+  var run=game.UiExploration;
+  if(run==null)return;
+  MapCombatSystem.EnsureProto(run);
+  if(!run.mapCombatProto)return;
+
+  var bar=Container("ps-xmap-maphand");
+  explorationMapHandBar=bar;
+  var head=Container("ps-xmap-maphand-head");
+  var title=new Label($"MAP DECK　EN {run.mapEnergy}"){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-xmap-maphand-title");
+  head.Add(title);
+  var rest=PackspireUiFactory.Button("ターン補給",()=>{
+   MapCombatSystem.RestockTurn(run);
+   ShowToast("マップENを回復し、手札を補充した");
+   RebuildMapHandBar();
+   RefreshExplorationHud();
+  });
+  rest.AddToClassList("ps-rite-chip");
+  head.Add(rest);
+  bar.Add(head);
+
+  var row=Container("ps-xmap-maphand-row");
+  foreach(var card in run.mapHand.ToList()){
+   var capture=card;
+   bool selected=run.selectedMapCardUid==capture.slotKey;
+   var btn=new Button(()=>{
+    MapCombatSystem.SelectCard(run,capture.slotKey);
+    RebuildMapHandBar();
+    RefreshExplorationHud();
+   }){text=$"{capture.name}\n{capture.cost}EN  射程{MapCombatSystem.RangeFor(capture)}\n{capture.damage}ダメ"};
+   btn.AddToClassList("ps-xmap-mapcard");
+   if(selected)btn.AddToClassList("ps-selected");
+   row.Add(btn);
+  }
+  if(run.mapHand.Count==0){
+   var empty=new Label("手札なし — ターン補給で補充"){pickingMode=PickingMode.Ignore};
+   empty.AddToClassList("ps-xmap-maphand-empty");
+   row.Add(empty);
+  }
+  bar.Add(row);
+  explorationRoot.Add(bar);
  }
 
  void TickExplorationCompass(float dt){
@@ -472,6 +532,22 @@ public sealed partial class PackspireUiFoundation {
  void ExecuteExplorationPath(int nodeId,bool confirmed){
   var run=game.UiExploration;
   if(run==null||ExplorationAnyMoving||game.UiExplorationEventActive)return;
+
+  // Prototype MapDeck: with a strike card selected, click enemy node to shoot instead of moving.
+  if(run.mapCombatProto&&!string.IsNullOrEmpty(run.selectedMapCardUid)&&MapCombatSystem.HasLivingEnemy(run,nodeId)){
+   if(MapCombatSystem.TryPlayStrike(run,nodeId,out var strikeMsg)){
+    ShowToast(strikeMsg);
+    explorationStage?.Bind(run,true);
+    RefreshExplorationHud();
+    RefreshExplorationSketch();
+    RebuildMapHandBar();
+    return;
+   }
+   ShowToast(strikeMsg);
+   RefreshExplorationHud();
+   return;
+  }
+
   var def=ExplorationMapSystem.Def(run);
 
   if(nodeId==run.currentNodeId){

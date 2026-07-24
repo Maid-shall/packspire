@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Packspire {
@@ -22,9 +23,12 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  readonly List<Material> materials=new();
  readonly Dictionary<int,SpriteRenderer> nodeRenderers=new();
  readonly Dictionary<int,SpriteRenderer> nodeRings=new();
+readonly Dictionary<int,SpriteRenderer> nodeEmbeddedMarks=new();
  readonly Dictionary<int,LineRenderer> edgeByKey=new();
  readonly Dictionary<int,ExplorationLinkKind> edgeKindByKey=new();
  readonly Dictionary<int,SpriteRenderer> lockVeils=new();
+ readonly Dictionary<string,Transform> enemyMarkers=new();
+ HashSet<int> strikeHighlightIds=new();
 
  ExplorationMapDef mapDef;
  ExplorationRunState runState;
@@ -38,6 +42,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  float moveT;
  int moveToId=-1;
  float orthoSize=DefaultOrtho;
+ float embeddedPulse=1f;
  bool ready;
  Font labelFont;
  Material spriteMaterial;
@@ -127,6 +132,10 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   ClampCameraTarget();
   if(!pointerDragging)cameraLive=Vector3.Lerp(cameraLive,cameraTarget,1f-Mathf.Exp(-PanLerp*dt));
   ApplyCamera();
+  if(UseEmbeddedNodeVisuals()){
+   embeddedPulse=0.5f+0.5f*Mathf.Sin(Time.unscaledTime*2.6f);
+   SetSelectedVisual(runState?.selectedNodeId??-1);
+  }
   RefreshEdgeStyles();
   RenderStage();
  }
@@ -210,61 +219,104 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   if(pieceTransform!=null)cameraTarget=pieceTransform.position;
  }
 
+ public void RefreshMapCombatVisuals(){
+  if(!ready||runState==null)return;
+  RefreshMarkers();
+  RenderStage();
+ }
+
  public void SetSelectedVisual(int selectedId){
   if(runState==null||mapDef==null)return;
+  bool embedded=UseEmbeddedNodeVisuals();
   foreach(var kv in nodeRenderers){
    int id=kv.Key;
    var cell=ExplorationMapSystem.Node(mapDef,id);
    bool locked=cell!=null&&cell.locked;
    bool revealed=!locked&&ExplorationMapSystem.IsRevealed(runState,id);
-   kv.Value.enabled=!locked;
+   bool selected=id==selectedId;
+   bool current=id==runState.currentNodeId;
+   bool reachable=ExplorationMapSystem.CanMove(runState,id);
+   bool inStrike=strikeHighlightIds.Contains(id);
+   bool highlighted=current||selected||reachable||inStrike;
+   bool sealedBreach=ExplorationMapSystem.Connected(mapDef,runState.currentNodeId,id)
+    &&ExplorationMapSystem.LinkKind(mapDef,runState.currentNodeId,id)==ExplorationLinkKind.Breach
+    &&!ExplorationMapSystem.IsEdgeOpened(runState,runState.currentNodeId,id);
+   if(nodeEmbeddedMarks.TryGetValue(id,out var embeddedMark)&&embeddedMark!=null){
+    bool showGlow=!locked&&revealed&&(highlighted||sealedBreach);
+    embeddedMark.enabled=showGlow;
+    if(showGlow){
+     var glow=EmbeddedGlowColor(cell?.type,current,reachable,inStrike,selected,sealedBreach);
+     glow.a*=embedded?0.78f+0.22f*embeddedPulse:1f;
+     embeddedMark.color=glow;
+     float gs=EmbeddedGlowScale(cell,current,highlighted||sealedBreach);
+     if(current&&embedded)gs*=0.96f+0.06f*embeddedPulse;
+     embeddedMark.transform.localScale=Vector3.one*gs;
+    }
+   }
    if(nodeRings.TryGetValue(id,out var ring))ring.enabled=!locked;
    var marker=kv.Value.transform.parent;
    if(marker!=null){
     var label=marker.Find("label");
-    if(label!=null)label.gameObject.SetActive(revealed);
+    if(label!=null)label.gameObject.SetActive(revealed&&!embedded);
     var check=marker.Find("check");
     if(check!=null){
      var csr=check.GetComponent<SpriteRenderer>();
-     if(csr!=null)csr.enabled=revealed&&ExplorationMapSystem.IsCleared(runState,id);
+     if(csr!=null)csr.enabled=revealed&&ExplorationMapSystem.IsCleared(runState,id)&&!embedded;
     }
    }
    if(lockVeils.TryGetValue(id,out var veil))veil.enabled=false;
    if(!revealed){
-    kv.Value.color=new Color(.44f,.36f,.26f,.32f);
-    if(ring!=null){
-     ring.enabled=true;
-     ring.color=new Color(.58f,.48f,.32f,.18f);
-     ring.transform.localScale=Vector3.one*.4f;
+    if(embedded){
+     kv.Value.enabled=false;
+     if(ring!=null)ring.enabled=false;
+    } else {
+     kv.Value.enabled=!locked;
+     kv.Value.color=new Color(.44f,.36f,.26f,.32f);
+     if(ring!=null){
+      ring.enabled=true;
+      ring.color=new Color(.58f,.48f,.32f,.18f);
+      ring.transform.localScale=Vector3.one*.4f;
+     }
     }
     continue;
    }
-   bool selected=id==selectedId;
-   bool current=id==runState.currentNodeId;
-   bool reachable=ExplorationMapSystem.CanMove(runState,id);
-   bool sealedBreach=ExplorationMapSystem.Connected(mapDef,runState.currentNodeId,id)
-    &&ExplorationMapSystem.LinkKind(mapDef,runState.currentNodeId,id)==ExplorationLinkKind.Breach
-    &&!ExplorationMapSystem.IsEdgeOpened(runState,runState.currentNodeId,id);
    bool cleared=ExplorationMapSystem.IsCleared(runState,id);
    bool hub=cell!=null&&cell.links!=null&&cell.links.Length>=3;
    Color baseCol=NodeColor(cell?.type);
    if(current)baseCol=new Color(1f,.82f,.38f);
+   else if(inStrike)baseCol=new Color(.35f,.92f,.95f);
    else if(sealedBreach)baseCol=new Color(.55f,.35f,.48f);
    else if(cleared)baseCol=Color.Lerp(baseCol,new Color(.38f,.34f,.30f),.45f);
    else if(selected)baseCol=Color.Lerp(baseCol,new Color(1f,.92f,.55f),.45f);
    else if(reachable)baseCol=Color.Lerp(baseCol,new Color(.95f,.85f,.45f),.28f);
-   kv.Value.color=baseCol;
-   float s=current?0.42f:(selected||reachable||sealedBreach)?0.36f:hub?0.32f:0.28f;
-   kv.Value.transform.localScale=new Vector3(s,s,s);
+   kv.Value.enabled=!locked&&!embedded;
+   if(!embedded){
+    kv.Value.color=baseCol;
+    float s=current?0.42f:(inStrike||selected||reachable||sealedBreach)?0.36f:hub?0.32f:0.28f;
+    kv.Value.transform.localScale=new Vector3(s,s,s);
+   }
    if(ring!=null){
-    float rs=current?0.62f:(selected||reachable||sealedBreach)?0.52f:hub?0.48f:0.42f;
-    ring.transform.localScale=new Vector3(rs,rs,rs);
-    ring.enabled=true;
-    ring.color=current?new Color(1f,.82f,.35f,.95f)
-     :sealedBreach?new Color(.7f,.4f,.55f,.8f)
-     :reachable?new Color(.9f,.74f,.38f,.78f)
-     :selected?new Color(1f,.92f,.55f,.55f)
-     :new Color(.78f,.66f,.42f,.38f);
+    if(embedded){
+     bool showRing=highlighted||sealedBreach;
+     ring.enabled=showRing;
+     if(showRing){
+      float rs=current?1.05f:(inStrike||selected||reachable)?0.92f:0.82f;
+      if(current)rs*=0.98f+0.04f*embeddedPulse;
+      ring.transform.localScale=new Vector3(rs,rs,rs);
+      ring.color=EmbeddedRingColor(cell?.type,current,reachable,inStrike,selected,sealedBreach);
+      ring.color=new Color(ring.color.r,ring.color.g,ring.color.b,ring.color.a*(0.82f+0.18f*embeddedPulse));
+     }
+    } else {
+     float rs=current?0.62f:(inStrike||selected||reachable||sealedBreach)?0.52f:hub?0.48f:0.42f;
+     ring.transform.localScale=new Vector3(rs,rs,rs);
+     ring.enabled=true;
+     ring.color=current?new Color(1f,.82f,.35f,.95f)
+      :inStrike?new Color(.3f,.95f,1f,.95f)
+      :sealedBreach?new Color(.7f,.4f,.55f,.8f)
+      :reachable?new Color(.9f,.74f,.38f,.78f)
+      :selected?new Color(1f,.92f,.55f,.55f)
+      :new Color(.78f,.66f,.42f,.38f);
+    }
    }
   }
  }
@@ -273,7 +325,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
 
  void Teardown(){
   ready=false;boundMapId=null;spriteMaterial=null;viewPixelSize=default;
-  nodeMarkers.Clear();edgeLines.Clear();nodeRenderers.Clear();nodeRings.Clear();edgeByKey.Clear();edgeKindByKey.Clear();lockVeils.Clear();
+  nodeMarkers.Clear();edgeLines.Clear();nodeRenderers.Clear();nodeRings.Clear();nodeEmbeddedMarks.Clear();edgeByKey.Clear();edgeKindByKey.Clear();lockVeils.Clear();
   if(renderTarget!=null){
    if(RenderTexture.active==renderTarget)RenderTexture.active=null;
    renderTarget.Release();Destroy(renderTarget);renderTarget=null;
@@ -291,8 +343,63 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   BuildMapSurface();BuildEdges();BuildNodes();BuildPiece();RefreshMarkers();
  }
 
+ void RefreshEnemyMarkers(){
+  if(overlayRoot==null||runState==null||mapDef==null)return;
+  var living=new HashSet<string>();
+  foreach(var enemy in MapCombatSystem.LivingEnemies(runState)){
+   living.Add(enemy.id);
+   if(!enemyMarkers.TryGetValue(enemy.id,out var marker)||marker==null){
+    marker=CreateEnemyMarker(enemy.id).transform;
+    enemyMarkers[enemy.id]=marker;
+   }
+   var cell=ExplorationMapSystem.Node(mapDef,enemy.nodeId);
+   if(cell==null){marker.gameObject.SetActive(false);continue;}
+   marker.gameObject.SetActive(true);
+   Vector3 pos=ExplorationMapSystem.WorldPos(mapDef,cell);
+   pos.z=-0.09f;
+   pos.y+=0.12f;
+   marker.position=pos;
+   var label=marker.Find("hp");
+   if(label!=null){
+    var tm=label.GetComponent<TextMesh>();
+    if(tm!=null)tm.text=$"{enemy.hp}";
+   }
+  }
+  var stale=enemyMarkers.Keys.Where(id=>!living.Contains(id)).ToList();
+  foreach(string id in stale){
+   if(enemyMarkers.TryGetValue(id,out var t)&&t!=null)Destroy(t.gameObject);
+   enemyMarkers.Remove(id);
+  }
+ }
+
+ GameObject CreateEnemyMarker(string id){
+  var go=new GameObject("Enemy_"+id);
+  go.transform.SetParent(overlayRoot,false);
+  SetLayer(go);
+  var body=go.AddComponent<SpriteRenderer>();
+  body.sprite=PawnSprite();
+  body.sortingOrder=8;
+  body.color=new Color(.72f,.28f,.85f,1f);
+  AssignSpriteMaterial(body);
+  go.transform.localScale=Vector3.one*.48f;
+  var hpGo=new GameObject("hp");
+  hpGo.transform.SetParent(go.transform,false);
+  hpGo.transform.localPosition=new Vector3(0f,.55f,0f);
+  SetLayer(hpGo);
+  var tm=hpGo.AddComponent<TextMesh>();
+  tm.fontSize=48;
+  tm.characterSize=.05f;
+  tm.anchor=TextAnchor.LowerCenter;
+  tm.alignment=TextAlignment.Center;
+  tm.color=new Color(1f,.85f,.95f,1f);
+  tm.text="";
+  if(labelFont!=null)tm.font=labelFont;
+  return go;
+ }
+
  void ClearOverlays(){
-  nodeMarkers.Clear();edgeLines.Clear();nodeRenderers.Clear();nodeRings.Clear();edgeByKey.Clear();edgeKindByKey.Clear();lockVeils.Clear();
+  nodeMarkers.Clear();edgeLines.Clear();nodeRenderers.Clear();nodeRings.Clear();nodeEmbeddedMarks.Clear();edgeByKey.Clear();edgeKindByKey.Clear();lockVeils.Clear();
+  enemyMarkers.Clear();strikeHighlightIds.Clear();
   pieceTransform=null;pieceRenderer=null;pieceShadow=null;
   if(overlayRoot!=null)for(int i=overlayRoot.childCount-1;i>=0;i--)Destroy(overlayRoot.GetChild(i).gameObject);
  }
@@ -335,7 +442,30 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void BuildMapSurface(){
-  // Flat map: nodes and edges only (no rite plate / terrain backdrop).
+  if(mapDef==null||mapRoot==null)return;
+  if(string.IsNullOrEmpty(mapDef.artResource))return;
+  var tex=Resources.Load<Texture2D>(mapDef.artResource);
+  if(tex==null){
+   Debug.LogWarning("Exploration map art missing: "+mapDef.artResource);
+   return;
+  }
+  var go=new GameObject("MapArt");
+  go.transform.SetParent(mapRoot,false);
+  SetLayer(go);
+  mapRenderer=go.AddComponent<SpriteRenderer>();
+  // Match WorldPos: u,v in [0,1] map onto mapWidth x mapHeight centered at origin.
+  var sp=Sprite.Create(tex,new Rect(0,0,tex.width,tex.height),new Vector2(.5f,.5f),100f);
+  sprites.Add(sp);
+  mapRenderer.sprite=sp;
+  mapRenderer.sortingOrder=0;
+  AssignSpriteMaterial(mapRenderer);
+  float worldW=mapDef.mapWidth;
+  float worldH=mapDef.mapHeight;
+  float spriteW=sp.bounds.size.x;
+  float spriteH=sp.bounds.size.y;
+  if(spriteW<0.01f||spriteH<0.01f)return;
+  go.transform.localScale=new Vector3(worldW/spriteW,worldH/spriteH,1f);
+  go.transform.localPosition=new Vector3(0f,0f,0.05f);
  }
 
  void BuildEdges(){
@@ -367,12 +497,23 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void ConfigureConduit(LineRenderer lr,Vector3 pa,Vector3 pb,ExplorationLinkKind kind,bool visible,bool walkable,bool opened){
-  // Soft bend for organic rite feel (hidden uses same path, ghost styling below).
+  bool embedded=UseEmbeddedNodeVisuals();
   Vector3 mid=(pa+pb)*.5f;
   Vector3 perp=new Vector3(-(pb.y-pa.y),pb.x-pa.x,0f).normalized*((pa-pb).magnitude*.04f);
-  mid+=perp;
+  mid+=perp*(embedded?0.35f:1f);
   lr.positionCount=3;
   lr.SetPosition(0,pa);lr.SetPosition(1,mid);lr.SetPosition(2,pb);
+  if(embedded){
+   if(!walkable){
+    lr.enabled=false;
+    return;
+   }
+   lr.enabled=visible;
+   if(!visible)return;
+   lr.startColor=lr.endColor=new Color(1f,.84f,.48f,.24f);
+   lr.startWidth=lr.endWidth=.018f;
+   return;
+  }
   lr.enabled=visible;
   if(!visible)return;
   if(kind==ExplorationLinkKind.Breach&&!opened){
@@ -391,6 +532,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void BuildNodes(){
+  bool embedded=UseEmbeddedNodeVisuals();
   foreach(var cell in mapDef.cells){
    if(cell.locked)continue;
 
@@ -400,13 +542,29 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    Vector3 p=ExplorationMapSystem.WorldPos(mapDef,cell);p.z=-0.05f;
    root.transform.position=p;
 
+   if(embedded){
+    var markGo=new GameObject("embedded");
+    markGo.transform.SetParent(root.transform,false);
+    SetLayer(markGo);
+    markGo.transform.localPosition=new Vector3(0f,0f,.01f);
+    var embeddedSr=markGo.AddComponent<SpriteRenderer>();
+    embeddedSr.sprite=SoftGlowSprite();
+    embeddedSr.sortingOrder=2;
+    embeddedSr.enabled=false;
+    AssignSpriteMaterial(embeddedSr);
+    nodeEmbeddedMarks[cell.id]=embeddedSr;
+   }
+
    var ringGo=new GameObject("ring");
    ringGo.transform.SetParent(root.transform,false);
    SetLayer(ringGo);
    var ring=ringGo.AddComponent<SpriteRenderer>();
-   ring.sprite=RingSprite();ring.sortingOrder=3;ring.color=new Color(.85f,.7f,.4f,.35f);
+   ring.sprite=embedded?SoftRingSprite():RingSprite();
+   ring.sortingOrder=3;
+   ring.color=new Color(.85f,.7f,.4f,.35f);
    AssignSpriteMaterial(ring);
-   ringGo.transform.localScale=Vector3.one*.48f;
+   ringGo.transform.localScale=Vector3.one*(embedded?0.9f:.48f);
+   ring.enabled=!embedded;
    nodeRings[cell.id]=ring;
 
    var bodyGo=new GameObject("body");
@@ -427,7 +585,7 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    check.sprite=CircleSprite();check.sortingOrder=7;check.color=new Color(.95f,.8f,.4f,.95f);check.enabled=false;
    AssignSpriteMaterial(check);
 
-   if(cell.landmark||cell.type is "entrance" or "battle" or "event" or "building_door" or "rest"){
+   if(!embedded&&(cell.landmark||cell.type is "entrance" or "battle" or "event" or "building_door" or "rest")){
     var labelGo=new GameObject("label");
     labelGo.transform.SetParent(root.transform,false);
     SetLayer(labelGo);
@@ -443,22 +601,32 @@ public sealed class ExplorationMapStage : MonoBehaviour {
  }
 
  void BuildPiece(){
+  bool embedded=UseEmbeddedNodeVisuals();
   var shadowGo=new GameObject("PieceShadow");
   shadowGo.transform.SetParent(overlayRoot,false);
   SetLayer(shadowGo);
   pieceShadow=shadowGo.AddComponent<SpriteRenderer>();
-  pieceShadow.sprite=CircleSprite();pieceShadow.sortingOrder=6;pieceShadow.color=new Color(0,0,0,.5f);
+  pieceShadow.sprite=embedded?SoftGlowSprite():CircleSprite();
+  pieceShadow.sortingOrder=6;
+  pieceShadow.color=embedded?new Color(0,0,0,.28f):new Color(0,0,0,.5f);
   AssignSpriteMaterial(pieceShadow);
-  shadowGo.transform.localScale=new Vector3(.4f,.2f,1f);
+  shadowGo.transform.localScale=embedded?new Vector3(.55f,.28f,1f):new Vector3(.4f,.2f,1f);
 
   var go=new GameObject("PlayerPiece");
   go.transform.SetParent(overlayRoot,false);
   SetLayer(go);
   pieceTransform=go.transform;
   pieceRenderer=go.AddComponent<SpriteRenderer>();
-  pieceRenderer.sprite=PawnSprite();pieceRenderer.sortingOrder=9;
+  if(embedded){
+   pieceRenderer.sprite=SoftGlowSprite();
+   pieceRenderer.sortingOrder=9;
+   pieceRenderer.color=new Color(1f,.9f,.52f,.88f);
+   go.transform.localScale=Vector3.one*.42f;
+  } else {
+   pieceRenderer.sprite=PawnSprite();pieceRenderer.sortingOrder=9;
+   go.transform.localScale=Vector3.one*.55f;
+  }
   AssignSpriteMaterial(pieceRenderer);
-  go.transform.localScale=Vector3.one*.55f;
  }
 
  void RefreshMarkers(){
@@ -469,8 +637,21 @@ public sealed class ExplorationMapStage : MonoBehaviour {
    pieceTransform.position=p;
    if(pieceShadow!=null){var sp=p;sp.z=-0.01f;sp.y-=0.06f;pieceShadow.transform.position=sp;}
   }
+  RefreshStrikeHighlights();
   SetSelectedVisual(runState.selectedNodeId);
+  RefreshEnemyMarkers();
   RefreshEdgeStyles();
+ }
+
+ void RefreshStrikeHighlights(){
+  strikeHighlightIds.Clear();
+  if(runState==null||!runState.mapCombatProto)return;
+  var card=MapCombatSystem.SelectedCard(runState);
+  if(card==null)return;
+  int range=MapCombatSystem.RangeFor(card);
+  if(range<=0)return;
+  foreach(int id in MapCombatSystem.NodesInStrikeRange(runState,range))
+   strikeHighlightIds.Add(id);
  }
 
  void RefreshEdgeStyles(){
@@ -581,6 +762,31 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   tex.SetPixels(cols);tex.Apply();var sp=Sprite.Create(tex,new Rect(0,0,s,s),new Vector2(.5f,.5f),48f);sprites.Add(sp);return sp;
  }
 
+ Sprite SoftGlowSprite(){
+  int s=128;var tex=new Texture2D(s,s,TextureFormat.ARGB32,false);var cols=new Color[s*s];
+  float c=(s-1)*.5f;
+  for(int y=0;y<s;y++)for(int x=0;x<s;x++){
+   float d=Vector2.Distance(new Vector2(x,y),new Vector2(c,c))/c;
+   float a=Mathf.Clamp01(1f-d);
+   a=a*a*a;
+   cols[y*s+x]=new Color(1f,1f,1f,a);
+  }
+  tex.SetPixels(cols);tex.Apply();var sp=Sprite.Create(tex,new Rect(0,0,s,s),new Vector2(.5f,.5f),48f);sprites.Add(sp);return sp;
+ }
+
+ Sprite SoftRingSprite(){
+  int s=128;var tex=new Texture2D(s,s,TextureFormat.ARGB32,false);var cols=new Color[s*s];
+  float c=(s-1)*.5f;
+  for(int y=0;y<s;y++)for(int x=0;x<s;x++){
+   float d=Vector2.Distance(new Vector2(x,y),new Vector2(c,c))/c;
+   float band=Mathf.Exp(-Mathf.Pow((d-.62f)*11f,2f));
+   float inner=Mathf.Exp(-Mathf.Pow((d-.42f)*9f,2f))*.22f;
+   float a=Mathf.Clamp01(band+inner);
+   cols[y*s+x]=new Color(1f,1f,1f,a);
+  }
+  tex.SetPixels(cols);tex.Apply();var sp=Sprite.Create(tex,new Rect(0,0,s,s),new Vector2(.5f,.5f),48f);sprites.Add(sp);return sp;
+ }
+
  Sprite NodeIconSprite(string type){
   int s=56;var tex=new Texture2D(s,s,TextureFormat.ARGB32,false);var cols=new Color[s*s];
   for(int i=0;i<cols.Length;i++)cols[i]=Color.clear;
@@ -677,6 +883,45 @@ public sealed class ExplorationMapStage : MonoBehaviour {
   if(sr==null)return;
   var mat=EnsureSpriteMaterial();
   if(mat!=null)sr.sharedMaterial=mat;
+ }
+
+ bool UseEmbeddedNodeVisuals()=>false;
+
+ static float EmbeddedGlowScale(ExplorationCellDef cell,bool current,bool highlighted){
+  float s=cell?.landmark==true?0.88f:0.62f;
+  if(cell?.type is "battle" or "rest" or "building_door")s+=0.08f;
+  if(current)s+=0.06f;
+  else if(highlighted)s+=0.03f;
+  return s;
+ }
+
+ static Color EmbeddedGlowColor(string type,bool current,bool reachable,bool inStrike,bool selected,bool sealedBreach){
+  Color baseCol=type switch{
+   "battle"=>new Color(.72f,.42f,.92f,1f),
+   "rest"=>new Color(1f,.62f,.28f,1f),
+   "building_door"=>new Color(1f,.78f,.42f,1f),
+   "entrance" or "exit"=>new Color(.72f,.82f,.98f,1f),
+   _=>new Color(.92f,.84f,.62f,1f),
+  };
+  if(current)return new Color(1f,.9f,.52f,.42f);
+  if(inStrike)return new Color(.45f,.95f,1f,.34f);
+  if(sealedBreach)return new Color(.78f,.45f,.58f,.32f);
+  if(reachable)return Color.Lerp(baseCol,new Color(1f,.9f,.55f,1f),.35f)*new Color(1f,1f,1f,.28f);
+  if(selected)return baseCol*new Color(1f,1f,1f,.24f);
+  return baseCol*new Color(1f,1f,1f,.18f);
+ }
+
+ static Color EmbeddedRingColor(string type,bool current,bool reachable,bool inStrike,bool selected,bool sealedBreach){
+  if(current)return new Color(1f,.88f,.45f,.38f);
+  if(inStrike)return new Color(.35f,.95f,1f,.42f);
+  if(sealedBreach)return new Color(.75f,.42f,.55f,.34f);
+  if(reachable)return new Color(1f,.86f,.48f,.28f);
+  if(selected)return new Color(1f,.92f,.58f,.22f);
+  return type switch{
+   "battle"=>new Color(.68f,.45f,.88f,.18f),
+   "rest"=>new Color(1f,.58f,.24f,.18f),
+   _=>new Color(.88f,.78f,.55f,.16f),
+  };
  }
 }
 }

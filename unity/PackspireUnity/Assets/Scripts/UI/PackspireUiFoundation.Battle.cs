@@ -287,6 +287,11 @@ public sealed partial class PackspireUiFoundation {
  }
 
  public void RefreshBattleUi(){
+  // Same-screen combat on the seal grid: refresh GridBoard chrome instead of full battle screen.
+  if(gridBoardBuilt&&game.UiScreen==ScreenId.GridBoard){
+   RefreshGridBoard();
+   return;
+  }
   if(!battleUiBuilt||battleRoot==null)return;
   var run=game.UiRun;
   var battle=game.UiBattle;
@@ -561,7 +566,12 @@ public sealed partial class PackspireUiFoundation {
  }
 
  public void PlayBattleActionFx(BattleActionFx fx){
-  if(!battleUiBuilt||battleRoot==null||!fx.ok)return;
+  if(!fx.ok)return;
+  if(gridBoardBuilt&&gridBoardCombatMode&&gridBoardCombatStage!=null){
+   PlayGridBattleActionFx(fx);
+   return;
+  }
+  if(!battleUiBuilt||battleRoot==null)return;
   int stagger=0;
   if(fx.damageToEnemy>0){
    SpawnBattleFloater(true,battleIconDamage,fx.damageToEnemy.ToString(),"ps-battle-floater-damage",stagger);

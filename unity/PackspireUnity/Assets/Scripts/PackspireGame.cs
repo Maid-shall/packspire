@@ -8,7 +8,7 @@ public partial class PackspireGame : MonoBehaviour {
 
 
  public static PackspireGame Instance { get; private set; }
- MetaSave meta; RunState run; ExplorationRunState exploration; BattleState battle; ScreenId screen; string selectedUid="",message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
+ MetaSave meta; RunState run; ExplorationRunState exploration; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string selectedUid="",message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
  ScreenId lastVisualScreen; bool visualScreenTracked;
@@ -18,7 +18,9 @@ public partial class PackspireGame : MonoBehaviour {
  public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
  public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase;
  public ExplorationRunState UiExploration=>exploration;
+ public GridBoardRunState UiGridBoard=>gridBoard;
  public bool UiUsesExplorationMap=>exploration!=null;
+ public bool UiUsesGridBoard=>gridBoard!=null;
  public bool UiExplorationEventActive=>explorationEventActive;
  public int UiExplorationEventNodeId=>explorationEventNodeId;
  public BattleState UiBattle=>battle;
@@ -37,8 +39,9 @@ public partial class PackspireGame : MonoBehaviour {
   explorationEventActive=false;explorationEventNodeId=-1;
   if(target==ScreenId.Pack)OpenPacking();
   else{
+  // Also clear grid board when returning to hub meta screens
    if(target==ScreenId.Hub||target==ScreenId.Status||target==ScreenId.Vault||target==ScreenId.Heirloom||target==ScreenId.Faction||target==ScreenId.Expedition||target==ScreenId.Compendium||target==ScreenId.Character){
-    run=null;exploration=null;SetRoutePresentationMode(RoutePresentationMode.None);
+    run=null;exploration=null;gridBoard=null;SetRoutePresentationMode(RoutePresentationMode.None);
    }
    screen=target;
   }
@@ -123,13 +126,58 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiDevOpenExplorationMap(){
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
   packingAtBase=false;
+  gridBoard=null;
   exploration=ExplorationMapSystem.CreateRun(ExplorationMapCatalog.DefaultMapId);
+  MapCombatSystem.EnsureProto(exploration);
   battle=null;
   explorationEventActive=false;explorationEventNodeId=-1;
   screen=ScreenId.Map;
-  message="DEV: 遠征マップ";
+  message="DEV: 遠征マップ（MapDeck試作ON）";
   SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
   UiDevCloseWithoutRestore();
+ }
+ public void UiDevOpenGridBoard(){
+  if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
+  packingAtBase=false;
+  exploration=null;
+  explorationEventActive=false;explorationEventNodeId=-1;
+  battle=null;
+  gridBoard=GridBoardSystem.Create(run.dungeon);
+  screen=ScreenId.GridBoard;
+  message="DEV: 封印格子盤（配置→一筆→進行）";
+  SetRoutePresentationMode(RoutePresentationMode.None);
+  UiDevCloseWithoutRestore();
+ }
+ public void UiResetGridBoard(){
+  if(run==null)return;
+  exploration=null;
+  explorationEventActive=false;explorationEventNodeId=-1;
+  battle=null;
+  gridBoard=GridBoardSystem.Create(run.dungeon);
+  screen=ScreenId.GridBoard;
+  message="封印格子をやり直した";
+  SetRoutePresentationMode(RoutePresentationMode.None);
+ }
+ public void UiFinishExpedition(bool win=true)=>FinishRun(win);
+ public void UiRetreatFromGrid(){
+  message="途中撤退した。戦利品は持ち帰れる";
+  FinishRun(true);
+ }
+ public void UiAdvanceGridArea(){
+  if(gridBoard==null)return;
+  if(!GridBoardSystem.TryAdvanceArea(gridBoard,out var msg)){message=msg;return;}
+  message=msg;
+  PackspireUiFoundation.Instance?.ForceRefreshScreen();
+ }
+ public void UiConfirmGridReturn(){
+  if(gridBoard==null)return;
+  gridBoard.pendingGate="";
+  message=$"区画 {gridBoard.areaIndex+1} の帰還点から持ち帰った";
+  FinishRun(true);
+ }
+ public void UiDeclineGridGate(){
+  if(gridBoard==null)return;
+  GridBoardSystem.DeclineGate(gridBoard);
  }
  public string UiRoleMilestone(string roleId,bool maximum)=>RoleMilestoneText(roleId,maximum);
  public Texture2D ResolveCharacterPortrait(CharacterDef def){
@@ -286,10 +334,7 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public void UiPackingSave(){
   UiPackingCapture();
-  if(!packingAtBase){
-   screen=ScreenId.Map;
-   if(exploration!=null)SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
-  }
+  if(!packingAtBase)ReturnToExpeditionScreen();
  }
  public void UiTakeReward(string itemId){
   if(run==null||!GameCatalog.Items.ContainsKey(itemId))return;
@@ -297,21 +342,60 @@ public partial class PackspireGame : MonoBehaviour {
   StorageFormulaSystem.EnsureItemRolled(loot);
   run.lootBag.Add(loot);
   rewardSelectionId="";
-  screen=ScreenId.Map;
-  if(exploration!=null)SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
+  ReturnToExpeditionScreen();
  }
  public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
- public void UiReturnToMap(){
-  screen=ScreenId.Map;
-  if(exploration!=null)SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
+ public void UiReturnToMap()=>ReturnToExpeditionScreen();
+ public void UiResolveEvent(int choice){
+  if(run==null)return;
+  if(choice==0){run.hp=Mathf.Max(1,run.hp-6);run.gold+=24;message="代償を払い、24Gを得た";}
+  else if(choice==1){foreach(var item in run.inventory)item.durability=6;message="残響が装備を修復した";}
+  else message="黒い靄を振り払い、探索へ戻った";
+  ReturnToExpeditionScreen();
  }
- public void UiResolveEvent(int choice){if(run==null)return;if(choice==0){run.hp=Mathf.Max(1,run.hp-6);run.gold+=24;}else if(choice==1)foreach(var item in run.inventory)item.durability=6;screen=ScreenId.Map;}
+ public void UiBeginGridEvent(){
+  if(run==null||gridBoard==null)return;
+  message="記憶の揺らぎに触れた";
+  screen=ScreenId.Event;
+  SetRoutePresentationMode(RoutePresentationMode.None);
+ }
+ public void UiBeginGridEncounter(){
+  if(run==null||gridBoard==null||battle!=null)return;
+  StartBattle(false);
+ }
  public void UiReturnToHub(){
-  run=null;exploration=null;explorationEventActive=false;explorationEventNodeId=-1;
+  run=null;exploration=null;gridBoard=null;explorationEventActive=false;explorationEventNodeId=-1;
   SetRoutePresentationMode(RoutePresentationMode.None);screen=ScreenId.Hub;
  }
+ void ReturnToExpeditionScreen(){
+  if(gridBoard!=null){
+   screen=ScreenId.GridBoard;
+   SetRoutePresentationMode(RoutePresentationMode.None);
+  } else {
+   screen=ScreenId.Map;
+   if(exploration!=null)SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
+  }
+ }
  void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;selectedUid="";message="荷造りセットを編集";screen=ScreenId.Pack;}
- void StartRun(string dungeon){try{message="ダンジョンを生成中…";run=LoadoutSystem.CreateRun(meta,dungeon);packingAtBase=false;exploration=ExplorationMapSystem.CreateRun(ExplorationMapCatalog.DefaultMapId);selectedUid="";explorationEventActive=false;explorationEventNodeId=-1;message=$"{ExplorationMapSystem.Def(exploration)?.name??"探索"}へ進入";screen=ScreenId.Map;SetRoutePresentationMode(RoutePresentationMode.RiteDebug);}catch(Exception ex){run=null;exploration=null;screen=ScreenId.Expedition;message="遠征開始エラー："+ex.Message;Debug.LogException(ex);}}
+ void StartRun(string dungeon){
+  try{
+   message="ダンジョンを生成中…";
+   run=LoadoutSystem.CreateRun(meta,dungeon);
+   packingAtBase=false;
+   exploration=null;
+   explorationEventActive=false;explorationEventNodeId=-1;
+   battle=null;
+   selectedUid="";
+   gridBoard=GridBoardSystem.Create(run.dungeon);
+   message="封印格子を展開した";
+   screen=ScreenId.GridBoard;
+   SetRoutePresentationMode(RoutePresentationMode.None);
+  }catch(Exception ex){
+   run=null;exploration=null;gridBoard=null;screen=ScreenId.Expedition;
+   message="遠征開始エラー："+ex.Message;
+   Debug.LogException(ex);
+  }
+ }
  void StartBattle(bool boss){
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);
@@ -325,14 +409,17 @@ public partial class PackspireGame : MonoBehaviour {
    enemy=pool[UnityEngine.Random.Range(0,pool.Length)];
   }
   battle=BattleSystem.Begin(run,enemy,dungeon.hpScale);
-  screen=ScreenId.Battle;
+  // Same-screen combat when on the seal grid; legacy full battle screen otherwise.
+  screen=gridBoard!=null?ScreenId.GridBoard:ScreenId.Battle;
   SetRoutePresentationMode(RoutePresentationMode.None);
  }
  void WinBattle(){
   int goldBonus=CharacterSystem.WinGoldBonus(run);
   run.battlesWon++;run.gold+=12+run.battlesWon*3+goldBonus;run.hp=Mathf.Min(run.maxHp,run.hp+3);
   if(goldBonus>0)message=$"勝利　+{goldBonus}G（{CharacterSystem.OfRun(run).traitName}）";
-  if(battle!=null&&battle.enemy.tier==3){FinishRun(true);return;}
+  bool boss=battle!=null&&battle.enemy.tier==3;
+  battle=null;
+  if(boss){FinishRun(true);return;}
   if(exploration!=null)ExplorationMapSystem.MarkCleared(exploration,exploration.currentNodeId);
   screen=ScreenId.Reward;
   if(exploration!=null)SetRoutePresentationMode(RoutePresentationMode.RiteDebug);
@@ -358,7 +445,7 @@ public partial class PackspireGame : MonoBehaviour {
   }
   meta.runs++;SaveSystem.Save(meta);
   battle=null;
-  exploration=null;explorationEventActive=false;explorationEventNodeId=-1;
+  exploration=null;gridBoard=null;explorationEventActive=false;explorationEventNodeId=-1;
   SetRoutePresentationMode(RoutePresentationMode.None);
   message=win?"遠征成功。戦利品をすべて保管しました":"探索終了。戦利品と獲得ゴールドは持ち帰れません";
   screen=win?ScreenId.GameClear:ScreenId.GameOver;

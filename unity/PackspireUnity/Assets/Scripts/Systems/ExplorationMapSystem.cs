@@ -59,6 +59,13 @@ public class ExplorationRunState {
  public List<string> openedEdges=new();
  /// <summary>Known hidden edges as "mapId:lo:hi".</summary>
  public List<string> knownHiddenEdges=new();
+ /// <summary>Prototype MapDeck combat (hop-range strikes). Not the final dual-deck loadout.</summary>
+ public bool mapCombatProto;
+ public bool mapCombatSeeded;
+ public int mapEnergy=2;
+ public string selectedMapCardUid="";
+ public List<CardInstance> mapHand=new();
+ public List<MapEnemyState> mapEnemies=new();
 }
 
 public enum ExplorationEncounter {
@@ -237,6 +244,7 @@ public static class ExplorationMapSystem {
   };
   MarkVisited(run,entrance.id);
   Reveal(run,def,entrance.id);
+  MapCombatSystem.EnsureProto(run);
   return run;
  }
 
@@ -405,6 +413,7 @@ public static class ExplorationMapSystem {
    return ExplorationEncounter.None;
   }
   if(IsCleared(run,nodeId))return ExplorationEncounter.None;
+  if(MapCombatSystem.HasLivingEnemy(run,nodeId))return ExplorationEncounter.Battle;
   return node.type switch{
    "event" or "treasure"=>ExplorationEncounter.Event,
    "battle" or "boss"=>ExplorationEncounter.Battle,

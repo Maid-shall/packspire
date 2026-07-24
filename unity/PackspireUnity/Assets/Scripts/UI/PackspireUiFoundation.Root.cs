@@ -61,6 +61,8 @@ public sealed partial class PackspireUiFoundation {
   AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
   AddDevAction(grid,"ゲームオーバー(DEV)",OpenGameOverPreviewFromDev);
   AddDevAction(grid,"ゲームクリア(DEV)",OpenGameClearPreviewFromDev);
+  AddDevAction(grid,"封印格子盤(DEV)",()=>DevNavigate(ScreenId.GridBoard,()=>game.UiDevOpenGridBoard()));
+  AddDevAction(grid,"遠征マップ(DEV・旧ノード)",()=>DevNavigate(ScreenId.Map,()=>game.UiDevOpenExplorationMap()));
   scroll.Add(grid);
   developerPanelRoot.Add(scroll);
   var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());

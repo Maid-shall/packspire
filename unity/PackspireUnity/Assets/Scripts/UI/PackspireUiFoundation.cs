@@ -66,6 +66,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   HandleNavInput();
   RefreshDeveloperOverlay();
   if(renderedScreen==ScreenId.Map&&explorationMapBuilt)TickExplorationMap();
+  if(renderedScreen==ScreenId.GridBoard&&gridBoardBuilt)TickGridBoard();
  }
  void OnDestroy(){
   if(Instance==this)Instance=null;
@@ -76,11 +77,13 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  public bool Handles(ScreenId value){
   if(!uiReady||game==null)return false;
   if(value==ScreenId.Map)return game.UiUsesExplorationMap;
+  if(value==ScreenId.GridBoard)return game.UiUsesGridBoard;
   return true;
  }
  public void ForceRefreshScreen(){
   hasRenderedScreen=false;
   explorationMapBuilt=false;
+  gridBoardBuilt=false;
   battleUiBuilt=false;
   if(uiReady)RefreshScreen(true);
  }
