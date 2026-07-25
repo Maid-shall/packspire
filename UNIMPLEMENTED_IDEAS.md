@@ -1,6 +1,6 @@
 # PACKSPIRE 未実装アイデアノート
 
-これまでの相談で候補・方向性として出たものの、まだ実装していない内容をまとめています。現在動いている仕様と調整値は `GAME_DATA.md`、ゲーム全体の説明は `README.md` を参照してください。
+これまでの相談で候補・方向性として出たものの、まだ実装していない内容をまとめています。現在動いている仕様は [GAME_AND_SYSTEMS.md](GAME_AND_SYSTEMS.md)、数値とIDは [DATA_REFERENCE.md](DATA_REFERENCE.md)、作業順は [ROADMAP_AND_TASKS.md](ROADMAP_AND_TASKS.md) を参照してください。
 
 ## 1. 拠点施設
 
