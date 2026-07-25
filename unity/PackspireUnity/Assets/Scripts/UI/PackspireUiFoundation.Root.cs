@@ -10,6 +10,7 @@ public sealed partial class PackspireUiFoundation {
    "UI/PackspireTheme",
    "UI/PackspirePacking",
    "UI/PackspireRoute",
+   "UI/PackspireGridBoard",
    "UI/PackspireRoster",
    "UI/PackspireBattle",
    "UI/PackspirePolish",
