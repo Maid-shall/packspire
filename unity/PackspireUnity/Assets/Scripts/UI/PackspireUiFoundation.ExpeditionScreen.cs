@@ -534,6 +534,8 @@ public sealed partial class PackspireUiFoundation {
  // Prefer dedicated portraitResource Sprite (e.g. Sena kick). Never assign sprite.texture to Image.image.
  Sprite ResolveExpeditionBannerSprite(CharacterDef character){
   if(character==null)return null;
+  if(character.portraitAsset!=null)return character.portraitAsset;
+  if(character.portraitFrontAsset!=null)return character.portraitFrontAsset;
   if(character.HasPortraitAsset){
    var sprite=LoadPortraitSprite(character.portraitResource);
    if(sprite!=null)return sprite;
@@ -547,6 +549,8 @@ public sealed partial class PackspireUiFoundation {
 
  Texture2D ResolveExpeditionBannerTexture(CharacterDef character){
   if(character==null)return null;
+  if(character.portraitAsset!=null)return character.portraitAsset.texture;
+  if(character.portraitFrontAsset!=null)return character.portraitFrontAsset.texture;
   if(character.HasPortraitAsset){
    var tex=LoadPortraitTexture(character.portraitResource);
    if(tex!=null)return tex;

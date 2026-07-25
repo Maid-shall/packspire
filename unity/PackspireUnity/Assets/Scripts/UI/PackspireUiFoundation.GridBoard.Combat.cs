@@ -99,7 +99,7 @@ public sealed partial class PackspireUiFoundation {
   rawDamage=BattleSystem.Damage(baseDamage+dungeon.damage+pressure,battle.enemyStatuses,run.statuses);
   specialMove=baseDamage==0&&dungeon.damage+pressure==0;
   playerBlock=run.block;
-  effects=ContentDatabase.EnemyEffects(battle.enemy.name,moveIndex);
+  effects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   return true;
  }
 

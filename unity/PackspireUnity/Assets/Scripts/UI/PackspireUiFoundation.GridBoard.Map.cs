@@ -332,13 +332,15 @@ void OnGridCellClicked(int x,int y){
  void RefreshGridActors(GridBoardRunState run){
   if(gridBoardActorLayer==null||run==null)return;
   gridBoardActorLayer.Clear();
+  gridBoardHeroActor=null;
   // The explorer is an actor too, rather than a terrain decoration.  That
   // keeps future movement, hit reactions and facing animation independent of
   // the logical grid cell.
   var piece=GridBoardSystem.PieceVisual(run);
   var hero=Container("ps-gboard-actor ps-gboard-player-actor");
+  gridBoardHeroActor=hero;
   hero.pickingMode=PickingMode.Ignore;
-  hero.userData=new Vector2Int(Mathf.RoundToInt(piece.x),Mathf.RoundToInt(piece.y));
+  hero.userData=piece;
   var character=CharacterSystem.OfRun(game.UiRun);
   if(character!=null)
    hero.Add(CharacterPortraitFront(character,"ps-gboard-player-portrait"));
@@ -372,12 +374,25 @@ void OnGridCellClicked(int x,int y){
   gridBoardActorLayer.style.width=gridBoardGrid?.resolvedStyle.width??0;
   gridBoardActorLayer.style.height=gridBoardGrid?.resolvedStyle.height??0;
   foreach(var actor in gridBoardActorLayer.Children()){
-   if(actor.userData is not Vector2Int pos)continue;
+   Vector2 pos;
+   if(actor.userData is Vector2 precise)pos=precise;
+   else if(actor.userData is Vector2Int cell)pos=cell;
+   else continue;
    actor.style.left=9+pos.x*pitch;
    actor.style.top=9+pos.y*pitch;
    actor.style.width=pitch-2;
    actor.style.height=pitch-2;
   }
+ }
+
+ void UpdateGridBoardMotionVisual(GridBoardRunState run){
+  if(run==null)return;
+  if(gridBoardHeroActor==null){
+   RefreshGridActors(run);
+   return;
+  }
+  gridBoardHeroActor.userData=GridBoardSystem.PieceVisual(run);
+  LayoutGridBoardMap();
  }
 
  void SetGridBoardMapHover(bool hover){

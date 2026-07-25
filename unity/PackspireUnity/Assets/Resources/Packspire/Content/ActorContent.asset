@@ -1,0 +1,577 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff7bbd56b105d4643b45233f181bb00b, type: 3}
+  m_Name: ActorContent
+  m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireActorContentSet
+  roles:
+  - id: warrior
+    name: "\u6226\u58EB"
+    kind: "\u57FA\u672C\u8077"
+    description: "\u6B66\u5668\u653B\u6483\u3092\u5F37\u5316\u3059\u308B\u3002\u6700\u5927HP+2\u3002"
+    family: warrior
+    milestoneText: "\u540C\u3058\u6B66\u5668\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C0\u30E1\u30FC\u30B8\u3002"
+    maximumMilestoneText: "\u6B66\u5668\u30AB\u30FC\u30C9\u3092\u4E00\u5B9A\u56DE\u6570\u4F7F\u3046\u305F\u3073\u3001\u30E9\u30F3\u4E2D\u306E\u653B\u6483\u529B\u304C\u6210\u9577\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: guardian
+    name: "\u5B88\u8B77\u5175"
+    kind: "\u57FA\u672C\u8077"
+    description: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u5F37\u5316\u3059\u308B\u3002\u6700\u5927HP+2\u3002"
+    family: guardian
+    milestoneText: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u9023\u7D9A\u4F7F\u7528\u3059\u308B\u3068\u6B21\u306E\u9632\u5FA1\u52B9\u679C\u304C\u4E0A\u6607\u3059\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u958B\u59CB\u6642\u306B\u9632\u5FA1\u3092\u5F97\u3066\u3001\u4F59\u5270\u9632\u5FA1\u3092\u6B21\u306E\u30BF\u30FC\u30F3\u3078\u4E00\u90E8\u6301\u3061\u8D8A\u3059\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    - basicGuard
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: scout
+    name: "\u65A5\u5019"
+    kind: "\u57FA\u672C\u8077"
+    description: "\u77ED\u5263\u30FB\u69CD\u3068\u63A2\u7D22\u306B\u512A\u308C\u308B\u3002"
+    family: scout
+    milestoneText: "\u7570\u306A\u308B\u88C5\u5099\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C9\u30ED\u30FC\u3002"
+    maximumMilestoneText: "\u5404\u6226\u95D8\u3067\u6700\u521D\u306B\u4F7F\u30460\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u8907\u88FD\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicStrike
+    - basicTactic
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: artificer
+    name: "\u5DE5\u5320"
+    kind: "\u57FA\u672C\u8077"
+    description: "\u9053\u5177\u30AB\u30FC\u30C9\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: artificer
+    milestoneText: "\u5C5E\u6027\u4E00\u81F4\u304C3\u8272\u4EE5\u4E0A\u306A\u3089\u6226\u95D8\u958B\u59CB\u6642\u306B\u30A8\u30CD\u30EB\u30AE\u30FC\u3092\u5F97\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u4E2D\u306B\u6700\u521D\u306B\u4F7F\u3046\u30EB\u30FC\u30F3\u30FB\u9053\u5177\u30AB\u30FC\u30C9\u306E\u8010\u4E45\u3092\u6D88\u8CBB\u3057\u306A\u3044\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicTactic
+    - basicTactic
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: blade_master
+    name: "\u5263\u8056"
+    kind: "\u4E0A\u7D1A\u8077"
+    description: "\u5263\u3068\u77ED\u5263\u3092\u5927\u5E45\u306B\u5F37\u5316\u3059\u308B\u3002"
+    family: warrior
+    milestoneText: "\u540C\u3058\u6B66\u5668\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C0\u30E1\u30FC\u30B8\u3002"
+    maximumMilestoneText: "\u6B66\u5668\u30AB\u30FC\u30C9\u3092\u4E00\u5B9A\u56DE\u6570\u4F7F\u3046\u305F\u3073\u3001\u30E9\u30F3\u4E2D\u306E\u653B\u6483\u529B\u304C\u6210\u9577\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: bulwark
+    name: "\u57CE\u585E\u9A0E\u58EB"
+    kind: "\u4E0A\u7D1A\u8077"
+    description: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u5927\u5E45\u306B\u5F37\u5316\u3059\u308B\u3002"
+    family: guardian
+    milestoneText: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u9023\u7D9A\u4F7F\u7528\u3059\u308B\u3068\u6B21\u306E\u9632\u5FA1\u52B9\u679C\u304C\u4E0A\u6607\u3059\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u958B\u59CB\u6642\u306B\u9632\u5FA1\u3092\u5F97\u3066\u3001\u4F59\u5270\u9632\u5FA1\u3092\u6B21\u306E\u30BF\u30FC\u30F3\u3078\u4E00\u90E8\u6301\u3061\u8D8A\u3059\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    - basicGuard
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: hunter
+    name: "\u9B54\u7363\u72E9\u308A"
+    kind: "\u4E0A\u7D1A\u8077"
+    description: "\u77ED\u5263\u3068\u69CD\u3092\u5927\u5E45\u306B\u5F37\u5316\u3059\u308B\u3002"
+    family: scout
+    milestoneText: "\u7570\u306A\u308B\u88C5\u5099\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C9\u30ED\u30FC\u3002"
+    maximumMilestoneText: "\u5404\u6226\u95D8\u3067\u6700\u521D\u306B\u4F7F\u30460\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u8907\u88FD\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicStrike
+    - basicTactic
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: grand_artificer
+    name: "\u932C\u88C5\u8853\u5E2B"
+    kind: "\u4E0A\u7D1A\u8077"
+    description: "\u9053\u5177\u3092\u5927\u5E45\u306B\u5F37\u5316\u3059\u308B\u3002"
+    family: artificer
+    milestoneText: "\u5C5E\u6027\u4E00\u81F4\u304C3\u8272\u4EE5\u4E0A\u306A\u3089\u6226\u95D8\u958B\u59CB\u6642\u306B\u30A8\u30CD\u30EB\u30AE\u30FC\u3092\u5F97\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u4E2D\u306B\u6700\u521D\u306B\u4F7F\u3046\u30EB\u30FC\u30F3\u30FB\u9053\u5177\u30AB\u30FC\u30C9\u306E\u8010\u4E45\u3092\u6D88\u8CBB\u3057\u306A\u3044\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicTactic
+    - basicTactic
+    maxLevel: 10
+    artwork: {fileID: 0}
+  - id: arsenal_lord
+    name: "\u4E07\u5175\u306E\u738B"
+    kind: "\u96A0\u3057\u8077"
+    description: "\u3059\u3079\u3066\u306E\u6B66\u5668\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: warrior
+    milestoneText: "\u540C\u3058\u6B66\u5668\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C0\u30E1\u30FC\u30B8\u3002"
+    maximumMilestoneText: "\u6B66\u5668\u30AB\u30FC\u30C9\u3092\u4E00\u5B9A\u56DE\u6570\u4F7F\u3046\u305F\u3073\u3001\u30E9\u30F3\u4E2D\u306E\u653B\u6483\u529B\u304C\u6210\u9577\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: pack_saint
+    name: "\u4E0D\u52D5\u306E\u8056\u8005"
+    kind: "\u96A0\u3057\u8077"
+    description: "\u9632\u5FA1\u3068\u56DE\u5FA9\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: guardian
+    milestoneText: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u9023\u7D9A\u4F7F\u7528\u3059\u308B\u3068\u6B21\u306E\u9632\u5FA1\u52B9\u679C\u304C\u4E0A\u6607\u3059\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u958B\u59CB\u6642\u306B\u9632\u5FA1\u3092\u5F97\u3066\u3001\u4F59\u5270\u9632\u5FA1\u3092\u6B21\u306E\u30BF\u30FC\u30F3\u3078\u4E00\u90E8\u6301\u3061\u8D8A\u3059\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: rune_weaver
+    name: "\u5883\u754C\u306E\u7E54\u624B"
+    kind: "\u96A0\u3057\u8077"
+    description: "\u30EB\u30FC\u30F3\u7531\u6765\u30AB\u30FC\u30C9\u30920\u30B3\u30B9\u30C8\u5316\u3059\u308B\u3002"
+    family: artificer
+    milestoneText: "\u5C5E\u6027\u4E00\u81F4\u304C3\u8272\u4EE5\u4E0A\u306A\u3089\u6226\u95D8\u958B\u59CB\u6642\u306B\u30A8\u30CD\u30EB\u30AE\u30FC\u3092\u5F97\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u4E2D\u306B\u6700\u521D\u306B\u4F7F\u3046\u30EB\u30FC\u30F3\u30FB\u9053\u5177\u30AB\u30FC\u30C9\u306E\u8010\u4E45\u3092\u6D88\u8CBB\u3057\u306A\u3044\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicTactic
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: grid_dancer
+    name: "\u76E4\u4E0A\u306E\u821E\u8E0F\u5BB6"
+    kind: "\u96A0\u3057\u8077"
+    description: "0\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: scout
+    milestoneText: "\u7570\u306A\u308B\u88C5\u5099\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C9\u30ED\u30FC\u3002"
+    maximumMilestoneText: "\u5404\u6226\u95D8\u3067\u6700\u521D\u306B\u4F7F\u30460\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u8907\u88FD\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicStrike
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: quickblade
+    name: "\u8FC5\u5203\u58EB"
+    kind: "\u8907\u5408\u8077"
+    description: "\u98A8\u8272\u4E00\u81F4\u306E\u653B\u6483\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: scout
+    milestoneText: "\u7570\u306A\u308B\u88C5\u5099\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C9\u30ED\u30FC\u3002"
+    maximumMilestoneText: "\u5404\u6226\u95D8\u3067\u6700\u521D\u306B\u4F7F\u30460\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u8907\u88FD\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicStrike
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: anchor_knight
+    name: "\u5B9A\u7740\u9A0E\u58EB"
+    kind: "\u8907\u5408\u8077"
+    description: "\u571F\u8272\u4E00\u81F4\u306E\u9632\u5FA1\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: guardian
+    milestoneText: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u9023\u7D9A\u4F7F\u7528\u3059\u308B\u3068\u6B21\u306E\u9632\u5FA1\u52B9\u679C\u304C\u4E0A\u6607\u3059\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u958B\u59CB\u6642\u306B\u9632\u5FA1\u3092\u5F97\u3066\u3001\u4F59\u5270\u9632\u5FA1\u3092\u6B21\u306E\u30BF\u30FC\u30F3\u3078\u4E00\u90E8\u6301\u3061\u8D8A\u3059\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: siege_channeler
+    name: "\u653B\u57CE\u5C0E\u5E2B"
+    kind: "\u8907\u5408\u8077"
+    description: "\u8907\u6570\u8272\u4E00\u81F4\u3092\u9AD8\u706B\u529B\u3078\u5909\u3048\u308B\u3002"
+    family: artificer
+    milestoneText: "\u5C5E\u6027\u4E00\u81F4\u304C3\u8272\u4EE5\u4E0A\u306A\u3089\u6226\u95D8\u958B\u59CB\u6642\u306B\u30A8\u30CD\u30EB\u30AE\u30FC\u3092\u5F97\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u4E2D\u306B\u6700\u521D\u306B\u4F7F\u3046\u30EB\u30FC\u30F3\u30FB\u9053\u5177\u30AB\u30FC\u30C9\u306E\u8010\u4E45\u3092\u6D88\u8CBB\u3057\u306A\u3044\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicTactic
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: right_hand_swordsman
+    name: "\u7247\u624B\u5263\u9B3C"
+    kind: "\u914D\u7F6E\u96A0\u3057\u8077"
+    description: "\u53F3\u5074\u306E\u7247\u624B\u6B66\u5668\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: warrior
+    milestoneText: "\u540C\u3058\u6B66\u5668\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C0\u30E1\u30FC\u30B8\u3002"
+    maximumMilestoneText: "\u6B66\u5668\u30AB\u30FC\u30C9\u3092\u4E00\u5B9A\u56DE\u6570\u4F7F\u3046\u305F\u3073\u3001\u30E9\u30F3\u4E2D\u306E\u653B\u6483\u529B\u304C\u6210\u9577\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: iron_vanguard
+    name: "\u9244\u6BBB\u524D\u885B"
+    kind: "\u52E2\u529B\u8077"
+    description: "\u9632\u5177\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: guardian
+    milestoneText: "\u9632\u5FA1\u30AB\u30FC\u30C9\u3092\u9023\u7D9A\u4F7F\u7528\u3059\u308B\u3068\u6B21\u306E\u9632\u5FA1\u52B9\u679C\u304C\u4E0A\u6607\u3059\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u958B\u59CB\u6642\u306B\u9632\u5FA1\u3092\u5F97\u3066\u3001\u4F59\u5270\u9632\u5FA1\u3092\u6B21\u306E\u30BF\u30FC\u30F3\u3078\u4E00\u90E8\u6301\u3061\u8D8A\u3059\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: spore_druid
+    name: "\u80DE\u5B50\u68EE\u5C0E\u5E2B"
+    kind: "\u52E2\u529B\u8077"
+    description: "\u56DE\u5FA9\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: scout
+    milestoneText: "\u7570\u306A\u308B\u88C5\u5099\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C9\u30ED\u30FC\u3002"
+    maximumMilestoneText: "\u5404\u6226\u95D8\u3067\u6700\u521D\u306B\u4F7F\u30460\u30B3\u30B9\u30C8\u30AB\u30FC\u30C9\u3092\u8907\u88FD\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicStrike
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: guild_factor
+    name: "\u8377\u9020\u5546\u52D9\u5B98"
+    kind: "\u52E2\u529B\u8077"
+    description: "\u9053\u5177\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: artificer
+    milestoneText: "\u5C5E\u6027\u4E00\u81F4\u304C3\u8272\u4EE5\u4E0A\u306A\u3089\u6226\u95D8\u958B\u59CB\u6642\u306B\u30A8\u30CD\u30EB\u30AE\u30FC\u3092\u5F97\u308B\u3002"
+    maximumMilestoneText: "\u6226\u95D8\u4E2D\u306B\u6700\u521D\u306B\u4F7F\u3046\u30EB\u30FC\u30F3\u30FB\u9053\u5177\u30AB\u30FC\u30C9\u306E\u8010\u4E45\u3092\u6D88\u8CBB\u3057\u306A\u3044\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicGuard
+    - basicTactic
+    - basicTactic
+    maxLevel: 15
+    artwork: {fileID: 0}
+  - id: void_apostle
+    name: "\u865A\u7121\u306E\u4F7F\u5F92"
+    kind: "\u52E2\u529B\u8077"
+    description: "\u546A\u3044\u6B66\u5668\u3092\u5F37\u5316\u3059\u308B\u3002"
+    family: warrior
+    milestoneText: "\u540C\u3058\u6B66\u5668\u7531\u6765\u306E\u30AB\u30FC\u30C9\u3092\u7D9A\u3051\u3066\u4F7F\u3046\u3068\u8FFD\u52A0\u30C0\u30E1\u30FC\u30B8\u3002"
+    maximumMilestoneText: "\u6B66\u5668\u30AB\u30FC\u30C9\u3092\u4E00\u5B9A\u56DE\u6570\u4F7F\u3046\u305F\u3073\u3001\u30E9\u30F3\u4E2D\u306E\u653B\u6483\u529B\u304C\u6210\u9577\u3059\u308B\u3002"
+    startingCardIds:
+    - basicStrike
+    - basicStrike
+    - basicGuard
+    - basicGuard
+    maxLevel: 15
+    artwork: {fileID: 0}
+  enemies:
+  - id: sentinel
+    name: "\u9244\u6BBB\u306E\u756A\u5175"
+    tier: 1
+    hp: 34
+    moves:
+    - damage: 8
+      effects: []
+    - damage: 5
+      effects:
+      - statusId: strength
+        target: 0
+        amount: 2
+        duration: 3
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: rats
+    name: "\u6D1E\u7A74\u30CD\u30BA\u30DF\u306E\u7FA4\u308C"
+    tier: 1
+    hp: 29
+    moves:
+    - damage: 8
+      effects: []
+    - damage: 6
+      effects: []
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: porter
+    name: "\u9306\u3073\u305F\u8377\u904B\u3073\u4EBA\u5F62"
+    tier: 1
+    hp: 38
+    moves:
+    - damage: 10
+      effects: []
+    - damage: 0
+      effects: []
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: mage
+    name: "\u80DE\u5B50\u306E\u9B54\u5C0E\u5E2B"
+    tier: 2
+    hp: 45
+    moves:
+    - damage: 7
+      effects:
+      - statusId: poison
+        target: 2
+        amount: 3
+        duration: 0
+    - damage: 11
+      effects: []
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: beast
+    name: "\u93A7\u55B0\u3044\u7363"
+    tier: 2
+    hp: 50
+    moves:
+    - damage: 9
+      effects:
+      - statusId: armorBreak
+        target: 2
+        amount: 2
+        duration: 2
+    - damage: 10
+      effects: []
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: knight
+    name: "\u865A\u308D\u306A\u9A0E\u58EB"
+    tier: 2
+    hp: 54
+    moves:
+    - damage: 13
+      effects: []
+    - damage: 6
+      effects:
+      - statusId: vulnerable
+        target: 2
+        amount: 1
+        duration: 2
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  - id: dragon
+    name: "\u52AB\u706B\u7ADC"
+    tier: 2
+    hp: 62
+    moves:
+    - damage: 14
+      effects: []
+    - damage: 10
+      effects: []
+    - damage: 16
+      effects: []
+    portrait: {fileID: 21300000, guid: c2e5f9b38d6a4104b0f7e1a4d9c8b723, type: 3}
+    legacyPortraitResource: Art/Portraits/enemy-dragon-v1
+  - id: boss
+    name: "\u8377\u55B0\u3089\u3044"
+    tier: 3
+    hp: 72
+    moves:
+    - damage: 12
+      effects: []
+    - damage: 12
+      effects: []
+    - damage: 17
+      effects: []
+    portrait: {fileID: 0}
+    legacyPortraitResource: 
+  factions:
+  - id: iron
+    name: "\u9244\u6BBB\u8ECD"
+    description: "\u9632\u5177\u30AB\u30FC\u30C9\u3092\u5F37\u5316\u3059\u308B\u52E2\u529B\u3002"
+    ranks:
+    - "\u5F93\u58EB"
+    - "\u5175\u58EB"
+    - "\u9A0E\u58EB"
+    - "\u9244\u5C06"
+    artwork: {fileID: 0}
+  - id: spore
+    name: "\u80DE\u5B50\u6559\u56E3"
+    description: "\u52DD\u5229\u5F8C\u306E\u56DE\u5FA9\u3092\u5F37\u5316\u3059\u308B\u52E2\u529B\u3002"
+    ranks:
+    - "\u82BD\u5439\u304D"
+    - "\u57F9\u990A\u58EB"
+    - "\u68EE\u5C0E\u5E2B"
+    - "\u68EE\u306E\u4EE3\u884C\u8005"
+    artwork: {fileID: 0}
+  - id: guild
+    name: "\u8377\u9020\u308A\u5E2B\u7D44\u5408"
+    description: "\u5546\u5E97\u3068\u9053\u5177\u3092\u5F97\u610F\u3068\u3059\u308B\u52E2\u529B\u3002"
+    ranks:
+    - "\u898B\u7FD2\u3044"
+    - "\u7D44\u5408\u54E1"
+    - "\u5546\u52D9\u5B98"
+    - "\u5927\u756A\u982D"
+    artwork: {fileID: 0}
+  - id: void
+    name: "\u865A\u7121\u306E\u5DE1\u793C\u8005"
+    description: "\u7372\u5F97\u30B4\u30FC\u30EB\u30C9\u3068\u546A\u3044\u88C5\u5099\u304C\u5897\u3048\u308B\u52E2\u529B\u3002"
+    ranks:
+    - "\u8FF7\u3044\u5B50"
+    - "\u5DE1\u793C\u8005"
+    - "\u4F7F\u5F92"
+    - "\u6DF1\u6DF5\u537F"
+    artwork: {fileID: 0}
+  characters:
+  - id: ren
+    name: "\u84EE"
+    title: "\u9244\u93A7\u306E\u5263\u58EB"
+    description: "\u524D\u7DDA\u3067\u6575\u306E\u5203\u3092\u53D7\u3051\u6B62\u3081\u308B\u9060\u5F81\u8005\u3002"
+    portraitBody: 0
+    portraitHair: 0
+    portrait: {fileID: 0}
+    portraitFront: {fileID: 0}
+    portraitHub: {fileID: 0}
+    legacyPortraitResource: 
+    legacyPortraitFrontResource: 
+    legacyPortraitHubResource: 
+    traitName: "\u4E0D\u5C48"
+    traitText: "\u6700\u5927HP+4"
+    traitKind: maxHpBonus
+    traitValue: 4
+    activeSkillId: ren_rush
+    activeSkillName: "\u7A81\u6483"
+    activeSkillText: "\u6575\u306B10\u30C0\u30E1\u30FC\u30B8\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
+    activeSkillKind: 1
+    activeSkillAmount: 10
+    activeSkillSecondaryAmount: 0
+    portraitFocusX: 0.5
+    portraitFocusY: 0.26
+    portraitZoom: 2.2
+    portraitBannerOffsetX: 0
+    portraitBannerOffsetY: 0
+  - id: mio
+    name: "\u6FAA"
+    title: "\u5F71\u8D70\u308A\u306E\u65A5\u5019"
+    description: "\u9699\u3092\u898B\u9003\u3055\u306A\u3044\u63A2\u7D22\u306E\u5C02\u9580\u5BB6\u3002"
+    portraitBody: 1
+    portraitHair: 1
+    portrait: {fileID: 0}
+    portraitFront: {fileID: 0}
+    portraitHub: {fileID: 0}
+    legacyPortraitResource: 
+    legacyPortraitFrontResource: 
+    legacyPortraitHubResource: 
+    traitName: "\u5148\u8AAD\u307F"
+    traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B1\u679A\u8FFD\u52A0\u30C9\u30ED\u30FC"
+    traitKind: openingDraw
+    traitValue: 1
+    activeSkillId: mio_read
+    activeSkillName: "\u898B\u5207\u308A"
+    activeSkillText: "8\u30D6\u30ED\u30C3\u30AF\u30011\u679A\u30C9\u30ED\u30FC\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
+    activeSkillKind: 3
+    activeSkillAmount: 8
+    activeSkillSecondaryAmount: 1
+    portraitFocusX: 0.5
+    portraitFocusY: 0.26
+    portraitZoom: 2.2
+    portraitBannerOffsetX: 0
+    portraitBannerOffsetY: 0
+  - id: kuro
+    name: "\u7384"
+    title: "\u57CE\u58C1\u306E\u5B88\u4EBA"
+    description: "\u6700\u521D\u306E\u4E00\u6483\u3092\u51CC\u3050\u91CD\u88C5\u306E\u8B77\u885B\u3002"
+    portraitBody: 2
+    portraitHair: 0
+    portrait: {fileID: 0}
+    portraitFront: {fileID: 0}
+    portraitHub: {fileID: 0}
+    legacyPortraitResource: 
+    legacyPortraitFrontResource: 
+    legacyPortraitHubResource: 
+    traitName: "\u5805\u5B88"
+    traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B4\u30D6\u30ED\u30C3\u30AF"
+    traitKind: openingBlock
+    traitValue: 4
+    activeSkillId: kuro_bulwark
+    activeSkillName: "\u9244\u58C1"
+    activeSkillText: "14\u30D6\u30ED\u30C3\u30AF\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
+    activeSkillKind: 2
+    activeSkillAmount: 14
+    activeSkillSecondaryAmount: 0
+    portraitFocusX: 0.5
+    portraitFocusY: 0.26
+    portraitZoom: 2.2
+    portraitBannerOffsetX: 0
+    portraitBannerOffsetY: 0
+  - id: hina
+    name: "\u967D\u83DC"
+    title: "\u932C\u88C5\u306E\u6280\u5E2B"
+    description: "\u88C5\u5099\u3068\u9053\u5177\u306E\u6271\u3044\u306B\u9577\u3051\u305F\u5DE5\u5320\u3002"
+    portraitBody: 3
+    portraitHair: 2
+    portrait: {fileID: 0}
+    portraitFront: {fileID: 0}
+    portraitHub: {fileID: 0}
+    legacyPortraitResource: 
+    legacyPortraitFrontResource: 
+    legacyPortraitHubResource: 
+    traitName: "\u6574\u5099"
+    traitText: "\u6226\u95D8\u52DD\u5229\u6642\u306E\u6240\u6301\u91D1+3"
+    traitKind: winGold
+    traitValue: 3
+    activeSkillId: hina_repair
+    activeSkillName: "\u5FDC\u6025\u4FEE\u7406"
+    activeSkillText: "HP\u309210\u56DE\u5FA9\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
+    activeSkillKind: 4
+    activeSkillAmount: 10
+    activeSkillSecondaryAmount: 0
+    portraitFocusX: 0.5
+    portraitFocusY: 0.26
+    portraitZoom: 2.2
+    portraitBannerOffsetX: 0
+    portraitBannerOffsetY: 0
+  - id: sena
+    name: "\u702C\u540D"
+    title: "\u7089\u811A\u306E\u95D8\u58EB"
+    description: "\u8E74\u308A\u3067\u6226\u5834\u3092\u5207\u308A\u958B\u304F\u9060\u5F81\u8005\u3002"
+    portraitBody: 0
+    portraitHair: 0
+    portrait: {fileID: 21300000, guid: b1d4e8a27c5f4093a9e6d0f3c8b7a612, type: 3}
+    portraitFront: {fileID: 21300000, guid: f7b1c4d56e804329d0f5b2a4e6d7c189, type: 3}
+    portraitHub: {fileID: 21300000, guid: a8c2d5e67f9043ab1e6f7c8d9a0b1c2d, type: 3}
+    legacyPortraitResource: Art/Portraits/hero-sena-kick-v1
+    legacyPortraitFrontResource: Art/Portraits/DD/hero-sena-front-v1
+    legacyPortraitHubResource: Art/Portraits/DD/hero-sena-hub-v1
+    traitName: "\u7089\u811A"
+    traitText: "\u6700\u5927HP+2"
+    traitKind: maxHpBonus
+    traitValue: 2
+    activeSkillId: sena_kick
+    activeSkillName: "\u8E74\u65CB"
+    activeSkillText: "\u6575\u306B14\u30C0\u30E1\u30FC\u30B8\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
+    activeSkillKind: 1
+    activeSkillAmount: 14
+    activeSkillSecondaryAmount: 0
+    portraitFocusX: 0.39
+    portraitFocusY: 0.22
+    portraitZoom: 2.65
+    portraitBannerOffsetX: 0
+    portraitBannerOffsetY: 0.02

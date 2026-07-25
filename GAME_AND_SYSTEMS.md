@@ -214,10 +214,13 @@ GridBoardと荷造りは役割別のpartial classへ分割されています。�
 | 内容 | 主なファイル |
 |---|---|
 | 基本モデル・保存形式 | `Assets/Scripts/Core/Models.cs` |
-| 装備・カード・敵・ダンジョン | `Assets/Scripts/Core/GameCatalog.cs` |
-| キャラクター | `Assets/Scripts/Core/CharacterCatalog.cs` |
-| 拠点施設 | `Assets/Scripts/Core/HubFacilityCatalog.cs` |
-| 収納術式データ | `Assets/Scripts/Systems/StorageFormulaCatalog.cs` |
+| ゲームマスター入口 | `Assets/Resources/Packspire/PackspireContentDatabase.asset` |
+| カテゴリ別マスター | `Assets/Resources/Packspire/Content/*.asset` |
+| マスターデータ型・検証 | `Assets/Scripts/Core/PackspireContentDatabase.cs` |
+| 装備・カード等の互換API | `Assets/Scripts/Core/GameCatalog.cs` |
+| キャラクター互換API | `Assets/Scripts/Core/CharacterCatalog.cs` |
+| 拠点施設互換API | `Assets/Scripts/Core/HubFacilityCatalog.cs` |
+| 収納術式互換API | `Assets/Scripts/Systems/StorageFormulaCatalog.cs` |
 | 荷造り計算 | `Assets/Scripts/Systems/BackpackSystem.cs` |
 | デッキ構築 | `Assets/Scripts/Systems/LoadoutSystem.cs` |
 | 格子盤進行 | `Assets/Scripts/Systems/GridBoardSystem.cs` |
@@ -226,4 +229,8 @@ GridBoardと荷造りは役割別のpartial classへ分割されています。�
 | GridBoard UI | `Assets/Scripts/UI/PackspireUiFoundation.GridBoard*.cs` |
 | 荷造りUI | `Assets/Scripts/UI/PackspireUiFoundation.PreparationScreens*.cs` |
 
-コード上の一部日本語文字列は現在文字化けしています。IDと数値は参照できますが、日本語名称・説明はデータ移行時にUTF-8の正規データへ置き換える必要があります。
+装備、カード、役職、敵、ダンジョン、バッグ、勢力、キャラクター、施設、イベント、商人、報酬、状態異常、収納術式は、入口SOから参照する4つのカテゴリ別ScriptableObjectを正本とします。セーブとラン状態だけはJSONで保存し、マスターデータを安定した文字列IDで参照します。
+
+セーブは現行・書き込み途中・バックアップの3段階で保持し、旧版JSONは段階的なマイグレーションを通します。ビルド開始前にはマスターデータ検証が自動で走り、主要なデータ参照・セーブ移行・戦闘計算・格子盤初期化はEditModeテストで確認します。
+
+マスターデータ内の日本語は正規化済みです。UIコードなどに残る古い直書き文字列は、各画面の正式データ投入時に引き続き整理します。

@@ -124,6 +124,8 @@ public sealed partial class PackspireUiFoundation {
  }
 
  Texture2D PopDarkPortraitArt(CharacterDef def){
+  if(def?.portraitFrontAsset!=null)return def.portraitFrontAsset.texture;
+  if(def?.portraitAsset!=null)return def.portraitAsset.texture;
   if(def!=null&&!string.IsNullOrEmpty(def.id)){
    var cutout=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
    if(cutout!=null)return cutout;

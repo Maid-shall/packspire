@@ -60,6 +60,9 @@ public sealed partial class PackspireUiFoundation {
   if(run==null)return;
   if(game.UiBattle!=null)return;
   if(gridBoardEventOpen)return;
+  var previousPhase=run.phase;
+  int previousPathIndex=run.pathIndex;
+  bool previousMoving=run.moving;
   bool routeChanged=run.phase==GridBoardPhase.Run
    &&GridBoardSystem.TickRun(run,Time.unscaledDeltaTime);
   if(run.pendingEvent){
@@ -76,7 +79,12 @@ public sealed partial class PackspireUiFoundation {
    RefreshGridBoard();
    return;
   }
-  if(routeChanged)RefreshGridBoard();
+  if(!routeChanged)return;
+  bool presentationChanged=previousPhase!=run.phase
+   ||previousPathIndex!=run.pathIndex
+   ||previousMoving!=run.moving;
+  if(presentationChanged)RefreshGridBoard();
+  else UpdateGridBoardMotionVisual(run);
  }
 }
 }

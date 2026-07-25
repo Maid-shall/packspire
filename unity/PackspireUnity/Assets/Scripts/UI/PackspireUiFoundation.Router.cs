@@ -11,10 +11,7 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   screenRoot.style.display=DisplayStyle.Flex;
-  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen){
-   UpdateNavHud();
-   return;
-  }
+  if(!force&&hasRenderedScreen&&renderedScreen==game.UiScreen)return;
   if(hasRenderedScreen&&renderedScreen!=game.UiScreen&&!navSuppressHistory)
    RecordNavHistory(renderedScreen,game.UiScreen);
   if(renderedScreen==ScreenId.GridBoard&&game.UiScreen!=ScreenId.GridBoard)

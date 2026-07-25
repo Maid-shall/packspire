@@ -27,7 +27,7 @@ public static class BattleSystem {
   ResetBattleEphemeral(run);
   run.deck=BackpackSystem.BuildDeck(run);
   run.draw=Shuffle(run.deck.Select(x=>x.Clone()).ToList());
-  Draw(run,5);
+  Draw(run,PackspireContent.Data.balance.initialHand);
   int hp=Mathf.RoundToInt(enemy.hp*hpScale);
   var battle=new BattleState{enemy=enemy,enemyHp=hp,enemyMaxHp=hp,enemyBlock=0,move=0,enemyStatuses=new(),log="戦闘開始"};
   CharacterSystem.OnBattleBegin(run,battle);
@@ -42,7 +42,7 @@ public static class BattleSystem {
   run.hand??=new();run.hand.Clear();
   run.draw??=new();run.draw.Clear();
   run.discard??=new();run.discard.Clear();
-  run.energy=3;
+  run.energy=PackspireContent.Data.balance.baseEnergy;
   run.block=0;
   run.attackBuff=0;
   run.activeSkillUsed=false;
@@ -110,7 +110,7 @@ public static class BattleSystem {
   run.block=0;
   Tick(battle.enemyStatuses,ref battle.enemyHp,battle.enemyMaxHp);
   Tick(run.statuses,ref run.hp,run.maxHp);
-  var effects=ContentDatabase.EnemyEffects(battle.enemy.name,moveIndex);
+  var effects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   ApplyEffects(run,battle,effects,true);
   battle.move++;
   run.energy=3;

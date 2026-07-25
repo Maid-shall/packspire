@@ -8,7 +8,7 @@ public sealed partial class PackspireUiFoundation {
  // GridBoard is split by responsibility to keep the screen safe to extend:
  // Map = board/input/camera, Presentation = shared HUD, Combat = enemy data,
  // Cards = hand/previews, Events = modal encounters and the screen tick.
- VisualElement gridBoardRoot,gridBoardGrid,gridBoardActorLayer,gridBoardHandRoot,gridBoardDirRow,gridBoardHpFill,gridBoardShieldFill,gridBoardPortraitHost;
+ VisualElement gridBoardRoot,gridBoardGrid,gridBoardActorLayer,gridBoardHeroActor,gridBoardHandRoot,gridBoardDirRow,gridBoardHpFill,gridBoardShieldFill,gridBoardPortraitHost;
  VisualElement gridBoardViewport,gridBoardStage,gridBoardSelectedHost,gridBoardCombatStage,gridBoardCombatHpTrack,gridBoardCombatHpFill,gridBoardCombatShieldTrack,gridBoardCombatShieldFill;
  VisualElement gridBoardCombatEnemyFocus,gridBoardCombatVitals,gridBoardCombatIntentPanel,gridBoardCombatEnemyStatuses;
  VisualElement gridBoardCombatActionView,gridBoardCombatCardPreview;

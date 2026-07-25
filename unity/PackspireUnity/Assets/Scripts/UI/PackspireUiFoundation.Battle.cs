@@ -336,7 +336,7 @@ public sealed partial class PackspireUiFoundation {
   int moveIndex=battle.move%battle.enemy.damages.Length;
   int baseDamage=battle.enemy.damages[moveIndex];
   int rawIntent=BattleSystem.Damage(baseDamage+dungeon.damage,battle.enemyStatuses,run.statuses);
-  var moveEffects=ContentDatabase.EnemyEffects(battle.enemy.name,moveIndex);
+  var moveEffects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   RefreshBattleIntent(rawIntent,baseDamage==0&&dungeon.damage==0,run.block,moveEffects);
 
   SetMeter(battleEnemyHpFill,battleEnemyHpLabel,Mathf.Max(0,battle.enemyHp),battle.enemyMaxHp,$"{Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}",true);

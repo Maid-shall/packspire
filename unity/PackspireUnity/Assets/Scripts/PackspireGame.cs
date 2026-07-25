@@ -20,6 +20,13 @@ public partial class PackspireGame : MonoBehaviour {
  public GridBoardRunState UiGridBoard=>gridBoard;
  public bool UiUsesGridBoard=>gridBoard!=null;
  public BattleState UiBattle=>battle;
+ public EventContent UiCurrentEvent{
+  get{
+   string id=gridBoard?.pendingEventId;
+   if(string.IsNullOrEmpty(id))id=PackspireContent.Data.balance.defaultEventId;
+   return PackspireContent.Data.events.FirstOrDefault(x=>x.id==id);
+  }
+ }
  public ScreenId UiDeveloperReturnScreen=>developerReturnScreen;
  string rewardSelectionId="",shopSelectionId="";
  ScreenId developerReturnScreen; bool developerHasReturn;
@@ -98,18 +105,22 @@ public partial class PackspireGame : MonoBehaviour {
  public string UiRoleMilestone(string roleId,bool maximum)=>RoleMilestoneText(roleId,maximum);
  public Texture2D ResolveCharacterPortrait(CharacterDef def){
   if(def!=null&&def.HasPortraitAsset){
+   if(def.portraitAsset!=null)return def.portraitAsset.texture;
    var tex=Resources.Load<Texture2D>(def.portraitResource);
    if(tex!=null)return tex;
   }
   return characterArt;
  }
  public Sprite ResolveCharacterPortraitSprite(CharacterDef def){
-  if(def!=null&&def.HasPortraitAsset)
+  if(def!=null&&def.HasPortraitAsset){
+   if(def.portraitAsset!=null)return def.portraitAsset;
    return Resources.Load<Sprite>(def.portraitResource);
+  }
   return null;
  }
  public Texture2D ResolveCharacterPortraitFront(CharacterDef def){
   if(def!=null){
+   if(def.portraitFrontAsset!=null)return def.portraitFrontAsset.texture;
    if(!string.IsNullOrEmpty(def.portraitFrontResource)&&!def.portraitFrontResource.Contains("/DD/")){
     var front=Resources.Load<Texture2D>(def.portraitFrontResource);
     if(front!=null)return front;
@@ -131,6 +142,7 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public Texture2D ResolveCharacterPortraitHub(CharacterDef def){
   if(def!=null){
+   if(def.portraitHubAsset!=null)return def.portraitHubAsset.texture;
    if(def.HasHubPortraitAsset&&!def.portraitHubResource.Contains("/DD/")){
     var hub=Resources.Load<Texture2D>(def.portraitHubResource);
     if(hub!=null)return hub;
@@ -141,6 +153,7 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public Texture2D ResolveEnemyPortrait(EnemyDef def){
   if(def!=null&&def.HasPortraitAsset){
+   if(def.portraitAsset!=null)return def.portraitAsset.texture;
    var tex=Resources.Load<Texture2D>(def.portraitResource);
    if(tex!=null)return tex;
   }
@@ -265,9 +278,27 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiReturnToMap()=>ReturnToExpeditionScreen();
  public void UiResolveEvent(int choice){
   if(run==null)return;
-  if(choice==0){run.hp=Mathf.Max(1,run.hp-6);run.gold+=24;message="代償を払い、24Gを得た";}
-  else if(choice==1){foreach(var item in run.inventory)item.durability=6;message="残響が装備を修復した";}
-  else message="黒い靄を振り払い、探索へ戻った";
+  var current=UiCurrentEvent;
+  if(current==null||choice<0||choice>=current.choices.Length){
+   message="異変は静かに消えた";
+  } else {
+   var selected=current.choices[choice];
+   foreach(var effect in selected.effects??Array.Empty<EventEffectContent>()){
+    switch(effect.effect){
+     case EventEffectType.Hp:
+      run.hp=effect.amount<0?Mathf.Max(1,run.hp+effect.amount):Mathf.Min(run.maxHp,run.hp+effect.amount);
+      break;
+     case EventEffectType.Gold:
+      run.gold=Mathf.Max(0,run.gold+effect.amount);
+      break;
+     case EventEffectType.RepairAll:
+      foreach(var item in run.inventory)item.durability=Mathf.Max(item.durability,effect.amount);
+      break;
+    }
+   }
+   message=selected.resultText;
+  }
+  if(gridBoard!=null)gridBoard.pendingEventId="";
   ReturnToExpeditionScreen();
  }
  public void UiBeginGridEvent(){
@@ -354,7 +385,10 @@ public partial class PackspireGame : MonoBehaviour {
   message=win?"遠征成功。戦利品をすべて保管しました":"探索終了。戦利品と獲得ゴールドは持ち帰れません";
   screen=win?ScreenId.GameClear:ScreenId.GameOver;
  }
- string RoleMilestoneText(string id,bool maximum){if(id.Contains("guardian")||id.Contains("bulwark")||id.Contains("knight"))return maximum?"戦闘開始時に防御を得て、余剰防御を次のターンへ一部持ち越す。":"防御カードを連続使用すると次の防御効果が上昇する。";if(id.Contains("scout")||id.Contains("hunter")||id.Contains("blade")||id.Contains("dancer"))return maximum?"各戦闘で最初に使う0コストカードを複製する。":"異なる装備由来のカードを続けて使うと追加ドロー。";if(id.Contains("artificer")||id.Contains("rune")||id.Contains("channeler"))return maximum?"戦闘中に最初に使うルーン・道具カードの耐久を消費しない。":"属性一致が3色以上なら戦闘開始時にエネルギーを得る。";return maximum?"武器カードを一定回数使うたび、ラン中の攻撃力が成長する。":"同じ武器由来のカードを続けて使うと追加ダメージ。";}
+ string RoleMilestoneText(string id,bool maximum){
+  if(!GameCatalog.Roles.TryGetValue(id,out var role))return "";
+  return maximum?role.maximumMilestoneText:role.milestoneText;
+ }
  ItemInstance CloneItem(ItemInstance x)=>JsonUtility.FromJson<ItemInstance>(JsonUtility.ToJson(x));
 }
 }

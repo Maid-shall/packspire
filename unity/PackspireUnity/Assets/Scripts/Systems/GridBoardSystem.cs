@@ -9,6 +9,7 @@ public enum GridBoardPhase { Place, Path, Run, Done }
 [Serializable]
 public class GridCellState {
  public int x,y;
+ public string contentId="";
  /// <summary>floor | blocked | void | start | goal. Void supports future irregular boards.</summary>
  public string terrain="floor";
  /// <summary>empty | lamp | fog | seal | enemy | event | next | return</summary>
@@ -47,6 +48,7 @@ public class GridBoardRunState {
  public bool pendingBattle;
  /// <summary>Set when the piece lands on an event cell; UI opens Event screen.</summary>
  public bool pendingEvent;
+ public string pendingEventId="";
  /// <summary>Dungeon id used for area count / flavor.</summary>
  public string dungeonId="old_spire";
  public int areaIndex;
@@ -63,13 +65,15 @@ public static class GridBoardSystem {
  public const int DefaultAreaCount=3;
 
  public static GridBoardRunState Create(string dungeonId="old_spire"){
+  var balance=PackspireContent.Data.balance;
   var run=new GridBoardRunState{
-   dungeonId=string.IsNullOrEmpty(dungeonId)?"old_spire":dungeonId,
+   dungeonId=string.IsNullOrEmpty(dungeonId)?balance.defaultDungeonId:dungeonId,
    areaCount=AreaCountForDungeon(dungeonId),
    areaIndex=0,
    phase=GridBoardPhase.Place,
-   energy=DefaultEnergy,
-   energyMax=DefaultEnergy,
+   energy=balance.baseEnergy,
+   energyMax=balance.baseEnergy,
+   doomMax=balance.gridDoomMax,
    turnsMax=DefaultTurns,
    turnsUsed=0,
   };
@@ -110,7 +114,7 @@ public static class GridBoardSystem {
  public static string GrowthSummary(GridBoardRunState run){
   if(run?.cells==null)return "術式 —";
   int active=run.cells.Count(c=>c.place is "lamp" or "fog" or "seal");
-  int mature=run.cells.Count(c=>(c.place is "lamp" or "fog" or "seal")&&c.grow>=3);
+  int mature=run.cells.Count(c=>(c.place is "lamp" or "fog" or "seal")&&c.grow>=PackspireContent.Data.balance.gridGrowthThreshold);
   return active==0?"術式なし":$"術式 {active}　成熟 {mature}";
  }
 
@@ -120,10 +124,10 @@ public static class GridBoardSystem {
   matured=0;
   if(run?.cells==null)return;
   foreach(var cell in run.cells){
-   if(cell.place is not ("lamp" or "fog" or "seal")||cell.grow>=3)continue;
+   if(cell.place is not ("lamp" or "fog" or "seal")||cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold)continue;
    cell.grow++;
    advanced++;
-   if(cell.grow>=3)matured++;
+   if(cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold)matured++;
   }
  }
 
@@ -134,6 +138,7 @@ public static class GridBoardSystem {
   run.phase=GridBoardPhase.Place;
   run.pendingBattle=false;
   run.pendingEvent=false;
+  run.pendingEventId="";
   run.pendingGate="";
   run.selectedCardUid="";
   run.moving=false;
@@ -207,7 +212,11 @@ public static class GridBoardSystem {
    .OrderBy(_=>UnityEngine.Random.value)
    .Take(Mathf.Max(0,count))
    .ToList();
-  foreach(var c in pool){c.place=place;c.grow=0;}
+  foreach(var c in pool){
+   c.place=place;
+   c.contentId=place=="event"?PackspireContent.Data.balance.defaultEventId:"";
+   c.grow=0;
+  }
  }
 
  /// <summary>Build the exploration-side faces from the same placed equipment that builds combat cards.</summary>
@@ -226,20 +235,11 @@ public static class GridBoardSystem {
  }
 
  static CardInstance ExploreFace(CardInstance combatCard,ItemDef item){
-  string id=item.type switch{
-   ItemType.Weapon=>"gb_seal",
-   ItemType.Armor=>"gb_fog",
-   ItemType.Rune=>"gb_lamp",
-   ItemType.Supply=>"gb_fog",
-   _=>"gb_lamp",
-  };
-  (string name,string text)=id switch{
-   "gb_seal"=>($"{item.name}：楔", "マスを封鎖する。武器を盤面へ打ち込み、曲がるための壁を作る。"),
-   "gb_fog"=>($"{item.name}：帳", "マスに霧を置く。防護・攪乱の術式面。"),
-   _=>($"{item.name}：灯", "マスに灯りを置く。成熟すれば導線を支える。"),
-  };
+  string id=item.explorationCardId;
+  if(!GameCatalog.ExplorationCards.TryGetValue(id,out var def))
+   def=GameCatalog.ExplorationCards["gb_lamp"];
   return new CardInstance{
-   id=id,name=name,text=text,cost=1,type=CardType.Skill,source=item.name,
+   id=def.id,name=$"{item.name}：{def.name}",text=def.text,cost=def.cost,type=CardType.Skill,source=item.name,
    sourceItemUid=combatCard.sourceItemUid,slotKey="explore:"+combatCard.slotKey
   };
  }
@@ -253,17 +253,21 @@ public static class GridBoardSystem {
    run.selectedCardUid="";
    return;
   }
-  run.hand.Add(MakeCard("gb_lamp","灯り",1,"マスに灯り。通過すると育つ。"));
-  run.hand.Add(MakeCard("gb_fog","霧",1,"マスに霧。通過時に一瞬遅れる。"));
-  run.hand.Add(MakeCard("gb_seal","封鎖",1,"マスを封鎖＝曲がるための壁。"));
-  run.hand.Add(MakeCard("gb_lamp","灯り",1,"マスに灯り。通過すると育つ。"));
-  run.hand.Add(MakeCard("gb_seal","封鎖",1,"マスを封鎖＝曲がるための壁。"));
+  run.hand.Add(MakeCard("gb_lamp"));
+  run.hand.Add(MakeCard("gb_fog"));
+  run.hand.Add(MakeCard("gb_seal"));
+  run.hand.Add(MakeCard("gb_lamp"));
+  run.hand.Add(MakeCard("gb_seal"));
   run.selectedCardUid="";
  }
 
- static CardInstance MakeCard(string id,string name,int cost,string text)=>new(){
-  id=id,name=name,cost=cost,text=text,type=CardType.Skill,source="grid-board",slotKey=Guid.NewGuid().ToString("N")
- };
+ static CardInstance MakeCard(string id){
+  var def=GameCatalog.ExplorationCards[id];
+  return new CardInstance{
+   id=def.id,name=def.name,cost=def.cost,text=def.text,type=CardType.Skill,
+   source="grid-board",slotKey=Guid.NewGuid().ToString("N")
+  };
+ }
 
  public static GridCellState Cell(GridBoardRunState run,int x,int y){
   if(run==null)return null;
@@ -317,12 +321,7 @@ public static class GridBoardSystem {
   if(cell==null){msg="範囲外";return false;}
   if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
   if(cell.place!="empty"&&cell.place!="enemy"){msg="すでに何かある";return false;}
-  string place=card.id switch{
-   "gb_lamp"=>"lamp",
-   "gb_fog"=>"fog",
-   "gb_seal"=>"seal",
-   _=>"",
-  };
+  string place=GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)?exploration.place:"";
   if(string.IsNullOrEmpty(place)){msg="未知のカード";return false;}
   cell.place=place;
   cell.grow=0;
@@ -515,10 +514,10 @@ public static class GridBoardSystem {
   if(run==null||run.phase!=GridBoardPhase.Run)return false;
   if(!string.IsNullOrEmpty(run.pendingGate))return false;
   if(run.path==null||run.path.Count==0)return false;
-  float speed=2.4f;
+  float speed=PackspireContent.Data.balance.gridMoveSpeed;
   var here=run.moving?run.moveTo:run.piece;
   var cellHere=Cell(run,here.x,here.y);
-  if(cellHere!=null&&cellHere.place=="fog")speed=1.2f;
+  if(cellHere!=null&&cellHere.place=="fog")speed=PackspireContent.Data.balance.gridFogMoveSpeed;
   if(run.moving){
    run.moveT+=dt*speed;
    if(run.moveT>=1f){
@@ -555,7 +554,7 @@ public static class GridBoardSystem {
   var cell=Cell(run,pos.x,pos.y);
   if(cell==null)return;
   if(cell.place=="lamp"){
-   run.message=cell.grow>=3?"狼煙の灯りが導線を照らす":"灯りの傍を抜けた";
+   run.message=cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold?"狼煙の灯りが導線を照らす":"灯りの傍を抜けた";
   } else if(cell.place=="fog"){
    run.message="霧を抜けた";
   } else if(cell.place=="enemy"){
@@ -565,7 +564,9 @@ public static class GridBoardSystem {
    run.moveT=0f;
    run.message="敵影に接触した";
   } else if(cell.place=="event"){
+   run.pendingEventId=string.IsNullOrEmpty(cell.contentId)?PackspireContent.Data.balance.defaultEventId:cell.contentId;
    cell.place="empty";
+   cell.contentId="";
    run.pendingEvent=true;
    run.moving=false;
    run.moveT=0f;

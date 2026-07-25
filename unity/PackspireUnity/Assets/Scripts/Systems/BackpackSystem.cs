@@ -158,17 +158,11 @@ public static class BackpackSystem {
  }
 
  static List<CardInstance> RoleCards(string role){
-  string archetype=new[]{"guardian","bulwark","anchor_knight","iron_vanguard","pack_saint"}.Contains(role)?"guardian"
-   :new[]{"scout","hunter","quickblade","grid_dancer","spore_druid"}.Contains(role)?"scout"
-   :new[]{"artificer","grand_artificer","rune_weaver","siege_channeler","guild_factor"}.Contains(role)?"artificer"
-   :"warrior";
-  string[] ids=archetype=="guardian"?new[]{"basicStrike","basicGuard","basicGuard","basicGuard"}
-   :archetype=="scout"?new[]{"basicStrike","basicStrike","basicStrike","basicTactic"}
-   :archetype=="artificer"?new[]{"basicStrike","basicGuard","basicTactic","basicTactic"}
-   :new[]{"basicStrike","basicStrike","basicGuard","basicGuard"};
+  if(!GameCatalog.Roles.TryGetValue(role,out var roleDef))
+   roleDef=GameCatalog.Roles[PackspireContent.Data.balance.defaultRoleId];
+  string[] ids=roleDef.startingCardIds??System.Array.Empty<string>();
   return ids.Select((id,i)=>{
-   string roleName=GameCatalog.Roles.TryGetValue(role,out var roleDef)?roleDef.name:role;
-   var c=FromDef(GameCatalog.Cards[id],roleName+"の基本技","role-"+i);
+   var c=FromDef(GameCatalog.Cards[id],roleDef.name+"の基本技","role-"+i);
    c.roleCard=true;
    return c;
   }).ToList();

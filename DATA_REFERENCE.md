@@ -3,7 +3,7 @@
 最終更新: 2026-07-26
 基準: 現行Unityコード
 
-この文書は、現在コードに存在するID、基本値、データ関係を確認するための索引です。コードと差がある場合はコードを優先します。日本語文字列の一部はソース上で文字化けしているため、名称は既存の設計用語を併記しています。
+この文書は、現在のID、基本値、データ関係を確認するための索引です。差がある場合は `PackspireContentDatabase.asset` を優先します。
 
 ## 1. 基本列挙
 
@@ -80,7 +80,44 @@
 | `echoWall` | Skill | 1 | ブロック12 |
 | `starBomb` | Attack | 2 | 期待24、廃棄 |
 
-## 5. 共鳴
+## 5. 探索カード・消耗品・状態異常
+
+### 探索カード
+
+| ID | 配置 | EN | 用途 |
+|---|---|---:|---|
+| `gb_lamp` | `lamp` | 1 | 灯を配置 |
+| `gb_fog` | `fog` | 1 | 霧を配置 |
+| `gb_seal` | `seal` | 1 | 封印を配置 |
+
+装備は戦闘カード参照とは別に探索カードIDを一つ持ちます。収納術式に入った同じ装備から、戦闘面と探索面の両方を生成します。
+
+### 消耗品
+
+| ID | 効果 |
+|---|---|
+| `heal` | HPを12回復 |
+| `guard` | ブロック10 |
+| `fire` | 期待値12のダイスダメージ |
+| `energy` | EN+2 |
+
+所持状態はセーブへIDで保存し、名称・説明・効果種別・効果量はScriptableObjectを参照します。
+
+### 状態異常
+
+| ID | 種別 | 主効果 |
+|---|---|---|
+| `strength` | 強化 | 与ダメージ加算 |
+| `weak` | 弱体 | 与ダメージ低下 |
+| `vulnerable` | 弱体 | 被ダメージ増加 |
+| `poison` | 継続 | ターン終了時ダメージ、蓄積減少 |
+| `burn` | 継続 | ターン終了時ダメージ |
+| `regen` | 強化 | ターン終了時回復 |
+| `armorBreak` | 弱体 | 獲得ブロック低下 |
+
+カードと敵行動は状態異常ID・対象・量・持続を直接参照します。表示定義と効果参照はJSONではなく同じScriptableObject内にあります。
+
+## 6. 共鳴
 
 標準共鳴 `classic` の現行ルールです。
 
@@ -100,7 +137,7 @@
 | `shield` + `crystal` | `guard` → `echoWall` |
 | `bomb` + `flask` | 対象カード群 → `starBomb` |
 
-## 6. 収納術式
+## 7. 収納術式
 
 ### 術核
 
@@ -140,7 +177,7 @@
 | `stable` | 1.0 | 99 | 0.5 |
 | `volatile` | 1.5 | 8 | 0.65 |
 
-## 7. 色特性
+## 8. 色特性
 
 | ID | 条件 | 効果 |
 |---|---|---|
@@ -160,7 +197,7 @@
 
 色特性はLINKとは別系統です。
 
-## 8. 敵
+## 9. 敵
 
 `moves` は敵が順に使用する基礎行動値です。Doomとダンジョン補正が加わります。
 
@@ -177,7 +214,7 @@
 
 `dragon` には専用ポートレート `Art/Portraits/enemy-dragon-v1` が設定されています。他の敵は正式アートの追加が必要です。
 
-## 9. ダンジョン
+## 10. ダンジョン
 
 | ID | 名称 | 戦闘数 | HP倍率 | 攻撃加算 | 金倍率 |
 |---|---|---:|---:|---:|---:|
@@ -187,7 +224,7 @@
 
 GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノード式マップは現行仕様ではありません。
 
-## 10. キャラクター
+## 11. キャラクター
 
 現行ID:
 
@@ -207,9 +244,9 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 - 戦闘中1回のアクティブスキル。
 - バナー用フォーカス座標とズーム。
 
-現ソースの日本語名・説明は文字化けしているため、正式データ移行時に再定義します。
+名称・説明・特性・画像参照は `PackspireContentDatabase.asset` のキャラクター欄で編集します。
 
-## 11. 役職
+## 12. 役職
 
 ### 基本
 
@@ -242,7 +279,7 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 
 役職カタログと効果用の基盤はありますが、全解除条件・全効果・表示文が完成済みとはみなしません。
 
-## 12. 勢力
+## 13. 勢力
 
 | ID | 名称 |
 |---|---|
@@ -253,7 +290,7 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 
 各勢力は評判値と段階名を持ちます。正式な報酬、役職解除、イベント分岐はコンテンツ投入時に確定します。
 
-## 13. 拠点施設
+## 14. 拠点施設
 
 | ID | 接続画面 |
 |---|---|
@@ -269,13 +306,17 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 
 施設はテーマ、マップ上の座標、解放状態、アイコンResourcesパスを持ちます。
 
-## 14. 保存データ
+## 15. 保存データ
 
 ### セーブキー
 
 - 現行: `packspire_unity_save_v17`
+- 書き込み途中: `packspire_unity_save_v17_staging`
+- 自動退避: `packspire_unity_save_v17_backup`
 - 移行元: v16、v1
 - `MetaSave.version`: 17
+
+保存時は「旧現行値をbackupへ退避 → stagingへ新規値を書き込み → 現行値を更新」の順で確定します。読み込み時はstaging、現行、backup、旧版の順に有効なJSONを探索するため、書き込み中断や現行データ破損から復旧できます。
 
 ### MetaSave
 
@@ -324,7 +365,7 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 - 状態。
 - 山札、手札、捨て札。
 
-## 15. データ追加時のチェック
+## 16. データ追加時のチェック
 
 ### 装備
 
@@ -363,16 +404,25 @@ GridBoard上の区画数は戦闘数から2～4へ変換されます。旧36ノ�
 - 解決後の復帰先。
 - セーブ対象となる状態。
 
-## 16. 主なデータソース
+## 17. 主なデータソース
 
 | データ | ファイル |
 |---|---|
 | 基本モデル | `unity/PackspireUnity/Assets/Scripts/Core/Models.cs` |
-| 装備・カード・役職・敵・ダンジョン・勢力 | `unity/PackspireUnity/Assets/Scripts/Core/GameCatalog.cs` |
-| キャラクター | `unity/PackspireUnity/Assets/Scripts/Core/CharacterCatalog.cs` |
-| 拠点施設 | `unity/PackspireUnity/Assets/Scripts/Core/HubFacilityCatalog.cs` |
-| 収納術式 | `unity/PackspireUnity/Assets/Scripts/Systems/StorageFormulaCatalog.cs` |
+| マスターデータ入口 | `unity/PackspireUnity/Assets/Resources/Packspire/PackspireContentDatabase.asset` |
+| カード・状態・消耗品 | `unity/PackspireUnity/Assets/Resources/Packspire/Content/CardContent.asset` |
+| 装備・収納術式 | `unity/PackspireUnity/Assets/Resources/Packspire/Content/ItemContent.asset` |
+| 役職・敵・キャラクター | `unity/PackspireUnity/Assets/Resources/Packspire/Content/ActorContent.asset` |
+| ダンジョン・施設・イベント・商人・報酬・バランス | `unity/PackspireUnity/Assets/Resources/Packspire/Content/WorldContent.asset` |
+| データ型と検証 | `unity/PackspireUnity/Assets/Scripts/Core/PackspireContentDatabase.cs` |
+| 初期データ生成 | `unity/PackspireUnity/Assets/Editor/PackspireContentAssetBuilder.cs` |
+| 装備・カード等の互換API | `unity/PackspireUnity/Assets/Scripts/Core/GameCatalog.cs` |
+| キャラクター互換API | `unity/PackspireUnity/Assets/Scripts/Core/CharacterCatalog.cs` |
+| 拠点施設互換API | `unity/PackspireUnity/Assets/Scripts/Core/HubFacilityCatalog.cs` |
+| 収納術式互換API | `unity/PackspireUnity/Assets/Scripts/Systems/StorageFormulaCatalog.cs` |
 | 格子盤定数と状態 | `unity/PackspireUnity/Assets/Scripts/Systems/GridBoardSystem.cs` |
 | セーブ処理 | `unity/PackspireUnity/Assets/Scripts/Systems/SaveSystem.cs` |
+| ビルド前検証 | `unity/PackspireUnity/Assets/Editor/PackspireContentBuildValidator.cs` |
+| EditModeテスト | `unity/PackspireUnity/Assets/Editor/Tests/PackspireEditModeTests.cs` |
 
-データ移行が完了したら、この文書の表は新しい正本から自動生成できる形へ寄せるのが望ましいです。
+セーブデータは `SaveSystem` がJSONで管理し、マスターデータはScriptableObjectで管理します。セーブ内にはScriptableObject参照ではなく既存の文字列IDを保持するため、現在のセーブ互換性は維持されます。

@@ -75,10 +75,10 @@ public static class CharacterSystem {
   var def=OfRun(run);
   var fx=new BattleActionFx{ok=true,cardName=def.activeSkillName,cardType=CardType.Skill};
   string logLine;
-  switch(def.activeSkillId){
-   case "ren_rush":{
+  switch(def.activeSkillKind){
+   case CharacterSkillKind.Damage:{
     int dieOne,dieTwo,modifier;
-    int rolled=BattleSystem.RollDamage(10,out dieOne,out dieTwo,out modifier);
+    int rolled=BattleSystem.RollDamage(def.activeSkillAmount,out dieOne,out dieTwo,out modifier);
     int raw=BattleSystem.Damage(rolled,run.statuses,battle.enemyStatuses);
     int dealt=Mathf.Max(0,raw-battle.enemyBlock);
     battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
@@ -89,36 +89,25 @@ public static class CharacterSystem {
     logLine=$"{def.activeSkillName}：{dealt}ダメージ";
     break;
    }
-   case "mio_read":
-    run.block+=BattleSystem.Block(8,run.statuses);
-    BattleSystem.Draw(run,1);
-    fx.blockGained=8;
-    logLine=$"{def.activeSkillName}：8ブロック / 1枚ドロー";
+   case CharacterSkillKind.BlockAndDraw:
+    int block=BattleSystem.Block(def.activeSkillAmount,run.statuses);
+    run.block+=block;
+    BattleSystem.Draw(run,def.activeSkillSecondaryAmount);
+    fx.blockGained=block;
+    logLine=$"{def.activeSkillName}：{block}ブロック / {def.activeSkillSecondaryAmount}枚ドロー";
     break;
-   case "kuro_bulwark":
-    run.block+=BattleSystem.Block(14,run.statuses);
-    fx.blockGained=14;
-    logLine=$"{def.activeSkillName}：14ブロック";
+   case CharacterSkillKind.Block:
+    int gained=BattleSystem.Block(def.activeSkillAmount,run.statuses);
+    run.block+=gained;
+    fx.blockGained=gained;
+    logLine=$"{def.activeSkillName}：{gained}ブロック";
     break;
-   case "hina_repair":
+   case CharacterSkillKind.Heal:
     int before=run.hp;
-    run.hp=Mathf.Min(run.maxHp,run.hp+10);
+    run.hp=Mathf.Min(run.maxHp,run.hp+def.activeSkillAmount);
     fx.healGained=run.hp-before;
-    logLine=$"{def.activeSkillName}：HP+10（{run.hp}/{run.maxHp}）";
+    logLine=$"{def.activeSkillName}：HP+{fx.healGained}（{run.hp}/{run.maxHp}）";
     break;
-   case "sena_kick":{
-    int dieOne,dieTwo,modifier;
-    int rolled=BattleSystem.RollDamage(14,out dieOne,out dieTwo,out modifier);
-    int raw=BattleSystem.Damage(rolled,run.statuses,battle.enemyStatuses);
-    int dealt=Mathf.Max(0,raw-battle.enemyBlock);
-    battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
-    battle.enemyHp-=dealt;
-    fx.damageToEnemy=dealt;
-    fx.dieOne=dieOne;fx.dieTwo=dieTwo;fx.damageModifier=modifier;fx.rolledDamage=raw;
-    fx.cardType=CardType.Attack;
-    logLine=$"{def.activeSkillName}：{dealt}ダメージ";
-    break;
-   }
    default:
     return CharacterSkillResult.Fail;
   }
