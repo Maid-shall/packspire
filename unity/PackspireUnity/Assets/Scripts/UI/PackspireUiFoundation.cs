@@ -32,6 +32,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  string packingEquipFilter="";
  bool packingDragging,packingTapWasSelected,packingDragFromList;
  Vector2 packingDragStart;
+ Vector2Int packingDragGrip;
  VisualElement packingRootElement,packingGridElement,packingDragGhost;
  VisualElement packingFilterRowElement,packingKilnElement,packingKilnRailElement,packingPopupElement;
  ScrollView packingEquipScrollElement,packingRightScrollElement;

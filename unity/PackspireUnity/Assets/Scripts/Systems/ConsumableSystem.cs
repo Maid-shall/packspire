@@ -21,11 +21,15 @@ public static class ConsumableSystem {
     run.block+=10;
     fx.blockGained=10;
     break;
-   case "fire":
-    battle.enemyHp-=12;
-    fx.damageToEnemy=12;
+   case "fire":{
+    int dieOne,dieTwo,modifier;
+    int rolled=BattleSystem.RollDamage(12,out dieOne,out dieTwo,out modifier);
+    battle.enemyHp-=rolled;
+    fx.damageToEnemy=rolled;
+    fx.dieOne=dieOne;fx.dieTwo=dieTwo;fx.damageModifier=modifier;fx.rolledDamage=rolled;
     fx.cardType=CardType.Attack;
     break;
+   }
    case "energy":
     run.energy+=2;
     fx.energyGained=2;

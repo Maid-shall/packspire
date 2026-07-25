@@ -9,6 +9,7 @@ namespace Packspire {
 public struct BattleActionFx {
  public bool ok,enemyDefeated,playerDefeated;
  public int damageToEnemy,damageToPlayer,blockGained,healGained,energyGained,selfDamage;
+ public int dieOne,dieTwo,damageModifier,rolledDamage;
  public CardType cardType;
  public string cardName;
  public static BattleActionFx Fail=>new();
@@ -54,7 +55,9 @@ public static class BattleSystem {
   var c=run.hand[handIndex];
   if(c.cost>run.energy)return BattleActionFx.Fail;
   run.energy-=c.cost;
-  int raw=Damage(c.damage+run.attackBuff,run.statuses,battle.enemyStatuses);
+  int dieOne=0,dieTwo=0,modifier=0;
+  int rolled=c.damage>0?RollDamage(c.damage,out dieOne,out dieTwo,out modifier):0;
+  int raw=Damage(rolled+run.attackBuff,run.statuses,battle.enemyStatuses);
   int dealt=Mathf.Max(0,raw-battle.enemyBlock);
   battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
   battle.enemyHp-=dealt;
@@ -86,6 +89,10 @@ public static class BattleSystem {
    healGained=healed,
    energyGained=energyGain,
    selfDamage=self,
+   dieOne=dieOne,
+   dieTwo=dieTwo,
+   damageModifier=modifier,
+   rolledDamage=raw,
    cardType=c.type,
    cardName=c.name
   };
@@ -95,7 +102,9 @@ public static class BattleSystem {
   run.discard.AddRange(run.hand);
   run.hand.Clear();
   int moveIndex=battle.move%battle.enemy.damages.Length;
-  int raw=Damage(battle.enemy.damages[moveIndex]+dungeonDamage,battle.enemyStatuses,run.statuses);
+  int dieOne,dieTwo,modifier;
+  int rolled=RollDamage(battle.enemy.damages[moveIndex]+dungeonDamage,out dieOne,out dieTwo,out modifier);
+  int raw=Damage(rolled,battle.enemyStatuses,run.statuses);
   int damage=Mathf.Max(0,raw-run.block);
   run.hp-=damage;
   run.block=0;
@@ -111,6 +120,10 @@ public static class BattleSystem {
    ok=true,
    playerDefeated=run.hp<=0,
    damageToPlayer=damage,
+   dieOne=dieOne,
+   dieTwo=dieTwo,
+   damageModifier=modifier,
+   rolledDamage=raw,
    cardName=battle.enemy.name
   };
  }
@@ -118,6 +131,12 @@ public static class BattleSystem {
  public static bool EndTurn(RunState run,BattleState battle,int dungeonDamage=0)=>EndTurnFx(run,battle,dungeonDamage).playerDefeated;
  public static void Draw(RunState run,int n){while(n-->0){if(run.draw.Count==0){run.draw=Shuffle(run.discard);run.discard=new();}if(run.draw.Count==0)return;var c=run.draw[^1];run.draw.RemoveAt(run.draw.Count-1);run.hand.Add(c);}}
  public static int Status(List<StatusState> statuses,string type)=>statuses.FirstOrDefault(x=>x.type==type)?.amount??0;
+ public static int RollDamage(int expected,out int dieOne,out int dieTwo,out int modifier){
+  dieOne=Rng.Next(1,7);
+  dieTwo=Rng.Next(1,7);
+  modifier=expected-7;
+  return Mathf.Max(0,dieOne+dieTwo+modifier);
+ }
  public static int Damage(int value,List<StatusState> attacker,List<StatusState> defender){value+=Status(attacker,"strength");if(Status(attacker,"weak")>0)value=Mathf.FloorToInt(value*.75f);if(Status(defender,"vulnerable")>0)value=Mathf.CeilToInt(value*1.5f);return Mathf.Max(0,value);}
  public static int Block(int value,List<StatusState> statuses)=>Mathf.Max(0,value-Status(statuses,"armorBreak"));
  public static void Apply(List<StatusState> statuses,EffectSpec effect){if(ContentDatabase.Status(effect.type)==null)return;var current=statuses.FirstOrDefault(x=>x.type==effect.type);if(current==null){current=new StatusState{type=effect.type};statuses.Add(current);}current.amount+=Mathf.Max(1,effect.amount);current.duration=Mathf.Max(current.duration,effect.duration);}

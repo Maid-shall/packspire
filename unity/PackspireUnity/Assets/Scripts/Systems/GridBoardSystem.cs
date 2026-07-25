@@ -9,7 +9,7 @@ public enum GridBoardPhase { Place, Path, Run, Done }
 [Serializable]
 public class GridCellState {
  public int x,y;
- /// <summary>floor | blocked | start | goal</summary>
+ /// <summary>floor | blocked | void | start | goal. Void supports future irregular boards.</summary>
  public string terrain="floor";
  /// <summary>empty | lamp | fog | seal | enemy | event | next | return</summary>
  public string place="empty";
@@ -31,7 +31,12 @@ public class GridBoardRunState {
  public Vector2Int lastDir;
  public int turnsMax=3;
  public int turnsUsed;
+ /// <summary>Expedition-wide pressure from the dungeon's indestructible calamity facility.</summary>
+ public int doom;
+ public int doomMax=6;
  public int softLengthMax=28;
+ /// <summary>Reverse faces emitted by the storage formula; the current hand is drawn from this pool.</summary>
+ public List<CardInstance> explorePool=new();
  public List<CardInstance> hand=new();
  public string selectedCardUid="";
  public string message="";
@@ -79,6 +84,49 @@ public static class GridBoardSystem {
   return Mathf.Clamp(Mathf.Max(2,(def.battles+1)/2),2,4);
  }
 
+ public static int DoomTier(GridBoardRunState run)=>run==null?0:Mathf.Clamp(run.doom/2,0,3);
+ public static float EnemyHpMultiplier(GridBoardRunState run)=>1f+DoomTier(run)*0.12f;
+ public static int EnemyDamageBonus(GridBoardRunState run)=>DoomTier(run);
+
+ public static string DoomFacilityName(string dungeonId)=>dungeonId switch{
+  "ash_forge"=>"灰熱炉",
+  "hollow_archive"=>"抹消機関",
+  _=>"黒鐘楼",
+ };
+
+ public static string DoomSummary(GridBoardRunState run){
+  if(run==null)return "災厄　—";
+  int max=Mathf.Max(1,run.doomMax);
+  int value=Mathf.Clamp(run.doom,0,max);
+  string pips=new string('●',value)+new string('○',Mathf.Max(0,max-value));
+  return $"{DoomFacilityName(run.dungeonId)}　{pips}";
+ }
+
+ static void AdvanceDoom(GridBoardRunState run){
+  if(run==null)return;
+  run.doom=Mathf.Clamp(run.doom+1,0,Mathf.Max(1,run.doomMax));
+ }
+
+ public static string GrowthSummary(GridBoardRunState run){
+  if(run?.cells==null)return "術式 —";
+  int active=run.cells.Count(c=>c.place is "lamp" or "fog" or "seal");
+  int mature=run.cells.Count(c=>(c.place is "lamp" or "fog" or "seal")&&c.grow>=3);
+  return active==0?"術式なし":$"術式 {active}　成熟 {mature}";
+ }
+
+ /// <summary>Placed field formulae mature once per completed exploration route.</summary>
+ static void AdvanceGrowth(GridBoardRunState run,out int advanced,out int matured){
+  advanced=0;
+  matured=0;
+  if(run?.cells==null)return;
+  foreach(var cell in run.cells){
+   if(cell.place is not ("lamp" or "fog" or "seal")||cell.grow>=3)continue;
+   cell.grow++;
+   advanced++;
+   if(cell.grow>=3)matured++;
+  }
+ }
+
  public static void LoadArea(GridBoardRunState run,int index){
   if(run==null)return;
   run.areaIndex=Mathf.Clamp(index,0,Mathf.Max(0,run.areaCount-1));
@@ -123,6 +171,7 @@ public static class GridBoardSystem {
   for(int y=0;y<n;y++)for(int x=0;x<n;x++){
    var c=new GridCellState{x=x,y=y,terrain="floor",place="empty",grow=0};
    if(x==0&&y==n/2)c.terrain="start";
+   else if(VoidPattern(n,x,y))c.terrain="void";
    else if(BlockedPattern(n,x,y))c.terrain="blocked";
    run.cells.Add(c);
   }
@@ -134,6 +183,15 @@ public static class GridBoardSystem {
   PlaceRandom(run,"event",events);
   if(run.areaIndex<run.areaCount-1)PlaceRandom(run,"next",1);
   PlaceRandom(run,"return",1);
+ }
+
+ static bool VoidPattern(int n,int x,int y){
+  // A few missing edge cells make even the fully revealed prototype read as a
+  // dungeon fragment. Future maps can freely use interior voids too.
+  int mid=n/2;
+  if((x==0||x==n-1)&&(y<mid-1||y>mid+1))return true;
+  if((y==0||y==n-1)&&(x==0||x==1||x==n-2||x==n-1))return true;
+  return (x==1&&y==1)||(x==n-2&&y==n-2&&n>=8);
  }
 
  static bool BlockedPattern(int n,int x,int y){
@@ -152,8 +210,49 @@ public static class GridBoardSystem {
   foreach(var c in pool){c.place=place;c.grow=0;}
  }
 
+ /// <summary>Build the exploration-side faces from the same placed equipment that builds combat cards.</summary>
+ public static void SyncExplorePool(GridBoardRunState board,RunState gameRun){
+  if(board==null)return;
+  board.explorePool.Clear();
+  if(gameRun!=null){
+   foreach(var combatCard in BackpackSystem.Build(gameRun).candidates){
+    var item=gameRun.inventory.FirstOrDefault(x=>x.uid==combatCard.sourceItemUid);
+    if(item==null||!GameCatalog.Items.TryGetValue(item.templateId,out var def))continue;
+    var explore=ExploreFace(combatCard,def);
+    board.explorePool.Add(explore);
+   }
+  }
+  SeedHand(board);
+ }
+
+ static CardInstance ExploreFace(CardInstance combatCard,ItemDef item){
+  string id=item.type switch{
+   ItemType.Weapon=>"gb_seal",
+   ItemType.Armor=>"gb_fog",
+   ItemType.Rune=>"gb_lamp",
+   ItemType.Supply=>"gb_fog",
+   _=>"gb_lamp",
+  };
+  (string name,string text)=id switch{
+   "gb_seal"=>($"{item.name}：楔", "マスを封鎖する。武器を盤面へ打ち込み、曲がるための壁を作る。"),
+   "gb_fog"=>($"{item.name}：帳", "マスに霧を置く。防護・攪乱の術式面。"),
+   _=>($"{item.name}：灯", "マスに灯りを置く。成熟すれば導線を支える。"),
+  };
+  return new CardInstance{
+   id=id,name=name,text=text,cost=1,type=CardType.Skill,source=item.name,
+   sourceItemUid=combatCard.sourceItemUid,slotKey="explore:"+combatCard.slotKey
+  };
+ }
+
  static void SeedHand(GridBoardRunState run){
   run.hand.Clear();
+  if(run.explorePool!=null&&run.explorePool.Count>0){
+   int count=Mathf.Min(5,run.explorePool.Count);
+   foreach(var card in run.explorePool.OrderBy(_=>UnityEngine.Random.value).Take(count))
+    run.hand.Add(card.Clone());
+   run.selectedCardUid="";
+   return;
+  }
   run.hand.Add(MakeCard("gb_lamp","灯り",1,"マスに灯り。通過すると育つ。"));
   run.hand.Add(MakeCard("gb_fog","霧",1,"マスに霧。通過時に一瞬遅れる。"));
   run.hand.Add(MakeCard("gb_seal","封鎖",1,"マスを封鎖＝曲がるための壁。"));
@@ -186,7 +285,7 @@ public static class GridBoardSystem {
  public static bool IsWalkable(GridBoardRunState run,int x,int y){
   var c=Cell(run,x,y);
   if(c==null)return false;
-  if(c.terrain=="blocked")return false;
+  if(c.terrain is "blocked" or "void")return false;
   if(c.place=="seal")return false;
   return true;
  }
@@ -216,7 +315,7 @@ public static class GridBoardSystem {
   if(run.energy<card.cost){msg=$"ENが足りない（{run.energy}/{run.energyMax}）";return false;}
   var cell=Cell(run,x,y);
   if(cell==null){msg="範囲外";return false;}
-  if(cell.terrain is "start" or "goal" or "blocked"){msg="ここには置けない";return false;}
+  if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
   if(cell.place!="empty"&&cell.place!="enemy"){msg="すでに何かある";return false;}
   string place=card.id switch{
    "gb_lamp"=>"lamp",
@@ -456,8 +555,7 @@ public static class GridBoardSystem {
   var cell=Cell(run,pos.x,pos.y);
   if(cell==null)return;
   if(cell.place=="lamp"){
-   cell.grow=Mathf.Min(3,cell.grow+1);
-   run.message=cell.grow>=3?"灯りが狼煙になった":$"灯りが育った（{cell.grow}/3）";
+   run.message=cell.grow>=3?"狼煙の灯りが導線を照らす":"灯りの傍を抜けた";
   } else if(cell.place=="fog"){
    run.message="霧を抜けた";
   } else if(cell.place=="enemy"){
@@ -499,10 +597,14 @@ public static class GridBoardSystem {
   run.selectedCardUid="";
   run.pendingBattle=false;
   run.pendingEvent=false;
+  AdvanceGrowth(run,out int advanced,out int matured);
+  AdvanceDoom(run);
   // Keep pendingGate if the route ended on a gate and the player has not chosen yet.
   RefillExploreResources(run);
   if(string.IsNullOrEmpty(run.pendingGate))
-   run.message="ルート終端。手札とENを補充した — いまの位置からまた配置できる";
+   run.message=advanced>0
+    ?$"ルート終端。術式が {advanced} 個成長{(matured>0?$"、{matured} 個が成熟":"")} — 手札とENを補充した"
+    :"ルート終端。手札とENを補充した — いまの位置からまた配置できる";
  }
 
  public static void RefillExploreResources(GridBoardRunState run){

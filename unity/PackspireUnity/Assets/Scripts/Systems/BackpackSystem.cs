@@ -138,13 +138,11 @@ public static class BackpackSystem {
    }
   }
 
-  var valid=result.candidates.Select(x=>x.slotKey).ToHashSet();
-  run.selectedCardSlots=run.selectedCardSlots.Where(valid.Contains).ToList();
-  if(run.selectedCardSlots.Count==0&&result.candidates.Count>0)
-   run.selectedCardSlots=result.candidates.Select(x=>x.slotKey).ToList();
-  var selected=run.selectedCardSlots.ToHashSet();
+  // The storage formula is the deck builder. Every placed item emits its card;
+  // selectedCardSlots remains synchronized only for old saves and UI compatibility.
+  run.selectedCardSlots=result.candidates.Select(x=>x.slotKey).ToList();
   result.deck.AddRange(result.roleCards);
-  result.deck.AddRange(result.candidates.Where(x=>selected.Contains(x.slotKey)));
+  result.deck.AddRange(result.candidates);
   return result;
  }
 

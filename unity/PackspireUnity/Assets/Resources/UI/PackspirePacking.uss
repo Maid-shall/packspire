@@ -2248,3 +2248,36 @@
 .ps-rite-equip-scroll .unity-scroller__tracker {
     background-color: rgba(212, 168, 72, 0.55);
 }
+
+/* Shared packing chrome: retain the existing layout but make the framing part
+   of the same bright magical world as expedition.  Only anchors and focused
+   surfaces get a full edge; ordinary reading space remains open. */
+.ps-rite-top {
+    background-color: rgba(13, 12, 39, 0.82);
+    border-bottom-color: rgb(226, 84, 159);
+}
+.ps-rite-brand-mark { background-color: rgb(87, 240, 255); }
+.ps-rite-top-eyebrow { color: rgb(124, 237, 255); }
+.ps-rite-top-name { color: rgb(255, 215, 120); }
+.ps-rite-left {
+    background-color: rgba(11, 10, 42, 0.48);
+    border-left-color: rgb(87, 240, 255);
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-rite-right-shell {
+    background-color: rgba(19, 8, 47, 0.44);
+    border-left-color: rgb(255, 100, 179);
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-rite-popup {
+    background-color: rgba(18, 11, 48, 0.96);
+    border-left-color: rgb(255, 100, 179);
+    border-right-color: rgba(87, 240, 255, 0.54);
+    border-top-color: rgba(255, 211, 123, 0.60);
+    border-bottom-color: rgba(121, 96, 255, 0.58);
+}
+.ps-rite-tick { border-left-color: rgb(255, 211, 123); border-right-color: rgb(87, 240, 255); border-top-color: rgb(255, 100, 179); border-bottom-color: rgb(121, 96, 255); }

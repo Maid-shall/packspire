@@ -5,32 +5,52 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
- VisualElement gridBoardRoot,gridBoardGrid,gridBoardHandRoot,gridBoardDirRow,gridBoardHpFill,gridBoardPortraitHost;
- VisualElement gridBoardViewport,gridBoardStage,gridBoardSelectedHost,gridBoardCombatStage;
- VisualElement gridBoardContextActions,gridBoardEnergyRail,gridBoardCombatRail,gridBoardConsumablesRoot,gridBoardFxLayer;
- VisualElement gridBoardGateActions;
+ VisualElement gridBoardRoot,gridBoardGrid,gridBoardActorLayer,gridBoardHandRoot,gridBoardDirRow,gridBoardHpFill,gridBoardShieldFill,gridBoardPortraitHost;
+ VisualElement gridBoardViewport,gridBoardStage,gridBoardSelectedHost,gridBoardCombatStage,gridBoardCombatHpTrack,gridBoardCombatHpFill,gridBoardCombatShieldTrack,gridBoardCombatShieldFill;
+ VisualElement gridBoardCombatEnemyFocus,gridBoardCombatVitals,gridBoardCombatIntentPanel,gridBoardCombatEnemyStatuses;
+ VisualElement gridBoardCombatActionView,gridBoardCombatCardPreview;
+ VisualElement gridBoardContextActions,gridBoardRoutePalette,gridBoardEnergyRail,gridBoardCombatRail,gridBoardConsumablesRoot,gridBoardFxLayer;
+ VisualElement gridBoardPlayerHud,gridBoardMapStats;
+ VisualElement gridBoardGateActions,gridBoardResolveTray,gridBoardResolveDice;
+ VisualElement gridBoardHoverPreview,gridBoardCellDetail,gridBoardEventOverlay;
  Label gridBoardPhaseLabel,gridBoardInkLabel,gridBoardHintLabel;
+ Label gridBoardDoomLabel,gridBoardAreaChipLabel,gridBoardCurveChipLabel,gridBoardShieldLabel,gridBoardModeToast;
  Label gridBoardTypeLabel,gridBoardTitleLabel,gridBoardStatusLabel,gridBoardBodyLabel;
- Label gridBoardHeroNameLabel,gridBoardHpLabel,gridBoardZoomLabel,gridBoardEnergyLabel,gridBoardCombatTitle;
- Label gridBoardCombatHpLabel,gridBoardCombatIntentLabel;
+ Label gridBoardHeroNameLabel,gridBoardHpLabel,gridBoardEnergyLabel,gridBoardCombatTitle;
+ Label gridBoardCombatHpLabel,gridBoardCombatShieldLabel,gridBoardCombatIntentLabel,gridBoardCombatIntentHintLabel,gridBoardResolveFormula,gridBoardResolveResult;
  Image gridBoardCombatPortrait;
  Button gridBoardSkillButton,gridBoardEndTurnButton;
+ Button gridBoardHoverCard;
  readonly Dictionary<long,VisualElement> gridBoardCells=new();
  bool gridBoardBuilt;
  bool gridBoardHandOpen;
  bool gridBoardLayoutBusy;
+ bool gridBoardLayoutQueued;
  bool gridBoardCombatMode;
+ bool gridBoardEventOpen;
+ bool gridBoardDiceResultActive;
+ float gridBoardDiceResultUntil;
+ int gridBoardDieOne,gridBoardDieTwo,gridBoardDiceModifier,gridBoardDiceTotal,gridBoardDiceDamage;
+ string gridBoardDiceSource="";
+ bool gridBoardFollowingExplorer;
  float gridBoardZoom=1f;
  Vector2 gridBoardPan;
  bool gridBoardPanning,gridBoardDidPan;
+ bool gridBoardMapHover,gridBoardDockHover,gridBoardHeaderHover;
  Vector2 gridBoardPointerStart,gridBoardPanAtStart;
  Vector2 gridBoardLastLayoutPos=new(float.NaN,float.NaN);
  Texture2D[] gridBoardCardFrames;
+ Texture2D gridBoardMakaiBackground,gridBoardBoardSurface,gridBoardHudTop,gridBoardEnergyRailArt,gridBoardInfoHeaderArt,gridBoardPlayerHudArt;
  int gridBoardFloaterSerial;
  const float GridZoomMin=0.55f;
  const float GridZoomMax=1.9f;
  const float GridCellBasePx=64f;
- const float GridHandPeekSink=188f;
+ // A closed hand should still show enough of every card to read the identity.
+ // It is a deliberate composition element at the bottom of the expedition,
+ // not a hidden drawer.
+ const float GridHandPeekSink=132f;
+ const float GridHandWidth=760f;
+ const float GridHandCardWidth=168f;
  // Board y=0 is top of screen, so "up" on UI decreases y.
  static readonly Vector2Int BoardUp=new(0,-1);
  static readonly Vector2Int BoardDown=new(0,1);
@@ -41,18 +61,31 @@ public sealed partial class PackspireUiFoundation {
   gridBoardBuilt=false;
   gridBoardHandOpen=false;
   gridBoardCombatMode=false;
-  gridBoardRoot=null;gridBoardGrid=null;gridBoardHandRoot=null;gridBoardDirRow=null;
-  gridBoardHpFill=null;gridBoardPortraitHost=null;
-  gridBoardViewport=null;gridBoardStage=null;gridBoardSelectedHost=null;gridBoardCombatStage=null;
-  gridBoardContextActions=null;gridBoardEnergyRail=null;gridBoardCombatRail=null;
-  gridBoardConsumablesRoot=null;gridBoardFxLayer=null;gridBoardGateActions=null;
-  gridBoardPhaseLabel=null;gridBoardInkLabel=null;gridBoardHintLabel=null;
+  gridBoardRoot=null;gridBoardGrid=null;gridBoardActorLayer=null;gridBoardHandRoot=null;gridBoardDirRow=null;
+  gridBoardHpFill=null;gridBoardShieldFill=null;gridBoardPortraitHost=null;
+  gridBoardViewport=null;gridBoardStage=null;gridBoardSelectedHost=null;gridBoardCombatStage=null;gridBoardCombatHpTrack=null;gridBoardCombatHpFill=null;gridBoardCombatShieldTrack=null;gridBoardCombatShieldFill=null;
+  gridBoardCombatEnemyFocus=null;gridBoardCombatVitals=null;gridBoardCombatIntentPanel=null;gridBoardCombatEnemyStatuses=null;
+  gridBoardCombatActionView=null;gridBoardCombatCardPreview=null;
+  gridBoardContextActions=null;gridBoardRoutePalette=null;gridBoardEnergyRail=null;gridBoardCombatRail=null;
+  gridBoardPlayerHud=null;gridBoardMapStats=null;
+  gridBoardConsumablesRoot=null;gridBoardFxLayer=null;gridBoardGateActions=null;gridBoardResolveTray=null;gridBoardResolveDice=null;
+  gridBoardHoverPreview=null;gridBoardCellDetail=null;gridBoardEventOverlay=null;
+  gridBoardPhaseLabel=null;gridBoardInkLabel=null;gridBoardHintLabel=null;gridBoardDoomLabel=null;
+  gridBoardAreaChipLabel=null;gridBoardCurveChipLabel=null;gridBoardShieldLabel=null;gridBoardModeToast=null;
   gridBoardTypeLabel=null;gridBoardTitleLabel=null;gridBoardStatusLabel=null;gridBoardBodyLabel=null;
-  gridBoardHeroNameLabel=null;gridBoardHpLabel=null;gridBoardZoomLabel=null;gridBoardEnergyLabel=null;gridBoardCombatTitle=null;
-  gridBoardCombatHpLabel=null;gridBoardCombatIntentLabel=null;gridBoardCombatPortrait=null;
+  gridBoardHeroNameLabel=null;gridBoardHpLabel=null;gridBoardEnergyLabel=null;gridBoardCombatTitle=null;
+  gridBoardCombatHpLabel=null;gridBoardCombatShieldLabel=null;gridBoardCombatIntentLabel=null;gridBoardCombatIntentHintLabel=null;gridBoardResolveFormula=null;gridBoardResolveResult=null;gridBoardCombatPortrait=null;
   gridBoardSkillButton=null;gridBoardEndTurnButton=null;
+  gridBoardHoverCard=null;
   gridBoardPanning=false;gridBoardDidPan=false;
+  gridBoardMapHover=false;gridBoardDockHover=false;gridBoardHeaderHover=false;
   gridBoardLayoutBusy=false;
+  gridBoardLayoutQueued=false;
+  gridBoardFollowingExplorer=false;
+  gridBoardEventOpen=false;
+  gridBoardDiceResultActive=false;
+  gridBoardDiceResultUntil=0f;
+  gridBoardDiceSource="";
   gridBoardLastLayoutPos=new(float.NaN,float.NaN);
   gridBoardCells.Clear();
  }
@@ -64,6 +97,22 @@ public sealed partial class PackspireUiFoundation {
    gridBoardCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
  }
 
+ void EnsureGridBoardEnvironmentArt(){
+  if(gridBoardMakaiBackground==null)
+   gridBoardMakaiBackground=Resources.Load<Texture2D>("Art/UI/Product/dungeon-makai-bg-01");
+  if(gridBoardBoardSurface==null)
+   gridBoardBoardSurface=Resources.Load<Texture2D>("Art/UI/Product/dungeon-board-surface-01");
+  if(gridBoardHudTop==null)
+   gridBoardHudTop=Resources.Load<Texture2D>("Art/UI/Product/dungeon-hud-top-compact-v1")
+    ??Resources.Load<Texture2D>("Art/UI/Product/dungeon-hud-top-layout-v2");
+  if(gridBoardEnergyRailArt==null)
+   gridBoardEnergyRailArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-energy-simple-layout-v3");
+  if(gridBoardInfoHeaderArt==null)
+   gridBoardInfoHeaderArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-info-header-layout-v2");
+  if(gridBoardPlayerHudArt==null)
+   gridBoardPlayerHudArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-player-status-cluster-v2");
+ }
+
  void BuildGridBoard(){
   var run=game.UiGridBoard;
   if(run==null){
@@ -73,10 +122,16 @@ public sealed partial class PackspireUiFoundation {
   SuspendGridBoard();
   gridBoardBuilt=true;
   EnsureGridBoardCardFrames();
-  if(gridBoardZoom<GridZoomMin||gridBoardZoom>GridZoomMax)gridBoardZoom=1f;
+  EnsureGridBoardEnvironmentArt();
+  // Zoom controls are intentionally not exposed in this layout pass.
+  gridBoardZoom=1f;
   gridBoardPan=Vector2.zero;
 
   gridBoardRoot=Container("ps-gboard");
+  if(gridBoardMakaiBackground!=null){
+   gridBoardRoot.style.backgroundImage=new StyleBackground(gridBoardMakaiBackground);
+   gridBoardRoot.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+  }
   screenRoot.Add(gridBoardRoot);
 
   // Map stage is the right pane (dock stays on the left).
@@ -90,77 +145,139 @@ public sealed partial class PackspireUiFoundation {
   gridBoardViewport.RegisterCallback<GeometryChangedEvent>(OnGridViewportGeometryChanged);
 
   gridBoardGrid=Container("ps-gboard-grid");
+  if(gridBoardBoardSurface!=null){
+   gridBoardGrid.style.backgroundImage=new StyleBackground(gridBoardBoardSurface);
+   gridBoardGrid.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+  }
   gridBoardGrid.style.position=Position.Absolute;
   gridBoardGrid.style.flexGrow=0;
   gridBoardGrid.style.flexShrink=0;
+  // Pan and zoom begin on the stone board itself, never on the surrounding
+  // dungeon backdrop or the HUD.
   BuildGridCells(run);
   gridBoardViewport.Add(gridBoardGrid);
+  gridBoardActorLayer=Container("ps-gboard-actors");
+  gridBoardActorLayer.pickingMode=PickingMode.Ignore;
+  gridBoardViewport.Add(gridBoardActorLayer);
   EnsureBattleAssets();
   gridBoardCombatStage=Container("ps-gboard-combat-stage");
   gridBoardCombatStage.style.display=DisplayStyle.None;
+  gridBoardCombatEnemyFocus=Container("ps-gboard-enemy-focus");
+  var enemyEyebrow=new Label("HOSTILE SIGNATURE"){pickingMode=PickingMode.Ignore};
+  enemyEyebrow.AddToClassList("ps-gboard-enemy-eyebrow");
+  gridBoardCombatEnemyFocus.Add(enemyEyebrow);
   gridBoardCombatPortrait=new Image{scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
   gridBoardCombatPortrait.AddToClassList("ps-gboard-combat-portrait");
-  gridBoardCombatStage.Add(gridBoardCombatPortrait);
+  gridBoardCombatEnemyFocus.Add(gridBoardCombatPortrait);
+  gridBoardCombatStage.Add(gridBoardCombatEnemyFocus);
+
+  // Enemy durability sits directly below the portrait. Intent is deliberately
+  // separate on the left so the persistent player towers never cover it.
+  gridBoardCombatVitals=Container("ps-gboard-combat-vitals");
+  var vitalityCaption=new Label("VITALITY"){pickingMode=PickingMode.Ignore};
+  vitalityCaption.AddToClassList("ps-gboard-combat-caption");
+  gridBoardCombatVitals.Add(vitalityCaption);
   gridBoardCombatTitle=new Label("敵"){pickingMode=PickingMode.Ignore};
   gridBoardCombatTitle.AddToClassList("ps-gboard-combat-title");
-  gridBoardCombatStage.Add(gridBoardCombatTitle);
+  gridBoardCombatVitals.Add(gridBoardCombatTitle);
   gridBoardCombatHpLabel=new Label("HP —"){pickingMode=PickingMode.Ignore};
   gridBoardCombatHpLabel.AddToClassList("ps-gboard-combat-hp");
-  gridBoardCombatStage.Add(gridBoardCombatHpLabel);
+  gridBoardCombatVitals.Add(gridBoardCombatHpLabel);
+  gridBoardCombatHpTrack=Container("ps-gboard-combat-hp-track");
+  gridBoardCombatHpTrack.pickingMode=PickingMode.Ignore;
+  gridBoardCombatHpFill=Container("ps-gboard-combat-hp-fill");
+  gridBoardCombatHpFill.pickingMode=PickingMode.Ignore;
+  gridBoardCombatHpTrack.Add(gridBoardCombatHpFill);
+  gridBoardCombatVitals.Add(gridBoardCombatHpTrack);
+  gridBoardCombatShieldLabel=new Label("SH —"){pickingMode=PickingMode.Ignore};
+  gridBoardCombatShieldLabel.AddToClassList("ps-gboard-combat-shield");
+  gridBoardCombatVitals.Add(gridBoardCombatShieldLabel);
+  gridBoardCombatShieldTrack=Container("ps-gboard-combat-shield-track");
+  gridBoardCombatShieldTrack.pickingMode=PickingMode.Ignore;
+  gridBoardCombatShieldFill=Container("ps-gboard-combat-shield-fill");
+  gridBoardCombatShieldFill.pickingMode=PickingMode.Ignore;
+  gridBoardCombatShieldTrack.Add(gridBoardCombatShieldFill);
+  gridBoardCombatVitals.Add(gridBoardCombatShieldTrack);
+  gridBoardCombatEnemyStatuses=Container("ps-gboard-combat-statuses");
+  gridBoardCombatVitals.Add(gridBoardCombatEnemyStatuses);
+  gridBoardCombatStage.Add(gridBoardCombatVitals);
+
+  gridBoardCombatIntentPanel=Container("ps-gboard-combat-intent-panel");
+  var intentCaption=new Label("NEXT ACTION"){pickingMode=PickingMode.Ignore};
+  intentCaption.AddToClassList("ps-gboard-combat-caption");
+  gridBoardCombatIntentPanel.Add(intentCaption);
   gridBoardCombatIntentLabel=new Label(""){pickingMode=PickingMode.Ignore};
   gridBoardCombatIntentLabel.AddToClassList("ps-gboard-combat-intent");
-  gridBoardCombatStage.Add(gridBoardCombatIntentLabel);
+  gridBoardCombatIntentPanel.Add(gridBoardCombatIntentLabel);
+  gridBoardCombatIntentHintLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  gridBoardCombatIntentHintLabel.AddToClassList("ps-gboard-combat-intent-hint");
+  gridBoardCombatIntentPanel.Add(gridBoardCombatIntentHintLabel);
+  gridBoardCombatStage.Add(gridBoardCombatIntentPanel);
   gridBoardFxLayer=Container("ps-gboard-fx-layer");
   gridBoardFxLayer.pickingMode=PickingMode.Ignore;
   gridBoardCombatStage.Add(gridBoardFxLayer);
+
+  // The right side is the player's context surface. Hovered cards and dice
+  // resolution replace one another here without ever covering the enemy art.
+  gridBoardCombatActionView=Container("ps-gboard-combat-action-view");
+  var actionCaption=new Label("CARD / DICE"){pickingMode=PickingMode.Ignore};
+  actionCaption.AddToClassList("ps-gboard-action-view-caption");
+  gridBoardCombatActionView.Add(actionCaption);
+  gridBoardCombatCardPreview=Container("ps-gboard-combat-card-preview");
+  gridBoardCombatActionView.Add(gridBoardCombatCardPreview);
+  gridBoardCombatStage.Add(gridBoardCombatActionView);
   gridBoardStage.Add(gridBoardViewport);
-  gridBoardStage.Add(gridBoardCombatStage);
+  gridBoardStage.RegisterCallback<PointerEnterEvent>(_=>SetGridBoardMapHover(true));
+  gridBoardStage.RegisterCallback<PointerLeaveEvent>(_=>SetGridBoardMapHover(false));
 
-  var zoomBar=Container("ps-gboard-zoom");
-  zoomBar.Add(MakeGridAction("−",()=>AdjustGridZoom(-0.12f)));
-  gridBoardZoomLabel=new Label(""){pickingMode=PickingMode.Ignore};
-  gridBoardZoomLabel.AddToClassList("ps-gboard-zoom-label");
-  zoomBar.Add(gridBoardZoomLabel);
-  zoomBar.Add(MakeGridAction("＋",()=>AdjustGridZoom(0.12f)));
-  gridBoardStage.Add(zoomBar);
   gridBoardRoot.Add(gridBoardStage);
+  // The enemy dossier belongs to the persistent screen shell, not to the
+  // panned board. It therefore stays fixed at the right edge in battle.
+  gridBoardRoot.Add(gridBoardCombatStage);
 
-  var top=Container("ps-gboard-top");
-  DressRiteFrame(top);
-  var brand=Container("ps-rite-brand");
-  var mark=Container("ps-rite-brand-mark");
-  mark.pickingMode=PickingMode.Ignore;
-  brand.Add(mark);
-  var titleBlock=Container("ps-rite-top-title");
-  var eye=new Label("EXPEDITION  /  GRID"){pickingMode=PickingMode.Ignore};
-  eye.AddToClassList("ps-rite-top-eyebrow");
-  eye.AddToClassList("ps-chrome-eyebrow");
-  titleBlock.Add(eye);
-  var name=new Label("封印格子"){pickingMode=PickingMode.Ignore};
-  name.AddToClassList("ps-rite-top-name");
-  titleBlock.Add(name);
-  var topSub=new Label("カードを置き、導線を引く"){pickingMode=PickingMode.Ignore};
-  topSub.AddToClassList("ps-gboard-top-sub");
-  titleBlock.Add(topSub);
-  brand.Add(titleBlock);
-  top.Add(brand);
-  gridBoardPhaseLabel=new Label(""){pickingMode=PickingMode.Ignore};
-  gridBoardPhaseLabel.AddToClassList("ps-gboard-phase");
-  top.Add(gridBoardPhaseLabel);
-  gridBoardInkLabel=new Label(""){pickingMode=PickingMode.Ignore};
-  gridBoardInkLabel.AddToClassList("ps-gboard-ink");
-  top.Add(gridBoardInkLabel);
+  // The board owns the entire screen. Only compact, decision-relevant chips
+  // remain in the upper-right; the old full-width banner is intentionally gone.
+  gridBoardMapStats=Container("ps-gboard-map-stats");
+  gridBoardDoomLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  gridBoardDoomLabel.AddToClassList("ps-gboard-stat-chip");
+  gridBoardDoomLabel.AddToClassList("ps-gboard-stat-turn");
+  gridBoardMapStats.Add(gridBoardDoomLabel);
+  gridBoardAreaChipLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  gridBoardAreaChipLabel.AddToClassList("ps-gboard-stat-chip");
+  gridBoardAreaChipLabel.AddToClassList("ps-gboard-stat-area");
+  gridBoardMapStats.Add(gridBoardAreaChipLabel);
+  gridBoardCurveChipLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  gridBoardCurveChipLabel.AddToClassList("ps-gboard-stat-chip");
+  gridBoardCurveChipLabel.AddToClassList("ps-gboard-stat-curve");
+  gridBoardMapStats.Add(gridBoardCurveChipLabel);
   var finishTop=MakeGridAction("撤退",()=>{
    game.UiRetreatFromGrid();
    ForceRefreshScreen();
   });
   finishTop.AddToClassList("ps-gboard-top-finish");
-  top.Add(finishTop);
-  gridBoardRoot.Add(top);
+  gridBoardMapStats.Add(finishTop);
+  gridBoardRoot.Add(gridBoardMapStats);
+
+  gridBoardModeToast=new Label("封印格子\n探索"){pickingMode=PickingMode.Ignore};
+  gridBoardModeToast.AddToClassList("ps-gboard-mode-toast");
+  gridBoardRoot.Add(gridBoardModeToast);
+  gridBoardModeToast.schedule.Execute(()=>gridBoardModeToast?.AddToClassList("ps-gboard-mode-toast-out")).StartingIn(1350);
+  gridBoardModeToast.schedule.Execute(()=>{
+   if(gridBoardModeToast!=null)gridBoardModeToast.style.display=DisplayStyle.None;
+  }).StartingIn(1750);
 
   var dock=Container("ps-gboard-dock");
   var panel=Container("ps-gboard-panel");
-  DressRiteFrame(panel);
+  if(gridBoardInfoHeaderArt!=null){
+   var ornament=Container("ps-gboard-panel-ornament");
+   ornament.pickingMode=PickingMode.Ignore;
+   ornament.style.backgroundImage=new StyleBackground(gridBoardInfoHeaderArt);
+   ornament.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   panel.Add(ornament);
+  }
+  // The right dock is deliberately an open reading column.  The environment
+  // and the important controls carry the ornamental weight; framing this too
+  // would make the expedition screen feel like a stack of windows.
   gridBoardTypeLabel=new Label("封印格子"){pickingMode=PickingMode.Ignore};
   gridBoardTypeLabel.AddToClassList("ps-gboard-panel-type");
   panel.Add(gridBoardTypeLabel);
@@ -182,7 +299,6 @@ public sealed partial class PackspireUiFoundation {
 
   gridBoardGateActions=Container("ps-gboard-gate");
   gridBoardGateActions.style.display=DisplayStyle.None;
-  panel.Add(gridBoardGateActions);
 
   // Path-only contextual controls (hidden until a route is being drawn).
   gridBoardContextActions=Container("ps-gboard-context");
@@ -210,13 +326,33 @@ public sealed partial class PackspireUiFoundation {
   gridBoardContextActions.Add(pathActions);
   panel.Add(gridBoardContextActions);
   dock.Add(panel);
+  dock.RegisterCallback<PointerEnterEvent>(_=>SetGridBoardDockHover(true));
+  dock.RegisterCallback<PointerLeaveEvent>(_=>SetGridBoardDockHover(false));
 
+  gridBoardPlayerHud=Container("ps-gboard-player-hud");
+  gridBoardPlayerHud.pickingMode=PickingMode.Ignore;
+  var playerHudOrnamentClip=Container("ps-gboard-player-hud-ornament-clip");
+  var playerHudOrnament=Container("ps-gboard-player-hud-ornament");
+  if(gridBoardPlayerHudArt!=null){
+   playerHudOrnament.style.backgroundImage=new StyleBackground(gridBoardPlayerHudArt);
+   playerHudOrnament.style.unityBackgroundScaleMode=ScaleMode.ScaleToFit;
+  }
+  playerHudOrnamentClip.Add(playerHudOrnament);
+  gridBoardPlayerHud.Add(playerHudOrnamentClip);
   var hero=Container("ps-gboard-hero");
   var heroRow=Container("ps-gboard-hero-row");
   gridBoardPortraitHost=Container("ps-gboard-portrait");
   var character=CharacterSystem.OfRun(game.UiRun);
-  if(character!=null)
-   gridBoardPortraitHost.Add(CharacterPortraitFront(character,"ps-gboard-portrait-image"));
+  if(character!=null){
+   var portraitImage=CharacterPortraitFront(character,"ps-gboard-portrait-image");
+   // The source is a full-body cutout. Crop its upper square so the compact
+   // diamond HUD reads as a portrait instead of a miniature character.
+   if(portraitImage is Image portrait){
+    portrait.uv=new Rect(0.04f,0.58f,0.92f,0.42f);
+    portrait.scaleMode=ScaleMode.ScaleAndCrop;
+   }
+   gridBoardPortraitHost.Add(portraitImage);
+  }
   else{
    var blank=Container("ps-gboard-portrait-blank");
    blank.pickingMode=PickingMode.Ignore;
@@ -234,17 +370,61 @@ public sealed partial class PackspireUiFoundation {
   gridBoardHpFill=Container("ps-gboard-hp-fill");
   hpTrack.Add(gridBoardHpFill);
   heroMeta.Add(hpTrack);
+  gridBoardShieldLabel=new Label(""){pickingMode=PickingMode.Ignore};
+  gridBoardShieldLabel.AddToClassList("ps-gboard-shield-label");
+  heroMeta.Add(gridBoardShieldLabel);
+  var shieldTrack=Container("ps-gboard-shield-track");
+  gridBoardShieldFill=Container("ps-gboard-shield-fill");
+  shieldTrack.Add(gridBoardShieldFill);
+  heroMeta.Add(shieldTrack);
   heroRow.Add(heroMeta);
   hero.Add(heroRow);
-  dock.Add(hero);
+  // The top-edge reveal strip owns header hover. The portrait itself should
+  // never reserve an invisible click-blocking rectangle over the map.
+  hero.pickingMode=PickingMode.Ignore;
   gridBoardRoot.Add(dock);
+  // Vital information never moves between exploration and combat.
+  gridBoardPlayerHud.Add(hero);
+  gridBoardRoot.Add(gridBoardPlayerHud);
 
-  // Bottom-right peek fan: hover to expand, click to pick.
+  // Path drawing gets its own compact board overlay. These are deliberately
+  // separate from the retired exploration dossier so they remain reachable
+  // while the whole map stays visible.
+  gridBoardRoutePalette=Container("ps-gboard-route-palette");
+  gridBoardRoutePalette.style.display=DisplayStyle.None;
+  var undoRoute=MakeGridAction("↶",()=>{
+   if(GridBoardSystem.UndoSegment(run,out var msg))ShowToast(msg);
+   else ShowToast(msg);
+   RefreshGridBoard();
+  });
+  undoRoute.tooltip="一手戻す";
+  undoRoute.AddToClassList("ps-gboard-route-icon");
+  gridBoardRoutePalette.Add(undoRoute);
+  var beginRoute=MakeGridAction("▶",()=>{
+   if(GridBoardSystem.BeginRun(run,out var msg))ShowToast(msg);
+   else ShowToast(msg);
+   RefreshGridBoard();
+  });
+  beginRoute.tooltip="導線を進む";
+  beginRoute.AddToClassList("ps-gboard-route-icon");
+  beginRoute.AddToClassList("ps-gboard-route-start");
+  gridBoardRoutePalette.Add(beginRoute);
+  var clearRoute=MakeGridAction("×",()=>{
+   GridBoardSystem.ClearPath(run);
+   RefreshGridBoard();
+  });
+  clearRoute.tooltip="ルートをやめる";
+  clearRoute.AddToClassList("ps-gboard-route-icon");
+  clearRoute.AddToClassList("ps-gboard-route-cancel");
+  gridBoardRoutePalette.Add(clearRoute);
+  gridBoardRoot.Add(gridBoardRoutePalette);
+
+  // The exploration hand is deliberately quiet: cards individually rise on
+  // hover, rather than opening a full wall across the dungeon.
   gridBoardHandOpen=false;
   gridBoardHandRoot=Container("ps-battle-hand");
   gridBoardHandRoot.AddToClassList("ps-gboard-hand-fan");
-  gridBoardHandRoot.RegisterCallback<PointerEnterEvent>(_=>SetGridHandOpen(true));
-  gridBoardHandRoot.RegisterCallback<PointerLeaveEvent>(_=>SetGridHandOpen(false));
+  gridBoardHandRoot.RegisterCallback<PointerLeaveEvent>(_=>ClearGridHandFocus());
   SyncGridHandChrome();
   gridBoardRoot.Add(gridBoardHandRoot);
 
@@ -262,19 +442,45 @@ public sealed partial class PackspireUiFoundation {
   });
   gridBoardSkillButton.AddToClassList("ps-gboard-skill");
   gridBoardCombatRail.Add(gridBoardSkillButton);
-  gridBoardEndTurnButton=MakeGridAction("END TURN",()=>{
+  gridBoardEndTurnButton=MakeGridAction("ターン終了",()=>{
    if(game.UiBattle==null||battleInputLocked){ShowToast("戦闘中ではない");return;}
    if(!game.UiEndBattleTurn())ShowToast(game.UiMessage);
    RefreshGridBoard();
   });
   gridBoardEndTurnButton.AddToClassList("ps-gboard-endturn");
   gridBoardCombatRail.Add(gridBoardEndTurnButton);
-  gridBoardEnergyRail.Add(gridBoardCombatRail);
-  gridBoardRoot.Add(gridBoardEnergyRail);
+  gridBoardPlayerHud?.Add(gridBoardEnergyRail);
+  // Battle actions need their own lower-right dock. Keeping them inside the
+  // EN rail made both groups cramped and prevented independent composition.
+  gridBoardRoot.Add(gridBoardCombatRail);
+
+  // A stable home for future dice resolution. It sits above the combat hand so
+  // card → roll → result reads without covering the grid.
+  gridBoardResolveTray=Container("ps-gboard-resolve");
+  gridBoardResolveTray.style.display=DisplayStyle.None;
+  var resolveHead=Container("ps-gboard-resolve-head");
+  gridBoardResolveFormula=new Label("DICE  /  READY"){pickingMode=PickingMode.Ignore};
+  gridBoardResolveFormula.AddToClassList("ps-gboard-resolve-formula");
+  resolveHead.Add(gridBoardResolveFormula);
+  gridBoardResolveResult=new Label("—"){pickingMode=PickingMode.Ignore};
+  gridBoardResolveResult.AddToClassList("ps-gboard-resolve-result");
+  resolveHead.Add(gridBoardResolveResult);
+  gridBoardResolveTray.Add(resolveHead);
+  gridBoardResolveDice=Container("ps-gboard-resolve-dice");
+  gridBoardResolveTray.Add(gridBoardResolveDice);
+  if(gridBoardCombatActionView!=null)gridBoardCombatActionView.Add(gridBoardResolveTray);
 
   gridBoardSelectedHost=Container("ps-gboard-selected");
   gridBoardSelectedHost.style.display=DisplayStyle.None;
   gridBoardRoot.Add(gridBoardSelectedHost);
+  gridBoardCellDetail=Container("ps-gboard-cell-detail");
+  gridBoardCellDetail.pickingMode=PickingMode.Ignore;
+  gridBoardCellDetail.style.display=DisplayStyle.None;
+  gridBoardRoot.Add(gridBoardCellDetail);
+  // Gate decisions must not live in the retired right dossier: that column is
+  // hidden during exploration. Keep them at the screen root as a real modal.
+  gridBoardRoot.Add(gridBoardGateActions);
+  BuildGridBoardEventOverlay();
 
   RefreshGridBoard();
  }
@@ -286,7 +492,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  Button MakeDirButton(string label,Vector2Int dir){
-  var b=PackspireUiFactory.Button(label,()=>{
+  var b=PackspireUiFactory.SecondaryActionButton(label,()=>{
    var board=game.UiGridBoard;
    if(board==null)return;
    if(!GridBoardSystem.EnsurePathMode(board))return;
@@ -316,9 +522,20 @@ public sealed partial class PackspireUiFoundation {
     int cx=x,cy=y;
     var cell=new Button(()=>OnGridCellClicked(cx,cy));
     cell.AddToClassList("ps-gboard-cell");
+    cell.RegisterCallback<PointerEnterEvent>(_=>ShowGridCellDetail(cx,cy));
+    cell.RegisterCallback<PointerLeaveEvent>(_=>HideGridCellDetail());
     cell.style.flexGrow=0;
     cell.style.flexShrink=0;
     cell.text="";
+    // The face is deliberately separate from the logical cell.  Later the
+    // board can contain voids and fogged cells without changing input/pathing.
+    var cellFace=Container("ps-gboard-cell-face");
+    cellFace.pickingMode=PickingMode.Ignore;
+    cell.Add(cellFace);
+    var cellSigil=new Label(""){pickingMode=PickingMode.Ignore};
+    cellSigil.AddToClassList("ps-gboard-cell-sigil");
+    cellSigil.name="sigil";
+    cell.Add(cellSigil);
     var cellMark=new Label(""){pickingMode=PickingMode.Ignore};
     cellMark.AddToClassList("ps-gboard-cell-mark");
     cellMark.name="mark";
@@ -331,8 +548,9 @@ public sealed partial class PackspireUiFoundation {
   ApplyGridZoomVisual();
  }
 
- void OnGridCellClicked(int x,int y){
+void OnGridCellClicked(int x,int y){
   if(gridBoardDidPan||game.UiBattle!=null)return;
+  HideGridCellDetail();
   var run=game.UiGridBoard;
   if(run==null)return;
   if(run.phase==GridBoardPhase.Place){
@@ -351,31 +569,93 @@ public sealed partial class PackspireUiFoundation {
    else if(!string.IsNullOrEmpty(msg))ShowToast(msg);
   }
   RefreshGridBoard();
+}
+
+ void ShowGridCellDetail(int x,int y){
+  var run=game.UiGridBoard;
+  if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null||
+   !string.IsNullOrEmpty(run.selectedCardUid))return;
+  var cell=GridBoardSystem.Cell(run,x,y);
+  if(cell==null)return;
+  (string tag,string title,string body,string action)=cell.terrain switch{
+   "void"=>("VOID","奈落","足場のない裂け目。進入も術式の配置もできない。","盤面の外縁"),
+   "blocked"=>("TERRAIN","瓦礫","崩れた障害地形。通行できない。曲がるための壁として扱える。","通行不可"),
+   "start"=>("ORIGIN","侵入地点","この区画の探索開始地点。経路はここから伸びる。","現在地の基点"),
+   _=>GridCellDetailCopy(cell,run)
+  };
+  gridBoardCellDetail.Clear();
+  var eyebrow=new Label(tag){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-gboard-cell-detail-eyebrow");
+  gridBoardCellDetail.Add(eyebrow);
+  var head=new Label(title){pickingMode=PickingMode.Ignore};
+  head.AddToClassList("ps-gboard-cell-detail-title");
+  gridBoardCellDetail.Add(head);
+  var rule=new VisualElement{pickingMode=PickingMode.Ignore};
+  rule.AddToClassList("ps-gboard-cell-detail-rule");
+  gridBoardCellDetail.Add(rule);
+  var description=new Label(body){pickingMode=PickingMode.Ignore};
+  description.AddToClassList("ps-gboard-cell-detail-body");
+  gridBoardCellDetail.Add(description);
+  var footer=new Label(action){pickingMode=PickingMode.Ignore};
+  footer.AddToClassList("ps-gboard-cell-detail-footer");
+  gridBoardCellDetail.Add(footer);
+  gridBoardCellDetail.style.display=DisplayStyle.Flex;
+  gridBoardCellDetail.BringToFront();
+ }
+
+ (string tag,string title,string body,string action) GridCellDetailCopy(GridCellState cell,GridBoardRunState run){
+  string growth=cell.grow>0?$"　成長 {cell.grow}/3":"";
+  return cell.place switch{
+   "lamp"=>("FORMULA","灯",$"安寧の灯。周囲を照らす術式面。通過ごとに育つ。{growth}","通過：成長を進める"),
+   "fog"=>("FORMULA","霧",$"防護と攪乱の術式面。通過ごとに成熟へ近づく。{growth}","通過：成長を進める"),
+   "seal"=>("FORMULA","封",$"通行を塞ぐ楔。経路を曲げるための壁として働く。{growth}","通行不可・曲がりの起点"),
+   "enemy"=>("HOSTILE","敵影","接触すると同一画面で戦闘へ移行する。敵は後に盤面上を移動する可能性がある。","接触：戦闘開始"),
+   "event"=>("ANOMALY","異変","正体の知れない現象。踏み込むと選択式のイベントが発生する。","接触：イベントを確認"),
+   "next"=>("PASSAGE","次区画","次の区画への裂け目。到達後に進むか選べる。","到達：区画選択"),
+   "return"=>("RETURN","帰還点","探索の戦果を持ち帰るための出口。","到達：帰還を確認"),
+   _=>("FLOOR","石床","まだ何も刻まれていない石床。導線を伸ばすための余地。","左クリック：経路を選択")
+  };
+ }
+
+ void HideGridCellDetail(){
+  if(gridBoardCellDetail!=null)gridBoardCellDetail.style.display=DisplayStyle.None;
  }
 
  void EnterGridCombatMode(bool on){
   gridBoardCombatMode=on;
   if(gridBoardViewport!=null)
-   gridBoardViewport.style.display=on?DisplayStyle.None:DisplayStyle.Flex;
+   // Keep the expedition board visible during an encounter. Combat is a state of
+   // the same expedition, rather than a replacement screen.
+   gridBoardViewport.style.display=DisplayStyle.Flex;
   if(gridBoardCombatStage!=null)
    gridBoardCombatStage.style.display=on?DisplayStyle.Flex:DisplayStyle.None;
+  if(gridBoardRoot!=null)
+   gridBoardRoot.EnableInClassList("ps-gboard-in-combat",on);
   if(on){
    gridBoardHandOpen=true;
-   if(gridBoardZoomLabel!=null&&gridBoardZoomLabel.parent!=null)
-    gridBoardZoomLabel.parent.style.display=DisplayStyle.None;
-  } else if(gridBoardZoomLabel!=null&&gridBoardZoomLabel.parent!=null)
-   gridBoardZoomLabel.parent.style.display=DisplayStyle.Flex;
+  }
+  ShowGridModeToast(on?"戦闘":"探索");
   SyncGridHandChrome();
  }
 
- void OnGridBoardWheel(WheelEvent evt){
-  float step=evt.delta.y<0f?0.1f:-0.1f;
-  AdjustGridZoom(step);
-  evt.StopPropagation();
+ void ShowGridModeToast(string mode){
+  if(gridBoardModeToast==null)return;
+  gridBoardModeToast.text=$"封印格子\n{mode}";
+  gridBoardModeToast.RemoveFromClassList("ps-gboard-mode-toast-out");
+  gridBoardModeToast.style.display=DisplayStyle.Flex;
+  gridBoardModeToast.schedule.Execute(()=>gridBoardModeToast?.AddToClassList("ps-gboard-mode-toast-out")).StartingIn(1350);
+  gridBoardModeToast.schedule.Execute(()=>{
+   if(gridBoardModeToast!=null)gridBoardModeToast.style.display=DisplayStyle.None;
+  }).StartingIn(1750);
  }
 
  void OnGridBoardPointerDown(PointerDownEvent evt){
-  if(evt.button!=0)return;
+  // Left click selects cells. The board can be grabbed with right or middle
+  // mouse, and Space + left drag gives touchpad users an equivalent gesture.
+  if(!IsGridBoardPanGesture(evt.button))return;
+  if(!IsGridBoardPointerPosition(evt.position))return;
+  var board=game.UiGridBoard;
+  if(gridBoardCombatMode||(board!=null&&board.phase==GridBoardPhase.Run))return;
   if(gridBoardHandRoot!=null&&gridBoardHandRoot.resolvedStyle.display!=DisplayStyle.None
    &&gridBoardHandRoot.worldBound.Contains(evt.position))return;
   gridBoardPanning=true;
@@ -385,6 +665,13 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void OnGridBoardPointerMove(PointerMoveEvent evt){
+  // Fallback for controls that report a held mouse button only on move.
+  if(!gridBoardPanning&&IsGridBoardPanButtonsHeld(evt.pressedButtons)&&IsGridBoardPointerPosition(evt.position)){
+   gridBoardPanning=true;
+   gridBoardDidPan=false;
+   gridBoardPointerStart=evt.position;
+   gridBoardPanAtStart=gridBoardPan;
+  }
   if(!gridBoardPanning)return;
   Vector2 delta=(Vector2)evt.position-gridBoardPointerStart;
   if(!gridBoardDidPan&&delta.sqrMagnitude>64f){
@@ -406,10 +693,46 @@ public sealed partial class PackspireUiFoundation {
   gridBoardViewport?.schedule.Execute(()=>{gridBoardDidPan=false;}).ExecuteLater(1);
  }
 
+ void OnGridBoardWheel(WheelEvent evt){
+  if(!IsGridBoardPointerPosition(evt.mousePosition))return;
+  var board=game.UiGridBoard;
+  if(gridBoardCombatMode||(board!=null&&board.phase==GridBoardPhase.Run))return;
+  if(Mathf.Abs(evt.delta.y)<0.01f)return;
+  AdjustGridZoom(evt.delta.y>0f?-0.12f:0.12f);
+  evt.StopPropagation();
+ }
+
+ bool IsGridBoardPointerPosition(Vector2 position){
+  return gridBoardGrid!=null&&gridBoardGrid.worldBound.Contains(position);
+ }
+
+ bool IsGridBoardPanGesture(int button){
+  return button==1||button==2||(button==0&&Input.GetKey(KeyCode.Space));
+ }
+
+ bool IsGridBoardPanButtonsHeld(int pressedButtons){
+  bool rightOrMiddle=(pressedButtons&(1<<1))!=0||(pressedButtons&(1<<2))!=0;
+  bool spaceLeft=Input.GetKey(KeyCode.Space)&&(pressedButtons&1)!=0;
+  return rightOrMiddle||spaceLeft;
+ }
+
  void OnGridViewportGeometryChanged(GeometryChangedEvent evt){
   if(Mathf.Approximately(evt.oldRect.width,evt.newRect.width)
    &&Mathf.Approximately(evt.oldRect.height,evt.newRect.height))return;
-  LayoutGridBoardMap();
+  QueueGridBoardLayout();
+ }
+
+ // GeometryChanged is raised while UI Toolkit is resolving layout.  Updating
+ // child geometry inside that callback can schedule another layout immediately
+ // (especially when the actor overlay follows the board), so defer it to the
+ // next panel pass and coalesce repeated resize notifications.
+ void QueueGridBoardLayout(){
+  if(gridBoardLayoutQueued||gridBoardViewport==null)return;
+  gridBoardLayoutQueued=true;
+  gridBoardViewport.schedule.Execute(()=>{
+   gridBoardLayoutQueued=false;
+   LayoutGridBoardMap();
+  }).ExecuteLater(0);
  }
 
  void AdjustGridZoom(float delta){
@@ -419,8 +742,6 @@ public sealed partial class PackspireUiFoundation {
   ApplyGridZoomVisual();
   gridBoardLastLayoutPos=new(float.NaN,float.NaN);
   LayoutGridBoardMap();
-  if(gridBoardZoomLabel!=null)
-   gridBoardZoomLabel.text=$"{Mathf.RoundToInt(gridBoardZoom*100f)}%";
  }
 
  void ApplyGridZoomVisual(){
@@ -466,8 +787,6 @@ public sealed partial class PackspireUiFoundation {
    var cellMark=ve.Q<Label>("mark");
    if(cellMark!=null)cellMark.style.fontSize=font;
   }
-  if(gridBoardZoomLabel!=null)
-   gridBoardZoomLabel.text=$"{Mathf.RoundToInt(gridBoardZoom*100f)}%";
  }
 
  void LayoutGridBoardMap(){
@@ -476,14 +795,27 @@ public sealed partial class PackspireUiFoundation {
   if(vr.width<8f||vr.height<8f)return;
   var run=game.UiGridBoard;
   int n=run!=null?Mathf.Max(1,run.size):8;
-  int px=Mathf.Max(28,Mathf.RoundToInt(GridCellBasePx*gridBoardZoom));
-  const int margin=1;
-  int pitch=px+margin*2;
-  float gw=n*pitch+16f;
-  float gh=n*pitch+16f;
-  // Center inside the right-hand stage (left of dock is excluded by stage bounds).
-  float left=(vr.width-gw)*0.5f+gridBoardPan.x;
-  float top=(vr.height-gh)*0.5f+gridBoardPan.y;
+ int px=Mathf.Max(28,Mathf.RoundToInt(GridCellBasePx*gridBoardZoom));
+ const int margin=1;
+ int pitch=px+margin*2;
+ float gw=n*pitch+16f;
+ float gh=n*pitch+16f;
+ // Exploration is a tableau while planning. Once the route resolves, the
+ // camera locks onto the explorer so movement reads as traversal, not as a
+ // token sliding across a static board.
+ bool followExplorer=!gridBoardCombatMode&&run!=null&&run.phase==GridBoardPhase.Run;
+ float left;
+ float top;
+ if(followExplorer){
+  var piece=GridBoardSystem.PieceVisual(run);
+  float actorX=8f+(piece.x+0.5f)*pitch;
+  float actorY=8f+(piece.y+0.5f)*pitch;
+  left=vr.width*0.5f-actorX;
+  top=vr.height*0.53f-actorY;
+ } else {
+  left=(vr.width-gw)*0.5f+gridBoardPan.x;
+  top=(vr.height-gh)*0.5f+gridBoardPan.y;
+ }
   if(!float.IsNaN(gridBoardLastLayoutPos.x)
    &&Mathf.Abs(gridBoardLastLayoutPos.x-left)<0.5f
    &&Mathf.Abs(gridBoardLastLayoutPos.y-top)<0.5f)return;
@@ -492,7 +824,80 @@ public sealed partial class PackspireUiFoundation {
   gridBoardGrid.style.position=Position.Absolute;
   gridBoardGrid.style.left=left;
   gridBoardGrid.style.top=top;
+  LayoutGridActors(left,top,pitch);
   gridBoardLayoutBusy=false;
+ }
+
+ void RefreshGridActors(GridBoardRunState run){
+  if(gridBoardActorLayer==null||run==null)return;
+  gridBoardActorLayer.Clear();
+  // The explorer is an actor too, rather than a terrain decoration.  That
+  // keeps future movement, hit reactions and facing animation independent of
+  // the logical grid cell.
+  var piece=GridBoardSystem.PieceVisual(run);
+  var hero=Container("ps-gboard-actor ps-gboard-player-actor");
+  hero.pickingMode=PickingMode.Ignore;
+  hero.userData=new Vector2Int(Mathf.RoundToInt(piece.x),Mathf.RoundToInt(piece.y));
+  var character=CharacterSystem.OfRun(game.UiRun);
+  if(character!=null)
+   hero.Add(CharacterPortraitFront(character,"ps-gboard-player-portrait"));
+  else{
+   var glyph=new Label("★"){pickingMode=PickingMode.Ignore};
+   glyph.AddToClassList("ps-gboard-actor-glyph");
+   hero.Add(glyph);
+  }
+  gridBoardActorLayer.Add(hero);
+  // Enemy cells are spawn anchors only. The visible token deliberately lives
+  // here so patrols, knockback and multi-cell enemies can move independently.
+  foreach(var cell in run.cells.Where(c=>c.place=="enemy")){
+   var actor=Container("ps-gboard-actor ps-gboard-enemy-actor");
+   actor.pickingMode=PickingMode.Ignore;
+   actor.userData=new Vector2Int(cell.x,cell.y);
+   var glyph=new Label("⚔"){pickingMode=PickingMode.Ignore};
+   glyph.AddToClassList("ps-gboard-actor-glyph");
+   actor.Add(glyph);
+   gridBoardActorLayer.Add(actor);
+  }
+  if(!float.IsNaN(gridBoardLastLayoutPos.x))
+   LayoutGridActors(gridBoardLastLayoutPos.x,gridBoardLastLayoutPos.y,
+    Mathf.Max(28,Mathf.RoundToInt(GridCellBasePx*gridBoardZoom))+2);
+ }
+
+ void LayoutGridActors(float boardLeft,float boardTop,int pitch){
+  if(gridBoardActorLayer==null)return;
+  gridBoardActorLayer.style.position=Position.Absolute;
+  gridBoardActorLayer.style.left=boardLeft;
+  gridBoardActorLayer.style.top=boardTop;
+  gridBoardActorLayer.style.width=gridBoardGrid?.resolvedStyle.width??0;
+  gridBoardActorLayer.style.height=gridBoardGrid?.resolvedStyle.height??0;
+  foreach(var actor in gridBoardActorLayer.Children()){
+   if(actor.userData is not Vector2Int pos)continue;
+   actor.style.left=9+pos.x*pitch;
+   actor.style.top=9+pos.y*pitch;
+   actor.style.width=pitch-2;
+   actor.style.height=pitch-2;
+  }
+ }
+
+ void SetGridBoardMapHover(bool hover){
+  gridBoardMapHover=hover;
+  SyncGridBoardHoverChrome();
+ }
+
+ void SetGridBoardDockHover(bool hover){
+  gridBoardDockHover=hover;
+  SyncGridBoardHoverChrome();
+ }
+
+ void SetGridBoardHeaderHover(bool hover){
+  gridBoardHeaderHover=hover;
+  SyncGridBoardHoverChrome();
+ }
+
+ void SyncGridBoardHoverChrome(){
+  if(gridBoardRoot==null)return;
+  gridBoardRoot.EnableInClassList("ps-gboard-inspecting",gridBoardMapHover||gridBoardDockHover);
+  gridBoardRoot.EnableInClassList("ps-gboard-header-hover",gridBoardHeaderHover);
  }
 
  void RefreshGridBoard(){
@@ -504,6 +909,15 @@ public sealed partial class PackspireUiFoundation {
   if(inBattle&&!gridBoardCombatMode)EnterGridCombatMode(true);
   else if(!inBattle&&gridBoardCombatMode)EnterGridCombatMode(false);
 
+  // Exploration HUD is progressive disclosure. The map remains unobstructed
+  // while idle; selecting a card or beginning a route brings in EN and the
+  // reading rails needed to make the decision.
+  bool planning=inBattle||!string.IsNullOrEmpty(run.pendingGate)||
+   !string.IsNullOrEmpty(run.selectedCardUid)||
+   run.phase==GridBoardPhase.Path||run.phase==GridBoardPhase.Run;
+  gridBoardRoot.EnableInClassList("ps-gboard-planning",planning);
+  gridBoardRoot.EnableInClassList("ps-gboard-idle",!planning);
+
   string phase=GridBoardSystem.PhaseLabel(run.phase);
   string ink=run.phase==GridBoardPhase.Path||run.phase==GridBoardPhase.Run||run.phase==GridBoardPhase.Done
    ?$"曲がり　{run.turnsUsed}/{run.turnsMax}　·　長さ {Mathf.Max(0,run.path.Count-1)}"
@@ -514,12 +928,25 @@ public sealed partial class PackspireUiFoundation {
 
   if(gridBoardPhaseLabel!=null)gridBoardPhaseLabel.text=inBattle?"戦闘":phase;
   if(gridBoardInkLabel!=null)
-   gridBoardInkLabel.text=inBattle?$"勝利数 {game.UiRun?.battlesWon??0}":$"{GridBoardSystem.AreaLabel(run)}　·　{ink}";
+   gridBoardInkLabel.text=inBattle?$"勝利数 {game.UiRun?.battlesWon??0}":$"{GridBoardSystem.AreaLabel(run)}　·　{ink}　·　{GridBoardSystem.GrowthSummary(run)}";
+  if(gridBoardDoomLabel!=null)
+   gridBoardDoomLabel.text=inBattle
+    ?$"◆ ROUND {Mathf.Max(1,(game.UiBattle?.move??0)+1):00}"
+    :$"◆ TURN {Mathf.Max(1,run.doom+1):00}";
+  if(gridBoardAreaChipLabel!=null){
+   gridBoardAreaChipLabel.text=$"◇ 区画 {run.areaIndex+1}/{Mathf.Max(1,run.areaCount)}";
+   gridBoardAreaChipLabel.style.display=inBattle?DisplayStyle.None:DisplayStyle.Flex;
+  }
+  if(gridBoardCurveChipLabel!=null){
+   gridBoardCurveChipLabel.text=$"✦ 曲がり {run.turnsUsed}/{Mathf.Max(1,run.turnsMax)}";
+   gridBoardCurveChipLabel.style.display=inBattle?DisplayStyle.None:DisplayStyle.Flex;
+  }
+  gridBoardMapStats?.EnableInClassList("ps-gboard-map-stats-combat",inBattle);
   if(gridBoardTypeLabel!=null)gridBoardTypeLabel.text=inBattle?"戦闘":"封印格子";
   if(gridBoardTitleLabel!=null)
    gridBoardTitleLabel.text=inBattle?(game.UiBattle.enemy?.name??"交戦中"):(string.IsNullOrEmpty(run.pendingGate)?phase:run.pendingGate=="next"?"次区画":"帰還点");
   if(gridBoardStatusLabel!=null)
-   gridBoardStatusLabel.text=inBattle?DescribeGridBattleIntentShort():(string.IsNullOrEmpty(run.pendingGate)?ink:GridBoardSystem.AreaLabel(run));
+   gridBoardStatusLabel.text=inBattle?"戦闘中":(string.IsNullOrEmpty(run.pendingGate)?ink:GridBoardSystem.AreaLabel(run));
 
   if(inBattle){
    RefreshGridCombatStage();
@@ -551,6 +978,8 @@ public sealed partial class PackspireUiFoundation {
   RefreshGridGateChoice(run);
 
   bool showPathContext=!inBattle&&string.IsNullOrEmpty(run.pendingGate)&&run.phase==GridBoardPhase.Path;
+  if(gridBoardRoutePalette!=null)
+   gridBoardRoutePalette.style.display=showPathContext?DisplayStyle.Flex:DisplayStyle.None;
   if(gridBoardContextActions!=null)
    gridBoardContextActions.style.display=showPathContext?DisplayStyle.Flex:DisplayStyle.None;
 
@@ -585,6 +1014,7 @@ public sealed partial class PackspireUiFoundation {
   foreach(var cell in run.cells){
    if(!gridBoardCells.TryGetValue(CellKey(cell.x,cell.y),out var ve)||ve==null)continue;
    ve.EnableInClassList("ps-gboard-cell",true);
+   ve.EnableInClassList("ps-gboard-void",cell.terrain=="void");
    ve.EnableInClassList("ps-gboard-blocked",cell.terrain=="blocked");
    ve.EnableInClassList("ps-gboard-start",cell.terrain=="start");
    ve.EnableInClassList("ps-gboard-goal",cell.terrain=="goal");
@@ -602,6 +1032,18 @@ public sealed partial class PackspireUiFoundation {
    ve.EnableInClassList("ps-gboard-goal",false);
 
    var cellMark=ve.Q<Label>("mark");
+   var cellSigil=ve.Q<Label>("sigil");
+   if(cellSigil!=null){
+    cellSigil.text=cell.terrain switch{
+     "blocked"=>"✦",
+     "start"=>"◈",
+     "goal"=>"✧",
+     _=>cell.place switch{
+      "lamp"=>"✦", "fog"=>"☾", "seal"=>"◇",
+      "event"=>"✧", "next"=>"➜", "return"=>"↶", _=>""
+     }
+    };
+   }
    if(cellMark!=null){
     string t=cell.terrain switch{
      "start"=>"入",
@@ -609,16 +1051,26 @@ public sealed partial class PackspireUiFoundation {
      "blocked"=>"■",
      _=>GridBoardSystem.PlaceLabel(cell.place),
     };
-    if(cell.place=="lamp"&&cell.grow>0)t=$"灯{cell.grow}";
+     if(cell.grow>0&&(cell.place is "lamp" or "fog" or "seal"))t=$"{GridBoardSystem.PlaceLabel(cell.place)}{cell.grow}";
     if(cell.x==pieceX&&cell.y==pieceY)t=string.IsNullOrEmpty(t)?"●":t+"●";
     cellMark.text=t??"";
    }
   }
 
+  RefreshGridActors(run);
+
+  bool shouldFollow=!inBattle&&run.phase==GridBoardPhase.Run;
+  if(shouldFollow!=gridBoardFollowingExplorer){
+   gridBoardFollowingExplorer=shouldFollow;
+   gridBoardZoom=shouldFollow?1.28f:1f;
+   gridBoardPan=Vector2.zero;
+   gridBoardLastLayoutPos=new(float.NaN,float.NaN);
+  }
   ApplyGridZoomVisual();
   LayoutGridBoardMap();
   RebuildGridHand(run);
   RefreshGridSelectedCard(run);
+  RefreshGridResolveTray(inBattle);
  }
 
  void RefreshGridHero(){
@@ -629,14 +1081,64 @@ public sealed partial class PackspireUiFoundation {
   if(runState==null){
    if(gridBoardHpLabel!=null)gridBoardHpLabel.text="体力 —";
    if(gridBoardHpFill!=null)gridBoardHpFill.style.width=Length.Percent(0);
+   if(gridBoardHpFill!=null)gridBoardHpFill.style.height=Length.Percent(0);
+   if(gridBoardShieldLabel!=null)gridBoardShieldLabel.text="SH 0";
+   if(gridBoardShieldFill!=null)gridBoardShieldFill.style.height=Length.Percent(0);
    return;
   }
   if(gridBoardHpLabel!=null)
-   gridBoardHpLabel.text=$"体力　{runState.hp} / {runState.maxHp}";
+   gridBoardHpLabel.text=$"HP {runState.hp}/{runState.maxHp}";
   if(gridBoardHpFill!=null){
    float t=runState.maxHp>0?Mathf.Clamp01((float)runState.hp/runState.maxHp):0f;
-   gridBoardHpFill.style.width=Length.Percent(t*100f);
+   gridBoardHpFill.style.width=Length.Percent(100);
+   gridBoardHpFill.style.height=Length.Percent(t*100f);
   }
+  if(gridBoardShieldLabel!=null)gridBoardShieldLabel.text=$"SH {Mathf.Max(0,runState.block)}";
+  if(gridBoardShieldFill!=null){
+   float shieldT=runState.maxHp>0?Mathf.Clamp01((float)runState.block/runState.maxHp):0f;
+   gridBoardShieldFill.style.height=Length.Percent(shieldT*100f);
+  }
+ }
+
+ void RefreshGridResolveTray(bool inBattle){
+  if(gridBoardResolveTray==null)return;
+  bool show=inBattle&&gridBoardDiceResultActive&&Time.unscaledTime<gridBoardDiceResultUntil;
+  gridBoardCombatActionView?.EnableInClassList("ps-gboard-action-view-rolling",show);
+  if(gridBoardCombatCardPreview!=null)
+   gridBoardCombatCardPreview.style.display=show?DisplayStyle.None:DisplayStyle.Flex;
+  gridBoardResolveTray.style.display=show?DisplayStyle.Flex:DisplayStyle.None;
+  if(!show)return;
+  if(gridBoardResolveFormula!=null)
+   gridBoardResolveFormula.text=$"{gridBoardDiceSource}  /  2D6 {GridDiceModifierText(gridBoardDiceModifier)}";
+  if(gridBoardResolveResult!=null)
+   gridBoardResolveResult.text=$"{gridBoardDiceTotal} → {gridBoardDiceDamage} DMG";
+  if(gridBoardResolveDice==null)return;
+  gridBoardResolveDice.Clear();
+  foreach(int value in new[]{gridBoardDieOne,gridBoardDieTwo}){
+   var die=new Label(value.ToString()){pickingMode=PickingMode.Ignore};
+   die.AddToClassList("ps-gboard-die");
+   gridBoardResolveDice.Add(die);
+  }
+  var modifier=new Label(GridDiceModifierText(gridBoardDiceModifier)){pickingMode=PickingMode.Ignore};
+  modifier.AddToClassList("ps-gboard-die-mod");
+  gridBoardResolveDice.Add(modifier);
+ }
+
+ static string GridDiceModifierText(int modifier)=>modifier>0?$"+ {modifier}":modifier<0?$"− {Mathf.Abs(modifier)}":"+ 0";
+
+ void ShowGridDiceResult(BattleActionFx fx){
+  if(!gridBoardCombatMode||fx.dieOne<=0||fx.dieTwo<=0)return;
+  gridBoardDiceResultActive=true;
+  gridBoardDiceResultUntil=Time.unscaledTime+2.4f;
+  gridBoardDieOne=fx.dieOne;
+  gridBoardDieTwo=fx.dieTwo;
+  gridBoardDiceModifier=fx.damageModifier;
+  gridBoardDiceTotal=fx.rolledDamage;
+  gridBoardDiceDamage=fx.damageToEnemy>0?fx.damageToEnemy:fx.damageToPlayer;
+  gridBoardDiceSource=string.IsNullOrEmpty(fx.cardName)?"DAMAGE ROLL":fx.cardName;
+  RefreshGridResolveTray(true);
+  gridBoardResolveTray?.BringToFront();
+  gridBoardResolveTray?.schedule.Execute(()=>RefreshGridResolveTray(game.UiBattle!=null)).StartingIn(2450);
  }
 
  void SyncGridHandChrome(){
@@ -644,11 +1146,15 @@ public sealed partial class PackspireUiFoundation {
   bool open=gridBoardHandOpen||gridBoardCombatMode;
   gridBoardHandRoot.EnableInClassList("ps-gboard-hand-open",open);
   gridBoardHandRoot.style.left=StyleKeyword.Auto;
-  gridBoardHandRoot.style.right=10;
-  gridBoardHandRoot.style.bottom=52;
-  gridBoardHandRoot.style.width=460;
-  gridBoardHandRoot.style.height=open?310:56;
-  gridBoardHandRoot.style.overflow=open?Overflow.Visible:Overflow.Hidden;
+  gridBoardHandRoot.style.right=StyleKeyword.Auto;
+  gridBoardHandRoot.style.left=Length.Percent(58);
+  gridBoardHandRoot.style.marginLeft=-GridHandWidth*0.5f;
+  gridBoardHandRoot.style.bottom=gridBoardCombatMode?-72:(open?54:0);
+  gridBoardHandRoot.style.width=GridHandWidth;
+  // The visible cards stay fixed inside this compact hit strip. The separate
+  // hover preview is picking-disabled, so it cannot feed back into layout.
+  gridBoardHandRoot.style.height=gridBoardCombatMode?260:(open?344:96);
+  gridBoardHandRoot.style.overflow=Overflow.Visible;
   gridBoardHandRoot.style.backgroundColor=Color.clear;
   gridBoardHandRoot.style.borderLeftWidth=0;
   gridBoardHandRoot.style.borderRightWidth=0;
@@ -669,7 +1175,7 @@ public sealed partial class PackspireUiFoundation {
   var orbs=new System.Text.StringBuilder("EN ");
   for(int i=0;i<max;i++)orbs.Append(i<en?'●':'○');
   orbs.Append($"  {en}/{max}");
-  gridBoardEnergyLabel.text=orbs.ToString();
+  gridBoardEnergyLabel.text=$"EN      {en}/{max}";
   if(gridBoardCombatRail!=null)
    gridBoardCombatRail.style.display=gridBoardCombatMode?DisplayStyle.Flex:DisplayStyle.None;
   if(gridBoardSkillButton!=null){
@@ -677,8 +1183,10 @@ public sealed partial class PackspireUiFoundation {
    gridBoardSkillButton.tooltip=game.UiActiveSkillTooltip;
    gridBoardSkillButton.SetEnabled(gridBoardCombatMode&&game.UiActiveSkillAvailable&&!battleInputLocked);
   }
-  if(gridBoardEndTurnButton!=null)
+  if(gridBoardEndTurnButton!=null){
+   gridBoardEndTurnButton.tooltip="手札を捨て、敵の次の行動を解決する";
    gridBoardEndTurnButton.SetEnabled(gridBoardCombatMode&&game.UiBattle!=null&&!battleInputLocked);
+  }
  }
 
  void RefreshGridGateChoice(GridBoardRunState run){
@@ -690,23 +1198,38 @@ public sealed partial class PackspireUiFoundation {
   }
   gridBoardGateActions.style.display=DisplayStyle.Flex;
   bool next=run.pendingGate=="next";
+  gridBoardGateActions.EnableInClassList("ps-gboard-gate-next",next);
+  gridBoardGateActions.EnableInClassList("ps-gboard-gate-return",!next);
+  var dialog=Container("ps-gboard-gate-dialog");
+  var eyebrow=new Label(next?"AREA PASSAGE":"EXPEDITION RETURN"){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-gboard-gate-eyebrow");
+  dialog.Add(eyebrow);
   var head=new Label(next?"次区画への裂け目":"帰還点"){pickingMode=PickingMode.Ignore};
   head.AddToClassList("ps-gboard-gate-title");
-  gridBoardGateActions.Add(head);
+  dialog.Add(head);
+  var body=new Label(next
+   ?"裂け目の向こうへ進むと、この区画には戻れない。"
+   :"ここまでの戦利品を持ち帰り、遠征を終了する。"){pickingMode=PickingMode.Ignore};
+  body.AddToClassList("ps-gboard-gate-body");
+  dialog.Add(body);
+  var choices=Container("ps-gboard-gate-choices");
   if(next){
-   gridBoardGateActions.Add(MakeGridAction("次の区画へ進む",()=>{
+   choices.Add(MakeGridAction("次の区画へ進む",()=>{
     game.UiAdvanceGridArea();
    }));
   } else {
-   gridBoardGateActions.Add(MakeGridAction("帰還する",()=>{
+   choices.Add(MakeGridAction("戦利品を持って帰還する",()=>{
     game.UiConfirmGridReturn();
     ForceRefreshScreen();
    }));
   }
-  gridBoardGateActions.Add(MakeGridAction("まだ探索する",()=>{
+  choices.Add(MakeGridAction("まだ探索する",()=>{
    game.UiDeclineGridGate();
    RefreshGridBoard();
   }));
+  dialog.Add(choices);
+  gridBoardGateActions.Add(dialog);
+  gridBoardGateActions.BringToFront();
  }
 
  void RefreshGridConsumables(){
@@ -736,12 +1259,23 @@ public sealed partial class PackspireUiFoundation {
   var battle=game.UiBattle;
   if(battle?.enemy==null)return;
   if(gridBoardCombatTitle!=null)gridBoardCombatTitle.text=battle.enemy.name;
-  if(gridBoardCombatHpLabel!=null){
-   string block=battle.enemyBlock>0?$"　·　BLK {battle.enemyBlock}":"";
-   gridBoardCombatHpLabel.text=$"HP {Mathf.Max(0,battle.enemyHp)} / {battle.enemyMaxHp}{block}";
+  if(gridBoardCombatHpLabel!=null)
+   gridBoardCombatHpLabel.text=$"HP {Mathf.Max(0,battle.enemyHp)} / {battle.enemyMaxHp}";
+  if(gridBoardCombatHpFill!=null){
+   float ratio=battle.enemyMaxHp>0?Mathf.Clamp01((float)battle.enemyHp/battle.enemyMaxHp):0f;
+   gridBoardCombatHpFill.style.width=Length.Percent(ratio*100f);
   }
+  if(gridBoardCombatShieldLabel!=null)
+   gridBoardCombatShieldLabel.text=$"SH {Mathf.Max(0,battle.enemyBlock)}";
+  if(gridBoardCombatShieldFill!=null){
+   float shieldRatio=battle.enemyMaxHp>0?Mathf.Clamp01((float)Mathf.Max(0,battle.enemyBlock)/battle.enemyMaxHp):0f;
+   gridBoardCombatShieldFill.style.width=Length.Percent(shieldRatio*100f);
+  }
+  RefreshGridCombatEnemyStatuses(battle.enemyStatuses);
   if(gridBoardCombatIntentLabel!=null)
    gridBoardCombatIntentLabel.text=DescribeGridBattleIntentShort();
+  if(gridBoardCombatIntentHintLabel!=null)
+   gridBoardCombatIntentHintLabel.text=DescribeGridBattleIntentHint();
   if(gridBoardCombatPortrait!=null){
    if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseDragonArt!=null){
     gridBoardCombatPortrait.image=game.UiShowcaseDragonArt;
@@ -757,10 +1291,31 @@ public sealed partial class PackspireUiFoundation {
   }
  }
 
+ void RefreshGridCombatEnemyStatuses(List<StatusState> statuses){
+  if(gridBoardCombatEnemyStatuses==null)return;
+  gridBoardCombatEnemyStatuses.Clear();
+  if(statuses==null||statuses.Count==0)return;
+  foreach(var status in statuses.Take(3)){
+   var def=ContentDatabase.Status(status.type);
+   var chip=new Label($"{(def!=null?def.name:status.type)} {status.amount}"){pickingMode=PickingMode.Ignore};
+   chip.AddToClassList("ps-gboard-combat-status-chip");
+   gridBoardCombatEnemyStatuses.Add(chip);
+  }
+ }
+
  string DescribeGridBattleIntentShort(){
-  if(!TryGetGridBattleIntent(out int raw,out bool special,out int unusedBlock,out List<EffectSpec> unusedEffects))return "意図 —";
-  if(raw>0)return $"意図 ATTACK {raw}";
-  return special?"意図 SPECIAL":"意図 —";
+  if(!TryGetGridBattleIntent(out int raw,out bool special,out int unusedBlock,out List<EffectSpec> unusedEffects))return "次の行動　—";
+  string extra="";
+  if(unusedEffects!=null&&unusedEffects.Count>0){
+   var effect=unusedEffects[0];
+   var def=ContentDatabase.Status(effect.type);
+   extra=$"\n{(def!=null?def.name:effect.type)} +{effect.amount}";
+  }
+  if(raw>0){
+   int modifier=raw-7;
+   return $"⚔ 攻撃\n2D6 {GridDiceModifierText(modifier)}　平均 {raw}{extra}";
+  }
+  return special?$"次の行動\n✦ 特殊行動{extra}":"次の行動\n—";
  }
 
  string DescribeGridBattleIntentHint(){
@@ -789,8 +1344,9 @@ public sealed partial class PackspireUiFoundation {
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
   int moveIndex=battle.move%battle.enemy.damages.Length;
   int baseDamage=battle.enemy.damages[moveIndex];
-  rawDamage=BattleSystem.Damage(baseDamage+dungeon.damage,battle.enemyStatuses,run.statuses);
-  specialMove=baseDamage==0&&dungeon.damage==0;
+  int pressure=GridBoardSystem.EnemyDamageBonus(game.UiGridBoard);
+  rawDamage=BattleSystem.Damage(baseDamage+dungeon.damage+pressure,battle.enemyStatuses,run.statuses);
+  specialMove=baseDamage==0&&dungeon.damage+pressure==0;
   playerBlock=run.block;
   effects=ContentDatabase.EnemyEffects(battle.enemy.name,moveIndex);
   return true;
@@ -806,14 +1362,64 @@ public sealed partial class PackspireUiFoundation {
   if(run!=null)RebuildGridHand(run);
  }
 
+ void FocusGridHandCard(Button card){
+  if(gridBoardHoverCard==card)return;
+  if(gridBoardHoverCard!=null)gridBoardHoverCard.RemoveFromClassList("ps-gboard-fan-focus");
+  if(gridBoardHoverPreview!=null){
+   gridBoardHoverPreview.RemoveFromHierarchy();
+   gridBoardHoverPreview=null;
+  }
+  gridBoardHoverCard=card;
+  gridBoardHoverCard.AddToClassList("ps-gboard-fan-focus");
+  if(card.userData is not CardInstance data)return;
+  ShowGridExplorationCardPreview(data,false);
+ }
+
+ void ClearGridHandFocus(){
+  if(gridBoardHoverCard!=null)gridBoardHoverCard.RemoveFromClassList("ps-gboard-fan-focus");
+  gridBoardHoverCard=null;
+  if(gridBoardHoverPreview!=null){
+   gridBoardHoverPreview.RemoveFromHierarchy();
+   gridBoardHoverPreview=null;
+  }
+  if(gridBoardCombatMode)ShowGridCombatCardPreview(null);
+  else RefreshGridSelectedCard(game.UiGridBoard);
+ }
+
+ void ShowGridCombatCardPreview(CardInstance card,bool affordable=true){
+  if(gridBoardCombatCardPreview==null)return;
+  gridBoardCombatCardPreview.Clear();
+  if(card==null||game.UiRun==null){
+   var hint=new Label("手札に触れて\n術式を確認"){pickingMode=PickingMode.Ignore};
+   hint.AddToClassList("ps-gboard-card-view-empty");
+   gridBoardCombatCardPreview.Add(hint);
+   return;
+  }
+  var preview=Container("ps-battle-card ps-gboard-card-view-card");
+  preview.pickingMode=PickingMode.Ignore;
+  PopulateBattleCard(preview,card,game.UiRun,affordable);
+  gridBoardCombatCardPreview.Add(preview);
+ }
+
  void RefreshGridSelectedCard(GridBoardRunState run){
   if(gridBoardSelectedHost==null)return;
-  gridBoardSelectedHost.Clear();
-  if(gridBoardCombatMode||game.UiBattle!=null){
-   gridBoardSelectedHost.style.display=DisplayStyle.None;
+  bool showPreview=run!=null&&run.phase==GridBoardPhase.Place&&!string.IsNullOrEmpty(run.selectedCardUid);
+  if(!showPreview||gridBoardCombatMode||game.UiBattle!=null){
+   ShowGridExplorationCardPreview(null,false);
    return;
   }
   var card=run!=null&&run.phase==GridBoardPhase.Place?GridBoardSystem.SelectedCard(run):null;
+  if(card==null){
+   ShowGridExplorationCardPreview(null,false);
+   return;
+  }
+  ShowGridExplorationCardPreview(card,true);
+ }
+
+void ShowGridExplorationCardPreview(CardInstance card,bool committed){
+  if(gridBoardSelectedHost==null)return;
+  if(card!=null)HideGridCellDetail();
+  gridBoardSelectedHost.Clear();
   if(card==null){
    gridBoardSelectedHost.style.display=DisplayStyle.None;
    return;
@@ -824,16 +1430,24 @@ public sealed partial class PackspireUiFoundation {
   gridBoardSelectedHost.style.display=DisplayStyle.Flex;
   gridBoardSelectedHost.style.backgroundColor=Color.clear;
   gridBoardSelectedHost.style.position=Position.Absolute;
-  gridBoardSelectedHost.style.right=28;
-  gridBoardSelectedHost.style.top=96;
+  // Planning preview overlays the right edge of the map; exploration has no
+  // persistent dossier column competing for this space.
+  gridBoardSelectedHost.style.right=34;
+  gridBoardSelectedHost.style.top=82;
   gridBoardSelectedHost.style.width=cardW;
   gridBoardSelectedHost.style.height=cardH;
-  var preview=new Button(()=>{
-   if(game.UiGridBoard!=null)game.UiGridBoard.selectedCardUid="";
-   RefreshGridBoard();
-  });
+  VisualElement preview;
+  if(committed){
+   preview=new Button(()=>{
+    if(game.UiGridBoard!=null)game.UiGridBoard.selectedCardUid="";
+    RefreshGridBoard();
+   });
+  } else {
+   preview=new VisualElement{pickingMode=PickingMode.Ignore};
+  }
   preview.AddToClassList("ps-battle-card");
   preview.AddToClassList("ps-gboard-selected-card");
+  preview.AddToClassList("ps-gboard-side-preview");
   preview.style.position=Position.Relative;
   preview.style.width=cardW;
   preview.style.height=cardH;
@@ -847,6 +1461,7 @@ public sealed partial class PackspireUiFoundation {
 
  void RebuildGridHand(GridBoardRunState run){
   if(gridBoardHandRoot==null)return;
+  ClearGridHandFocus();
   gridBoardHandRoot.Clear();
   EnsureBattleAssets();
 
@@ -876,7 +1491,7 @@ public sealed partial class PackspireUiFoundation {
   float center=(count-1)*0.5f;
   float spreadDeg=count<=5?6.2f:count==6?7.4f:5.0f;
   float radius=count<=5?110f:count==6?205f:155f;
-  float horizontalStep=count<=5?72f:count==6?62f:52f;
+  float horizontalStep=count<=5?112f:count==6?92f:72f;
   bool open=gridBoardHandOpen;
   float sink=open?0f:GridHandPeekSink;
   var handSlots=new List<(Button button,float depth)>(count);
@@ -895,6 +1510,7 @@ public sealed partial class PackspireUiFoundation {
    });
    button.AddToClassList("ps-battle-card");
    button.AddToClassList("ps-gboard-fan-card");
+   button.userData=capture;
    if(!open)button.AddToClassList("ps-gboard-fan-peek");
    if(selected)button.AddToClassList("ps-gboard-fan-selected");
    PopulateGridPlaceCard(button,capture);
@@ -902,14 +1518,18 @@ public sealed partial class PackspireUiFoundation {
    float angle=open?spreadIndex*spreadDeg:spreadIndex*2.2f;
    float rad=angle*Mathf.Deg2Rad;
    float arcLift=open?radius*(1f-Mathf.Cos(rad)):0f;
-   float baseRight=(count-1-i)*horizontalStep+8f;
+   float span=GridHandCardWidth+(count-1)*horizontalStep;
+   float outerInset=Mathf.Max(8f,(GridHandWidth-span)*0.5f);
+   float baseRight=(count-1-i)*horizontalStep+outerInset;
    float arcShift=open?radius*Mathf.Sin(rad):spreadIndex*6f;
    button.style.position=Position.Absolute;
    button.style.right=baseRight-arcShift;
    button.style.bottom=arcLift-sink;
    button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
    button.style.transformOrigin=new TransformOrigin(new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
-   if(open)button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
+   if(!gridBoardCombatMode){
+    button.RegisterCallback<PointerEnterEvent>(_=>FocusGridHandCard(button));
+   } else if(open)button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
    handSlots.Add((button,Mathf.Abs(spreadIndex)-(selected?10f:0f)));
   }
   foreach(var slot in handSlots.OrderByDescending(x=>x.depth))
@@ -925,13 +1545,15 @@ public sealed partial class PackspireUiFoundation {
    var empty=new Label("手札なし"){pickingMode=PickingMode.Ignore};
    empty.AddToClassList("ps-gboard-hand-empty");
    gridBoardHandRoot.Add(empty);
+   ShowGridCombatCardPreview(null);
+   AttachGridResolveTray();
    return;
   }
   int count=run.hand.Count;
   float center=(count-1)*0.5f;
   float spreadDeg=count<=5?6.2f:count==6?7.4f:count==7?7.0f:5.0f;
   float radius=count<=5?110f:count==6?205f:count==7?198f:155f;
-  float horizontalStep=count<=5?72f:count==6?62f:52f;
+  float horizontalStep=count<=5?112f:count==6?92f:count==7?80f:72f;
   var handSlots=new List<(Button button,float depth)>(count);
   for(int i=0;i<count;i++){
    int index=i;
@@ -948,28 +1570,54 @@ public sealed partial class PackspireUiFoundation {
    });
    button.AddToClassList("ps-battle-card");
    button.AddToClassList("ps-gboard-fan-card");
+   button.userData=card;
    if(!affordable)button.AddToClassList("ps-battle-card-disabled");
    PopulateBattleCard(button,card,run,affordable);
    float spreadIndex=i-center;
    float angle=spreadIndex*spreadDeg;
    float rad=angle*Mathf.Deg2Rad;
    float arcLift=radius*(1f-Mathf.Cos(rad));
-   float baseRight=(count-1-i)*horizontalStep+8f;
+   float span=GridHandCardWidth+(count-1)*horizontalStep;
+   float outerInset=Mathf.Max(8f,(GridHandWidth-span)*0.5f);
+   float baseRight=(count-1-i)*horizontalStep+outerInset;
    float arcShift=radius*Mathf.Sin(rad);
    button.style.position=Position.Absolute;
    button.style.right=baseRight-arcShift;
    button.style.bottom=arcLift;
    button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
    button.style.transformOrigin=new TransformOrigin(new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
-   button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
+   button.RegisterCallback<PointerEnterEvent>(_=>{
+    button.BringToFront();
+    ShowGridCombatCardPreview(card,affordable);
+   });
    handSlots.Add((button,Mathf.Abs(spreadIndex)));
   }
   foreach(var slot in handSlots.OrderByDescending(x=>x.depth))
    gridBoardHandRoot.Add(slot.button);
+  ShowGridCombatCardPreview(null);
+  AttachGridResolveTray();
+ }
+
+ // Card detail and dice results share one fixed right-side reading lane.
+ void AttachGridResolveTray(){
+  if(gridBoardResolveTray==null)return;
+  var host=gridBoardCombatActionView??gridBoardRoot;
+  if(host==null)return;
+  if(gridBoardResolveTray.parent!=host)host.Add(gridBoardResolveTray);
+  gridBoardResolveTray.BringToFront();
  }
 
  void PlayGridBattleActionFx(BattleActionFx fx){
   if(gridBoardFxLayer==null||gridBoardCombatStage==null)return;
+  ShowGridDiceResult(fx);
+  if(fx.damageToEnemy>0&&gridBoardCombatEnemyFocus!=null){
+   gridBoardCombatEnemyFocus.AddToClassList("ps-gboard-enemy-hit");
+   gridBoardCombatEnemyFocus.schedule.Execute(()=>gridBoardCombatEnemyFocus?.RemoveFromClassList("ps-gboard-enemy-hit")).StartingIn(180);
+  }
+  if(fx.damageToPlayer>0&&gridBoardRoot!=null){
+   gridBoardRoot.AddToClassList("ps-gboard-player-hit");
+   gridBoardRoot.schedule.Execute(()=>gridBoardRoot?.RemoveFromClassList("ps-gboard-player-hit")).StartingIn(220);
+  }
   EnsureBattleAssets();
   int stagger=0;
   void Spawn(string value,Texture2D icon,string tone){
@@ -1048,15 +1696,67 @@ public sealed partial class PackspireUiFoundation {
   return "◆";
  }
 
+ void BuildGridBoardEventOverlay(){
+  if(gridBoardRoot==null)return;
+  gridBoardEventOverlay=Container("ps-gboard-event-overlay");
+  gridBoardEventOverlay.style.display=DisplayStyle.None;
+  var panel=Container("ps-gboard-event-popup");
+  var eyebrow=new Label("UNKNOWN SIGNAL"){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-gboard-event-eyebrow");
+  panel.Add(eyebrow);
+  var title=new Label("異変を発見"){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-gboard-event-title");
+  panel.Add(title);
+  var body=new Label("足元の封印が脈打っている。進行を止めて、どう対処するか選べ。"){pickingMode=PickingMode.Ignore};
+  body.AddToClassList("ps-gboard-event-body");
+  panel.Add(body);
+  var choices=Container("ps-gboard-event-choices");
+  var risk=MakeGridAction("血を捧げる　HP -6 / 24G",()=>ResolveGridBoardEvent(0));
+  risk.AddToClassList("ps-gboard-event-choice");
+  choices.Add(risk);
+  var repair=MakeGridAction("装備を整える　耐久を回復",()=>ResolveGridBoardEvent(1));
+  repair.AddToClassList("ps-gboard-event-choice");
+  choices.Add(repair);
+  var leave=MakeGridAction("立ち去る",()=>ResolveGridBoardEvent(2));
+  leave.AddToClassList("ps-gboard-event-choice");
+  choices.Add(leave);
+  panel.Add(choices);
+  gridBoardEventOverlay.Add(panel);
+  gridBoardRoot.Add(gridBoardEventOverlay);
+ }
+
+ void OpenGridBoardEventPopup(){
+  if(gridBoardRoot==null||gridBoardEventOpen)return;
+  if(gridBoardEventOverlay==null)BuildGridBoardEventOverlay();
+  if(gridBoardEventOverlay==null)return;
+  gridBoardEventOpen=true;
+  gridBoardEventOverlay.style.display=DisplayStyle.Flex;
+  gridBoardEventOverlay.BringToFront();
+ }
+
+ void ResolveGridBoardEvent(int choice){
+  if(!gridBoardEventOpen)return;
+  gridBoardEventOpen=false;
+  if(gridBoardEventOverlay!=null)
+   gridBoardEventOverlay.style.display=DisplayStyle.None;
+  game.UiResolveEvent(choice);
+  // The event resolves without leaving the grid; movement resumes next tick.
+  ForceRefreshScreen();
+ }
+
  void TickGridBoard(){
   if(!gridBoardBuilt)return;
   var run=game.UiGridBoard;
   if(run==null)return;
   if(game.UiBattle!=null)return;
-  if(run.phase==GridBoardPhase.Run&&GridBoardSystem.TickRun(run,Time.unscaledDeltaTime))
-   RefreshGridBoard();
+  if(gridBoardEventOpen)return;
+  bool routeChanged=run.phase==GridBoardPhase.Run
+   &&GridBoardSystem.TickRun(run,Time.unscaledDeltaTime);
   if(run.pendingEvent){
    run.pendingEvent=false;
+   // The board-local overlay can be hidden behind the grid's visual layers.
+   // The established Event route is attached to the screen root and returns
+   // here after the player chooses, so the route continues from its next cell.
    game.UiBeginGridEvent();
    return;
   }
@@ -1064,7 +1764,9 @@ public sealed partial class PackspireUiFoundation {
    run.pendingBattle=false;
    game.UiBeginGridEncounter();
    RefreshGridBoard();
+   return;
   }
+  if(routeChanged)RefreshGridBoard();
  }
 }
 }

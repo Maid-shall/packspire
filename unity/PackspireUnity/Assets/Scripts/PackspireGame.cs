@@ -143,6 +143,7 @@ public partial class PackspireGame : MonoBehaviour {
   explorationEventActive=false;explorationEventNodeId=-1;
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
+  GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="DEV: 封印格子盤（配置→一筆→進行）";
   SetRoutePresentationMode(RoutePresentationMode.None);
@@ -154,6 +155,7 @@ public partial class PackspireGame : MonoBehaviour {
   explorationEventActive=false;explorationEventNodeId=-1;
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
+  GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="封印格子をやり直した";
   SetRoutePresentationMode(RoutePresentationMode.None);
@@ -274,7 +276,8 @@ public partial class PackspireGame : MonoBehaviour {
  public bool UiEndBattleTurn(){
   if(run==null||battle==null)return false;
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
-  var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage);
+  var gridPressure=GridBoardSystem.EnemyDamageBonus(gridBoard);
+  var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage+gridPressure);
   PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
   if(fx.playerDefeated){FinishRun(false);return true;}
   PackspireUiFoundation.Instance?.RefreshBattleUi();
@@ -387,6 +390,7 @@ public partial class PackspireGame : MonoBehaviour {
    battle=null;
    selectedUid="";
    gridBoard=GridBoardSystem.Create(run.dungeon);
+   GridBoardSystem.SyncExplorePool(gridBoard,run);
    message="封印格子を展開した";
    screen=ScreenId.GridBoard;
    SetRoutePresentationMode(RoutePresentationMode.None);
@@ -408,7 +412,8 @@ public partial class PackspireGame : MonoBehaviour {
    var pool=GameCatalog.Enemies.Where(x=>boss?x.tier==3:x.tier==Mathf.Min(2,1+run.battlesWon/3)).ToArray();
    enemy=pool[UnityEngine.Random.Range(0,pool.Length)];
   }
-  battle=BattleSystem.Begin(run,enemy,dungeon.hpScale);
+  float pressureScale=GridBoardSystem.EnemyHpMultiplier(gridBoard);
+  battle=BattleSystem.Begin(run,enemy,dungeon.hpScale*pressureScale);
   // Same-screen combat when on the seal grid; legacy full battle screen otherwise.
   screen=gridBoard!=null?ScreenId.GridBoard:ScreenId.Battle;
   SetRoutePresentationMode(RoutePresentationMode.None);

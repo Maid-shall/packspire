@@ -37,7 +37,8 @@ public sealed partial class PackspireUiFoundation {
    ??Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-wide");
   battlePlateHex=Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
   battleMeterFrame=Resources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
-  for(int i=0;i<3;i++)battleCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
+  for(int i=0;i<3;i++)
+   battleCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
  }
 
  void BuildBattle(){
@@ -486,7 +487,7 @@ public sealed partial class PackspireUiFoundation {
   var name=new Label(card.name){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-battle-card-name");
   slot.Add(name);
-  var body=new Label(card.text){pickingMode=PickingMode.Ignore};
+  var body=new Label(BattleCardDisplayText(card)){pickingMode=PickingMode.Ignore};
   body.AddToClassList("ps-battle-card-text");
   slot.Add(body);
   string sourceName=card.source;
@@ -506,6 +507,13 @@ public sealed partial class PackspireUiFoundation {
    lockLabel.AddToClassList("ps-battle-card-lock");
    slot.Add(lockLabel);
   }
+ }
+
+ static string BattleCardDisplayText(CardInstance card){
+  if(card==null||card.damage<=0)return card?.text??"";
+  int modifier=card.damage-7;
+  string formula=$"2D6 {(modifier>=0?"+ ":"− ")}{Mathf.Abs(modifier)} ダメージ";
+  return card.text.Replace($"{card.damage}ダメージ",formula);
  }
 
  void RefreshBattleConsumables(RunState run){

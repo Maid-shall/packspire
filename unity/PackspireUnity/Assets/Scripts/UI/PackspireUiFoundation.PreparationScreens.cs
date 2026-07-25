@@ -14,6 +14,7 @@ public sealed partial class PackspireUiFoundation {
   packingDragging=false;
   packingTapWasSelected=false;
   packingDragFromList=false;
+  packingDragGrip=Vector2Int.zero;
   packingDragGhost=null;
   packingPopupElement=null;
 
@@ -140,7 +141,7 @@ public sealed partial class PackspireUiFoundation {
   kilnRail.Add(BuildPackingColorCounters(build));
   var railSpacer=Container("ps-rite-rail-spacer");
   kilnRail.Add(railSpacer);
-  var cardsBtn=PackspireUiFactory.Button($"デッキ  戦闘{run.selectedCardSlots.Count}",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
+  var cardsBtn=PackspireUiFactory.Button($"術式札  {run.selectedCardSlots.Count}",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
   cardsBtn.AddToClassList("ps-rite-tool");
   cardsBtn.AddToClassList("ps-rite-tool-primary");
   kilnRail.Add(cardsBtn);
@@ -999,12 +1000,13 @@ public sealed partial class PackspireUiFoundation {
   root.RegisterCallback<PointerUpEvent>(OnPackingPointerUp);
  }
 
- void BindPackingDragSource(VisualElement element,string uid,ActiveStorageFormula formula,bool fromEquipList=false){
+ void BindPackingDragSource(VisualElement element,string uid,ActiveStorageFormula formula,bool fromEquipList=false,Vector2Int grip=default){
   element.RegisterCallback<PointerDownEvent>(evt=>{
    if(evt.button!=0||packingFormulaOpen||packingCardsOpen||packingRootElement==null)return;
    packingDragUid=uid;
    packingDragging=false;
    packingDragFromList=fromEquipList;
+   packingDragGrip=grip;
    packingDragStart=evt.position;
    packingTapWasSelected=selectedPackingUid==uid;
    packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,game.UiRun?.placements.FirstOrDefault(x=>x.itemUid==uid)?.rotation??packingRotation);
@@ -1025,6 +1027,7 @@ public sealed partial class PackspireUiFoundation {
     packingDragUid="";
     packingDragging=false;
     packingDragFromList=false;
+    packingDragGrip=Vector2Int.zero;
     return;
    }
    packingDragging=true;
@@ -1047,6 +1050,7 @@ public sealed partial class PackspireUiFoundation {
    string uid=packingDragUid;
    packingDragUid="";
    packingDragFromList=false;
+   packingDragGrip=Vector2Int.zero;
    if(packingTapWasSelected){selectedPackingUid="";packingRotation=0;}
    else selectedPackingUid=uid;
    BuildPackingAgain();
@@ -1071,9 +1075,11 @@ public sealed partial class PackspireUiFoundation {
  void EndPackingDrag(bool applyDrop,Vector2 panelPosition=default){
   string uid=packingDragUid;
   bool wasDragging=packingDragging;
+  Vector2Int grip=packingDragGrip;
   packingDragUid="";
   packingDragging=false;
   packingDragFromList=false;
+  packingDragGrip=Vector2Int.zero;
   if(packingDragGhost!=null){
    packingDragGhost.RemoveFromHierarchy();
    packingDragGhost=null;
@@ -1085,7 +1091,9 @@ public sealed partial class PackspireUiFoundation {
 
   int cell=FindPackingCellAt(panelPosition);
   if(cell>=0){
-   if(!game.UiPackingPlace(uid,cell,packingRotation))ShowToast("そこには置けません");
+   int width=BackpackSystem.GridWidth(game.UiRun);
+   int anchor=cell-grip.x-grip.y*width;
+   if(!game.UiPackingPlace(uid,anchor,packingRotation))ShowToast("そこには置けません");
    selectedPackingUid=uid;
   } else {
    game.UiPackingRemove(uid);
@@ -1276,7 +1284,7 @@ public sealed partial class PackspireUiFoundation {
   var headerEye=new Label("DECK  /  COMBAT + EXPLORE"){pickingMode=PickingMode.Ignore};
   headerEye.AddToClassList("ps-rite-top-eyebrow");
   headerTitle.Add(headerEye);
-  var headerName=new Label($"デッキ確認  戦闘 {run.selectedCardSlots.Count}/{build.candidates.Count}"){pickingMode=PickingMode.Ignore};
+  var headerName=new Label($"術式札  {build.candidates.Count} 枚"){pickingMode=PickingMode.Ignore};
   headerName.AddToClassList("ps-rite-top-name");
   headerTitle.Add(headerName);
   header.Add(headerTitle);
@@ -1284,35 +1292,23 @@ public sealed partial class PackspireUiFoundation {
   close.AddToClassList("ps-rite-chip");
   header.Add(close);
   panel.Add(header);
-  panel.Add(RiteMetaLine("収納術式から出るデッキ。左＝戦闘、右＝探索（探索の採用ルールは仮表示）。"));
+  panel.Add(RiteMetaLine("術式に置いた装備は全て両面札になる。左＝戦闘面、右＝探索面。個別の採用選択は不要。"));
 
   var split=Container("ps-rite-deck-split");
 
-  // Left: combat adopt (existing behavior)
+  // Left: combat face. Placement into the storage formula is the only adoption rule.
   var combatCol=Container("ps-rite-deck-col");
-  var combatHead=new Label("戦闘デッキ"){pickingMode=PickingMode.Ignore};
+  var combatHead=new Label("戦闘面"){pickingMode=PickingMode.Ignore};
   combatHead.AddToClassList("ps-rite-deck-col-title");
   combatCol.Add(combatHead);
-  var combatActions=Container("ps-rite-formula-row");
-  var all=PackspireUiFactory.Button("すべて採用",()=>{
-   foreach(var card in build.candidates)if(!run.selectedCardSlots.Contains(card.slotKey))run.selectedCardSlots.Add(card.slotKey);
-   BuildPackingAgain();
-  });
-  all.AddToClassList("ps-rite-chip");
-  combatActions.Add(all);
-  var none=PackspireUiFactory.Button("すべて外す",()=>{run.selectedCardSlots.Clear();BuildPackingAgain();});
-  none.AddToClassList("ps-rite-chip");
-  combatActions.Add(none);
-  combatCol.Add(combatActions);
   var combatScroll=new ScrollView(ScrollViewMode.Vertical);
   combatScroll.AddToClassList("ps-rite-deck-col-scroll");
   var combatCards=Container("ps-rite-cards");
   foreach(var card in build.candidates){
-   var entry=card;
-   bool chosen=run.selectedCardSlots.Contains(entry.slotKey);
-   var button=new Button(()=>{game.UiPackingToggleCard(entry.slotKey);BuildPackingAgain();}){text=$"{(chosen?"●":"○")} {entry.name}　{entry.cost}EN\n{entry.text}"};
+   var button=new Button(()=>{}){text=$"● {card.name}　{card.cost}EN\n{card.text}"};
    button.AddToClassList("ps-rite-card");
-   if(chosen)button.AddToClassList("ps-selected");
+   button.pickingMode=PickingMode.Ignore;
+   button.AddToClassList("ps-selected");
    combatCards.Add(button);
   }
   if(build.candidates.Count==0)
@@ -1321,13 +1317,13 @@ public sealed partial class PackspireUiFoundation {
   combatCol.Add(combatScroll);
   split.Add(combatCol);
 
-  // Right: explore deck preview (provisional — selection rules TBD)
+  // Right: the reverse face of the same formula cards. Effects are still provisional.
   var exploreCol=Container("ps-rite-deck-col");
   exploreCol.AddToClassList("ps-rite-deck-col-explore");
-  var exploreHead=new Label("探索デッキ（仮）"){pickingMode=PickingMode.Ignore};
+  var exploreHead=new Label("探索面（設計中）"){pickingMode=PickingMode.Ignore};
   exploreHead.AddToClassList("ps-rite-deck-col-title");
   exploreCol.Add(exploreHead);
-  exploreCol.Add(PackspireUiFactory.Body("採用の確定前。基本札＋いまの配置から見える想定候補。"));
+  exploreCol.Add(PackspireUiFactory.Body("左の各札に対応する裏面。盤面術式の種類と成長効果は次の段階で定義する。"));
   var exploreScroll=new ScrollView(ScrollViewMode.Vertical);
   exploreScroll.AddToClassList("ps-rite-deck-col-scroll");
   var exploreCards=Container("ps-rite-cards");
@@ -1347,26 +1343,12 @@ public sealed partial class PackspireUiFoundation {
   return overlay;
  }
 
- /// <summary>Provisional explore deck view for packing popup. Not the final adopt rules.</summary>
+ /// <summary>Provisional reverse-face view for every formula card. Effects are defined later.</summary>
  static List<(string name,int cost,string text)> BuildExploreDeckPreview(RunState run,DeckBuildResult build){
-  var list=new List<(string name,int cost,string text)>{
-   ("灯り",1,"マスに灯り。通過すると育つ。"),
-   ("霧",1,"マスに霧。通過時に一瞬遅れる。"),
-   ("封鎖",1,"マスを封鎖＝曲がるための壁。"),
-  };
-  if(run?.inventory==null||run.placements==null)return list;
-  // Mirror combat: placed gear suggests explore-flavored stubs (display only).
-  var placed=run.placements
-   .Select(p=>run.inventory.FirstOrDefault(i=>i.uid==p.itemUid))
-   .Where(i=>i!=null)
-   .Take(6);
-  foreach(var item in placed){
-   string itemName=GameCatalog.Items.TryGetValue(item.templateId,out var def)?def.name:item.templateId;
-   list.Add(($"探索：{itemName}",1,$"配置中の装備から出る探索札の仮候補（ルール未確定）。"));
-  }
-  // If nothing placed but combat candidates exist, still hint the link.
-  if(run.placements.Count==0&&build!=null&&build.candidates.Count>0)
-   list.Add(("探索候補（装備待ち）",0,"魔方陣に装備を置くと、探索側の候補もここへ並ぶ想定。"));
+  var list=new List<(string name,int cost,string text)>();
+  if(build?.candidates==null)return list;
+  foreach(var card in build.candidates)
+   list.Add(($"探索：{card.source}",1,$"「{card.name}」の裏面。盤面術式の種類・形状・成熟効果は未定義。"));
   return list;
  }
 
@@ -1374,11 +1356,14 @@ public sealed partial class PackspireUiFoundation {
   int width=formula.core.width,cells=formula.core.width*formula.core.height;
   var grid=Container("ps-rite-grid");
   packingGridElement=grid;
-  float cellPercent=(100f/width)-1.4f;
+  // Keep the visual row width identical to the formula's logical width. The old
+  // percentage plus per-cell margins could wrap six logical cells into five.
+  float cellPercent=100f/width;
   float cellHeight=Mathf.Clamp(560f/Mathf.Max(1,formula.core.height),58f,84f);
   var plateTex=Resources.Load<Texture2D>("Art/Rite/rite-cell-plate-v1");
   for(int index=0;index<cells;index++){
    int cellIndex=index;
+   int cellX=index%width,cellY=index/width;
    var occupant=PlacementAt(run,index);
    var boardElement=StorageFormulaSystem.BoardAt(formula.core,index);
    var cell=new VisualElement();
@@ -1388,6 +1373,10 @@ public sealed partial class PackspireUiFoundation {
    cell.pickingMode=PickingMode.Position;
    cell.style.width=Length.Percent(cellPercent);
    cell.style.height=cellHeight;
+   cell.style.marginLeft=0;
+   cell.style.marginRight=0;
+   cell.style.marginTop=0;
+   cell.style.marginBottom=0;
 
    if(plateTex!=null){
     var plate=new Image{image=plateTex,scaleMode=ScaleMode.StretchToFill,pickingMode=PickingMode.Ignore};
@@ -1405,6 +1394,7 @@ public sealed partial class PackspireUiFoundation {
     }
    }
    var orbWrap=BuildRiteOrb(boardElement,orbExtra);
+   orbWrap.pickingMode=PickingMode.Ignore;
    if(occupant==null)orbWrap.AddToClassList("ps-rite-orb-wrap-open");
    else orbWrap.AddToClassList("ps-rite-orb-wrap-placed");
    cell.Add(orbWrap);
@@ -1413,9 +1403,14 @@ public sealed partial class PackspireUiFoundation {
     var item=run.inventory.FirstOrDefault(x=>x.uid==occupant.itemUid);
     if(item!=null){
      cell.tooltip=GameCatalog.Items[item.templateId].name;
-     cell.Add(Atlas(game.UiEquipmentArt,ItemUv(item.templateId),"ps-rite-cell-art"));
-     if(item.uid==selectedPackingUid)cell.AddToClassList("ps-selected");
-     BindPackingDragSource(cell,item.uid,formula);
+      var art=Atlas(game.UiEquipmentArt,ItemUv(item.templateId),"ps-rite-cell-art");
+      art.pickingMode=PickingMode.Ignore;
+      art.style.rotate=new Rotate(Angle.Degrees(occupant.rotation*90f));
+      cell.Add(art);
+      if(item.uid==selectedPackingUid)cell.AddToClassList("ps-selected");
+      int anchorX=occupant.anchor%width,anchorY=occupant.anchor/width;
+      var grip=new Vector2Int(cellX-anchorX,cellY-anchorY);
+      BindPackingDragSource(cell,item.uid,formula,false,grip);
     }
    } else {
     cell.RegisterCallback<ClickEvent>(_=>{

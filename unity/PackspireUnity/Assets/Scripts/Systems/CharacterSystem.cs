@@ -77,11 +77,14 @@ public static class CharacterSystem {
   string logLine;
   switch(def.activeSkillId){
    case "ren_rush":{
-    int raw=BattleSystem.Damage(10,run.statuses,battle.enemyStatuses);
+    int dieOne,dieTwo,modifier;
+    int rolled=BattleSystem.RollDamage(10,out dieOne,out dieTwo,out modifier);
+    int raw=BattleSystem.Damage(rolled,run.statuses,battle.enemyStatuses);
     int dealt=Mathf.Max(0,raw-battle.enemyBlock);
     battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
     battle.enemyHp-=dealt;
     fx.damageToEnemy=dealt;
+    fx.dieOne=dieOne;fx.dieTwo=dieTwo;fx.damageModifier=modifier;fx.rolledDamage=raw;
     fx.cardType=CardType.Attack;
     logLine=$"{def.activeSkillName}：{dealt}ダメージ";
     break;
@@ -104,11 +107,14 @@ public static class CharacterSystem {
     logLine=$"{def.activeSkillName}：HP+10（{run.hp}/{run.maxHp}）";
     break;
    case "sena_kick":{
-    int raw=BattleSystem.Damage(14,run.statuses,battle.enemyStatuses);
+    int dieOne,dieTwo,modifier;
+    int rolled=BattleSystem.RollDamage(14,out dieOne,out dieTwo,out modifier);
+    int raw=BattleSystem.Damage(rolled,run.statuses,battle.enemyStatuses);
     int dealt=Mathf.Max(0,raw-battle.enemyBlock);
     battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
     battle.enemyHp-=dealt;
     fx.damageToEnemy=dealt;
+    fx.dieOne=dieOne;fx.dieTwo=dieTwo;fx.damageModifier=modifier;fx.rolledDamage=raw;
     fx.cardType=CardType.Attack;
     logLine=$"{def.activeSkillName}：{dealt}ダメージ";
     break;
