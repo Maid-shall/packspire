@@ -40,7 +40,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  int compendiumTab;
  Button developerAccessButton;
  VisualElement developerPanelRoot;
- // exploration fields live in PackspireUiFoundation.ExplorationMap.cs
  // battle fields live in PackspireUiFoundation.Battle.cs
 
  void Awake(){
@@ -66,24 +65,20 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   if(root!=null)RefreshScreen(false);
   HandleNavInput();
   RefreshDeveloperOverlay();
-  if(renderedScreen==ScreenId.Map&&explorationMapBuilt)TickExplorationMap();
   if(renderedScreen==ScreenId.GridBoard&&gridBoardBuilt)TickGridBoard();
  }
  void OnDestroy(){
   if(Instance==this)Instance=null;
-  ReleaseExplorationStage();
   if(ownsPanelSettings&&panelSettings!=null)Destroy(panelSettings);
  }
 
  public bool Handles(ScreenId value){
   if(!uiReady||game==null)return false;
-  if(value==ScreenId.Map)return game.UiUsesExplorationMap;
   if(value==ScreenId.GridBoard)return game.UiUsesGridBoard;
   return true;
  }
  public void ForceRefreshScreen(){
   hasRenderedScreen=false;
-  explorationMapBuilt=false;
   gridBoardBuilt=false;
   battleUiBuilt=false;
   if(uiReady)RefreshScreen(true);

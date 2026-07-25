@@ -56,7 +56,7 @@ public sealed partial class PackspireUiFoundation {
   rewardHeaderType=new Label(rewardPreviewMode?"戦利品（DEV）":"戦利品"){pickingMode=PickingMode.Ignore};
   rewardHeaderType.AddToClassList("ps-reward-header-type");
   header.Add(rewardHeaderType);
-  string place=rewardPreviewMode?"試掘の間":ExplorationMapSystem.Breadcrumb(game.UiExploration);
+  string place=rewardPreviewMode?"試掘の間":"封印格子";
   rewardHeaderPlace=new Label(place){pickingMode=PickingMode.Ignore};
   rewardHeaderPlace.AddToClassList("ps-reward-header-place");
   header.Add(rewardHeaderPlace);

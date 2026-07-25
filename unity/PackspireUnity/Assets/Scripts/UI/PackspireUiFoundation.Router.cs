@@ -6,7 +6,6 @@ public sealed partial class PackspireUiFoundation {
  void RefreshScreen(bool force){
   if(game==null||screenRoot==null)return;
   if(!Handles(game.UiScreen)){
-   if(game.UiScreen==ScreenId.Battle&&explorationStage!=null)SuspendExplorationStage();
    screenRoot.style.display=DisplayStyle.None;
    hasRenderedScreen=false;
    return;
@@ -18,16 +17,10 @@ public sealed partial class PackspireUiFoundation {
   }
   if(hasRenderedScreen&&renderedScreen!=game.UiScreen&&!navSuppressHistory)
    RecordNavHistory(renderedScreen,game.UiScreen);
-  if(renderedScreen==ScreenId.Map&&game.UiScreen!=ScreenId.Map){
-   if(game.UiScreen==ScreenId.Battle)SuspendExplorationStage();
-   else ReleaseExplorationStage();
-  }
   if(renderedScreen==ScreenId.GridBoard&&game.UiScreen!=ScreenId.GridBoard)
    SuspendGridBoard();
   if(renderedScreen==ScreenId.Battle&&game.UiScreen!=ScreenId.Battle)
    SuspendBattleUi();
-  if(renderedScreen==ScreenId.Reward&&game.UiScreen!=ScreenId.Reward&&game.UiScreen!=ScreenId.Map&&game.UiScreen!=ScreenId.GridBoard&&game.UiScreen!=ScreenId.Battle)
-   ReleaseExplorationStage();
   renderedScreen=game.UiScreen;hasRenderedScreen=true;
   ClearScreenTree();
 #if UNITY_EDITOR
@@ -42,14 +35,13 @@ public sealed partial class PackspireUiFoundation {
   else if(renderedScreen==ScreenId.Faction)BuildFaction();
   else if(renderedScreen==ScreenId.Expedition)BuildExpedition();
   else if(renderedScreen==ScreenId.Pack)BuildPacking();
-  else if(renderedScreen==ScreenId.Map)BuildExplorationMap();
   else if(renderedScreen==ScreenId.GridBoard)BuildGridBoard();
   else if(renderedScreen==ScreenId.Battle)BuildBattle();
   else if(renderedScreen==ScreenId.Reward)BuildReward();
   else if(renderedScreen==ScreenId.Shop)BuildShop();
   else if(renderedScreen==ScreenId.Event)BuildEvent();
-  else if(renderedScreen==ScreenId.GameOver){ReleaseExplorationStage();BuildGameOver();}
-  else if(renderedScreen==ScreenId.GameClear){ReleaseExplorationStage();BuildGameClear();}
+  else if(renderedScreen==ScreenId.GameOver)BuildGameOver();
+  else if(renderedScreen==ScreenId.GameClear)BuildGameClear();
   else BuildCompendium();
   AnimateScreenIn();
   UpdateNavHud();
