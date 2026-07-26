@@ -37,7 +37,10 @@ public static class BattleSystem {
   ResetBattleEphemeral(run);
   run.deck=BackpackSystem.BuildDeck(run);
   run.draw=Shuffle(run.deck.Select(x=>x.Clone()).ToList());
-  Draw(run,PackspireContent.Data.balance.initialHand);
+  var innate=run.draw.Where(card=>card.innate).ToList();
+  foreach(var card in innate)run.draw.Remove(card);
+  run.hand.AddRange(innate);
+  Draw(run,Mathf.Max(0,PackspireContent.Data.balance.initialHand-run.hand.Count));
   int hp=Mathf.RoundToInt(enemy.hp*hpScale);
   var battle=new BattleState{enemy=enemy,enemyHp=hp,enemyMaxHp=hp,enemyBlock=0,move=0,enemyStatuses=new(),log="戦闘開始"};
   Record(battle,"戦闘開始");
@@ -64,7 +67,7 @@ public static class BattleSystem {
  public static BattleActionFx PlayCard(RunState run,BattleState battle,int handIndex){
   if(handIndex<0||handIndex>=run.hand.Count)return BattleActionFx.Fail;
   var c=run.hand[handIndex];
-  if(c.cost>run.energy)return BattleActionFx.Fail;
+  if(c.unplayable||c.cost>run.energy)return BattleActionFx.Fail;
   run.energy-=c.cost;
   int dieOne=0,dieTwo=0,modifier=0;
   int rolled=c.damage>0?RollDamage(c.damage,out dieOne,out dieTwo,out modifier):0;
@@ -89,7 +92,13 @@ public static class BattleSystem {
    item.durability=Mathf.Max(0,item.durability-1);
   }
   run.hand.RemoveAt(handIndex);
-  if(!c.exhaust){if(c.recycle)run.draw.Add(c);else run.discard.Add(c);}
+  bool exhaust=c.exhaust||c.afterUse!=BattleCardAfterUse.Discard;
+  if(c.afterUse==BattleCardAfterUse.RemoveExpedition&&!string.IsNullOrEmpty(c.slotKey)){
+   run.removedBattleCardSlots??=new();
+   if(!run.removedBattleCardSlots.Contains(c.slotKey))
+    run.removedBattleCardSlots.Add(c.slotKey);
+  }
+  if(!exhaust){if(c.recycle)run.draw.Add(c);else run.discard.Add(c);}
   if(c.draw>0)Draw(run,c.draw);
   var details=new List<string>();
   if(dealt>0)details.Add($"{dealt}ダメージ");
@@ -98,7 +107,7 @@ public static class BattleSystem {
   if(energyGain!=0)details.Add($"EN{(energyGain>0?"+":"")}{energyGain}");
   if(c.draw>0)details.Add($"{c.draw}枚ドロー");
   if(self>0)details.Add($"自傷{self}");
-  if(c.exhaust)details.Add("廃棄");
+  if(exhaust)details.Add(c.afterUse==BattleCardAfterUse.RemoveExpedition?"遠征中除外":"廃棄");
   string effects=EffectText(c.effects);
   if(!string.IsNullOrEmpty(effects))details.Add(effects);
   Record(battle,$"{c.name}：{(details.Count>0?string.Join(" / ",details):"効果なし")}");
@@ -120,8 +129,13 @@ public static class BattleSystem {
  }
 
  public static BattleActionFx EndTurnFx(RunState run,BattleState battle,int dungeonDamage=0){
-  run.discard.AddRange(run.hand);
-  run.hand.Clear();
+  var retained=new List<CardInstance>();
+  foreach(var card in run.hand){
+   if(card.ethereal)continue;
+   if(card.retain)retained.Add(card);
+   else run.discard.Add(card);
+  }
+  run.hand=retained;
   int enemyStatusDamage=Tick(battle.enemyStatuses,ref battle.enemyHp,battle.enemyMaxHp);
   if(battle.enemyHp<=0){
    Record(battle,$"{battle.enemy.name}は継続ダメージで倒れた");
@@ -155,7 +169,7 @@ public static class BattleSystem {
   battle.move++;
   if(activePhase!=null)battle.enemyPhaseMove++;
   run.energy=PackspireContent.Data.balance.baseEnergy;
-  Draw(run,PackspireContent.Data.balance.initialHand);
+  Draw(run,Mathf.Max(0,PackspireContent.Data.balance.initialHand-run.hand.Count));
   var details=new List<string>();
   if(damage>0)details.Add($"{damage}ダメージ");
   if(enemyBlock>0)details.Add($"{enemyBlock}ブロック");

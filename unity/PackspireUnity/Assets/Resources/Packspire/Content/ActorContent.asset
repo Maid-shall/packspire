@@ -12,6 +12,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7bbd56b105d4643b45233f181bb00b, type: 3}
   m_Name: ActorContent
   m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireActorContentSet
+  reactionValues:
+  - id: martial
+    name: "\u6B66\u7DF4"
+    description: "\u6B66\u5668\u3092\u6271\u3044\u6226\u7DDA\u3092\u62BC\u3059\u7D4C\u9A13\u3002"
+    category: combat
+  - id: blade_extreme
+    name: "\u5263\u6975"
+    description: "\u5203\u3092\u6975\u3081\u305F\u6FC3\u5EA6\u3002"
+    category: combat
+  - id: guard
+    name: "\u5B88\u8B77"
+    description: "\u88AB\u5BB3\u3092\u53D7\u3051\u6B62\u3081\u5B88\u308A\u629C\u304F\u6FC3\u5EA6\u3002"
+    category: combat
+  - id: observation
+    name: "\u89B3\u6E2C"
+    description: "\u6575\u3068\u672A\u77E5\u3092\u8AAD\u307F\u89E3\u304F\u6FC3\u5EA6\u3002"
+    category: exploration
+  - id: speed
+    name: "\u8FC5\u901F"
+    description: "\u5148\u624B\u3068\u8EFD\u3055\u3092\u4F5C\u308B\u6FC3\u5EA6\u3002"
+    category: combat
+  - id: artifice
+    name: "\u5DE5\u5DE7"
+    description: "\u88C5\u5099\u30FB\u8853\u5F0F\u30FB\u914D\u7F6E\u3092\u7D44\u307F\u66FF\u3048\u308B\u6FC3\u5EA6\u3002"
+    category: craft
+  - id: hunt
+    name: "\u72E9\u731F"
+    description: "\u7372\u7269\u3092\u8FFD\u3044\u5F31\u70B9\u3092\u7A81\u304F\u6FC3\u5EA6\u3002"
+    category: exploration
+  - id: fortification
+    name: "\u7BC9\u57CE"
+    description: "\u5B88\u308A\u3092\u69CB\u9020\u3078\u5909\u3048\u308B\u6FC3\u5EA6\u3002"
+    category: combat
+  - id: siege
+    name: "\u653B\u57CE"
+    description: "\u8A2D\u7F6E\u7269\u3068\u91CD\u88C5\u3092\u7A81\u7834\u529B\u3078\u5909\u3048\u308B\u6FC3\u5EA6\u3002"
+    category: craft
+  - id: immovable
+    name: "\u4E0D\u52D5"
+    description: "\u4F4D\u7F6E\u3068\u69CB\u3048\u3092\u5D29\u3055\u306A\u3044\u6FC3\u5EA6\u3002"
+    category: combat
+  - id: asymmetry
+    name: "\u504F\u4F4D"
+    description: "\u5DE6\u53F3\u5DEE\u3084\u6B6A\u306A\u914D\u7F6E\u3092\u6D3B\u304B\u3059\u6FC3\u5EA6\u3002"
+    category: packing
+  - id: commerce
+    name: "\u5546\u52D9"
+    description: "\u4FA1\u5024\u3068\u4EA4\u63DB\u3092\u64CD\u308B\u6FC3\u5EA6\u3002"
+    category: world
+  - id: spore
+    name: "\u80DE\u5B50"
+    description: "\u6210\u9577\u30FB\u8150\u6557\u30FB\u518D\u751F\u306B\u89E6\u308C\u305F\u6FC3\u5EA6\u3002"
+    category: world
+  - id: void
+    name: "\u865A\u7121"
+    description: "\u5883\u754C\u5916\u306E\u898F\u5247\u306B\u89E6\u308C\u305F\u6FC3\u5EA6\u3002"
+    category: world
+  - id: sacrifice
+    name: "\u4EE3\u511F"
+    description: "\u640D\u5931\u3092\u529B\u3078\u5909\u3048\u305F\u8A18\u9332\u3002"
+    category: memory
+  - id: blade_saint_seal
+    name: "\u5263\u8056\u5370"
+    description: "\u5263\u8056\u56FA\u6709\u306E\u7CFB\u8B5C\u3092\u793A\u3059\u5370\u3002"
+    category: signature
   roles:
   - id: warrior
     name: "\u6226\u58EB"
@@ -25,6 +90,24 @@ MonoBehaviour:
     - basicStrike
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: martial
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions:
+    - reactionId: martial
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    unlockRecipes: []
     maxLevel: 10
     artwork: {fileID: 0}
   - id: guardian
@@ -39,6 +122,19 @@ MonoBehaviour:
     - basicGuard
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: guard
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    unlockRecipes: []
     maxLevel: 10
     artwork: {fileID: 0}
   - id: scout
@@ -53,6 +149,24 @@ MonoBehaviour:
     - basicStrike
     - basicStrike
     - basicTactic
+    reactionContributions:
+    - reactionId: observation
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: speed
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions:
+    - reactionId: observation
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    unlockRecipes: []
     maxLevel: 10
     artwork: {fileID: 0}
   - id: artificer
@@ -67,6 +181,19 @@ MonoBehaviour:
     - basicGuard
     - basicTactic
     - basicTactic
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions:
+    - reactionId: artifice
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    unlockRecipes: []
     maxLevel: 10
     artwork: {fileID: 0}
   - id: blade_master
@@ -81,6 +208,27 @@ MonoBehaviour:
     - basicStrike
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: blade_saint_seal
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: blade-path
+      hint: "\u5263\u6975\u309210\u307E\u3067\u9AD8\u3081\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: blade_extreme
+        minimum: 10
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 10
     artwork: {fileID: 0}
   - id: bulwark
@@ -95,6 +243,27 @@ MonoBehaviour:
     - basicGuard
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: fortification
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: guardian-path
+      hint: "\u5B88\u8B77\u309210\u307E\u3067\u9AD8\u3081\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: guard
+        minimum: 10
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 10
     artwork: {fileID: 0}
   - id: hunter
@@ -109,6 +278,31 @@ MonoBehaviour:
     - basicStrike
     - basicStrike
     - basicTactic
+    reactionContributions:
+    - reactionId: observation
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: hunt
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: hunter-path
+      hint: "\u89B3\u6E2C\u3068\u72E9\u731F\u3092\u91CD\u306D\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: observation
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: hunt
+        minimum: 2
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 10
     artwork: {fileID: 0}
   - id: grand_artificer
@@ -123,6 +317,27 @@ MonoBehaviour:
     - basicGuard
     - basicTactic
     - basicTactic
+    reactionContributions:
+    - reactionId: artifice
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: siege
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: artifice-path
+      hint: "\u5DE5\u5DE7\u309210\u307E\u3067\u9AD8\u3081\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: artifice
+        minimum: 10
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 10
     artwork: {fileID: 0}
   - id: arsenal_lord
@@ -137,6 +352,27 @@ MonoBehaviour:
     - basicStrike
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: martial
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: many-arms
+      hint: "\u7570\u306A\u308B\u4E09\u3064\u4EE5\u4E0A\u306E\u6E90\u304B\u3089\u6B66\u7DF4\u3092\u5F97\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: martial
+        minimum: 14
+        acceptedScopes: 63
+        minimumSources: 3
     maxLevel: 15
     artwork: {fileID: 0}
   - id: pack_saint
@@ -151,6 +387,31 @@ MonoBehaviour:
     - basicGuard
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: immovable
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: unmoving-pack
+      hint: "\u5B88\u8B77\u3068\u4E0D\u52D5\u3092\u6DF1\u304F\u91CD\u306D\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: guard
+        minimum: 14
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: immovable
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: rune_weaver
@@ -165,6 +426,31 @@ MonoBehaviour:
     - basicGuard
     - basicTactic
     - basicTactic
+    reactionContributions:
+    - reactionId: artifice
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: void
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: void-runes
+      hint: "\u5DE5\u5DE7\u306B\u865A\u7121\u3092\u7E54\u308A\u8FBC\u3080"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: artifice
+        minimum: 12
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: void
+        minimum: 5
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: grid_dancer
@@ -179,6 +465,31 @@ MonoBehaviour:
     - basicStrike
     - basicStrike
     - basicTactic
+    reactionContributions:
+    - reactionId: observation
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: asymmetry
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: crooked-board
+      hint: "\u89B3\u6E2C\u3068\u504F\u4F4D\u3092\u6DF1\u304F\u91CD\u306D\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: observation
+        minimum: 12
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: asymmetry
+        minimum: 6
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: quickblade
@@ -193,6 +504,31 @@ MonoBehaviour:
     - basicStrike
     - basicStrike
     - basicTactic
+    reactionContributions:
+    - reactionId: speed
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: unexpected-edge
+      hint: "\u5263\u6975\u3068\u8FC5\u901F\u3092\u5171\u9CF4\u3055\u305B\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: blade_extreme
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: speed
+        minimum: 6
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: anchor_knight
@@ -207,6 +543,31 @@ MonoBehaviour:
     - basicGuard
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: guard
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: immovable
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: fixed-guard
+      hint: "\u5B88\u8B77\u3068\u4E0D\u52D5\u3092\u5171\u9CF4\u3055\u305B\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: guard
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: immovable
+        minimum: 6
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: siege_channeler
@@ -221,6 +582,31 @@ MonoBehaviour:
     - basicGuard
     - basicTactic
     - basicTactic
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: siege
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: living-siege
+      hint: "\u5DE5\u5DE7\u3068\u653B\u57CE\u3092\u5171\u9CF4\u3055\u305B\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: artifice
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: siege
+        minimum: 6
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: right_hand_swordsman
@@ -235,6 +621,31 @@ MonoBehaviour:
     - basicStrike
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: asymmetry
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes:
+    - id: one-sided-edge
+      hint: "\u5263\u6975\u3068\u504F\u4F4D\u3092\u5171\u9CF4\u3055\u305B\u308B"
+      visibleBeforeUnlock: 1
+      requirements:
+      - reactionId: blade_extreme
+        minimum: 8
+        acceptedScopes: 63
+        minimumSources: 0
+      - reactionId: asymmetry
+        minimum: 4
+        acceptedScopes: 63
+        minimumSources: 0
     maxLevel: 15
     artwork: {fileID: 0}
   - id: iron_vanguard
@@ -249,6 +660,19 @@ MonoBehaviour:
     - basicGuard
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: guard
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: fortification
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes: []
     maxLevel: 15
     artwork: {fileID: 0}
   - id: spore_druid
@@ -263,6 +687,19 @@ MonoBehaviour:
     - basicStrike
     - basicStrike
     - basicTactic
+    reactionContributions:
+    - reactionId: spore
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: observation
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes: []
     maxLevel: 15
     artwork: {fileID: 0}
   - id: guild_factor
@@ -277,6 +714,19 @@ MonoBehaviour:
     - basicGuard
     - basicTactic
     - basicTactic
+    reactionContributions:
+    - reactionId: commerce
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: artifice
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes: []
     maxLevel: 15
     artwork: {fileID: 0}
   - id: void_apostle
@@ -291,6 +741,19 @@ MonoBehaviour:
     - basicStrike
     - basicGuard
     - basicGuard
+    reactionContributions:
+    - reactionId: void
+      amount: 2
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    - reactionId: sacrifice
+      amount: 1
+      scope: 0
+      stackRule: 0
+      perLevel: 1
+    currentRoleContributions: []
+    unlockRecipes: []
     maxLevel: 15
     artwork: {fileID: 0}
   enemies:
@@ -303,7 +766,11 @@ MonoBehaviour:
     boardMoveSteps: 0
     boardPatrolRadius: 1
     moves:
-    - damage: 8
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 8
+      block: 0
+      heal: 0
       effects: []
     - name: "\u9632\u5FA1"
       kind: 1
@@ -315,6 +782,7 @@ MonoBehaviour:
         target: 0
         amount: 2
         duration: 3
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: rats
@@ -326,10 +794,19 @@ MonoBehaviour:
     boardMoveSteps: 2
     boardPatrolRadius: 5
     moves:
-    - damage: 8
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 8
+      block: 0
+      heal: 0
       effects: []
-    - damage: 6
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 6
+      block: 0
+      heal: 0
       effects: []
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: porter
@@ -341,7 +818,11 @@ MonoBehaviour:
     boardMoveSteps: 1
     boardPatrolRadius: 3
     moves:
-    - damage: 10
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 10
+      block: 0
+      heal: 0
       effects: []
     - name: "\u9632\u5FA1"
       kind: 1
@@ -349,6 +830,7 @@ MonoBehaviour:
       block: 12
       heal: 0
       effects: []
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: mage
@@ -370,8 +852,13 @@ MonoBehaviour:
         target: 2
         amount: 3
         duration: 0
-    - damage: 11
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 11
+      block: 0
+      heal: 0
       effects: []
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: beast
@@ -393,8 +880,13 @@ MonoBehaviour:
         target: 2
         amount: 2
         duration: 2
-    - damage: 10
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 10
+      block: 0
+      heal: 0
       effects: []
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: knight
@@ -406,7 +898,11 @@ MonoBehaviour:
     boardMoveSteps: 1
     boardPatrolRadius: 4
     moves:
-    - damage: 13
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 13
+      block: 0
+      heal: 0
       effects: []
     - name: "\u59A8\u5BB3"
       kind: 3
@@ -418,6 +914,7 @@ MonoBehaviour:
         target: 2
         amount: 1
         duration: 2
+    phases: []
     portrait: {fileID: 0}
     legacyPortraitResource: 
   - id: dragon
@@ -429,12 +926,25 @@ MonoBehaviour:
     boardMoveSteps: 1
     boardPatrolRadius: 6
     moves:
-    - damage: 14
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 14
+      block: 0
+      heal: 0
       effects: []
-    - damage: 10
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 10
+      block: 0
+      heal: 0
       effects: []
-    - damage: 16
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 16
+      block: 0
+      heal: 0
       effects: []
+    phases: []
     portrait: {fileID: 21300000, guid: c2e5f9b38d6a4104b0f7e1a4d9c8b723, type: 3}
     legacyPortraitResource: Art/Portraits/enemy-dragon-v1
   - id: boss
@@ -456,23 +966,27 @@ MonoBehaviour:
         target: 0
         amount: 2
         duration: 2
-    - damage: 12
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 12
+      block: 0
+      heal: 0
       effects: []
-    - damage: 17
+    - name: "\u653B\u6483"
+      kind: 0
+      damage: 17
+      block: 0
+      heal: 0
       effects: []
     phases:
     - name: "\u6355\u98DF"
       minimumHpPercent: 51
-      moveIndices:
-      - 0
-      - 1
+      moveIndices: 0000000001000000
     - name: "\u66B4\u98DF"
       minimumHpPercent: 0
-      moveIndices:
-      - 1
-      - 2
-    portrait: {fileID: 0}
-    legacyPortraitResource: 
+      moveIndices: 0100000002000000
+    portrait: {fileID: 21300000, guid: c2e5f9b38d6a4104b0f7e1a4d9c8b723, type: 3}
+    legacyPortraitResource: Art/Portraits/enemy-dragon-v1
   factions:
   - id: iron
     name: "\u9244\u6BBB\u8ECD"
@@ -527,6 +1041,7 @@ MonoBehaviour:
     traitText: "\u6700\u5927HP+4"
     traitKind: maxHpBonus
     traitValue: 4
+    explorationSightBonus: 0
     activeSkillId: ren_rush
     activeSkillName: "\u7A81\u6483"
     activeSkillText: "\u6575\u306B10\u30C0\u30E1\u30FC\u30B8\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
@@ -554,6 +1069,7 @@ MonoBehaviour:
     traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B1\u679A\u8FFD\u52A0\u30C9\u30ED\u30FC"
     traitKind: openingDraw
     traitValue: 1
+    explorationSightBonus: 0
     activeSkillId: mio_read
     activeSkillName: "\u898B\u5207\u308A"
     activeSkillText: "8\u30D6\u30ED\u30C3\u30AF\u30011\u679A\u30C9\u30ED\u30FC\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
@@ -581,6 +1097,7 @@ MonoBehaviour:
     traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B4\u30D6\u30ED\u30C3\u30AF"
     traitKind: openingBlock
     traitValue: 4
+    explorationSightBonus: 0
     activeSkillId: kuro_bulwark
     activeSkillName: "\u9244\u58C1"
     activeSkillText: "14\u30D6\u30ED\u30C3\u30AF\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
@@ -608,6 +1125,7 @@ MonoBehaviour:
     traitText: "\u6226\u95D8\u52DD\u5229\u6642\u306E\u6240\u6301\u91D1+3"
     traitKind: winGold
     traitValue: 3
+    explorationSightBonus: 0
     activeSkillId: hina_repair
     activeSkillName: "\u5FDC\u6025\u4FEE\u7406"
     activeSkillText: "HP\u309210\u56DE\u5FA9\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"
@@ -635,6 +1153,7 @@ MonoBehaviour:
     traitText: "\u6700\u5927HP+2"
     traitKind: maxHpBonus
     traitValue: 2
+    explorationSightBonus: 0
     activeSkillId: sena_kick
     activeSkillName: "\u8E74\u65CB"
     activeSkillText: "\u6575\u306B14\u30C0\u30E1\u30FC\u30B8\u3002\u6226\u95D8\u4E2D1\u56DE\u3002"

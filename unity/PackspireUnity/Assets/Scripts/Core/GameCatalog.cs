@@ -25,11 +25,32 @@ public static class GameCatalog {
    .Select(x=>new CellDef(x.x,x.y,x.element,Math.Max(1,x.value)))
    .ToArray();
   var ids=value.cardIds??Array.Empty<string>();
-  var item=new ItemDef(value.id,value.name,value.type,ids.FirstOrDefault()??"",value.description,cells){
-   cardIds=ids.ToArray(),
-   cardId=ids.FirstOrDefault()??"",
+  var grants=(value.grantedCards??Array.Empty<GrantedCardContent>())
+   .Where(x=>x!=null&&!string.IsNullOrEmpty(x.battleCardId))
+   .Select(x=>new GrantedCardDef{
+    battleCardId=x.battleCardId,
+    explorationCardId=x.explorationCardId,
+    count=Math.Max(1,x.count)
+   })
+   .ToArray();
+  if(grants.Length==0)
+   grants=ids.Select(id=>new GrantedCardDef{
+    battleCardId=id,explorationCardId=value.explorationCardId,count=1
+   }).ToArray();
+  var normalizedIds=ids.Length>0
+   ?ids.ToArray()
+   :grants.SelectMany(grant=>Enumerable.Repeat(grant.battleCardId,Math.Max(1,grant.count))).ToArray();
+  var item=new ItemDef(value.id,value.name,value.type,normalizedIds.FirstOrDefault()??"",value.description,cells){
+   cardIds=normalizedIds,
+   cardId=normalizedIds.FirstOrDefault()??"",
    linkRule=value.linkRule??"",
    explorationCardId=value.explorationCardId,
+   grantedCards=grants,
+   rarity=value.rarity,
+   acquisitionTier=Math.Max(1,value.acquisitionTier),
+   baseDurability=Math.Max(0,value.baseDurability),
+   resonanceTags=(value.resonanceTags??Array.Empty<string>()).ToArray(),
+   reactionContributions=(value.reactionContributions??Array.Empty<ReactionContributionContent>()).ToArray(),
    artwork=value.artwork
   };
   return item;
@@ -43,11 +64,29 @@ public static class GameCatalog {
   energy=value.energy,
   selfDamage=value.selfDamage,
   exhaust=value.exhaust,
+  innate=value.innate,
+  retain=value.retain,
+  ethereal=value.ethereal,
+  unplayable=value.unplayable,
+  afterUse=value.exhaust&&value.afterUse==BattleCardAfterUse.Discard
+   ?BattleCardAfterUse.ExhaustBattle:value.afterUse,
   artwork=value.artwork
  };
 
  static ExplorationCardDef ToExplorationCard(ExplorationCardContent value)=>new(){
-  id=value.id,name=value.name,text=value.text,place=value.place,cost=value.cost,artwork=value.artwork
+  id=value.id,name=value.name,text=value.text,place=value.place,cost=value.cost,duration=value.duration,
+  kind=value.kind,target=value.target,consumeRule=value.consumeRule,growthTrigger=value.growthTrigger,
+  effects=(value.effects??Array.Empty<ExplorationEffectContent>()).ToArray(),
+  stages=(value.stages??Array.Empty<ExplorationStageContent>()).Where(stage=>stage!=null).Select(stage=>new ExplorationStageDef{
+   id=stage.id,name=stage.name,text=stage.text,minimumProgress=stage.minimumProgress,
+   passiveEffects=(stage.passiveEffects??Array.Empty<ExplorationEffectContent>()).ToArray(),
+   onEnterEffects=(stage.onEnterEffects??Array.Empty<ExplorationEffectContent>()).ToArray(),
+   onTurnEffects=(stage.onTurnEffects??Array.Empty<ExplorationEffectContent>()).ToArray(),
+   onMatureEffects=(stage.onMatureEffects??Array.Empty<ExplorationEffectContent>()).ToArray(),
+   artwork=stage.artwork,boardArtwork=stage.boardArtwork
+  }).OrderBy(stage=>stage.minimumProgress).ToArray(),
+  tags=(value.tags??Array.Empty<string>()).ToArray(),
+  artwork=value.artwork
  };
 
  static RoleDef ToRole(RoleContent value)=>new(value.id,value.name,value.kind,value.description,value.maxLevel){
@@ -55,7 +94,10 @@ public static class GameCatalog {
   family=value.family,
   milestoneText=value.milestoneText,
   maximumMilestoneText=value.maximumMilestoneText,
-  startingCardIds=(value.startingCardIds??Array.Empty<string>()).ToArray()
+  startingCardIds=(value.startingCardIds??Array.Empty<string>()).ToArray(),
+  reactionContributions=(value.reactionContributions??Array.Empty<ReactionContributionContent>()).ToArray(),
+  currentRoleContributions=(value.currentRoleContributions??Array.Empty<ReactionContributionContent>()).ToArray(),
+  unlockRecipes=(value.unlockRecipes??Array.Empty<RoleUnlockRecipeContent>()).ToArray()
  };
 
  static EnemyDef ToEnemy(EnemyContent value){

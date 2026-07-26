@@ -5,15 +5,16 @@ using UnityEngine;
 
 namespace Packspire {
 public static class SaveSystem {
- public const int CurrentVersion=17;
- const string Key="packspire_unity_save_v17";
+ public const int CurrentVersion=18;
+ const string Key="packspire_unity_save_v18";
  const string StagingKey=Key+"_staging";
  const string BackupKey=Key+"_backup";
- const string LegacyKey="packspire_unity_save_v16";
+ const string LegacyKey="packspire_unity_save_v17";
+ const string LegacyKeyV16="packspire_unity_save_v16";
  const string LegacyKeyV1="packspire_unity_save_v1";
 
  public static MetaSave Load(){
-  foreach(var key in new[]{StagingKey,Key,BackupKey,LegacyKey,LegacyKeyV1}){
+  foreach(var key in new[]{StagingKey,Key,BackupKey,LegacyKey,LegacyKeyV16,LegacyKeyV1}){
    if(!PlayerPrefs.HasKey(key))continue;
    if(TryRead(PlayerPrefs.GetString(key,""),out var save)){
     if(key!=Key)Debug.LogWarning($"PACKSPIRE save recovered from '{key}'.");
@@ -38,7 +39,7 @@ public static class SaveSystem {
  }
 
  public static void Reset(){
-  foreach(var key in new[]{Key,StagingKey,BackupKey,LegacyKey,LegacyKeyV1})
+  foreach(var key in new[]{Key,StagingKey,BackupKey,LegacyKey,LegacyKeyV16,LegacyKeyV1})
    PlayerPrefs.DeleteKey(key);
   PlayerPrefs.Save();
  }
@@ -67,6 +68,7 @@ public static class SaveSystem {
   int sourceVersion=Mathf.Max(1,save.version);
   if(sourceVersion<16)MigrateTo16(save);
   if(sourceVersion<17)MigrateTo17(save);
+  if(sourceVersion<18)MigrateTo18(save);
   NormalizeCurrent(save);
   save.version=CurrentVersion;
   return save;
@@ -83,6 +85,10 @@ public static class SaveSystem {
    :save.selectedCharacterId;
  }
 
+ static void MigrateTo18(MetaSave save){
+  save.memoryReactions??=new List<ReactionValueState>();
+ }
+
  static void NormalizeCurrent(MetaSave save){
   save.stash??=new List<ItemInstance>();
   save.consumables??=new List<string>();
@@ -94,6 +100,7 @@ public static class SaveSystem {
   save.unlockedSecrets??=new List<string>();
   save.jobLevels??=new List<IdInt>();
   save.factionRep??=new List<IdFloat>();
+  save.memoryReactions??=new List<ReactionValueState>();
 
   string defaultCharacter=PackspireContent.Data.balance.defaultCharacterId;
   if(string.IsNullOrEmpty(save.selectedCharacterId)||!CharacterCatalog.All.ContainsKey(save.selectedCharacterId))

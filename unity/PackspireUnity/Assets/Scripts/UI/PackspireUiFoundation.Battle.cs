@@ -444,7 +444,7 @@ public sealed partial class PackspireUiFoundation {
   for(int i=0;i<count;i++){
    int index=i;
    var card=run.hand[index];
-   bool affordable=card.cost<=run.energy;
+   bool affordable=!card.unplayable&&card.cost<=run.energy;
    Button button=null;
    button=new Button(()=>{
     if(!affordable||battleInputLocked||button==null)return;
@@ -492,7 +492,7 @@ public sealed partial class PackspireUiFoundation {
   var name=new Label(card.name){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-battle-card-name");
   slot.Add(name);
-  var body=new Label(BattleCardDisplayText(card)){pickingMode=PickingMode.Ignore};
+  var body=new Label(BattleCardDisplayTextWithKeywords(card)){pickingMode=PickingMode.Ignore};
   body.AddToClassList("ps-battle-card-text");
   slot.Add(body);
   string sourceName=card.source;
@@ -501,7 +501,9 @@ public sealed partial class PackspireUiFoundation {
   var source=new Label(sourceName){pickingMode=PickingMode.Ignore};
   source.AddToClassList("ps-battle-card-source");
   foot.Add(source);
-  string durability=sourceItem!=null?$"DUR {sourceItem.durability}/6":card.roleCard?"ROLE":"BASIC";
+  int maximumDurability=sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var durabilityItem)
+   ?durabilityItem.baseDurability:6;
+  string durability=sourceItem!=null?$"DUR {sourceItem.durability}/{maximumDurability}":card.roleCard?"ROLE":"BASIC";
   var dur=new Label(durability){pickingMode=PickingMode.Ignore};
   dur.AddToClassList("ps-battle-card-durability");
   if(sourceItem!=null&&sourceItem.durability<=1)dur.AddToClassList("ps-battle-card-durability-low");
@@ -512,6 +514,19 @@ public sealed partial class PackspireUiFoundation {
    lockLabel.AddToClassList("ps-battle-card-lock");
    slot.Add(lockLabel);
   }
+ }
+
+ static string BattleCardDisplayTextWithKeywords(CardInstance card){
+  if(card==null)return "";
+  string text=BattleCardDisplayText(card);
+  var keywords=new List<string>();
+  if(card.innate)keywords.Add("開始手札");
+  if(card.retain)keywords.Add("保持");
+  if(card.ethereal)keywords.Add("揮発");
+  if(card.unplayable)keywords.Add("使用不可");
+  if(card.afterUse==BattleCardAfterUse.ExhaustBattle)keywords.Add("戦闘除外");
+  if(card.afterUse==BattleCardAfterUse.RemoveExpedition)keywords.Add("遠征除外");
+  return keywords.Count==0?text:$"{text}\n〈{string.Join("・",keywords)}〉";
  }
 
  static string BattleCardDisplayText(CardInstance card){

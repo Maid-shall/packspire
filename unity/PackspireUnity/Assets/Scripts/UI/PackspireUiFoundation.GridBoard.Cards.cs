@@ -156,7 +156,10 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    button=new Button(()=>{
     if(run.phase==GridBoardPhase.Place){
      run.selectedCardUid=capture.slotKey;
-     run.message=$"{capture.name} を選択";
+     if(GameCatalog.ExplorationCards.TryGetValue(capture.id,out var definition)&&
+      definition.target==ExplorationTargetKind.None&&definition.kind!=ExplorationCardKind.Installation){
+      if(!GridBoardSystem.TryUseSelectedCard(run,out var message))ShowToast(message);
+     } else run.message=$"{capture.name} を選択";
     }
     gridBoardHandOpen=false;
     SyncGridHandChrome();
@@ -212,12 +215,12 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   for(int i=0;i<count;i++){
    int index=i;
     var card=run.hand[index];
-    bool affordable=card.cost<=run.energy;
+    bool affordable=!card.unplayable&&card.cost<=run.energy;
    Button button=null;
     button=new Button(()=>{
      if(battleInputLocked||button==null||game.UiBattle==null)return;
      if(!affordable){
-      ShowToast("ENが不足している");
+      ShowToast(card.unplayable?"このカードは直接使用できない":"ENが不足している");
       return;
      }
      int handIndex=game.UiRun.hand.FindIndex(value=>value.slotKey==card.slotKey);

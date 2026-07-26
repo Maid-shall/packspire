@@ -92,6 +92,7 @@ public static class PackspireContentAssetBuilder {
   items.resonances=Resonances();
   items.stabilities=Stabilities();
   items.colorTraits=ColorTraits();
+  actors.reactionValues=ReactionValues();
   actors.roles=Roles();
   actors.enemies=Enemies();
   actors.factions=Factions();
@@ -103,6 +104,49 @@ public static class PackspireContentAssetBuilder {
   world.rewardPools=RewardPools();
   world.balance=Balance();
  }
+
+ [MenuItem("PACKSPIRE/Content/Upgrade Reaction Data")]
+ public static void UpgradeReactionData(){
+  var database=AssetDatabase.LoadAssetAtPath<PackspireContentDatabase>(AssetPath);
+  var items=AssetDatabase.LoadAssetAtPath<PackspireItemContentSet>(ItemPath);
+  var actors=AssetDatabase.LoadAssetAtPath<PackspireActorContentSet>(ActorPath);
+  var world=AssetDatabase.LoadAssetAtPath<PackspireWorldContentSet>(WorldPath);
+  if(database==null||items==null||actors==null||world==null)
+   throw new InvalidOperationException("PACKSPIRE content assets are missing.");
+  actors.reactionValues=ReactionValues();
+  foreach(var role in actors.roles??Array.Empty<RoleContent>())ConfigureRoleReactions(role);
+  foreach(var item in items.items??Array.Empty<ItemContent>())ConfigureItemReactions(item);
+  foreach(var eventContent in world.events??Array.Empty<EventContent>())
+   ConfigureEventReactions(eventContent);
+  database.schemaVersion=PackspireContentDatabase.SupportedSchemaVersion;
+  EditorUtility.SetDirty(database);
+  EditorUtility.SetDirty(items);
+  EditorUtility.SetDirty(actors);
+  EditorUtility.SetDirty(world);
+  AssetDatabase.SaveAssets();
+  var report=PackspireContent.Validate(database);
+  if(!report.IsValid)throw new InvalidOperationException(string.Join("\n",report.errors));
+  Debug.Log($"Upgraded reaction data. {report.Summary}",database);
+ }
+
+ static ReactionValueContent[] ReactionValues()=>new[]{
+  Reaction("martial","武練","武器を扱い戦線を押す経験。","combat"),
+  Reaction("blade_extreme","剣極","刃を極めた濃度。","combat"),
+  Reaction("guard","守護","被害を受け止め守り抜く濃度。","combat"),
+  Reaction("observation","観測","敵と未知を読み解く濃度。","exploration"),
+  Reaction("speed","迅速","先手と軽さを作る濃度。","combat"),
+  Reaction("artifice","工巧","装備・術式・配置を組み替える濃度。","craft"),
+  Reaction("hunt","狩猟","獲物を追い弱点を突く濃度。","exploration"),
+  Reaction("fortification","築城","守りを構造へ変える濃度。","combat"),
+  Reaction("siege","攻城","設置物と重装を突破力へ変える濃度。","craft"),
+  Reaction("immovable","不動","位置と構えを崩さない濃度。","combat"),
+  Reaction("asymmetry","偏位","左右差や歪な配置を活かす濃度。","packing"),
+  Reaction("commerce","商務","価値と交換を操る濃度。","world"),
+  Reaction("spore","胞子","成長・腐敗・再生に触れた濃度。","world"),
+  Reaction("void","虚無","境界外の規則に触れた濃度。","world"),
+  Reaction("sacrifice","代償","損失を力へ変えた記録。","memory"),
+  Reaction("blade_saint_seal","剣聖印","剣聖固有の系譜を示す印。","signature")
+ };
 
  static StatusContent[] Statuses()=>new[]{
   Status("strength","強化","▲","与えるダメージが蓄積数だけ増加する。","buff"),
@@ -140,9 +184,15 @@ public static class PackspireContentAssetBuilder {
  };
 
  static ExplorationCardContent[] ExplorationCards()=>new[]{
-  new ExplorationCardContent{id="gb_lamp",name="灯",place="lamp",cost=1,text="マスに灯りを置く。通過するたびに成長し、成熟すると導線を支える。"},
-  new ExplorationCardContent{id="gb_fog",name="帳",place="fog",cost=1,text="マスに霧を置く。防護と攪乱に使う探索術式。"},
-  new ExplorationCardContent{id="gb_seal",name="楔",place="seal",cost=1,text="マスを封鎖する。曲がるための壁を作る探索術式。"}
+  Exploration("gb_lamp","灯","lamp","マスに灯りを置く。ターン経過で成長し、成熟すると導線を支える。",
+   Stage("spark","灯","小さな光が周囲を照らしている。",0),
+   Stage("beacon","狼煙の灯","成熟した灯。周囲2マスを継続して照らす。",3)),
+  Exploration("gb_fog","帳","fog","マスに霧を置く。防護と攪乱に使う探索術式。",
+   Stage("mist","帳","防護と攪乱の霧が漂っている。",0),
+   Stage("deep_mist","深層の霧","成熟した霧。敵の追跡経路を遮る。",3)),
+  Exploration("gb_seal","楔","seal","マスを封鎖する。曲がるための壁を作る探索術式。",
+   Stage("wedge","楔","導線を曲げるための封鎖楔。",0),
+   Stage("lock","封鎖の楔","成熟した封印。導線と敵の双方を遮る。",3))
  };
 
  static ConsumableContent[] Consumables()=>new[]{
@@ -178,7 +228,7 @@ public static class PackspireContentAssetBuilder {
   Item("charm","風読みの護符",ItemType.Rune,new[]{"tailwind"},"風2点を持つ護符。",
    new[]{Cell(0,0,Element.Wind,2)}),
   Item("cursed_blade","飢えた呪剣",ItemType.Weapon,new[]{"devour"},"強力だが代償を要求する縦2マス武器。",
-   new[]{Cell(0,0,Element.Fire,2),Cell(0,1,Element.Earth)})
+   new[]{Cell(0,0,Element.Fire,2),Cell(0,1,Element.Earth)},rarity:ItemRarity.Cursed,acquisitionTier:2)
  };
 
  static RoleContent[] Roles()=>new[]{
@@ -218,15 +268,87 @@ public static class PackspireContentAssetBuilder {
   Board(Enemy("dragon","劫火竜",2,62,new[]{Move(14),Move(10),Move(16)},
    LoadSprite("Assets/Resources/Art/Portraits/enemy-dragon-v1.png"),"Art/Portraits/enemy-dragon-v1"),EnemyBoardBehavior.Chase,6,1,6),
   Board(Phased(
-   Enemy("boss","荷喰らい",3,72,Empower(14,Effect("strength",EffectTarget.Self,2,2)),Move(12),Move(17)),
+   Enemy("boss","荷喰らい",3,72,
+    new[]{Empower(14,Effect("strength",EffectTarget.Self,2,2)),Move(12),Move(17)},
+    LoadSprite("Assets/Resources/Art/Portraits/enemy-dragon-v1.png"),"Art/Portraits/enemy-dragon-v1"),
    Phase("捕食",51,0,1),
    Phase("暴食",0,1,2)),EnemyBoardBehavior.Chase,6,2,6)
  };
 
  static DungeonContent[] Dungeons()=>new[]{
-  new DungeonContent{id="old_spire",name="古塔パックスパイア",description="格子盤探索の基準となる古塔。",battles=5,hpScale=1f,damage=0,goldScale=1f},
+  new DungeonContent{
+   id="old_spire",name="紫晶の封鐘塔",
+   description="装備の表裏、成長術式、追跡敵、代償イベントを一巡で試せる最初の完成版ダンジョン。",
+   battles=7,hpScale=1f,damage=0,goldScale=1f,rewardPoolId="old_spire_trials",
+   areas=new[]{
+    Area("threshold","欠けた入口",7,1,1,1,
+     new[]{"sentinel","porter"},new[]{"wayfinder_shrine","memory_rift"},
+     "灯りと封鎖を試し、次区画への裂け目を探せ"),
+    Area("crossroads","鐘鎖の交差路",8,2,2,1,
+     new[]{"rats","porter","beast"},new[]{"wayfinder_shrine","field_workbench","memory_rift"},
+     "追跡する敵を導線と設置術式でかわすか、迎え撃て"),
+    Area("deep_vault","反響保管層",9,2,2,2,
+     new[]{"mage","beast","knight"},new[]{"field_workbench","spore_nursery","black_ledger"},
+     "妨害と消耗を越え、帰還か最深部への進出かを選べ"),
+    Area("bell_heart","封鐘心臓部",9,0,1,1,
+     Array.Empty<string>(),new[]{"black_ledger","spore_nursery"},
+     "荷喰らいを倒して封鐘塔を踏破せよ","boss")
+   }
+  },
   new DungeonContent{id="ash_forge",name="灰熱の鋳造坑",description="敵の密度と攻撃性が高い高温坑道。",battles=6,hpScale=1.35f,damage=2,goldScale=1.25f},
   new DungeonContent{id="hollow_archive",name="虚ろなる大記憶庫",description="多数の精鋭が待つ最深記憶域。",battles=8,hpScale=1.7f,damage=4,goldScale=1.55f}
+ };
+
+ static DungeonAreaContent Area(string id,string name,int size,int enemies,int events,int lamps,
+  string[] enemyIds,string[] eventIds,string objective,string boss="")=>new(){
+   id=id,name=name,size=size,layoutRows=CompletedDungeonLayout(id),
+   enemyCount=enemies,eventCount=events,lampCount=lamps,
+   enemyIds=enemyIds,eventIds=eventIds,objective=objective,bossEnemyId=boss
+  };
+
+ static string[] CompletedDungeonLayout(string areaId)=>areaId switch{
+  "threshold"=>new[]{
+   "XX...XX",
+   "X.....X",
+   "......X",
+   "S......",
+   "X...#..",
+   "XX....X",
+   "XXX..XX"
+  },
+  "crossroads"=>new[]{
+   "XX...XXX",
+   "X......X",
+   "...#....",
+   "........",
+   "S..X....",
+   "...X....",
+   "X......X",
+   "XX...XXX"
+  },
+  "deep_vault"=>new[]{
+   "XXX...XXX",
+   "XX.....XX",
+   "X..#....X",
+   ".........",
+   "S...XX...",
+   "....XX...",
+   "X.......X",
+   "XX.#...XX",
+   "XXX...XXX"
+  },
+  "bell_heart"=>new[]{
+   "XXX...XXX",
+   "XX.....XX",
+   "X.......X",
+   "...#.#...",
+   "S..#.....",
+   "...#.#...",
+   "X.......X",
+   "XX.....XX",
+   "XXX...XXX"
+  },
+  _=>Array.Empty<string>()
  };
 
  static BackpackContent[] Backpacks()=>new[]{
@@ -282,6 +404,44 @@ public static class PackspireContentAssetBuilder {
      EventEffect(EventEffectType.RepairAll,6)),
     EventChoice("leave","立ち去る","黒い靄を振り払い、探索へ戻った")
    }
+  },
+  new EventContent{
+   id="wayfinder_shrine",eyebrow="WAYFINDER  /  TRACE",title="導標の祭壇",
+   body="青い針が未知の区画を指して震えている。針を読むか、砕いて路銀に変えるか。",
+   choices=new[]{
+    EventChoice("read","導標を読み解く","塔の構造を読み、観測の反応を得た"),
+    EventChoice("break","導標を砕く","砕けた結晶を18Gに換えた",EventEffect(EventEffectType.Gold,18)),
+    EventChoice("leave","触れずに進む","針の震えを記憶し、探索へ戻った")
+   }
+  },
+  new EventContent{
+   id="field_workbench",eyebrow="WORKBENCH  /  LOADOUT",title="放棄された荷造り卓",
+   body="折れた工具と、まだ熱を残す修復炉がある。装備を直す余地も、部材を売る余地もある。",
+   choices=new[]{
+    EventChoice("repair","装備を修復する","全装備の耐久を8まで修復した",EventEffect(EventEffectType.RepairAll,8)),
+    EventChoice("salvage","部材を回収する","不要な部材を20Gに換えた",EventEffect(EventEffectType.Gold,20)),
+    EventChoice("study","構造を記録する","工巧の反応を遠征記録へ刻んだ")
+   }
+  },
+  new EventContent{
+   id="spore_nursery",eyebrow="SPORE  /  GROWTH",title="眠る胞子苗床",
+   body="淡い胞子が傷と金属の双方へ根を伸ばす。育てれば癒やすが、何を養分にするかは選ばなければならない。",
+   choices=new[]{
+    EventChoice("rest","胞子に身を預ける","HPを10回復した",EventEffect(EventEffectType.Hp,10)),
+    EventChoice("repair","装備を培養する","全装備の耐久を7まで修復した",EventEffect(EventEffectType.RepairAll,7)),
+    EventChoice("harvest","胞子を採取する","胞子を16Gに換えた",EventEffect(EventEffectType.Gold,16))
+   }
+  },
+  new EventContent{
+   id="black_ledger",eyebrow="PACT  /  PRICE",title="黒鐘の台帳",
+   body="台帳には、まだ支払っていない代価と、まだ受け取っていない報酬が同じ墨で記されている。",
+   minimumDoomTier=1,weight=2,
+   choices=new[]{
+    EventChoice("offer","血で署名する","HPを8失い、36Gと代償の反応を得た",
+     EventEffect(EventEffectType.Hp,-8),EventEffect(EventEffectType.Gold,36)),
+    EventChoice("repair","古い契約を修復する","装備の耐久を9まで修復した",EventEffect(EventEffectType.RepairAll,9)),
+    EventChoice("leave","台帳を閉じる","契約を拒み、最深部へ進んだ")
+   }
   }
  };
 
@@ -298,7 +458,14 @@ public static class PackspireContentAssetBuilder {
  };
 
  static RewardPoolContent[] RewardPools()=>new[]{
-  new RewardPoolContent{id="standard",itemIds=new[]{"dagger","plate","crystal","bomb","spear","buckler","flask","charm"}}
+  new RewardPoolContent{id="standard",itemIds=new[]{"dagger","plate","crystal","bomb","spear","buckler","flask","charm"}},
+  new RewardPoolContent{id="old_spire_trials",itemIds=new[]{
+   "sword","shield","ember",
+   "dagger","buckler","charm",
+   "spear","plate","crystal",
+   "herb","flask","bomb",
+   "cursed_blade"
+  }}
  };
 
  static GameBalanceContent Balance()=>new(){
@@ -374,11 +541,29 @@ public static class PackspireContentAssetBuilder {
  static EffectContent Effect(string id,EffectTarget target,int amount=1,int duration=0)=>
   new EffectContent{statusId=id,target=target,amount=amount,duration=duration};
  static CellContent Cell(int x,int y,Element element,int value=1)=>new CellContent{x=x,y=y,element=element,value=value};
- static CardContent Card(string id,string name,CardType type,int cost,string text,int damage=0,int block=0,int heal=0,int buff=0,int energy=0,int selfDamage=0,bool exhaust=false,EffectContent[] effects=null)=>
-  new CardContent{id=id,name=name,type=type,cost=cost,text=text,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,exhaust=exhaust,effects=effects??Array.Empty<EffectContent>()};
- static ItemContent Item(string id,string name,ItemType type,string[] cards,string description,CellContent[] cells,string linkRule="")=>
-  new ItemContent{id=id,name=name,type=type,cardIds=cards,description=description,cells=cells,linkRule=linkRule,
-   explorationCardId=type switch{ItemType.Weapon=>"gb_seal",ItemType.Rune=>"gb_lamp",_=>"gb_fog"}};
+ static CardContent Card(string id,string name,CardType type,int cost,string text,int damage=0,int block=0,int heal=0,int buff=0,int energy=0,int selfDamage=0,bool exhaust=false,EffectContent[] effects=null,
+  bool innate=false,bool retain=false,bool ethereal=false,bool unplayable=false,BattleCardAfterUse afterUse=BattleCardAfterUse.Discard)=>
+  new CardContent{id=id,name=name,type=type,cost=cost,text=text,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,
+   exhaust=exhaust,innate=innate,retain=retain,ethereal=ethereal,unplayable=unplayable,
+   afterUse=exhaust&&afterUse==BattleCardAfterUse.Discard?BattleCardAfterUse.ExhaustBattle:afterUse,
+   effects=effects??Array.Empty<EffectContent>()};
+ static ExplorationCardContent Exploration(string id,string name,string place,string text,params ExplorationStageContent[] stages)=>
+  new ExplorationCardContent{id=id,name=name,place=place,text=text,cost=1,kind=ExplorationCardKind.Installation,
+   target=ExplorationTargetKind.Cell,consumeRule=ExplorationConsumeRule.Discard,growthTrigger=ExplorationGrowthTrigger.TurnsElapsed,
+   stages=stages??Array.Empty<ExplorationStageContent>()};
+ static ExplorationStageContent Stage(string id,string name,string text,int progress)=>
+  new ExplorationStageContent{id=id,name=name,text=text,minimumProgress=progress};
+ static ItemContent Item(string id,string name,ItemType type,string[] cards,string description,CellContent[] cells,string linkRule="",
+  ItemRarity rarity=ItemRarity.Common,int acquisitionTier=1,int baseDurability=6,string[] resonanceTags=null,GrantedCardContent[] grantedCards=null){
+  string exploration=type switch{ItemType.Weapon=>"gb_seal",ItemType.Rune=>"gb_lamp",_=>"gb_fog"};
+  var grants=grantedCards??cards.GroupBy(card=>card).Select(group=>new GrantedCardContent{
+   battleCardId=group.Key,explorationCardId=exploration,count=group.Count()
+  }).ToArray();
+  var item=new ItemContent{id=id,name=name,type=type,rarity=rarity,acquisitionTier=acquisitionTier,baseDurability=baseDurability,
+   resonanceTags=resonanceTags??Array.Empty<string>(),cardIds=cards,grantedCards=grants,description=description,cells=cells,linkRule=linkRule,explorationCardId=exploration};
+  ConfigureItemReactions(item);
+  return item;
+ }
  static RoleContent Role(string id,string name,string kind,string description,int max=10){
   string family=new[]{"guardian","bulwark","anchor_knight","iron_vanguard","pack_saint"}.Contains(id)?"guardian"
    :new[]{"scout","hunter","quickblade","grid_dancer","spore_druid"}.Contains(id)?"scout"
@@ -396,8 +581,10 @@ public static class PackspireContentAssetBuilder {
    :family=="scout"?"各戦闘で最初に使う0コストカードを複製する。"
    :family=="artificer"?"戦闘中に最初に使うルーン・道具カードの耐久を消費しない。"
    :"武器カードを一定回数使うたび、ラン中の攻撃力が成長する。";
-  return new RoleContent{id=id,name=name,kind=kind,description=description,maxLevel=max,family=family,
+  var role=new RoleContent{id=id,name=name,kind=kind,description=description,maxLevel=max,family=family,
    startingCardIds=starting,milestoneText=milestone,maximumMilestoneText=maximum};
+  ConfigureRoleReactions(role);
+  return role;
  }
  static EnemyMoveContent Move(int damage,params EffectContent[] effects)=>new EnemyMoveContent{name="攻撃",kind=EnemyMoveKind.Attack,damage=damage,effects=effects??Array.Empty<EffectContent>()};
  static EnemyMoveContent Guard(int block,params EffectContent[] effects)=>new EnemyMoveContent{name="防御",kind=EnemyMoveKind.Guard,block=block,effects=effects??Array.Empty<EffectContent>()};
@@ -438,8 +625,22 @@ public static class PackspireContentAssetBuilder {
   new ConduitBonusContent{element=element,target=target,threshold=threshold,amountPerMatch=amount,useHalfWaterHeal=useHalfWaterHeal,matchDivisor=matchDivisor};
  static ColorTraitContent Trait(string id,string name,Element element,int required,ColorTraitEffect effect,int amount)=>
   new ColorTraitContent{id=id,name=name,element=element,requiredMatches=required,effect=effect,amount=amount};
- static EventChoiceContent EventChoice(string id,string label,string result,params EventEffectContent[] effects)=>
-  new EventChoiceContent{id=id,label=label,resultText=result,effects=effects??Array.Empty<EventEffectContent>()};
+ static EventChoiceContent EventChoice(string id,string label,string result,params EventEffectContent[] effects){
+  var choice=new EventChoiceContent{id=id,label=label,resultText=result,effects=effects??Array.Empty<EventEffectContent>()};
+  choice.reactionContributions=id switch{
+   "offer"=>new[]{Contribution("sacrifice",3,ReactionScope.Expedition)},
+   "repair"=>new[]{Contribution("artifice",2,ReactionScope.Expedition)},
+   "read"=>new[]{Contribution("observation",3,ReactionScope.Expedition)},
+   "study"=>new[]{Contribution("artifice",3,ReactionScope.Expedition)},
+   "rest"=>new[]{Contribution("spore",3,ReactionScope.Expedition)},
+   "harvest"=>new[]{Contribution("spore",1,ReactionScope.Expedition),Contribution("commerce",1,ReactionScope.Expedition)},
+   "salvage"=>new[]{Contribution("commerce",2,ReactionScope.Expedition)},
+   "break"=>new[]{Contribution("commerce",1,ReactionScope.Expedition)},
+   "leave"=>new[]{Contribution("observation",1,ReactionScope.Area)},
+   _=>Array.Empty<ReactionContributionContent>()
+  };
+  return choice;
+ }
  static EventEffectContent EventEffect(EventEffectType effect,int amount=0)=>new(){effect=effect,amount=amount};
  static MerchantContent Merchant(string id,string context,string name,string idle,string soldOut,string purchase,
   float scale,float offsetX,float offsetY,float viewportHeight,string characterResource)=>new(){
@@ -447,6 +648,100 @@ public static class PackspireContentAssetBuilder {
    characterScale=scale,characterOffsetX=offsetX,characterOffsetY=offsetY,characterViewportHeight=viewportHeight,
    legacyCharacterResource=characterResource,legacyBackdropResource="Art/UI/PopDark/hub-bg-v1"
   };
+
+ static ReactionValueContent Reaction(string id,string name,string description,string category)=>
+  new(){id=id,name=name,description=description,category=category};
+ static ReactionContributionContent Contribution(string id,int amount,ReactionScope scope,
+  bool perLevel=false,ReactionStackRule stack=ReactionStackRule.Add)=>
+  new(){reactionId=id,amount=amount,scope=scope,perLevel=perLevel,stackRule=stack};
+ static ReactionRequirementContent Requirement(string id,int minimum,
+  ReactionScopeMask scopes=ReactionScopeMask.All,int sources=0)=>
+  new(){reactionId=id,minimum=minimum,acceptedScopes=scopes,minimumSources=sources};
+ static RoleUnlockRecipeContent Recipe(string id,string hint,params ReactionRequirementContent[] requirements)=>
+  new(){id=id,hint=hint,visibleBeforeUnlock=true,requirements=requirements};
+
+ static void ConfigureRoleReactions(RoleContent role){
+  if(role==null)return;
+  role.reactionContributions=role.id switch{
+   "warrior"=>new[]{Contribution("martial",1,ReactionScope.Mastery,true),Contribution("blade_extreme",1,ReactionScope.Mastery,true)},
+   "guardian"=>new[]{Contribution("guard",1,ReactionScope.Mastery,true)},
+   "scout"=>new[]{Contribution("observation",1,ReactionScope.Mastery,true),Contribution("speed",1,ReactionScope.Mastery,true)},
+   "artificer"=>new[]{Contribution("artifice",1,ReactionScope.Mastery,true)},
+   "blade_master"=>new[]{Contribution("blade_extreme",2,ReactionScope.Mastery,true),Contribution("blade_saint_seal",1,ReactionScope.Mastery,true)},
+   "bulwark"=>new[]{Contribution("guard",2,ReactionScope.Mastery,true),Contribution("fortification",1,ReactionScope.Mastery,true)},
+   "hunter"=>new[]{Contribution("observation",1,ReactionScope.Mastery,true),Contribution("hunt",2,ReactionScope.Mastery,true)},
+   "grand_artificer"=>new[]{Contribution("artifice",2,ReactionScope.Mastery,true),Contribution("siege",1,ReactionScope.Mastery,true)},
+   "arsenal_lord"=>new[]{Contribution("martial",2,ReactionScope.Mastery,true),Contribution("blade_extreme",1,ReactionScope.Mastery,true)},
+   "pack_saint"=>new[]{Contribution("guard",2,ReactionScope.Mastery,true),Contribution("immovable",1,ReactionScope.Mastery,true)},
+   "rune_weaver"=>new[]{Contribution("artifice",2,ReactionScope.Mastery,true),Contribution("void",1,ReactionScope.Mastery,true)},
+   "grid_dancer"=>new[]{Contribution("observation",2,ReactionScope.Mastery,true),Contribution("asymmetry",1,ReactionScope.Mastery,true)},
+   "quickblade"=>new[]{Contribution("speed",2,ReactionScope.Mastery,true),Contribution("blade_extreme",1,ReactionScope.Mastery,true)},
+   "anchor_knight"=>new[]{Contribution("guard",1,ReactionScope.Mastery,true),Contribution("immovable",2,ReactionScope.Mastery,true)},
+   "siege_channeler"=>new[]{Contribution("artifice",1,ReactionScope.Mastery,true),Contribution("siege",2,ReactionScope.Mastery,true)},
+   "right_hand_swordsman"=>new[]{Contribution("blade_extreme",1,ReactionScope.Mastery,true),Contribution("asymmetry",2,ReactionScope.Mastery,true)},
+   "iron_vanguard"=>new[]{Contribution("guard",1,ReactionScope.Mastery,true),Contribution("fortification",2,ReactionScope.Mastery,true)},
+   "spore_druid"=>new[]{Contribution("spore",2,ReactionScope.Mastery,true),Contribution("observation",1,ReactionScope.Mastery,true)},
+   "guild_factor"=>new[]{Contribution("commerce",2,ReactionScope.Mastery,true),Contribution("artifice",1,ReactionScope.Mastery,true)},
+   "void_apostle"=>new[]{Contribution("void",2,ReactionScope.Mastery,true),Contribution("sacrifice",1,ReactionScope.Mastery,true)},
+   _=>Array.Empty<ReactionContributionContent>()
+  };
+  role.currentRoleContributions=role.id switch{
+   "warrior"=>new[]{Contribution("martial",2,ReactionScope.Loadout)},
+   "guardian"=>new[]{Contribution("guard",2,ReactionScope.Loadout)},
+   "scout"=>new[]{Contribution("observation",2,ReactionScope.Loadout)},
+   "artificer"=>new[]{Contribution("artifice",2,ReactionScope.Loadout)},
+   _=>Array.Empty<ReactionContributionContent>()
+  };
+  role.unlockRecipes=role.id switch{
+   "blade_master"=>new[]{Recipe("blade-path","剣極を10まで高める",Requirement("blade_extreme",10))},
+   "bulwark"=>new[]{Recipe("guardian-path","守護を10まで高める",Requirement("guard",10))},
+   "hunter"=>new[]{Recipe("hunter-path","観測と狩猟を重ねる",Requirement("observation",8),Requirement("hunt",2))},
+   "grand_artificer"=>new[]{Recipe("artifice-path","工巧を10まで高める",Requirement("artifice",10))},
+   "quickblade"=>new[]{Recipe("unexpected-edge","剣極と迅速を共鳴させる",Requirement("blade_extreme",8),Requirement("speed",6))},
+   "anchor_knight"=>new[]{Recipe("fixed-guard","守護と不動を共鳴させる",Requirement("guard",8),Requirement("immovable",6))},
+   "siege_channeler"=>new[]{Recipe("living-siege","工巧と攻城を共鳴させる",Requirement("artifice",8),Requirement("siege",6))},
+   "right_hand_swordsman"=>new[]{Recipe("one-sided-edge","剣極と偏位を共鳴させる",Requirement("blade_extreme",8),Requirement("asymmetry",4))},
+   "arsenal_lord"=>new[]{Recipe("many-arms","異なる三つ以上の源から武練を得る",Requirement("martial",14,ReactionScopeMask.All,3))},
+   "pack_saint"=>new[]{Recipe("unmoving-pack","守護と不動を深く重ねる",Requirement("guard",14),Requirement("immovable",8))},
+   "rune_weaver"=>new[]{Recipe("void-runes","工巧に虚無を織り込む",Requirement("artifice",12),Requirement("void",5))},
+   "grid_dancer"=>new[]{Recipe("crooked-board","観測と偏位を深く重ねる",Requirement("observation",12),Requirement("asymmetry",6))},
+   _=>Array.Empty<RoleUnlockRecipeContent>()
+  };
+ }
+
+ static void ConfigureItemReactions(ItemContent item){
+  if(item==null)return;
+  item.reactionContributions=item.id switch{
+   "sword"=>new[]{Contribution("blade_extreme",2,ReactionScope.Loadout)},
+   "dagger"=>new[]{Contribution("blade_extreme",1,ReactionScope.Loadout),Contribution("speed",2,ReactionScope.Loadout)},
+   "shield"=>new[]{Contribution("guard",2,ReactionScope.Loadout)},
+   "plate"=>new[]{Contribution("guard",2,ReactionScope.Loadout),Contribution("immovable",1,ReactionScope.Loadout)},
+   "spear"=>new[]{Contribution("hunt",2,ReactionScope.Loadout),Contribution("martial",1,ReactionScope.Loadout)},
+   "buckler"=>new[]{Contribution("guard",1,ReactionScope.Loadout),Contribution("speed",1,ReactionScope.Loadout)},
+   "ember"=>new[]{Contribution("artifice",1,ReactionScope.Loadout),Contribution("siege",1,ReactionScope.Loadout)},
+   "crystal"=>new[]{Contribution("artifice",2,ReactionScope.Loadout)},
+   "flask"=>new[]{Contribution("artifice",1,ReactionScope.Loadout),Contribution("spore",1,ReactionScope.Loadout)},
+   "charm"=>new[]{Contribution("speed",2,ReactionScope.Loadout),Contribution("observation",1,ReactionScope.Loadout)},
+   "cursed_blade"=>new[]{Contribution("blade_extreme",3,ReactionScope.Loadout),Contribution("sacrifice",2,ReactionScope.Loadout)},
+   _=>Array.Empty<ReactionContributionContent>()
+  };
+ }
+
+ static void ConfigureEventReactions(EventContent eventContent){
+  foreach(var choice in eventContent?.choices??Array.Empty<EventChoiceContent>())
+   choice.reactionContributions=choice.id switch{
+    "offer"=>new[]{Contribution("sacrifice",3,ReactionScope.Expedition)},
+    "repair"=>new[]{Contribution("artifice",2,ReactionScope.Expedition)},
+    "read"=>new[]{Contribution("observation",3,ReactionScope.Expedition)},
+    "study"=>new[]{Contribution("artifice",3,ReactionScope.Expedition)},
+    "rest"=>new[]{Contribution("spore",3,ReactionScope.Expedition)},
+    "harvest"=>new[]{Contribution("spore",1,ReactionScope.Expedition),Contribution("commerce",1,ReactionScope.Expedition)},
+    "salvage"=>new[]{Contribution("commerce",2,ReactionScope.Expedition)},
+    "break"=>new[]{Contribution("commerce",1,ReactionScope.Expedition)},
+    "leave"=>new[]{Contribution("observation",1,ReactionScope.Area)},
+    _=>Array.Empty<ReactionContributionContent>()
+   };
+ }
 
  static Element[] Shift(Element[] source,int shift){
   var result=new Element[source.Length];

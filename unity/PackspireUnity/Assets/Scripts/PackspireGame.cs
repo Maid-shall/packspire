@@ -115,6 +115,7 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiAdvanceGridArea(){
   if(gridBoard==null)return;
   if(!GridBoardSystem.TryAdvanceArea(gridBoard,out var msg)){message=msg;return;}
+  ReactionSystem.ClearScope(run,ReactionScope.Area);
   message=msg;
   var ui=PackspireUiFoundation.Instance;
   if(ui!=null)ui.ForceRefreshScreen();
@@ -329,7 +330,13 @@ public partial class PackspireGame : MonoBehaviour {
       break;
     }
    }
+   foreach(var contribution in selected.reactionContributions??Array.Empty<ReactionContributionContent>())
+    ReactionSystem.Grant(meta,run,contribution,$"event:{current.id}:{selected.id}");
+   var discovered=ReactionSystem.DiscoverRoles(meta,run);
    message=selected.resultText;
+   if(discovered.Count>0)
+    message+=$"\n新たな役職反応: {string.Join(" / ",discovered.Select(id=>GameCatalog.Roles.TryGetValue(id,out var role)?role.name:id))}";
+   SaveSystem.Save(meta);
   }
   if(gridBoard!=null)gridBoard.pendingEventId="";
   ReturnToExpeditionScreen();
@@ -356,6 +363,8 @@ public partial class PackspireGame : MonoBehaviour {
   try{
    message="ダンジョンを生成中…";
    run=LoadoutSystem.CreateRun(meta,dungeon);
+   var discovered=ReactionSystem.DiscoverRoles(meta,run);
+   if(discovered.Count>0)SaveSystem.Save(meta);
    packingAtBase=false;
    battle=null;
    gridBoard=GridBoardSystem.Create(run.dungeon);

@@ -9,6 +9,9 @@ public sealed partial class PackspireUiFoundation {
  void RefreshGridBoard(){
   var run=game.UiGridBoard;
   if(!gridBoardBuilt||run==null||gridBoardGrid==null)return;
+  if(gridBoardCells.Count!=run.cells.Count)BuildGridCells(run);
+  gridBoardGrid.EnableInClassList("ps-gboard-irregular",
+   GridBoardSystem.HasAuthoredLayout(run));
 
   // Keep stage mode in sync with live battle state (no ScreenId.Battle hop).
   bool inBattle=game.UiBattle!=null;
@@ -123,11 +126,13 @@ public sealed partial class PackspireUiFoundation {
    bool discovered=GridBoardSystem.IsDiscovered(run,cell);
    var enemy=GridBoardSystem.EnemyAt(run,cell.x,cell.y);
    string displayPlace=visible&&enemy!=null?"enemy":cell.place;
-   bool showPlace=visible||(discovered&&displayPlace!="enemy");
+   bool showPlace=visible||discovered;
+   bool unresolvedPresence=!discovered&&cell.place!="empty";
    ve.EnableInClassList("ps-gboard-cell",true);
    ve.EnableInClassList("ps-gboard-visible",visible);
    ve.EnableInClassList("ps-gboard-memory",discovered&&!visible);
    ve.EnableInClassList("ps-gboard-unseen",!discovered);
+   ve.EnableInClassList("ps-gboard-signature",unresolvedPresence);
    ve.EnableInClassList("ps-gboard-void",cell.terrain=="void");
    ve.EnableInClassList("ps-gboard-blocked",cell.terrain=="blocked");
    ve.EnableInClassList("ps-gboard-start",cell.terrain=="start");
@@ -154,6 +159,14 @@ public sealed partial class PackspireUiFoundation {
 
    var cellMark=ve.Q<Label>("mark");
    var cellSigil=ve.Q<Label>("sigil");
+   var installationArt=ve.Q<Image>("installation-art");
+   if(installationArt!=null){
+    var stage=showPlace?GridBoardSystem.InstallationStage(run,cell):null;
+    var art=stage?.boardArtwork;
+    installationArt.sprite=art;
+    installationArt.image=null;
+    installationArt.style.display=art!=null?DisplayStyle.Flex:DisplayStyle.None;
+   }
    if(cellSigil!=null){
     cellSigil.text=!discovered?"":displayPlace=="calamity"?"◆":cell.terrain switch{
      "blocked"=>"✦",
@@ -164,6 +177,12 @@ public sealed partial class PackspireUiFoundation {
       "event"=>"✧", "next"=>"➜", "return"=>"↶", _=>""
      }
     };
+    if(!discovered)
+     cellSigil.text=unresolvedPresence?"◇":cell.terrain switch{
+      "blocked"=>"◆",
+      "start"=>"◇",
+      _=>""
+     };
    }
    if(cellMark!=null){
     string t=!discovered?"":displayPlace=="calamity"?"刻":cell.terrain switch{
@@ -176,6 +195,9 @@ public sealed partial class PackspireUiFoundation {
     if(showPlace&&displayPlace=="calamity")t=$"刻{run.doom}";
     if(cell.x==pieceX&&cell.y==pieceY)t=string.IsNullOrEmpty(t)?"●":t+"●";
     cellMark.text=t??"";
+    if(!discovered)
+     cellMark.text=unresolvedPresence?"？":cell.terrain=="blocked"?"■":
+      cell.terrain=="start"?"入":"";
    }
   }
 

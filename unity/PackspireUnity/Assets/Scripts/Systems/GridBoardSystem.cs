@@ -15,10 +15,29 @@ public class GridCellState {
  /// <summary>empty | lamp | fog | seal | enemy | event | next | return</summary>
  public string place="empty";
  public int grow;
+ /// <summary>Persistent exploration entity occupying this cell, if any.</summary>
+ public string installationUid="";
  /// <summary>True after this cell has entered the explorer's sight at least once.</summary>
  public bool discovered;
  /// <summary>Exploration turn when this cell was most recently visible.</summary>
  public int lastSeenTurn=-1;
+}
+
+[Serializable]
+public class GridInstallationState {
+ public string uid="",cardId="",sourceItemUid="";
+ public int x,y,rotation;
+ public int placedTurn,age,progress,stageIndex,remainingDuration,charges;
+ public bool consumed;
+ public Vector2Int Position=>new(x,y);
+}
+
+[Serializable]
+public class GridTimedExplorationEffectState {
+ public string uid="";
+ public ExplorationEffectType type;
+ public int amount,remainingTurns,x,y;
+ public string parameter="";
 }
 
 [Serializable]
@@ -27,6 +46,15 @@ public class GridEnemyState {
  public string contentId="";
  public int x,y;
  public int previousX,previousY;
+ /// <summary>
+ /// Hostile presence is known from the start, but this coordinate is only a
+ /// signature until sight identifies it. It deliberately stops updating while
+ /// the hostile is outside sight, so exploration never becomes perfect radar.
+ /// </summary>
+ public bool signatureInitialized;
+ public bool identified;
+ public int lastKnownX,lastKnownY;
+ public int lastSeenTurn=-1;
  /// <summary>patrol | chase | wait</summary>
  public string behavior="patrol";
  public int sightRange=4;
@@ -61,6 +89,11 @@ public class GridBoardRunState {
  public int energy=3;
  public int energyMax=3;
  public List<GridCellState> cells=new();
+ /// <summary>Placed exploration formulae. Cells only retain a stable entity reference.</summary>
+ public List<GridInstallationState> installations=new();
+ public List<GridTimedExplorationEffectState> timedEffects=new();
+ /// <summary>Reverse faces removed for the rest of this expedition.</summary>
+ public List<string> removedExplorationSlotKeys=new();
  /// <summary>Movable hostile entities; never baked into terrain or cell places.</summary>
  public List<GridEnemyState> enemies=new();
  public List<Vector2Int> path=new();
@@ -77,6 +110,7 @@ public class GridBoardRunState {
  public int softLengthMax=28;
  /// <summary>Reverse faces emitted by the storage formula; the current hand is drawn from this pool.</summary>
  public List<CardInstance> explorePool=new();
+ public List<CardInstance> areaExhaustedExploreCards=new();
  public List<CardInstance> hand=new();
  public string selectedCardUid="";
  public string message="";
@@ -135,11 +169,25 @@ public static class GridBoardSystem {
  }
 
  public static int AreaCountForDungeon(string dungeonId){
-  // Proto: 2–3 areas from dungeon battle budget; always at least 2.
+  var content=DungeonDefinition(dungeonId);
+  if(content?.areas!=null&&content.areas.Length>0)return content.areas.Length;
+  // Legacy content derives its area count from the old battle budget.
   var def=GameCatalog.Dungeons.FirstOrDefault(x=>x.id==dungeonId);
   if(def==null)return DefaultAreaCount;
   return Mathf.Clamp(Mathf.Max(2,(def.battles+1)/2),2,4);
  }
+
+ static DungeonContent DungeonDefinition(string dungeonId)=>
+  PackspireContent.Data.dungeons.FirstOrDefault(value=>value.id==dungeonId);
+
+ static DungeonAreaContent AreaDefinition(GridBoardRunState run){
+  var dungeon=DungeonDefinition(run?.dungeonId);
+  if(dungeon?.areas==null||run==null||run.areaIndex<0||run.areaIndex>=dungeon.areas.Length)return null;
+  return dungeon.areas[run.areaIndex];
+ }
+
+ public static bool HasAuthoredLayout(GridBoardRunState run)=>
+  AreaDefinition(run)?.layoutRows?.Length>0;
 
  public static int DoomTier(GridBoardRunState run)=>run==null?0:Mathf.Clamp(run.doom/2,0,3);
  public static float EnemyHpMultiplier(GridBoardRunState run)=>1f+DoomTier(run)*0.12f;
@@ -178,7 +226,24 @@ public static class GridBoardSystem {
   advanced=0;
   matured=0;
   if(run?.cells==null)return;
+  foreach(var installation in (run.installations??new List<GridInstallationState>()).ToList()){
+   if(installation.consumed||!GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition))continue;
+   installation.age++;
+   var cell=Cell(run,installation.x,installation.y);
+   var currentStage=InstallationStage(run,cell);
+   ApplyExplorationEffects(run,currentStage?.onTurnEffects,cell);
+   if(installation.remainingDuration>0&&--installation.remainingDuration<=0){
+    RemoveInstallation(run,installation,cell);
+    continue;
+   }
+   if(definition.growthTrigger!=ExplorationGrowthTrigger.TurnsElapsed)continue;
+   bool stageChanged;
+   AdvanceInstallationProgress(run,installation,definition,cell,1,out stageChanged);
+   advanced++;
+   if(stageChanged)matured++;
+  }
   foreach(var cell in run.cells){
+   if(!string.IsNullOrEmpty(cell.installationUid))continue;
    if(cell.place is not ("lamp" or "fog" or "seal")||cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold)continue;
    cell.grow++;
    advanced++;
@@ -188,10 +253,15 @@ public static class GridBoardSystem {
 
  public static void LoadArea(GridBoardRunState run,int index){
   if(run==null)return;
+  ClearTimedExplorationEffects(run);
+  run.areaExhaustedExploreCards??=new();
+  run.explorePool??=new();
+  run.explorePool.AddRange(run.areaExhaustedExploreCards.Select(card=>card.Clone()));
+  run.areaExhaustedExploreCards.Clear();
   run.areaIndex=Mathf.Clamp(index,0,Mathf.Max(0,run.areaCount-1));
   run.areaTurn=0;
   run.explorationTurnPending=false;
-  run.size=AreaSize(run.areaIndex);
+  run.size=AreaSize(run);
   run.phase=GridBoardPhase.Place;
   run.pendingBattle=false;
   run.pendingEnemyId="";
@@ -207,9 +277,13 @@ public static class GridBoardSystem {
   RevealAround(run,run.piece);
   ResetPath(run);
   bool last=run.areaIndex>=run.areaCount-1;
-  run.message=last
-   ?$"最終区画 {run.areaIndex+1}/{run.areaCount} — 帰還点を見つけて持ち帰れ"
-   :$"区画 {run.areaIndex+1}/{run.areaCount} — 次区画への裂け目か、帰還点を探せ";
+  var authored=AreaDefinition(run);
+  string objective=authored?.objective;
+  run.message=!string.IsNullOrWhiteSpace(objective)
+   ?$"区画 {run.areaIndex+1}/{run.areaCount}「{authored.name}」— {objective}"
+   :last
+    ?$"最終区画 {run.areaIndex+1}/{run.areaCount} — 帰還点を見つけて持ち帰れ"
+    :$"区画 {run.areaIndex+1}/{run.areaCount} — 次区画への裂け目か、帰還点を探せ";
  }
 
  public static bool TryAdvanceArea(GridBoardRunState run,out string msg){
@@ -228,19 +302,41 @@ public static class GridBoardSystem {
   run.message="まだこの区画を探索する";
  }
 
- static int AreaSize(int areaIndex)=>areaIndex<=0?7:areaIndex==1?8:9;
+ static int AreaSize(GridBoardRunState run){
+  var authored=AreaDefinition(run);
+  if(authored!=null){
+   int layoutSize=authored.layoutRows?.Length??0;
+   return Mathf.Clamp(Mathf.Max(authored.size,layoutSize),5,12);
+  }
+  return run.areaIndex<=0?7:run.areaIndex==1?8:9;
+ }
 
  static void BuildCells(GridBoardRunState run){
   run.cells.Clear();
   run.enemies.Clear();
+  run.installations??=new();
+  run.installations.Clear();
   int n=run.size;
+  var authored=AreaDefinition(run);
   var rng=new System.Random(AreaGenerationSeed(run));
+  bool hasAuthoredLayout=authored?.layoutRows!=null&&authored.layoutRows.Length==n&&
+   authored.layoutRows.All(row=>row!=null&&row.Length==n);
   for(int y=0;y<n;y++)for(int x=0;x<n;x++){
-   var c=new GridCellState{x=x,y=y,terrain="floor",place="empty",grow=0};
+   char authoredCell=hasAuthoredLayout?authored.layoutRows[y][x]:'.';
+   string terrain=authoredCell switch{
+    'X'=>"void",
+    '#'=>"blocked",
+    'S'=>"start",
+    _=>"floor"
+   };
+   var c=new GridCellState{x=x,y=y,terrain=terrain,place="empty",grow=0};
    run.cells.Add(c);
   }
 
-  var start=new Vector2Int(0,n/2);
+  var authoredStart=run.cells.FirstOrDefault(cell=>cell.terrain=="start");
+  var start=authoredStart!=null
+   ?new Vector2Int(authoredStart.x,authoredStart.y)
+   :new Vector2Int(0,n/2);
   Cell(run,start.x,start.y).terrain="start";
   var protectedCells=new HashSet<long>{
    CellKey(start.x,start.y),
@@ -248,62 +344,66 @@ public static class GridBoardSystem {
    CellKey(Mathf.Min(2,n-1),start.y)
   };
 
-  // First break the rectangular silhouette around its perimeter, then punch a
-  // few genuine interior holes. Every removal is accepted only if all
-  // remaining traversable cells still form one connected dungeon fragment.
-  int voidTarget=Mathf.Clamp(Mathf.RoundToInt(n*n*(0.20f+run.areaIndex*0.015f)),8,n*n/3);
-  int interiorTarget=2+run.areaIndex;
-  var borderCandidates=Shuffled(run.cells.Where(c=>
-   !protectedCells.Contains(CellKey(c.x,c.y))&&
-   (c.x==0||c.y==0||c.x==n-1||c.y==n-1)),rng);
-  int voidCount=0;
-  foreach(var cell in borderCandidates){
-   if(voidCount>=voidTarget-interiorTarget)break;
-   if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
-  }
-  var interiorCandidates=Shuffled(run.cells.Where(c=>
-   !protectedCells.Contains(CellKey(c.x,c.y))&&
-   c.x>1&&c.y>0&&c.x<n-1&&c.y<n-1),rng);
-  int interiorVoids=0;
-  foreach(var cell in interiorCandidates){
-   if(interiorVoids>=interiorTarget||voidCount>=voidTarget)break;
-   if(TrySetTerrain(run,cell,"void",start)){interiorVoids++;voidCount++;}
-  }
-  var remainingVoidCandidates=Shuffled(run.cells.Where(c=>
-   c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))),rng);
-  foreach(var cell in remainingVoidCandidates){
-   if(voidCount>=voidTarget)break;
-   if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
-  }
+  if(!hasAuthoredLayout){
+   // Legacy/generated areas still receive a connected irregular silhouette.
+   int voidTarget=Mathf.Clamp(Mathf.RoundToInt(n*n*(0.20f+run.areaIndex*0.015f)),8,n*n/3);
+   int interiorTarget=2+run.areaIndex;
+   var borderCandidates=Shuffled(run.cells.Where(c=>
+    !protectedCells.Contains(CellKey(c.x,c.y))&&
+    (c.x==0||c.y==0||c.x==n-1||c.y==n-1)),rng);
+   int voidCount=0;
+   foreach(var cell in borderCandidates){
+    if(voidCount>=voidTarget-interiorTarget)break;
+    if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
+   }
+   var interiorCandidates=Shuffled(run.cells.Where(c=>
+    !protectedCells.Contains(CellKey(c.x,c.y))&&
+    c.x>1&&c.y>0&&c.x<n-1&&c.y<n-1),rng);
+   int interiorVoids=0;
+   foreach(var cell in interiorCandidates){
+    if(interiorVoids>=interiorTarget||voidCount>=voidTarget)break;
+    if(TrySetTerrain(run,cell,"void",start)){interiorVoids++;voidCount++;}
+   }
+   var remainingVoidCandidates=Shuffled(run.cells.Where(c=>
+    c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))),rng);
+   foreach(var cell in remainingVoidCandidates){
+    if(voidCount>=voidTarget)break;
+    if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
+   }
 
-  int blockedTarget=Mathf.Clamp(3+run.areaIndex,3,6);
-  var wallCandidates=Shuffled(run.cells.Where(c=>
-   c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))&&
-   c.x>0&&c.x<n-1&&c.y>0&&c.y<n-1),rng);
-  int blocked=0;
-  foreach(var cell in wallCandidates){
-   if(blocked>=blockedTarget)break;
-   if(TrySetTerrain(run,cell,"blocked",start)){blocked++;}
+   int blockedTarget=Mathf.Clamp(3+run.areaIndex,3,6);
+   var wallCandidates=Shuffled(run.cells.Where(c=>
+    c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))&&
+    c.x>0&&c.x<n-1&&c.y>0&&c.y<n-1),rng);
+   int blocked=0;
+   foreach(var cell in wallCandidates){
+    if(blocked>=blockedTarget)break;
+    if(TrySetTerrain(run,cell,"blocked",start)){blocked++;}
+   }
   }
+  if(!IsAreaTraversable(run,start))
+   Debug.LogError($"Dungeon area '{authored?.id??run.dungeonId}' has a disconnected layout.");
   PlaceCalamityFacility(run,start,rng);
 
   var distances=TerrainDistances(run,start);
-  var lamp=run.cells
-   .Where(c=>c.terrain=="floor"&&c.place=="empty"&&
-    distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=2&&distance<=4)
-   .OrderBy(c=>distances[CellKey(c.x,c.y)])
-   .ThenBy(_=>rng.Next())
-   .FirstOrDefault();
-  if(lamp!=null){lamp.place="lamp";lamp.grow=0;}
+  int lampCount=authored!=null?authored.lampCount:1;
+  foreach(var lamp in Shuffled(run.cells.Where(c=>c.terrain=="floor"&&c.place=="empty"&&
+   distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=2&&distance<=5),rng)
+   .Take(Mathf.Max(0,lampCount))){
+   lamp.place="lamp";
+   lamp.grow=0;
+  }
 
   // Gates are deliberately far from the entrance. Since terrain connectivity
   // was validated above, every selected anchor is guaranteed reachable.
   if(run.areaIndex<run.areaCount-1)PlaceFarthest(run,"next",distances,rng);
-  PlaceFarthest(run,"return",distances,rng);
-  int enemies=Mathf.Clamp(1+run.areaIndex,1,4);
-  int events=run.areaIndex==0?1:2;
-  SpawnEnemies(run,enemies,rng,distances,2);
-  PlaceRandom(run,"event",events,rng,distances,2);
+  bool hasBoss=authored!=null&&!string.IsNullOrEmpty(authored.bossEnemyId);
+  if(!hasBoss)PlaceFarthest(run,"return",distances,rng);
+  int enemies=authored!=null?authored.enemyCount:Mathf.Clamp(1+run.areaIndex,1,4);
+  int events=authored!=null?authored.eventCount:run.areaIndex==0?1:2;
+  SpawnEnemies(run,enemies,rng,distances,2,authored?.enemyIds);
+  PlaceRandom(run,"event",events,rng,distances,2,authored?.eventIds);
+  if(hasBoss)SpawnBoss(run,authored.bossEnemyId,rng,distances);
  }
 
  static int StableHash(string value){
@@ -373,7 +473,49 @@ public static class GridBoardSystem {
    cell.discovered=true;
    cell.lastSeenTurn=run.explorationTurn;
   }
+  foreach(var enemy in run.enemies??new List<GridEnemyState>()){
+   EnsureEnemySignature(enemy);
+   int dx=Mathf.Abs(enemy.x-origin.x);
+   int dy=Mathf.Abs(enemy.y-origin.y);
+   int distance=run.sightIncludesDiagonals?Mathf.Max(dx,dy):dx+dy;
+   if(distance<=sight)ObserveEnemy(run,enemy);
+  }
   return revealed;
+ }
+
+ static void EnsureEnemySignature(GridEnemyState enemy){
+  if(enemy==null||enemy.signatureInitialized)return;
+  enemy.signatureInitialized=true;
+  enemy.lastKnownX=enemy.x;
+  enemy.lastKnownY=enemy.y;
+ }
+
+ static void ObserveEnemy(GridBoardRunState run,GridEnemyState enemy){
+  if(enemy==null)return;
+  EnsureEnemySignature(enemy);
+  enemy.identified=true;
+  enemy.lastKnownX=enemy.x;
+  enemy.lastKnownY=enemy.y;
+  enemy.lastSeenTurn=run?.explorationTurn??0;
+ }
+
+ public static Vector2Int LastKnownEnemyPosition(GridEnemyState enemy){
+  EnsureEnemySignature(enemy);
+  return enemy==null?default:new Vector2Int(enemy.lastKnownX,enemy.lastKnownY);
+ }
+
+ public static IReadOnlyList<GridEnemyState> EnemySignaturesAt(GridBoardRunState run,int x,int y){
+  if(run?.enemies==null)return Array.Empty<GridEnemyState>();
+  foreach(var enemy in run.enemies)EnsureEnemySignature(enemy);
+  return run.enemies.Where(enemy=>enemy.lastKnownX==x&&enemy.lastKnownY==y).ToArray();
+ }
+
+ public static bool IsEnemyCurrentlyRevealed(GridBoardRunState run,GridEnemyState enemy){
+  if(run==null||enemy==null)return false;
+  EnsureEnemySignature(enemy);
+  return IsCurrentlyVisible(run,Cell(run,enemy.x,enemy.y))||
+   (enemy.lastSeenTurn==run.explorationTurn&&
+    enemy.lastKnownX==enemy.x&&enemy.lastKnownY==enemy.y);
  }
 
  static List<GridCellState> Shuffled(IEnumerable<GridCellState> source,System.Random rng){
@@ -444,7 +586,7 @@ public static class GridBoardSystem {
  }
 
  static void PlaceRandom(GridBoardRunState run,string place,int count,System.Random rng,
-  Dictionary<long,int> distances,int minimumDistance){
+  Dictionary<long,int> distances,int minimumDistance,IReadOnlyList<string> authoredIds=null){
   var pool=Shuffled(run.cells.Where(c=>
    c.terrain=="floor"&&c.place=="empty"&&
    !run.enemies.Any(enemy=>enemy.x==c.x&&enemy.y==c.y)&&
@@ -452,14 +594,15 @@ public static class GridBoardSystem {
    .Take(Mathf.Max(0,count));
   foreach(var c in pool){
    SetPlace(c,place);
-   if(place=="event")c.contentId=SelectEventId(run,rng);
+   if(place=="event")c.contentId=SelectEventId(run,rng,authoredIds);
   }
  }
 
- static string SelectEventId(GridBoardRunState run,System.Random rng){
+ static string SelectEventId(GridBoardRunState run,System.Random rng,IReadOnlyList<string> authoredIds=null){
   int tier=DoomTier(run);
+  var allowed=authoredIds==null||authoredIds.Count==0?null:authoredIds.ToHashSet();
   var pool=PackspireContent.Data.events
-   .Where(content=>content.minimumDoomTier<=tier)
+   .Where(content=>content.minimumDoomTier<=tier&&(allowed==null||allowed.Contains(content.id)))
    .ToArray();
   if(pool.Length==0)return PackspireContent.Data.balance.defaultEventId;
   int total=pool.Sum(content=>Mathf.Max(1,content.weight));
@@ -484,14 +627,31 @@ public static class GridBoardSystem {
  }
 
  static void SpawnEnemies(GridBoardRunState run,int count,System.Random rng,
-  Dictionary<long,int> distances,int minimumDistance){
-  var cells=Shuffled(run.cells.Where(c=>
+  Dictionary<long,int> distances,int minimumDistance,IReadOnlyList<string> authoredIds=null){
+  var candidates=run.cells.Where(c=>
    c.terrain=="floor"&&c.place=="empty"&&
-   distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=minimumDistance),rng)
-   .Take(Mathf.Max(0,count))
+   distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=minimumDistance)
    .ToList();
+  var cells=new List<GridCellState>();
+  // Progression is normally watched, not hard-locked. One hostile signature is
+  // placed near the onward gate; movement and route noise decide whether it
+  // remains there by the time the explorer arrives.
+  var onward=run.cells.FirstOrDefault(cell=>cell.place=="next");
+  if(count>0&&onward!=null&&candidates.Count>0){
+   var guard=candidates
+    .OrderBy(cell=>Mathf.Abs(cell.x-onward.x)+Mathf.Abs(cell.y-onward.y))
+    .ThenByDescending(cell=>distances[CellKey(cell.x,cell.y)])
+    .ThenBy(_=>rng.Next())
+    .First();
+   cells.Add(guard);
+   candidates.Remove(guard);
+  }
+  cells.AddRange(Shuffled(candidates,rng).Take(Mathf.Max(0,count-cells.Count)));
   int tier=Mathf.Clamp(1+run.areaIndex/2,1,2);
-  var definitions=GameCatalog.Enemies.Where(enemy=>enemy.tier==tier).ToArray();
+  var allowed=authoredIds==null||authoredIds.Count==0?null:authoredIds.ToHashSet();
+  var definitions=GameCatalog.Enemies
+   .Where(enemy=>allowed!=null?allowed.Contains(enemy.id):enemy.tier==tier)
+   .ToArray();
   if(definitions.Length==0)definitions=GameCatalog.Enemies.ToArray();
   for(int i=0;i<cells.Count;i++){
    var cell=cells[i];
@@ -500,6 +660,7 @@ public static class GridBoardSystem {
     uid=$"area-{run.areaIndex}-enemy-{i}",
     contentId=definition?.id??"",
     x=cell.x,y=cell.y,previousX=cell.x,previousY=cell.y,
+    signatureInitialized=true,lastKnownX=cell.x,lastKnownY=cell.y,
     originX=cell.x,originY=cell.y,
     behavior=definition?.boardBehavior switch{
      EnemyBoardBehavior.Chase=>"chase",
@@ -512,6 +673,35 @@ public static class GridBoardSystem {
     patrolStep=rng.Next(4)
    });
   }
+ }
+
+ static void SpawnBoss(GridBoardRunState run,string bossEnemyId,System.Random rng,
+  Dictionary<long,int> distances){
+  var definition=GameCatalog.Enemies.FirstOrDefault(enemy=>enemy.id==bossEnemyId);
+  if(definition==null)return;
+  var cell=run.cells
+   .Where(value=>value.terrain=="floor"&&value.place=="empty"&&
+    !run.enemies.Any(enemy=>enemy.x==value.x&&enemy.y==value.y)&&
+    distances.ContainsKey(CellKey(value.x,value.y)))
+   .OrderByDescending(value=>distances[CellKey(value.x,value.y)])
+   .ThenBy(_=>rng.Next())
+   .FirstOrDefault();
+  if(cell==null)return;
+  run.enemies.Add(new GridEnemyState{
+   uid=$"area-{run.areaIndex}-boss",
+   contentId=definition.id,
+   x=cell.x,y=cell.y,previousX=cell.x,previousY=cell.y,
+   signatureInitialized=true,lastKnownX=cell.x,lastKnownY=cell.y,
+   originX=cell.x,originY=cell.y,
+   behavior=definition.boardBehavior switch{
+    EnemyBoardBehavior.Chase=>"chase",
+    EnemyBoardBehavior.Wait=>"wait",
+    _=>"patrol"
+   },
+   sightRange=definition.boardSightRange,
+   moveSteps=definition.boardMoveSteps,
+   patrolRadius=definition.boardPatrolRadius
+  });
  }
 
  static void SetPlace(GridCellState cell,string place){
@@ -527,6 +717,7 @@ public static class GridBoardSystem {
   board.explorePool.Clear();
   if(gameRun!=null){
    foreach(var combatCard in BackpackSystem.Build(gameRun).candidates){
+    if(board.removedExplorationSlotKeys?.Contains("explore:"+combatCard.slotKey)==true)continue;
     var item=gameRun.inventory.FirstOrDefault(x=>x.uid==combatCard.sourceItemUid);
     if(item==null||!GameCatalog.Items.TryGetValue(item.templateId,out var def))continue;
     var explore=ExploreFace(combatCard,def);
@@ -537,7 +728,8 @@ public static class GridBoardSystem {
  }
 
  static CardInstance ExploreFace(CardInstance combatCard,ItemDef item){
-  string id=item.explorationCardId;
+  string id=!string.IsNullOrEmpty(combatCard.explorationCardId)
+   ?combatCard.explorationCardId:item.explorationCardId;
   if(!GameCatalog.ExplorationCards.TryGetValue(id,out var def))
    def=GameCatalog.ExplorationCards["gb_lamp"];
   return new CardInstance{
@@ -625,20 +817,205 @@ public static class GridBoardSystem {
   var card=SelectedCard(run);
   if(card==null){msg="カードを選んでからマスをタップ";return false;}
   if(run.energy<card.cost){msg=$"ENが足りない（{run.energy}/{run.energyMax}）";return false;}
+  if(!GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)){msg="未知のカード";return false;}
   var cell=Cell(run,x,y);
   if(cell==null){msg="範囲外";return false;}
-  if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
-  if(cell.place!="empty"||EnemyAt(run,x,y)!=null){msg="すでに何かある";return false;}
-  string place=GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)?exploration.place:"";
-  if(string.IsNullOrEmpty(place)){msg="未知のカード";return false;}
-  cell.place=place;
-  cell.grow=0;
+  if(exploration.kind==ExplorationCardKind.Installation){
+   if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
+   if(cell.place!="empty"||EnemyAt(run,x,y)!=null){msg="すでに何かある";return false;}
+   if(string.IsNullOrEmpty(exploration.place)){msg="設置種別がない";return false;}
+   cell.place=exploration.place;
+   cell.grow=0;
+   run.installations??=new();
+   var installation=new GridInstallationState{
+    uid=Guid.NewGuid().ToString("N"),
+    cardId=exploration.id,
+    sourceItemUid=card.sourceItemUid,
+    x=x,y=y,
+    placedTurn=run.explorationTurn,
+    remainingDuration=exploration.duration,
+    stageIndex=ResolveInstallationStageIndex(exploration,0)
+   };
+   run.installations.Add(installation);
+   cell.installationUid=installation.uid;
+   ApplyExplorationEffects(run,InstallationStage(run,cell)?.onEnterEffects,cell);
+  } else {
+   if(exploration.target==ExplorationTargetKind.Installation&&InstallationAt(run,x,y)==null){
+    msg="対象となる設置術式がない";return false;
+   }
+   if(exploration.target==ExplorationTargetKind.Enemy&&EnemyAt(run,x,y)==null){
+    msg="対象となる敵がいない";return false;
+   }
+   ApplyExplorationEffects(run,exploration.effects,cell);
+  }
   run.energy=Mathf.Max(0,run.energy-card.cost);
-  run.hand.RemoveAll(c=>c.slotKey==card.slotKey);
+  ConsumeExplorationCard(run,card,exploration.consumeRule);
   run.selectedCardUid="";
-  msg=place=="seal"?$"{card.name}を置いた（曲がる壁） EN{run.energy}":$"{card.name}を置いた EN{run.energy}";
+  msg=exploration.kind==ExplorationCardKind.Installation
+   ?exploration.place=="seal"?$"{card.name}を置いた（曲がる壁） EN{run.energy}":$"{card.name}を置いた EN{run.energy}"
+   :$"{card.name}を使用した EN{run.energy}";
   run.message=msg;
   return true;
+ }
+
+ public static bool TryUseSelectedCard(GridBoardRunState run,out string msg){
+  msg="";
+  var card=SelectedCard(run);
+  if(card==null||!GameCatalog.ExplorationCards.TryGetValue(card.id,out var definition)){
+   msg="カードが選ばれていない";return false;
+  }
+  if(definition.target!=ExplorationTargetKind.None){
+   msg="対象を選ぶ必要がある";return false;
+  }
+  return TryPlace(run,run.piece.x,run.piece.y,out msg);
+ }
+
+ static void ConsumeExplorationCard(GridBoardRunState run,CardInstance card,ExplorationConsumeRule rule){
+  if(rule==ExplorationConsumeRule.Persistent)return;
+  run.hand.RemoveAll(value=>value.slotKey==card.slotKey);
+  if(rule==ExplorationConsumeRule.ExhaustArea){
+   run.areaExhaustedExploreCards??=new();
+   var source=run.explorePool.FirstOrDefault(value=>value.slotKey==card.slotKey);
+   if(source!=null)run.areaExhaustedExploreCards.Add(source.Clone());
+  }
+  if(rule is ExplorationConsumeRule.ExhaustArea or ExplorationConsumeRule.RemoveExpedition)
+   run.explorePool.RemoveAll(value=>value.slotKey==card.slotKey);
+  if(rule==ExplorationConsumeRule.RemoveExpedition){
+   run.removedExplorationSlotKeys??=new();
+   if(!run.removedExplorationSlotKeys.Contains(card.slotKey))
+    run.removedExplorationSlotKeys.Add(card.slotKey);
+  }
+ }
+
+ static void ApplyExplorationEffects(
+  GridBoardRunState run,IEnumerable<ExplorationEffectContent> effects,GridCellState target){
+  foreach(var effect in effects??Enumerable.Empty<ExplorationEffectContent>()){
+   if(effect==null||effect.type==ExplorationEffectType.None)continue;
+   ApplyExplorationEffect(run,effect.type,effect.amount,effect.parameter,target);
+   if(effect.duration>0&&effect.type is ExplorationEffectType.Sight or ExplorationEffectType.Turns){
+    run.timedEffects??=new();
+    run.timedEffects.Add(new GridTimedExplorationEffectState{
+     uid=Guid.NewGuid().ToString("N"),type=effect.type,amount=effect.amount,
+     remainingTurns=effect.duration,parameter=effect.parameter,x=target?.x??run.piece.x,y=target?.y??run.piece.y
+    });
+   }
+  }
+ }
+
+ static void ApplyExplorationEffect(
+  GridBoardRunState run,ExplorationEffectType type,int amount,string parameter,GridCellState target){
+  switch(type){
+   case ExplorationEffectType.Draw:{
+    int count=Mathf.Max(0,amount);
+    foreach(var source in (run.explorePool??new List<CardInstance>())
+     .OrderBy(_=>UnityEngine.Random.value).Take(count)){
+     var card=source.Clone();
+     card.slotKey=$"{source.slotKey}:draw:{Guid.NewGuid():N}";
+     run.hand.Add(card);
+    }
+    break;
+   }
+   case ExplorationEffectType.Energy:run.energy=Mathf.Max(0,run.energy+amount);break;
+   case ExplorationEffectType.Sight:run.sightRangeBonus+=amount;break;
+   case ExplorationEffectType.Turns:run.turnsMax=Mathf.Max(0,run.turnsMax+amount);break;
+   case ExplorationEffectType.Reveal:
+    RevealAround(run,target!=null?new Vector2Int(target.x,target.y):run.piece,Mathf.Max(0,amount));
+    break;
+   case ExplorationEffectType.Growth:{
+    var installation=target==null?null:InstallationAt(run,target.x,target.y);
+    if(installation!=null&&GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition)){
+     installation.progress=Mathf.Max(0,installation.progress+amount);
+     installation.stageIndex=ResolveInstallationStageIndex(definition,installation.progress);
+     target.grow=installation.progress;
+    }
+    break;
+   }
+   case ExplorationEffectType.Doom:run.doom=Mathf.Clamp(run.doom+amount,0,Mathf.Max(1,run.doomMax));break;
+   case ExplorationEffectType.RemoveInstallation:{
+    var installation=target==null?null:InstallationAt(run,target.x,target.y);
+    if(installation!=null)RemoveInstallation(run,installation,target);
+    break;
+   }
+  }
+ }
+
+ static void TickTimedExplorationEffects(GridBoardRunState run){
+  if(run?.timedEffects==null)return;
+  foreach(var effect in run.timedEffects.ToList()){
+   effect.remainingTurns--;
+   if(effect.remainingTurns>0)continue;
+   if(effect.type==ExplorationEffectType.Sight)run.sightRangeBonus-=effect.amount;
+   else if(effect.type==ExplorationEffectType.Turns)run.turnsMax=Mathf.Max(0,run.turnsMax-effect.amount);
+   run.timedEffects.Remove(effect);
+  }
+ }
+
+ static void ClearTimedExplorationEffects(GridBoardRunState run){
+  if(run?.timedEffects==null)return;
+  foreach(var effect in run.timedEffects){
+   if(effect.type==ExplorationEffectType.Sight)run.sightRangeBonus-=effect.amount;
+   else if(effect.type==ExplorationEffectType.Turns)run.turnsMax=Mathf.Max(0,run.turnsMax-effect.amount);
+  }
+  run.timedEffects.Clear();
+ }
+
+ public static GridInstallationState InstallationAt(GridBoardRunState run,int x,int y)=>
+  run?.installations?.FirstOrDefault(value=>!value.consumed&&value.x==x&&value.y==y);
+
+ public static ExplorationStageDef InstallationStage(GridBoardRunState run,GridCellState cell){
+  var installation=cell==null?null:InstallationAt(run,cell.x,cell.y);
+  if(installation==null||!GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition))
+   return null;
+  if(definition.stages==null||definition.stages.Length==0)return null;
+  int index=Mathf.Clamp(installation.stageIndex,0,definition.stages.Length-1);
+  return definition.stages[index];
+ }
+
+ public static bool AdvanceInstallationProgress(
+  GridBoardRunState run,int x,int y,ExplorationGrowthTrigger trigger,int amount=1){
+  var installation=InstallationAt(run,x,y);
+  if(installation==null||!GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition))
+   return false;
+  if(definition.growthTrigger!=trigger)return false;
+  return AdvanceInstallationProgress(run,installation,definition,Cell(run,x,y),amount,out _);
+ }
+
+ static bool AdvanceInstallationProgress(
+  GridBoardRunState run,GridInstallationState installation,ExplorationCardDef definition,
+  GridCellState cell,int amount,out bool stageChanged){
+  stageChanged=false;
+  if(run==null||installation==null||definition==null||installation.consumed||amount==0)return false;
+  int previousIndex=installation.stageIndex;
+  var previousStage=definition.stages!=null&&previousIndex>=0&&previousIndex<definition.stages.Length
+   ?definition.stages[previousIndex]:null;
+  installation.progress=Mathf.Max(0,installation.progress+amount);
+  installation.stageIndex=ResolveInstallationStageIndex(definition,installation.progress);
+  if(cell!=null)cell.grow=installation.progress;
+  stageChanged=installation.stageIndex!=previousIndex;
+  if(stageChanged){
+   ApplyExplorationEffects(run,previousStage?.onMatureEffects,cell);
+   ApplyExplorationEffects(run,InstallationStage(run,cell)?.onEnterEffects,cell);
+  }
+  return true;
+ }
+
+ static void RemoveInstallation(
+  GridBoardRunState run,GridInstallationState installation,GridCellState cell){
+  if(installation==null)return;
+  installation.consumed=true;
+  if(cell!=null){
+   cell.installationUid="";
+   cell.place="empty";
+   cell.grow=0;
+  }
+ }
+
+ static int ResolveInstallationStageIndex(ExplorationCardDef definition,int progress){
+  if(definition?.stages==null||definition.stages.Length==0)return 0;
+  int resolved=0;
+  for(int i=0;i<definition.stages.Length;i++)
+   if(definition.stages[i]!=null&&definition.stages[i].minimumProgress<=progress)resolved=i;
+  return resolved;
  }
 
  /// <summary>Start path drawing without a separate "path phase" button.</summary>
@@ -806,6 +1183,7 @@ public static class GridBoardSystem {
  public static bool BeginRun(GridBoardRunState run,out string msg){
   msg="";
   if(!CanStartRun(run)){msg="まだ滑走していない";return false;}
+  AlertEnemiesAlongRoute(run);
   run.phase=GridBoardPhase.Run;
   run.explorationTurnPending=true;
   run.pathIndex=0;
@@ -816,6 +1194,26 @@ public static class GridBoardSystem {
   msg="導線に沿って進む";
   run.message=msg;
   return true;
+ }
+
+ /// <summary>
+ /// Committing a route produces a short-range noise trail. Hostiles close to
+ /// that trail begin pursuit even when the explorer never identified them.
+ /// Avoiding every battle therefore needs stealth or field control rather than
+ /// simply plotting around perfectly tracked markers.
+ /// </summary>
+ public static int AlertEnemiesAlongRoute(GridBoardRunState run,int hearingRange=-1){
+  if(run?.enemies==null||run.path==null||run.path.Count<2)return 0;
+  int range=hearingRange<0?1+Mathf.Min(1,DoomTier(run)):Mathf.Max(0,hearingRange);
+  int alerted=0;
+  foreach(var enemy in run.enemies){
+   int nearest=run.path.Min(position=>
+    Mathf.Abs(position.x-enemy.x)+Mathf.Abs(position.y-enemy.y));
+   if(nearest>range||enemy.alerted)continue;
+   enemy.alerted=true;
+   alerted++;
+  }
+  return alerted;
  }
 
  public static bool TickRun(GridBoardRunState run,float dt){
@@ -862,6 +1260,7 @@ public static class GridBoardSystem {
   var cell=Cell(run,pos.x,pos.y);
   if(cell==null)return;
   RevealAround(run,pos);
+  AdvanceInstallationProgress(run,pos.x,pos.y,ExplorationGrowthTrigger.RoutePasses);
   var hostile=EnemyAt(run,pos.x,pos.y);
   if(hostile!=null){
    EngageEnemy(run,hostile);
@@ -1004,6 +1403,7 @@ public static class GridBoardSystem {
      enemy.y=destination.y;
      moved++;
     }
+    if(IsCurrentlyVisible(run,Cell(run,enemy.x,enemy.y)))ObserveEnemy(run,enemy);
     occupied.Add(CellKey(enemy.x,enemy.y));
     if(enemy.x==run.piece.x&&enemy.y==run.piece.y){
      EngageEnemy(run,enemy);
@@ -1030,6 +1430,7 @@ public static class GridBoardSystem {
   };
   AdvanceGrowth(run,out result.growthAdvanced,out result.growthMatured);
   ApplyMatureFieldEffects(run);
+  TickTimedExplorationEffects(run);
   AdvanceDoom(run);
   result.doomAfter=run.doom;
   return result;

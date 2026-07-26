@@ -21,6 +21,58 @@ public sealed class PackspireEditModeTests {
   Assert.That(save.loadouts,Has.Count.EqualTo(3));
   Assert.That(save.selectedLoadoutId,Is.EqualTo("loadout-1"));
   Assert.That(save.selectedCharacterId,Is.Not.Empty);
+  Assert.That(save.memoryReactions,Is.Not.Null);
+ }
+
+ [Test]
+ public void ReactionValues_CombineRoleLevelsAndPlacedEquipmentWithBreakdown(){
+  var meta=new MetaSave{
+   jobLevels=new(){new IdInt("warrior",8)},
+   unlockedRoles=new(){"warrior","guardian","scout","artificer"}
+  };
+  var sword=new ItemInstance("sword");
+  var run=new RunState{role="warrior",inventory=new(){sword},placements=new(){new Placement(sword.uid,0)}};
+
+  var snapshot=ReactionSystem.Build(meta,run);
+
+  Assert.That(snapshot.Total("blade_extreme"),Is.EqualTo(10));
+  Assert.That(snapshot.Total("blade_extreme",ReactionScopeMask.Mastery),Is.EqualTo(8));
+  Assert.That(snapshot.Total("blade_extreme",ReactionScopeMask.Loadout),Is.EqualTo(2));
+  Assert.That(snapshot.SourceCount("blade_extreme"),Is.EqualTo(2));
+  Assert.That(snapshot.Breakdown("blade_extreme").Count,Is.EqualTo(2));
+ }
+
+ [Test]
+ public void ReactionValues_UnlockThroughAlternativeMixedSourcesAndRemainUnlocked(){
+  var meta=new MetaSave{
+   jobLevels=new(){new IdInt("warrior",8)},
+   unlockedRoles=new(){"warrior","guardian","scout","artificer"}
+  };
+  var sword=new ItemInstance("sword");
+  var run=new RunState{role="warrior",inventory=new(){sword},placements=new(){new Placement(sword.uid,0)}};
+
+  var discovered=ReactionSystem.DiscoverRoles(meta,run);
+
+  Assert.That(discovered,Does.Contain("blade_master"));
+  Assert.That(meta.unlockedRoles,Does.Contain("blade_master"));
+  run.placements.Clear();
+  Assert.That(ReactionSystem.Build(meta,run).Total("blade_extreme"),Is.EqualTo(8));
+  Assert.That(meta.unlockedRoles,Does.Contain("blade_master"),"Discovery must not be revoked when a loadout changes.");
+ }
+
+ [Test]
+ public void ReactionValues_EventGrantUsesItsAuthoredLifetime(){
+  var meta=new MetaSave();
+  var run=new RunState();
+  var offer=PackspireContent.Data.events.Single(value=>value.id=="memory_rift")
+   .choices.Single(value=>value.id=="offer");
+
+  foreach(var contribution in offer.reactionContributions)
+   ReactionSystem.Grant(meta,run,contribution,"event:memory_rift:offer");
+
+  Assert.That(ReactionSystem.Build(meta,run).Total("sacrifice",ReactionScopeMask.Expedition),Is.EqualTo(3));
+  Assert.That(ReactionSystem.Build(meta,null).Total("sacrifice"),Is.Zero,
+   "Expedition reactions must not leak into permanent mastery.");
  }
 
  [Test]
@@ -32,10 +84,14 @@ public sealed class PackspireEditModeTests {
 
  [Test]
  public void CombatTurn_UsesAuthoredEnergyAndHandValues(){
-  var run=new RunState{hp=42,maxHp=42};
+  var run=new RunState{hp=42,maxHp=42,role="warrior"};
+  var sword=new ItemInstance("sword");
+  run.inventory.Add(sword);
+  run.placements.Add(new Placement(sword.uid,0));
   var enemy=GameCatalog.Enemies.First();
   var battle=BattleSystem.Begin(run,enemy);
   run.energy=0;
+  run.discard.AddRange(run.hand);
   run.hand.Clear();
   BattleSystem.EndTurnFx(run,battle);
   Assert.That(run.energy,Is.EqualTo(PackspireContent.Data.balance.baseEnergy));
@@ -97,11 +153,81 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
+ public void BattleCardLifecycle_RetainsAndRemovesEtherealCards(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=GameCatalog.Enemies.First();
+  var battle=BattleSystem.Begin(run,enemy);
+  run.hand.Clear();
+  run.discard.Clear();
+  run.hand.Add(new CardInstance{id="retain",name="Retain",retain=true});
+  run.hand.Add(new CardInstance{id="ethereal",name="Ethereal",ethereal=true});
+  run.hand.Add(new CardInstance{id="normal",name="Normal"});
+  BattleSystem.EndTurnFx(run,battle);
+  Assert.That(run.hand.Any(card=>card.id=="retain"),Is.True);
+  Assert.That(run.hand.Any(card=>card.id=="ethereal"),Is.False);
+  Assert.That(run.discard.Concat(run.hand).Any(card=>card.id=="normal"),Is.True);
+  Assert.That(run.discard.Any(card=>card.id=="ethereal"),Is.False);
+ }
+
+ [Test]
+ public void BattleCardLifecycle_RemoveExpeditionDoesNotReturnToTheDeck(){
+  var run=new RunState{role="warrior",backpack="standard",energy=3};
+  var sword=new ItemInstance("sword");
+  run.inventory.Add(sword);
+  run.placements.Add(new Placement(sword.uid,0));
+  var emitted=BackpackSystem.BuildDeck(run).First(card=>card.sourceItemUid==sword.uid);
+  emitted.afterUse=BattleCardAfterUse.RemoveExpedition;
+  run.hand.Add(emitted);
+  var enemy=GameCatalog.Enemies.First();
+  var battle=new BattleState{enemy=enemy,enemyHp=enemy.hp,enemyMaxHp=enemy.hp,enemyStatuses=new()};
+  Assert.That(BattleSystem.PlayCard(run,battle,0).ok,Is.True);
+  Assert.That(run.removedBattleCardSlots,Does.Contain(emitted.slotKey));
+  Assert.That(BackpackSystem.BuildDeck(run).Any(card=>card.slotKey==emitted.slotKey),Is.False);
+ }
+
+ [Test]
+ public void EquipmentCardFaces_RemainPairedWhenTheDeckIsBuilt(){
+  var run=new RunState{role="warrior",backpack="standard"};
+  var sword=new ItemInstance("sword");
+  run.inventory.Add(sword);
+  run.placements.Add(new Placement(sword.uid,0));
+  var built=BackpackSystem.Build(run);
+  var swordCards=built.candidates.Where(card=>card.sourceItemUid==sword.uid).ToArray();
+  Assert.That(swordCards,Has.Length.EqualTo(2));
+  Assert.That(swordCards.All(card=>card.id=="slash"),Is.True);
+  Assert.That(swordCards.All(card=>card.explorationCardId=="gb_seal"),Is.True);
+ }
+
+ [Test]
  public void GridBoard_UsesAuthoredBalance(){
   var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId);
   Assert.That(board.energyMax,Is.EqualTo(PackspireContent.Data.balance.baseEnergy));
   Assert.That(board.doomMax,Is.EqualTo(PackspireContent.Data.balance.gridDoomMax));
   Assert.That(board.cells,Is.Not.Empty);
+ }
+
+ [Test]
+ public void GridBoard_InstallationPersistsAndAdvancesItsAuthoredStage(){
+  var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId,41821);
+  board.enemies.Clear();
+  var target=board.cells.First(cell=>cell.terrain=="floor"&&cell.place=="empty");
+  var card=new CardInstance{
+   id="gb_lamp",name="Lamp",cost=1,slotKey="test-installation",sourceItemUid="item-test"
+  };
+  board.hand.Clear();
+  board.hand.Add(card);
+  GridBoardSystem.SelectCard(board,card.slotKey);
+  Assert.That(GridBoardSystem.TryPlace(board,target.x,target.y,out var message),Is.True,message);
+  var installation=GridBoardSystem.InstallationAt(board,target.x,target.y);
+  Assert.That(installation,Is.Not.Null);
+  Assert.That(installation.cardId,Is.EqualTo("gb_lamp"));
+  Assert.That(GridBoardSystem.InstallationStage(board,target)?.id,Is.EqualTo("spark"));
+  for(int i=0;i<3;i++){
+   board.explorationTurnPending=true;
+   GridBoardSystem.ResolveExplorationTurn(board);
+  }
+  Assert.That(installation.progress,Is.EqualTo(3));
+  Assert.That(GridBoardSystem.InstallationStage(board,target)?.id,Is.EqualTo("beacon"));
  }
 
  [Test]
@@ -155,6 +281,115 @@ public sealed class PackspireEditModeTests {
   Assert.That(spawned.sightRange,Is.EqualTo(authored.boardSightRange));
   Assert.That(spawned.moveSteps,Is.EqualTo(authored.boardMoveSteps));
   Assert.That(spawned.patrolRadius,Is.EqualTo(authored.boardPatrolRadius));
+ }
+
+ [Test]
+ public void CompletedDungeon_UsesAuthoredAreasAndEndsAtItsBoss(){
+  var dungeon=PackspireContent.Data.dungeons.Single(value=>value.id=="old_spire");
+  Assert.That(dungeon.areas,Has.Length.EqualTo(4));
+  Assert.That(dungeon.rewardPoolId,Is.EqualTo("old_spire_trials"));
+
+  var board=GridBoardSystem.Create(dungeon.id,19277);
+  Assert.That(board.areaCount,Is.EqualTo(dungeon.areas.Length));
+  Assert.That(board.size,Is.EqualTo(dungeon.areas[0].size));
+  Assert.That(board.enemies.Select(enemy=>enemy.contentId),
+   Is.SubsetOf(dungeon.areas[0].enemyIds));
+  Assert.That(board.cells.Where(cell=>cell.place=="event").Select(cell=>cell.contentId),
+   Is.SubsetOf(dungeon.areas[0].eventIds));
+
+  GridBoardSystem.LoadArea(board,dungeon.areas.Length-1);
+  Assert.That(board.size,Is.EqualTo(dungeon.areas[^1].size));
+  Assert.That(board.cells.Any(cell=>cell.place=="return"),Is.False,
+   "The completed slice must require its final boss instead of exposing an early return gate");
+  Assert.That(board.enemies.Count(enemy=>enemy.contentId=="boss"),Is.EqualTo(1));
+  Assert.That(GameCatalog.Enemies.Single(enemy=>enemy.id=="boss").tier,Is.EqualTo(3),
+   "Tier 3 is what routes victory through the expedition completion flow");
+ }
+
+ [Test]
+ public void CompletedDungeon_RewardPoolCoversEveryEquipmentDirection(){
+  var dungeon=PackspireContent.Data.dungeons.Single(value=>value.id=="old_spire");
+  var pool=PackspireContent.Data.rewardPools.Single(value=>value.id==dungeon.rewardPoolId);
+  var items=pool.itemIds.Select(id=>GameCatalog.Items[id]).ToArray();
+  Assert.That(items.Any(item=>item.type==ItemType.Weapon),Is.True);
+  Assert.That(items.Any(item=>item.type==ItemType.Armor),Is.True);
+  Assert.That(items.Any(item=>item.type==ItemType.Rune),Is.True);
+  Assert.That(items.Any(item=>item.type==ItemType.Supply),Is.True);
+  Assert.That(items.Any(item=>item.rarity==ItemRarity.Cursed),Is.True);
+ }
+
+ [Test]
+ public void CompletedDungeon_UsesConnectedAuthoredSilhouettes(){
+  var dungeon=PackspireContent.Data.dungeons.Single(value=>value.id=="old_spire");
+  Assert.That(dungeon.areas.Select(area=>string.Join("/",area.layoutRows)).Distinct().Count(),
+   Is.EqualTo(dungeon.areas.Length),"Every completed area should have its own silhouette");
+  foreach(var area in dungeon.areas){
+   Assert.That(area.layoutRows,Has.Length.EqualTo(area.size));
+   Assert.That(area.layoutRows.All(row=>row.Length==area.size),Is.True);
+   Assert.That(area.layoutRows.Sum(row=>row.Count(cell=>cell=='S')),Is.EqualTo(1));
+   Assert.That(area.layoutRows.Any(row=>row.Contains('X')),Is.True,
+    $"{area.id} should not render as a full square");
+  }
+
+  var board=GridBoardSystem.Create(dungeon.id,72841);
+  for(int areaIndex=0;areaIndex<dungeon.areas.Length;areaIndex++){
+   GridBoardSystem.LoadArea(board,areaIndex);
+   Assert.That(GridBoardSystem.HasAuthoredLayout(board),Is.True);
+   Assert.That(GridBoardSystem.IsAreaTraversable(board),Is.True,
+    $"{dungeon.areas[areaIndex].id} must remain one connected playable fragment");
+  }
+ }
+
+ [Test]
+ public void GridBoard_HostileIntelKeepsOnlyTheLastObservedPosition(){
+  var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId,48219);
+  board.enemies.Clear();
+  var hiddenCells=board.cells.Where(cell=>cell.terrain=="floor"&&
+   System.Math.Max(System.Math.Abs(cell.x-board.piece.x),
+    System.Math.Abs(cell.y-board.piece.y))>=3).Take(2).ToArray();
+  Assert.That(hiddenCells,Has.Length.EqualTo(2));
+  var enemy=new GridEnemyState{
+   uid="hidden-signature",contentId="dragon",
+   x=hiddenCells[0].x,y=hiddenCells[0].y,
+   previousX=hiddenCells[0].x,previousY=hiddenCells[0].y
+  };
+  board.enemies.Add(enemy);
+
+  Assert.That(GridBoardSystem.LastKnownEnemyPosition(enemy),
+   Is.EqualTo(new UnityEngine.Vector2Int(hiddenCells[0].x,hiddenCells[0].y)));
+  Assert.That(enemy.identified,Is.False);
+  enemy.x=hiddenCells[1].x;
+  enemy.y=hiddenCells[1].y;
+  Assert.That(GridBoardSystem.LastKnownEnemyPosition(enemy),
+   Is.EqualTo(new UnityEngine.Vector2Int(hiddenCells[0].x,hiddenCells[0].y)),
+   "Hidden movement must not turn the signature into perfect radar");
+
+  GridBoardSystem.RevealAround(board,enemy.Position,0);
+  Assert.That(enemy.identified,Is.True);
+  Assert.That(GridBoardSystem.LastKnownEnemyPosition(enemy),Is.EqualTo(enemy.Position));
+ }
+
+ [Test]
+ public void GridBoard_CommittedRouteAlertsNearbyHostiles(){
+  var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId,62114);
+  board.enemies.Clear();
+  GridBoardSystem.BeginPathPhase(board);
+  var direction=new[]{
+   UnityEngine.Vector2Int.up,UnityEngine.Vector2Int.right,
+   UnityEngine.Vector2Int.down,UnityEngine.Vector2Int.left
+  }.First(value=>GridBoardSystem.CanSlide(board,value));
+  Assert.That(GridBoardSystem.TrySlide(board,direction,out _),Is.True);
+  var routeCell=board.path[1];
+  var hostileCell=board.cells.First(cell=>cell.terrain=="floor"&&
+   System.Math.Abs(cell.x-routeCell.x)+System.Math.Abs(cell.y-routeCell.y)<=1&&
+   !board.path.Contains(new UnityEngine.Vector2Int(cell.x,cell.y)));
+  var enemy=new GridEnemyState{
+   uid="route-listener",contentId="sentinel",x=hostileCell.x,y=hostileCell.y
+  };
+  board.enemies.Add(enemy);
+
+  Assert.That(GridBoardSystem.AlertEnemiesAlongRoute(board,1),Is.EqualTo(1));
+  Assert.That(enemy.alerted,Is.True);
  }
 
  [Test]

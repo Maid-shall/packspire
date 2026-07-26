@@ -152,10 +152,12 @@ public sealed partial class PackspireUiFoundation {
   gridBoardViewport.RegisterCallback<GeometryChangedEvent>(OnGridViewportGeometryChanged);
 
   gridBoardGrid=Container("ps-gboard-grid");
-  if(gridBoardBoardSurface!=null){
+  if(gridBoardBoardSurface!=null&&!GridBoardSystem.HasAuthoredLayout(run)){
    gridBoardGrid.style.backgroundImage=new StyleBackground(gridBoardBoardSurface);
    PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardGrid,ScaleMode.StretchToFill);
   }
+  gridBoardGrid.EnableInClassList("ps-gboard-irregular",
+   GridBoardSystem.HasAuthoredLayout(run));
   gridBoardGrid.style.position=Position.Absolute;
   gridBoardGrid.style.flexGrow=0;
   gridBoardGrid.style.flexShrink=0;

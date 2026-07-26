@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82dd8ecfa03417a9a9b7a0c38845b61, type: 3}
   m_Name: PackspireContentDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireContentDatabase
-  schemaVersion: 2
+  schemaVersion: 6
   cardContent: {fileID: 11400000, guid: f062789c0e9a44b4194c7c839c050354, type: 2}
   itemContent: {fileID: 11400000, guid: a8fb3383f38a3e34ca26eed830c4f937, type: 2}
   actorContent: {fileID: 11400000, guid: 11f2b85da1fb2dd4fb5f8457e48da124, type: 2}

@@ -8,6 +8,23 @@ public enum EffectTarget { Self, Enemy, Player }
 public enum ConsumableEffectType { Heal, Block, Damage, Energy }
 public enum CharacterSkillKind { None, Damage, Block, BlockAndDraw, Heal }
 public enum EventEffectType { None, Hp, Gold, RepairAll }
+public enum ItemRarity { Common, Uncommon, Rare, Legendary, Cursed }
+public enum BattleCardAfterUse { Discard, ExhaustBattle, RemoveExpedition }
+public enum ExplorationCardKind { Support, Use, Installation, Drawback }
+public enum ExplorationTargetKind { None, Cell, Route, Installation, Enemy }
+public enum ExplorationConsumeRule { Discard, ExhaustArea, RemoveExpedition, Persistent }
+public enum ExplorationGrowthTrigger { None, TurnsElapsed, RoutePasses, Activations, AdjacentElement, Custom }
+public enum ReactionScope { Mastery, Loadout, Expedition, Area, Moment, Memory }
+[Flags] public enum ReactionScopeMask {
+ None=0, Mastery=1<<0, Loadout=1<<1, Expedition=1<<2,
+ Area=1<<3, Moment=1<<4, Memory=1<<5,
+ Permanent=Mastery|Memory, Active=Loadout|Expedition|Area|Moment,
+ All=Mastery|Loadout|Expedition|Area|Moment|Memory
+}
+public enum ReactionStackRule { Add, Highest, UniqueSource }
+public enum ExplorationEffectType {
+ None,Draw,Energy,Sight,Turns,Reveal,Growth,Doom,RemoveInstallation,MoveEnemy,Custom
+}
 
 [Serializable] public class CellContent {
  public int x,y,value=1;
@@ -20,17 +37,78 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
  public int amount=1,duration;
 }
 
+[Serializable] public class GrantedCardContent {
+ public string battleCardId,explorationCardId;
+ [Min(1)] public int count=1;
+}
+
+[Serializable] public class ReactionValueContent {
+ public string id,name,description,category;
+}
+
+[Serializable] public class ReactionContributionContent {
+ public string reactionId;
+ public int amount=1;
+ public ReactionScope scope=ReactionScope.Mastery;
+ public ReactionStackRule stackRule=ReactionStackRule.Add;
+ public bool perLevel;
+}
+
+[Serializable] public class ReactionRequirementContent {
+ public string reactionId;
+ [Min(1)] public int minimum=1;
+ public ReactionScopeMask acceptedScopes=ReactionScopeMask.Permanent;
+ [Min(0)] public int minimumSources;
+}
+
+[Serializable] public class RoleUnlockRecipeContent {
+ public string id,hint;
+ public bool visibleBeforeUnlock=true;
+ public ReactionRequirementContent[] requirements=Array.Empty<ReactionRequirementContent>();
+}
+
 [Serializable] public class ItemContent {
  public string id,name,description,linkRule,explorationCardId;
  public ItemType type;
+ public ItemRarity rarity;
+ [Min(1)] public int acquisitionTier=1;
+ [Min(0)] public int baseDurability=6;
+ public string[] resonanceTags=Array.Empty<string>();
+ public ReactionContributionContent[] reactionContributions=Array.Empty<ReactionContributionContent>();
+ public GrantedCardContent[] grantedCards=Array.Empty<GrantedCardContent>();
+ // Legacy fields remain readable while existing authored assets migrate.
  public string[] cardIds=Array.Empty<string>();
  public CellContent[] cells=Array.Empty<CellContent>();
  public Sprite artwork;
 }
 
+[Serializable] public class ExplorationEffectContent {
+ public ExplorationEffectType type;
+ public int amount=1,duration;
+ public string parameter;
+}
+
+[Serializable] public class ExplorationStageContent {
+ public string id,name,text;
+ [Min(0)] public int minimumProgress;
+ public ExplorationEffectContent[] passiveEffects=Array.Empty<ExplorationEffectContent>();
+ public ExplorationEffectContent[] onEnterEffects=Array.Empty<ExplorationEffectContent>();
+ public ExplorationEffectContent[] onTurnEffects=Array.Empty<ExplorationEffectContent>();
+ public ExplorationEffectContent[] onMatureEffects=Array.Empty<ExplorationEffectContent>();
+ public Sprite artwork,boardArtwork;
+}
+
 [Serializable] public class ExplorationCardContent {
  public string id,name,text,place;
  public int cost=1;
+ public ExplorationCardKind kind=ExplorationCardKind.Installation;
+ public ExplorationTargetKind target=ExplorationTargetKind.Cell;
+ public ExplorationConsumeRule consumeRule=ExplorationConsumeRule.Discard;
+ public ExplorationGrowthTrigger growthTrigger=ExplorationGrowthTrigger.TurnsElapsed;
+ [Min(0)] public int duration;
+ public ExplorationEffectContent[] effects=Array.Empty<ExplorationEffectContent>();
+ public ExplorationStageContent[] stages=Array.Empty<ExplorationStageContent>();
+ public string[] tags=Array.Empty<string>();
  public Sprite artwork;
 }
 
@@ -39,6 +117,8 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
  public CardType type;
  public int cost,damage,block,heal,buff,energy,selfDamage;
  public bool exhaust;
+ public bool innate,retain,ethereal,unplayable;
+ public BattleCardAfterUse afterUse;
  public EffectContent[] effects=Array.Empty<EffectContent>();
  public Sprite artwork;
 }
@@ -46,6 +126,9 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
 [Serializable] public class RoleContent {
  public string id,name,kind,description,family,milestoneText,maximumMilestoneText;
  public string[] startingCardIds=Array.Empty<string>();
+ public ReactionContributionContent[] reactionContributions=Array.Empty<ReactionContributionContent>();
+ public ReactionContributionContent[] currentRoleContributions=Array.Empty<ReactionContributionContent>();
+ public RoleUnlockRecipeContent[] unlockRecipes=Array.Empty<RoleUnlockRecipeContent>();
  public int maxLevel=10;
  public Sprite artwork;
 }
@@ -91,7 +174,31 @@ public enum EnemyBoardBehavior {
  public string id,name,description;
  public int battles,damage;
  public float hpScale=1f,goldScale=1f;
+ public string rewardPoolId="standard";
+ public DungeonAreaContent[] areas=Array.Empty<DungeonAreaContent>();
  public Sprite artwork;
+}
+
+[Serializable] public class DungeonAreaContent {
+ public string id,name,objective;
+ [Range(5,12)] public int size=7;
+ /// <summary>
+ /// Optional authored square mask. '.' is floor, 'S' is the entrance,
+ /// '#' is blocking terrain and 'X' is outside the playable fragment.
+ /// Keeping the mask square preserves the board coordinate model while the
+ /// visible dungeon itself can have any connected silhouette.
+ /// </summary>
+ public string[] layoutRows=Array.Empty<string>();
+ [Min(0)] public int enemyCount=1;
+ public string[] enemyIds=Array.Empty<string>();
+ [Min(0)] public int eventCount=1;
+ public string[] eventIds=Array.Empty<string>();
+ [Min(0)] public int lampCount=1;
+ /// <summary>
+ /// Tier-3 enemy that replaces the ordinary return gate. Defeating it completes
+ /// the expedition through the normal boss victory flow.
+ /// </summary>
+ public string bossEnemyId="";
 }
 
 [Serializable] public class BackpackContent {
@@ -148,6 +255,7 @@ public enum EnemyBoardBehavior {
 [Serializable] public class EventChoiceContent {
  public string id,label,resultText;
  public EventEffectContent[] effects=Array.Empty<EventEffectContent>();
+ public ReactionContributionContent[] reactionContributions=Array.Empty<ReactionContributionContent>();
 }
 
 [Serializable] public class EventEffectContent {
@@ -241,7 +349,7 @@ public enum EnemyBoardBehavior {
 
 [CreateAssetMenu(fileName="PackspireContentDatabase",menuName="PACKSPIRE/Content Database")]
 public sealed class PackspireContentDatabase : ScriptableObject {
- public const int SupportedSchemaVersion=2;
+ public const int SupportedSchemaVersion=6;
  public int schemaVersion=SupportedSchemaVersion;
  public PackspireCardContentSet cardContent;
  public PackspireItemContentSet itemContent;
@@ -270,6 +378,7 @@ public sealed class PackspireContentDatabase : ScriptableObject {
  public ResonanceContent[] resonances=>itemContent!=null?itemContent.resonances:Array.Empty<ResonanceContent>();
  public StabilityContent[] stabilities=>itemContent!=null?itemContent.stabilities:Array.Empty<StabilityContent>();
  public ColorTraitContent[] colorTraits=>itemContent!=null?itemContent.colorTraits:Array.Empty<ColorTraitContent>();
+ public ReactionValueContent[] reactionValues=>actorContent!=null?actorContent.reactionValues:Array.Empty<ReactionValueContent>();
 }
 
 public sealed class ContentValidationReport {
@@ -342,6 +451,7 @@ public static class PackspireContent {
   ValidateIds(value.resonances.Select(x=>x.id),"resonance",result);
   ValidateIds(value.stabilities.Select(x=>x.id),"stability",result);
   ValidateIds(value.colorTraits.Select(x=>x.id),"color trait",result);
+  ValidateIds(value.reactionValues.Select(x=>x.id),"reaction value",result);
 
   if(value.board.Length!=24)result.errors.Add($"Base storage board has {value.board.Length} cells; expected 24.");
   var itemIds=value.items.Select(x=>x.id).ToHashSet();
@@ -349,25 +459,82 @@ public static class PackspireContent {
   var explorationCardIds=value.explorationCards.Select(x=>x.id).ToHashSet();
   var statusIds=value.statuses.Select(x=>x.id).ToHashSet();
   var eventIds=value.events.Select(x=>x.id).ToHashSet();
+  var enemyIds=value.enemies.Select(x=>x.id).ToHashSet();
+  var rewardPoolIds=value.rewardPools.Select(x=>x.id).ToHashSet();
+  var reactionIds=value.reactionValues.Select(x=>x.id).ToHashSet();
 
   foreach(var item in value.items){
+   ValidateReactions(item.reactionContributions,$"item '{item.id}'",reactionIds,result);
    if(item.cells==null||item.cells.Length==0)result.errors.Add($"Item '{item.id}' has no occupied cells.");
-   foreach(var cardId in item.cardIds??Array.Empty<string>())
-    if(!cardIds.Contains(cardId))result.errors.Add($"Item '{item.id}' references missing card '{cardId}'.");
-   if(!explorationCardIds.Contains(item.explorationCardId))
-    result.errors.Add($"Item '{item.id}' references missing exploration card '{item.explorationCardId}'.");
+   if(item.acquisitionTier<1)result.errors.Add($"Item '{item.id}' has an invalid acquisition tier.");
+   if(item.baseDurability<0)result.errors.Add($"Item '{item.id}' has negative base durability.");
+   var grants=item.grantedCards??Array.Empty<GrantedCardContent>();
+   if(grants.Length>0){
+    foreach(var grant in grants){
+     if(grant==null){result.errors.Add($"Item '{item.id}' has a null card face pair.");continue;}
+     if(grant.count<1)result.errors.Add($"Item '{item.id}' has a card face pair with invalid count.");
+     if(!cardIds.Contains(grant.battleCardId))
+      result.errors.Add($"Item '{item.id}' references missing battle card '{grant.battleCardId}'.");
+     if(!explorationCardIds.Contains(grant.explorationCardId))
+      result.errors.Add($"Item '{item.id}' references missing exploration card '{grant.explorationCardId}'.");
+    }
+   } else {
+    result.warnings.Add($"Item '{item.id}' still uses legacy cardIds/explorationCardId fields.");
+    foreach(var cardId in item.cardIds??Array.Empty<string>())
+     if(!cardIds.Contains(cardId))result.errors.Add($"Item '{item.id}' references missing card '{cardId}'.");
+    if(!explorationCardIds.Contains(item.explorationCardId))
+     result.errors.Add($"Item '{item.id}' references missing exploration card '{item.explorationCardId}'.");
+   }
   }
   foreach(var exploration in value.explorationCards){
-   if(string.IsNullOrWhiteSpace(exploration.place))
+   if(exploration.kind==ExplorationCardKind.Installation&&string.IsNullOrWhiteSpace(exploration.place))
     result.errors.Add($"Exploration card '{exploration.id}' has no placement type.");
    if(exploration.cost<0)result.errors.Add($"Exploration card '{exploration.id}' has a negative cost.");
+   if(exploration.duration<0)result.errors.Add($"Exploration card '{exploration.id}' has a negative duration.");
+   var stages=exploration.stages??Array.Empty<ExplorationStageContent>();
+   if(stages.Length>0){
+    if(stages.Any(stage=>stage==null))
+     result.errors.Add($"Exploration card '{exploration.id}' has a null stage.");
+    var validStages=stages.Where(stage=>stage!=null).ToArray();
+    ValidateIds(validStages.Select(stage=>stage.id),$"stage in exploration card '{exploration.id}'",result);
+    if(validStages.Any(stage=>stage.minimumProgress<0))
+     result.errors.Add($"Exploration card '{exploration.id}' has a stage with negative progress.");
+    if(validStages.GroupBy(stage=>stage.minimumProgress).Any(group=>group.Count()>1))
+     result.errors.Add($"Exploration card '{exploration.id}' has duplicate stage progress thresholds.");
+    if(validStages.Length>0&&validStages.Min(stage=>stage.minimumProgress)!=0)
+     result.errors.Add($"Exploration card '{exploration.id}' must begin with a stage at progress 0.");
+   }
   }
   foreach(var consumable in value.consumables)
    if(consumable.amount<0)result.errors.Add($"Consumable '{consumable.id}' has a negative amount.");
-  foreach(var card in value.cards)ValidateEffects(card.effects,$"card '{card.id}'",statusIds,result);
-  foreach(var role in value.roles)
+  foreach(var card in value.cards){
+   ValidateEffects(card.effects,$"card '{card.id}'",statusIds,result);
+   if(card.exhaust&&card.afterUse==BattleCardAfterUse.RemoveExpedition)
+    result.warnings.Add($"Card '{card.id}' uses legacy exhaust together with RemoveExpedition.");
+  }
+  foreach(var role in value.roles){
+   ValidateReactions(role.reactionContributions,$"role '{role.id}'",reactionIds,result);
+   ValidateReactions(role.currentRoleContributions,$"current role '{role.id}'",reactionIds,result);
    foreach(var cardId in role.startingCardIds??Array.Empty<string>())
     if(!cardIds.Contains(cardId))result.errors.Add($"Role '{role.id}' references missing starting card '{cardId}'.");
+   var recipeIds=new HashSet<string>();
+   foreach(var recipe in role.unlockRecipes??Array.Empty<RoleUnlockRecipeContent>()){
+    if(recipe==null){result.errors.Add($"Role '{role.id}' has a null unlock recipe.");continue;}
+    if(string.IsNullOrWhiteSpace(recipe.id)||!recipeIds.Add(recipe.id))
+     result.errors.Add($"Role '{role.id}' has an empty or duplicate unlock recipe id '{recipe.id}'.");
+    if(recipe.requirements==null||recipe.requirements.Length==0)
+     result.errors.Add($"Role '{role.id}' unlock recipe '{recipe.id}' has no requirements.");
+    foreach(var requirement in recipe.requirements??Array.Empty<ReactionRequirementContent>()){
+     if(requirement==null){result.errors.Add($"Role '{role.id}' recipe '{recipe.id}' has a null requirement.");continue;}
+     if(!reactionIds.Contains(requirement.reactionId))
+      result.errors.Add($"Role '{role.id}' recipe '{recipe.id}' references missing reaction '{requirement.reactionId}'.");
+     if(requirement.minimum<1)
+      result.errors.Add($"Role '{role.id}' recipe '{recipe.id}' has a non-positive requirement.");
+     if(requirement.acceptedScopes==ReactionScopeMask.None)
+      result.errors.Add($"Role '{role.id}' recipe '{recipe.id}' accepts no reaction scopes.");
+    }
+   }
+  }
   foreach(var character in value.characters){
    if(character.activeSkillKind==CharacterSkillKind.None)
     result.errors.Add($"Character '{character.id}' has no active skill kind.");
@@ -395,6 +562,40 @@ public static class PackspireContent {
      result.errors.Add($"Enemy '{enemy.id}' phase '{phase.name}' references an invalid move.");
    }
   }
+  foreach(var dungeon in value.dungeons){
+   if(!string.IsNullOrEmpty(dungeon.rewardPoolId)&&!rewardPoolIds.Contains(dungeon.rewardPoolId))
+    result.errors.Add($"Dungeon '{dungeon.id}' references missing reward pool '{dungeon.rewardPoolId}'.");
+   var areaIds=new HashSet<string>();
+   foreach(var area in dungeon.areas??Array.Empty<DungeonAreaContent>()){
+    if(area==null){result.errors.Add($"Dungeon '{dungeon.id}' has a null area.");continue;}
+    if(string.IsNullOrWhiteSpace(area.id)||!areaIds.Add(area.id))
+     result.errors.Add($"Dungeon '{dungeon.id}' has an empty or duplicate area id '{area.id}'.");
+    if(area.size<5||area.size>12)
+     result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' has invalid size {area.size}.");
+    if(area.layoutRows!=null&&area.layoutRows.Length>0){
+     if(area.layoutRows.Length!=area.size||area.layoutRows.Any(row=>row==null||row.Length!=area.size))
+      result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' layout must be {area.size} rows of {area.size} cells.");
+     else{
+      const string allowedLayoutCells=".S#X";
+      if(area.layoutRows.SelectMany(row=>row).Any(cell=>!allowedLayoutCells.Contains(cell)))
+       result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' layout contains an unsupported cell.");
+      if(area.layoutRows.Sum(row=>row.Count(cell=>cell=='S'))!=1)
+       result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' layout must contain exactly one entrance 'S'.");
+     }
+    }
+    foreach(var enemyId in area.enemyIds??Array.Empty<string>())
+     if(!enemyIds.Contains(enemyId))
+      result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' references missing enemy '{enemyId}'.");
+    foreach(var eventId in area.eventIds??Array.Empty<string>())
+     if(!eventIds.Contains(eventId))
+      result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' references missing event '{eventId}'.");
+    if(!string.IsNullOrEmpty(area.bossEnemyId)){
+     var boss=value.enemies.FirstOrDefault(enemy=>enemy.id==area.bossEnemyId);
+     if(boss==null)result.errors.Add($"Dungeon '{dungeon.id}' area '{area.id}' references missing boss '{area.bossEnemyId}'.");
+     else if(boss.tier<3)result.warnings.Add($"Dungeon '{dungeon.id}' area '{area.id}' boss '{area.bossEnemyId}' is below tier 3 and will not finish the run.");
+    }
+   }
+  }
   foreach(var core in value.storageCores)
    if(core.board==null||core.board.Length!=core.width*core.height)
     result.errors.Add($"Storage core '{core.id}' board size does not match {core.width}x{core.height}.");
@@ -418,7 +619,11 @@ public static class PackspireContent {
   foreach(var eventContent in value.events){
    if(eventContent.choices==null||eventContent.choices.Length==0)
     result.errors.Add($"Event '{eventContent.id}' has no choices.");
-   else ValidateIds(eventContent.choices.Select(x=>x.id),$"event choice in '{eventContent.id}'",result);
+   else {
+    ValidateIds(eventContent.choices.Select(x=>x.id),$"event choice in '{eventContent.id}'",result);
+    foreach(var choice in eventContent.choices)
+     ValidateReactions(choice.reactionContributions,$"event '{eventContent.id}' choice '{choice.id}'",reactionIds,result);
+   }
   }
   foreach(var merchant in value.merchants)
    if(string.IsNullOrWhiteSpace(merchant.contextId))
@@ -478,6 +683,7 @@ public static class PackspireContent {
    value.itemContent.colorTraits??=Array.Empty<ColorTraitContent>();
   }
   if(value.actorContent!=null){
+   value.actorContent.reactionValues??=Array.Empty<ReactionValueContent>();
    value.actorContent.roles??=Array.Empty<RoleContent>();
    value.actorContent.enemies??=Array.Empty<EnemyContent>();
    value.actorContent.factions??=Array.Empty<FactionContent>();
@@ -485,6 +691,16 @@ public static class PackspireContent {
   }
   if(value.worldContent!=null){
    value.worldContent.dungeons??=Array.Empty<DungeonContent>();
+   foreach(var dungeon in value.worldContent.dungeons){
+    if(dungeon==null)continue;
+    dungeon.areas??=Array.Empty<DungeonAreaContent>();
+    foreach(var area in dungeon.areas){
+     if(area==null)continue;
+     area.layoutRows??=Array.Empty<string>();
+     area.enemyIds??=Array.Empty<string>();
+     area.eventIds??=Array.Empty<string>();
+    }
+   }
    value.worldContent.facilities??=Array.Empty<FacilityContent>();
    value.worldContent.events??=Array.Empty<EventContent>();
    value.worldContent.merchants??=Array.Empty<MerchantContent>();
@@ -496,6 +712,16 @@ public static class PackspireContent {
  static void ValidateEffects(IEnumerable<EffectContent> effects,string owner,HashSet<string> statusIds,ContentValidationReport result){
   foreach(var effect in effects??Enumerable.Empty<EffectContent>())
    if(!statusIds.Contains(effect.statusId))result.errors.Add($"{owner} references missing status '{effect.statusId}'.");
+ }
+
+ static void ValidateReactions(IEnumerable<ReactionContributionContent> contributions,string owner,
+  HashSet<string> reactionIds,ContentValidationReport result){
+  foreach(var contribution in contributions??Enumerable.Empty<ReactionContributionContent>()){
+   if(contribution==null){result.errors.Add($"{owner} has a null reaction contribution.");continue;}
+   if(!reactionIds.Contains(contribution.reactionId))
+    result.errors.Add($"{owner} references missing reaction '{contribution.reactionId}'.");
+   if(contribution.amount==0)result.warnings.Add($"{owner} contributes zero '{contribution.reactionId}'.");
+  }
  }
 
  static void ValidateOptionalItem(string id,string owner,HashSet<string> itemIds,ContentValidationReport result){

@@ -2077,6 +2077,66 @@
     border-top-color: rgb(255, 151, 224);
     border-bottom-color: rgb(255, 151, 224);
 }
+
+/* Exploration information model:
+   topology is public, while contents need sight. Authored outside-mask cells
+   remain layout spacers but do not draw an artificial square abyss. */
+.ps-gboard-grid.ps-gboard-irregular {
+    background-image: none;
+    background-color: rgba(8, 8, 24, 0.10);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-gboard-cell.ps-gboard-void,
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-void {
+    visibility: hidden;
+    opacity: 0;
+}
+.ps-gboard-cell.ps-gboard-unseen {
+    visibility: visible;
+    opacity: 0.70;
+    background-color: rgba(25, 19, 61, 0.78);
+    border-left-color: rgba(142, 109, 196, 0.44);
+    border-right-color: rgba(54, 37, 94, 0.70);
+    border-top-color: rgba(173, 133, 218, 0.38);
+    border-bottom-color: rgba(34, 22, 70, 0.78);
+}
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-blocked {
+    background-color: rgba(10, 8, 27, 0.88);
+    border-left-color: rgba(78, 59, 108, 0.42);
+    border-right-color: rgba(38, 28, 59, 0.64);
+    border-top-color: rgba(78, 59, 108, 0.38);
+    border-bottom-color: rgba(27, 19, 48, 0.72);
+}
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-face {
+    display: flex;
+    background-color: rgba(91, 64, 136, 0.20);
+}
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-mark,
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-sigil {
+    display: flex;
+}
+.ps-gboard-cell.ps-gboard-signature .ps-gboard-cell-face {
+    background-color: rgba(120, 52, 136, 0.42);
+    border-left-color: rgba(255, 132, 213, 0.46);
+    border-top-color: rgba(104, 235, 255, 0.34);
+}
+.ps-gboard-cell.ps-gboard-signature .ps-gboard-cell-mark {
+    color: rgb(255, 198, 230);
+}
+.ps-gboard-enemy-actor.ps-gboard-enemy-signature {
+    opacity: 0.48;
+    background-color: rgba(63, 23, 77, 0.72);
+    border-left-color: rgba(255, 113, 198, 0.60);
+    border-right-color: rgba(102, 227, 255, 0.42);
+    border-top-color: rgba(255, 203, 122, 0.42);
+    border-bottom-color: rgba(102, 227, 255, 0.42);
+}
+.ps-gboard-enemy-actor.ps-gboard-enemy-signature .ps-gboard-actor-glyph {
+    color: rgba(255, 202, 232, 0.78);
+}
 .ps-gboard-cell.ps-gboard-calamity {
     background-color: rgba(63, 10, 45, 0.92);
     border-left-color: rgb(255, 91, 166);

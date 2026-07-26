@@ -33,6 +33,15 @@ public sealed partial class PackspireUiFoundation {
     var cellFace=Container("ps-gboard-cell-face");
     cellFace.pickingMode=PickingMode.Ignore;
     cell.Add(cellFace);
+    var installationArt=new Image{pickingMode=PickingMode.Ignore,scaleMode=ScaleMode.ScaleToFit};
+    installationArt.name="installation-art";
+    installationArt.style.position=Position.Absolute;
+    installationArt.style.left=Length.Percent(12);
+    installationArt.style.top=Length.Percent(12);
+    installationArt.style.width=Length.Percent(76);
+    installationArt.style.height=Length.Percent(76);
+    installationArt.style.display=DisplayStyle.None;
+    cell.Add(installationArt);
     var cellSigil=new Label(""){pickingMode=PickingMode.Ignore};
     cellSigil.AddToClassList("ps-gboard-cell-sigil");
     cellSigil.name="sigil";
@@ -73,6 +82,87 @@ void OnGridCellClicked(int x,int y){
  }
 
  void ShowGridCellDetail(int x,int y){
+  var run=game.UiGridBoard;
+  if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null||
+   !string.IsNullOrEmpty(run.selectedCardUid))return;
+  var cell=GridBoardSystem.Cell(run,x,y);
+  if(cell==null||cell.terrain=="void"){HideGridCellDetail();return;}
+  bool inspected=GridBoardSystem.IsDiscovered(run,cell);
+  bool visible=GridBoardSystem.IsCurrentlyVisible(run,cell);
+  var liveEnemy=visible?GridBoardSystem.EnemyAt(run,x,y):null;
+  var signatures=GridBoardSystem.EnemySignaturesAt(run,x,y);
+  (string tag,string title,string body,string action) detail;
+  if(liveEnemy!=null)detail=GridEnemyDetailCopy(liveEnemy,true);
+  else if(signatures.Count>0)detail=GridEnemyDetailCopy(signatures[0],false);
+  else if(!inspected&&cell.place!="empty")
+   detail=("SIGNATURE","未解析反応",
+    "このマスに何かが存在する。視界へ収めるか、索敵術式を使えば正体と性質を確認できる。",
+    "視界・索敵で解析");
+  else if(!inspected)
+   detail=cell.terrain switch{
+    "blocked"=>("TERRAIN","障害地形","通行できない地形。内容物の反応はない。","地形情報"),
+    "start"=>("ORIGIN","侵入地点","この区画の探索開始地点。","現在地の基点"),
+     _=>("TERRAIN","未踏の床","地形と通行可否だけ判明している。詳細な反応はまだ解析されていない。","視界に入ると詳細判明")
+   };
+  else if(cell.place=="calamity")
+   detail=("CALAMITY",GridBoardSystem.DoomFacilityName(run.dungeonId),
+    $"時間経過とともに敵を強化する破壊不能施設。現在の圧力：{GridBoardSystem.DoomSummary(run)}",
+    "探索ターンごとに進行");
+  else detail=cell.terrain switch{
+   "blocked"=>("TERRAIN","障害地形","崩れた通行不能地形。導線も設置術式も通せない。","通行不可"),
+   "start"=>("ORIGIN","侵入地点","この区画の探索開始地点。導線はここから伸びる。","現在地の基点"),
+   _=>GridCellDetailCopy(cell,run)
+  };
+  PopulateGridCellDetail(detail);
+ }
+
+ void PopulateGridCellDetail((string tag,string title,string body,string action) detail){
+  if(gridBoardCellDetail==null)return;
+  gridBoardCellDetail.Clear();
+  var eyebrow=new Label(detail.tag){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-gboard-cell-detail-eyebrow");
+  gridBoardCellDetail.Add(eyebrow);
+  var head=new Label(detail.title){pickingMode=PickingMode.Ignore};
+  head.AddToClassList("ps-gboard-cell-detail-title");
+  gridBoardCellDetail.Add(head);
+  var rule=new VisualElement{pickingMode=PickingMode.Ignore};
+  rule.AddToClassList("ps-gboard-cell-detail-rule");
+  gridBoardCellDetail.Add(rule);
+  var description=new Label(detail.body){pickingMode=PickingMode.Ignore};
+  description.AddToClassList("ps-gboard-cell-detail-body");
+  gridBoardCellDetail.Add(description);
+  var footer=new Label(detail.action){pickingMode=PickingMode.Ignore};
+  footer.AddToClassList("ps-gboard-cell-detail-footer");
+  gridBoardCellDetail.Add(footer);
+  gridBoardCellDetail.style.display=DisplayStyle.Flex;
+  gridBoardCellDetail.BringToFront();
+ }
+
+ (string tag,string title,string body,string action) GridEnemyDetailCopy(
+  GridEnemyState enemy,bool live){
+  if(enemy==null)return ("HOSTILE","敵性反応","位置だけが検出されている。","視界・索敵で解析");
+  var definition=GameCatalog.Enemies.FirstOrDefault(value=>value.id==enemy.contentId);
+  if(!enemy.identified)return ("HOSTILE SIGNATURE","未確認の敵影",
+   live
+    ?"視界内に敵性存在を捉えた。接触すると戦闘へ移行する。"
+    :"敵性反応を検出している。移動するため、表示地点は現在地とは限らない。",
+   live?"接触：戦闘開始":"最終反応・現在位置不明");
+  string name=definition?.name??"敵影";
+  string movement=enemy.behavior switch{
+   "chase"=>"追跡型",
+   "wait"=>"待伏型",
+   _=>"巡回型"
+  };
+  return live
+   ?("HOSTILE",name,
+    $"{movement}。移動力 {Mathf.Max(0,enemy.moveSteps)}、感知 {Mathf.Max(1,enemy.sightRange)}。接触すると戦闘へ移行する。",
+    "現在位置・接触で戦闘")
+   :("LAST SEEN",name,
+    $"{movement}。最後に確認したのは TURN {Mathf.Max(0,enemy.lastSeenTurn):00}。視界外で移動している可能性がある。",
+    "最終目撃位置・現在位置不明");
+ }
+
+ void ShowGridCellDetailLegacy(int x,int y){
   var run=game.UiGridBoard;
   if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null||
    !string.IsNullOrEmpty(run.selectedCardUid))return;
@@ -120,6 +210,17 @@ void OnGridCellClicked(int x,int y){
  }
 
  (string tag,string title,string body,string action) GridCellDetailCopy(GridCellState cell,GridBoardRunState run){
+  var installation=GridBoardSystem.InstallationAt(run,cell.x,cell.y);
+  if(installation!=null&&GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition)){
+   var stage=GridBoardSystem.InstallationStage(run,cell);
+   string title=!string.IsNullOrEmpty(stage?.name)?stage.name:definition.name;
+   string body=!string.IsNullOrEmpty(stage?.text)?stage.text:definition.text;
+   var next=definition.stages?.FirstOrDefault(value=>value.minimumProgress>installation.progress);
+   string action=next!=null
+    ?$"次段階「{next.name}」まで {Mathf.Max(0,next.minimumProgress-installation.progress)}"
+    :"最終段階";
+   return (stage!=null&&installation.stageIndex>0?"EVOLVED FORMULA":"FORMULA",title,body,action);
+  }
   string growth=cell.grow>0?$"　成長 {cell.grow}/3":"";
   bool mature=cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold;
   if(mature)return cell.place switch{
@@ -383,16 +484,21 @@ void OnGridCellClicked(int x,int y){
    hero.Add(glyph);
   }
   gridBoardActorLayer.Add(hero);
-  // Hostiles are independent entities. Only currently visible actors are
-  // rendered, so remembered terrain never becomes a perfect enemy tracker.
-  foreach(var enemy in run.enemies.Where(value=>
-   GridBoardSystem.IsCurrentlyVisible(run,GridBoardSystem.Cell(run,value.x,value.y)))){
+  // Live sight shows the actor. Outside it, only the initial/last-observed
+  // signature remains; it deliberately does not track hidden movement.
+  foreach(var enemy in run.enemies){
+   bool live=GridBoardSystem.IsEnemyCurrentlyRevealed(run,enemy);
    var actor=Container("ps-gboard-actor ps-gboard-enemy-actor");
+   actor.EnableInClassList("ps-gboard-enemy-signature",!live);
+   actor.EnableInClassList("ps-gboard-enemy-identified",enemy.identified);
    actor.AddToClassList($"ps-gboard-enemy-{enemy.behavior}");
-   actor.EnableInClassList("ps-gboard-enemy-alerted",enemy.alerted);
+   actor.EnableInClassList("ps-gboard-enemy-alerted",live&&enemy.alerted);
    actor.pickingMode=PickingMode.Ignore;
-   actor.userData=new Vector2Int(enemy.x,enemy.y);
+   actor.userData=live
+    ?new Vector2Int(enemy.x,enemy.y)
+    :GridBoardSystem.LastKnownEnemyPosition(enemy);
    string enemyGlyph=enemy.behavior switch{"chase"=>"⚔","wait"=>"◆",_=>"◇"};
+   if(!live)enemyGlyph="？";
    var glyph=new Label(enemyGlyph){pickingMode=PickingMode.Ignore};
    glyph.AddToClassList("ps-gboard-actor-glyph");
    actor.Add(glyph);

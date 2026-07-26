@@ -109,10 +109,13 @@ public static class BackpackSystem {
     .Where(other=>other!=p&&Adjacent(run,p,other))
     .Select(other=>run.inventory.First(x=>x.uid==other.itemUid).templateId)
     .ToList();
+   var grants=ExpandedGrants(def);
    var ids=StorageFormulaSystem.ResolveCardIds(def,neighbors,formula.resonance);
    for(int copy=0;copy<ids.Length;copy++){
     if(!GameCatalog.Cards.ContainsKey(ids[copy]))continue;
     var card=FromDef(GameCatalog.Cards[ids[copy]],def.name,item.uid);
+    if(grants.Count>0)card.explorationCardId=grants[Mathf.Min(copy,grants.Count-1)].explorationCardId;
+    if(string.IsNullOrEmpty(card.explorationCardId))card.explorationCardId=def.explorationCardId;
     card.slotKey=$"{item.uid}:{ids[copy]}:{copy}";
     result.candidates.Add(card);
    }
@@ -140,6 +143,9 @@ public static class BackpackSystem {
 
   // The storage formula is the deck builder. Every placed item emits its card;
   // selectedCardSlots remains synchronized only for old saves and UI compatibility.
+  var removed=run.removedBattleCardSlots??new List<string>();
+  result.roleCards.RemoveAll(card=>removed.Contains(card.slotKey));
+  result.candidates.RemoveAll(card=>removed.Contains(card.slotKey));
   run.selectedCardSlots=result.candidates.Select(x=>x.slotKey).ToList();
   result.deck.AddRange(result.roleCards);
   result.deck.AddRange(result.candidates);
@@ -151,14 +157,33 @@ public static class BackpackSystem {
  public static CardInstance FromDef(CardDef d,string source,string uid){
   var card=new CardInstance{
    id=d.id,name=d.name,text=d.text,type=d.type,cost=d.cost,damage=d.damage,block=d.block,heal=d.heal,
-   buff=d.buff,energy=d.energy,selfDamage=d.selfDamage,exhaust=d.exhaust,source=source,sourceItemUid=uid
+   buff=d.buff,energy=d.energy,selfDamage=d.selfDamage,exhaust=d.exhaust,
+   innate=d.innate,retain=d.retain,ethereal=d.ethereal,unplayable=d.unplayable,afterUse=d.afterUse,
+   source=source,sourceItemUid=uid
   };
   card.effects=ContentDatabase.CardEffects(d.id);
   return card;
  }
 
+ static List<GrantedCardDef> ExpandedGrants(ItemDef item){
+  var result=new List<GrantedCardDef>();
+  foreach(var grant in item?.grantedCards??System.Array.Empty<GrantedCardDef>()){
+   if(grant==null||string.IsNullOrEmpty(grant.battleCardId))continue;
+   for(int i=0;i<Mathf.Max(1,grant.count);i++)
+    result.Add(grant);
+  }
+  if(result.Count==0){
+   foreach(var cardId in item?.cardIds??System.Array.Empty<string>())
+    result.Add(new GrantedCardDef{
+     battleCardId=cardId,explorationCardId=item.explorationCardId,count=1
+    });
+  }
+  return result;
+ }
+
  static List<CardInstance> RoleCards(string role){
-  if(!GameCatalog.Roles.TryGetValue(role,out var roleDef))
+  RoleDef roleDef=null;
+  if(string.IsNullOrEmpty(role)||!GameCatalog.Roles.TryGetValue(role,out roleDef))
    roleDef=GameCatalog.Roles[PackspireContent.Data.balance.defaultRoleId];
   string[] ids=roleDef.startingCardIds??System.Array.Empty<string>();
   return ids.Select((id,i)=>{

@@ -14,12 +14,109 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireWorldContentSet
   dungeons:
   - id: old_spire
-    name: "\u53E4\u5854\u30D1\u30C3\u30AF\u30B9\u30D1\u30A4\u30A2"
-    description: "\u683C\u5B50\u76E4\u63A2\u7D22\u306E\u57FA\u6E96\u3068\u306A\u308B\u53E4\u5854\u3002"
-    battles: 5
+    name: 紫晶の封鐘塔
+    description: 装備の表裏、成長術式、追跡敵、代償イベントを一巡で試せる最初の完成版ダンジョン。
+    battles: 7
     damage: 0
     hpScale: 1
     goldScale: 1
+    rewardPoolId: old_spire_trials
+    areas:
+    - id: threshold
+      name: 欠けた入口
+      objective: 灯りと封鎖を試し、次区画への裂け目を探せ
+      size: 7
+      layoutRows:
+      - XX...XX
+      - X.....X
+      - ......X
+      - S......
+      - X...#..
+      - XX....X
+      - XXX..XX
+      enemyCount: 1
+      enemyIds:
+      - sentinel
+      - porter
+      eventCount: 1
+      eventIds:
+      - wayfinder_shrine
+      - memory_rift
+      lampCount: 1
+      bossEnemyId:
+    - id: crossroads
+      name: 鐘鎖の交差路
+      objective: 追跡する敵を導線と設置術式でかわすか、迎え撃て
+      size: 8
+      layoutRows:
+      - XX...XXX
+      - X......X
+      - '...#....'
+      - '........'
+      - S..X....
+      - '...X....'
+      - X......X
+      - XX...XXX
+      enemyCount: 2
+      enemyIds:
+      - rats
+      - porter
+      - beast
+      eventCount: 2
+      eventIds:
+      - wayfinder_shrine
+      - field_workbench
+      - memory_rift
+      lampCount: 1
+      bossEnemyId:
+    - id: deep_vault
+      name: 反響保管層
+      objective: 妨害と消耗を越え、帰還か最深部への進出かを選べ
+      size: 9
+      layoutRows:
+      - XXX...XXX
+      - XX.....XX
+      - X..#....X
+      - '.........'
+      - S...XX...
+      - '....XX...'
+      - X.......X
+      - XX.#...XX
+      - XXX...XXX
+      enemyCount: 2
+      enemyIds:
+      - mage
+      - beast
+      - knight
+      eventCount: 2
+      eventIds:
+      - field_workbench
+      - spore_nursery
+      - black_ledger
+      lampCount: 2
+      bossEnemyId:
+    - id: bell_heart
+      name: 封鐘心臓部
+      objective: 荷喰らいを倒して封鐘塔を踏破せよ
+      size: 9
+      layoutRows:
+      - XXX...XXX
+      - XX.....XX
+      - X.......X
+      - '...#.#...'
+      - S..#.....
+      - '...#.#...'
+      - X.......X
+      - XX.....XX
+      - XXX...XXX
+      enemyCount: 0
+      enemyIds: []
+      eventCount: 1
+      eventIds:
+      - black_ledger
+      - spore_nursery
+      lampCount: 1
+      bossEnemyId: boss
     artwork: {fileID: 0}
   - id: ash_forge
     name: "\u7070\u71B1\u306E\u92F3\u9020\u5751"
@@ -28,6 +125,8 @@ MonoBehaviour:
     damage: 2
     hpScale: 1.35
     goldScale: 1.25
+    rewardPoolId: standard
+    areas: []
     artwork: {fileID: 0}
   - id: hollow_archive
     name: "\u865A\u308D\u306A\u308B\u5927\u8A18\u61B6\u5EAB"
@@ -36,6 +135,8 @@ MonoBehaviour:
     damage: 4
     hpScale: 1.7
     goldScale: 1.55
+    rewardPoolId: standard
+    areas: []
     artwork: {fileID: 0}
   facilities:
   - id: gate
@@ -169,6 +270,8 @@ MonoBehaviour:
     eyebrow: ANOMALY  /  RITE
     title: "\u8A18\u61B6\u306E\u63FA\u3089\u304E"
     body: "\u7A7A\u9593\u306E\u5965\u3067\u3001\u7D2B\u306E\u6B8B\u5149\u304C\u3086\u3063\u304F\u308A\u3068\u8108\u52D5\u3057\u3066\u3044\u308B\u3002\u89E6\u308C\u308C\u3070\u4F55\u304B\u304C\u5909\u308F\u308B\u3002\u305D\u306E\u4EE3\u511F\u307E\u3067\u306F\u3001\u307E\u3060\u8A18\u3055\u308C\u3066\u3044\u306A\u3044\u3002"
+    minimumDoomTier: 0
+    weight: 1
     choices:
     - id: offer
       label: "\u4EE3\u511F\u3092\u652F\u6255\u3046"
@@ -178,16 +281,209 @@ MonoBehaviour:
         amount: -6
       - effect: 2
         amount: 24
+      reactionContributions:
+      - reactionId: sacrifice
+        amount: 3
+        scope: 2
+        stackRule: 0
+        perLevel: 0
     - id: repair
       label: "\u6B8B\u97FF\u3092\u4FEE\u5FA9\u3059\u308B"
       resultText: "\u6B8B\u97FF\u304C\u88C5\u5099\u3092\u4FEE\u5FA9\u3057\u305F"
       effects:
       - effect: 3
         amount: 6
+      reactionContributions:
+      - reactionId: artifice
+        amount: 2
+        scope: 2
+        stackRule: 0
+        perLevel: 0
     - id: leave
       label: "\u7ACB\u3061\u53BB\u308B"
       resultText: "\u9ED2\u3044\u9744\u3092\u632F\u308A\u6255\u3044\u3001\u63A2\u7D22\u3078\u623B\u3063\u305F"
       effects: []
+      reactionContributions:
+      - reactionId: observation
+        amount: 1
+        scope: 3
+        stackRule: 0
+        perLevel: 0
+    artwork: {fileID: 0}
+  - id: wayfinder_shrine
+    eyebrow: WAYFINDER  /  TRACE
+    title: 導標の祭壇
+    body: 青い針が未知の区画を指して震えている。針を読むか、砕いて路銀に変えるか。
+    minimumDoomTier: 0
+    weight: 1
+    choices:
+    - id: read
+      label: 導標を読み解く
+      resultText: 塔の構造を読み、観測の反応を得た
+      effects: []
+      reactionContributions:
+      - reactionId: observation
+        amount: 3
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: break
+      label: 導標を砕く
+      resultText: 砕けた結晶を18Gに換えた
+      effects:
+      - effect: 2
+        amount: 18
+      reactionContributions:
+      - reactionId: commerce
+        amount: 1
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: leave
+      label: 触れずに進む
+      resultText: 針の震えを記憶し、探索へ戻った
+      effects: []
+      reactionContributions:
+      - reactionId: observation
+        amount: 1
+        scope: 3
+        stackRule: 0
+        perLevel: 0
+    artwork: {fileID: 0}
+  - id: field_workbench
+    eyebrow: WORKBENCH  /  LOADOUT
+    title: 放棄された荷造り卓
+    body: 折れた工具と、まだ熱を残す修復炉がある。装備を直す余地も、部材を売る余地もある。
+    minimumDoomTier: 0
+    weight: 1
+    choices:
+    - id: repair
+      label: 装備を修復する
+      resultText: 全装備の耐久を8まで修復した
+      effects:
+      - effect: 3
+        amount: 8
+      reactionContributions:
+      - reactionId: artifice
+        amount: 2
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: salvage
+      label: 部材を回収する
+      resultText: 不要な部材を20Gに換えた
+      effects:
+      - effect: 2
+        amount: 20
+      reactionContributions:
+      - reactionId: commerce
+        amount: 2
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: study
+      label: 構造を記録する
+      resultText: 工巧の反応を遠征記録へ刻んだ
+      effects: []
+      reactionContributions:
+      - reactionId: artifice
+        amount: 3
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    artwork: {fileID: 0}
+  - id: spore_nursery
+    eyebrow: SPORE  /  GROWTH
+    title: 眠る胞子苗床
+    body: 淡い胞子が傷と金属の双方へ根を伸ばす。育てれば癒やすが、何を養分にするかは選ばなければならない。
+    minimumDoomTier: 0
+    weight: 1
+    choices:
+    - id: rest
+      label: 胞子に身を預ける
+      resultText: HPを10回復した
+      effects:
+      - effect: 1
+        amount: 10
+      reactionContributions:
+      - reactionId: spore
+        amount: 3
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: repair
+      label: 装備を培養する
+      resultText: 全装備の耐久を7まで修復した
+      effects:
+      - effect: 3
+        amount: 7
+      reactionContributions:
+      - reactionId: artifice
+        amount: 2
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: harvest
+      label: 胞子を採取する
+      resultText: 胞子を16Gに換えた
+      effects:
+      - effect: 2
+        amount: 16
+      reactionContributions:
+      - reactionId: spore
+        amount: 1
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+      - reactionId: commerce
+        amount: 1
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    artwork: {fileID: 0}
+  - id: black_ledger
+    eyebrow: PACT  /  PRICE
+    title: 黒鐘の台帳
+    body: 台帳には、まだ支払っていない代価と、まだ受け取っていない報酬が同じ墨で記されている。
+    minimumDoomTier: 1
+    weight: 2
+    choices:
+    - id: offer
+      label: 血で署名する
+      resultText: HPを8失い、36Gと代償の反応を得た
+      effects:
+      - effect: 1
+        amount: -8
+      - effect: 2
+        amount: 36
+      reactionContributions:
+      - reactionId: sacrifice
+        amount: 3
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: repair
+      label: 古い契約を修復する
+      resultText: 装備の耐久を9まで修復した
+      effects:
+      - effect: 3
+        amount: 9
+      reactionContributions:
+      - reactionId: artifice
+        amount: 2
+        scope: 2
+        stackRule: 0
+        perLevel: 0
+    - id: leave
+      label: 台帳を閉じる
+      resultText: 契約を拒み、最深部へ進んだ
+      effects: []
+      reactionContributions:
+      - reactionId: observation
+        amount: 1
+        scope: 3
+        stackRule: 0
+        perLevel: 0
     artwork: {fileID: 0}
   merchants:
   - id: traveler
@@ -264,6 +560,21 @@ MonoBehaviour:
     - buckler
     - flask
     - charm
+  - id: old_spire_trials
+    itemIds:
+    - sword
+    - shield
+    - ember
+    - dagger
+    - buckler
+    - charm
+    - spear
+    - plate
+    - crystal
+    - herb
+    - flask
+    - bomb
+    - cursed_blade
   balance:
     baseEnergy: 3
     initialHand: 5

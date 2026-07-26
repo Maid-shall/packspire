@@ -21,6 +21,20 @@ MonoBehaviour:
       \u653B\u6483+2\u3002"
     explorationCardId: gb_seal
     type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: slash
+      explorationCardId: gb_seal
+      count: 2
     cardIds:
     - slash
     - slash
@@ -41,6 +55,20 @@ MonoBehaviour:
       \u30B3\u30B9\u30C8-1\u3002"
     explorationCardId: gb_fog
     type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: guard
+      explorationCardId: gb_fog
+      count: 2
     cardIds:
     - guard
     - guard
@@ -60,6 +88,25 @@ MonoBehaviour:
     linkRule: "\u6B66\u5668\u3068\u96A3\u63A5: \u305D\u306E\u653B\u6483+2\u3002"
     explorationCardId: gb_lamp
     type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: siege
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: spark
+      explorationCardId: gb_lamp
+      count: 1
     cardIds:
     - spark
     cells:
@@ -74,6 +121,15 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_fog
     type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions: []
+    grantedCards:
+    - battleCardId: mend
+      explorationCardId: gb_fog
+      count: 1
     cardIds:
     - mend
     cells:
@@ -88,6 +144,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_seal
     type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: speed
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: stab
+      explorationCardId: gb_seal
+      count: 2
     cardIds:
     - stab
     - stab
@@ -103,6 +178,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_fog
     type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: immovable
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: brace
+      explorationCardId: gb_fog
+      count: 1
     cardIds:
     - brace
     cells:
@@ -125,6 +219,20 @@ MonoBehaviour:
     linkRule: "\u96A3\u63A5\u88C5\u5099\u306E\u30AB\u30FC\u30C9\u30B3\u30B9\u30C8-1\u3002"
     explorationCardId: gb_lamp
     type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: focus
+      explorationCardId: gb_lamp
+      count: 1
     cardIds:
     - focus
     cells:
@@ -143,6 +251,15 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_fog
     type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions: []
+    grantedCards:
+    - battleCardId: bomb
+      explorationCardId: gb_fog
+      count: 1
     cardIds:
     - bomb
     cells:
@@ -157,6 +274,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_seal
     type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: hunt
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: martial
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: pierce
+      explorationCardId: gb_seal
+      count: 1
     cardIds:
     - pierce
     cells:
@@ -179,6 +315,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_fog
     type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: speed
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: parry
+      explorationCardId: gb_fog
+      count: 1
     cardIds:
     - parry
     cells:
@@ -193,6 +348,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_fog
     type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: spore
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: acid
+      explorationCardId: gb_fog
+      count: 1
     cardIds:
     - acid
     cells:
@@ -211,6 +385,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_lamp
     type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: speed
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: observation
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: tailwind
+      explorationCardId: gb_lamp
+      count: 1
     cardIds:
     - tailwind
     cells:
@@ -225,6 +418,25 @@ MonoBehaviour:
     linkRule: 
     explorationCardId: gb_seal
     type: 0
+    rarity: 4
+    acquisitionTier: 2
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 3
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: sacrifice
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: devour
+      explorationCardId: gb_seal
+      count: 1
     cardIds:
     - devour
     cells:

@@ -24,14 +24,19 @@ public sealed partial class PackspireUiFoundation {
  string[] RewardIds(){
   string[] pool=RewardPool();
   if(pool.Length==0)return System.Array.Empty<string>();
-  int start=((game.UiRun?.battlesWon??0)*3)%pool.Length;
+  int completed=Mathf.Max(0,(game.UiRun?.battlesWon??1)-1);
+  int start=(completed*3)%pool.Length;
   return Enumerable.Range(0,Mathf.Min(3,pool.Length)).Select(i=>pool[(start+i)%pool.Length]).ToArray();
  }
 
  string[] RewardIdsPreview()=>RewardPool().Take(3).ToArray();
 
  string[] RewardPool(){
-  var pool=PackspireContent.Data.rewardPools.FirstOrDefault(x=>x.id=="standard");
+  string dungeonId=game.UiRun?.dungeon;
+  var dungeon=PackspireContent.Data.dungeons.FirstOrDefault(value=>value.id==dungeonId);
+  string poolId=string.IsNullOrEmpty(dungeon?.rewardPoolId)?"standard":dungeon.rewardPoolId;
+  var pool=PackspireContent.Data.rewardPools.FirstOrDefault(x=>x.id==poolId)
+   ??PackspireContent.Data.rewardPools.FirstOrDefault(x=>x.id=="standard");
   return pool?.itemIds??System.Array.Empty<string>();
  }
 

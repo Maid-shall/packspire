@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -377,6 +378,18 @@ public sealed partial class PackspireUiFoundation {
    mgmtDetailScroll.Add(ManagementSection("属性",string.Join("・",selected.cells.Select(x=>ElementLabel(x.element)))));
   if(!string.IsNullOrEmpty(selected.linkRule))
    mgmtDetailScroll.Add(ManagementSection("LINK",selected.linkRule));
+  var faceLines=new List<string>();
+  foreach(var grant in selected.grantedCards??System.Array.Empty<GrantedCardDef>()){
+   string battle=GameCatalog.Cards.TryGetValue(grant.battleCardId,out var battleCard)
+    ?battleCard.name:grant.battleCardId;
+   string exploration=GameCatalog.ExplorationCards.TryGetValue(grant.explorationCardId,out var exploreCard)
+    ?exploreCard.name:grant.explorationCardId;
+   faceLines.Add($"{battle} ⇄ {exploration}{(grant.count>1?$" ×{grant.count}":"")}");
+   if(exploreCard?.stages!=null&&exploreCard.stages.Length>1)
+    faceLines.Add("  成長: "+string.Join(" → ",exploreCard.stages.Select(stage=>stage.name)));
+  }
+  if(faceLines.Count>0)
+   mgmtDetailScroll.Add(ManagementSection("カード両面",string.Join("\n",faceLines)));
   mgmtDetailScroll.Add(ManagementSection("入手","遠征や戦闘で入手すると記録されます。"));
 }
 
