@@ -45,7 +45,7 @@ public static class ConsumableSystem {
   }
 
   run.consumables.RemoveAt(index);
-  battle.log=$"{consumable.name}を使用";
+  BattleSystem.Record(battle,$"{consumable.name}を使用");
   fx.enemyDefeated=battle.enemyHp<=0;
   return fx;
  }

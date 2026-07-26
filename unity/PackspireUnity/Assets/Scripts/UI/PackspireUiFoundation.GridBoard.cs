@@ -32,7 +32,8 @@ public sealed partial class PackspireUiFoundation {
  bool gridBoardCombatMode;
  bool gridBoardEventOpen;
  bool gridBoardDiceResultActive;
- float gridBoardDiceResultUntil;
+ float gridBoardDiceResultStarted,gridBoardDiceResultUntil;
+ int gridBoardDiceSequence;
  int gridBoardDieOne,gridBoardDieTwo,gridBoardDiceModifier,gridBoardDiceTotal,gridBoardDiceDamage;
  string gridBoardDiceSource="";
  bool gridBoardFollowingExplorer;
@@ -87,7 +88,9 @@ public sealed partial class PackspireUiFoundation {
   gridBoardFollowingExplorer=false;
   gridBoardEventOpen=false;
   gridBoardDiceResultActive=false;
+  gridBoardDiceResultStarted=0f;
   gridBoardDiceResultUntil=0f;
+  gridBoardDiceSequence=0;
   gridBoardDiceSource="";
   gridBoardLastLayoutPos=new(float.NaN,float.NaN);
   gridBoardCells.Clear();

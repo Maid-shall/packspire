@@ -164,6 +164,7 @@ public static class BackpackSystem {
   return ids.Select((id,i)=>{
    var c=FromDef(GameCatalog.Cards[id],roleDef.name+"の基本技","role-"+i);
    c.roleCard=true;
+   c.slotKey=$"role:{roleDef.id}:{id}:{i}";
    return c;
   }).ToList();
  }

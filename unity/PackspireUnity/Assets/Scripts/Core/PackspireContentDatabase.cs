@@ -50,9 +50,21 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
  public Sprite artwork;
 }
 
+public enum EnemyMoveKind { Attack, Guard, Empower, Disrupt, Special }
+
 [Serializable] public class EnemyMoveContent {
+ public string name="攻撃";
+ public EnemyMoveKind kind=EnemyMoveKind.Attack;
  public int damage;
+ public int block;
+ public int heal;
  public EffectContent[] effects=Array.Empty<EffectContent>();
+}
+
+[Serializable] public class EnemyPhaseContent {
+ public string name="通常";
+ [Range(0,100)] public int minimumHpPercent;
+ public int[] moveIndices=Array.Empty<int>();
 }
 
 public enum EnemyBoardBehavior {
@@ -70,6 +82,7 @@ public enum EnemyBoardBehavior {
  [Min(0)] public int boardMoveSteps=1;
  [Min(1)] public int boardPatrolRadius=3;
  public EnemyMoveContent[] moves=Array.Empty<EnemyMoveContent>();
+ public EnemyPhaseContent[] phases=Array.Empty<EnemyPhaseContent>();
  public Sprite portrait;
  public string legacyPortraitResource;
 }
@@ -361,9 +374,27 @@ public static class PackspireContent {
    if(character.activeSkillAmount<0)
     result.errors.Add($"Character '{character.id}' has a negative active skill amount.");
   }
-  foreach(var enemy in value.enemies)
-   foreach(var move in enemy.moves??Array.Empty<EnemyMoveContent>())
+  foreach(var enemy in value.enemies){
+   if(enemy.moves==null||enemy.moves.Length==0)
+    result.errors.Add($"Enemy '{enemy.id}' has no moves.");
+   foreach(var move in enemy.moves??Array.Empty<EnemyMoveContent>()){
+    if(string.IsNullOrWhiteSpace(move.name))
+     result.errors.Add($"Enemy '{enemy.id}' has an unnamed move.");
+   if(move.damage<0||move.block<0||move.heal<0)
+     result.errors.Add($"Enemy '{enemy.id}' move '{move.name}' has a negative value.");
     ValidateEffects(move.effects,$"enemy '{enemy.id}'",statusIds,result);
+   }
+   foreach(var phase in enemy.phases??Array.Empty<EnemyPhaseContent>()){
+    if(string.IsNullOrWhiteSpace(phase.name))
+     result.errors.Add($"Enemy '{enemy.id}' has an unnamed phase.");
+    if(phase.minimumHpPercent<0||phase.minimumHpPercent>100)
+     result.errors.Add($"Enemy '{enemy.id}' phase '{phase.name}' has an invalid HP threshold.");
+    if(phase.moveIndices==null||phase.moveIndices.Length==0)
+     result.errors.Add($"Enemy '{enemy.id}' phase '{phase.name}' has no moves.");
+    else if(phase.moveIndices.Any(index=>index<0||index>=enemy.moves.Length))
+     result.errors.Add($"Enemy '{enemy.id}' phase '{phase.name}' references an invalid move.");
+   }
+  }
   foreach(var core in value.storageCores)
    if(core.board==null||core.board.Length!=core.width*core.height)
     result.errors.Add($"Storage core '{core.id}' board size does not match {core.width}x{core.height}.");

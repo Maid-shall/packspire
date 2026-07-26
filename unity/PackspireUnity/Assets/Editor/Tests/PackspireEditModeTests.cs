@@ -31,6 +31,72 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
+ public void CombatTurn_UsesAuthoredEnergyAndHandValues(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=GameCatalog.Enemies.First();
+  var battle=BattleSystem.Begin(run,enemy);
+  run.energy=0;
+  run.hand.Clear();
+  BattleSystem.EndTurnFx(run,battle);
+  Assert.That(run.energy,Is.EqualTo(PackspireContent.Data.balance.baseEnergy));
+  Assert.That(run.hand.Count,Is.EqualTo(PackspireContent.Data.balance.initialHand));
+ }
+
+ [Test]
+ public void CombatStatus_UntimedStrengthPersistsAcrossTurns(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=GameCatalog.Enemies.First();
+  var battle=BattleSystem.Begin(run,enemy);
+  BattleSystem.Apply(run.statuses,new EffectSpec{type="strength",target="self",amount=2,duration=0});
+  BattleSystem.EndTurnFx(run,battle);
+  Assert.That(BattleSystem.Status(run.statuses,"strength"),Is.EqualTo(2));
+ }
+
+ [Test]
+ public void CombatStatus_LethalPoisonDefeatsEnemyBeforeItsAction(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=new EnemyDef("test","Test",1,1,99);
+  var battle=BattleSystem.Begin(run,enemy);
+  BattleSystem.Apply(battle.enemyStatuses,new EffectSpec{type="poison",target="enemy",amount=1});
+  var result=BattleSystem.EndTurnFx(run,battle);
+  Assert.That(result.enemyDefeated,Is.True);
+  Assert.That(result.statusDamageToEnemy,Is.EqualTo(1));
+  Assert.That(run.hp,Is.EqualTo(42),"Defeated enemy must not take its action");
+ }
+
+ [Test]
+ public void EnemyMove_GuardAndEmpowerUseTheAuthoredIntent(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=GameCatalog.Enemies.Single(value=>value.id=="sentinel");
+  var battle=BattleSystem.Begin(run,enemy);
+  battle.move=1;
+  var move=ContentDatabase.EnemyMove(enemy.id,battle.move);
+  Assert.That(move.kind,Is.EqualTo(EnemyMoveKind.Guard));
+  var result=BattleSystem.EndTurnFx(run,battle);
+  Assert.That(result.enemyMoveKind,Is.EqualTo(EnemyMoveKind.Guard));
+  Assert.That(result.enemyBlockGained,Is.EqualTo(9));
+  Assert.That(battle.enemyBlock,Is.EqualTo(9));
+  Assert.That(BattleSystem.Status(battle.enemyStatuses,"strength"),Is.EqualTo(2));
+  Assert.That(run.hp,Is.EqualTo(42));
+ }
+
+ [Test]
+ public void BossPhase_ChangesTheMoveSequenceAtHalfHealth(){
+  var run=new RunState{hp=42,maxHp=42};
+  var enemy=GameCatalog.Enemies.Single(value=>value.id=="boss");
+  var battle=BattleSystem.Begin(run,enemy);
+  Assert.That(BattleSystem.EnemyPhaseName(battle),Is.EqualTo("捕食"));
+  Assert.That(BattleSystem.NextEnemyMoveIndex(battle),Is.EqualTo(0));
+  battle.enemyHp=battle.enemyMaxHp/2;
+  battle.move=3;
+  Assert.That(BattleSystem.EnemyPhaseName(battle),Is.EqualTo("暴食"));
+  Assert.That(BattleSystem.NextEnemyMoveIndex(battle),Is.EqualTo(1));
+  BattleSystem.EndTurnFx(run,battle);
+  Assert.That(battle.enemyPhaseThreshold,Is.EqualTo(0));
+  Assert.That(BattleSystem.NextEnemyMoveIndex(battle),Is.EqualTo(2));
+ }
+
+ [Test]
  public void GridBoard_UsesAuthoredBalance(){
   var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId);
   Assert.That(board.energyMax,Is.EqualTo(PackspireContent.Data.balance.baseEnergy));

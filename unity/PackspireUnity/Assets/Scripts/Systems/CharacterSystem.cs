@@ -56,7 +56,7 @@ public static class CharacterSystem {
     extra=$"{def.traitName}：勝利時+{def.traitValue}G";
     break;
   }
-  battle.log=string.IsNullOrEmpty(extra)?"戦闘開始":$"戦闘開始　／　{extra}";
+  if(!string.IsNullOrEmpty(extra))BattleSystem.Record(battle,extra);
  }
 
  public static int WinGoldBonus(RunState run){
@@ -112,7 +112,7 @@ public static class CharacterSystem {
     return CharacterSkillResult.Fail;
   }
   run.activeSkillUsed=true;
-  battle.log=logLine;
+  BattleSystem.Record(battle,logLine);
   fx.enemyDefeated=battle.enemyHp<=0;
   return new CharacterSkillResult(true,fx.enemyDefeated,logLine,fx);
  }

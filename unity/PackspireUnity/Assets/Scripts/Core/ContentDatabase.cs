@@ -27,9 +27,25 @@ public static class ContentDatabase {
  }
 
  public static List<EffectSpec> EnemyEffects(string enemyId,int moveIndex){
+  return Convert(EnemyMove(enemyId,moveIndex)?.effects);
+ }
+
+ public static EnemyMoveContent EnemyMove(string enemyId,int moveIndex){
   var enemy=PackspireContent.Data.enemies.FirstOrDefault(x=>x.id==enemyId);
-  if(enemy?.moves==null||moveIndex<0||moveIndex>=enemy.moves.Length)return new List<EffectSpec>();
-  return Convert(enemy.moves[moveIndex].effects);
+  if(enemy?.moves==null||enemy.moves.Length==0)return null;
+  int index=((moveIndex%enemy.moves.Length)+enemy.moves.Length)%enemy.moves.Length;
+  return enemy.moves[index];
+ }
+
+ public static EnemyPhaseContent EnemyPhase(string enemyId,int hp,int maxHp){
+  var enemy=PackspireContent.Data.enemies.FirstOrDefault(x=>x.id==enemyId);
+  if(enemy?.phases==null||enemy.phases.Length==0)return null;
+  int percent=maxHp>0?Mathf.CeilToInt(Mathf.Max(0,hp)*100f/maxHp):0;
+  return enemy.phases
+   .Where(x=>x!=null&&x.minimumHpPercent<=percent)
+   .OrderByDescending(x=>x.minimumHpPercent)
+   .FirstOrDefault()
+   ??enemy.phases.Where(x=>x!=null).OrderBy(x=>x.minimumHpPercent).FirstOrDefault();
  }
 
  public static StatusDefinition Status(string id)=>

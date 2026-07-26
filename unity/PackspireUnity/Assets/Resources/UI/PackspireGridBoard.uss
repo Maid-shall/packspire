@@ -1054,6 +1054,22 @@
     border-top-color: rgb(255, 202, 127);
     border-bottom-color: rgb(255, 202, 127);
 }
+.ps-gboard-in-combat .ps-gboard-die-critical {
+    background-color: rgba(255, 190, 65, 0.96);
+    color: rgb(35, 14, 42);
+    border-left-color: rgb(255, 238, 154);
+    border-right-color: rgb(255, 238, 154);
+    border-top-color: rgb(255, 238, 154);
+    border-bottom-color: rgb(255, 238, 154);
+}
+.ps-gboard-in-combat .ps-gboard-die-fumble {
+    background-color: rgba(82, 12, 42, 0.96);
+    color: rgb(255, 128, 164);
+    border-left-color: rgb(255, 78, 135);
+    border-right-color: rgb(255, 78, 135);
+    border-top-color: rgb(255, 78, 135);
+    border-bottom-color: rgb(255, 78, 135);
+}
 .ps-gboard-in-combat .ps-gboard-die-mod {
     font-size: 17px;
     color: rgb(255, 217, 157);

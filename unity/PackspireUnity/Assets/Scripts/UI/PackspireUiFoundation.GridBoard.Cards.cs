@@ -211,21 +211,26 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   var handSlots=new List<(Button button,float depth)>(count);
   for(int i=0;i<count;i++){
    int index=i;
-   var card=run.hand[index];
-   bool affordable=card.cost<=run.energy;
+    var card=run.hand[index];
+    bool affordable=card.cost<=run.energy;
    Button button=null;
-   button=new Button(()=>{
-    if(!affordable||battleInputLocked||button==null||game.UiBattle==null)return;
-    battleInputLocked=true;
-    button.SetEnabled(false);
-    if(!game.UiPlayBattleCard(index))ShowToast(game.UiMessage);
-    battleInputLocked=false;
-    RefreshGridBoard();
-   });
+    button=new Button(()=>{
+     if(battleInputLocked||button==null||game.UiBattle==null)return;
+     if(!affordable){
+      ShowToast("ENが不足している");
+      return;
+     }
+     int handIndex=game.UiRun.hand.FindIndex(value=>value.slotKey==card.slotKey);
+     if(handIndex<0)return;
+     battleInputLocked=true;
+     if(!game.UiPlayBattleCard(handIndex))ShowToast(game.UiMessage);
+     battleInputLocked=false;
+     RefreshGridBoard();
+    });
    button.AddToClassList("ps-battle-card");
    button.AddToClassList("ps-gboard-fan-card");
-   button.userData=card;
-   if(!affordable)button.AddToClassList("ps-battle-card-disabled");
+    button.userData=card;
+    if(!affordable)button.AddToClassList("ps-battle-card-disabled");
    PopulateBattleCard(button,card,run,affordable);
    float spreadIndex=i-center;
    float angle=spreadIndex*spreadDeg;
@@ -240,9 +245,9 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    button.style.bottom=arcLift;
    button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
    button.style.transformOrigin=new TransformOrigin(new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
-   button.RegisterCallback<PointerEnterEvent>(_=>{
-    button.BringToFront();
-    ShowGridCombatCardPreview(card,affordable);
+    button.RegisterCallback<PointerEnterEvent>(_=>{
+     button.BringToFront();
+     ShowGridCombatCardPreview(card,affordable);
    });
    handSlots.Add((button,Mathf.Abs(spreadIndex)));
   }

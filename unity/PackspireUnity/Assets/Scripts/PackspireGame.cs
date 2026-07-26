@@ -238,6 +238,7 @@ public partial class PackspireGame : MonoBehaviour {
   var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage+gridPressure);
   var ui=PackspireUiFoundation.Instance;
   if(ui!=null)ui.PlayBattleActionFx(fx);
+  if(fx.enemyDefeated){WinBattle();return true;}
   if(fx.playerDefeated){FinishRun(false);return true;}
   if(ui!=null)ui.RefreshBattleUi();
   return true;

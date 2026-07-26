@@ -334,11 +334,12 @@ public sealed partial class PackspireUiFoundation {
     battleEnemyPortrait.uv=EnemyUv(battle.enemy.id);
    }
   }
-  int moveIndex=battle.move%battle.enemy.damages.Length;
+  int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
   int baseDamage=battle.enemy.damages[moveIndex];
-  int rawIntent=BattleSystem.Damage(baseDamage+dungeon.damage,battle.enemyStatuses,run.statuses);
+  int rawIntent=baseDamage>0?BattleSystem.Damage(baseDamage+dungeon.damage,battle.enemyStatuses,run.statuses):0;
+  var authoredMove=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
   var moveEffects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
-  RefreshBattleIntent(rawIntent,baseDamage==0&&dungeon.damage==0,run.block,moveEffects);
+  RefreshBattleIntent(rawIntent,baseDamage==0,run.block,moveEffects,authoredMove);
 
   SetMeter(battleEnemyHpFill,battleEnemyHpLabel,Mathf.Max(0,battle.enemyHp),battle.enemyMaxHp,$"{Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}",true);
   SetMeter(battleEnemyBlockFill,battleEnemyBlockLabel,battle.enemyBlock,24,$"{battle.enemyBlock}",true);
@@ -352,7 +353,7 @@ public sealed partial class PackspireUiFoundation {
   battleSkillButton.SetEnabled(game.UiActiveSkillAvailable);
  }
 
- void RefreshBattleIntent(int rawDamage,bool specialMove,int playerBlock,List<EffectSpec> effects){
+ void RefreshBattleIntent(int rawDamage,bool specialMove,int playerBlock,List<EffectSpec> effects,EnemyMoveContent move=null){
   if(battleIntentBadge==null)return;
   bool attack=rawDamage>0;
   if(battleIntentIcon!=null){
@@ -374,19 +375,21 @@ public sealed partial class PackspireUiFoundation {
     int afterBlock=Mathf.Max(0,rawDamage-Mathf.Max(0,playerBlock));
     bits.Add(playerBlock>0?$"HIT YOU  {afterBlock}":"DIRECT HIT");
    }
-   if(effects!=null){
+    if(effects!=null){
     foreach(var effect in effects.Take(2)){
      var def=ContentDatabase.Status(effect.type);
      string name=def!=null?def.name:effect.type;
      bits.Add($"+{name}{effect.amount}");
     }
+    if((move?.block??0)>0)bits.Add($"+BLOCK {move.block}");
+    if((move?.heal??0)>0)bits.Add($"+HP {move.heal}");
    }
    if(!attack&&(effects==null||effects.Count==0))bits.Add("UNKNOWN MOVE");
    battleIntentHint.text=string.Join("   ·   ",bits);
   }
-  battleIntentBadge.tooltip=attack
-   ?$"NEXT ATTACK {rawDamage}"+(playerBlock>0?$"\nAfter BLOCK → {Mathf.Max(0,rawDamage-playerBlock)}":"")
-   :"NEXT SPECIAL MOVE";
+   battleIntentBadge.tooltip=attack
+    ?$"NEXT ATTACK {rawDamage}"+(playerBlock>0?$"\nAfter BLOCK → {Mathf.Max(0,rawDamage-playerBlock)}":"")
+    :$"NEXT {(string.IsNullOrEmpty(move?.name)?"SPECIAL MOVE":move.name)}";
  }
 
  static void SetMeter(VisualElement fill,Label label,int value,int max,string text,bool vertical){

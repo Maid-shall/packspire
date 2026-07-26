@@ -230,18 +230,26 @@ public sealed partial class PackspireUiFoundation {
    gridBoardCombatCardPreview.style.display=show?DisplayStyle.None:DisplayStyle.Flex;
   gridBoardResolveTray.style.display=show?DisplayStyle.Flex:DisplayStyle.None;
   if(!show)return;
+  float elapsed=Time.unscaledTime-gridBoardDiceResultStarted;
+  int stage=elapsed<.22f?0:elapsed<.46f?1:elapsed<.72f?2:3;
   if(gridBoardResolveFormula!=null)
-   gridBoardResolveFormula.text=$"{gridBoardDiceSource}  /  2D6 {GridDiceModifierText(gridBoardDiceModifier)}";
+   gridBoardResolveFormula.text=stage==0
+    ?$"{gridBoardDiceSource}  /  ROLLING"
+    :$"{gridBoardDiceSource}  /  2D6 {(stage>=3?GridDiceModifierText(gridBoardDiceModifier):"+ ?")}";
   if(gridBoardResolveResult!=null)
-   gridBoardResolveResult.text=$"{gridBoardDiceTotal} → {gridBoardDiceDamage} DMG";
+   gridBoardResolveResult.text=stage>=3?$"{gridBoardDiceTotal} → {gridBoardDiceDamage} DMG":"判定中…";
   if(gridBoardResolveDice==null)return;
   gridBoardResolveDice.Clear();
-  foreach(int value in new[]{gridBoardDieOne,gridBoardDieTwo}){
-   var die=new Label(value.ToString()){pickingMode=PickingMode.Ignore};
+  int[] values={gridBoardDieOne,gridBoardDieTwo};
+  for(int index=0;index<values.Length;index++){
+   bool revealed=stage>=index+1;
+   var die=new Label(revealed?values[index].ToString():"?"){pickingMode=PickingMode.Ignore};
    die.AddToClassList("ps-gboard-die");
+   if(stage>=2&&gridBoardDieOne==6&&gridBoardDieTwo==6)die.AddToClassList("ps-gboard-die-critical");
+   if(stage>=2&&gridBoardDieOne==1&&gridBoardDieTwo==1)die.AddToClassList("ps-gboard-die-fumble");
    gridBoardResolveDice.Add(die);
   }
-  var modifier=new Label(GridDiceModifierText(gridBoardDiceModifier)){pickingMode=PickingMode.Ignore};
+  var modifier=new Label(stage>=3?GridDiceModifierText(gridBoardDiceModifier):"+ ?"){pickingMode=PickingMode.Ignore};
   modifier.AddToClassList("ps-gboard-die-mod");
   gridBoardResolveDice.Add(modifier);
  }
@@ -251,7 +259,9 @@ public sealed partial class PackspireUiFoundation {
  void ShowGridDiceResult(BattleActionFx fx){
   if(!gridBoardCombatMode||fx.dieOne<=0||fx.dieTwo<=0)return;
   gridBoardDiceResultActive=true;
-  gridBoardDiceResultUntil=Time.unscaledTime+2.4f;
+  gridBoardDiceResultStarted=Time.unscaledTime;
+  gridBoardDiceResultUntil=Time.unscaledTime+1.8f;
+  int sequence=++gridBoardDiceSequence;
   gridBoardDieOne=fx.dieOne;
   gridBoardDieTwo=fx.dieTwo;
   gridBoardDiceModifier=fx.damageModifier;
@@ -260,7 +270,10 @@ public sealed partial class PackspireUiFoundation {
   gridBoardDiceSource=string.IsNullOrEmpty(fx.cardName)?"DAMAGE ROLL":fx.cardName;
   RefreshGridResolveTray(true);
   gridBoardResolveTray?.BringToFront();
-  gridBoardResolveTray?.schedule.Execute(()=>RefreshGridResolveTray(game.UiBattle!=null)).StartingIn(2450);
+  foreach(int delay in new[]{230,470,730,1850})
+   gridBoardResolveTray?.schedule.Execute(()=>{
+    if(sequence==gridBoardDiceSequence)RefreshGridResolveTray(game.UiBattle!=null);
+   }).StartingIn(delay);
  }
 
  void SyncGridHandChrome(){

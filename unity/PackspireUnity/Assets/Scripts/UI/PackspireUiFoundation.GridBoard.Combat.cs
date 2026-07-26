@@ -56,6 +56,11 @@ public sealed partial class PackspireUiFoundation {
 
  string DescribeGridBattleIntentShort(){
   if(!TryGetGridBattleIntent(out int raw,out bool special,out int unusedBlock,out List<EffectSpec> unusedEffects))return "次の行動　—";
+  var battle=game.UiBattle;
+  int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
+  var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
+  string phase=BattleSystem.EnemyPhaseName(battle);
+  string phasePrefix=string.IsNullOrEmpty(phase)?"":$"[{phase}] ";
   string extra="";
   if(unusedEffects!=null&&unusedEffects.Count>0){
    var effect=unusedEffects[0];
@@ -64,9 +69,12 @@ public sealed partial class PackspireUiFoundation {
   }
   if(raw>0){
    int modifier=raw-7;
-   return $"⚔ 攻撃\n2D6 {GridDiceModifierText(modifier)}　平均 {raw}{extra}";
+   string name=!string.IsNullOrEmpty(move?.name)?move.name:"攻撃";
+   return $"{phasePrefix}⚔ {name}\n2D6 {GridDiceModifierText(modifier)}　平均 {raw}{extra}";
   }
-  return special?$"次の行動\n✦ 特殊行動{extra}":"次の行動\n—";
+  if((move?.block??0)>0)return $"{phasePrefix}🛡 {move.name}\nブロック {move.block}{extra}";
+  if((move?.heal??0)>0)return $"{phasePrefix}✚ {move.name}\nHP回復 {move.heal}{extra}";
+  return special?$"{phasePrefix}次の行動\n✦ 特殊行動{extra}":"次の行動\n—";
  }
 
  string DescribeGridBattleIntentHint(){
@@ -76,6 +84,13 @@ public sealed partial class PackspireUiFoundation {
   if(raw>0){
    int after=Mathf.Max(0,raw-Mathf.Max(0,block));
    bits.Add(block>0?$"次の攻撃 被ダメ {after}":$"次の攻撃 被ダメ {raw}");
+  }
+  var battle=game.UiBattle;
+  if(battle?.enemy!=null){
+   int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
+   var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
+   if((move?.block??0)>0)bits.Add($"敵ブロック +{move.block}");
+   if((move?.heal??0)>0)bits.Add($"敵HP +{move.heal}");
   }
   if(effects!=null){
    foreach(var effect in effects.Take(2)){
@@ -93,11 +108,14 @@ public sealed partial class PackspireUiFoundation {
   var battle=game.UiBattle;
   if(run==null||battle?.enemy==null||battle.enemy.damages==null||battle.enemy.damages.Length==0)return false;
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
-  int moveIndex=battle.move%battle.enemy.damages.Length;
+  int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
   int baseDamage=battle.enemy.damages[moveIndex];
   int pressure=GridBoardSystem.EnemyDamageBonus(game.UiGridBoard);
-  rawDamage=BattleSystem.Damage(baseDamage+dungeon.damage+pressure,battle.enemyStatuses,run.statuses);
-  specialMove=baseDamage==0&&dungeon.damage+pressure==0;
+  rawDamage=baseDamage>0
+   ?BattleSystem.Damage(baseDamage+dungeon.damage+pressure,battle.enemyStatuses,run.statuses)
+   :0;
+  var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
+  specialMove=baseDamage==0||move!=null&&move.kind!=EnemyMoveKind.Attack;
   playerBlock=run.block;
   effects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   return true;

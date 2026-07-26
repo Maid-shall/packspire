@@ -4,11 +4,21 @@ using System.Linq;
 using UnityEngine;
 
 namespace Packspire {
-[Serializable] public class BattleState { public EnemyDef enemy; public int enemyHp,enemyMaxHp,enemyBlock,move; public List<StatusState> enemyStatuses=new(); public string log="戦闘開始"; }
+[Serializable] public class BattleState {
+ public EnemyDef enemy;
+ public int enemyHp,enemyMaxHp,enemyBlock,move;
+ public int enemyPhaseThreshold=int.MinValue,enemyPhaseMove;
+ public List<StatusState> enemyStatuses=new();
+ public List<string> logLines=new();
+ public string log="戦闘開始";
+}
 
 public struct BattleActionFx {
  public bool ok,enemyDefeated,playerDefeated;
  public int damageToEnemy,damageToPlayer,blockGained,healGained,energyGained,selfDamage;
+ public int statusDamageToEnemy,statusDamageToPlayer;
+ public int enemyBlockGained,enemyHealGained;
+ public EnemyMoveKind enemyMoveKind;
  public int dieOne,dieTwo,damageModifier,rolledDamage;
  public CardType cardType;
  public string cardName;
@@ -30,6 +40,7 @@ public static class BattleSystem {
   Draw(run,PackspireContent.Data.balance.initialHand);
   int hp=Mathf.RoundToInt(enemy.hp*hpScale);
   var battle=new BattleState{enemy=enemy,enemyHp=hp,enemyMaxHp=hp,enemyBlock=0,move=0,enemyStatuses=new(),log="戦闘開始"};
+  Record(battle,"戦闘開始");
   CharacterSystem.OnBattleBegin(run,battle);
   return battle;
  }
@@ -80,7 +91,17 @@ public static class BattleSystem {
   run.hand.RemoveAt(handIndex);
   if(!c.exhaust){if(c.recycle)run.draw.Add(c);else run.discard.Add(c);}
   if(c.draw>0)Draw(run,c.draw);
-  battle.log=$"{c.name}：{dealt}ダメージ / {gainedBlock}防御{EffectText(c.effects)}";
+  var details=new List<string>();
+  if(dealt>0)details.Add($"{dealt}ダメージ");
+  if(gainedBlock>0)details.Add($"{gainedBlock}ブロック");
+  if(healed>0)details.Add($"HP+{healed}");
+  if(energyGain!=0)details.Add($"EN{(energyGain>0?"+":"")}{energyGain}");
+  if(c.draw>0)details.Add($"{c.draw}枚ドロー");
+  if(self>0)details.Add($"自傷{self}");
+  if(c.exhaust)details.Add("廃棄");
+  string effects=EffectText(c.effects);
+  if(!string.IsNullOrEmpty(effects))details.Add(effects);
+  Record(battle,$"{c.name}：{(details.Count>0?string.Join(" / ",details):"効果なし")}");
   return new BattleActionFx{
    ok=true,
    enemyDefeated=battle.enemyHp<=0,
@@ -101,32 +122,84 @@ public static class BattleSystem {
  public static BattleActionFx EndTurnFx(RunState run,BattleState battle,int dungeonDamage=0){
   run.discard.AddRange(run.hand);
   run.hand.Clear();
-  int moveIndex=battle.move%battle.enemy.damages.Length;
-  int dieOne,dieTwo,modifier;
-  int rolled=RollDamage(battle.enemy.damages[moveIndex]+dungeonDamage,out dieOne,out dieTwo,out modifier);
-  int raw=Damage(rolled,battle.enemyStatuses,run.statuses);
+  int enemyStatusDamage=Tick(battle.enemyStatuses,ref battle.enemyHp,battle.enemyMaxHp);
+  if(battle.enemyHp<=0){
+   Record(battle,$"{battle.enemy.name}は継続ダメージで倒れた");
+   return new BattleActionFx{
+    ok=true,enemyDefeated=true,statusDamageToEnemy=enemyStatusDamage,
+    cardName=battle.enemy.name
+   };
+  }
+  int moveIndex=NextEnemyMoveIndex(battle);
+  var activePhase=ContentDatabase.EnemyPhase(battle.enemy.id,battle.enemyHp,battle.enemyMaxHp);
+  if(activePhase!=null&&battle.enemyPhaseThreshold!=activePhase.minimumHpPercent){
+   battle.enemyPhaseThreshold=activePhase.minimumHpPercent;
+   battle.enemyPhaseMove=0;
+   Record(battle,$"{battle.enemy.name}は「{activePhase.name}」へ移行");
+  }
+  var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
+  int baseDamage=move?.damage??battle.enemy.damages[moveIndex];
+  int dieOne=0,dieTwo=0,modifier=0;
+  int rolled=baseDamage>0?RollDamage(baseDamage+dungeonDamage,out dieOne,out dieTwo,out modifier):0;
+  int raw=baseDamage>0?Damage(rolled,battle.enemyStatuses,run.statuses):0;
   int damage=Mathf.Max(0,raw-run.block);
   run.hp-=damage;
   run.block=0;
-  Tick(battle.enemyStatuses,ref battle.enemyHp,battle.enemyMaxHp);
-  Tick(run.statuses,ref run.hp,run.maxHp);
+  int playerStatusDamage=Tick(run.statuses,ref run.hp,run.maxHp);
+  int enemyBlock=Mathf.Max(0,move?.block??0);
+  battle.enemyBlock+=enemyBlock;
+  int enemyHeal=Mathf.Min(Mathf.Max(0,move?.heal??0),Mathf.Max(0,battle.enemyMaxHp-battle.enemyHp));
+  battle.enemyHp+=enemyHeal;
   var effects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   ApplyEffects(run,battle,effects,true);
   battle.move++;
-  run.energy=3;
-  Draw(run,5);
-  battle.log=$"{battle.enemy.name}の攻撃：{damage}ダメージ{EffectText(effects)}";
+  if(activePhase!=null)battle.enemyPhaseMove++;
+  run.energy=PackspireContent.Data.balance.baseEnergy;
+  Draw(run,PackspireContent.Data.balance.initialHand);
+  var details=new List<string>();
+  if(damage>0)details.Add($"{damage}ダメージ");
+  if(enemyBlock>0)details.Add($"{enemyBlock}ブロック");
+  if(enemyHeal>0)details.Add($"HP+{enemyHeal}");
+  if(enemyStatusDamage>0)details.Add($"敵継続ダメージ{enemyStatusDamage}");
+  if(playerStatusDamage>0)details.Add($"継続ダメージ{playerStatusDamage}");
+  string effectText=EffectText(effects);
+  if(!string.IsNullOrEmpty(effectText))details.Add(effectText);
+  if(details.Count==0)details.Add("特殊行動");
+  string moveName=!string.IsNullOrEmpty(move?.name)?move.name:"攻撃";
+  Record(battle,$"{battle.enemy.name}の{moveName}：{string.Join(" / ",details)}");
   return new BattleActionFx{
    ok=true,
    playerDefeated=run.hp<=0,
    damageToPlayer=damage,
+   statusDamageToEnemy=enemyStatusDamage,
+   statusDamageToPlayer=playerStatusDamage,
+   enemyBlockGained=enemyBlock,
+   enemyHealGained=enemyHeal,
+   enemyMoveKind=move?.kind??EnemyMoveKind.Attack,
    dieOne=dieOne,
    dieTwo=dieTwo,
    damageModifier=modifier,
    rolledDamage=raw,
-   cardName=battle.enemy.name
+   cardName=moveName
   };
  }
+
+ public static int NextEnemyMoveIndex(BattleState battle){
+  if(battle?.enemy?.damages==null||battle.enemy.damages.Length==0)return 0;
+  var phase=ContentDatabase.EnemyPhase(battle.enemy.id,battle.enemyHp,battle.enemyMaxHp);
+  var indices=phase?.moveIndices?
+   .Where(index=>index>=0&&index<battle.enemy.damages.Length)
+   .ToArray();
+  if(indices!=null&&indices.Length>0){
+   int phaseMove=battle.enemyPhaseThreshold==phase.minimumHpPercent?battle.enemyPhaseMove:0;
+   return indices[((phaseMove%indices.Length)+indices.Length)%indices.Length];
+  }
+  return ((battle.move%battle.enemy.damages.Length)+battle.enemy.damages.Length)%battle.enemy.damages.Length;
+ }
+
+ public static string EnemyPhaseName(BattleState battle)=>
+  battle?.enemy==null?string.Empty:
+  ContentDatabase.EnemyPhase(battle.enemy.id,battle.enemyHp,battle.enemyMaxHp)?.name??string.Empty;
 
  public static bool EndTurn(RunState run,BattleState battle,int dungeonDamage=0)=>EndTurnFx(run,battle,dungeonDamage).playerDefeated;
  public static void Draw(RunState run,int n){while(n-->0){if(run.draw.Count==0){run.draw=Shuffle(run.discard);run.discard=new();}if(run.draw.Count==0)return;var c=run.draw[^1];run.draw.RemoveAt(run.draw.Count-1);run.hand.Add(c);}}
@@ -141,8 +214,31 @@ public static class BattleSystem {
  public static int Block(int value,List<StatusState> statuses)=>Mathf.Max(0,value-Status(statuses,"armorBreak"));
  public static void Apply(List<StatusState> statuses,EffectSpec effect){if(ContentDatabase.Status(effect.type)==null)return;var current=statuses.FirstOrDefault(x=>x.type==effect.type);if(current==null){current=new StatusState{type=effect.type};statuses.Add(current);}current.amount+=Mathf.Max(1,effect.amount);current.duration=Mathf.Max(current.duration,effect.duration);}
  static void ApplyEffects(RunState run,BattleState battle,List<EffectSpec> effects,bool enemySource){foreach(var effect in effects){var target=effect.target=="enemy"?battle.enemyStatuses:effect.target=="player"?run.statuses:effect.target=="self"?(enemySource?battle.enemyStatuses:run.statuses):battle.enemyStatuses;Apply(target,effect);}}
- static void Tick(List<StatusState> statuses,ref int hp,int maxHp){foreach(var status in statuses.ToList()){if(status.type=="poison"){hp=Mathf.Max(0,hp-status.amount);status.amount--;}if(status.type=="burn")hp=Mathf.Max(0,hp-status.amount);if(status.type=="regen")hp=Mathf.Min(maxHp,hp+status.amount);if(status.duration>0)status.duration--;var def=ContentDatabase.Status(status.type);if(status.amount<=0||status.duration==0&&def!=null&&!def.stack)statuses.Remove(status);}}
- static string EffectText(List<EffectSpec> effects)=>effects.Count==0?"":" / "+string.Join("・",effects.Select(x=>$"{ContentDatabase.Status(x.type)?.name}{x.amount}"));
+ static int Tick(List<StatusState> statuses,ref int hp,int maxHp){
+  int before=hp;
+  foreach(var status in statuses.ToList()){
+   bool timed=status.duration>0;
+   if(status.type=="poison"){
+    hp=Mathf.Max(0,hp-status.amount);
+    status.amount--;
+   }
+   if(status.type=="burn")hp=Mathf.Max(0,hp-status.amount);
+   if(status.type=="regen")hp=Mathf.Min(maxHp,hp+status.amount);
+   if(timed)status.duration--;
+   if(status.amount<=0||(timed&&status.duration<=0))statuses.Remove(status);
+  }
+  return Mathf.Max(0,before-hp);
+ }
+ static string EffectText(List<EffectSpec> effects)=>effects.Count==0?"":string.Join("・",effects.Select(x=>$"{ContentDatabase.Status(x.type)?.name}{x.amount}"));
+ public static void Record(BattleState battle,string line){
+  if(battle==null||string.IsNullOrEmpty(line))return;
+  battle.log=line;
+  battle.logLines??=new();
+  battle.logLines.Add(line);
+  const int maximumLines=24;
+  if(battle.logLines.Count>maximumLines)
+   battle.logLines.RemoveRange(0,battle.logLines.Count-maximumLines);
+ }
  static List<T> Shuffle<T>(List<T> list)=>list.OrderBy(_=>Rng.Next()).ToList();
 }
 }
