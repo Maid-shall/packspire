@@ -492,16 +492,22 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: 138px;
+    top: 0;
     bottom: 0;
     justify-content: center;
     align-items: center;
-    background-color: rgba(2, 1, 12, 0.48);
+    padding: 54px 72px 128px;
+    background-color: rgba(2, 1, 12, 0.76);
 }
 .ps-gboard-event-popup {
-    width: 470px;
-    padding: 26px 30px 24px;
-    background-color: rgba(14, 7, 39, 0.97);
+    width: 1040px;
+    max-width: 88%;
+    height: 610px;
+    max-height: 82%;
+    flex-direction: row;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(10, 5, 32, 0.98);
     border-left-width: 2px;
     border-right-width: 2px;
     border-top-width: 2px;
@@ -511,11 +517,85 @@
     border-top-color: rgb(255, 192, 221);
     border-bottom-color: rgb(175, 103, 255);
 }
-.ps-gboard-event-eyebrow { font-size: 12px; color: rgb(112, 237, 255); -unity-font-style: bold; }
-.ps-gboard-event-title { margin-top: 6px; font-size: 30px; color: rgb(255, 223, 163); }
-.ps-gboard-event-body { margin-top: 14px; margin-bottom: 20px; font-size: 16px; white-space: normal; color: rgb(230, 219, 249); }
-.ps-gboard-event-choices { flex-direction: column; }
-.ps-gboard-event-choice { width: 100%; margin-top: 7px; min-height: 38px; }
+.ps-gboard-event-art-column {
+    width: 57%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(4, 2, 17);
+    border-right-width: 1px;
+    border-right-color: rgba(81, 229, 255, 0.66);
+}
+.ps-gboard-event-art {
+    width: 100%;
+    height: 100%;
+}
+.ps-gboard-event-art-fallback {
+    width: 100%;
+    height: 100%;
+    font-size: 118px;
+    color: rgba(175, 103, 255, 0.58);
+    -unity-text-align: middle-center;
+}
+.ps-gboard-event-copy {
+    width: 43%;
+    height: 100%;
+    padding: 34px 34px 28px;
+    flex-direction: column;
+    background-color: rgba(13, 7, 39, 0.96);
+}
+.ps-gboard-event-eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgb(112, 237, 255);
+    -unity-font-style: bold;
+}
+.ps-gboard-event-title {
+    margin-top: 7px;
+    font-size: 31px;
+    color: rgb(255, 223, 163);
+}
+.ps-gboard-event-rule {
+    width: 100%;
+    height: 1px;
+    margin-top: 14px;
+    margin-bottom: 16px;
+    background-color: rgba(255, 91, 174, 0.70);
+}
+.ps-gboard-event-body {
+    flex-grow: 1;
+    margin: 0 0 18px;
+    font-size: 15px;
+    white-space: normal;
+    color: rgb(230, 219, 249);
+}
+.ps-gboard-event-choices {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+.ps-gboard-event-choice.ps-gboard-action {
+    width: 100%;
+    min-height: 68px;
+    margin-top: 8px;
+    padding: 10px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    white-space: normal;
+    background-color: rgba(49, 15, 67, 0.94);
+    border-left-width: 2px;
+    border-left-color: rgb(255, 91, 174);
+    border-right-color: rgba(81, 229, 255, 0.72);
+}
+.ps-gboard-event-choice-label {
+    font-size: 17px;
+    color: rgb(255, 226, 165);
+    -unity-font-style: bold;
+}
+.ps-gboard-event-choice-summary {
+    margin-top: 4px;
+    font-size: 11px;
+    color: rgba(216, 195, 226, 0.84);
+}
 
 /* Battle composition: three independent vertical bands.
    Header (0-160), enemy/readout (200-540), hand (from 560 down).  The dice
@@ -1926,4 +2006,102 @@
 }
 .ps-gboard-in-combat .ps-gboard-cell-detail {
     display: none;
+}
+
+/* Fog of discovery has three explicit states. Unknown cells intentionally
+   share one silhouette so holes and walls cannot leak the generated layout.
+   Remembered cells retain topology while moving actors require live sight. */
+.ps-gboard-cell.ps-gboard-visible {
+    opacity: 1;
+}
+.ps-gboard-cell.ps-gboard-visible .ps-gboard-cell-face {
+    border-left-color: rgba(112, 236, 255, 0.30);
+    border-top-color: rgba(255, 211, 139, 0.24);
+}
+.ps-gboard-cell.ps-gboard-memory {
+    opacity: 0.43;
+}
+.ps-gboard-cell.ps-gboard-unseen,
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-void,
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-blocked {
+    visibility: visible;
+    opacity: 1;
+    background-color: rgba(4, 4, 17, 0.96);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(49, 41, 80, 0.40);
+    border-right-color: rgba(24, 20, 46, 0.55);
+    border-top-color: rgba(49, 41, 80, 0.32);
+    border-bottom-color: rgba(19, 16, 39, 0.64);
+}
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-face,
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-void .ps-gboard-cell-face {
+    display: flex;
+    background-color: rgba(10, 8, 28, 0.94);
+    border-left-color: rgba(66, 53, 100, 0.16);
+    border-right-color: rgba(10, 8, 22, 0.44);
+    border-top-color: rgba(66, 53, 100, 0.14);
+    border-bottom-color: rgba(10, 8, 22, 0.48);
+}
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-mark,
+.ps-gboard-cell.ps-gboard-unseen .ps-gboard-cell-sigil {
+    display: none;
+}
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-path {
+    border-left-color: rgb(71, 245, 255);
+    border-right-color: rgb(71, 245, 255);
+    border-top-color: rgb(71, 245, 255);
+    border-bottom-color: rgb(71, 245, 255);
+}
+.ps-gboard-cell.ps-gboard-unseen.ps-gboard-preview {
+    border-left-color: rgb(255, 151, 224);
+    border-right-color: rgb(255, 151, 224);
+    border-top-color: rgb(255, 151, 224);
+    border-bottom-color: rgb(255, 151, 224);
+}
+.ps-gboard-cell.ps-gboard-calamity {
+    background-color: rgba(63, 10, 45, 0.92);
+    border-left-color: rgb(255, 91, 166);
+    border-right-color: rgba(255, 184, 104, 0.72);
+    border-top-color: rgba(255, 184, 104, 0.72);
+    border-bottom-color: rgb(255, 91, 166);
+}
+.ps-gboard-cell.ps-gboard-calamity .ps-gboard-cell-face {
+    background-color: rgba(109, 20, 75, 0.78);
+}
+.ps-gboard-cell.ps-gboard-calamity-tier-1 .ps-gboard-cell-face {
+    background-color: rgba(138, 27, 76, 0.82);
+}
+.ps-gboard-cell.ps-gboard-calamity-tier-2 .ps-gboard-cell-face {
+    background-color: rgba(167, 26, 62, 0.88);
+    border-left-color: rgb(255, 191, 91);
+}
+.ps-gboard-cell.ps-gboard-calamity-tier-3 .ps-gboard-cell-face {
+    background-color: rgba(194, 24, 53, 0.94);
+    border-left-color: rgb(255, 225, 119);
+    border-right-color: rgb(255, 96, 178);
+    border-top-color: rgb(255, 225, 119);
+    border-bottom-color: rgb(255, 96, 178);
+}
+.ps-gboard-cell.ps-gboard-mature .ps-gboard-cell-face {
+    border-left-color: rgb(255, 222, 119);
+    border-right-color: rgb(92, 240, 255);
+    border-top-color: rgb(255, 222, 119);
+    border-bottom-color: rgb(255, 106, 192);
+}
+.ps-gboard-cell.ps-gboard-mature .ps-gboard-cell-sigil {
+    color: rgb(255, 232, 146);
+}
+.ps-gboard-enemy-actor.ps-gboard-enemy-patrol {
+    border-left-color: rgb(115, 226, 255);
+}
+.ps-gboard-enemy-actor.ps-gboard-enemy-wait {
+    border-left-color: rgb(255, 218, 124);
+}
+.ps-gboard-enemy-actor.ps-gboard-enemy-alerted {
+    background-color: rgba(151, 27, 70, 0.96);
+    border-left-color: rgb(255, 79, 133);
+    border-right-color: rgb(255, 205, 102);
 }

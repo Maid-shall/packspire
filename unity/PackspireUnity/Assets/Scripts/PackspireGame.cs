@@ -92,6 +92,7 @@ public partial class PackspireGame : MonoBehaviour {
   packingAtBase=false;
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
+  GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
   GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="DEV: 封印格子盤（配置→一筆→進行）";
@@ -101,6 +102,7 @@ public partial class PackspireGame : MonoBehaviour {
   if(run==null)return;
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
+  GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
   GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="封印格子をやり直した";
@@ -119,6 +121,7 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public void UiConfirmGridReturn(){
   if(gridBoard==null)return;
+  GridBoardSystem.ResolveExplorationTurn(gridBoard);
   gridBoard.pendingGate="";
   message=$"区画 {gridBoard.areaIndex+1} の帰還点から持ち帰った";
   FinishRun(true);
@@ -333,7 +336,9 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiBeginGridEvent(){
   if(run==null||gridBoard==null)return;
   message="記憶の揺らぎに触れた";
-  screen=ScreenId.Event;
+  // Grid events are modal overlays on the live board. Keeping the screen
+  // stable preserves route progress, camera position and the exploration HUD.
+  screen=ScreenId.GridBoard;
  }
  public void UiBeginGridEncounter(){
   if(run==null||gridBoard==null||battle!=null)return;
@@ -353,6 +358,7 @@ public partial class PackspireGame : MonoBehaviour {
    packingAtBase=false;
    battle=null;
    gridBoard=GridBoardSystem.Create(run.dungeon);
+   GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
    GridBoardSystem.SyncExplorePool(gridBoard,run);
    message="封印格子を展開した";
    screen=ScreenId.GridBoard;
@@ -366,11 +372,14 @@ public partial class PackspireGame : MonoBehaviour {
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
-  EnemyDef enemy;
-  if(LockBattleShowcaseArt){
+  EnemyDef enemy=null;
+  if(gridBoard!=null&&!string.IsNullOrEmpty(gridBoard.pendingEnemyId))
+   enemy=GameCatalog.Enemies.FirstOrDefault(x=>x.id==gridBoard.pendingEnemyId);
+  if(gridBoard!=null)gridBoard.pendingEnemyId="";
+  if(enemy==null&&LockBattleShowcaseArt){
    enemy=GameCatalog.Enemies.FirstOrDefault(x=>x.id=="dragon")
     ??GameCatalog.Enemies.First(x=>x.tier==(boss?3:Mathf.Min(2,1+run.battlesWon/3)));
-  } else {
+  } else if(enemy==null){
    var pool=GameCatalog.Enemies.Where(x=>boss?x.tier==3:x.tier==Mathf.Min(2,1+run.battlesWon/3)).ToArray();
    enemy=pool[UnityEngine.Random.Range(0,pool.Length)];
   }

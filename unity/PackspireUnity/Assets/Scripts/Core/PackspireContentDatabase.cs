@@ -55,9 +55,20 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
  public EffectContent[] effects=Array.Empty<EffectContent>();
 }
 
+public enum EnemyBoardBehavior {
+ Patrol,
+ Chase,
+ Wait
+}
+
 [Serializable] public class EnemyContent {
  public string id,name;
  public int tier,hp;
+ [Header("Exploration board")]
+ public EnemyBoardBehavior boardBehavior=EnemyBoardBehavior.Patrol;
+ [Min(1)] public int boardSightRange=4;
+ [Min(0)] public int boardMoveSteps=1;
+ [Min(1)] public int boardPatrolRadius=3;
  public EnemyMoveContent[] moves=Array.Empty<EnemyMoveContent>();
  public Sprite portrait;
  public string legacyPortraitResource;
@@ -89,6 +100,8 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
  public string legacyPortraitResource,legacyPortraitFrontResource,legacyPortraitHubResource;
  public string traitName,traitText,traitKind;
  public int traitValue;
+ /// <summary>Added to the default one-cell exploration sight radius.</summary>
+ public int explorationSightBonus;
  public string activeSkillId,activeSkillName,activeSkillText;
  public CharacterSkillKind activeSkillKind;
  public int activeSkillAmount,activeSkillSecondaryAmount;
@@ -131,6 +144,9 @@ public enum EventEffectType { None, Hp, Gold, RepairAll }
 
 [Serializable] public class EventContent {
  public string id,eyebrow,title,body;
+ /// <summary>Allows the event pool to change as dungeon pressure rises.</summary>
+ public int minimumDoomTier;
+ public int weight=1;
  public EventChoiceContent[] choices=Array.Empty<EventChoiceContent>();
  public Sprite artwork;
 }

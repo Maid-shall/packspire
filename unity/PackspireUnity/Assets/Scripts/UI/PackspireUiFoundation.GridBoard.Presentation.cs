@@ -38,7 +38,7 @@ public sealed partial class PackspireUiFoundation {
   if(gridBoardDoomLabel!=null)
    gridBoardDoomLabel.text=inBattle
     ?$"◆ ROUND {Mathf.Max(1,(game.UiBattle?.move??0)+1):00}"
-    :$"◆ TURN {Mathf.Max(1,run.doom+1):00}";
+    :$"◆ TURN {Mathf.Max(1,run.explorationTurn+1):00}";
   if(gridBoardAreaChipLabel!=null){
    gridBoardAreaChipLabel.text=$"◇ 区画 {run.areaIndex+1}/{Mathf.Max(1,run.areaCount)}";
    gridBoardAreaChipLabel.style.display=inBattle?DisplayStyle.None:DisplayStyle.Flex;
@@ -119,19 +119,34 @@ public sealed partial class PackspireUiFoundation {
 
   foreach(var cell in run.cells){
    if(!gridBoardCells.TryGetValue(CellKey(cell.x,cell.y),out var ve)||ve==null)continue;
+   bool visible=GridBoardSystem.IsCurrentlyVisible(run,cell);
+   bool discovered=GridBoardSystem.IsDiscovered(run,cell);
+   var enemy=GridBoardSystem.EnemyAt(run,cell.x,cell.y);
+   string displayPlace=visible&&enemy!=null?"enemy":cell.place;
+   bool showPlace=visible||(discovered&&displayPlace!="enemy");
    ve.EnableInClassList("ps-gboard-cell",true);
+   ve.EnableInClassList("ps-gboard-visible",visible);
+   ve.EnableInClassList("ps-gboard-memory",discovered&&!visible);
+   ve.EnableInClassList("ps-gboard-unseen",!discovered);
    ve.EnableInClassList("ps-gboard-void",cell.terrain=="void");
    ve.EnableInClassList("ps-gboard-blocked",cell.terrain=="blocked");
    ve.EnableInClassList("ps-gboard-start",cell.terrain=="start");
    ve.EnableInClassList("ps-gboard-goal",cell.terrain=="goal");
    ve.EnableInClassList("ps-gboard-floor",cell.terrain=="floor");
-   ve.EnableInClassList("ps-gboard-lamp",cell.place=="lamp");
-   ve.EnableInClassList("ps-gboard-fog",cell.place=="fog");
-   ve.EnableInClassList("ps-gboard-seal",cell.place=="seal");
-   ve.EnableInClassList("ps-gboard-enemy",cell.place=="enemy");
-   ve.EnableInClassList("ps-gboard-event",cell.place=="event");
-   ve.EnableInClassList("ps-gboard-next",cell.place=="next");
-   ve.EnableInClassList("ps-gboard-return",cell.place=="return");
+   ve.EnableInClassList("ps-gboard-lamp",showPlace&&displayPlace=="lamp");
+   ve.EnableInClassList("ps-gboard-fog",showPlace&&displayPlace=="fog");
+   ve.EnableInClassList("ps-gboard-seal",showPlace&&displayPlace=="seal");
+   ve.EnableInClassList("ps-gboard-enemy",visible&&displayPlace=="enemy");
+   ve.EnableInClassList("ps-gboard-event",showPlace&&displayPlace=="event");
+   ve.EnableInClassList("ps-gboard-next",showPlace&&displayPlace=="next");
+   ve.EnableInClassList("ps-gboard-return",showPlace&&displayPlace=="return");
+   ve.EnableInClassList("ps-gboard-calamity",showPlace&&displayPlace=="calamity");
+   int calamityTier=GridBoardSystem.DoomTier(run);
+   ve.EnableInClassList("ps-gboard-calamity-tier-1",showPlace&&displayPlace=="calamity"&&calamityTier==1);
+   ve.EnableInClassList("ps-gboard-calamity-tier-2",showPlace&&displayPlace=="calamity"&&calamityTier==2);
+   ve.EnableInClassList("ps-gboard-calamity-tier-3",showPlace&&displayPlace=="calamity"&&calamityTier>=3);
+   ve.EnableInClassList("ps-gboard-mature",showPlace&&cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold&&
+    displayPlace is "lamp" or "fog" or "seal");
    ve.EnableInClassList("ps-gboard-path",pathSet.Contains(CellKey(cell.x,cell.y)));
    ve.EnableInClassList("ps-gboard-preview",preview.Contains(CellKey(cell.x,cell.y))&&!pathSet.Contains(CellKey(cell.x,cell.y)));
    ve.EnableInClassList("ps-gboard-piece",cell.x==pieceX&&cell.y==pieceY);
@@ -140,24 +155,25 @@ public sealed partial class PackspireUiFoundation {
    var cellMark=ve.Q<Label>("mark");
    var cellSigil=ve.Q<Label>("sigil");
    if(cellSigil!=null){
-    cellSigil.text=cell.terrain switch{
+    cellSigil.text=!discovered?"":displayPlace=="calamity"?"◆":cell.terrain switch{
      "blocked"=>"✦",
      "start"=>"◈",
      "goal"=>"✧",
-     _=>cell.place switch{
+     _=>!showPlace?"":displayPlace switch{
       "lamp"=>"✦", "fog"=>"☾", "seal"=>"◇",
       "event"=>"✧", "next"=>"➜", "return"=>"↶", _=>""
      }
     };
    }
    if(cellMark!=null){
-    string t=cell.terrain switch{
+    string t=!discovered?"":displayPlace=="calamity"?"刻":cell.terrain switch{
      "start"=>"入",
      "goal"=>"標",
      "blocked"=>"■",
-     _=>GridBoardSystem.PlaceLabel(cell.place),
+     _=>showPlace?GridBoardSystem.PlaceLabel(displayPlace):"",
     };
-     if(cell.grow>0&&(cell.place is "lamp" or "fog" or "seal"))t=$"{GridBoardSystem.PlaceLabel(cell.place)}{cell.grow}";
+     if(showPlace&&cell.grow>0&&(displayPlace is "lamp" or "fog" or "seal"))t=$"{GridBoardSystem.PlaceLabel(displayPlace)}{cell.grow}";
+    if(showPlace&&displayPlace=="calamity")t=$"刻{run.doom}";
     if(cell.x==pieceX&&cell.y==pieceY)t=string.IsNullOrEmpty(t)?"●":t+"●";
     cellMark.text=t??"";
    }

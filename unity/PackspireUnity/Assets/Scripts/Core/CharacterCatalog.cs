@@ -11,6 +11,7 @@ public class CharacterDef {
  public string portraitResource,portraitFrontResource,portraitHubResource;
  public string traitName,traitText,traitKind;
  public int traitValue;
+ public int explorationSightBonus;
  public string activeSkillId,activeSkillName,activeSkillText;
  public CharacterSkillKind activeSkillKind;
  public int activeSkillAmount,activeSkillSecondaryAmount;
@@ -38,6 +39,7 @@ public static class CharacterCatalog {
     portraitFrontResource=value.legacyPortraitFrontResource,
     portraitHubResource=value.legacyPortraitHubResource,
     traitName=value.traitName,traitText=value.traitText,traitKind=value.traitKind,traitValue=value.traitValue,
+    explorationSightBonus=value.explorationSightBonus,
     activeSkillId=value.activeSkillId,activeSkillName=value.activeSkillName,activeSkillText=value.activeSkillText,
     activeSkillKind=value.activeSkillKind,
     activeSkillAmount=value.activeSkillAmount,

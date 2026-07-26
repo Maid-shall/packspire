@@ -15,15 +15,54 @@ public class GridCellState {
  /// <summary>empty | lamp | fog | seal | enemy | event | next | return</summary>
  public string place="empty";
  public int grow;
+ /// <summary>True after this cell has entered the explorer's sight at least once.</summary>
+ public bool discovered;
+ /// <summary>Exploration turn when this cell was most recently visible.</summary>
+ public int lastSeenTurn=-1;
+}
+
+[Serializable]
+public class GridEnemyState {
+ public string uid="";
+ public string contentId="";
+ public int x,y;
+ public int previousX,previousY;
+ /// <summary>patrol | chase | wait</summary>
+ public string behavior="patrol";
+ public int sightRange=4;
+ public int moveSteps=1;
+ public int patrolRadius=3;
+ public int originX,originY;
+ public bool alerted;
+ public int patrolStep;
+ public Vector2Int Position=>new(x,y);
 }
 
 [Serializable]
 public class GridBoardRunState {
  public int size=8;
+ /// <summary>Stable seed for every authored/generated area in this expedition.</summary>
+ public int generationSeed;
+ /// <summary>Completed exploration turns across the whole expedition.</summary>
+ public int explorationTurn;
+ /// <summary>Completed exploration turns in the current area.</summary>
+ public int areaTurn;
+ /// <summary>True after movement starts until its route or gate resolves the turn.</summary>
+ public bool explorationTurnPending;
+ /// <summary>Base Chebyshev sight range. One reveals the surrounding eight cells.</summary>
+ public int baseSightRange=1;
+ /// <summary>Character, role, equipment and temporary effects add to this value.</summary>
+ public int sightRangeBonus;
+ /// <summary>When false, sight uses a diamond rather than including diagonal cells.</summary>
+ public bool sightIncludesDiagonals=true;
+ /// <summary>0 keeps discovered cells forever; positive values enable optional memory decay.</summary>
+ public int memoryDecayTurns;
  public GridBoardPhase phase=GridBoardPhase.Place;
  public int energy=3;
  public int energyMax=3;
  public List<GridCellState> cells=new();
+ /// <summary>Movable hostile entities; never baked into terrain or cell places.</summary>
+ public List<GridEnemyState> enemies=new();
  public List<Vector2Int> path=new();
  /// <summary>Path index where each slide segment ends (for undo).</summary>
  public List<int> segmentEnds=new();
@@ -46,7 +85,8 @@ public class GridBoardRunState {
  public Vector2Int moveFrom,moveTo;
  /// <summary>Set when the piece lands on an enemy cell; UI starts a same-screen battle.</summary>
  public bool pendingBattle;
- /// <summary>Set when the piece lands on an event cell; UI opens Event screen.</summary>
+ public string pendingEnemyId="";
+ /// <summary>Set when the piece lands on an event cell; UI opens the board-local event overlay.</summary>
  public bool pendingEvent;
  public string pendingEventId="";
  /// <summary>Dungeon id used for area count / flavor.</summary>
@@ -57,6 +97,17 @@ public class GridBoardRunState {
  public string pendingGate="";
 }
 
+public sealed class ExplorationTurnResult {
+ public int turn;
+ public int areaTurn;
+ public int growthAdvanced;
+ public int growthMatured;
+ public int doomBefore;
+ public int doomAfter;
+ public int enemiesMoved;
+ public bool enemyEngaged;
+}
+
 /// <summary>Prototype seal board: place cards, then Longcat-style slide path with turn cap.</summary>
 public static class GridBoardSystem {
  public const int DefaultSize=8;
@@ -64,11 +115,13 @@ public static class GridBoardSystem {
  public const int DefaultEnergy=3;
  public const int DefaultAreaCount=3;
 
- public static GridBoardRunState Create(string dungeonId="old_spire"){
+ public static GridBoardRunState Create(string dungeonId="old_spire",int generationSeed=0){
   var balance=PackspireContent.Data.balance;
+  string resolvedDungeonId=string.IsNullOrEmpty(dungeonId)?balance.defaultDungeonId:dungeonId;
   var run=new GridBoardRunState{
-   dungeonId=string.IsNullOrEmpty(dungeonId)?balance.defaultDungeonId:dungeonId,
-   areaCount=AreaCountForDungeon(dungeonId),
+   dungeonId=resolvedDungeonId,
+   generationSeed=generationSeed==0?Guid.NewGuid().GetHashCode():generationSeed,
+   areaCount=AreaCountForDungeon(resolvedDungeonId),
    areaIndex=0,
    phase=GridBoardPhase.Place,
    energy=balance.baseEnergy,
@@ -109,6 +162,8 @@ public static class GridBoardSystem {
  static void AdvanceDoom(GridBoardRunState run){
   if(run==null)return;
   run.doom=Mathf.Clamp(run.doom+1,0,Mathf.Max(1,run.doomMax));
+  foreach(var facility in run.cells.Where(cell=>cell.place=="calamity"))
+   facility.grow=run.doom;
  }
 
  public static string GrowthSummary(GridBoardRunState run){
@@ -134,9 +189,12 @@ public static class GridBoardSystem {
  public static void LoadArea(GridBoardRunState run,int index){
   if(run==null)return;
   run.areaIndex=Mathf.Clamp(index,0,Mathf.Max(0,run.areaCount-1));
+  run.areaTurn=0;
+  run.explorationTurnPending=false;
   run.size=AreaSize(run.areaIndex);
   run.phase=GridBoardPhase.Place;
   run.pendingBattle=false;
+  run.pendingEnemyId="";
   run.pendingEvent=false;
   run.pendingEventId="";
   run.pendingGate="";
@@ -146,6 +204,7 @@ public static class GridBoardSystem {
   BuildCells(run);
   RefillExploreResources(run);
   run.piece=StartCell(run);
+  RevealAround(run,run.piece);
   ResetPath(run);
   bool last=run.areaIndex>=run.areaCount-1;
   run.message=last
@@ -157,6 +216,7 @@ public static class GridBoardSystem {
   msg="";
   if(run==null){msg="盤がない";return false;}
   if(run.areaIndex>=run.areaCount-1){msg="これ以上の区画はない";return false;}
+  ResolveExplorationTurn(run);
   LoadArea(run,run.areaIndex+1);
   msg=run.message;
   return true;
@@ -172,51 +232,293 @@ public static class GridBoardSystem {
 
  static void BuildCells(GridBoardRunState run){
   run.cells.Clear();
+  run.enemies.Clear();
   int n=run.size;
+  var rng=new System.Random(AreaGenerationSeed(run));
   for(int y=0;y<n;y++)for(int x=0;x<n;x++){
    var c=new GridCellState{x=x,y=y,terrain="floor",place="empty",grow=0};
-   if(x==0&&y==n/2)c.terrain="start";
-   else if(VoidPattern(n,x,y))c.terrain="void";
-   else if(BlockedPattern(n,x,y))c.terrain="blocked";
    run.cells.Add(c);
   }
-  var lamp=Cell(run,2,n/2);
-  if(lamp!=null&&lamp.terrain=="floor"&&lamp.place=="empty"){lamp.place="lamp";lamp.grow=0;}
+
+  var start=new Vector2Int(0,n/2);
+  Cell(run,start.x,start.y).terrain="start";
+  var protectedCells=new HashSet<long>{
+   CellKey(start.x,start.y),
+   CellKey(1,start.y),
+   CellKey(Mathf.Min(2,n-1),start.y)
+  };
+
+  // First break the rectangular silhouette around its perimeter, then punch a
+  // few genuine interior holes. Every removal is accepted only if all
+  // remaining traversable cells still form one connected dungeon fragment.
+  int voidTarget=Mathf.Clamp(Mathf.RoundToInt(n*n*(0.20f+run.areaIndex*0.015f)),8,n*n/3);
+  int interiorTarget=2+run.areaIndex;
+  var borderCandidates=Shuffled(run.cells.Where(c=>
+   !protectedCells.Contains(CellKey(c.x,c.y))&&
+   (c.x==0||c.y==0||c.x==n-1||c.y==n-1)),rng);
+  int voidCount=0;
+  foreach(var cell in borderCandidates){
+   if(voidCount>=voidTarget-interiorTarget)break;
+   if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
+  }
+  var interiorCandidates=Shuffled(run.cells.Where(c=>
+   !protectedCells.Contains(CellKey(c.x,c.y))&&
+   c.x>1&&c.y>0&&c.x<n-1&&c.y<n-1),rng);
+  int interiorVoids=0;
+  foreach(var cell in interiorCandidates){
+   if(interiorVoids>=interiorTarget||voidCount>=voidTarget)break;
+   if(TrySetTerrain(run,cell,"void",start)){interiorVoids++;voidCount++;}
+  }
+  var remainingVoidCandidates=Shuffled(run.cells.Where(c=>
+   c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))),rng);
+  foreach(var cell in remainingVoidCandidates){
+   if(voidCount>=voidTarget)break;
+   if(TrySetTerrain(run,cell,"void",start)){voidCount++;}
+  }
+
+  int blockedTarget=Mathf.Clamp(3+run.areaIndex,3,6);
+  var wallCandidates=Shuffled(run.cells.Where(c=>
+   c.terrain=="floor"&&!protectedCells.Contains(CellKey(c.x,c.y))&&
+   c.x>0&&c.x<n-1&&c.y>0&&c.y<n-1),rng);
+  int blocked=0;
+  foreach(var cell in wallCandidates){
+   if(blocked>=blockedTarget)break;
+   if(TrySetTerrain(run,cell,"blocked",start)){blocked++;}
+  }
+  PlaceCalamityFacility(run,start,rng);
+
+  var distances=TerrainDistances(run,start);
+  var lamp=run.cells
+   .Where(c=>c.terrain=="floor"&&c.place=="empty"&&
+    distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=2&&distance<=4)
+   .OrderBy(c=>distances[CellKey(c.x,c.y)])
+   .ThenBy(_=>rng.Next())
+   .FirstOrDefault();
+  if(lamp!=null){lamp.place="lamp";lamp.grow=0;}
+
+  // Gates are deliberately far from the entrance. Since terrain connectivity
+  // was validated above, every selected anchor is guaranteed reachable.
+  if(run.areaIndex<run.areaCount-1)PlaceFarthest(run,"next",distances,rng);
+  PlaceFarthest(run,"return",distances,rng);
   int enemies=Mathf.Clamp(1+run.areaIndex,1,4);
   int events=run.areaIndex==0?1:2;
-  PlaceRandom(run,"enemy",enemies);
-  PlaceRandom(run,"event",events);
-  if(run.areaIndex<run.areaCount-1)PlaceRandom(run,"next",1);
-  PlaceRandom(run,"return",1);
+  SpawnEnemies(run,enemies,rng,distances,2);
+  PlaceRandom(run,"event",events,rng,distances,2);
  }
 
- static bool VoidPattern(int n,int x,int y){
-  // A few missing edge cells make even the fully revealed prototype read as a
-  // dungeon fragment. Future maps can freely use interior voids too.
-  int mid=n/2;
-  if((x==0||x==n-1)&&(y<mid-1||y>mid+1))return true;
-  if((y==0||y==n-1)&&(x==0||x==1||x==n-2||x==n-1))return true;
-  return (x==1&&y==1)||(x==n-2&&y==n-2&&n>=8);
+ static int StableHash(string value){
+  unchecked{
+   uint hash=2166136261;
+   foreach(char c in value??""){
+    hash^=c;
+    hash*=16777619;
+   }
+   return (int)hash;
+  }
  }
 
- static bool BlockedPattern(int n,int x,int y){
-  // Sparse walls that scale with board size.
-  if(n<=7)return (x==3&&y==2)||(x==4&&y==5)||(x==2&&y==5)||(x==5&&y==1);
-  if(n==8)return (x==3&&y==2)||(x==4&&y==5)||(x==2&&y==6)||(x==5&&y==1)||(x==6&&y==4);
-  return (x==3&&y==2)||(x==4&&y==5)||(x==2&&y==7)||(x==5&&y==1)||(x==7&&y==4)||(x==6&&y==6);
+ static int AreaGenerationSeed(GridBoardRunState run){
+  unchecked{
+   int hash=run?.generationSeed??0;
+   hash=(hash*397)^StableHash(run?.dungeonId);
+   hash=(hash*397)^(run?.areaIndex??0);
+   return hash;
+  }
  }
 
- static void PlaceRandom(GridBoardRunState run,string place,int count){
-  var pool=run.cells
-   .Where(c=>c.terrain=="floor"&&c.place=="empty")
-   .OrderBy(_=>UnityEngine.Random.value)
+ static long CellKey(int x,int y)=>((long)x<<32)|(uint)y;
+
+ /// <summary>Current sight radius after character/equipment/status modifiers.</summary>
+ public static int EffectiveSightRange(GridBoardRunState run)=>
+  run==null?0:Mathf.Max(0,run.baseSightRange+run.sightRangeBonus);
+
+ public static void ConfigureSight(GridBoardRunState run,int sightRangeBonus,
+  bool includeDiagonals=true){
+  if(run==null)return;
+  run.sightRangeBonus=sightRangeBonus;
+  run.sightIncludesDiagonals=includeDiagonals;
+  RevealAround(run,run.piece);
+ }
+
+ public static bool IsCurrentlyVisible(GridBoardRunState run,GridCellState cell){
+  if(run==null||cell==null)return false;
+  int dx=Mathf.Abs(cell.x-run.piece.x);
+  int dy=Mathf.Abs(cell.y-run.piece.y);
+  int distance=run.sightIncludesDiagonals?Mathf.Max(dx,dy):dx+dy;
+  return distance<=EffectiveSightRange(run);
+ }
+
+ public static bool IsDiscovered(GridBoardRunState run,GridCellState cell){
+  if(run==null||cell==null)return false;
+  if(IsCurrentlyVisible(run,cell))return true;
+  if(!cell.discovered)return false;
+  if(run.memoryDecayTurns<=0)return true;
+  return run.explorationTurn-cell.lastSeenTurn<=run.memoryDecayTurns;
+ }
+
+ /// <summary>
+ /// Reveal from one traversal anchor. Keeping this public lets character,
+ /// equipment and field effects reveal from alternate origins later.
+ /// </summary>
+ public static int RevealAround(GridBoardRunState run,Vector2Int origin,int range=-1){
+  if(run?.cells==null)return 0;
+  int sight=range<0?EffectiveSightRange(run):Mathf.Max(0,range);
+  int revealed=0;
+  foreach(var cell in run.cells){
+   int dx=Mathf.Abs(cell.x-origin.x);
+   int dy=Mathf.Abs(cell.y-origin.y);
+   int distance=run.sightIncludesDiagonals?Mathf.Max(dx,dy):dx+dy;
+   if(distance>sight)continue;
+   if(!cell.discovered)revealed++;
+   cell.discovered=true;
+   cell.lastSeenTurn=run.explorationTurn;
+  }
+  return revealed;
+ }
+
+ static List<GridCellState> Shuffled(IEnumerable<GridCellState> source,System.Random rng){
+  var values=source.ToList();
+  for(int i=values.Count-1;i>0;i--){
+   int j=rng.Next(i+1);
+   (values[i],values[j])=(values[j],values[i]);
+  }
+  return values;
+ }
+
+ static bool TrySetTerrain(GridBoardRunState run,GridCellState cell,string terrain,Vector2Int start){
+  if(cell==null||cell.terrain!="floor")return false;
+  string previous=cell.terrain;
+  cell.terrain=terrain;
+  if(IsAreaTraversable(run,start))return true;
+  cell.terrain=previous;
+  return false;
+ }
+
+ /// <summary>True when every non-void/non-blocked cell belongs to the start component.</summary>
+ public static bool IsAreaTraversable(GridBoardRunState run)=>run!=null&&
+  IsAreaTraversable(run,StartCell(run));
+
+ static bool IsAreaTraversable(GridBoardRunState run,Vector2Int start){
+  if(run?.cells==null||run.cells.Count==0)return false;
+  var startCell=Cell(run,start.x,start.y);
+  if(startCell==null||!TerrainWalkable(startCell))return false;
+  int expected=run.cells.Count(TerrainWalkable);
+  return TerrainDistances(run,start).Count==expected;
+ }
+
+ static bool TerrainWalkable(GridCellState cell)=>
+  cell!=null&&cell.terrain is not ("void" or "blocked");
+
+ static Dictionary<long,int> TerrainDistances(GridBoardRunState run,Vector2Int start){
+  var distances=new Dictionary<long,int>();
+  var startCell=Cell(run,start.x,start.y);
+  if(!TerrainWalkable(startCell))return distances;
+  var queue=new Queue<Vector2Int>();
+  queue.Enqueue(start);
+  distances[CellKey(start.x,start.y)]=0;
+  var directions=new[]{Vector2Int.up,Vector2Int.right,Vector2Int.down,Vector2Int.left};
+  while(queue.Count>0){
+   var current=queue.Dequeue();
+   int distance=distances[CellKey(current.x,current.y)];
+   foreach(var direction in directions){
+    var next=current+direction;
+    var cell=Cell(run,next.x,next.y);
+    long key=CellKey(next.x,next.y);
+    if(!TerrainWalkable(cell)||distances.ContainsKey(key))continue;
+    distances[key]=distance+1;
+    queue.Enqueue(next);
+   }
+  }
+  return distances;
+ }
+
+ static void PlaceFarthest(GridBoardRunState run,string place,
+  Dictionary<long,int> distances,System.Random rng){
+  var cell=run.cells
+   .Where(c=>c.terrain=="floor"&&c.place=="empty"&&
+    distances.ContainsKey(CellKey(c.x,c.y)))
+   .OrderByDescending(c=>distances[CellKey(c.x,c.y)])
+   .ThenBy(_=>rng.Next())
+   .FirstOrDefault();
+  SetPlace(cell,place);
+ }
+
+ static void PlaceRandom(GridBoardRunState run,string place,int count,System.Random rng,
+  Dictionary<long,int> distances,int minimumDistance){
+  var pool=Shuffled(run.cells.Where(c=>
+   c.terrain=="floor"&&c.place=="empty"&&
+   !run.enemies.Any(enemy=>enemy.x==c.x&&enemy.y==c.y)&&
+   distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=minimumDistance),rng)
+   .Take(Mathf.Max(0,count));
+  foreach(var c in pool){
+   SetPlace(c,place);
+   if(place=="event")c.contentId=SelectEventId(run,rng);
+  }
+ }
+
+ static string SelectEventId(GridBoardRunState run,System.Random rng){
+  int tier=DoomTier(run);
+  var pool=PackspireContent.Data.events
+   .Where(content=>content.minimumDoomTier<=tier)
+   .ToArray();
+  if(pool.Length==0)return PackspireContent.Data.balance.defaultEventId;
+  int total=pool.Sum(content=>Mathf.Max(1,content.weight));
+  int roll=rng.Next(Mathf.Max(1,total));
+  foreach(var content in pool){
+   roll-=Mathf.Max(1,content.weight);
+   if(roll<0)return content.id;
+  }
+  return pool[pool.Length-1].id;
+ }
+
+ static void PlaceCalamityFacility(GridBoardRunState run,Vector2Int start,System.Random rng){
+  var cell=run.cells
+   .Where(c=>c.terrain=="blocked"&&c.place=="empty")
+   .OrderByDescending(c=>Mathf.Abs(c.x-start.x)+Mathf.Abs(c.y-start.y))
+   .ThenBy(_=>rng.Next())
+   .FirstOrDefault();
+  if(cell==null)return;
+  SetPlace(cell,"calamity");
+  cell.contentId=run.dungeonId;
+  cell.grow=run.doom;
+ }
+
+ static void SpawnEnemies(GridBoardRunState run,int count,System.Random rng,
+  Dictionary<long,int> distances,int minimumDistance){
+  var cells=Shuffled(run.cells.Where(c=>
+   c.terrain=="floor"&&c.place=="empty"&&
+   distances.TryGetValue(CellKey(c.x,c.y),out int distance)&&distance>=minimumDistance),rng)
    .Take(Mathf.Max(0,count))
    .ToList();
-  foreach(var c in pool){
-   c.place=place;
-   c.contentId=place=="event"?PackspireContent.Data.balance.defaultEventId:"";
-   c.grow=0;
+  int tier=Mathf.Clamp(1+run.areaIndex/2,1,2);
+  var definitions=GameCatalog.Enemies.Where(enemy=>enemy.tier==tier).ToArray();
+  if(definitions.Length==0)definitions=GameCatalog.Enemies.ToArray();
+  for(int i=0;i<cells.Count;i++){
+   var cell=cells[i];
+   var definition=definitions.Length==0?null:definitions[rng.Next(definitions.Length)];
+   run.enemies.Add(new GridEnemyState{
+    uid=$"area-{run.areaIndex}-enemy-{i}",
+    contentId=definition?.id??"",
+    x=cell.x,y=cell.y,previousX=cell.x,previousY=cell.y,
+    originX=cell.x,originY=cell.y,
+    behavior=definition?.boardBehavior switch{
+     EnemyBoardBehavior.Chase=>"chase",
+     EnemyBoardBehavior.Wait=>"wait",
+     _=>"patrol"
+    },
+    sightRange=definition?.boardSightRange??4,
+    moveSteps=definition?.boardMoveSteps??1,
+    patrolRadius=definition?.boardPatrolRadius??3,
+    patrolStep=rng.Next(4)
+   });
   }
+ }
+
+ static void SetPlace(GridCellState cell,string place){
+  if(cell==null)return;
+  cell.place=place;
+  cell.contentId=place=="event"?PackspireContent.Data.balance.defaultEventId:"";
+  cell.grow=0;
  }
 
  /// <summary>Build the exploration-side faces from the same placed equipment that builds combat cards.</summary>
@@ -274,13 +576,19 @@ public static class GridBoardSystem {
   return run.cells.FirstOrDefault(c=>c.x==x&&c.y==y);
  }
 
+ public static GridEnemyState EnemyAt(GridBoardRunState run,int x,int y)=>
+  run?.enemies?.FirstOrDefault(enemy=>enemy.x==x&&enemy.y==y);
+
  public static Vector2Int StartCell(GridBoardRunState run){
   var c=run.cells.FirstOrDefault(t=>t.terrain=="start")??run.cells[0];
   return new Vector2Int(c.x,c.y);
  }
 
  public static Vector2Int GoalCell(GridBoardRunState run){
-  var c=run.cells.FirstOrDefault(t=>t.terrain=="goal")??run.cells[run.cells.Count-1];
+  var c=run.cells.FirstOrDefault(t=>t.place=="next")
+   ??run.cells.FirstOrDefault(t=>t.place=="return")
+   ??run.cells.LastOrDefault(TerrainWalkable)
+   ??run.cells[run.cells.Count-1];
   return new Vector2Int(c.x,c.y);
  }
 
@@ -320,7 +628,7 @@ public static class GridBoardSystem {
   var cell=Cell(run,x,y);
   if(cell==null){msg="範囲外";return false;}
   if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
-  if(cell.place!="empty"&&cell.place!="enemy"){msg="すでに何かある";return false;}
+  if(cell.place!="empty"||EnemyAt(run,x,y)!=null){msg="すでに何かある";return false;}
   string place=GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)?exploration.place:"";
   if(string.IsNullOrEmpty(place)){msg="未知のカード";return false;}
   cell.place=place;
@@ -422,7 +730,7 @@ public static class GridBoardSystem {
   msg="";
   if(run==null||run.phase!=GridBoardPhase.Path){msg="ルート描画中ではない";return false;}
   if(dir==Vector2Int.zero||(Mathf.Abs(dir.x)+Mathf.Abs(dir.y))!=1){msg="上下左右のみ";return false;}
-  if(run.path.Count==0)run.path.Add(StartCell(run));
+  if(run.path.Count==0)run.path.Add(run.piece);
 
   bool isTurn=run.lastDir!=Vector2Int.zero&&run.lastDir!=dir;
   if(run.lastDir!=Vector2Int.zero&&run.lastDir==dir){
@@ -444,7 +752,6 @@ public static class GridBoardSystem {
   foreach(var p in added)run.path.Add(p);
   run.segmentEnds.Add(run.path.Count-1);
   run.lastDir=dir;
-  run.piece=run.path[run.path.Count-1];
   msg=$"滑走 {added.Count}マス　曲がり {run.turnsUsed}/{run.turnsMax}";
   run.message=msg;
   return true;
@@ -453,7 +760,7 @@ public static class GridBoardSystem {
  public static bool TrySlideToward(GridBoardRunState run,int x,int y,out string msg){
   msg="";
   if(run==null||run.phase!=GridBoardPhase.Path){msg="ルート描画中ではない";return false;}
-  if(run.path.Count==0)run.path.Add(StartCell(run));
+  if(run.path.Count==0)run.path.Add(run.piece);
   var tip=run.path[run.path.Count-1];
   if(x==tip.x&&y==tip.y)return false;
   if(x!=tip.x&&y!=tip.y){msg="先端と同じ行／列を指定";return false;}
@@ -471,7 +778,6 @@ public static class GridBoardSystem {
   if(run.path.Count>startExclusive+1)
    run.path.RemoveRange(startExclusive+1,run.path.Count-(startExclusive+1));
   RecomputeTurnsFromPath(run);
-  run.piece=run.path[run.path.Count-1];
   msg=$"一手戻した　曲がり {run.turnsUsed}/{run.turnsMax}";
   run.message=msg;
   return true;
@@ -501,8 +807,10 @@ public static class GridBoardSystem {
   msg="";
   if(!CanStartRun(run)){msg="まだ滑走していない";return false;}
   run.phase=GridBoardPhase.Run;
+  run.explorationTurnPending=true;
   run.pathIndex=0;
   run.piece=run.path[0];
+  RevealAround(run,run.piece);
   run.moving=false;
   run.moveT=0f;
   msg="導線に沿って進む";
@@ -553,6 +861,12 @@ public static class GridBoardSystem {
  static void OnArrive(GridBoardRunState run,Vector2Int pos){
   var cell=Cell(run,pos.x,pos.y);
   if(cell==null)return;
+  RevealAround(run,pos);
+  var hostile=EnemyAt(run,pos.x,pos.y);
+  if(hostile!=null){
+   EngageEnemy(run,hostile);
+   return;
+  }
   if(cell.place=="lamp"){
    run.message=cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold?"狼煙の灯りが導線を照らす":"灯りの傍を抜けた";
   } else if(cell.place=="fog"){
@@ -584,7 +898,144 @@ public static class GridBoardSystem {
   }
  }
 
- /// <summary>One move ends when the drawn route finishes: refill explore resources and return to Place.</summary>
+ static void EngageEnemy(GridBoardRunState run,GridEnemyState enemy){
+  if(run==null||enemy==null)return;
+  run.enemies.Remove(enemy);
+  run.pendingEnemyId=enemy.contentId??"";
+  run.pendingBattle=true;
+  run.moving=false;
+  run.moveT=0f;
+  run.message="敵影に接触した";
+ }
+
+ static bool IsMatureField(GridCellState cell,string place)=>cell!=null&&
+  cell.place==place&&cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold;
+
+ static void ApplyMatureFieldEffects(GridBoardRunState run){
+  if(run?.cells==null)return;
+  foreach(var lamp in run.cells.Where(cell=>IsMatureField(cell,"lamp")))
+   RevealAround(run,new Vector2Int(lamp.x,lamp.y),2);
+ }
+
+ static bool EnemyCanEnter(GridBoardRunState run,GridCellState cell){
+  if(run==null||cell==null||cell.terrain is "void" or "blocked")return false;
+  if(cell.place is "seal" or "next" or "return" or "event")return false;
+  if(IsMatureField(cell,"fog"))return false;
+  return true;
+ }
+
+ static Dictionary<long,int> EnemyDistancesToPlayer(GridBoardRunState run){
+  var distances=new Dictionary<long,int>();
+  if(run==null)return distances;
+  var queue=new Queue<Vector2Int>();
+  queue.Enqueue(run.piece);
+  distances[CellKey(run.piece.x,run.piece.y)]=0;
+  var directions=new[]{Vector2Int.up,Vector2Int.right,Vector2Int.down,Vector2Int.left};
+  while(queue.Count>0){
+   var current=queue.Dequeue();
+   int distance=distances[CellKey(current.x,current.y)];
+   foreach(var direction in directions){
+    var next=current+direction;
+    var cell=Cell(run,next.x,next.y);
+    long key=CellKey(next.x,next.y);
+    if(distances.ContainsKey(key)||!EnemyCanEnter(run,cell))continue;
+    distances[key]=distance+1;
+    queue.Enqueue(next);
+   }
+  }
+  return distances;
+ }
+
+ public static int AdvanceEnemies(GridBoardRunState run,out bool engaged){
+  engaged=false;
+  if(run?.enemies==null||run.enemies.Count==0)return 0;
+  var distances=EnemyDistancesToPlayer(run);
+  var occupied=new HashSet<long>(run.enemies.Select(enemy=>CellKey(enemy.x,enemy.y)));
+  var directions=new[]{Vector2Int.up,Vector2Int.right,Vector2Int.down,Vector2Int.left};
+  int moved=0;
+  foreach(var enemy in run.enemies.OrderBy(value=>value.uid).ToList()){
+   if(run.pendingBattle)break;
+   int steps=Mathf.Max(0,enemy.moveSteps);
+   for(int step=0;step<steps;step++){
+    long currentKey=CellKey(enemy.x,enemy.y);
+    occupied.Remove(currentKey);
+    distances.TryGetValue(currentKey,out int playerDistance);
+    bool hasDistance=distances.ContainsKey(currentKey);
+    bool inSight=IsCurrentlyVisible(run,Cell(run,enemy.x,enemy.y));
+    int detectionRange=Mathf.Max(1,enemy.sightRange)+DoomTier(run);
+    bool detected=inSight||(hasDistance&&playerDistance<=detectionRange);
+    bool chase=enemy.behavior=="chase"||
+     (enemy.behavior=="wait"?(enemy.alerted||detected):
+      (enemy.alerted||detected));
+    if(detected)enemy.alerted=true;
+
+    var candidates=directions
+     .Select(direction=>enemy.Position+direction)
+     .Where(position=>{
+      var cell=Cell(run,position.x,position.y);
+      long key=CellKey(position.x,position.y);
+      bool withinPatrol=chase||enemy.behavior!="patrol"||
+       Mathf.Abs(position.x-enemy.originX)+Mathf.Abs(position.y-enemy.originY)<=Mathf.Max(1,enemy.patrolRadius);
+      return withinPatrol&&EnemyCanEnter(run,cell)&&(!occupied.Contains(key)||
+       (position.x==run.piece.x&&position.y==run.piece.y));
+     })
+     .ToList();
+    Vector2Int destination=enemy.Position;
+    if(chase&&hasDistance){
+     destination=candidates
+      .Where(position=>distances.TryGetValue(CellKey(position.x,position.y),out int value)&&
+       value<playerDistance)
+      .OrderBy(position=>distances[CellKey(position.x,position.y)])
+      .ThenBy(position=>position.y)
+      .ThenBy(position=>position.x)
+      .DefaultIfEmpty(enemy.Position)
+      .First();
+    } else if(enemy.behavior!="wait"&&candidates.Count>0){
+     int raw=StableHash(enemy.uid)+run.explorationTurn+enemy.patrolStep;
+     int index=(raw&int.MaxValue)%candidates.Count;
+     destination=candidates[index];
+     enemy.patrolStep++;
+    }
+
+    enemy.previousX=enemy.x;
+    enemy.previousY=enemy.y;
+    if(destination!=enemy.Position){
+     enemy.x=destination.x;
+     enemy.y=destination.y;
+     moved++;
+    }
+    occupied.Add(CellKey(enemy.x,enemy.y));
+    if(enemy.x==run.piece.x&&enemy.y==run.piece.y){
+     EngageEnemy(run,enemy);
+     engaged=true;
+     break;
+    }
+    if(destination==enemy.Position)break;
+   }
+  }
+  return moved;
+ }
+
+ /// <summary>
+ /// Resolve exactly one committed exploration turn. Events and battles may
+ /// pause a route, but cannot advance growth or pressure twice.
+ /// </summary>
+ public static ExplorationTurnResult ResolveExplorationTurn(GridBoardRunState run){
+  if(run==null||!run.explorationTurnPending)return null;
+  run.explorationTurnPending=false;
+  var result=new ExplorationTurnResult{
+   turn=++run.explorationTurn,
+   areaTurn=++run.areaTurn,
+   doomBefore=run.doom
+  };
+  AdvanceGrowth(run,out result.growthAdvanced,out result.growthMatured);
+  ApplyMatureFieldEffects(run);
+  AdvanceDoom(run);
+  result.doomAfter=run.doom;
+  return result;
+ }
+
+ /// <summary>One move ends when the drawn route finishes: resolve its turn and refill resources.</summary>
  public static void EndRouteMove(GridBoardRunState run){
   if(run==null)return;
   run.moving=false;
@@ -598,11 +1049,16 @@ public static class GridBoardSystem {
   run.selectedCardUid="";
   run.pendingBattle=false;
   run.pendingEvent=false;
-  AdvanceGrowth(run,out int advanced,out int matured);
-  AdvanceDoom(run);
+  var turn=ResolveExplorationTurn(run);
+  int advanced=turn?.growthAdvanced??0;
+  int matured=turn?.growthMatured??0;
+  if(turn!=null&&string.IsNullOrEmpty(run.pendingGate)){
+   turn.enemiesMoved=AdvanceEnemies(run,out bool engaged);
+   turn.enemyEngaged=engaged;
+  }
   // Keep pendingGate if the route ended on a gate and the player has not chosen yet.
   RefillExploreResources(run);
-  if(string.IsNullOrEmpty(run.pendingGate))
+  if(string.IsNullOrEmpty(run.pendingGate)&&!run.pendingBattle)
    run.message=advanced>0
     ?$"ルート終端。術式が {advanced} 個成長{(matured>0?$"、{matured} 個が成熟":"")} — 手札とENを補充した"
     :"ルート終端。手札とENを補充した — いまの位置からまた配置できる";
@@ -632,6 +1088,7 @@ public static class GridBoardSystem {
   "event"=>"異",
   "next"=>"次",
   "return"=>"帰",
+  "calamity"=>"刻",
   _=>"",
  };
 

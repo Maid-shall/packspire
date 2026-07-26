@@ -205,19 +205,19 @@ public static class PackspireContentAssetBuilder {
  };
 
  static EnemyContent[] Enemies()=>new[]{
-  Enemy("sentinel","鉄殻の番兵",1,34,
-   Move(8),Move(5,Effect("strength",EffectTarget.Self,2,3))),
-  Enemy("rats","洞穴ネズミの群れ",1,29,Move(8),Move(6)),
-  Enemy("porter","錆びた荷運び人形",1,38,Move(10),Move(0)),
-  Enemy("mage","胞子の魔導師",2,45,
-   Move(7,Effect("poison",EffectTarget.Player,3)),Move(11)),
-  Enemy("beast","鎧喰い獣",2,50,
-   Move(9,Effect("armorBreak",EffectTarget.Player,2,2)),Move(10)),
-  Enemy("knight","虚ろな騎士",2,54,
-   Move(13),Move(6,Effect("vulnerable",EffectTarget.Player,1,2))),
-  Enemy("dragon","劫火竜",2,62,new[]{Move(14),Move(10),Move(16)},
-   LoadSprite("Assets/Resources/Art/Portraits/enemy-dragon-v1.png"),"Art/Portraits/enemy-dragon-v1"),
-  Enemy("boss","荷喰らい",3,72,Move(12),Move(12),Move(17))
+  Board(Enemy("sentinel","鉄殻の番兵",1,34,
+   Move(8),Move(5,Effect("strength",EffectTarget.Self,2,3))),EnemyBoardBehavior.Wait,3,0,1),
+  Board(Enemy("rats","洞穴ネズミの群れ",1,29,Move(8),Move(6)),EnemyBoardBehavior.Chase,5,2,5),
+  Board(Enemy("porter","錆びた荷運び人形",1,38,Move(10),Move(0)),EnemyBoardBehavior.Patrol,3,1,3),
+  Board(Enemy("mage","胞子の魔導師",2,45,
+   Move(7,Effect("poison",EffectTarget.Player,3)),Move(11)),EnemyBoardBehavior.Wait,5,1,2),
+  Board(Enemy("beast","鎧喰い獣",2,50,
+   Move(9,Effect("armorBreak",EffectTarget.Player,2,2)),Move(10)),EnemyBoardBehavior.Chase,4,2,5),
+  Board(Enemy("knight","虚ろな騎士",2,54,
+   Move(13),Move(6,Effect("vulnerable",EffectTarget.Player,1,2))),EnemyBoardBehavior.Patrol,4,1,4),
+  Board(Enemy("dragon","劫火竜",2,62,new[]{Move(14),Move(10),Move(16)},
+   LoadSprite("Assets/Resources/Art/Portraits/enemy-dragon-v1.png"),"Art/Portraits/enemy-dragon-v1"),EnemyBoardBehavior.Chase,6,1,6),
+  Board(Enemy("boss","荷喰らい",3,72,Move(12),Move(12),Move(17)),EnemyBoardBehavior.Chase,6,2,6)
  };
 
  static DungeonContent[] Dungeons()=>new[]{
@@ -399,7 +399,15 @@ public static class PackspireContentAssetBuilder {
  static EnemyMoveContent Move(int damage,params EffectContent[] effects)=>new EnemyMoveContent{damage=damage,effects=effects??Array.Empty<EffectContent>()};
  static EnemyContent Enemy(string id,string name,int tier,int hp,params EnemyMoveContent[] moves)=>Enemy(id,name,tier,hp,moves,null,"");
  static EnemyContent Enemy(string id,string name,int tier,int hp,EnemyMoveContent[] moves,Sprite portrait,string legacy)=>
-  new EnemyContent{id=id,name=name,tier=tier,hp=hp,moves=moves,portrait=portrait,legacyPortraitResource=legacy};
+  new EnemyContent{id=id,name=name,tier=tier,hp=hp,moves=moves,portrait=portrait,legacyPortraitResource=legacy,
+   boardBehavior=EnemyBoardBehavior.Patrol,boardSightRange=4,boardMoveSteps=1,boardPatrolRadius=3};
+ static EnemyContent Board(EnemyContent enemy,EnemyBoardBehavior behavior,int sight,int steps,int radius){
+  enemy.boardBehavior=behavior;
+  enemy.boardSightRange=sight;
+  enemy.boardMoveSteps=steps;
+  enemy.boardPatrolRadius=radius;
+  return enemy;
+ }
  static CharacterContent Character(string id,string name,string title,string description,int body,int hair,string traitName,string traitText,string traitKind,int traitValue,string skillId,string skillName,string skillText,
   Sprite portrait=null,Sprite front=null,Sprite hub=null,string legacyPortrait="",string legacyFront="",string legacyHub="",float focusX=.5f,float focusY=.26f,float zoom=2.2f,float offsetX=0f,float offsetY=0f)=>
   new CharacterContent{id=id,name=name,title=title,description=description,portraitBody=body,portraitHair=hair,traitName=traitName,traitText=traitText,traitKind=traitKind,traitValue=traitValue,

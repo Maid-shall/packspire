@@ -298,6 +298,10 @@ MonoBehaviour:
     name: "\u9244\u6BBB\u306E\u756A\u5175"
     tier: 1
     hp: 34
+    boardBehavior: 2
+    boardSightRange: 3
+    boardMoveSteps: 0
+    boardPatrolRadius: 1
     moves:
     - damage: 8
       effects: []
@@ -313,6 +317,10 @@ MonoBehaviour:
     name: "\u6D1E\u7A74\u30CD\u30BA\u30DF\u306E\u7FA4\u308C"
     tier: 1
     hp: 29
+    boardBehavior: 1
+    boardSightRange: 5
+    boardMoveSteps: 2
+    boardPatrolRadius: 5
     moves:
     - damage: 8
       effects: []
@@ -324,6 +332,10 @@ MonoBehaviour:
     name: "\u9306\u3073\u305F\u8377\u904B\u3073\u4EBA\u5F62"
     tier: 1
     hp: 38
+    boardBehavior: 0
+    boardSightRange: 3
+    boardMoveSteps: 1
+    boardPatrolRadius: 3
     moves:
     - damage: 10
       effects: []
@@ -335,6 +347,10 @@ MonoBehaviour:
     name: "\u80DE\u5B50\u306E\u9B54\u5C0E\u5E2B"
     tier: 2
     hp: 45
+    boardBehavior: 2
+    boardSightRange: 5
+    boardMoveSteps: 1
+    boardPatrolRadius: 2
     moves:
     - damage: 7
       effects:
@@ -350,6 +366,10 @@ MonoBehaviour:
     name: "\u93A7\u55B0\u3044\u7363"
     tier: 2
     hp: 50
+    boardBehavior: 1
+    boardSightRange: 4
+    boardMoveSteps: 2
+    boardPatrolRadius: 5
     moves:
     - damage: 9
       effects:
@@ -365,6 +385,10 @@ MonoBehaviour:
     name: "\u865A\u308D\u306A\u9A0E\u58EB"
     tier: 2
     hp: 54
+    boardBehavior: 0
+    boardSightRange: 4
+    boardMoveSteps: 1
+    boardPatrolRadius: 4
     moves:
     - damage: 13
       effects: []
@@ -380,6 +404,10 @@ MonoBehaviour:
     name: "\u52AB\u706B\u7ADC"
     tier: 2
     hp: 62
+    boardBehavior: 1
+    boardSightRange: 6
+    boardMoveSteps: 1
+    boardPatrolRadius: 6
     moves:
     - damage: 14
       effects: []
@@ -393,6 +421,10 @@ MonoBehaviour:
     name: "\u8377\u55B0\u3089\u3044"
     tier: 3
     hp: 72
+    boardBehavior: 1
+    boardSightRange: 6
+    boardMoveSteps: 2
+    boardPatrolRadius: 6
     moves:
     - damage: 12
       effects: []

@@ -29,6 +29,10 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 [Serializable] public class EnemyDef {
  public string id,name;
  public int tier,hp;
+ public EnemyBoardBehavior boardBehavior;
+ public int boardSightRange=4;
+ public int boardMoveSteps=1;
+ public int boardPatrolRadius=3;
  public int[] damages;
  public Sprite portraitAsset;
  /// <summary>Optional Resources path (no extension) for a dedicated square portrait.</summary>

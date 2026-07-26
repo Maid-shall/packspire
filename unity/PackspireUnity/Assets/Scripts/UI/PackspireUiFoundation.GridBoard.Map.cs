@@ -78,7 +78,22 @@ void OnGridCellClicked(int x,int y){
    !string.IsNullOrEmpty(run.selectedCardUid))return;
   var cell=GridBoardSystem.Cell(run,x,y);
   if(cell==null)return;
-  (string tag,string title,string body,string action)=cell.terrain switch{
+  // Unseen cells expose neither their terrain nor their contents. Moving
+  // hostiles also disappear from remembered cells once they leave current sight.
+  if(!GridBoardSystem.IsDiscovered(run,cell)){
+   HideGridCellDetail();
+   return;
+  }
+  var enemy=GridBoardSystem.EnemyAt(run,x,y);
+  if(GridBoardSystem.IsCurrentlyVisible(run,cell)&&enemy!=null)
+   cell=new GridCellState{x=cell.x,y=cell.y,terrain=cell.terrain,place="enemy",discovered=true};
+  else if(!GridBoardSystem.IsCurrentlyVisible(run,cell)&&cell.place=="enemy")
+   cell=new GridCellState{x=cell.x,y=cell.y,terrain=cell.terrain,place="empty",discovered=true};
+  (string tag,string title,string body,string action)=cell.place=="calamity"
+   ?("CALAMITY",GridBoardSystem.DoomFacilityName(run.dungeonId),
+    $"時間経過とともに敵を強化する破壊不能施設。現在の圧力：{GridBoardSystem.DoomSummary(run)}",
+    "破壊不能・探索ターンごとに進行")
+   :cell.terrain switch{
    "void"=>("VOID","奈落","足場のない裂け目。進入も術式の配置もできない。","盤面の外縁"),
    "blocked"=>("TERRAIN","瓦礫","崩れた障害地形。通行できない。曲がるための壁として扱える。","通行不可"),
    "start"=>("ORIGIN","侵入地点","この区画の探索開始地点。経路はここから伸びる。","現在地の基点"),
@@ -106,6 +121,24 @@ void OnGridCellClicked(int x,int y){
 
  (string tag,string title,string body,string action) GridCellDetailCopy(GridCellState cell,GridBoardRunState run){
   string growth=cell.grow>0?$"　成長 {cell.grow}/3":"";
+  bool mature=cell.grow>=PackspireContent.Data.balance.gridGrowthThreshold;
+  if(mature)return cell.place switch{
+   "lamp"=>("MATURE FORMULA","狼煙の灯",
+    "成熟した灯。周囲2マスを継続して照らし、離れたあとも地形を記憶へ残す。",
+    "成熟効果：広域視界"),
+   "fog"=>("MATURE FORMULA","深層の霧",
+    "成熟した霧。敵駒はこのマスへ侵入できず、追跡経路を迂回する。",
+    "成熟効果：敵移動を遮断"),
+   "seal"=>("MATURE FORMULA","封鎖の楔",
+    "成熟した封印。導線と敵駒の双方を遮り、盤面の流れを固定する。",
+    "成熟効果：完全封鎖"),
+   _=>GridCellDetailCopyUnmatured(cell,growth)
+  };
+  return GridCellDetailCopyUnmatured(cell,growth);
+ }
+
+ (string tag,string title,string body,string action) GridCellDetailCopyUnmatured(
+  GridCellState cell,string growth){
   return cell.place switch{
    "lamp"=>("FORMULA","灯",$"安寧の灯。周囲を照らす術式面。通過ごとに育つ。{growth}","通過：成長を進める"),
    "fog"=>("FORMULA","霧",$"防護と攪乱の術式面。通過ごとに成熟へ近づく。{growth}","通過：成長を進める"),
@@ -350,17 +383,29 @@ void OnGridCellClicked(int x,int y){
    hero.Add(glyph);
   }
   gridBoardActorLayer.Add(hero);
-  // Enemy cells are spawn anchors only. The visible token deliberately lives
-  // here so patrols, knockback and multi-cell enemies can move independently.
-  foreach(var cell in run.cells.Where(c=>c.place=="enemy")){
+  // Hostiles are independent entities. Only currently visible actors are
+  // rendered, so remembered terrain never becomes a perfect enemy tracker.
+  foreach(var enemy in run.enemies.Where(value=>
+   GridBoardSystem.IsCurrentlyVisible(run,GridBoardSystem.Cell(run,value.x,value.y)))){
    var actor=Container("ps-gboard-actor ps-gboard-enemy-actor");
+   actor.AddToClassList($"ps-gboard-enemy-{enemy.behavior}");
+   actor.EnableInClassList("ps-gboard-enemy-alerted",enemy.alerted);
    actor.pickingMode=PickingMode.Ignore;
-   actor.userData=new Vector2Int(cell.x,cell.y);
-   var glyph=new Label("⚔"){pickingMode=PickingMode.Ignore};
+   actor.userData=new Vector2Int(enemy.x,enemy.y);
+   string enemyGlyph=enemy.behavior switch{"chase"=>"⚔","wait"=>"◆",_=>"◇"};
+   var glyph=new Label(enemyGlyph){pickingMode=PickingMode.Ignore};
    glyph.AddToClassList("ps-gboard-actor-glyph");
    actor.Add(glyph);
    gridBoardActorLayer.Add(actor);
   }
+  // When the explorer enters a hostile anchor, the hostile marker may still
+  // exist for the last interpolation frame. Keep the explorer readable above
+  // every other movable actor until the encounter consumes that anchor.
+  gridBoardHeroActor.BringToFront();
+  // Cell refreshes can change painter order in UI Toolkit. Actors remain a
+  // separate movable layer, but must always paint after the terrain layer.
+  gridBoardGrid?.SendToBack();
+  gridBoardActorLayer.BringToFront();
   if(!float.IsNaN(gridBoardLastLayoutPos.x))
    LayoutGridActors(gridBoardLastLayoutPos.x,gridBoardLastLayoutPos.y,
     Mathf.Max(28,Mathf.RoundToInt(GridCellBasePx*gridBoardZoom))+2);
@@ -373,6 +418,7 @@ void OnGridCellClicked(int x,int y){
   gridBoardActorLayer.style.top=boardTop;
   gridBoardActorLayer.style.width=gridBoardGrid?.resolvedStyle.width??0;
   gridBoardActorLayer.style.height=gridBoardGrid?.resolvedStyle.height??0;
+  gridBoardActorLayer.BringToFront();
   foreach(var actor in gridBoardActorLayer.Children()){
    Vector2 pos;
    if(actor.userData is Vector2 precise)pos=precise;

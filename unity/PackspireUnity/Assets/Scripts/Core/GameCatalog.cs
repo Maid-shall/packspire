@@ -59,8 +59,12 @@ public static class GameCatalog {
  };
 
  static EnemyDef ToEnemy(EnemyContent value){
-  var enemy=new EnemyDef(value.id,value.name,value.tier,value.hp,(value.moves??Array.Empty<EnemyMoveContent>()).Select(x=>x.damage).ToArray()){
-   portraitAsset=value.portrait
+ var enemy=new EnemyDef(value.id,value.name,value.tier,value.hp,(value.moves??Array.Empty<EnemyMoveContent>()).Select(x=>x.damage).ToArray()){
+   portraitAsset=value.portrait,
+   boardBehavior=value.boardBehavior,
+   boardSightRange=Math.Max(1,value.boardSightRange),
+   boardMoveSteps=Math.Max(0,value.boardMoveSteps),
+   boardPatrolRadius=Math.Max(1,value.boardPatrolRadius)
   };
   if(!string.IsNullOrEmpty(value.legacyPortraitResource))enemy.WithPortrait(value.legacyPortraitResource);
   return enemy;

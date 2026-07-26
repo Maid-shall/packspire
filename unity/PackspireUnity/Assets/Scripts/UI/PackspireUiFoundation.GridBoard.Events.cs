@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,36 +6,69 @@ public sealed partial class PackspireUiFoundation {
 // Board-local events and the exploration runtime tick.
  void BuildGridBoardEventOverlay(){
   if(gridBoardRoot==null)return;
+  if(gridBoardEventOverlay!=null)
+   gridBoardEventOverlay.RemoveFromHierarchy();
   gridBoardEventOverlay=Container("ps-gboard-event-overlay");
   gridBoardEventOverlay.style.display=DisplayStyle.None;
+  var content=game.UiCurrentEvent;
   var panel=Container("ps-gboard-event-popup");
-  var eyebrow=new Label("UNKNOWN SIGNAL"){pickingMode=PickingMode.Ignore};
+  var artColumn=Container("ps-gboard-event-art-column");
+  if(content?.artwork!=null){
+   var art=new Image{
+    sprite=content.artwork,
+    scaleMode=ScaleMode.ScaleAndCrop,
+    pickingMode=PickingMode.Ignore
+   };
+   art.AddToClassList("ps-gboard-event-art");
+   artColumn.Add(art);
+  } else {
+   var fallback=new Label("◇"){pickingMode=PickingMode.Ignore};
+   fallback.AddToClassList("ps-gboard-event-art-fallback");
+   artColumn.Add(fallback);
+  }
+  panel.Add(artColumn);
+
+  var copy=Container("ps-gboard-event-copy");
+  var eyebrow=new Label(content?.eyebrow??"ANOMALY  /  RITE"){pickingMode=PickingMode.Ignore};
   eyebrow.AddToClassList("ps-gboard-event-eyebrow");
-  panel.Add(eyebrow);
-  var title=new Label("異変を発見"){pickingMode=PickingMode.Ignore};
+  copy.Add(eyebrow);
+  var title=new Label(content?.title??"異変を発見"){pickingMode=PickingMode.Ignore};
   title.AddToClassList("ps-gboard-event-title");
-  panel.Add(title);
-  var body=new Label("足元の封印が脈打っている。進行を止めて、どう対処するか選べ。"){pickingMode=PickingMode.Ignore};
+  copy.Add(title);
+  var rule=Container("ps-gboard-event-rule");
+  rule.pickingMode=PickingMode.Ignore;
+  copy.Add(rule);
+  var body=new Label(content?.body??"足元の封印が脈打っている。どう対処するか選べ。"){
+   pickingMode=PickingMode.Ignore
+  };
   body.AddToClassList("ps-gboard-event-body");
-  panel.Add(body);
+  copy.Add(body);
   var choices=Container("ps-gboard-event-choices");
-  var risk=MakeGridAction("血を捧げる　HP -6 / 24G",()=>ResolveGridBoardEvent(0));
-  risk.AddToClassList("ps-gboard-event-choice");
-  choices.Add(risk);
-  var repair=MakeGridAction("装備を整える　耐久を回復",()=>ResolveGridBoardEvent(1));
-  repair.AddToClassList("ps-gboard-event-choice");
-  choices.Add(repair);
-  var leave=MakeGridAction("立ち去る",()=>ResolveGridBoardEvent(2));
-  leave.AddToClassList("ps-gboard-event-choice");
-  choices.Add(leave);
-  panel.Add(choices);
+  var eventChoices=content?.choices??System.Array.Empty<EventChoiceContent>();
+  for(int i=0;i<eventChoices.Length;i++){
+   int choiceIndex=i;
+   var choice=eventChoices[i];
+   var button=MakeGridAction("",()=>ResolveGridBoardEvent(choiceIndex));
+   button.AddToClassList("ps-gboard-event-choice");
+   var choiceLabel=new Label(choice.label){pickingMode=PickingMode.Ignore};
+   choiceLabel.AddToClassList("ps-gboard-event-choice-label");
+   button.Add(choiceLabel);
+   var summary=new Label(EffectSummary(choice)){pickingMode=PickingMode.Ignore};
+   summary.AddToClassList("ps-gboard-event-choice-summary");
+   button.Add(summary);
+   choices.Add(button);
+  }
+  copy.Add(choices);
+  panel.Add(copy);
   gridBoardEventOverlay.Add(panel);
   gridBoardRoot.Add(gridBoardEventOverlay);
  }
 
  void OpenGridBoardEventPopup(){
   if(gridBoardRoot==null||gridBoardEventOpen)return;
-  if(gridBoardEventOverlay==null)BuildGridBoardEventOverlay();
+  // Rebuild from the pending event so authored title, illustration and choices
+  // always match the cell that halted the route.
+  BuildGridBoardEventOverlay();
   if(gridBoardEventOverlay==null)return;
   gridBoardEventOpen=true;
   gridBoardEventOverlay.style.display=DisplayStyle.Flex;
@@ -67,10 +98,8 @@ public sealed partial class PackspireUiFoundation {
    &&GridBoardSystem.TickRun(run,Time.unscaledDeltaTime);
   if(run.pendingEvent){
    run.pendingEvent=false;
-   // The board-local overlay can be hidden behind the grid's visual layers.
-   // The established Event route is attached to the screen root and returns
-   // here after the player chooses, so the route continues from its next cell.
    game.UiBeginGridEvent();
+   OpenGridBoardEventPopup();
    return;
   }
   if(run.pendingBattle){
