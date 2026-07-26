@@ -299,7 +299,10 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    stagger+=70;
   }
   if(fx.damageToEnemy>0)Spawn(fx.damageToEnemy.ToString(),battleIconDamage,"ps-battle-floater-damage");
-  if(fx.damageToPlayer>0)Spawn(fx.damageToPlayer.ToString(),battleIconClaw??battleIconDamage,"ps-battle-floater-damage");
+  if(fx.damageToPlayer>0){
+   var damageIcon=battleIconClaw!=null?battleIconClaw:battleIconDamage;
+   Spawn(fx.damageToPlayer.ToString(),damageIcon,"ps-battle-floater-damage");
+  }
   if(fx.blockGained>0)Spawn("+"+fx.blockGained,battleIconBlock,"ps-battle-floater-block");
   if(fx.healGained>0)Spawn("+"+fx.healGained,battleIconHeal,"ps-battle-floater-heal");
   if(fx.energyGained>0)Spawn("+"+fx.energyGained,battleIconEnergy,"ps-battle-floater-energy");
@@ -316,7 +319,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   if(frame==null&&gridBoardCardFrames!=null&&gridBoardCardFrames.Length>0)frame=gridBoardCardFrames[0];
   if(frame!=null){
    slot.style.backgroundImage=new StyleBackground(frame);
-   slot.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   PackspireUiFactory.ApplyBackgroundScaleMode(slot,ScaleMode.StretchToFill);
   }
   var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
   cost.AddToClassList("ps-battle-card-cost");

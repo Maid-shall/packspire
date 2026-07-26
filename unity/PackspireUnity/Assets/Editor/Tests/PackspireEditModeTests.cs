@@ -36,5 +36,16 @@ public sealed class PackspireEditModeTests {
   Assert.That(board.doomMax,Is.EqualTo(PackspireContent.Data.balance.gridDoomMax));
   Assert.That(board.cells,Is.Not.Empty);
  }
+
+ [Test]
+ public void ResourceCache_ReusesLoadedMasterAsset(){
+  PackspireResources.ClearCacheForTests();
+  var first=PackspireResources.Load<PackspireContentDatabase>("Packspire/PackspireContentDatabase");
+  var second=PackspireResources.LoadFirst<PackspireContentDatabase>(
+   "Packspire/does-not-exist",
+   "Packspire/PackspireContentDatabase");
+  Assert.That(first,Is.Not.Null);
+  Assert.That(second,Is.SameAs(first));
+ }
 }
 #endif

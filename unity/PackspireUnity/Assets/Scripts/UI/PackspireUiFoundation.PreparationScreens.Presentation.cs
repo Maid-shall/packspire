@@ -22,7 +22,7 @@ public sealed partial class PackspireUiFoundation {
    ("Art/HubRig/Character/character-cloth","ps-rite-character-layer ps-rite-char-front"),
   };
   foreach(var layer in layers){
-   var tex=Resources.Load<Texture2D>(layer.path);
+   var tex=PackspireResources.Load<Texture2D>(layer.path);
    if(tex==null)continue;
    var image=new Image{image=tex,uv=new Rect(0,0,1,1),scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    foreach(var cls in layer.cls.Split(' '))if(!string.IsNullOrEmpty(cls))image.AddToClassList(cls);
@@ -61,7 +61,7 @@ public sealed partial class PackspireUiFoundation {
   layers.Add(glow);
 
   // Shared base frame, colored by conduit
-  var baseTex=Resources.Load<Texture2D>("Art/Rite/rite-circle-base-v1");
+  var baseTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-circle-base-v1");
   if(baseTex!=null){
    var art=new Image{image=baseTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    art.AddToClassList("ps-rite-circle-art");
@@ -70,7 +70,7 @@ public sealed partial class PackspireUiFoundation {
   }
 
   // Shape accent ← 収納核（形）
-  var shapeTex=Resources.Load<Texture2D>("Art/Rite/rite-accent-"+coreId+"-v1");
+  var shapeTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-accent-"+coreId+"-v1");
   if(shapeTex!=null){
    var shape=new Image{image=shapeTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    shape.AddToClassList("ps-rite-circle-shape");
@@ -80,7 +80,7 @@ public sealed partial class PackspireUiFoundation {
   }
 
   // Inner rune band, colored by conduit
-  var innerTex=Resources.Load<Texture2D>("Art/Rite/rite-inner-spin-v1");
+  var innerTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-inner-spin-v1");
   if(innerTex!=null){
    var inner=new Image{image=innerTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    inner.AddToClassList("ps-rite-circle-inner-spin");
@@ -88,7 +88,7 @@ public sealed partial class PackspireUiFoundation {
    layers.Add(inner);
   }
 
-  var spinTex=Resources.Load<Texture2D>("Art/Rite/rite-circle-spin-v1");
+  var spinTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-circle-spin-v1");
   if(spinTex!=null){
    var outerSpin=new Image{image=spinTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    outerSpin.AddToClassList("ps-rite-circle-spin-art");
@@ -100,7 +100,7 @@ public sealed partial class PackspireUiFoundation {
   layers.Add(BuildResonanceFloaters(resonanceId,conduitTint));
 
   // Center crest ← 安定式
-  var crestTex=Resources.Load<Texture2D>("Art/Rite/rite-crest-"+stabilityId+"-v1");
+  var crestTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-crest-"+stabilityId+"-v1");
   if(crestTex!=null){
    var crest=new Image{image=crestTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
    crest.AddToClassList("ps-rite-circle-crest");
@@ -295,8 +295,9 @@ public sealed partial class PackspireUiFoundation {
    _=>null,
   };
   if(key==null)return null;
-  return Resources.Load<Texture2D>("Art/Rite/orb-"+key+"-v2")
-   ??Resources.Load<Texture2D>("Art/Rite/orb-"+key+"-v1");
+  return PackspireResources.LoadFirst<Texture2D>(
+   "Art/Rite/orb-"+key+"-v2",
+   "Art/Rite/orb-"+key+"-v1");
  }
 
  VisualElement BuildRiteOrb(Element element,string extraClass=""){

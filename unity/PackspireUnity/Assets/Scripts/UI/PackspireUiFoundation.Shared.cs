@@ -9,30 +9,30 @@ public sealed partial class PackspireUiFoundation {
  Texture2D sharedHubShowcasePortrait;
 
  Texture2D CourtyardArt(){
-  if(sharedCourtyardArt==null)sharedCourtyardArt=Resources.Load<Texture2D>("Art/UI/hub-courtyard-v1");
+  if(sharedCourtyardArt==null)sharedCourtyardArt=PackspireResources.Load<Texture2D>("Art/UI/hub-courtyard-v1");
   return sharedCourtyardArt;
  }
 
  Texture2D HubBackgroundArt(){
-  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=Resources.Load<Texture2D>("Art/UI/PopDark/hub-bg-v1");
-  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=Resources.Load<Texture2D>("Art/UI/HubDD/hub-bg-v1");
+  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/hub-bg-v1");
+  if(sharedHubBackgroundArt==null)sharedHubBackgroundArt=PackspireResources.Load<Texture2D>("Art/UI/HubDD/hub-bg-v1");
   return sharedHubBackgroundArt;
  }
 
  Texture2D HubShowcasePortraitArt(){
   if(sharedHubShowcasePortrait==null){
-   sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-cutout-v1");
+   sharedHubShowcasePortrait=PackspireResources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-cutout-v1");
    if(sharedHubShowcasePortrait==null)
-    sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-hub-v1");
+    sharedHubShowcasePortrait=PackspireResources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-hub-v1");
    if(sharedHubShowcasePortrait==null)
-    sharedHubShowcasePortrait=Resources.Load<Texture2D>("Art/Portraits/hero-courier-hub-v1");
+    sharedHubShowcasePortrait=PackspireResources.Load<Texture2D>("Art/Portraits/hero-courier-hub-v1");
    if(sharedHubShowcasePortrait==null)
     Debug.LogWarning("Packspire: missing hub showcase portrait (PopDark/hero-courier-cutout-v1)");
   }
   return sharedHubShowcasePortrait;
  }
 
- Texture2D HubPortraitFrameArt()=>Resources.Load<Texture2D>("Art/UI/PopDark/portrait-frame-v1");
+ Texture2D HubPortraitFrameArt()=>PackspireResources.Load<Texture2D>("Art/UI/PopDark/portrait-frame-v1");
 
  void ShowToast(string message){if(toast==null)return;toast.Clear();toast.Add(new Label(message));toast.style.display=DisplayStyle.Flex;toast.style.opacity=0f;toast.style.translate=new Translate(0,-10,0);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=1f;toast.style.translate=new Translate(0,0,0);}).StartingIn(16);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=0f;toast.style.translate=new Translate(0,-8,0);}).StartingIn(1700);toast.schedule.Execute(()=>{if(toast!=null)toast.style.display=DisplayStyle.None;}).StartingIn(1950);}
  VisualElement Milestone(int required,int current,string title,string description){var item=Container(current>=required?"ps-milestone ps-unlocked":"ps-milestone ps-locked");item.Add(PackspireUiFactory.Title($"Lv.{required}　{title}"));item.Add(PackspireUiFactory.Body(description));return item;}
@@ -85,12 +85,12 @@ public sealed partial class PackspireUiFoundation {
  VisualElement AtlasButton(Texture2D texture,Rect uv,string label,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=label};button.AddToClassList("ps-atlas-button");if(selected)button.AddToClassList("ps-selected");button.Add(Atlas(texture,uv,"ps-atlas-image"));var name=new Label(label);name.AddToClassList("ps-atlas-label");button.Add(name);if(selected)button.Add(SelectionBadge());return button;}
 
  static Sprite LoadPortraitSprite(string path){
-  return string.IsNullOrEmpty(path)?null:Resources.Load<Sprite>(path);
+  return string.IsNullOrEmpty(path)?null:PackspireResources.Load<Sprite>(path);
  }
 
  static Texture2D LoadPortraitTexture(string path){
   if(string.IsNullOrEmpty(path))return null;
-  var tex=Resources.Load<Texture2D>(path);
+  var tex=PackspireResources.Load<Texture2D>(path);
   if(tex!=null)return tex;
   return null;
  }
@@ -127,15 +127,15 @@ public sealed partial class PackspireUiFoundation {
   if(def?.portraitFrontAsset!=null)return def.portraitFrontAsset.texture;
   if(def?.portraitAsset!=null)return def.portraitAsset.texture;
   if(def!=null&&!string.IsNullOrEmpty(def.id)){
-   var cutout=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
+   var cutout=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
    if(cutout!=null)return cutout;
-   var front=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
+   var front=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
    if(front!=null)return front;
-   var hub=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
+   var hub=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
    if(hub!=null)return hub;
   }
   if(def!=null&&!string.IsNullOrEmpty(def.portraitFrontResource)&&!def.portraitFrontResource.Contains("/DD/")){
-   var legacy=Resources.Load<Texture2D>(def.portraitFrontResource);
+   var legacy=PackspireResources.Load<Texture2D>(def.portraitFrontResource);
    if(legacy!=null)return legacy;
   }
   return HubShowcasePortraitArt();

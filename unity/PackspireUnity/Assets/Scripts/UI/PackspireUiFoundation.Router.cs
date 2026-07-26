@@ -104,7 +104,6 @@ public sealed partial class PackspireUiFoundation {
   hubBriefingHost=null;
   hubGoldLabel=null;
   hubStreetGuideEntry=null;
-  hubReelScroll=null;
   hubStreetGuideModal=null;
   hubStreetGuideList=null;
   hubStreetGuideDetail=null;

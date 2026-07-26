@@ -21,7 +21,7 @@ public sealed partial class PackspireUiFoundation {
    "UI/PackspireHub"
   };
   foreach(var path in styleSheetPaths){
-   var sheet=Resources.Load<StyleSheet>(path);
+   var sheet=PackspireResources.Load<StyleSheet>(path);
    if(sheet!=null)root.styleSheets.Add(sheet);
    else Debug.LogWarning($"Missing Packspire style sheet: {path}");
   }
@@ -104,6 +104,9 @@ public sealed partial class PackspireUiFoundation {
  void RefreshDeveloperOverlay(){
   if(developerPanelRoot==null||game==null)return;
   bool open=game.UiDeveloperPanelOpen;
+  if(developerOverlayStateKnown&&lastDeveloperOverlayOpen==open)return;
+  developerOverlayStateKnown=true;
+  lastDeveloperOverlayOpen=open;
   if(developerAccessButton!=null){
    developerAccessButton.text=open?"F10 ×":"F10 DEV";
    developerAccessButton.style.display=DisplayStyle.Flex;

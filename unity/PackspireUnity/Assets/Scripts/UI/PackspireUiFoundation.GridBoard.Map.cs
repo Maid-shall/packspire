@@ -208,12 +208,12 @@ void OnGridCellClicked(int x,int y){
  }
 
  bool IsGridBoardPanGesture(int button){
-  return button==1||button==2||(button==0&&Input.GetKey(KeyCode.Space));
+  return button==1||button==2||(button==0&&PackspireInput.PanModifierHeld());
  }
 
  bool IsGridBoardPanButtonsHeld(int pressedButtons){
   bool rightOrMiddle=(pressedButtons&(1<<1))!=0||(pressedButtons&(1<<2))!=0;
-  bool spaceLeft=Input.GetKey(KeyCode.Space)&&(pressedButtons&1)!=0;
+  bool spaceLeft=PackspireInput.PanModifierHeld()&&(pressedButtons&1)!=0;
   return rightOrMiddle||spaceLeft;
  }
 

@@ -217,6 +217,8 @@ GridBoardと荷造りは役割別のpartial classへ分割されています。�
 | ゲームマスター入口 | `Assets/Resources/Packspire/PackspireContentDatabase.asset` |
 | カテゴリ別マスター | `Assets/Resources/Packspire/Content/*.asset` |
 | マスターデータ型・検証 | `Assets/Scripts/Core/PackspireContentDatabase.cs` |
+| Resources読込境界・キャッシュ | `Assets/Scripts/Core/PackspireResources.cs` |
+| 入力方式の境界 | `Assets/Scripts/Core/PackspireInput.cs` |
 | 装備・カード等の互換API | `Assets/Scripts/Core/GameCatalog.cs` |
 | キャラクター互換API | `Assets/Scripts/Core/CharacterCatalog.cs` |
 | 拠点施設互換API | `Assets/Scripts/Core/HubFacilityCatalog.cs` |
@@ -232,5 +234,7 @@ GridBoardと荷造りは役割別のpartial classへ分割されています。�
 装備、カード、役職、敵、ダンジョン、バッグ、勢力、キャラクター、施設、イベント、商人、報酬、状態異常、収納術式は、入口SOから参照する4つのカテゴリ別ScriptableObjectを正本とします。セーブとラン状態だけはJSONで保存し、マスターデータを安定した文字列IDで参照します。
 
 セーブは現行・書き込み途中・バックアップの3段階で保持し、旧版JSONは段階的なマイグレーションを通します。ビルド開始前にはマスターデータ検証が自動で走り、主要なデータ参照・セーブ移行・戦闘計算・格子盤初期化はEditModeテストで確認します。
+
+ランタイムの `Resources.Load` は `PackspireResources` だけを入口とし、同一アセットの反復検索をキャッシュします。将来Addressablesへ移行する場合も、この境界の実装を差し替えます。入力は現状のプロジェクト設定に合わせて旧Input Managerへ統一し、ゲーム側からは `PackspireInput` を通します。新Input Systemを導入するまでは両方式を混在させません。
 
 マスターデータ内の日本語は正規化済みです。UIコードなどに残る古い直書き文字列は、各画面の正式データ投入時に引き続き整理します。

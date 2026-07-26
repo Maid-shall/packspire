@@ -72,7 +72,7 @@ public sealed partial class PackspireUiFoundation {
 
  void HandleNavInput(){
   if(!uiReady||game==null||!ShouldShowNavHud())return;
-  if(Input.GetKeyDown(KeyCode.Escape)){
+  if(PackspireInput.CancelPressed()){
    if(TryCloseHeirloomPickerFromInput())return;
    NavGoBack();
   }

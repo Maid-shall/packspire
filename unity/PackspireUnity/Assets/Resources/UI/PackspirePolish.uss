@@ -761,7 +761,7 @@
 }
 .ps-progress-track-head {
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-end;
     margin-bottom: 10px;
 }
 .ps-progress-track-level {

@@ -262,7 +262,7 @@ public static class PackspireContent {
  public static PackspireContentDatabase Data {
   get {
    if(data!=null)return data;
-   data=Resources.Load<PackspireContentDatabase>(ResourcePath);
+   data=PackspireResources.Load<PackspireContentDatabase>(ResourcePath);
    if(data==null){
     Debug.LogError($"PACKSPIRE content database was not found at Resources/{ResourcePath}.asset.");
     data=ScriptableObject.CreateInstance<PackspireContentDatabase>();

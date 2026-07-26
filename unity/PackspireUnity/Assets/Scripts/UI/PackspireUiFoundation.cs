@@ -12,6 +12,8 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  PanelSettings panelSettings; bool ownsPanelSettings,uiReady;
  VisualElement root,screenRoot,transitionRoot,dim,leftPaper,rightPaper,scrollPaper,battleShade,toast;
  Coroutine transitionRoutine;
+ Coroutine startupRoutine;
+ bool startCalled;
  ScreenId renderedScreen;
  bool hasRenderedScreen;
  bool skipNextTransition;
@@ -40,13 +42,16 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  int compendiumTab;
  Button developerAccessButton;
  VisualElement developerPanelRoot;
+ bool developerOverlayStateKnown;
+ bool lastDeveloperOverlayOpen;
  // battle fields live in PackspireUiFoundation.Battle.cs
 
  void Awake(){
   if(Instance!=null&&Instance!=this){Destroy(this);return;}
   Instance=this;game=GetComponent<PackspireGame>();
-  document=gameObject.GetComponent<UIDocument>()??gameObject.AddComponent<UIDocument>();
-  panelSettings=Resources.Load<PanelSettings>("UI/PackspirePanelSettings");
+  document=gameObject.GetComponent<UIDocument>();
+  if(document==null)document=gameObject.AddComponent<UIDocument>();
+  panelSettings=PackspireResources.Load<PanelSettings>("UI/PackspirePanelSettings");
   if(panelSettings==null){
    panelSettings=ScriptableObject.CreateInstance<PanelSettings>();
    panelSettings.name="Packspire Runtime UI Fallback";
@@ -56,16 +61,39 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
    panelSettings.sortingOrder=120;
    ownsPanelSettings=true;
   }
-  var tree=Resources.Load<VisualTreeAsset>("UI/PackspireRoot");
+  var tree=PackspireResources.Load<VisualTreeAsset>("UI/PackspireRoot");
   document.enabled=false;document.panelSettings=panelSettings;document.visualTreeAsset=tree;document.enabled=true;
  }
 
- IEnumerator Start(){for(int frame=0;frame<30;frame++){if(document!=null&&document.rootVisualElement!=null&&document.rootVisualElement.panel!=null)break;yield return null;}BuildRoot();if(uiReady)RefreshScreen(true);}
+ void Start(){
+  startCalled=true;
+  BeginUiInitialization();
+ }
+ void OnEnable(){
+  if(startCalled&&!uiReady&&startupRoutine==null)BeginUiInitialization();
+ }
+ void BeginUiInitialization(){
+  if(startupRoutine==null)startupRoutine=StartCoroutine(InitializeUi());
+ }
+ IEnumerator InitializeUi(){
+  for(int frame=0;frame<30;frame++){
+   if(document!=null&&document.rootVisualElement!=null&&document.rootVisualElement.panel!=null)break;
+   yield return null;
+  }
+  startupRoutine=null;
+  BuildRoot();
+  if(uiReady)RefreshScreen(true);
+ }
  void Update(){
-  if(root!=null)RefreshScreen(false);
+  if(root!=null&&(!hasRenderedScreen||renderedScreen!=game.UiScreen))RefreshScreen(false);
   HandleNavInput();
   RefreshDeveloperOverlay();
   if(renderedScreen==ScreenId.GridBoard&&gridBoardBuilt)TickGridBoard();
+ }
+ void OnDisable(){
+  if(startupRoutine!=null){StopCoroutine(startupRoutine);startupRoutine=null;}
+  if(transitionRoutine!=null){StopCoroutine(transitionRoutine);transitionRoutine=null;}
+  HideTransition();
  }
  void OnDestroy(){
   if(Instance==this)Instance=null;

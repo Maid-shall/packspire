@@ -69,7 +69,8 @@ public sealed partial class PackspireUiFoundation {
 
   shopShell=Container("ps-shop-screen ps-dark-surface");
   var backgroundHost=Container("ps-layer-background");
-  var bg=HubBackgroundArt()??CourtyardArt();
+  var bg=HubBackgroundArt();
+  if(bg==null)bg=CourtyardArt();
   if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
   var shade=Container("ps-mgmt-shade");
   shade.pickingMode=PickingMode.Ignore;
@@ -200,7 +201,8 @@ public sealed partial class PackspireUiFoundation {
   if(shopMerchant==null||shopMerchantBackdropLayer==null)return;
   shopMerchantBackdropLayer.Clear();
   var bgPath=string.IsNullOrEmpty(shopMerchant.backdropResource)?"Art/UI/PopDark/hub-bg-v1":shopMerchant.backdropResource;
-  var bg=Resources.Load<Texture2D>(bgPath)??HubBackgroundArt();
+  var bg=PackspireResources.Load<Texture2D>(bgPath);
+  if(bg==null)bg=HubBackgroundArt();
   if(bg!=null)
    shopMerchantBackdropLayer.Add(Image(bg,new Rect(0,0,1,1),"ps-shop-merchant-bg",ScaleMode.ScaleAndCrop));
   else {
@@ -213,7 +215,7 @@ public sealed partial class PackspireUiFoundation {
    var artHost=shopMerchantCounterLayer.Q(className:"ps-shop-merchant-counter-art");
    artHost?.RemoveFromHierarchy();
    if(!string.IsNullOrEmpty(shopMerchant.counterResource)){
-    var counterTex=Resources.Load<Texture2D>(shopMerchant.counterResource);
+    var counterTex=PackspireResources.Load<Texture2D>(shopMerchant.counterResource);
     if(counterTex!=null){
      var art=Image(counterTex,new Rect(0,0,1,1),"ps-shop-merchant-counter-art",ScaleMode.ScaleAndCrop);
      shopMerchantCounterLayer.Insert(0,art);
@@ -250,7 +252,7 @@ public sealed partial class PackspireUiFoundation {
 
  Texture2D ResolveShopMerchantCharacter(){
   if(shopMerchant!=null&&!string.IsNullOrEmpty(shopMerchant.characterResource)){
-   var named=Resources.Load<Texture2D>(shopMerchant.characterResource);
+   var named=PackspireResources.Load<Texture2D>(shopMerchant.characterResource);
    if(named!=null)return named;
   }
   var pop=PopDarkPortraitArt(game.UiSelectedCharacter);

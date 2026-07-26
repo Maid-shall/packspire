@@ -50,7 +50,8 @@ public sealed partial class PackspireUiFoundation {
 
   rewardShell=Container("ps-reward-screen ps-dark-surface");
   var backgroundHost=Container("ps-layer-background");
-  var bg=HubBackgroundArt()??CourtyardArt();
+  var bg=HubBackgroundArt();
+  if(bg==null)bg=CourtyardArt();
   if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
   var shade=Container("ps-reward-shade");
   shade.pickingMode=PickingMode.Ignore;

@@ -8,12 +8,12 @@ public partial class PackspireGame : MonoBehaviour {
 
 
  public static PackspireGame Instance { get; private set; }
- MetaSave meta; RunState run; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string selectedUid="",message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
+ MetaSave meta; RunState run; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
  ScreenId lastVisualScreen; bool visualScreenTracked;
  /// <summary>Temporary art-preview lock: battle always shows 瀬名 + 劫火竜 portraits.</summary>
- public const bool LockBattleShowcaseArt=true;
+ public static readonly bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
  public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
  public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase;
@@ -28,12 +28,36 @@ public partial class PackspireGame : MonoBehaviour {
   }
  }
  public ScreenId UiDeveloperReturnScreen=>developerReturnScreen;
- string rewardSelectionId="",shopSelectionId="";
  ScreenId developerReturnScreen; bool developerHasReturn;
 
- void Awake(){if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}Instance=this;DontDestroyOnLoad(gameObject);meta=SaveSystem.Load();factionArt=Resources.Load<Texture2D>("Art/faction-hub-sheet");characterArt=Resources.Load<Texture2D>("Art/character-creator-sheet");equipmentArt=Resources.Load<Texture2D>("Art/equipment-sheet");roleArt=Resources.Load<Texture2D>("Art/roles-sheet");enemyArt=Resources.Load<Texture2D>("Art/enemy-sheet");dungeonArt=Resources.Load<Texture2D>("Art/dungeon-sheet");showcaseHeroSprite=Resources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");showcaseHeroArt=showcaseHeroSprite==null?Resources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1"):null;showcaseDragonArt=Resources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;Application.targetFrameRate=60;}
+ void Awake(){
+  if(Instance!=null&&Instance!=this){Destroy(gameObject);return;}
+  Instance=this;
+  DontDestroyOnLoad(gameObject);
+  meta=SaveSystem.Load();
+  factionArt=PackspireResources.Load<Texture2D>("Art/faction-hub-sheet");
+  characterArt=PackspireResources.Load<Texture2D>("Art/character-creator-sheet");
+  equipmentArt=PackspireResources.Load<Texture2D>("Art/equipment-sheet");
+  roleArt=PackspireResources.Load<Texture2D>("Art/roles-sheet");
+  enemyArt=PackspireResources.Load<Texture2D>("Art/enemy-sheet");
+  dungeonArt=PackspireResources.Load<Texture2D>("Art/dungeon-sheet");
+  showcaseHeroSprite=PackspireResources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");
+  if(showcaseHeroSprite==null)
+   showcaseHeroArt=PackspireResources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1");
+  showcaseDragonArt=PackspireResources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");
+  screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;
+  Application.targetFrameRate=60;
+ }
  void OnDestroy(){if(Instance==this)Instance=null;}
- void Update(){if(Input.GetKeyDown(KeyCode.F10))UiToggleDeveloperPanel();if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}if(lastVisualScreen==screen)return;var previous=lastVisualScreen;lastVisualScreen=screen;PackspireUiFoundation.Instance?.PlayFor(previous,screen);}
+ void Update(){
+  if(PackspireInput.DeveloperTogglePressed())UiToggleDeveloperPanel();
+  if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}
+  if(lastVisualScreen==screen)return;
+  var previous=lastVisualScreen;
+  lastVisualScreen=screen;
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.PlayFor(previous,screen);
+ }
  public void UiNavigate(ScreenId target){
   if(target==ScreenId.Pack)OpenPacking();
   else{
@@ -90,7 +114,8 @@ public partial class PackspireGame : MonoBehaviour {
   if(gridBoard==null)return;
   if(!GridBoardSystem.TryAdvanceArea(gridBoard,out var msg)){message=msg;return;}
   message=msg;
-  PackspireUiFoundation.Instance?.ForceRefreshScreen();
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.ForceRefreshScreen();
  }
  public void UiConfirmGridReturn(){
   if(gridBoard==null)return;
@@ -106,7 +131,7 @@ public partial class PackspireGame : MonoBehaviour {
  public Texture2D ResolveCharacterPortrait(CharacterDef def){
   if(def!=null&&def.HasPortraitAsset){
    if(def.portraitAsset!=null)return def.portraitAsset.texture;
-   var tex=Resources.Load<Texture2D>(def.portraitResource);
+   var tex=PackspireResources.Load<Texture2D>(def.portraitResource);
    if(tex!=null)return tex;
   }
   return characterArt;
@@ -114,7 +139,7 @@ public partial class PackspireGame : MonoBehaviour {
  public Sprite ResolveCharacterPortraitSprite(CharacterDef def){
   if(def!=null&&def.HasPortraitAsset){
    if(def.portraitAsset!=null)return def.portraitAsset;
-   return Resources.Load<Sprite>(def.portraitResource);
+   return PackspireResources.Load<Sprite>(def.portraitResource);
   }
   return null;
  }
@@ -122,20 +147,21 @@ public partial class PackspireGame : MonoBehaviour {
   if(def!=null){
    if(def.portraitFrontAsset!=null)return def.portraitFrontAsset.texture;
    if(!string.IsNullOrEmpty(def.portraitFrontResource)&&!def.portraitFrontResource.Contains("/DD/")){
-    var front=Resources.Load<Texture2D>(def.portraitFrontResource);
+    var front=PackspireResources.Load<Texture2D>(def.portraitFrontResource);
     if(front!=null)return front;
    }
    if(!string.IsNullOrEmpty(def.id)){
-    var popCutout=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
+    var popCutout=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-cutout-v1");
     if(popCutout!=null)return popCutout;
-    var popFront=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
+    var popFront=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-front-v1");
     if(popFront!=null)return popFront;
-    var popHub=Resources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
+    var popHub=PackspireResources.Load<Texture2D>($"Art/Portraits/PopDark/hero-{def.id}-hub-v1");
     if(popHub!=null)return popHub;
    }
-   var showcase=Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-cutout-v1")
-    ??Resources.Load<Texture2D>("Art/Portraits/PopDark/hero-courier-hub-v1")
-    ??Resources.Load<Texture2D>("Art/Portraits/hero-courier-hub-v1");
+   var showcase=PackspireResources.LoadFirst<Texture2D>(
+    "Art/Portraits/PopDark/hero-courier-cutout-v1",
+    "Art/Portraits/PopDark/hero-courier-hub-v1",
+    "Art/Portraits/hero-courier-hub-v1");
    if(showcase!=null)return showcase;
   }
   return characterArt;
@@ -144,7 +170,7 @@ public partial class PackspireGame : MonoBehaviour {
   if(def!=null){
    if(def.portraitHubAsset!=null)return def.portraitHubAsset.texture;
    if(def.HasHubPortraitAsset&&!def.portraitHubResource.Contains("/DD/")){
-    var hub=Resources.Load<Texture2D>(def.portraitHubResource);
+    var hub=PackspireResources.Load<Texture2D>(def.portraitHubResource);
     if(hub!=null)return hub;
    }
    return ResolveCharacterPortraitFront(def);
@@ -154,7 +180,7 @@ public partial class PackspireGame : MonoBehaviour {
  public Texture2D ResolveEnemyPortrait(EnemyDef def){
   if(def!=null&&def.HasPortraitAsset){
    if(def.portraitAsset!=null)return def.portraitAsset.texture;
-   var tex=Resources.Load<Texture2D>(def.portraitResource);
+   var tex=PackspireResources.Load<Texture2D>(def.portraitResource);
    if(tex!=null)return tex;
   }
   return enemyArt;
@@ -186,18 +212,20 @@ public partial class PackspireGame : MonoBehaviour {
   if(run==null||battle==null||run.activeSkillUsed)return false;
   var result=CharacterSystem.UseActiveSkill(run,battle);
   if(!result.success)return false;
-  PackspireUiFoundation.Instance?.PlayBattleActionFx(result.fx);
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.PlayBattleActionFx(result.fx);
   if(result.enemyDefeated){WinBattle();return true;}
-  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  if(ui!=null)ui.RefreshBattleUi();
   return true;
  }
  public bool UiPlayBattleCard(int handIndex){
   if(run==null||battle==null)return false;
   var fx=BattleSystem.PlayCard(run,battle,handIndex);
   if(!fx.ok)return false;
-  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.PlayBattleActionFx(fx);
   if(fx.enemyDefeated){WinBattle();return true;}
-  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  if(ui!=null)ui.RefreshBattleUi();
   return true;
  }
  public bool UiEndBattleTurn(){
@@ -205,18 +233,20 @@ public partial class PackspireGame : MonoBehaviour {
   var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
   var gridPressure=GridBoardSystem.EnemyDamageBonus(gridBoard);
   var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage+gridPressure);
-  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.PlayBattleActionFx(fx);
   if(fx.playerDefeated){FinishRun(false);return true;}
-  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  if(ui!=null)ui.RefreshBattleUi();
   return true;
  }
  public bool UiUseBattleConsumable(int index){
   if(run==null||battle==null)return false;
   var fx=ConsumableSystem.UseFx(run,battle,index);
   if(!fx.ok)return false;
-  PackspireUiFoundation.Instance?.PlayBattleActionFx(fx);
+  var ui=PackspireUiFoundation.Instance;
+  if(ui!=null)ui.PlayBattleActionFx(fx);
   if(fx.enemyDefeated){WinBattle();return true;}
-  PackspireUiFoundation.Instance?.RefreshBattleUi();
+  if(ui!=null)ui.RefreshBattleUi();
   return true;
  }
  public bool UiActiveSkillAvailable=>run!=null&&battle!=null&&!run.activeSkillUsed;
@@ -271,7 +301,6 @@ public partial class PackspireGame : MonoBehaviour {
   var loot=new ItemInstance(itemId){identified=false};
   StorageFormulaSystem.EnsureItemRolled(loot);
   run.lootBag.Add(loot);
-  rewardSelectionId="";
   ReturnToExpeditionScreen();
  }
  public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
@@ -316,14 +345,13 @@ public partial class PackspireGame : MonoBehaviour {
  void ReturnToExpeditionScreen(){
   screen=gridBoard!=null?ScreenId.GridBoard:ScreenId.Expedition;
  }
- void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;selectedUid="";message="荷造りセットを編集";screen=ScreenId.Pack;}
+ void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;message="荷造りセットを編集";screen=ScreenId.Pack;}
  void StartRun(string dungeon){
   try{
    message="ダンジョンを生成中…";
    run=LoadoutSystem.CreateRun(meta,dungeon);
    packingAtBase=false;
    battle=null;
-   selectedUid="";
    gridBoard=GridBoardSystem.Create(run.dungeon);
    GridBoardSystem.SyncExplorePool(gridBoard,run);
    message="封印格子を展開した";

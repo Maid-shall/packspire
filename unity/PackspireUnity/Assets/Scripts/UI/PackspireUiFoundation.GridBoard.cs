@@ -97,23 +97,24 @@ public sealed partial class PackspireUiFoundation {
   if(gridBoardCardFrames!=null)return;
   gridBoardCardFrames=new Texture2D[3];
   for(int i=0;i<3;i++)
-   gridBoardCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
+   gridBoardCardFrames[i]=PackspireResources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
  }
 
  void EnsureGridBoardEnvironmentArt(){
   if(gridBoardMakaiBackground==null)
-   gridBoardMakaiBackground=Resources.Load<Texture2D>("Art/UI/Product/dungeon-makai-bg-01");
+   gridBoardMakaiBackground=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-makai-bg-01");
   if(gridBoardBoardSurface==null)
-   gridBoardBoardSurface=Resources.Load<Texture2D>("Art/UI/Product/dungeon-board-surface-01");
+   gridBoardBoardSurface=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-board-surface-01");
   if(gridBoardHudTop==null)
-   gridBoardHudTop=Resources.Load<Texture2D>("Art/UI/Product/dungeon-hud-top-compact-v1")
-    ??Resources.Load<Texture2D>("Art/UI/Product/dungeon-hud-top-layout-v2");
+   gridBoardHudTop=PackspireResources.LoadFirst<Texture2D>(
+    "Art/UI/Product/dungeon-hud-top-compact-v1",
+    "Art/UI/Product/dungeon-hud-top-layout-v2");
   if(gridBoardEnergyRailArt==null)
-   gridBoardEnergyRailArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-energy-simple-layout-v3");
+   gridBoardEnergyRailArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-energy-simple-layout-v3");
   if(gridBoardInfoHeaderArt==null)
-   gridBoardInfoHeaderArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-info-header-layout-v2");
+   gridBoardInfoHeaderArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-info-header-layout-v2");
   if(gridBoardPlayerHudArt==null)
-   gridBoardPlayerHudArt=Resources.Load<Texture2D>("Art/UI/Product/dungeon-player-status-cluster-v2");
+   gridBoardPlayerHudArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-player-status-cluster-v2");
  }
 
  void BuildGridBoard(){
@@ -133,7 +134,7 @@ public sealed partial class PackspireUiFoundation {
   gridBoardRoot=Container("ps-gboard");
   if(gridBoardMakaiBackground!=null){
    gridBoardRoot.style.backgroundImage=new StyleBackground(gridBoardMakaiBackground);
-   gridBoardRoot.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardRoot,ScaleMode.StretchToFill);
   }
   screenRoot.Add(gridBoardRoot);
 
@@ -150,7 +151,7 @@ public sealed partial class PackspireUiFoundation {
   gridBoardGrid=Container("ps-gboard-grid");
   if(gridBoardBoardSurface!=null){
    gridBoardGrid.style.backgroundImage=new StyleBackground(gridBoardBoardSurface);
-   gridBoardGrid.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardGrid,ScaleMode.StretchToFill);
   }
   gridBoardGrid.style.position=Position.Absolute;
   gridBoardGrid.style.flexGrow=0;
@@ -275,7 +276,7 @@ public sealed partial class PackspireUiFoundation {
    var ornament=Container("ps-gboard-panel-ornament");
    ornament.pickingMode=PickingMode.Ignore;
    ornament.style.backgroundImage=new StyleBackground(gridBoardInfoHeaderArt);
-   ornament.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   PackspireUiFactory.ApplyBackgroundScaleMode(ornament,ScaleMode.StretchToFill);
    panel.Add(ornament);
   }
   // The right dock is deliberately an open reading column.  The environment
@@ -338,7 +339,7 @@ public sealed partial class PackspireUiFoundation {
   var playerHudOrnament=Container("ps-gboard-player-hud-ornament");
   if(gridBoardPlayerHudArt!=null){
    playerHudOrnament.style.backgroundImage=new StyleBackground(gridBoardPlayerHudArt);
-   playerHudOrnament.style.unityBackgroundScaleMode=ScaleMode.ScaleToFit;
+   PackspireUiFactory.ApplyBackgroundScaleMode(playerHudOrnament,ScaleMode.ScaleToFit);
   }
   playerHudOrnamentClip.Add(playerHudOrnament);
   gridBoardPlayerHud.Add(playerHudOrnamentClip);

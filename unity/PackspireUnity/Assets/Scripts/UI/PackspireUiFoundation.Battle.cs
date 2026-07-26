@@ -24,21 +24,22 @@ public sealed partial class PackspireUiFoundation {
 
  void EnsureBattleAssets(){
   if(battleSceneBg!=null&&battleIconDamage!=null&&battlePlateHex!=null)return;
-  battleSceneBg=Resources.Load<Texture2D>("Art/Battle/battle-bg-forest-ground-v1");
-  battleEnvFarBg=Resources.Load<Texture2D>("Art/RouteKeyed/far-background-v1");
-  battleEnvMidBg=Resources.Load<Texture2D>("Art/RouteKeyed/midground-v1");
-  battleIconDamage=Resources.Load<Texture2D>("Art/Battle/Icons/icon-damage");
-  battleIconBlock=Resources.Load<Texture2D>("Art/Battle/Icons/icon-block");
-  battleIconHeal=Resources.Load<Texture2D>("Art/Battle/Icons/icon-heal");
-  battleIconEnergy=Resources.Load<Texture2D>("Art/Battle/Icons/icon-energy");
-  battleIconClaw=Resources.Load<Texture2D>("Art/Battle/Icons/icon-claw");
-  battlePlateWide=Resources.Load<Texture2D>("Art/UI/PopDark/btn-wide-v1")
-   ??Resources.Load<Texture2D>("Art/UI/ChromeDD/btn-plate-wide")
-   ??Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-wide");
-  battlePlateHex=Resources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
-  battleMeterFrame=Resources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
+  battleSceneBg=PackspireResources.Load<Texture2D>("Art/Battle/battle-bg-forest-ground-v1");
+  battleEnvFarBg=PackspireResources.Load<Texture2D>("Art/RouteKeyed/far-background-v1");
+  battleEnvMidBg=PackspireResources.Load<Texture2D>("Art/RouteKeyed/midground-v1");
+  battleIconDamage=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-damage");
+  battleIconBlock=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-block");
+  battleIconHeal=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-heal");
+  battleIconEnergy=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-energy");
+  battleIconClaw=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-claw");
+  battlePlateWide=PackspireResources.LoadFirst<Texture2D>(
+   "Art/UI/PopDark/btn-wide-v1",
+   "Art/UI/ChromeDD/btn-plate-wide",
+   "Art/Battle/Chrome/btn-plate-wide");
+  battlePlateHex=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
+  battleMeterFrame=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
   for(int i=0;i<3;i++)
-   battleCardFrames[i]=Resources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
+   battleCardFrames[i]=PackspireResources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
  }
 
  void BuildBattle(){
@@ -269,7 +270,7 @@ public sealed partial class PackspireUiFoundation {
  static void ApplyBattlePlate(VisualElement button,Texture2D plate,ScaleMode mode){
   if(button==null||plate==null)return;
   button.style.backgroundImage=new StyleBackground(plate);
-  button.style.unityBackgroundScaleMode=mode;
+  PackspireUiFactory.ApplyBackgroundScaleMode(button,mode);
   button.style.backgroundColor=Color.clear;
   button.style.borderTopWidth=0;
   button.style.borderRightWidth=0;
@@ -355,9 +356,10 @@ public sealed partial class PackspireUiFoundation {
   if(battleIntentBadge==null)return;
   bool attack=rawDamage>0;
   if(battleIntentIcon!=null){
-   battleIntentIcon.image=specialMove&&!attack
-    ?(battleIconEnergy??battleIconBlock)
-    :(battleIconClaw??battleIconDamage);
+   if(specialMove&&!attack)
+    battleIntentIcon.image=battleIconEnergy!=null?battleIconEnergy:battleIconBlock;
+   else
+    battleIntentIcon.image=battleIconClaw!=null?battleIconClaw:battleIconDamage;
    battleIntentIcon.style.display=battleIntentIcon.image!=null?DisplayStyle.Flex:DisplayStyle.None;
   }
   if(battleIntentValue!=null){
@@ -471,7 +473,7 @@ public sealed partial class PackspireUiFoundation {
   Texture2D frame=frameIndex<battleCardFrames.Length?battleCardFrames[frameIndex]:null;
   if(frame!=null){
    slot.style.backgroundImage=new StyleBackground(frame);
-   slot.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   PackspireUiFactory.ApplyBackgroundScaleMode(slot,ScaleMode.StretchToFill);
   }
   var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
   cost.AddToClassList("ps-battle-card-cost");
@@ -587,7 +589,8 @@ public sealed partial class PackspireUiFoundation {
    stagger+=70;
   }
   if(fx.damageToPlayer>0){
-   SpawnBattleFloater(false,battleIconClaw??battleIconDamage,fx.damageToPlayer.ToString(),"ps-battle-floater-damage",stagger);
+   var damageIcon=battleIconClaw!=null?battleIconClaw:battleIconDamage;
+   SpawnBattleFloater(false,damageIcon,fx.damageToPlayer.ToString(),"ps-battle-floater-damage",stagger);
    PulseBattleActor(true,"ps-battle-actor-hit");
    stagger+=70;
   }

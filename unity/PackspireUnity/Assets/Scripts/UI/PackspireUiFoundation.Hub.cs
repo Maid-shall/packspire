@@ -21,9 +21,6 @@ public sealed partial class PackspireUiFoundation {
  VisualElement hubStreetGuideDetail;
  ScrollView hubStreetGuideFacilityScroll;
 
- // Legacy reel scroll ref kept null (v4 uses hubFacilityScroll).
- ScrollView hubReelScroll;
-
  void BuildHub(){
   hubStreetGuideOpen=false;
   var meta=game.UiMeta;

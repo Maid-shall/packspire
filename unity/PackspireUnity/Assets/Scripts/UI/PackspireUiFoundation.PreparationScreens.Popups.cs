@@ -238,7 +238,7 @@ public sealed partial class PackspireUiFoundation {
   // percentage plus per-cell margins could wrap six logical cells into five.
   float cellPercent=100f/width;
   float cellHeight=Mathf.Clamp(560f/Mathf.Max(1,formula.core.height),58f,84f);
-  var plateTex=Resources.Load<Texture2D>("Art/Rite/rite-cell-plate-v1");
+  var plateTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-cell-plate-v1");
   for(int index=0;index<cells;index++){
    int cellIndex=index;
    int cellX=index%width,cellY=index/width;

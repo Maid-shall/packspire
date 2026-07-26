@@ -46,7 +46,8 @@ public sealed partial class PackspireUiFoundation {
   resultShell.EnableInClassList("ps-result-defeat",false);
 
   var backgroundHost=Container("ps-layer-background");
-  var bg=HubBackgroundArt()??CourtyardArt();
+  var bg=HubBackgroundArt();
+  if(bg==null)bg=CourtyardArt();
   if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
   var shade=Container("ps-result-shade");
   shade.pickingMode=PickingMode.Ignore;

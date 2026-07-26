@@ -8,6 +8,14 @@ public static class PackspireUiFactory {
  public static Label Title(string text){var label=new Label(text);label.AddToClassList("ps-title");return label;}
  public static Label Body(string text){var label=new Label(text);label.AddToClassList("ps-body");return label;}
  public static Button Button(string text,Action clicked){var button=new Button(clicked){text=text};button.AddToClassList("ps-button");return button;}
+ public static void ApplyBackgroundScaleMode(VisualElement target,ScaleMode mode){
+  if(target==null)return;
+  var position=BackgroundPropertyHelper.ConvertScaleModeToBackgroundPosition(mode);
+  target.style.backgroundPositionX=position;
+  target.style.backgroundPositionY=position;
+  target.style.backgroundRepeat=BackgroundPropertyHelper.ConvertScaleModeToBackgroundRepeat(mode);
+  target.style.backgroundSize=BackgroundPropertyHelper.ConvertScaleModeToBackgroundSize(mode);
+ }
 
  public static Button PrimaryButton(string text,Action clicked){
   var button=Button(text,clicked);
@@ -57,9 +65,9 @@ public static class PackspireUiFactory {
  static Texture2D LoadPopTex(params string[] paths){
   foreach(var path in paths){
    if(string.IsNullOrEmpty(path))continue;
-   var tex=Resources.Load<Texture2D>(path);
+   var tex=PackspireResources.Load<Texture2D>(path);
    if(tex!=null)return tex;
-   var sprite=Resources.Load<Sprite>(path);
+   var sprite=PackspireResources.Load<Sprite>(path);
    if(sprite!=null&&sprite.texture!=null)return sprite.texture;
   }
   return null;
@@ -84,7 +92,7 @@ public static class PackspireUiFactory {
   target.style.unityBackgroundImageTintColor=Color.white;
   if(plate!=null){
    target.style.backgroundImage=new StyleBackground(plate);
-   target.style.unityBackgroundScaleMode=ScaleMode.StretchToFill;
+   ApplyBackgroundScaleMode(target,ScaleMode.StretchToFill);
    // Keep slices at 0 in code too — USS can be overridden by importer borders.
    target.style.unitySliceLeft=0;
    target.style.unitySliceRight=0;
