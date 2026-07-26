@@ -546,7 +546,14 @@ public static class PackspireContentAssetBuilder {
   new CardContent{id=id,name=name,type=type,cost=cost,text=text,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,
    exhaust=exhaust,innate=innate,retain=retain,ethereal=ethereal,unplayable=unplayable,
    afterUse=exhaust&&afterUse==BattleCardAfterUse.Discard?BattleCardAfterUse.ExhaustBattle:afterUse,
-   effects=effects??Array.Empty<EffectContent>()};
+   effects=effects??Array.Empty<EffectContent>(),artwork=LoadCardArtwork(id)};
+ static Sprite LoadCardArtwork(string id)=>id switch {
+  "basicStrike"=>LoadSprite("Assets/Resources/Art/Cards/Production/basic-strike-v1.png"),
+  "basicGuard"=>LoadSprite("Assets/Resources/Art/Cards/Production/basic-guard-v1.png"),
+  "tailwind"=>LoadSprite("Assets/Resources/Art/Cards/Production/tailwind-v1.png"),
+  "acid"=>LoadSprite("Assets/Resources/Art/Cards/Production/acid-flask-v1.png"),
+  _=>null
+ };
  static ExplorationCardContent Exploration(string id,string name,string place,string text,params ExplorationStageContent[] stages)=>
   new ExplorationCardContent{id=id,name=name,place=place,text=text,cost=1,kind=ExplorationCardKind.Installation,
    target=ExplorationTargetKind.Cell,consumeRule=ExplorationConsumeRule.Discard,growthTrigger=ExplorationGrowthTrigger.TurnsElapsed,

@@ -16,7 +16,6 @@ public sealed partial class PackspireUiFoundation {
  Label battleSkillMetaLabel;
  Button battleSkillButton,battleEndTurnButton;
  Texture2D battleEnvFarBg,battleEnvMidBg,battleSceneBg;
- Texture2D[] battleCardFrames=new Texture2D[3];
  Texture2D battleIconDamage,battleIconBlock,battleIconHeal,battleIconEnergy,battleIconClaw;
  Texture2D battlePlateWide,battlePlateHex,battleMeterFrame;
  int battleFloaterSerial;
@@ -38,8 +37,6 @@ public sealed partial class PackspireUiFoundation {
    "Art/Battle/Chrome/btn-plate-wide");
   battlePlateHex=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
   battleMeterFrame=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
-  for(int i=0;i<3;i++)
-   battleCardFrames[i]=PackspireResources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
  }
 
  void BuildBattle(){
@@ -472,29 +469,37 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void PopulateBattleCard(VisualElement slot,CardInstance card,RunState run,bool affordable){
-  int frameIndex=card.type==CardType.Attack?0:card.type==CardType.Skill?1:2;
-  Texture2D frame=frameIndex<battleCardFrames.Length?battleCardFrames[frameIndex]:null;
-  if(frame!=null){
-   slot.style.backgroundImage=new StyleBackground(frame);
-   PackspireUiFactory.ApplyBackgroundScaleMode(slot,ScaleMode.StretchToFill);
-  }
-  var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
-  cost.AddToClassList("ps-battle-card-cost");
-  slot.Add(cost);
+  ApplyBattleCardPresentation(slot,card,run);
   var illustration=Container("ps-battle-card-art");
   var sourceItem=run.inventory.FirstOrDefault(x=>x.uid==card.sourceItemUid);
-  if(sourceItem!=null)
+  if(GameCatalog.Cards.TryGetValue(card.id,out var authoredCard)&&authoredCard.artwork!=null){
+   var art=new Image{sprite=authoredCard.artwork,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
+   art.AddToClassList("ps-battle-card-art-image");
+   illustration.Add(art);
+  } else if(sourceItem!=null)
    illustration.Add(Atlas(game.UiEquipmentArt,ItemUv(sourceItem.templateId),"ps-battle-card-art-image"));
   else if(!string.IsNullOrEmpty(run.role))
    illustration.Add(Atlas(game.UiRoleArt,RoleUv(run.role),"ps-battle-card-art-image"));
   if(!affordable)illustration.AddToClassList("ps-battle-card-art-disabled");
   slot.Add(illustration);
+  // The cost crest is part of the frame and intentionally overlaps the art.
+  // Add it after the illustration so the art can never cover the number.
+  var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
+  cost.AddToClassList("ps-battle-card-cost");
+  slot.Add(cost);
   var name=new Label(card.name){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-battle-card-name");
   slot.Add(name);
   var body=new Label(BattleCardDisplayTextWithKeywords(card)){pickingMode=PickingMode.Ignore};
   body.AddToClassList("ps-battle-card-text");
   slot.Add(body);
+  string formula=DemonCardDiceFormula(card);
+  if(!string.IsNullOrEmpty(formula)){
+   slot.AddToClassList("ps-demon-card-has-formula");
+   var formulaLabel=new Label(formula){pickingMode=PickingMode.Ignore};
+   formulaLabel.AddToClassList("ps-demon-card-formula");
+   slot.Add(formulaLabel);
+  }
   string sourceName=card.source;
   if(sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var itemDef))sourceName=itemDef.name;
   var foot=Container("ps-battle-card-foot");
@@ -514,6 +519,7 @@ public sealed partial class PackspireUiFoundation {
    lockLabel.AddToClassList("ps-battle-card-lock");
    slot.Add(lockLabel);
   }
+  AddBattleDemonCardOverlay(slot,card,run);
  }
 
  static string BattleCardDisplayTextWithKeywords(CardInstance card){

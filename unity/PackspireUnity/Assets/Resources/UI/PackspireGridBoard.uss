@@ -2181,3 +2181,67 @@
     border-left-color: rgb(255, 79, 133);
     border-right-color: rgb(255, 205, 102);
 }
+
+/* Demon card hand states. The map remains the focal layer: resting cards sink,
+   exploration focus lifts one identity, and combat reads full detail at right. */
+.ps-gboard .ps-gboard-fan-card.ps-demon-card {
+    width: 168px;
+    height: 252px;
+    min-width: 168px;
+    min-height: 252px;
+    max-width: 168px;
+    max-height: 252px;
+}
+
+.ps-gboard .ps-gboard-fan-card.ps-gboard-fan-peek.ps-gboard-fan-focus {
+    translate: 0 -86px;
+    scale: 1.03 1.03 1;
+    opacity: 1;
+}
+
+.ps-gboard .ps-gboard-fan-card.ps-gboard-fan-selected {
+    translate: 0 -24px;
+    scale: 1.03 1.03 1;
+    opacity: 1;
+}
+
+.ps-gboard-in-combat .ps-battle-hand.ps-gboard-hand-fan .ps-gboard-fan-card.ps-demon-card {
+    scale: 0.84 0.84 1;
+    opacity: 0.92;
+}
+
+.ps-gboard-in-combat .ps-battle-hand.ps-gboard-hand-fan .ps-gboard-fan-card.ps-demon-card:hover {
+    translate: 0 -18px;
+    scale: 0.90 0.90 1;
+    opacity: 1;
+}
+
+.ps-gboard-in-combat .ps-gboard-card-view-card.ps-demon-card {
+    width: 184px;
+    min-width: 184px;
+    max-width: 184px;
+    height: 276px;
+    min-height: 276px;
+    max-height: 276px;
+}
+
+.ps-gboard .ps-gboard-side-preview.ps-demon-card,
+.ps-gboard .ps-gboard-side-preview.ps-demon-card:hover {
+    width: 236px;
+    min-width: 236px;
+    max-width: 236px;
+    height: 354px;
+    min-height: 354px;
+    max-height: 354px;
+    translate: 0 0;
+    scale: 1 1 1;
+    opacity: 1;
+}
+
+.ps-gboard .ps-gboard-side-preview.ps-demon-card .ps-battle-card-name {
+    font-size: 18px;
+}
+
+.ps-gboard .ps-gboard-side-preview.ps-demon-card .ps-battle-card-text {
+    font-size: 14px;
+}

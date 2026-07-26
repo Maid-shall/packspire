@@ -79,7 +79,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    return;
   }
   // Inline size/pos so PackspireBattle.uss (.ps-battle-card 168x236) cannot win.
-  const float cardW=252f;
+  const float cardW=236f;
   const float cardH=354f;
   gridBoardSelectedHost.style.display=DisplayStyle.Flex;
   gridBoardSelectedHost.style.backgroundColor=Color.clear;
@@ -323,20 +323,24 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
 
  void PopulateGridPlaceCard(VisualElement slot,CardInstance card){
   // Skill frame (combat-card-01) for place cards — same chrome as battle.
-  Texture2D frame=gridBoardCardFrames!=null&&gridBoardCardFrames.Length>1?gridBoardCardFrames[1]:null;
-  if(frame==null&&gridBoardCardFrames!=null&&gridBoardCardFrames.Length>0)frame=gridBoardCardFrames[0];
-  if(frame!=null){
-   slot.style.backgroundImage=new StyleBackground(frame);
-   PackspireUiFactory.ApplyBackgroundScaleMode(slot,ScaleMode.StretchToFill);
+  ApplyExplorationCardPresentation(slot,card);
+  var illustration=Container("ps-battle-card-art");
+  var sourceItem=game.UiRun?.inventory?.FirstOrDefault(value=>value.uid==card.sourceItemUid);
+  if(sourceItem!=null)
+   illustration.Add(Atlas(game.UiEquipmentArt,ItemUv(sourceItem.templateId),"ps-battle-card-art-image"));
+  else if(GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)&&exploration.artwork!=null){
+   var art=new Image{sprite=exploration.artwork,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
+   art.AddToClassList("ps-battle-card-art-image");
+   illustration.Add(art);
+  } else {
+   var glyph=new Label(GridPlaceGlyph(card)){pickingMode=PickingMode.Ignore};
+   glyph.AddToClassList("ps-gboard-card-glyph");
+   illustration.Add(glyph);
   }
+  slot.Add(illustration);
   var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
   cost.AddToClassList("ps-battle-card-cost");
   slot.Add(cost);
-  var illustration=Container("ps-battle-card-art");
-  var glyph=new Label(GridPlaceGlyph(card)){pickingMode=PickingMode.Ignore};
-  glyph.AddToClassList("ps-gboard-card-glyph");
-  illustration.Add(glyph);
-  slot.Add(illustration);
   var name=new Label(card.name){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-battle-card-name");
   slot.Add(name);
@@ -351,6 +355,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   tag.AddToClassList("ps-battle-card-durability");
   foot.Add(tag);
   slot.Add(foot);
+  AddExplorationDemonCardOverlay(slot,card);
  }
 
  static string GridPlaceGlyph(CardInstance card){

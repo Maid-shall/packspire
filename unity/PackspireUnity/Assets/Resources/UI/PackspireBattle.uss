@@ -944,3 +944,235 @@
 }
 
 /* portrait rule lives with hub home block above */
+
+/* ===== Demon card family ==================================================
+   One equipment keeps one silhouette. Combat/exploration swap the skin,
+   while compact type crests carry the mechanical category. */
+.ps-battle-card.ps-demon-card {
+    width: 168px;
+    height: 252px;
+    min-width: 168px;
+    min-height: 252px;
+    max-width: 168px;
+    max-height: 252px;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: stretch-to-fill;
+    transition-property: translate, scale, opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+}
+
+.ps-demon-card .ps-battle-card-cost {
+    left: 6.5%;
+    top: 7.5%;
+    width: 27%;
+    height: 18%;
+    font-size: 22px;
+    -unity-text-align: middle-center;
+    color: rgb(255, 236, 199);
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgba(14, 4, 18, 0.96);
+    background-color: rgba(7, 5, 16, 0.82);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+
+.ps-demon-card-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-demon-card .ps-battle-card-art {
+    left: 8.5%;
+    right: 7.5%;
+    top: 6.5%;
+    height: 53.5%;
+    overflow: hidden;
+    background-color: rgba(5, 3, 13, 0.90);
+}
+
+.ps-demon-card .ps-battle-card-art-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-demon-card .ps-battle-card-name {
+    left: 11%;
+    right: 10%;
+    top: 60%;
+    height: 7%;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: rgb(255, 230, 181);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(7, 3, 13, 0.96);
+}
+
+.ps-demon-card .ps-battle-card-text {
+    left: 12%;
+    right: 11%;
+    top: 68%;
+    height: 21%;
+    font-size: 11px;
+    color: rgb(242, 225, 203);
+    -unity-text-align: upper-left;
+    -unity-text-outline-width: 0;
+}
+
+.ps-demon-card.ps-demon-card-has-formula .ps-battle-card-text {
+    top: 76%;
+    height: 13%;
+    font-size: 10px;
+}
+
+.ps-demon-card-formula {
+    position: absolute;
+    left: 15%;
+    right: 14%;
+    top: 68%;
+    height: 8%;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: rgb(255, 230, 183);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(6, 2, 12, 0.96);
+}
+
+.ps-demon-card .ps-battle-card-foot {
+    left: 13%;
+    right: 13%;
+    bottom: 2.5%;
+    height: 5.5%;
+    align-items: center;
+}
+
+.ps-demon-card .ps-battle-card-source,
+.ps-demon-card .ps-battle-card-durability {
+    font-size: 8px;
+    color: rgba(225, 210, 192, 0.78);
+    -unity-text-outline-width: 0;
+}
+
+.ps-demon-card .ps-battle-card-lock {
+    right: 7%;
+    top: 7%;
+    min-width: 44px;
+    height: 17px;
+    font-size: 8px;
+    color: rgb(255, 220, 202);
+    background-color: rgba(64, 10, 29, 0.96);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(255, 82, 139);
+    border-right-color: rgb(255, 82, 139);
+    border-top-color: rgb(255, 82, 139);
+    border-bottom-color: rgb(255, 82, 139);
+}
+
+.ps-demon-card-type {
+    position: absolute;
+    left: 42%;
+    bottom: 3.5%;
+    width: 16%;
+    height: 7%;
+    font-size: 10px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: rgb(255, 112, 163);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(5, 2, 12, 0.96);
+}
+
+.ps-demon-card-pattern {
+    position: absolute;
+    right: 8%;
+    top: 7%;
+    min-width: 24px;
+    height: 13px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+    color: rgba(255, 102, 163, 0.82);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(5, 2, 12, 0.96);
+}
+
+.ps-demon-card-explore .ps-demon-card-pattern {
+    color: rgba(91, 229, 255, 0.82);
+}
+
+.ps-demon-card-explore .ps-demon-card-type {
+    color: rgb(91, 229, 255);
+}
+
+.ps-demon-card-defense .ps-demon-card-type { color: rgb(120, 218, 255); }
+.ps-demon-card-technique .ps-demon-card-type { color: rgb(210, 116, 255); }
+.ps-demon-card-consumable .ps-demon-card-type { color: rgb(255, 151, 111); }
+.ps-demon-card-immediate .ps-demon-card-type { color: rgb(128, 170, 255); }
+.ps-demon-card-installation .ps-demon-card-type { color: rgb(95, 239, 220); }
+.ps-demon-card-curse .ps-demon-card-type { color: rgb(213, 91, 255); }
+
+.ps-demon-card-growth {
+    position: absolute;
+    right: 7%;
+    top: 18%;
+    width: 18px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ps-demon-card-growth-stage {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 3px;
+    font-size: 8px;
+    color: rgba(171, 151, 198, 0.72);
+    -unity-text-align: middle-center;
+    background-color: rgba(8, 5, 22, 0.90);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(146, 101, 194, 0.72);
+    border-right-color: rgba(146, 101, 194, 0.72);
+    border-top-color: rgba(146, 101, 194, 0.72);
+    border-bottom-color: rgba(146, 101, 194, 0.72);
+}
+
+.ps-demon-card-growth-stage.ps-demon-card-growth-active {
+    color: rgb(216, 252, 255);
+    background-color: rgba(19, 113, 128, 0.92);
+    border-left-color: rgb(99, 239, 255);
+    border-right-color: rgb(99, 239, 255);
+    border-top-color: rgb(99, 239, 255);
+    border-bottom-color: rgb(99, 239, 255);
+}
+
+.ps-battle-card.ps-demon-card:hover {
+    translate: 0 -36px;
+    scale: 1.07 1.07 1;
+    opacity: 1;
+}
+
+.ps-battle-card.ps-demon-card.ps-gboard-fan-selected {
+    translate: 0 -22px;
+    scale: 1.04 1.04 1;
+    opacity: 1;
+}
+
+.ps-battle-card.ps-demon-card-disabled {
+    opacity: 0.46;
+}

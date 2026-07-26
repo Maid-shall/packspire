@@ -43,7 +43,6 @@ public sealed partial class PackspireUiFoundation {
  bool gridBoardMapHover,gridBoardDockHover,gridBoardHeaderHover;
  Vector2 gridBoardPointerStart,gridBoardPanAtStart;
  Vector2 gridBoardLastLayoutPos=new(float.NaN,float.NaN);
- Texture2D[] gridBoardCardFrames;
  Texture2D gridBoardMakaiBackground,gridBoardBoardSurface,gridBoardHudTop,gridBoardEnergyRailArt,gridBoardInfoHeaderArt,gridBoardPlayerHudArt;
  int gridBoardFloaterSerial;
  const float GridZoomMin=0.55f;
@@ -96,13 +95,6 @@ public sealed partial class PackspireUiFoundation {
   gridBoardCells.Clear();
  }
 
- void EnsureGridBoardCardFrames(){
-  if(gridBoardCardFrames!=null)return;
-  gridBoardCardFrames=new Texture2D[3];
-  for(int i=0;i<3;i++)
-   gridBoardCardFrames[i]=PackspireResources.Load<Texture2D>($"Art/UI/Cards/combat-card-{i:00}");
- }
-
  void EnsureGridBoardEnvironmentArt(){
   if(gridBoardMakaiBackground==null)
    gridBoardMakaiBackground=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-makai-bg-01");
@@ -128,7 +120,6 @@ public sealed partial class PackspireUiFoundation {
   }
   SuspendGridBoard();
   gridBoardBuilt=true;
-  EnsureGridBoardCardFrames();
   EnsureGridBoardEnvironmentArt();
   // Zoom controls are intentionally not exposed in this layout pass.
   gridBoardZoom=1f;
