@@ -65,6 +65,7 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-reward-header");
+  header.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Reward,"ps-reward-header-icon"));
   rewardHeaderType=new Label(rewardPreviewMode?"戦利品（DEV）":"戦利品"){pickingMode=PickingMode.Ignore};
   rewardHeaderType.AddToClassList("ps-reward-header-type");
   header.Add(rewardHeaderType);
@@ -79,6 +80,7 @@ public sealed partial class PackspireUiFoundation {
 
   var body=Container("ps-reward-body");
   var candidateCol=Container("ps-reward-col-candidates");
+  candidateCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-reward-column-boundary"));
   rewardCandidateScroll=new ScrollView(ScrollViewMode.Vertical);
   rewardCandidateScroll.AddToClassList("ps-reward-candidate-scroll");
   rewardCandidateScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -89,6 +91,7 @@ public sealed partial class PackspireUiFoundation {
   body.Add(candidateCol);
 
   var detailCol=Container("ps-reward-col-detail");
+  detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-reward-detail-corner"));
   rewardDetailArtHost=Container("ps-reward-detail-art-host");
   detailCol.Add(rewardDetailArtHost);
   rewardDetailScroll=new ScrollView(ScrollViewMode.Vertical);
@@ -105,12 +108,14 @@ public sealed partial class PackspireUiFoundation {
   rewardConfirmButton=PackspireUiFactory.Button("この戦利品を獲得する",ConfirmRewardSelection);
   rewardConfirmButton.AddToClassList("ps-primary-action");
   rewardConfirmButton.AddToClassList("ps-chrome-action");
+  PackspireUiFactory.DecorateActionButton(rewardConfirmButton,true);
   footer.Add(rewardConfirmButton);
   rewardReturnButton=PackspireUiFactory.Button(rewardPreviewMode?"プレビューを閉じる":"地図へ戻る",()=>{
    if(rewardPreviewMode)CloseRewardPreview();
    else game.UiReturnToMap();
   });
   rewardReturnButton.AddToClassList("ps-chrome-action");
+  PackspireUiFactory.DecorateActionButton(rewardReturnButton,false);
   footer.Add(rewardReturnButton);
   contentHost.Add(footer);
 

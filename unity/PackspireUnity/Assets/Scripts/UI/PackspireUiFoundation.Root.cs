@@ -18,7 +18,8 @@ public sealed partial class PackspireUiFoundation {
    "UI/PackspireManagement",
    "UI/PackspireMeta",
    "UI/PackspireCommerce",
-   "UI/PackspireHub"
+   "UI/PackspireHub",
+   "UI/PackspireOrnaments"
   };
   foreach(var path in styleSheetPaths){
    var sheet=PackspireResources.Load<StyleSheet>(path);

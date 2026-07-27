@@ -72,6 +72,7 @@ public sealed partial class PackspireUiFoundation {
   body.Add(visualCol);
 
   var summaryCol=Container("ps-result-col-summary");
+  summaryCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-result-detail-corner"));
   resultCauseLabel=new Label(){pickingMode=PickingMode.Ignore};
   resultCauseLabel.AddToClassList("ps-result-cause");
   summaryCol.Add(resultCauseLabel);
@@ -90,6 +91,7 @@ public sealed partial class PackspireUiFoundation {
   resultReturnButton.AddToClassList("ps-primary-action");
   resultReturnButton.AddToClassList("ps-chrome-action");
   resultReturnButton.AddToClassList("ps-result-return-btn");
+  PackspireUiFactory.DecorateActionButton(resultReturnButton,true);
   footer.Add(resultReturnButton);
   summaryCol.Add(footer);
   body.Add(summaryCol);

@@ -13,7 +13,7 @@ public sealed partial class PackspireUiFoundation {
   screen.Add(mist);
   var dialog=Container("ps-event-panel");
   mist.Add(dialog);
-  dialog.Add(ChromeBrand(content?.eyebrow??"ANOMALY  /  RITE",content?.title??"異変"));
+  dialog.Add(ChromeBrand(content?.eyebrow??"ANOMALY  /  RITE",content?.title??"異変",PackspireUiFactory.PopIcon.Objective));
   dialog.Add(PackspireUiFactory.Body(content?.body??"異変は静かに揺らいでいる。"));
   var choices=content?.choices??System.Array.Empty<EventChoiceContent>();
   for(int i=0;i<choices.Length;i++){

@@ -71,6 +71,7 @@ public sealed partial class PackspireUiFoundation {
  VisualElement BuildHubChromeSecondary(string title,Action onClick)=>BuildHubChromeButton(HubChromeKind.Secondary,"hub-secondary","",title,"",onClick);
  VisualElement BuildHubChromeStreetGuide(Action onClick){
   var button=BuildHubChromeButton(HubChromeKind.Secondary,"hub-street-entry","MAP","街案内","塔内の施設",onClick);
+  AddHubStreetButtonFrames(button);
   button.AddToClassList("ps-hub-street-entry");
   return button;
  }

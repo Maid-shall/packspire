@@ -35,18 +35,20 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header ps-heirloom-header");
-  header.Add(ChromeBrand("HEIRLOOM  /  RELIC","家宝"));
+  header.Add(ChromeBrand("HEIRLOOM  /  RELIC","家宝",PackspireUiFactory.PopIcon.Heirloom));
   heirloomSlotButton=BuildHeirloomSlotButton();
   header.Add(heirloomSlotButton);
   contentHost.Add(header);
 
   var body=Container("ps-heirloom-body");
   var portraitCol=Container("ps-heirloom-col-portrait");
+  portraitCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-heirloom-column-boundary"));
   heirloomPortraitHost=Container("ps-heirloom-portrait-host");
   portraitCol.Add(heirloomPortraitHost);
   body.Add(portraitCol);
 
   var growthCol=Container("ps-heirloom-col-growth");
+  growthCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-heirloom-detail-corner"));
   heirloomGrowthScroll=new ScrollView(ScrollViewMode.Vertical);
   heirloomGrowthScroll.AddToClassList("ps-heirloom-growth-scroll");
   heirloomGrowthScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -94,7 +96,7 @@ public sealed partial class PackspireUiFoundation {
 
   var panel=Container("ps-heirloom-picker");
   panel.RegisterCallback<ClickEvent>(evt=>evt.StopPropagation());
-  panel.Add(ChromeBrand("CHOOSE  /  RELIC","家宝を選ぶ"));
+  panel.Add(ChromeBrand("CHOOSE  /  RELIC","家宝を選ぶ",PackspireUiFactory.PopIcon.Heirloom));
 
   var scroll=new ScrollView(ScrollViewMode.Vertical);
   scroll.AddToClassList("ps-heirloom-picker-scroll");
@@ -107,10 +109,12 @@ public sealed partial class PackspireUiFoundation {
   var footer=Container("ps-heirloom-picker-footer");
   var cancel=PackspireUiFactory.Button("キャンセル",CloseHeirloomPicker);
   cancel.AddToClassList("ps-chrome-action");
+  PackspireUiFactory.DecorateActionButton(cancel,false);
   footer.Add(cancel);
   heirloomPickerConfirm=PackspireUiFactory.Button("決定",ConfirmHeirloomPicker);
   heirloomPickerConfirm.AddToClassList("ps-chrome-action");
   heirloomPickerConfirm.AddToClassList("ps-primary-action");
+  PackspireUiFactory.DecorateActionButton(heirloomPickerConfirm,true);
   footer.Add(heirloomPickerConfirm);
   panel.Add(footer);
   modal.Add(panel);

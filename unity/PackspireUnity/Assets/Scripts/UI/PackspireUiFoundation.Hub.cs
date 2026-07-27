@@ -20,8 +20,17 @@ public sealed partial class PackspireUiFoundation {
  VisualElement hubStreetGuideList;
  VisualElement hubStreetGuideDetail;
  ScrollView hubStreetGuideFacilityScroll;
+ Texture2D hubHomeLogoArt;
+ Texture2D hubHomeButtonArt;
+ Texture2D hubHomeStreetButtonArt;
+ Texture2D hubHomeChromeArt;
+ Texture2D hubHomeObjectivePanelArt;
+
+ enum HubHomeButtonState { Normal, Hover, Selected, Disabled }
+ enum HubHomeChromePart { Divider, Currency, ObjectiveCrest }
 
  void BuildHub(){
+  EnsureHubHomeArt();
   hubStreetGuideOpen=false;
   var meta=game.UiMeta;
   var facilities=HubFacilityCatalog.NavFacilities();
@@ -36,6 +45,7 @@ public sealed partial class PackspireUiFoundation {
   bgLayer.Add(Container("ps-hub-v4-shade-left"));
   bgLayer.Add(Container("ps-hub-v4-shade-center"));
   bgLayer.Add(Container("ps-hub-v4-shade-right"));
+  bgLayer.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Home,"ps-hub-nav-watermark"));
   foreach(var child in bgLayer.Children())child.pickingMode=PickingMode.Ignore;
   hubShell.Add(bgLayer);
 
@@ -64,14 +74,11 @@ public sealed partial class PackspireUiFoundation {
 
  VisualElement BuildHubNavColumn(HubFacilityDef[] facilities){
   var col=Container("ps-hub-col-nav");
+  col.Add(HubHomeChrome(HubHomeChromePart.Divider,"ps-hub-nav-boundary"));
   var header=Container("ps-hub-nav-header");
   header.pickingMode=PickingMode.Ignore;
-  var eyebrow=new Label("HOME  /  FACILITIES"){pickingMode=PickingMode.Ignore};
-  eyebrow.AddToClassList("ps-hub-nav-eyebrow");
-  var title=new Label("施設"){pickingMode=PickingMode.Ignore};
-  title.AddToClassList("ps-hub-nav-title");
-  header.Add(eyebrow);
-  header.Add(title);
+  if(hubHomeLogoArt!=null)
+   header.Add(Image(hubHomeLogoArt,new Rect(0,0,1,1),"ps-hub-home-logo",ScaleMode.ScaleToFit));
   col.Add(header);
 
   var surface=Container("ps-hub-nav-surface");
@@ -84,13 +91,8 @@ public sealed partial class PackspireUiFoundation {
 
   for(int i=0;i<facilities.Length;i++){
    var facility=facilities[i];
-   var row=BuildHubNavFacilityRow(facility,()=>EnterHubFacility(facility));
+   var row=BuildHubNavFacilityRow(facility,i==0,()=>EnterHubFacility(facility));
    hubFacilityScroll.Add(row);
-   if(i<facilities.Length-1){
-    var rule=Container("ps-hub-nav-rule");
-    rule.pickingMode=PickingMode.Ignore;
-    hubFacilityScroll.Add(rule);
-   }
   }
 
   surface.Add(hubFacilityScroll);
@@ -104,21 +106,20 @@ public sealed partial class PackspireUiFoundation {
   return col;
  }
 
- VisualElement BuildHubNavFacilityRow(HubFacilityDef facility,System.Action onClick){
+ VisualElement BuildHubNavFacilityRow(HubFacilityDef facility,bool selected,System.Action onClick){
   var button=new Button(onClick){name=$"hub-nav-{facility.id}",userData=facility.id,tooltip=facility.description};
   button.AddToClassList("ps-hub-nav-row");
+  if(selected)button.AddToClassList("ps-current");
   if(!facility.unlocked){
    button.AddToClassList("ps-locked");
    button.SetEnabled(false);
   }
 
-  var accent=Container("ps-hub-nav-accent");
-  accent.pickingMode=PickingMode.Ignore;
-  button.Add(accent);
+  AddHubHomeButtonFrames(button);
 
   var seal=Container("ps-hub-nav-seal");
   seal.pickingMode=PickingMode.Ignore;
-  seal.Add(new Label(facility.seal){pickingMode=PickingMode.Ignore});
+  seal.Add(PackspireUiFactory.SystemIcon(HubFacilityIcon(facility.id),"ps-hub-nav-icon"));
   button.Add(seal);
 
   var copy=Container("ps-hub-nav-copy");
@@ -132,6 +133,19 @@ public sealed partial class PackspireUiFoundation {
   button.Add(copy);
   return button;
  }
+
+ static PackspireUiFactory.PopIcon HubFacilityIcon(string id)=>id switch{
+  "gate"=>PackspireUiFactory.PopIcon.Gate,
+  "forge"=>PackspireUiFactory.PopIcon.Packing,
+  "vault"=>PackspireUiFactory.PopIcon.Vault,
+  "heirloom"=>PackspireUiFactory.PopIcon.Heirloom,
+  "guild"=>PackspireUiFactory.PopIcon.Guild,
+  "codex"=>PackspireUiFactory.PopIcon.Codex,
+  "shop"=>PackspireUiFactory.PopIcon.Shop,
+  "embassy"=>PackspireUiFactory.PopIcon.RoleFaction,
+  "barracks"=>PackspireUiFactory.PopIcon.RoleCurrent,
+  _=>PackspireUiFactory.PopIcon.Home
+ };
 
  void EnterHubFacility(HubFacilityDef facility){
   if(!facility.unlocked)return;
@@ -169,6 +183,8 @@ public sealed partial class PackspireUiFoundation {
 
   var goldChip=Container("ps-hub-gold-chip");
   goldChip.pickingMode=PickingMode.Ignore;
+  goldChip.Add(HubHomeChrome(HubHomeChromePart.Currency,"ps-hub-gold-frame"));
+  goldChip.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Shop,"ps-hub-gold-icon"));
   hubGoldLabel=new Label($"{meta.baseGold} G"){pickingMode=PickingMode.Ignore};
   hubGoldLabel.AddToClassList("ps-hub-gold-label");
   goldChip.Add(hubGoldLabel);
@@ -179,13 +195,13 @@ public sealed partial class PackspireUiFoundation {
   col.Add(spacer);
 
   var board=Container("ps-hub-briefing-board");
+  if(hubHomeObjectivePanelArt!=null)
+   board.Add(Image(hubHomeObjectivePanelArt,new Rect(0,0,1,1),"ps-hub-briefing-panel",ScaleMode.StretchToFill));
   var header=Container("ps-hub-briefing-header");
   header.pickingMode=PickingMode.Ignore;
-  var eyebrow=new Label("BRIEFING"){pickingMode=PickingMode.Ignore};
-  eyebrow.AddToClassList("ps-hub-briefing-eyebrow");
-  var title=new Label("目的と通知"){pickingMode=PickingMode.Ignore};
+  header.Add(HubHomeChrome(HubHomeChromePart.ObjectiveCrest,"ps-hub-objective-crest"));
+  var title=new Label("本日の目標"){pickingMode=PickingMode.Ignore};
   title.AddToClassList("ps-hub-briefing-title");
-  header.Add(eyebrow);
   header.Add(title);
   board.Add(header);
 
@@ -255,6 +271,7 @@ public sealed partial class PackspireUiFoundation {
   row.pickingMode=PickingMode.Ignore;
   var mark=Container("ps-hub-briefing-mark ps-hub-briefing-mark-"+item.kind);
   mark.pickingMode=PickingMode.Ignore;
+  mark.Add(PackspireUiFactory.SystemIcon(HubBriefingIcon(item.kind),"ps-hub-briefing-icon"));
   row.Add(mark);
   var copy=Container("ps-hub-briefing-copy");
   copy.pickingMode=PickingMode.Ignore;
@@ -264,14 +281,83 @@ public sealed partial class PackspireUiFoundation {
   body.AddToClassList("ps-hub-briefing-item-body");
   copy.Add(title);
   copy.Add(body);
-  row.Add(copy);
-  if(!string.IsNullOrEmpty(item.facilityId)){
-   var link=new Button(()=>EnterHubFacility(HubFacilityCatalog.Find(item.facilityId))){text="開く"};
+   row.Add(copy);
+   if(!string.IsNullOrEmpty(item.facilityId)){
+    var link=new Button(()=>EnterHubFacility(HubFacilityCatalog.Find(item.facilityId))){text="➜"};
    link.AddToClassList("ps-hub-briefing-link");
    row.Add(link);
   }
+  row.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.Section,"ps-hub-briefing-item-rule"));
   return row;
  }
+
+ static PackspireUiFactory.PopIcon HubBriefingIcon(string kind)=>kind switch{
+  "objective"=>PackspireUiFactory.PopIcon.Objective,
+  "recommend"=>PackspireUiFactory.PopIcon.Expedition,
+  "notice"=>PackspireUiFactory.PopIcon.Heirloom,
+  _=>PackspireUiFactory.PopIcon.Codex
+ };
+
+ void EnsureHubHomeArt(){
+  hubHomeLogoArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/HubV2/hub-logo-v1");
+  hubHomeButtonArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/HubV2/hub-button-states-v1");
+  hubHomeStreetButtonArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/HubV2/hub-street-button-states-v1");
+  hubHomeChromeArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/HubV2/hub-chrome-v1");
+  hubHomeObjectivePanelArt=PackspireResources.Load<Texture2D>("Art/UI/PopDark/HubV2/hub-objective-panel-v3");
+ }
+
+ void AddHubHomeButtonFrames(VisualElement host){
+  if(host==null||hubHomeButtonArt==null)return;
+  var stack=Container("ps-hub-home-frame-stack");
+  stack.pickingMode=PickingMode.Ignore;
+  foreach(HubHomeButtonState state in System.Enum.GetValues(typeof(HubHomeButtonState))){
+   var stateClass=state.ToString().ToLowerInvariant();
+   stack.Add(Image(hubHomeButtonArt,HubHomeButtonUv(state),$"ps-hub-home-frame ps-hub-home-frame-{stateClass}",ScaleMode.StretchToFill));
+  }
+  host.Insert(0,stack);
+ }
+
+ void AddHubStreetButtonFrames(VisualElement host){
+  if(host==null||hubHomeStreetButtonArt==null)return;
+  var stack=Container("ps-hub-home-frame-stack ps-hub-street-frame-stack");
+  stack.pickingMode=PickingMode.Ignore;
+  foreach(HubHomeButtonState state in System.Enum.GetValues(typeof(HubHomeButtonState))){
+   var stateClass=state.ToString().ToLowerInvariant();
+   stack.Add(Image(hubHomeStreetButtonArt,HubStreetButtonUv(state),$"ps-hub-home-frame ps-hub-street-frame ps-hub-home-frame-{stateClass}",ScaleMode.StretchToFill));
+  }
+  host.Insert(0,stack);
+ }
+
+ Image HubHomeChrome(HubHomeChromePart part,string className){
+  if(hubHomeChromeArt==null)return new Image();
+  return Image(hubHomeChromeArt,HubHomeChromeUv(part),className,ScaleMode.StretchToFill);
+ }
+
+ static Rect HubHomeButtonUv(HubHomeButtonState state)=>state switch{
+  HubHomeButtonState.Hover=>PixelUv(635,227,610,231,1254),
+  HubHomeButtonState.Selected=>PixelUv(9,776,612,233,1254),
+  HubHomeButtonState.Disabled=>PixelUv(636,777,610,226,1254),
+  _=>PixelUv(13,228,607,225,1254)
+ };
+
+ static Rect HubStreetButtonUv(HubHomeButtonState state)=>state switch{
+  HubHomeButtonState.Hover=>PixelUv(796,112,680,350,1536,1024),
+  HubHomeButtonState.Selected=>PixelUv(76,554,674,350,1536,1024),
+  HubHomeButtonState.Disabled=>PixelUv(802,564,660,330,1536,1024),
+  _=>PixelUv(90,120,660,330,1536,1024)
+ };
+
+ static Rect HubHomeChromeUv(HubHomeChromePart part)=>part switch{
+  HubHomeChromePart.Currency=>PixelUv(629,244,533,169,1254),
+  HubHomeChromePart.ObjectiveCrest=>PixelUv(39,735,596,344,1254),
+  _=>PixelUv(258,28,121,605,1254)
+ };
+
+ static Rect PixelUv(int x,int y,int width,int height,int textureSize)=>
+  new Rect((float)x/textureSize,(float)(textureSize-y-height)/textureSize,(float)width/textureSize,(float)height/textureSize);
+
+ static Rect PixelUv(int x,int y,int width,int height,int textureWidth,int textureHeight)=>
+  new Rect((float)x/textureWidth,(float)(textureHeight-y-height)/textureHeight,(float)width/textureWidth,(float)height/textureHeight);
 
  VisualElement BuildHubStreetGuideModal(){
   var modal=Container("ps-hub-layer-modal");

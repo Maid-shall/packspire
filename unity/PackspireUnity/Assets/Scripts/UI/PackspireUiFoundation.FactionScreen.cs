@@ -55,11 +55,12 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header");
-  header.Add(ChromeBrand("FACTION  /  LEDGER","勢力"));
+  header.Add(ChromeBrand("FACTION  /  LEDGER","勢力",PackspireUiFactory.PopIcon.RoleFaction));
   contentHost.Add(header);
 
   var body=Container("ps-faction-body");
   var graphCol=Container("ps-faction-col-graph");
+  graphCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-faction-column-boundary"));
   factionGraphHost=Container("ps-faction-graph-host");
   AddSurfaceOuterCorners(factionGraphHost);
   factionGraphEdges=Container("ps-faction-graph-edges");
@@ -75,6 +76,7 @@ public sealed partial class PackspireUiFoundation {
 
   var detailCol=Container("ps-faction-col-detail");
   var detailSurface=Container("ps-faction-detail-surface");
+  detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-faction-detail-corner"));
   factionDetailHeader=Container("ps-faction-detail-header");
   detailSurface.Add(factionDetailHeader);
   factionDetailScroll=new ScrollView(ScrollViewMode.Vertical);

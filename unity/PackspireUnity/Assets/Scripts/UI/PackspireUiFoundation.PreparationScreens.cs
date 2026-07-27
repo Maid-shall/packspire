@@ -39,6 +39,7 @@ public sealed partial class PackspireUiFoundation {
   var brand=Container("ps-rite-brand");
   var brandMark=Container("ps-rite-brand-mark");
   brandMark.pickingMode=PickingMode.Ignore;
+  brandMark.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Packing,"ps-rite-brand-icon"));
   brand.Add(brandMark);
   var topTitle=Container("ps-rite-top-title");
   var topEyebrow=new Label("ATELIER  /  FORGE"){pickingMode=PickingMode.Ignore};
@@ -73,6 +74,7 @@ public sealed partial class PackspireUiFoundation {
   // Left: floating equip tray (header + filters pinned above scroll)
   var left=Container("ps-rite-left");
   DressRiteFrame(left);
+  left.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-rite-column-boundary"));
   var leftHeader=Container("ps-rite-left-header");
   leftHeader.Add(RiteSectionHead("01","術装"));
   packingFilterRowElement=BuildPackingFilterRow();
@@ -144,6 +146,7 @@ public sealed partial class PackspireUiFoundation {
   var cardsBtn=PackspireUiFactory.Button($"術式札  {run.selectedCardSlots.Count}",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
   cardsBtn.AddToClassList("ps-rite-tool");
   cardsBtn.AddToClassList("ps-rite-tool-primary");
+  cardsBtn.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.CardCheck,"ps-rite-tool-icon"));
   kilnRail.Add(cardsBtn);
   center.Add(kilnRail);
   StartPackingCirclePulse(center);
@@ -151,6 +154,7 @@ public sealed partial class PackspireUiFoundation {
 
   var rightShell=Container("ps-rite-right-shell");
   DressRiteFrame(rightShell);
+  rightShell.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-rite-detail-corner"));
   var right=new ScrollView(ScrollViewMode.Vertical);
   packingRightScrollElement=right;
   right.AddToClassList("ps-rite-right");

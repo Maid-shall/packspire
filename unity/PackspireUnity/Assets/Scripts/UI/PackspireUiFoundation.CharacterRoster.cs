@@ -30,11 +30,12 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header");
-  header.Add(ChromeBrand("ROSTER  /  RECRUIT","遠征者の選択"));
+  header.Add(ChromeBrand("ROSTER  /  RECRUIT","遠征者の選択",PackspireUiFactory.PopIcon.RoleCurrent));
   contentHost.Add(header);
 
   var body=Container("ps-roster-body");
   var reelCol=Container("ps-roster-col-reel");
+  reelCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-roster-column-boundary"));
   var reelHead=new Label("キャラクター"){pickingMode=PickingMode.Ignore};
   reelHead.AddToClassList("ps-roster-reel-heading");
   reelCol.Add(reelHead);
@@ -58,6 +59,7 @@ public sealed partial class PackspireUiFoundation {
   body.Add(artCol);
 
   var detailCol=Container("ps-roster-col-detail");
+  detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-roster-detail-corner"));
   rosterDetailScrollHost=new ScrollView(ScrollViewMode.Vertical);
   rosterDetailScrollHost.AddToClassList("ps-roster-detail-scroll");
   rosterDetailScrollHost.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -69,6 +71,7 @@ public sealed partial class PackspireUiFoundation {
   rosterConfirmButton.AddToClassList("ps-primary-action");
   rosterConfirmButton.AddToClassList("ps-chrome-action");
   rosterConfirmButton.AddToClassList("ps-roster-confirm");
+  PackspireUiFactory.DecorateActionButton(rosterConfirmButton,true);
   footer.Add(rosterConfirmButton);
   detailCol.Add(footer);
   body.Add(detailCol);

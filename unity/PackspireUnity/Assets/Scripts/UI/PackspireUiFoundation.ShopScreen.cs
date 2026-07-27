@@ -79,7 +79,7 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-shop-header");
-  header.Add(ChromeBrand("MERCHANT  /  COUNTER",shopMerchant.displayName));
+  header.Add(ChromeBrand("MERCHANT  /  COUNTER",shopMerchant.displayName,PackspireUiFactory.PopIcon.Shop));
   shopDevHintLabel=new Label("DEVプレビュー"){pickingMode=PickingMode.Ignore};
   shopDevHintLabel.AddToClassList("ps-shop-dev-hint");
   shopDevHintLabel.style.display=shopPreviewMode?DisplayStyle.Flex:DisplayStyle.None;
@@ -89,6 +89,7 @@ public sealed partial class PackspireUiFoundation {
   var body=Container("ps-shop-body");
 
   var listCol=Container("ps-shop-col-list");
+  listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-shop-column-boundary"));
   shopFilterHost=Container("ps-shop-filter-host");
   listCol.Add(shopFilterHost);
   shopProductScroll=new ScrollView(ScrollViewMode.Vertical);
@@ -103,6 +104,7 @@ public sealed partial class PackspireUiFoundation {
 
   var detailCol=Container("ps-shop-col-detail");
   shopDetailHost=Container("ps-shop-detail-host");
+  shopDetailHost.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-shop-detail-corner"));
   shopDetailScroll=new ScrollView(ScrollViewMode.Vertical);
   shopDetailScroll.AddToClassList("ps-shop-detail-scroll");
   shopDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -182,6 +184,7 @@ public sealed partial class PackspireUiFoundation {
   shopBuyButton.AddToClassList("ps-primary-action");
   shopBuyButton.AddToClassList("ps-chrome-action");
   shopBuyButton.AddToClassList("ps-shop-buy-btn");
+  PackspireUiFactory.DecorateActionButton(shopBuyButton,true);
   actions.Add(shopBuyButton);
   shopLeaveButton=PackspireUiFactory.Button("地図へ戻る",()=>{
    if(shopPreviewMode)CloseShopPreview();
@@ -189,6 +192,7 @@ public sealed partial class PackspireUiFoundation {
   });
   shopLeaveButton.AddToClassList("ps-chrome-action");
   shopLeaveButton.AddToClassList("ps-shop-leave-btn");
+  PackspireUiFactory.DecorateActionButton(shopLeaveButton,false);
   actions.Add(shopLeaveButton);
   shopMerchantTransactionLayer.Add(actions);
   shopFutureMerchantActionLayer=Container("ps-shop-future-merchant-actions");
@@ -232,7 +236,7 @@ public sealed partial class PackspireUiFoundation {
   }
   LayoutShopMerchantCharacter();
   if(shopLeaveButton!=null)
-   shopLeaveButton.text=shopPreviewMode?"プレビューを閉じる":"地図へ戻る";
+   PackspireUiFactory.SetActionLabel(shopLeaveButton,shopPreviewMode?"プレビューを閉じる":"地図へ戻る");
   if(shopDevHintLabel!=null)
    shopDevHintLabel.style.display=shopPreviewMode?DisplayStyle.Flex:DisplayStyle.None;
  }
@@ -274,6 +278,13 @@ public sealed partial class PackspireUiFoundation {
   if(shopFilterHost==null)return;
   shopFilterHost.Clear();
   string[] labels={"すべて","武器","防具","ルーン","消耗"};
+  var icons=new[]{
+   PackspireUiFactory.PopIcon.Filter,
+   PackspireUiFactory.PopIcon.Weapon,
+   PackspireUiFactory.PopIcon.Armor,
+   PackspireUiFactory.PopIcon.Relic,
+   PackspireUiFactory.PopIcon.Supply
+  };
   for(int i=0;i<labels.Length;i++){
    int index=i;
    var button=PackspireUiFactory.Button(labels[i],()=>{
@@ -287,6 +298,7 @@ public sealed partial class PackspireUiFoundation {
     RefreshShopPurchaseFooter();
    });
    button.AddToClassList("ps-shop-filter");
+   button.Insert(0,PackspireUiFactory.SystemIcon(icons[i],"ps-shop-filter-icon"));
    if(i==shopCategoryFilter)button.AddToClassList("ps-selected");
    shopFilterHost.Add(button);
   }
@@ -403,17 +415,17 @@ public sealed partial class PackspireUiFoundation {
   if(shopPreviewMode){
    shopPurchaseReason.text="DEVプレビューでは購入できません";
    shopBuyButton.SetEnabled(false);
-   shopBuyButton.text="購入する";
+   PackspireUiFactory.SetActionLabel(shopBuyButton,"購入する");
    return;
   }
   if(gold<price){
    shopPurchaseReason.text="所持金が足りません";
    shopBuyButton.SetEnabled(false);
-   shopBuyButton.text="所持金が足りません";
+   PackspireUiFactory.SetActionLabel(shopBuyButton,"所持金が足りません");
   } else {
    shopPurchaseReason.text="";
    shopBuyButton.SetEnabled(true);
-   shopBuyButton.text=$"{price}Gで購入する";
+   PackspireUiFactory.SetActionLabel(shopBuyButton,$"{price}Gで購入する");
   }
  }
 

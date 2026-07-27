@@ -54,12 +54,13 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header ps-exp-header");
-  header.Add(ChromeBrand("EXPEDITION  /  BRIEF","遠征準備"));
+  header.Add(ChromeBrand("EXPEDITION  /  BRIEF","遠征準備",PackspireUiFactory.PopIcon.Gate));
   contentHost.Add(header);
 
   var body=Container("ps-expedition-body");
 
   var destCol=Container("ps-exp-col-dest");
+  destCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-exp-column-boundary"));
   var destHead=new Label("遠征先"){pickingMode=PickingMode.Ignore};
   destHead.AddToClassList("ps-typo-section");
   destHead.AddToClassList("ps-exp-dest-heading");
@@ -102,6 +103,7 @@ public sealed partial class PackspireUiFoundation {
   body.Add(artCol);
 
   expeditionDetailColumn=Container("ps-exp-col-detail ps-expedition-detail-column ps-surface-quiet");
+  expeditionDetailColumn.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-exp-detail-corner"));
   expeditionDetailColumn.style.minHeight=0;
   expeditionDetailColumn.style.flexGrow=1;
   expeditionDetailColumn.style.flexShrink=1;

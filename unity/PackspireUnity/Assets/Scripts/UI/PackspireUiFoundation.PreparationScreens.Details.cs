@@ -8,7 +8,7 @@ public sealed partial class PackspireUiFoundation {
 // Packing selection, formula details, traits, links, and helper components.
  VisualElement BuildPackingFilterRow(){
   var row=Container("ps-rite-filters");
-  void AddFilter(string id,string label){
+  void AddFilter(string id,string label,PackspireUiFactory.PopIcon icon){
    var button=PackspireUiFactory.Button(label,()=>{
     if(packingEquipFilter!=id){
      packingEquipFilter=id;
@@ -17,14 +17,15 @@ public sealed partial class PackspireUiFoundation {
     BuildPackingAgain();
    });
    button.AddToClassList("ps-rite-filter");
+   button.Insert(0,PackspireUiFactory.SystemIcon(icon,"ps-rite-filter-icon"));
    if(packingEquipFilter==id)button.AddToClassList("ps-selected");
    row.Add(button);
   }
-  AddFilter("","全部");
-  AddFilter("weapon","武器");
-  AddFilter("armor","防具");
-  AddFilter("rune","ルーン");
-  AddFilter("supply","道具");
+  AddFilter("","全部",PackspireUiFactory.PopIcon.Filter);
+  AddFilter("weapon","武器",PackspireUiFactory.PopIcon.Weapon);
+  AddFilter("armor","防具",PackspireUiFactory.PopIcon.Armor);
+  AddFilter("rune","ルーン",PackspireUiFactory.PopIcon.Relic);
+  AddFilter("supply","道具",PackspireUiFactory.PopIcon.Supply);
   return row;
  }
 
@@ -46,15 +47,18 @@ public sealed partial class PackspireUiFoundation {
   var rotate=PackspireUiFactory.Button($"回転\n{packingRotation*90}°",()=>RotateSelectedPacking(formula));
   rotate.AddToClassList("ps-rite-select-btn");
   rotate.AddToClassList("ps-rite-select-btn-primary");
+  rotate.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Rotate,"ps-rite-select-icon"));
   rotate.focusable=true;
   dock.Add(rotate);
   var clear=PackspireUiFactory.Button("選択解除",()=>{selectedPackingUid="";packingRotation=0;BuildPackingAgain();});
   clear.AddToClassList("ps-rite-select-btn");
+  clear.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Undo,"ps-rite-select-icon"));
   dock.Add(clear);
   bool placed=run.placements.Any(x=>x.itemUid==selectedPackingUid);
   var remove=PackspireUiFactory.Button("外す",()=>{game.UiPackingRemove(selectedPackingUid);selectedPackingUid="";BuildPackingAgain();});
   remove.AddToClassList("ps-rite-select-btn");
   remove.AddToClassList("ps-rite-select-btn-danger");
+  remove.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Remove,"ps-rite-select-icon"));
   remove.SetEnabled(placed);
   dock.Add(remove);
   dock.BringToFront();

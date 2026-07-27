@@ -30,7 +30,12 @@ public sealed partial class PackspireUiFoundation {
 
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header");
-  header.Add(ChromeBrand(eyebrow,title));
+  var pageIcon=layout switch{
+   ManagementLayout.StatusOverview=>PackspireUiFactory.PopIcon.Guild,
+   ManagementLayout.CompendiumReelDetail=>PackspireUiFactory.PopIcon.Codex,
+   _=>PackspireUiFactory.PopIcon.Vault
+  };
+  header.Add(ChromeBrand(eyebrow,title,pageIcon));
   contentHost.Add(header);
 
   var body=Container("ps-mgmt-body");
@@ -46,6 +51,7 @@ public sealed partial class PackspireUiFoundation {
    body.AddToClassList("ps-status-main-row");
 
    var characterCol=Container("ps-status-character-column");
+   characterCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
    var characterSurface=Container("ps-status-character-surface");
    var characterScroll=new ScrollView(ScrollViewMode.Vertical);
    characterScroll.AddToClassList("ps-status-character-scroll");
@@ -58,6 +64,7 @@ public sealed partial class PackspireUiFoundation {
    body.Add(characterCol);
 
    var rolesCol=Container("ps-status-roles-column");
+   rolesCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
    var rolesSurface=Container("ps-status-roles-surface");
    mgmtListHeader=Container("ps-mgmt-list-header ps-status-roles-header");
    rolesSurface.Add(mgmtListHeader);
@@ -72,6 +79,7 @@ public sealed partial class PackspireUiFoundation {
 
    var detailCol=Container("ps-status-role-detail-column");
    var detailSurface=Container("ps-status-role-detail-surface");
+   detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-mgmt-open-corner"));
    mgmtDetailHero=Container("ps-mgmt-detail-hero ps-status-detail-header");
    mgmtDetailHero.style.display=DisplayStyle.None;
    mgmtDetailArtHost=Container("ps-mgmt-detail-art-host ps-status-role-image ps-art-vignette");
@@ -92,6 +100,7 @@ public sealed partial class PackspireUiFoundation {
    shell.AddToClassList("ps-codex-v2");
    body.AddToClassList("ps-codex-main-row");
    var listCol=Container("ps-mgmt-col-list ps-codex-index-column");
+   listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
    mgmtListHeader=Container("ps-mgmt-list-header ps-codex-index-header");
    listCol.Add(mgmtListHeader);
    var listSurface=Container("ps-codex-index-surface");
@@ -112,6 +121,7 @@ public sealed partial class PackspireUiFoundation {
 
    var detailCol=Container("ps-mgmt-col-detail ps-codex-record-column");
    var detailSurface=Container("ps-codex-record-surface");
+   detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-mgmt-open-corner"));
    mgmtDetailSummaryHost=Container("ps-mgmt-detail-summary-host ps-codex-record-header");
    detailSurface.Add(mgmtDetailSummaryHost);
    detailScroll=new ScrollView(ScrollViewMode.Vertical);
@@ -128,6 +138,7 @@ public sealed partial class PackspireUiFoundation {
    shell.AddToClassList("ps-vault-v2");
    body.AddToClassList("ps-vault-main-row");
    var listCol=Container("ps-mgmt-col-list ps-vault-inventory-column");
+   listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
    mgmtListHeader=Container("ps-mgmt-list-header ps-vault-inventory-header");
    listCol.Add(mgmtListHeader);
    var listSurface=Container("ps-vault-inventory-surface");
@@ -143,6 +154,7 @@ public sealed partial class PackspireUiFoundation {
 
    var detailCol=Container("ps-mgmt-col-detail ps-vault-item-detail-column");
    var detailSurface=Container("ps-vault-item-detail-surface");
+   detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-mgmt-open-corner"));
    mgmtDetailHero=Container("ps-mgmt-detail-hero ps-vault-item-header");
    mgmtDetailHero.style.display=DisplayStyle.None;
    mgmtDetailArtHost=Container("ps-mgmt-detail-art-host ps-art-vignette");
@@ -395,6 +407,7 @@ public sealed partial class PackspireUiFoundation {
   meta.Add(lv);
   copy.Add(meta);
   row.Add(copy);
+  row.Add(PackspireUiFactory.SystemIcon(RoleKindIcon(kind),"ps-status-role-kind-icon"));
   if(equipped){
    var stamp=Container("ps-seal-mark ps-status-role-equip-seal");
    stamp.pickingMode=PickingMode.Ignore;
@@ -402,6 +415,15 @@ public sealed partial class PackspireUiFoundation {
    row.Add(stamp);
   }
   return row;
+ }
+
+ static PackspireUiFactory.PopIcon RoleKindIcon(string kind){
+  if(string.IsNullOrEmpty(kind))return PackspireUiFactory.PopIcon.RoleBasic;
+  if(kind.Contains("勢力"))return PackspireUiFactory.PopIcon.RoleFaction;
+  if(kind.Contains("複合"))return PackspireUiFactory.PopIcon.RoleComposite;
+  if(kind.Contains("隠し"))return PackspireUiFactory.PopIcon.RoleHidden;
+  if(kind.Contains("上級"))return PackspireUiFactory.PopIcon.RoleAdvanced;
+  return PackspireUiFactory.PopIcon.RoleBasic;
  }
 
  VisualElement StatusLevelTrack(RoleDef role,int currentLevel){
@@ -477,6 +499,14 @@ public sealed partial class PackspireUiFoundation {
    var button=PackspireUiFactory.Button(labels[i],()=>onPick(index));
    button.AddToClassList("ps-mgmt-filter");
    button.AddToClassList("ps-action-secondary");
+   var icon=labels[i] switch{
+    "使用中"=>PackspireUiFactory.PopIcon.Selected,
+    "装備"=>PackspireUiFactory.PopIcon.Relic,
+    "役職"=>PackspireUiFactory.PopIcon.Guild,
+    "敵"=>PackspireUiFactory.PopIcon.Weapon,
+    _=>PackspireUiFactory.PopIcon.Filter
+   };
+   button.Insert(0,PackspireUiFactory.SystemIcon(icon,"ps-mgmt-filter-icon"));
    if(i==selectedIndex)button.AddToClassList("ps-selected");
    bar.Add(button);
   }

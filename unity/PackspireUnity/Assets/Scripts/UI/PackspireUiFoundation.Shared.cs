@@ -37,27 +37,35 @@ public sealed partial class PackspireUiFoundation {
  void ShowToast(string message){if(toast==null)return;toast.Clear();toast.Add(new Label(message));toast.style.display=DisplayStyle.Flex;toast.style.opacity=0f;toast.style.translate=new Translate(0,-10,0);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=1f;toast.style.translate=new Translate(0,0,0);}).StartingIn(16);toast.schedule.Execute(()=>{if(toast==null)return;toast.style.opacity=0f;toast.style.translate=new Translate(0,-8,0);}).StartingIn(1700);toast.schedule.Execute(()=>{if(toast!=null)toast.style.display=DisplayStyle.None;}).StartingIn(1950);}
  VisualElement Milestone(int required,int current,string title,string description){var item=Container(current>=required?"ps-milestone ps-unlocked":"ps-milestone ps-locked");item.Add(PackspireUiFactory.Title($"Lv.{required}　{title}"));item.Add(PackspireUiFactory.Body(description));return item;}
 
- VisualElement ChromeBrand(string eyebrow,string title){
+ VisualElement ChromeBrand(string eyebrow,string title,PackspireUiFactory.PopIcon? icon=null){
   var brand=Container("ps-chrome-brand");
+  if(icon.HasValue)
+   brand.Add(PackspireUiFactory.SystemIcon(icon.Value,"ps-chrome-brand-icon"));
+  var copy=Container("ps-chrome-brand-copy");
   if(!string.IsNullOrEmpty(eyebrow)){
    var eye=new Label(eyebrow){pickingMode=PickingMode.Ignore};
    eye.AddToClassList("ps-chrome-eyebrow");
-   brand.Add(eye);
+   copy.Add(eye);
   }
   var heading=PackspireUiFactory.Title(title);
   heading.AddToClassList("ps-chrome-title");
-  brand.Add(heading);
+  copy.Add(heading);
+  brand.Add(copy);
+  brand.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.PageTitle,"ps-chrome-brand-stroke"));
   return brand;
  }
 
  VisualElement ChromeSection(string english,string japanese){
   var section=Container("ps-chrome-section");
+  var copy=Container("ps-chrome-section-copy");
   var en=new Label(english){pickingMode=PickingMode.Ignore};
   en.AddToClassList("ps-chrome-section-en");
-  section.Add(en);
+  copy.Add(en);
   var jp=new Label(japanese){pickingMode=PickingMode.Ignore};
   jp.AddToClassList("ps-chrome-section-jp");
-  section.Add(jp);
+  copy.Add(jp);
+  section.Add(copy);
+  section.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.Section,"ps-chrome-section-stroke"));
   return section;
  }
 
@@ -72,7 +80,7 @@ public sealed partial class PackspireUiFoundation {
   if(!whitePaper&&game.UiBookArt!=null)
    shell.Add(Image(game.UiBookArt,new Rect(0,0,1,1),"ps-book-background",ScaleMode.StretchToFill));
   var frame=Container("ps-book-frame");
-  frame.Add(ChromeBrand(string.IsNullOrEmpty(eyebrow)?"ARCHIVE  /  LEDGER":eyebrow,title));
+  frame.Add(ChromeBrand(string.IsNullOrEmpty(eyebrow)?"ARCHIVE  /  LEDGER":eyebrow,title,PackspireUiFactory.PopIcon.Codex));
   var pages=Container("ps-book-pages");
   pages.name="book-pages";
   frame.Add(pages);
@@ -80,7 +88,7 @@ public sealed partial class PackspireUiFoundation {
   if(singleContent!=null)pages.Add(singleContent);
   return shell;
  }
- VisualElement Page(string title){var page=new ScrollView();page.AddToClassList("ps-book-page");page.AddToClassList(nextPageIsLeft?"ps-page-left":"ps-page-right");nextPageIsLeft=!nextPageIsLeft;var heading=Container("ps-page-heading");var label=PackspireUiFactory.Title(title);label.AddToClassList("ps-page-heading-title");heading.Add(label);heading.Add(InkRule());page.Add(heading);return page;}
+ VisualElement Page(string title){var page=new ScrollView();page.AddToClassList("ps-book-page");page.AddToClassList(nextPageIsLeft?"ps-page-left":"ps-page-right");nextPageIsLeft=!nextPageIsLeft;var heading=Container("ps-page-heading");var label=PackspireUiFactory.Title(title);label.AddToClassList("ps-page-heading-title");heading.Add(label);heading.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.PageTitle,"ps-page-heading-stroke"));page.Add(heading);return page;}
  VisualElement RecordButton(string title,string subtitle,VisualElement art,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=title+"\n"+subtitle};button.AddToClassList("ps-record-button");if(selected)button.AddToClassList("ps-selected");button.Add(art);var copy=Container("ps-record-copy");copy.Add(PackspireUiFactory.Title(title));copy.Add(PackspireUiFactory.Body(subtitle));button.Add(copy);if(selected)button.Add(SelectionBadge());button.Add(InkRule());return button;}
  VisualElement AtlasButton(Texture2D texture,Rect uv,string label,bool selected,System.Action clicked){var button=new Button(clicked){tooltip=label};button.AddToClassList("ps-atlas-button");if(selected)button.AddToClassList("ps-selected");button.Add(Atlas(texture,uv,"ps-atlas-image"));var name=new Label(label);name.AddToClassList("ps-atlas-label");button.Add(name);if(selected)button.Add(SelectionBadge());return button;}
 
