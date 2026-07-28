@@ -35,6 +35,10 @@ public sealed partial class PackspireUiFoundation {
   navBackButton.AddToClassList("ps-nav-back");
   navBackButton.AddToClassList("ps-action-nav");
   navBackButton.pickingMode=PickingMode.Position;
+  navBackButton.Insert(0,PackspireUiFactory.ManagementArt(
+   PackspireUiFactory.ManagementChrome.Back,
+   "ps-nav-back-medallion"
+  ));
   navHudRoot.Add(navBackButton);
 
   navMenuButton=new Button(ToggleNavMenu){text="☰ メニュー"};

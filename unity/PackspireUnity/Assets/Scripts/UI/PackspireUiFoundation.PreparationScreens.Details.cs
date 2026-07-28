@@ -8,7 +8,7 @@ public sealed partial class PackspireUiFoundation {
 // Packing selection, formula details, traits, links, and helper components.
  VisualElement BuildPackingFilterRow(){
   var row=Container("ps-rite-filters");
-  void AddFilter(string id,string label,PackspireUiFactory.PopIcon icon){
+  void AddFilter(string id,string label,PackspireUiFactory.ManagementChrome icon){
    var button=PackspireUiFactory.Button(label,()=>{
     if(packingEquipFilter!=id){
      packingEquipFilter=id;
@@ -17,15 +17,15 @@ public sealed partial class PackspireUiFoundation {
     BuildPackingAgain();
    });
    button.AddToClassList("ps-rite-filter");
-   button.Insert(0,PackspireUiFactory.SystemIcon(icon,"ps-rite-filter-icon"));
+   button.Insert(0,PackspireUiFactory.ManagementArt(icon,"ps-rite-filter-icon ps-management-filter-medallion"));
    if(packingEquipFilter==id)button.AddToClassList("ps-selected");
    row.Add(button);
   }
-  AddFilter("","全部",PackspireUiFactory.PopIcon.Filter);
-  AddFilter("weapon","武器",PackspireUiFactory.PopIcon.Weapon);
-  AddFilter("armor","防具",PackspireUiFactory.PopIcon.Armor);
-  AddFilter("rune","ルーン",PackspireUiFactory.PopIcon.Relic);
-  AddFilter("supply","道具",PackspireUiFactory.PopIcon.Supply);
+  AddFilter("","全部",PackspireUiFactory.ManagementChrome.AllItems);
+  AddFilter("weapon","武器",PackspireUiFactory.ManagementChrome.WeaponCategory);
+  AddFilter("armor","防具",PackspireUiFactory.ManagementChrome.ArmorCategory);
+  AddFilter("rune","ルーン",PackspireUiFactory.ManagementChrome.SupplyCategory);
+  AddFilter("supply","道具",PackspireUiFactory.ManagementChrome.SupplyCategory);
   return row;
  }
 

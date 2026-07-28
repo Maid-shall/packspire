@@ -55,6 +55,17 @@ public sealed partial class PackspireUiFoundation {
   return brand;
  }
 
+ VisualElement ManagementBrand(string eyebrow,string title,PackspireUiFactory.ManagementChrome crest){
+  var brand=ChromeBrand(eyebrow,title);
+  brand.AddToClassList("ps-management-brand");
+  brand.Insert(0,PackspireUiFactory.ManagementArt(crest,"ps-management-brand-crest"));
+  brand.Add(PackspireUiFactory.ManagementArt(
+   PackspireUiFactory.ManagementChrome.TitleFlourish,
+   "ps-management-brand-flourish"
+  ));
+  return brand;
+ }
+
  VisualElement ChromeSection(string english,string japanese){
   var section=Container("ps-chrome-section");
   var copy=Container("ps-chrome-section-copy");

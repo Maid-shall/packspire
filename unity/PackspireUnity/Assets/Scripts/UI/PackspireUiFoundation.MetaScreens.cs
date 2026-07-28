@@ -8,23 +8,56 @@ public sealed partial class PackspireUiFoundation {
  void BuildStatus(){
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var learned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var allLearned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var learned=FilteredStatusRoles(allLearned);
   if(learned.Count>0){
    if(string.IsNullOrEmpty(selectedRoleId)||!learned.Any(x=>x.id==selectedRoleId))
     selectedRoleId=learned.FirstOrDefault(x=>x.id==meta.currentRole)?.id??learned[0].id;
   }else selectedRoleId="";
 
-  var shell=BuildManagementShell("STATUS  /  RANK","ステータス",ManagementLayout.StatusOverview,out var _,out _);
+  var shell=BuildManagementShell("STATUS  /  RANK","役職記録",ManagementLayout.StatusOverview,out var _,out _);
   screenRoot.Add(shell);
 
   ClearMgmtOverview();
   mgmtOverviewHost.Add(ManagementCharacterOverview(character,meta));
 
-  mgmtListHeader.Clear();
-  mgmtListHeader.Add(SelectiveSectionHead("ROLES","習得役職"));
+  PopulateStatusHeader();
   PopulateStatusList(learned,meta);
   RefreshStatusDetail(character,meta,learned);
 }
+
+ void PopulateStatusHeader(){
+  if(mgmtListHeader==null)return;
+  mgmtListHeader.Clear();
+  mgmtListHeader.Add(ManagementFilterBar(
+   new[]{"基本","上級","複合","勢力","隠し"},
+   statusRoleFilter,
+   index=>{
+    if(statusRoleFilter==index)return;
+    statusRoleFilter=index;
+    selectedRoleId="";
+    RefreshStatusScreen();
+   }
+  ));
+  mgmtListHeader.Add(SelectiveSectionHead("ROLES","習得役職"));
+ }
+
+ System.Collections.Generic.List<IdInt> FilteredStatusRoles(System.Collections.Generic.List<IdInt> learned){
+  if(statusRoleFilter<0||statusRoleFilter>4)statusRoleFilter=0;
+  return learned.Where(level=>RoleMatchesStatusFilter(GameCatalog.Roles[level.id],statusRoleFilter)).ToList();
+ }
+
+ static bool RoleMatchesStatusFilter(RoleDef role,int filter){
+  if(role==null)return false;
+  string kind=role.kind??string.Empty;
+  return filter switch{
+   1=>kind.Contains("上級"),
+   2=>kind.Contains("複合"),
+   3=>kind.Contains("勢力"),
+   4=>kind.Contains("隠し"),
+   _=>!kind.Contains("上級")&&!kind.Contains("複合")&&!kind.Contains("勢力")&&!kind.Contains("隠し")
+  };
+ }
 
  void PopulateStatusList(System.Collections.Generic.List<IdInt> learned,MetaSave meta){
   SaveMgmtListScroll();
@@ -108,18 +141,21 @@ public sealed partial class PackspireUiFoundation {
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Status){RebuildScreen(BuildStatus);return;}
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var learned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var allLearned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var learned=FilteredStatusRoles(allLearned);
   if(learned.Count>0&&!learned.Any(x=>x.id==selectedRoleId))selectedRoleId=learned[0].id;
+  if(learned.Count==0)selectedRoleId="";
   ClearMgmtOverview();
   mgmtOverviewHost.Add(ManagementCharacterOverview(character,meta));
+  PopulateStatusHeader();
   PopulateStatusList(learned,meta);
   RefreshStatusDetail(character,meta,learned);
  }
 
  void BuildVault(){
   var meta=game.UiMeta;
-  if(vaultFilter!=0&&vaultFilter!=1)vaultFilter=0;
-  var stash=FilteredVaultStash(meta).ToList();
+  if(vaultFilter<0||vaultFilter>4)vaultFilter=0;
+  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0)vaultFilter=0;
   if(string.IsNullOrEmpty(selectedVaultUid)||!meta.stash.Any(x=>x.uid==selectedVaultUid))
    selectedVaultUid=meta.stash.FirstOrDefault()?.uid??"";
@@ -131,8 +167,13 @@ public sealed partial class PackspireUiFoundation {
 
  System.Collections.Generic.IEnumerable<ItemInstance> FilteredVaultStash(MetaSave meta){
   if(meta.stash==null)return System.Array.Empty<ItemInstance>();
-  if(vaultFilter==1)return meta.stash.Where(x=>VaultItemInLoadout(meta,x.uid));
-  return meta.stash;
+  return vaultFilter switch{
+   1=>meta.stash.Where(x=>GameCatalog.Items.TryGetValue(x.templateId,out var def)&&def.type==ItemType.Weapon),
+   2=>meta.stash.Where(x=>GameCatalog.Items.TryGetValue(x.templateId,out var def)&&def.type==ItemType.Armor),
+   3=>meta.stash.Where(x=>GameCatalog.Items.TryGetValue(x.templateId,out var def)&&def.type==ItemType.Supply),
+   4=>meta.stash.Where(x=>GameCatalog.Items.TryGetValue(x.templateId,out var def)&&def.type==ItemType.Rune),
+   _=>meta.stash
+  };
  }
 
  void PopulateVaultGrid(MetaSave meta,System.Collections.Generic.List<ItemInstance> stash){
@@ -159,77 +200,330 @@ public sealed partial class PackspireUiFoundation {
  void RefreshVaultDetail(MetaSave meta){
   ClearMgmtDetailHero();
   mgmtDetailScroll?.Clear();
-  if(mgmtDetailScroll!=null)mgmtDetailScroll.scrollOffset=Vector2.zero;
-  var stash=FilteredVaultStash(meta).ToList();
+  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
   var selected=meta.stash.FirstOrDefault(x=>x.uid==selectedVaultUid);
   if(selected==null||!stash.Any(x=>x.uid==selectedVaultUid)){
    if(mgmtDetailHero!=null)mgmtDetailHero.style.display=DisplayStyle.None;
-   mgmtDetailScroll.Add(PackspireUiFactory.EmptyState("装備を選択","左の一覧から装備を選ぶと詳細が表示されます。"));
+   mgmtDetailScroll?.Add(PackspireUiFactory.EmptyState("装備を選択","左の装備棚から記録を選んでください。"));
    return;
   }
   var def=GameCatalog.Items[selected.templateId];
-  SetMgmtDetailHeroArt(Atlas(game.UiEquipmentArt,ItemUv(def.id),"ps-mgmt-detail-art-image"));
-  var nameBlock=Container("ps-mgmt-detail-name-row");
-  nameBlock.Add(PackspireUiFactory.Title(def.name));
-  if(selected.uid==meta.selectedHeirloomUid)nameBlock.Add(HeirloomMark());
-  if(VaultItemInLoadout(meta,selected.uid)){
-   var use=Container("ps-seal-mark");
-   use.pickingMode=PickingMode.Ignore;
-   use.Add(new Label("使用中"){pickingMode=PickingMode.Ignore});
-   nameBlock.Add(use);
-  }
-  SetMgmtDetailHeroSummary(
-   nameBlock,
-   PackspireUiFactory.Body($"{ItemTypeLabel(def.type)}　{def.cells.Length}マス"),
-   PackspireUiFactory.Body($"鍛錬 +{selected.temper}　耐久 {selected.durability}/6")
-  );
+  bool heirloom=selected.uid==meta.selectedHeirloomUid;
+  if(!heirloom)vaultRecordPage=0;
+  SetMgmtDetailHeroArt(VaultItemArt(def.id,"ps-mgmt-detail-art-image ps-vault-v9-item-art"));
 
-  mgmtDetailScroll.Add(ManagementSection("基本性能",def.description));
-  mgmtDetailScroll.Add(ManagementSection("使用状況",$"使用 {selected.uses}回"));
-  if(selected.colors!=null&&selected.colors.Count>0)
-   mgmtDetailScroll.Add(ManagementSection("色特性",string.Join("・",selected.colors.Select(ElementLabel))));
+  var identity=Container("ps-vault-v9-identity-copy");
+  var pageTabs=Container("ps-vault-v9-page-tabs");
+  pageTabs.Add(VaultRecordTab("装備","1/2",vaultRecordPage==0,()=>{
+   if(vaultRecordPage==0)return;
+   vaultRecordPage=0;
+   RefreshVaultDetail(game.UiMeta);
+  }));
+  if(heirloom){
+   pageTabs.Add(VaultRecordTab("家宝","2/2",vaultRecordPage==1,()=>{
+    if(vaultRecordPage==1)return;
+    vaultRecordPage=1;
+    RefreshVaultDetail(game.UiMeta);
+   }));
+  }
+  identity.Add(pageTabs);
+  var nameRow=Container("ps-mgmt-detail-name-row ps-vault-v9-name-row");
+  var name=PackspireUiFactory.Title(def.name);
+  name.AddToClassList("ps-vault-v9-item-name");
+  nameRow.Add(name);
+  if(heirloom)nameRow.Add(HeirloomMark());
+  if(VaultItemInLoadout(meta,selected.uid)){
+   var use=Container("ps-seal-mark ps-vault-v9-inuse");
+   use.Add(new Label("使用中"){pickingMode=PickingMode.Ignore});
+   nameRow.Add(use);
+  }
+  identity.Add(nameRow);
+  var metaLine=PackspireUiFactory.Body($"{ItemTypeLabel(def.type)}　／　RANK {Mathf.Max(1,selected.temper+1)}");
+  metaLine.AddToClassList("ps-vault-v9-meta");
+  identity.Add(metaLine);
+  var facts=Container("ps-vault-v9-identity-facts");
+  var factsCopy=Container("ps-vault-v9-identity-copy-column");
+  var description=PackspireUiFactory.Body(def.description);
+  description.AddToClassList("ps-vault-v9-description");
+  factsCopy.Add(description);
+  var durability=PackspireUiFactory.Body($"耐久　{selected.durability} / {def.baseDurability}");
+  durability.AddToClassList("ps-vault-v9-durability");
+  factsCopy.Add(durability);
+  facts.Add(factsCopy);
+  facts.Add(VaultOccupancyShape(selected,def));
+  identity.Add(facts);
+  SetMgmtDetailHeroSummary(identity);
+
+  if(vaultRecordPage==1&&heirloom){
+   mgmtDetailScroll?.Add(BuildVaultHeirloomPage(selected,def));
+   return;
+  }
+
+  var lower=Container("ps-vault-v9-lower");
+  var cardPanel=Container("ps-vault-v9-card-panel");
+  var cardHeader=Container("ps-vault-v9-lower-header");
+  var cardHeading=new Label(vaultCardExploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  cardHeading.AddToClassList("ps-vault-v9-lower-title");
+  cardHeader.Add(cardHeading);
+  var flip=PackspireUiFactory.Button(vaultCardExploration?"戦闘面へ":"探索面へ",()=>{
+   vaultCardExploration=!vaultCardExploration;
+   RefreshVaultDetail(game.UiMeta);
+  });
+  flip.AddToClassList("ps-vault-v9-flip");
+  cardHeader.Add(flip);
+  cardPanel.Add(cardHeader);
+ var face=BuildEquipmentCardFacePreview(selected,def,game.UiRun,vaultCardExploration);
+  if(face!=null){
+   face.pickingMode=PickingMode.Position;
+   face.AddToClassList("ps-vault-v9-card-open");
+   face.tooltip="クリックでカードを拡大";
+   face.RegisterCallback<ClickEvent>(evt=>{
+    evt.StopPropagation();
+    ShowVaultCardModal(selected,def,vaultCardExploration);
+   });
+   cardPanel.Add(face);
+  }
+  else cardPanel.Add(PackspireUiFactory.EmptyState("カードなし","この装備に対応するカードはありません。"));
+  lower.Add(cardPanel);
+
+  var effectPanel=Container("ps-vault-v9-effect-panel");
   var trait=StorageFormulaCatalog.Trait(selected.traitId);
-  if(trait!=null)
-   mgmtDetailScroll.Add(ManagementSection("個体特性",$"{trait.name}（{ElementLabel(trait.element)} {trait.requiredMatches}一致）\n{TraitEffectLabel(trait)}"));
-  if(!string.IsNullOrEmpty(def.linkRule))
-   mgmtDetailScroll.Add(ManagementSection("LINK効果",def.linkRule));
-  var loadoutName=VaultLoadoutName(meta,selected.uid);
-  if(!string.IsNullOrEmpty(loadoutName))
-   mgmtDetailScroll.Add(ManagementSection("使用中の荷造り",loadoutName));
-  if(selected.insured)
-   mgmtDetailScroll.Add(ManagementSection("保護","保険加入"));
-  var tail=Container("ps-space-scroll-tail");
-  tail.pickingMode=PickingMode.Ignore;
-  mgmtDetailScroll.Add(tail);
-  mgmtDetailScroll.scrollOffset=Vector2.zero;
-  mgmtDetailScroll.schedule.Execute(()=>{if(mgmtDetailScroll!=null)mgmtDetailScroll.scrollOffset=Vector2.zero;}).ExecuteLater(0);
+  string colorName=trait?.name??VaultColorEffectName(selected);
+  string colorBody=trait!=null
+   ?TraitEffectLabel(trait)
+   :VaultColorEffectBody(selected);
+  effectPanel.Add(VaultEffectRecord("色効果",colorName,colorBody,"ps-vault-v9-color-effect"));
+  effectPanel.Add(VaultEffectRecord(
+   "LINK効果",
+   string.IsNullOrEmpty(def.linkRule)?"固有LINKなし":"装備LINK",
+   string.IsNullOrEmpty(def.linkRule)?"隣接による追加効果はありません。":def.linkRule,
+   "ps-vault-v9-link-effect"
+  ));
+  var actions=Container("ps-vault-v9-actions");
+  var lockButton=VaultLockAction(
+   selected.insured,
+   ()=>{
+    selected.insured=!selected.insured;
+    SaveSystem.Save(meta);
+    UpdateMgmtVaultGridBadges(meta);
+    RefreshVaultDetail(meta);
+   }
+  );
+  actions.Add(lockButton);
+  effectPanel.Add(actions);
+  lower.Add(effectPanel);
+ mgmtDetailScroll?.Add(lower);
+}
+
+ void ShowVaultCardModal(ItemInstance item,ItemDef def,bool exploration){
+  CloseVaultCardModal();
+  if(screenRoot==null||item==null||def==null)return;
+  var overlay=Container("ps-vault-card-modal");
+  overlay.pickingMode=PickingMode.Position;
+  overlay.RegisterCallback<ClickEvent>(evt=>{
+   if(evt.target==overlay)CloseVaultCardModal();
+  });
+
+  var stage=Container("ps-vault-card-modal-stage");
+  stage.pickingMode=PickingMode.Position;
+  stage.RegisterCallback<ClickEvent>(evt=>{
+   if(evt.target==stage)CloseVaultCardModal();
+  });
+  var heading=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  heading.AddToClassList("ps-vault-card-modal-heading");
+  stage.Add(heading);
+  var enlarged=BuildEquipmentCardFacePreview(item,def,game.UiRun,exploration);
+  if(enlarged!=null){
+   enlarged.pickingMode=PickingMode.Position;
+   enlarged.AddToClassList("ps-vault-card-modal-face");
+   stage.Add(enlarged);
+  }
+  var hint=new Label("カードの外側を押すと閉じます"){pickingMode=PickingMode.Ignore};
+  hint.AddToClassList("ps-vault-card-modal-hint");
+  stage.Add(hint);
+  overlay.Add(stage);
+  screenRoot.Add(overlay);
+  vaultCardModal=overlay;
+ }
+
+ void CloseVaultCardModal(){
+  vaultCardModal?.RemoveFromHierarchy();
+  vaultCardModal=null;
+ }
+
+ Button VaultRecordTab(string label,string page,bool selected,System.Action onClick){
+  var button=PackspireUiFactory.Button("",onClick);
+  button.AddToClassList("ps-vault-v9-page-tab");
+  button.EnableInClassList("ps-selected",selected);
+  button.Add(new Label(label){pickingMode=PickingMode.Ignore});
+  var index=new Label(page){pickingMode=PickingMode.Ignore};
+  index.AddToClassList("ps-vault-v9-page-index");
+  button.Add(index);
+  return button;
+ }
+
+ VisualElement VaultEffectRecord(string eyebrow,string title,string body,string className){
+  var section=Container("ps-vault-v9-effect "+className);
+  var label=new Label(eyebrow){pickingMode=PickingMode.Ignore};
+  label.AddToClassList("ps-vault-v9-effect-eyebrow");
+  section.Add(label);
+  var heading=new Label(title){pickingMode=PickingMode.Ignore};
+  heading.AddToClassList("ps-vault-v9-effect-name");
+  section.Add(heading);
+  var copy=new Label(body){pickingMode=PickingMode.Ignore};
+  copy.AddToClassList("ps-vault-v9-effect-body");
+  section.Add(copy);
+  return section;
+ }
+
+ string VaultColorEffectName(ItemInstance item){
+  if(item?.colors==null||item.colors.Count==0)return "無彩";
+  return $"{ElementLabel(item.colors[0])}色共鳴";
+ }
+
+ string VaultColorEffectBody(ItemInstance item){
+  if(item?.colors==null||item.colors.Count==0)return "色一致による個体効果はありません。";
+  var counts=item.colors.GroupBy(x=>x).OrderByDescending(x=>x.Count()).ToList();
+  return $"{string.Join("・",counts.Select(x=>$"{ElementLabel(x.Key)}{x.Count()}"))}。同色セルの一致で個体特性が発動します。";
+ }
+
+ VisualElement VaultOccupancyShape(ItemInstance item,ItemDef def){
+  var block=Container("ps-vault-v9-shape");
+  var heading=new Label("占有形状"){pickingMode=PickingMode.Ignore};
+  heading.AddToClassList("ps-vault-v9-shape-title");
+  block.Add(heading);
+  var layout=def?.cells==null||def.cells.Length==0
+   ?new System.Collections.Generic.List<(Vector2Int pos,int original,Element element,int value)>()
+   :BackpackSystem.Layout(def,0,item);
+  if(layout.Count==0)return block;
+  int width=layout.Max(cell=>cell.pos.x)+1;
+  int height=layout.Max(cell=>cell.pos.y)+1;
+  var grid=Container("ps-vault-v9-shape-grid");
+  for(int y=0;y<height;y++){
+   var row=Container("ps-vault-v9-shape-row");
+   for(int x=0;x<width;x++){
+    var cell=Container("ps-vault-v9-shape-cell");
+    var occupied=layout.FirstOrDefault(value=>value.pos.x==x&&value.pos.y==y);
+    bool filled=layout.Any(value=>value.pos.x==x&&value.pos.y==y);
+    cell.AddToClassList(filled?"ps-filled":"ps-empty");
+    if(filled)cell.AddToClassList("ps-element-"+occupied.element.ToString().ToLowerInvariant());
+    row.Add(cell);
+   }
+   grid.Add(row);
+  }
+  block.Add(grid);
+  return block;
+ }
+
+ Button VaultLockAction(bool locked,System.Action onClick){
+  var button=new Button(){text=string.Empty};
+  if(onClick!=null)button.clicked+=onClick;
+  button.Clear();
+  button.AddToClassList("ps-vault-v9-lock-action");
+  button.EnableInClassList("ps-locked",locked);
+  button.tooltip=locked?"クリックでロック解除":"クリックで装備をロック";
+  return button;
+ }
+
+ VisualElement BuildVaultHeirloomPage(ItemInstance item,ItemDef def){
+  var page=Container("ps-vault-v9-heirloom-page");
+  var history=item.history??new HeirloomHistory();
+  page.Add(VaultEffectRecord(
+   "家宝の記録",
+   "遠征の記憶",
+   $"戦闘 {history.battles}　ボス {history.bosses}　敗北 {history.defeats}",
+   "ps-vault-v9-heirloom-history"
+  ));
+  string scars=item.scars==null||item.scars.Count==0
+   ?"まだ傷跡は刻まれていません。"
+   :string.Join("\n",item.scars.Take(3).Select(scar=>$"◆ {scar.type}　{scar.dungeon}"));
+  page.Add(VaultEffectRecord("傷跡","刻まれた履歴",scars,"ps-vault-v9-heirloom-scars"));
+  page.Add(VaultEffectRecord(
+   "継承",
+   def.name,
+   "家宝として蓄積した記憶は、次の遠征でも失われません。",
+   "ps-vault-v9-heirloom-legacy"
+  ));
+  return page;
  }
 
  void BuildVaultAgain(){RefreshVaultScreen(false);}
  void RefreshVaultScreen(bool rebuildList){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
   var meta=game.UiMeta;
-  var stash=FilteredVaultStash(meta).ToList();
-  if(vaultFilter!=0&&vaultFilter!=1)vaultFilter=0;
+  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
+  if(vaultFilter<0||vaultFilter>4)vaultFilter=0;
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0){
    vaultFilter=0;
-   stash=meta.stash.ToList();
+   stash=SortVaultStash(meta.stash).ToList();
   }
   if(!stash.Any(x=>x.uid==selectedVaultUid))selectedVaultUid=stash.FirstOrDefault()?.uid??meta.stash.FirstOrDefault()?.uid??"";
   if(rebuildList){
    mgmtListHeader.Clear();
-   mgmtListHeader.Add(ManagementFilterBar(new[]{"すべて","使用中"},vaultFilter,index=>{
+   mgmtListHeader.Add(SelectiveSectionHead("ITEM STORAGE","装備棚"));
+   mgmtListHeader.Add(VaultCategoryBar(new[]{"すべて","武器","防具","道具","遺物"},vaultFilter,index=>{
     vaultFilter=index;
     RefreshVaultScreen(true);
    }));
    var active=LoadoutSystem.Active(meta);
-   mgmtListHeader.Add(PackspireUiFactory.Body($"使用中荷造り　{active.name}　／　保管 {meta.stash.Count}"));
+   var context=PackspireUiFactory.Body($"使用中荷造り　{active.name}");
+   context.AddToClassList("ps-vault-v7-context");
+   mgmtListHeader.Add(context);
+   if(mgmtVaultFooter!=null){
+    mgmtVaultFooter.Clear();
+    mgmtVaultFooter.pickingMode=PickingMode.Position;
+    var sortWrap=Container("ps-vault-v7-rarity-filter");
+    sortWrap.pickingMode=PickingMode.Position;
+    var sortLabel=new Label("並べ替え"){pickingMode=PickingMode.Ignore};
+    sortLabel.AddToClassList("ps-vault-v8-sort-label");
+    sortWrap.Add(sortLabel);
+    var sortChoices=new List<string>{
+     "レアリティ順","入手段階順","名前順","種類順","占有マス順","鍛錬順","耐久が低い順"
+    };
+    vaultSortMode=Mathf.Clamp(vaultSortMode,0,sortChoices.Count-1);
+    var sortField=new DropdownField(sortChoices,vaultSortMode);
+    sortField.pickingMode=PickingMode.Position;
+    sortField.SetEnabled(true);
+    sortField.AddToClassList("ps-vault-v8-sort");
+    sortField.RegisterValueChangedCallback(_=>{
+     int next=sortField.index;
+     if(next<0||next==vaultSortMode)return;
+     vaultSortMode=next;
+     RefreshVaultScreen(true);
+    });
+    sortWrap.Add(sortField);
+    mgmtVaultFooter.Add(sortWrap);
+    var count=PackspireUiFactory.Body($"{stash.Count} / {Mathf.Max(240,meta.stash.Count)}");
+    count.AddToClassList("ps-vault-v7-count");
+    mgmtVaultFooter.Add(count);
+    mgmtVaultFooter.BringToFront();
+   }
    PopulateVaultGrid(meta,stash);
   }else{
    UpdateMgmtVaultGridSelection(selectedVaultUid);
    UpdateMgmtVaultGridBadges(meta);
   }
   RefreshVaultDetail(meta);
+ }
+
+ System.Collections.Generic.IEnumerable<ItemInstance> SortVaultStash(System.Collections.Generic.IEnumerable<ItemInstance> items){
+  return vaultSortMode switch{
+   1=>items.OrderByDescending(x=>GameCatalog.Items[x.templateId].acquisitionTier)
+           .ThenByDescending(x=>(int)GameCatalog.Items[x.templateId].rarity)
+           .ThenBy(x=>GameCatalog.Items[x.templateId].name),
+   2=>items.OrderBy(x=>GameCatalog.Items[x.templateId].name),
+   3=>items.OrderBy(x=>(int)GameCatalog.Items[x.templateId].type)
+           .ThenBy(x=>GameCatalog.Items[x.templateId].name),
+   4=>items.OrderByDescending(x=>GameCatalog.Items[x.templateId].cells?.Length??0)
+           .ThenByDescending(x=>(int)GameCatalog.Items[x.templateId].rarity),
+   5=>items.OrderByDescending(x=>x.temper)
+           .ThenByDescending(x=>(int)GameCatalog.Items[x.templateId].rarity),
+   6=>items.OrderBy(x=>x.durability)
+           .ThenBy(x=>GameCatalog.Items[x.templateId].name),
+   _=>items.OrderByDescending(x=>(int)GameCatalog.Items[x.templateId].rarity)
+           .ThenByDescending(x=>GameCatalog.Items[x.templateId].acquisitionTier)
+           .ThenBy(x=>GameCatalog.Items[x.templateId].name)
+  };
  }
 
  void BuildCompendium(){
@@ -378,6 +672,8 @@ public sealed partial class PackspireUiFoundation {
    mgmtDetailScroll.Add(ManagementSection("属性",string.Join("・",selected.cells.Select(x=>ElementLabel(x.element)))));
   if(!string.IsNullOrEmpty(selected.linkRule))
    mgmtDetailScroll.Add(ManagementSection("LINK",selected.linkRule));
+  var cardPair=BuildEquipmentCardPairPreview(new ItemInstance(selected.id),selected,game.UiRun);
+  if(cardPair!=null)mgmtDetailScroll.Add(cardPair);
   var faceLines=new List<string>();
   foreach(var grant in selected.grantedCards??System.Array.Empty<GrantedCardDef>()){
    string battle=GameCatalog.Cards.TryGetValue(grant.battleCardId,out var battleCard)

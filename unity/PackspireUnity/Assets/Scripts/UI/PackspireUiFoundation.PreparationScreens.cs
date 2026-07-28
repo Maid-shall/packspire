@@ -22,7 +22,7 @@ public sealed partial class PackspireUiFoundation {
   packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,packingRotation);
   var build=BackpackSystem.Build(run);
 
-  var root=Container("ps-rite");
+  var root=Container("ps-rite ps-rite-v3");
   root.pickingMode=PickingMode.Position;
   packingRootElement=root;
   screenRoot.Add(root);
@@ -39,7 +39,10 @@ public sealed partial class PackspireUiFoundation {
   var brand=Container("ps-rite-brand");
   var brandMark=Container("ps-rite-brand-mark");
   brandMark.pickingMode=PickingMode.Ignore;
-  brandMark.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Packing,"ps-rite-brand-icon"));
+  brandMark.Add(PackspireUiFactory.ManagementArt(
+   PackspireUiFactory.ManagementChrome.PackingCrest,
+   "ps-rite-brand-icon ps-management-page-crest"
+  ));
   brand.Add(brandMark);
   var topTitle=Container("ps-rite-top-title");
   var topEyebrow=new Label("ATELIER  /  FORGE"){pickingMode=PickingMode.Ignore};
@@ -154,7 +157,10 @@ public sealed partial class PackspireUiFoundation {
 
   var rightShell=Container("ps-rite-right-shell");
   DressRiteFrame(rightShell);
-  rightShell.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-rite-detail-corner"));
+  rightShell.Add(PackspireUiFactory.ManagementArt(
+   PackspireUiFactory.ManagementChrome.DetailCorner,
+   "ps-rite-detail-corner ps-management-detail-corner"
+  ));
   var right=new ScrollView(ScrollViewMode.Vertical);
   packingRightScrollElement=right;
   right.AddToClassList("ps-rite-right");

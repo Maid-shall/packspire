@@ -177,6 +177,143 @@ public sealed partial class PackspireUiFoundation {
   _=>"⌁"
  };
 
+ VisualElement BuildEquipmentCardPairPreview(ItemInstance item,ItemDef definition,RunState run){
+  if(item==null||definition==null)return null;
+  string battleId=definition.grantedCards?.FirstOrDefault(
+   value=>value!=null&&!string.IsNullOrEmpty(value.battleCardId))?.battleCardId;
+  if(string.IsNullOrEmpty(battleId))battleId=definition.cardIds?.FirstOrDefault();
+  if(string.IsNullOrEmpty(battleId))battleId=definition.cardId;
+  if(string.IsNullOrEmpty(battleId)||!GameCatalog.Cards.TryGetValue(battleId,out var battleDefinition))
+   return null;
+
+  var battle=BackpackSystem.FromDef(battleDefinition,definition.name,item.uid);
+  string explorationId=definition.grantedCards?.FirstOrDefault(
+   value=>value!=null&&value.battleCardId==battleId&&!string.IsNullOrEmpty(value.explorationCardId))?.explorationCardId;
+  if(string.IsNullOrEmpty(explorationId))explorationId=definition.explorationCardId;
+  battle.explorationCardId=explorationId;
+
+  // A preview can point at a vault or codex item. Never add that item to the
+  // active run merely to render its two card faces.
+  var previewRun=new RunState {
+   role=run?.role??string.Empty,
+   inventory=new System.Collections.Generic.List<ItemInstance>{item}
+  };
+
+  var pair=Container("ps-equipment-card-pair");
+  pair.pickingMode=PickingMode.Ignore;
+  pair.Add(PackspireUiFactory.ManagementV6Art(
+   PackspireUiFactory.ManagementV6Piece.ArchiveCardTray,
+   "ps-management-v6-bg ps-equipment-card-pair-tray"
+  ));
+
+  var combatColumn=Container("ps-equipment-card-face ps-equipment-card-face-combat");
+  combatColumn.pickingMode=PickingMode.Ignore;
+  var combatLabel=new Label("COMBAT"){pickingMode=PickingMode.Ignore};
+  combatLabel.AddToClassList("ps-equipment-card-face-label");
+  combatColumn.Add(combatLabel);
+  var combatCard=Container("ps-battle-card ps-equipment-card-preview");
+  combatCard.pickingMode=PickingMode.Ignore;
+  PopulateBattleCard(combatCard,battle,previewRun,true);
+  combatColumn.Add(combatCard);
+  pair.Add(combatColumn);
+
+  var exploreColumn=Container("ps-equipment-card-face ps-equipment-card-face-explore");
+  exploreColumn.pickingMode=PickingMode.Ignore;
+  var exploreLabel=new Label("EXPLORE"){pickingMode=PickingMode.Ignore};
+  exploreLabel.AddToClassList("ps-equipment-card-face-label");
+  exploreColumn.Add(exploreLabel);
+  var exploreCard=Container("ps-battle-card ps-equipment-card-preview");
+  exploreCard.pickingMode=PickingMode.Ignore;
+  var exploreDefinition=BuildEquipmentExplorationCard(explorationId,battle,definition,item.uid);
+  PopulateEquipmentExplorationCard(exploreCard,exploreDefinition,item);
+  exploreColumn.Add(exploreCard);
+  pair.Add(exploreColumn);
+ return pair;
+ }
+
+ VisualElement BuildEquipmentCardFacePreview(ItemInstance item,ItemDef definition,RunState run,bool exploration){
+  if(item==null||definition==null)return null;
+  string battleId=definition.grantedCards?.FirstOrDefault(
+   value=>value!=null&&!string.IsNullOrEmpty(value.battleCardId))?.battleCardId;
+  if(string.IsNullOrEmpty(battleId))battleId=definition.cardIds?.FirstOrDefault();
+  if(string.IsNullOrEmpty(battleId))battleId=definition.cardId;
+  if(string.IsNullOrEmpty(battleId)||!GameCatalog.Cards.TryGetValue(battleId,out var battleDefinition))
+   return null;
+
+  var battle=BackpackSystem.FromDef(battleDefinition,definition.name,item.uid);
+  string explorationId=definition.grantedCards?.FirstOrDefault(
+   value=>value!=null&&value.battleCardId==battleId&&!string.IsNullOrEmpty(value.explorationCardId))?.explorationCardId;
+  if(string.IsNullOrEmpty(explorationId))explorationId=definition.explorationCardId;
+  battle.explorationCardId=explorationId;
+  var previewRun=new RunState{
+   role=run?.role??string.Empty,
+   inventory=new System.Collections.Generic.List<ItemInstance>{item}
+  };
+
+  var face=Container("ps-vault-v9-card-face");
+  face.pickingMode=PickingMode.Ignore;
+  var label=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  label.AddToClassList("ps-vault-v9-card-face-label");
+  face.Add(label);
+  var card=Container("ps-battle-card ps-equipment-card-preview ps-vault-v9-card");
+  card.pickingMode=PickingMode.Ignore;
+  if(exploration){
+   var explorationCard=BuildEquipmentExplorationCard(explorationId,battle,definition,item.uid);
+   PopulateEquipmentExplorationCard(card,explorationCard,item);
+  }else{
+   PopulateBattleCard(card,battle,previewRun,true);
+  }
+  face.Add(card);
+  return face;
+ }
+
+ static CardInstance BuildEquipmentExplorationCard(string explorationId,CardInstance battle,ItemDef item,string itemUid){
+  if(!string.IsNullOrEmpty(explorationId)&&GameCatalog.ExplorationCards.TryGetValue(explorationId,out var definition))
+   return new CardInstance{
+    id=definition.id,
+    name=definition.name,
+    text=definition.text,
+    cost=definition.cost,
+    source=item.name,
+    sourceItemUid=itemUid,
+    explorationCardId=definition.id
+   };
+  return new CardInstance{
+   id=string.IsNullOrEmpty(explorationId)?battle.id:explorationId,
+   name=battle.name,
+   text=battle.text,
+   cost=battle.cost,
+   source=item.name,
+   sourceItemUid=itemUid,
+   explorationCardId=explorationId
+  };
+ }
+
+ void PopulateEquipmentExplorationCard(VisualElement slot,CardInstance card,ItemInstance item){
+  ApplyExplorationCardPresentation(slot,card);
+  var illustration=Container("ps-battle-card-art");
+  illustration.Add(Atlas(game.UiEquipmentArt,ItemUv(item.templateId),"ps-battle-card-art-image"));
+  slot.Add(illustration);
+  var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
+  cost.AddToClassList("ps-battle-card-cost");
+  slot.Add(cost);
+  var name=new Label(card.name){pickingMode=PickingMode.Ignore};
+  name.AddToClassList("ps-battle-card-name");
+  slot.Add(name);
+  var body=new Label(card.text){pickingMode=PickingMode.Ignore};
+  body.AddToClassList("ps-battle-card-text");
+  slot.Add(body);
+  var foot=Container("ps-battle-card-foot");
+  var source=new Label(card.source){pickingMode=PickingMode.Ignore};
+  source.AddToClassList("ps-battle-card-source");
+  foot.Add(source);
+  var tag=new Label("GRID"){pickingMode=PickingMode.Ignore};
+  tag.AddToClassList("ps-battle-card-durability");
+  foot.Add(tag);
+  slot.Add(foot);
+  AddExplorationDemonCardOverlay(slot,card);
+ }
+
  static string DemonCardDiceFormula(CardInstance card){
   if(card==null||card.damage<=0)return "";
   int modifier=card.damage-7;

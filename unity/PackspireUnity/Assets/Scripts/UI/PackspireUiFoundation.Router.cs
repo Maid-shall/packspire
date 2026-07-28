@@ -132,6 +132,7 @@ public sealed partial class PackspireUiFoundation {
   shopMerchantCounterLayer=null;
   shopMerchantTransactionLayer=null;
   shopFutureMerchantActionLayer=null;
+  shopHeaderGoldLabel=null;
   shopGoldLabel=null;
   shopTotalLabel=null;
   shopSelectedNameLabel=null;

@@ -53,6 +53,25 @@ public static class PackspireUiFactory {
   CardCheck, Expedition, Reward, Objective
  }
  public enum PopOrnament { PageTitle, Section, VerticalBoundary, OpenCorner }
+ public enum ManagementChrome {
+  ShopCrest, PackingCrest, VaultCrest, RoleCrest,
+  AllItems, WeaponCategory, ArmorCategory, SupplyCategory,
+  Back, Confirm, Compare, Search,
+  TitleFlourish, SectionRule, SelectionCorners, DetailCorner
+ }
+ public enum ManagementV6Piece {
+  ShopProduct, ShopProductSelected, ShopProductSoldOut, ShopBuy,
+  ShopPrice, ShopTabRed, ShopTabPurple, ShopTabBlue, ShopCategorySelected,
+  ShopCategory, ShopGold, ShopSpeech, ShopBack, ShopCompare, ShopSoldOutSeal,
+  ShopDivider, ShopCoin,
+  RoleRed, RoleBlue, RoleGreen, RoleGold, RoleViolet,
+  RoleTabRed, RoleTabBlue, RoleTabGreen, RoleTabGold, RoleTabViolet,
+  RoleCurrent, RoleSeal, RoleAction, RoleSearch, RolePips, RoleDivider,
+  ArchiveFrame, ArchiveFrameSelected, ArchiveFrameCyan, ArchiveFrameViolet,
+  ArchiveTabAll, ArchiveTabWeapon, ArchiveTabArmor, ArchiveTabRelic,
+  ArchiveDropdown, ArchiveFilter, ArchiveCounter, ArchiveIndexSelected,
+  ArchiveIndex, ArchiveDivider, ArchiveLinkHeader, ArchiveCardTray, ArchiveLock
+ }
 
  static Texture2D popPrimaryPlate;
  static Texture2D popSecondaryPlate;
@@ -62,6 +81,10 @@ public static class PackspireUiFactory {
  static Texture2D popCoreIcons;
  static Texture2D popRoleControlIcons;
  static Texture2D popOrnaments;
+ static Texture2D managementChrome;
+ static Texture2D managementV6Shop;
+ static Texture2D managementV6Role;
+ static Texture2D managementV6Archive;
 
  static void EnsurePopArt(){
   if(popPrimaryPlate==null)
@@ -80,6 +103,14 @@ public static class PackspireUiFactory {
    popRoleControlIcons=LoadPopTex("Art/UI/PopDark/SystemV2/role-controls-v1");
   if(popOrnaments==null)
    popOrnaments=LoadPopTex("Art/UI/PopDark/SystemV2/ornaments-v1");
+  if(managementChrome==null)
+   managementChrome=LoadPopTex("Art/UI/PopDark/ManagementV3/management-chrome-v1");
+  if(managementV6Shop==null)
+   managementV6Shop=LoadPopTex("Art/UI/PopDark/ManagementV6/shop-kit");
+  if(managementV6Role==null)
+   managementV6Role=LoadPopTex("Art/UI/PopDark/ManagementV6/role-kit");
+  if(managementV6Archive==null)
+   managementV6Archive=LoadPopTex("Art/UI/PopDark/ManagementV6/archive-kit");
  }
 
  static Texture2D LoadPopTex(params string[] paths){
@@ -259,6 +290,104 @@ public static class PackspireUiFactory {
   });
   AddClasses(image,classes);
   return image;
+ }
+
+ public static Image ManagementArt(ManagementChrome chrome,string classes=""){
+  EnsurePopArt();
+  var image=new Image{
+   image=managementChrome,
+   uv=AtlasUv((int)chrome,4,4),
+   scaleMode=ScaleMode.ScaleToFit,
+   pickingMode=PickingMode.Ignore
+  };
+  image.AddToClassList("ps-management-art");
+  AddClasses(image,classes);
+  return image;
+ }
+
+ public static Image ManagementV6Art(ManagementV6Piece piece,string classes=""){
+  EnsurePopArt();
+  var texture=ManagementV6Texture(piece);
+  var image=new Image{
+   image=texture,
+   uv=ManagementV6Uv(piece,texture),
+   scaleMode=ScaleMode.StretchToFill,
+   pickingMode=PickingMode.Ignore
+  };
+  image.AddToClassList("ps-management-v6-art");
+  AddClasses(image,classes);
+  return image;
+ }
+
+ static Texture2D ManagementV6Texture(ManagementV6Piece piece){
+  int value=(int)piece;
+  if(value<17)return managementV6Shop;
+  if(value<30)return managementV6Role;
+  return managementV6Archive;
+ }
+
+ static Rect ManagementV6Uv(ManagementV6Piece piece,Texture2D texture){
+  var pixels=piece switch{
+   ManagementV6Piece.ShopProduct=>new RectInt(70,32,350,255),
+   ManagementV6Piece.ShopProductSelected=>new RectInt(437,31,390,260),
+   ManagementV6Piece.ShopProductSoldOut=>new RectInt(844,45,330,245),
+   ManagementV6Piece.ShopBuy=>new RectInt(1217,46,360,235),
+   ManagementV6Piece.ShopPrice=>new RectInt(68,313,335,245),
+   ManagementV6Piece.ShopTabRed=>new RectInt(468,344,320,175),
+   ManagementV6Piece.ShopTabPurple=>new RectInt(856,350,295,145),
+   ManagementV6Piece.ShopTabBlue=>new RectInt(1228,350,330,175),
+   ManagementV6Piece.ShopCategorySelected=>new RectInt(68,560,300,145),
+   ManagementV6Piece.ShopCategory=>new RectInt(413,560,315,145),
+   ManagementV6Piece.ShopGold=>new RectInt(775,579,355,120),
+   ManagementV6Piece.ShopSpeech=>new RectInt(1220,552,340,140),
+   ManagementV6Piece.ShopBack=>new RectInt(54,730,200,190),
+   ManagementV6Piece.ShopCompare=>new RectInt(340,730,180,185),
+   ManagementV6Piece.ShopSoldOutSeal=>new RectInt(604,728,180,175),
+   ManagementV6Piece.ShopDivider=>new RectInt(865,780,530,100),
+   ManagementV6Piece.ShopCoin=>new RectInt(1450,755,145,145),
+   ManagementV6Piece.RoleRed=>new RectInt(32,38,340,170),
+   ManagementV6Piece.RoleBlue=>new RectInt(394,35,340,180),
+   ManagementV6Piece.RoleGreen=>new RectInt(744,35,330,180),
+   ManagementV6Piece.RoleGold=>new RectInt(1088,35,350,180),
+   ManagementV6Piece.RoleViolet=>new RectInt(38,250,340,180),
+   ManagementV6Piece.RoleTabRed=>new RectInt(400,260,330,160),
+   ManagementV6Piece.RoleTabBlue=>new RectInt(755,258,300,155),
+   ManagementV6Piece.RoleTabGreen=>new RectInt(1086,255,340,160),
+   ManagementV6Piece.RoleTabGold=>new RectInt(47,450,335,165),
+   ManagementV6Piece.RoleTabViolet=>new RectInt(404,451,335,170),
+   ManagementV6Piece.RoleCurrent=>new RectInt(796,455,240,205),
+   ManagementV6Piece.RoleSeal=>new RectInt(1150,466,225,200),
+   ManagementV6Piece.RoleAction=>new RectInt(34,678,500,195),
+   ManagementV6Piece.RoleSearch=>new RectInt(570,700,195,140),
+   ManagementV6Piece.RolePips=>new RectInt(804,700,415,140),
+   ManagementV6Piece.RoleDivider=>new RectInt(1267,660,70,255),
+   ManagementV6Piece.ArchiveFrame=>new RectInt(75,45,275,265),
+   ManagementV6Piece.ArchiveFrameSelected=>new RectInt(410,40,285,270),
+   ManagementV6Piece.ArchiveFrameCyan=>new RectInt(760,40,280,270),
+   ManagementV6Piece.ArchiveFrameViolet=>new RectInt(1095,40,270,270),
+   ManagementV6Piece.ArchiveTabAll=>new RectInt(56,340,330,155),
+   ManagementV6Piece.ArchiveTabWeapon=>new RectInt(406,340,330,155),
+   ManagementV6Piece.ArchiveTabArmor=>new RectInt(745,340,330,155),
+   ManagementV6Piece.ArchiveTabRelic=>new RectInt(1080,340,330,155),
+   ManagementV6Piece.ArchiveDropdown=>new RectInt(51,565,395,140),
+   ManagementV6Piece.ArchiveFilter=>new RectInt(450,552,250,160),
+   ManagementV6Piece.ArchiveCounter=>new RectInt(755,567,300,125),
+   ManagementV6Piece.ArchiveIndexSelected=>new RectInt(1140,488,235,275),
+   ManagementV6Piece.ArchiveIndex=>new RectInt(57,710,180,228),
+   ManagementV6Piece.ArchiveDivider=>new RectInt(245,817,350,75),
+   ManagementV6Piece.ArchiveLinkHeader=>new RectInt(599,808,300,100),
+   ManagementV6Piece.ArchiveCardTray=>new RectInt(870,785,350,155),
+   _=>new RectInt(1200,798,310,143)
+  };
+  if(texture==null)return new Rect(0,0,1,1);
+  float width=Mathf.Max(1,texture.width);
+  float height=Mathf.Max(1,texture.height);
+  return new Rect(
+   pixels.x/width,
+   (height-pixels.y-pixels.height)/height,
+   pixels.width/width,
+   pixels.height/height
+  );
  }
 
  public static VisualElement IconTitle(PopIcon icon,string eyebrow,string title,string classes=""){
