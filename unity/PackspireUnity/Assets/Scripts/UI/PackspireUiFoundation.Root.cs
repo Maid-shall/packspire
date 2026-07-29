@@ -6,6 +6,10 @@ public sealed partial class PackspireUiFoundation {
  void BuildRoot(){
   root=document.rootVisualElement;if(root==null||root.panel==null){uiReady=false;Debug.LogWarning("Packspire UI Toolkit root is not ready.");return;}
   root.name="packspire-ui-root";root.AddToClassList("packspire-root");root.pickingMode=PickingMode.Ignore;
+  for(int i=root.styleSheets.count-1;i>=0;i--){
+   var attached=root.styleSheets[i];
+   if(attached!=null&&attached.name.StartsWith("Packspire"))root.styleSheets.Remove(attached);
+  }
   string[] styleSheetPaths={
    "UI/PackspireTheme",
    "UI/PackspirePacking",
@@ -20,7 +24,8 @@ public sealed partial class PackspireUiFoundation {
    "UI/PackspireCommerce",
    "UI/PackspireHub",
    "UI/PackspireOrnaments",
-   "UI/PackspireManagementV3"
+   "UI/PackspireManagementV3",
+   "UI/PackspireVaultCodexFinal"
   };
   foreach(var path in styleSheetPaths){
    var sheet=PackspireResources.Load<StyleSheet>(path);

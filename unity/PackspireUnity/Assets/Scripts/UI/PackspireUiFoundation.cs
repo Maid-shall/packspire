@@ -40,6 +40,10 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  ScrollView packingEquipScrollElement,packingRightScrollElement;
  float packingEquipScrollY,packingRightScrollY;
  int compendiumTab;
+ int compendiumDetailTab;
+ int compendiumDetailPage;
+ string compendiumDetailOwnerId="";
+ bool compendiumCardExploration;
  Button developerAccessButton;
  VisualElement developerPanelRoot;
  bool developerOverlayStateKnown;

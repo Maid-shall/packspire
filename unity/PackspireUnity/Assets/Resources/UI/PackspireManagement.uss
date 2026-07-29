@@ -478,8 +478,8 @@
 }
 
 /* Vault v2: compact inventory grid ~60% | item detail ~40% */
-.ps-vault-v2 .ps-vault-main-row,
-.ps-mgmt-layout-vault.ps-vault-v2 .ps-mgmt-body {
+.ps-vault-final .ps-vault-main-row,
+.ps-mgmt-layout-vault.ps-vault-final .ps-mgmt-body {
     flex-direction: row;
     flex-grow: 1;
     flex-shrink: 1;
@@ -718,7 +718,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v2 .ps-mgmt-detail-art-host {
+.ps-vault-final .ps-mgmt-detail-art-host {
     width: 112px;
     height: 112px;
     min-width: 112px;
@@ -729,7 +729,7 @@
     margin-right: 14px;
 }
 
-.ps-vault-v2 .ps-mgmt-detail-art-image {
+.ps-vault-final .ps-mgmt-detail-art-image {
     width: 100%;
     height: 100%;
     -unity-background-scale-mode: scale-to-fit;

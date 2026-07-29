@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
+ #region Status
+
  void BuildStatus(){
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
@@ -149,13 +151,16 @@ public sealed partial class PackspireUiFoundation {
   mgmtOverviewHost.Add(ManagementCharacterOverview(character,meta));
   PopulateStatusHeader();
   PopulateStatusList(learned,meta);
-  RefreshStatusDetail(character,meta,learned);
+ RefreshStatusDetail(character,meta,learned);
  }
+
+ #endregion
+ #region Vault
 
  void BuildVault(){
   var meta=game.UiMeta;
   if(vaultFilter<0||vaultFilter>4)vaultFilter=0;
-  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
+  var stash=CurrentVaultStash(meta);
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0)vaultFilter=0;
   if(string.IsNullOrEmpty(selectedVaultUid)||!meta.stash.Any(x=>x.uid==selectedVaultUid))
    selectedVaultUid=meta.stash.FirstOrDefault()?.uid??"";
@@ -200,7 +205,7 @@ public sealed partial class PackspireUiFoundation {
  void RefreshVaultDetail(MetaSave meta){
   ClearMgmtDetailHero();
   mgmtDetailScroll?.Clear();
-  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
+  var stash=CurrentVaultStash(meta);
   var selected=meta.stash.FirstOrDefault(x=>x.uid==selectedVaultUid);
   if(selected==null||!stash.Any(x=>x.uid==selectedVaultUid)){
    if(mgmtDetailHero!=null)mgmtDetailHero.style.display=DisplayStyle.None;
@@ -208,25 +213,18 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   var def=GameCatalog.Items[selected.templateId];
-  bool heirloom=selected.uid==meta.selectedHeirloomUid;
+  bool heirloom=IsVaultHeirloom(meta,selected);
   if(!heirloom)vaultRecordPage=0;
-  SetMgmtDetailHeroArt(VaultItemArt(def.id,"ps-mgmt-detail-art-image ps-vault-v9-item-art"));
 
-  var identity=Container("ps-vault-v9-identity-copy");
-  var pageTabs=Container("ps-vault-v9-page-tabs");
-  pageTabs.Add(VaultRecordTab("装備","1/2",vaultRecordPage==0,()=>{
-   if(vaultRecordPage==0)return;
-   vaultRecordPage=0;
-   RefreshVaultDetail(game.UiMeta);
-  }));
-  if(heirloom){
-   pageTabs.Add(VaultRecordTab("家宝","2/2",vaultRecordPage==1,()=>{
-    if(vaultRecordPage==1)return;
-    vaultRecordPage=1;
-    RefreshVaultDetail(game.UiMeta);
-   }));
+  if(vaultRecordPage==1&&heirloom){
+   if(mgmtDetailHero!=null)mgmtDetailHero.style.display=DisplayStyle.None;
+   mgmtDetailScroll?.Add(BuildVaultHeirloomPage(selected,def));
+   return;
   }
-  identity.Add(pageTabs);
+
+  var identity=Container("ps-vault-v11-equipment-hero");
+  var metaLine=PackspireUiFactory.Body($"RANK {Mathf.Max(1,selected.temper+1)}　／　{ItemTypeLabel(def.type)}");
+  metaLine.AddToClassList("ps-vault-v9-meta ps-vault-v11-meta");
   var nameRow=Container("ps-mgmt-detail-name-row ps-vault-v9-name-row");
   var name=PackspireUiFactory.Title(def.name);
   name.AddToClassList("ps-vault-v9-item-name");
@@ -237,27 +235,28 @@ public sealed partial class PackspireUiFoundation {
    use.Add(new Label("使用中"){pickingMode=PickingMode.Ignore});
    nameRow.Add(use);
   }
-  identity.Add(nameRow);
-  var metaLine=PackspireUiFactory.Body($"{ItemTypeLabel(def.type)}　／　RANK {Mathf.Max(1,selected.temper+1)}");
-  metaLine.AddToClassList("ps-vault-v9-meta");
-  identity.Add(metaLine);
-  var facts=Container("ps-vault-v9-identity-facts");
-  var factsCopy=Container("ps-vault-v9-identity-copy-column");
   var description=PackspireUiFactory.Body(def.description);
   description.AddToClassList("ps-vault-v9-description");
-  factsCopy.Add(description);
-  var durability=PackspireUiFactory.Body($"耐久　{selected.durability} / {def.baseDurability}");
-  durability.AddToClassList("ps-vault-v9-durability");
-  factsCopy.Add(durability);
-  facts.Add(factsCopy);
-  facts.Add(VaultOccupancyShape(selected,def));
-  identity.Add(facts);
-  SetMgmtDetailHeroSummary(identity);
 
-  if(vaultRecordPage==1&&heirloom){
-   mgmtDetailScroll?.Add(BuildVaultHeirloomPage(selected,def));
-   return;
-  }
+  var showcase=Container("ps-vault-v11-showcase");
+  var artColumn=Container("ps-vault-v11-art-column");
+  var artFrame=Container("ps-vault-v11-art-frame");
+  artFrame.Add(VaultItemArt(def.id,"ps-vault-v9-item-art ps-vault-v11-item-art"));
+  artColumn.Add(artFrame);
+  var durability=PackspireUiFactory.Body($"耐久　{selected.durability} / {def.baseDurability}");
+  durability.AddToClassList("ps-vault-v9-durability ps-vault-v11-durability");
+  artColumn.Add(durability);
+  showcase.Add(artColumn);
+  var infoColumn=Container("ps-vault-v17-info-column");
+  infoColumn.Add(metaLine);
+  infoColumn.Add(nameRow);
+  infoColumn.Add(description);
+  infoColumn.Add(VaultOccupancyShape(selected,def));
+  showcase.Add(infoColumn);
+  identity.Add(showcase);
+  SetMgmtDetailHeroSummary(identity);
+  identity.pickingMode=PickingMode.Position;
+  if(mgmtDetailSummaryHost!=null)mgmtDetailSummaryHost.pickingMode=PickingMode.Position;
 
   var lower=Container("ps-vault-v9-lower");
   var cardPanel=Container("ps-vault-v9-card-panel");
@@ -265,11 +264,24 @@ public sealed partial class PackspireUiFoundation {
   var cardHeading=new Label(vaultCardExploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
   cardHeading.AddToClassList("ps-vault-v9-lower-title");
   cardHeader.Add(cardHeading);
-  var flip=PackspireUiFactory.Button(vaultCardExploration?"戦闘面へ":"探索面へ",()=>{
+  var flip=PackspireUiFactory.Button("",()=>{
    vaultCardExploration=!vaultCardExploration;
    RefreshVaultDetail(game.UiMeta);
   });
   flip.AddToClassList("ps-vault-v9-flip");
+  flip.EnableInClassList("ps-exploration-active",vaultCardExploration);
+  var flipBackground=Container("ps-vault-v9-flip-bg");
+  flipBackground.pickingMode=PickingMode.Ignore;
+  flipBackground.transform.scale=new Vector3(vaultCardExploration?-1f:1f,1f,1f);
+  flip.Add(flipBackground);
+  var combatFaceLabel=new Label("戦闘"){pickingMode=PickingMode.Ignore};
+  combatFaceLabel.AddToClassList("ps-vault-v9-flip-label ps-combat");
+  combatFaceLabel.EnableInClassList("ps-selected",!vaultCardExploration);
+  flip.Add(combatFaceLabel);
+  var explorationFaceLabel=new Label("探索"){pickingMode=PickingMode.Ignore};
+  explorationFaceLabel.AddToClassList("ps-vault-v9-flip-label ps-exploration");
+  explorationFaceLabel.EnableInClassList("ps-selected",vaultCardExploration);
+  flip.Add(explorationFaceLabel);
   cardHeader.Add(flip);
   cardPanel.Add(cardHeader);
  var face=BuildEquipmentCardFacePreview(selected,def,game.UiRun,vaultCardExploration);
@@ -310,7 +322,25 @@ public sealed partial class PackspireUiFoundation {
    }
   );
   actions.Add(lockButton);
+  var nextItemButton=VaultPageArrow(true,()=>{
+   if(heirloom){
+    vaultRecordPage=1;
+    RefreshVaultDetail(meta);
+    return;
+   }
+   var visible=CurrentVaultStash(meta);
+   if(visible.Count==0)return;
+   int currentIndex=visible.FindIndex(entry=>entry.uid==selectedVaultUid);
+   int nextIndex=currentIndex<0?0:(currentIndex+1)%visible.Count;
+   selectedVaultUid=visible[nextIndex].uid;
+   vaultRecordPage=0;
+   UpdateMgmtVaultGridSelection(selectedVaultUid);
+   RefreshVaultDetail(meta);
+  });
+  nextItemButton.AddToClassList("ps-vault-v16-next-item");
+  nextItemButton.tooltip="次の装備";
   effectPanel.Add(actions);
+  effectPanel.Add(nextItemButton);
   lower.Add(effectPanel);
  mgmtDetailScroll?.Add(lower);
 }
@@ -395,16 +425,21 @@ public sealed partial class PackspireUiFoundation {
   var layout=def?.cells==null||def.cells.Length==0
    ?new System.Collections.Generic.List<(Vector2Int pos,int original,Element element,int value)>()
    :BackpackSystem.Layout(def,0,item);
-  if(layout.Count==0)return block;
-  int width=layout.Max(cell=>cell.pos.x)+1;
-  int height=layout.Max(cell=>cell.pos.y)+1;
+  int minX=layout.Count==0?0:layout.Min(cell=>cell.pos.x);
+  int minY=layout.Count==0?0:layout.Min(cell=>cell.pos.y);
+  int shapeWidth=layout.Count==0?0:layout.Max(cell=>cell.pos.x)-minX+1;
+  int shapeHeight=layout.Count==0?0:layout.Max(cell=>cell.pos.y)-minY+1;
+  int offsetX=Mathf.Max(0,(3-shapeWidth)/2);
+  int offsetY=Mathf.Max(0,(3-shapeHeight)/2);
   var grid=Container("ps-vault-v9-shape-grid");
-  for(int y=0;y<height;y++){
+  for(int y=0;y<3;y++){
    var row=Container("ps-vault-v9-shape-row");
-   for(int x=0;x<width;x++){
+   for(int x=0;x<3;x++){
     var cell=Container("ps-vault-v9-shape-cell");
-    var occupied=layout.FirstOrDefault(value=>value.pos.x==x&&value.pos.y==y);
-    bool filled=layout.Any(value=>value.pos.x==x&&value.pos.y==y);
+    int sourceX=x-offsetX+minX;
+    int sourceY=y-offsetY+minY;
+    var occupied=layout.FirstOrDefault(value=>value.pos.x==sourceX&&value.pos.y==sourceY);
+    bool filled=layout.Any(value=>value.pos.x==sourceX&&value.pos.y==sourceY);
     cell.AddToClassList(filled?"ps-filled":"ps-empty");
     if(filled)cell.AddToClassList("ps-element-"+occupied.element.ToString().ToLowerInvariant());
     row.Add(cell);
@@ -425,10 +460,40 @@ public sealed partial class PackspireUiFoundation {
   return button;
  }
 
+ Button VaultPageArrow(bool forward,System.Action onClick){
+  var button=PackspireUiFactory.Button("",onClick);
+  button.transform.scale=new Vector3(forward?1f:-1f,1f,1f);
+  button.AddToClassList("ps-vault-v11-page-arrow");
+  button.AddToClassList(forward?"ps-forward":"ps-back");
+  button.tooltip=forward?"家宝の記録を見る":"装備の記録へ戻る";
+  return button;
+ }
+
  VisualElement BuildVaultHeirloomPage(ItemInstance item,ItemDef def){
-  var page=Container("ps-vault-v9-heirloom-page");
+  var page=Container("ps-vault-v9-heirloom-page ps-vault-v11-heirloom-page");
+  var pageArrow=VaultPageArrow(false,()=>{
+   vaultRecordPage=0;
+   RefreshVaultDetail(game.UiMeta);
+  });
+  var heading=Container("ps-vault-v11-heirloom-heading");
+  var eyebrow=new Label("HEIRLOOM  /  LEGACY"){pickingMode=PickingMode.Ignore};
+  eyebrow.AddToClassList("ps-vault-v11-heirloom-eyebrow");
+  heading.Add(eyebrow);
+  var title=PackspireUiFactory.Title(def.name);
+  title.AddToClassList("ps-vault-v11-heirloom-title");
+  heading.Add(title);
+  var subtitle=PackspireUiFactory.Body("遠征を越えて受け継がれた家宝の全記録");
+  subtitle.AddToClassList("ps-vault-v11-heirloom-subtitle");
+  heading.Add(subtitle);
+  page.Add(heading);
+
+  var hero=Container("ps-vault-v11-heirloom-hero");
+  var art=Container("ps-vault-v11-heirloom-art");
+  art.Add(VaultItemArt(def.id,"ps-vault-v11-heirloom-art-image"));
+  hero.Add(art);
   var history=item.history??new HeirloomHistory();
-  page.Add(VaultEffectRecord(
+  var records=Container("ps-vault-v11-heirloom-records");
+  records.Add(VaultEffectRecord(
    "家宝の記録",
    "遠征の記憶",
    $"戦闘 {history.battles}　ボス {history.bosses}　敗北 {history.defeats}",
@@ -436,14 +501,17 @@ public sealed partial class PackspireUiFoundation {
   ));
   string scars=item.scars==null||item.scars.Count==0
    ?"まだ傷跡は刻まれていません。"
-   :string.Join("\n",item.scars.Take(3).Select(scar=>$"◆ {scar.type}　{scar.dungeon}"));
-  page.Add(VaultEffectRecord("傷跡","刻まれた履歴",scars,"ps-vault-v9-heirloom-scars"));
-  page.Add(VaultEffectRecord(
+   :string.Join("\n",item.scars.Take(5).Select(scar=>$"◆ {scar.type}　{scar.dungeon}　F{scar.floor}"));
+  records.Add(VaultEffectRecord("傷跡","刻まれた履歴",scars,"ps-vault-v9-heirloom-scars"));
+  records.Add(VaultEffectRecord(
    "継承",
    def.name,
    "家宝として蓄積した記憶は、次の遠征でも失われません。",
    "ps-vault-v9-heirloom-legacy"
   ));
+  hero.Add(records);
+  page.Add(hero);
+  page.Add(pageArrow);
   return page;
  }
 
@@ -451,7 +519,7 @@ public sealed partial class PackspireUiFoundation {
  void RefreshVaultScreen(bool rebuildList){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
   var meta=game.UiMeta;
-  var stash=SortVaultStash(FilteredVaultStash(meta)).ToList();
+  var stash=CurrentVaultStash(meta);
   if(vaultFilter<0||vaultFilter>4)vaultFilter=0;
   if(stash.Count==0&&meta.stash.Count>0&&vaultFilter!=0){
    vaultFilter=0;
@@ -461,7 +529,7 @@ public sealed partial class PackspireUiFoundation {
   if(rebuildList){
    mgmtListHeader.Clear();
    mgmtListHeader.Add(SelectiveSectionHead("ITEM STORAGE","装備棚"));
-   mgmtListHeader.Add(VaultCategoryBar(new[]{"すべて","武器","防具","道具","遺物"},vaultFilter,index=>{
+   mgmtListHeader.Add(VaultCategoryBar(VaultCategoryLabels,vaultFilter,index=>{
     vaultFilter=index;
     RefreshVaultScreen(true);
    }));
@@ -474,14 +542,13 @@ public sealed partial class PackspireUiFoundation {
     mgmtVaultFooter.pickingMode=PickingMode.Position;
     var sortWrap=Container("ps-vault-v7-rarity-filter");
     sortWrap.pickingMode=PickingMode.Position;
-    var sortLabel=new Label("並べ替え"){pickingMode=PickingMode.Ignore};
+    var sortLabel=new Label("並べ替え"){
+     pickingMode=PickingMode.Ignore
+    };
     sortLabel.AddToClassList("ps-vault-v8-sort-label");
     sortWrap.Add(sortLabel);
-    var sortChoices=new List<string>{
-     "レアリティ順","入手段階順","名前順","種類順","占有マス順","鍛錬順","耐久が低い順"
-    };
-    vaultSortMode=Mathf.Clamp(vaultSortMode,0,sortChoices.Count-1);
-    var sortField=new DropdownField(sortChoices,vaultSortMode);
+    vaultSortMode=Mathf.Clamp(vaultSortMode,0,VaultSortChoices.Count-1);
+    var sortField=new DropdownField(VaultSortChoices,vaultSortMode);
     sortField.pickingMode=PickingMode.Position;
     sortField.SetEnabled(true);
     sortField.AddToClassList("ps-vault-v8-sort");
@@ -526,6 +593,9 @@ public sealed partial class PackspireUiFoundation {
   };
  }
 
+ #endregion
+ #region Compendium
+
  void BuildCompendium(){
   if(compendiumTab>2)compendiumTab=0;
   var shell=BuildManagementShell("CODEX  /  ARCHIVE","図鑑",ManagementLayout.CompendiumReelDetail,out _,out _);
@@ -533,20 +603,22 @@ public sealed partial class PackspireUiFoundation {
   RefreshCompendiumScreen(true);
  }
 
- void RefreshCompendiumScreen(bool rebuildList){
+ void RefreshCompendiumScreen(bool _){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Compendium){RebuildScreen(BuildCompendium);return;}
   if(compendiumTab>2)compendiumTab=0;
   var meta=game.UiMeta;
-  if(rebuildList){
-   mgmtListHeader.Clear();
-   mgmtListHeader.Add(ManagementFilterBar(new[]{"装備","役職","敵"},compendiumTab,tab=>{
-    if(compendiumTab==tab)return;
-    compendiumTab=tab;
-    selectedCompendiumId="";
-    RefreshCompendiumScreen(true);
-   }));
-   PopulateCompendiumList(meta);
-  }
+  // The compendium used to refresh only its right-hand record. That left the
+  // already-instantiated legacy reel rows alive after switching to the new
+  // archive presentation. Always rebuild the index so no old VisualElements
+  // can survive a page flip, selection change, or hot reload.
+  mgmtListHeader.Clear();
+  mgmtListHeader.Add(ManagementFilterBar(new[]{"装備","役職","敵"},compendiumTab,tab=>{
+   if(compendiumTab==tab)return;
+   compendiumTab=tab;
+   selectedCompendiumId="";
+   RefreshCompendiumScreen(true);
+  }));
+  PopulateCompendiumList(meta);
   RefreshCompendiumDetail(meta);
  }
 
@@ -571,12 +643,10 @@ public sealed partial class PackspireUiFoundation {
     leading=SmallAtlasIcon(game.UiEquipmentArt,ItemUv(item.id));
    else
     leading=CodexIndexMark("？",true);
-   var row=ManagementReelRow(item.id,known?item.name:"？？？",known?ItemTypeLabel(item.type):"未発見",item.id==selectedCompendiumId,()=>{
+   var row=CodexIndexRow(item.id,known?item.name:"？？？",known?ItemTypeLabel(item.type):"未発見",item.id==selectedCompendiumId,()=>{
     selectedCompendiumId=item.id;
-    UpdateMgmtListSelection(selectedCompendiumId);
-    RefreshCompendiumDetail(meta);
+    RefreshCompendiumScreen(true);
    },leading);
-   row.AddToClassList("ps-codex-index-row");
    if(!known){
     row.AddToClassList("ps-mgmt-list-unknown");
     row.AddToClassList("ps-undiscovered");
@@ -595,12 +665,10 @@ public sealed partial class PackspireUiFoundation {
     leading=SmallAtlasIcon(game.UiRoleArt,RoleUv(role.id));
    else
     leading=CodexIndexMark("役",true);
-   var row=ManagementReelRow(role.id,known?role.name:"？？？",known?role.kind:"未習得",role.id==selectedCompendiumId,()=>{
+   var row=CodexIndexRow(role.id,known?role.name:"？？？",known?role.kind:"未習得",role.id==selectedCompendiumId,()=>{
     selectedCompendiumId=role.id;
-    UpdateMgmtListSelection(selectedCompendiumId);
-    RefreshCompendiumDetail(meta);
+    RefreshCompendiumScreen(true);
    },leading);
-   row.AddToClassList("ps-codex-index-row");
    if(!known){
     row.AddToClassList("ps-mgmt-list-unknown");
     row.AddToClassList("ps-undiscovered");
@@ -615,12 +683,10 @@ public sealed partial class PackspireUiFoundation {
   foreach(var enemy in values){
    bool known=meta.discoveredEnemies.Contains(enemy.id);
    VisualElement leading=known?CodexIndexMark("敵"):CodexIndexMark("？",true);
-   var row=ManagementReelRow(enemy.id,known?enemy.name:"？？？",known?$"危険度 {enemy.tier}":"未遭遇",enemy.id==selectedCompendiumId,()=>{
+   var row=CodexIndexRow(enemy.id,known?enemy.name:"？？？",known?$"危険度 {enemy.tier}":"未遭遇",enemy.id==selectedCompendiumId,()=>{
     selectedCompendiumId=enemy.id;
-    UpdateMgmtListSelection(selectedCompendiumId);
-    RefreshCompendiumDetail(meta);
+    RefreshCompendiumScreen(true);
    },leading);
-   row.AddToClassList("ps-codex-index-row");
    if(!known){
     row.AddToClassList("ps-mgmt-list-unknown");
     row.AddToClassList("ps-undiscovered");
@@ -635,6 +701,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshCompendiumDetail(MetaSave meta){
+  if(mgmtDetailHero!=null)mgmtDetailHero.RemoveFromClassList("ps-codex-item-v5-hero");
   if(mgmtDetailArtHost!=null)mgmtDetailArtHost.Clear();
   if(mgmtDetailSummaryHost!=null)mgmtDetailSummaryHost.Clear();
   mgmtDetailScroll?.Clear();
@@ -651,6 +718,7 @@ public sealed partial class PackspireUiFoundation {
  void RefreshItemCompendiumDetail(MetaSave meta){
   if(!GameCatalog.Items.ContainsKey(selectedCompendiumId))return;
   var selected=GameCatalog.Items[selectedCompendiumId];
+  PrepareCompendiumRecord("item:"+selected.id);
   bool known=meta.discoveredItems.Contains(selected.id);
   if(!known){
    SetMgmtUnknownFocalArt("？");
@@ -658,40 +726,25 @@ public sealed partial class PackspireUiFoundation {
     new Label("？？？"){pickingMode=PickingMode.Ignore},
     PackspireUiFactory.Body("未発見")
    );
-   mgmtDetailScroll.Add(ManagementSection("記録","遠征や戦闘で入手すると記録されます。"));
+   BuildCompendiumTwoPageRecord(
+    "UNKNOWN ITEM","？？？",
+    new List<CompendiumEntry>{
+     new("未発見","遠征や戦闘で入手すると固定記録が開示されます。","？",true)
+    },
+    CompendiumUnknownFlavorArt("？"),
+    "黒く塗り潰された頁だけが残っている。",
+    "入手後に出自の記録が開示される。",
+    "塔のどこかに、この品を知る者がいるらしい。"
+   );
    return;
   }
-  SetMgmtDetailHeroArt(Atlas(game.UiEquipmentArt,ItemUv(selected.id),"ps-mgmt-detail-art-image"));
-  SetMgmtDetailHeroSummary(
-   PackspireUiFactory.Title(selected.name),
-   PackspireUiFactory.Body(ItemTypeLabel(selected.type)),
-   PackspireUiFactory.Body($"{selected.cells.Length}マス")
-  );
-  mgmtDetailScroll.Add(ManagementSection("概要",selected.description));
-  if(selected.cells.Length>0)
-   mgmtDetailScroll.Add(ManagementSection("属性",string.Join("・",selected.cells.Select(x=>ElementLabel(x.element)))));
-  if(!string.IsNullOrEmpty(selected.linkRule))
-   mgmtDetailScroll.Add(ManagementSection("LINK",selected.linkRule));
-  var cardPair=BuildEquipmentCardPairPreview(new ItemInstance(selected.id),selected,game.UiRun);
-  if(cardPair!=null)mgmtDetailScroll.Add(cardPair);
-  var faceLines=new List<string>();
-  foreach(var grant in selected.grantedCards??System.Array.Empty<GrantedCardDef>()){
-   string battle=GameCatalog.Cards.TryGetValue(grant.battleCardId,out var battleCard)
-    ?battleCard.name:grant.battleCardId;
-   string exploration=GameCatalog.ExplorationCards.TryGetValue(grant.explorationCardId,out var exploreCard)
-    ?exploreCard.name:grant.explorationCardId;
-   faceLines.Add($"{battle} ⇄ {exploration}{(grant.count>1?$" ×{grant.count}":"")}");
-   if(exploreCard?.stages!=null&&exploreCard.stages.Length>1)
-    faceLines.Add("  成長: "+string.Join(" → ",exploreCard.stages.Select(stage=>stage.name)));
-  }
-  if(faceLines.Count>0)
-   mgmtDetailScroll.Add(ManagementSection("カード両面",string.Join("\n",faceLines)));
-  mgmtDetailScroll.Add(ManagementSection("入手","遠征や戦闘で入手すると記録されます。"));
+  BuildItemCompendiumRecord(selected);
 }
 
  void RefreshRoleCompendiumDetail(MetaSave meta){
   if(!GameCatalog.Roles.ContainsKey(selectedCompendiumId))return;
   var selected=GameCatalog.Roles[selectedCompendiumId];
+  PrepareCompendiumRecord("role:"+selected.id);
   bool known=meta.jobLevels.Any(x=>x.id==selected.id&&x.value>0);
   if(!known){
    SetMgmtUnknownFocalArt("役");
@@ -699,7 +752,17 @@ public sealed partial class PackspireUiFoundation {
     new Label("？？？"){pickingMode=PickingMode.Ignore},
     PackspireUiFactory.Body("未習得")
    );
-   mgmtDetailScroll.Add(ManagementSection("解放条件","イベントや遠征で習得できます。"));
+   BuildCompendiumTwoPageRecord(
+    "UNKNOWN ROLE","？？？",
+    new List<CompendiumEntry>{
+     new("解放の手掛かり",RoleUnlockSummary(selected),"鍵"),
+     new("未習得","習得後に効果と成長記録が開示されます。","？",true)
+    },
+    CompendiumUnknownFlavorArt("役"),
+    "名を失った役職の頁。系譜だけがかすかに残る。",
+    "条件を満たした遠征者だけが、その技法の起源を知る。",
+    "まだ誰も完全な形では語り継いでいない。"
+   );
    return;
   }
   var level=meta.jobLevels.First(x=>x.id==selected.id);
@@ -709,10 +772,23 @@ public sealed partial class PackspireUiFoundation {
    PackspireUiFactory.Body($"{selected.kind}　最大Lv.{selected.maxLevel}"),
    PackspireUiFactory.Body($"習得 Lv.{level.value}")
   );
-  mgmtDetailScroll.Add(ManagementSection("概要",selected.description));
-  mgmtDetailScroll.Add(ManagementSection("Lv.7 効果",game.UiRoleMilestone(selected.id,false),level.value<7));
-  mgmtDetailScroll.Add(ManagementSection($"Lv.{selected.maxLevel} 効果",game.UiRoleMilestone(selected.id,true),level.value<selected.maxLevel));
-  mgmtDetailScroll.Add(ManagementSection("解放条件","イベントや遠征で習得できます。"));
+  BuildCompendiumTwoPageRecord(
+   "ROLE CHRONICLE",selected.name,
+   new List<CompendiumEntry>{
+    new("役職概要",string.IsNullOrEmpty(selected.description)?"固定説明なし":selected.description,"記"),
+    new("重ね効果",RoleContributionSummary(selected.reactionContributions,"登録なし"),"重"),
+    new("現職効果",RoleContributionSummary(selected.currentRoleContributions,"登録なし"),"現"),
+    new("成長記録",$"Lv.7: {game.UiRoleMilestone(selected.id,false)} / 最大: {game.UiRoleMilestone(selected.id,true)}","成"),
+    new("初期カード",selected.startingCardIds?.Length>0?string.Join(" / ",selected.startingCardIds):"登録なし","札"),
+    new("解放経路",RoleUnlockSummary(selected),"鍵")
+   },
+   Atlas(game.UiRoleArt,RoleUv(selected.id),"ps-codex-v4-flavor-art-image"),
+   string.IsNullOrEmpty(selected.description)
+    ?$"{selected.name}の技法を記した古い手引きが残されている。"
+    :selected.description,
+   $"{selected.name}は単独の流派ではなく、遠征者たちが積み重ねた経験から形作られた役職である。",
+   "習得者ごとに重ねた技法が異なるため、同じ役職名でも戦い方には大きな違いが現れるという。"
+  );
 }
 
  void RefreshEnemyCompendiumDetail(MetaSave meta){
@@ -722,6 +798,7 @@ public sealed partial class PackspireUiFoundation {
    mgmtDetailScroll.Add(PackspireUiFactory.EmptyState("記録なし","遭遇した敵がここへ記録されます。"));
    return;
   }
+  PrepareCompendiumRecord("enemy:"+selected.id);
   bool known=meta.discoveredEnemies.Contains(selected.id);
   if(!known){
    SetMgmtUnknownFocalArt("敵");
@@ -729,7 +806,17 @@ public sealed partial class PackspireUiFoundation {
     new Label("？？？"){pickingMode=PickingMode.Ignore},
     PackspireUiFactory.Body("未遭遇")
    );
-   mgmtDetailScroll.Add(ManagementSection("出現","塔の各階層で遭遇する可能性があります。"));
+   BuildCompendiumTwoPageRecord(
+    "UNKNOWN HOSTILE","？？？",
+    new List<CompendiumEntry>{
+     new("出現域","塔の各階層","塔"),
+     new("未遭遇","遭遇後に行動と生態の記録が開示されます。","？",true)
+    },
+    CompendiumUnknownFlavorArt("敵"),
+    "目撃者の証言だけが残り、姿はまだ記録されていない。",
+    "塔の暗部から現れるという以外、確かな出自は不明。",
+    "遭遇から帰還した者が、新しい頁を書き足すことになる。"
+   );
    return;
   }
   SetMgmtDetailHeroArt(EnemyPortrait(selected,"ps-mgmt-detail-art-image"));
@@ -738,10 +825,25 @@ public sealed partial class PackspireUiFoundation {
    PackspireUiFactory.Body($"危険度 {selected.tier}"),
    PackspireUiFactory.Body($"基礎HP {selected.hp}")
   );
-  mgmtDetailScroll.Add(ManagementSection("行動",string.Join("・",selected.damages.Select(x=>x==0?"特殊行動":$"攻撃{x}"))));
-  mgmtDetailScroll.Add(ManagementSection("出現","塔の各階層で遭遇する可能性があります。"));
+  BuildCompendiumTwoPageRecord(
+   "HOSTILE ARCHIVE",selected.name,
+   new List<CompendiumEntry>{
+    new("行動順",EnemyActionSummary(selected),"剣"),
+    new("盤面思考",EnemyBehaviorLabel(selected.boardBehavior),"思"),
+    new("索敵と移動",$"視界 {selected.boardSightRange} / 移動 {selected.boardMoveSteps}","眼"),
+    new("巡回範囲",$"半径 {selected.boardPatrolRadius}マス","巡"),
+    new("耐性と弱点","追加解析待ち","盾",true),
+    new("出現記録","塔の各階層 / 遭遇済み","塔")
+   },
+   EnemyPortrait(selected,"ps-codex-v4-flavor-art-image"),
+   $"{selected.name}との遭遇から回収された観察記録。戦闘時の行動だけでなく、盤面上の習性も追記されている。",
+   $"危険度{selected.tier}に分類される塔の生物。行動様式は「{EnemyBehaviorLabel(selected.boardBehavior)}」として記録された。",
+   "古い遠征記録には異なる姿の目撃談もある。すべてが同種なのか、塔が生んだ変異なのかは判明していない。"
+  );
 }
 
- void BuildCompendiumAgain(){RefreshCompendiumScreen(false);}
+ void BuildCompendiumAgain(){RefreshCompendiumScreen(true);}
+
+ #endregion
 }
 }

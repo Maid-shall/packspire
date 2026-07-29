@@ -7,22 +7,14 @@ public sealed partial class PackspireUiFoundation {
  public enum ManagementLayout { StatusOverview, VaultListDetail, CompendiumReelDetail }
 
  ScrollView mgmtListScroll;
- VisualElement mgmtVaultGrid;
  VisualElement mgmtOverviewHost;
  VisualElement mgmtDetailHero;
  VisualElement mgmtDetailArtHost;
  VisualElement mgmtDetailSummaryHost;
  ScrollView mgmtDetailScroll;
  VisualElement mgmtListHeader;
- VisualElement mgmtVaultFooter;
  float mgmtListScrollY;
- int vaultFilter;
- int vaultSortMode;
- bool vaultCardExploration;
- int vaultRecordPage;
- VisualElement vaultCardModal;
  int statusRoleFilter;
- static Texture2D vaultPopItemArt;
 
  VisualElement BuildManagementShell(string eyebrow,string title,ManagementLayout layout,out ScrollView listScroll,out ScrollView detailScroll){
   var shell=Container("ps-mgmt-screen ps-mgmt-layout-"+LayoutClass(layout)+" ps-dark-surface");
@@ -105,8 +97,13 @@ public sealed partial class PackspireUiFoundation {
    detailCol.Add(detailSurface);
    body.Add(detailCol);
   }else if(layout==ManagementLayout.CompendiumReelDetail){
-   // Index reel | Specimen art | Record detail (product grammar)
-   shell.AddToClassList("ps-codex-v2");
+   // Compact discovery index | fixed, tabbed record.
+   // The record deliberately does not scroll: large collections are paged
+   // inside each information tab instead of becoming a web-like long page.
+   // V8 is the complete Codex presentation. Attaching the retired
+   // compatibility generations here also resurrects their half-height record
+   // viewport and ornamental selected-row plates.
+   shell.AddToClassList("ps-codex-v8");
    body.AddToClassList("ps-codex-main-row");
    var listCol=Container("ps-mgmt-col-list ps-codex-index-column");
    listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
@@ -122,31 +119,28 @@ public sealed partial class PackspireUiFoundation {
    listCol.Add(listSurface);
    body.Add(listCol);
 
-   var artCol=Container("ps-mgmt-col-art ps-codex-specimen-column");
-   mgmtDetailArtHost=Container("ps-art-vignette ps-mgmt-focal-art ps-codex-specimen-art");
-   AddSurfaceOuterCorners(mgmtDetailArtHost);
-   artCol.Add(mgmtDetailArtHost);
-   body.Add(artCol);
-
    var detailCol=Container("ps-mgmt-col-detail ps-codex-record-column");
    var detailSurface=Container("ps-codex-record-surface");
-   detailSurface.Add(PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.DetailCorner,"ps-mgmt-open-corner ps-management-detail-corner"));
+   mgmtDetailHero=Container("ps-mgmt-detail-hero ps-codex-record-hero");
+   mgmtDetailHero.style.display=DisplayStyle.None;
+   mgmtDetailArtHost=Container("ps-art-vignette ps-mgmt-focal-art ps-codex-specimen-art");
    mgmtDetailSummaryHost=Container("ps-mgmt-detail-summary-host ps-codex-record-header");
-   detailSurface.Add(mgmtDetailSummaryHost);
+   mgmtDetailHero.Add(mgmtDetailArtHost);
+   mgmtDetailHero.Add(mgmtDetailSummaryHost);
+   detailSurface.Add(mgmtDetailHero);
    detailScroll=new ScrollView(ScrollViewMode.Vertical);
    detailScroll.AddToClassList("ps-mgmt-detail-scroll");
    detailScroll.AddToClassList("ps-codex-record-scroll");
-   detailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-   StretchMgmtScrollContent(detailScroll,false);
+   detailScroll.verticalScrollerVisibility=ScrollerVisibility.Hidden;
+   detailScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
+   StretchMgmtScrollContent(detailScroll,true);
    detailSurface.Add(detailScroll);
    detailCol.Add(detailSurface);
-   mgmtDetailHero=null;
    body.Add(detailCol);
   }else{
    // Vault V9: compact inventory | one cohesive item record.
    // The record owns its art, card face and effect copy; it never scrolls.
-   shell.AddToClassList("ps-vault-v2");
-   shell.AddToClassList("ps-vault-v9");
+   shell.AddToClassList("ps-vault-final");
    body.AddToClassList("ps-vault-main-row ps-vault-v9-main-row");
    var listCol=Container("ps-mgmt-col-list ps-vault-inventory-column");
    mgmtListHeader=Container("ps-mgmt-list-header ps-vault-inventory-header");
@@ -265,125 +259,15 @@ public sealed partial class PackspireUiFoundation {
   foreach(var child in mgmtListScroll.contentContainer.Children()){
    if(child is not Button button)continue;
    bool selected=button.userData is string id&&id==selectedId;
-   button.EnableInClassList("ps-selected",selected);
+   if(button.ClassListContains("ps-codex-v9-index-entry")){
+    button.RemoveFromClassList("ps-selected");
+    button.RemoveFromClassList("ps-codex-current");
+    button.EnableInClassList("ps-codex-v9-current",selected);
+    ApplyCodexIndexRowState(button,selected);
+   }else{
+    button.EnableInClassList("ps-selected",selected);
+   }
   }
- }
-
- void UpdateMgmtVaultGridSelection(string selectedUid){
-  if(mgmtVaultGrid==null)return;
-  foreach(var child in mgmtVaultGrid.Children()){
-   if(child is not Button card||card.userData is not string uid)continue;
-   card.EnableInClassList("ps-selected",uid==selectedUid);
-  }
- }
-
- void UpdateMgmtVaultGridBadges(MetaSave meta){
-  if(mgmtVaultGrid==null)return;
-  foreach(var child in mgmtVaultGrid.Children()){
-   if(child is not Button card||card.userData is not string uid)continue;
-   card.EnableInClassList("ps-vault-heirloom",uid==meta.selectedHeirloomUid);
-   card.EnableInClassList("ps-vault-inuse",VaultItemInLoadout(meta,uid));
-   var stashItem=meta.stash.FirstOrDefault(x=>x.uid==uid);
-   card.EnableInClassList("ps-vault-protected",stashItem!=null&&stashItem.insured);
-  }
- }
-
- Button BuildVaultGridCard(MetaSave meta,ItemInstance item,bool selected,System.Action onClick){
-  var def=GameCatalog.Items[item.templateId];
-  bool heir=item.uid==meta.selectedHeirloomUid;
-  bool inUse=VaultItemInLoadout(meta,item.uid);
-  bool protectedItem=item.insured;
-  var card=new Button(onClick){userData=item.uid,tooltip=def.name};
-  card.AddToClassList("ps-vault-grid-card");
-  if(selected)card.AddToClassList("ps-selected");
-  if(heir)card.AddToClassList("ps-vault-heirloom");
-  if(inUse)card.AddToClassList("ps-vault-inuse");
-  if(protectedItem)card.AddToClassList("ps-vault-protected");
-  var normalFrame=Container("ps-vault-v7-frame ps-vault-v7-frame-normal");
-  normalFrame.pickingMode=PickingMode.Ignore;
-  card.Add(normalFrame);
-  var selectedFrame=Container("ps-vault-v7-frame ps-vault-v7-frame-selected");
-  selectedFrame.pickingMode=PickingMode.Ignore;
-  card.Add(selectedFrame);
-
-  var art=Container("ps-vault-grid-art");
-  art.pickingMode=PickingMode.Ignore;
-  art.Add(VaultItemArt(def.id,"ps-vault-grid-image"));
-  var badges=Container("ps-vault-grid-badges");
-  badges.pickingMode=PickingMode.Ignore;
-  if(heir)badges.Add(VaultGridBadge("家","ps-vault-badge-heirloom"));
-  if(inUse)badges.Add(VaultGridBadge("用","ps-vault-badge-inuse"));
-  art.Add(badges);
-  var lockMark=Container("ps-vault-grid-lock");
-  lockMark.pickingMode=PickingMode.Ignore;
-  lockMark.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Locked,"ps-vault-grid-lock-icon"));
-  art.Add(lockMark);
-  card.Add(art);
-  card.Add(PackspireUiFactory.ManagementArt(
-   PackspireUiFactory.ManagementChrome.SelectionCorners,
-   "ps-management-selection-corners"
-  ));
-
-  var name=new Label(def.name){pickingMode=PickingMode.Ignore};
-  name.AddToClassList("ps-vault-grid-name");
-  card.Add(name);
- return card;
- }
-
- VisualElement VaultItemArt(string itemId,string className){
-  vaultPopItemArt??=PackspireResources.Load<Texture2D>("Art/UI/Vault/vault-pop-items-v1");
-  if(vaultPopItemArt==null)return Atlas(game.UiEquipmentArt,ItemUv(itemId),className);
-  return Atlas(vaultPopItemArt,VaultPopItemUv(itemId),className);
- }
-
- static Rect VaultPopItemUv(string itemId){
-  int index=itemId switch{
-   "sword" or "dagger" or "spear" or "ember"=>0,
-   "shield" or "buckler" or "charm"=>1,
-   "herb"=>2,
-   "plate"=>3,
-   "crystal"=>4,
-   "flask" or "bomb"=>5,
-   _=>0
-  };
-  const float width=1f/3f;
-  const float height=.5f;
-  int column=index%3;
-  int row=index/3;
-  return new Rect(column*width,row==0?height:0f,width,height);
- }
-
- VisualElement VaultCategoryBar(string[] labels,int selectedIndex,System.Action<int> onPick){
-  var bar=Container("ps-vault-v7-category-bar");
-  for(int i=0;i<labels.Length;i++){
-   int index=i;
-   var button=PackspireUiFactory.Button("",()=>onPick(index));
-   button.AddToClassList("ps-vault-v7-category");
-   if(i==selectedIndex)button.AddToClassList("ps-selected");
-   VisualElement icon=i switch{
-    0=>PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.AllItems,"ps-vault-v7-category-icon"),
-    1=>PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.WeaponCategory,"ps-vault-v7-category-icon"),
-    2=>PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.ArmorCategory,"ps-vault-v7-category-icon"),
-    3=>PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.SupplyCategory,"ps-vault-v7-category-icon"),
-    _=>PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Relic,"ps-vault-v7-category-icon")
-   };
-   icon.pickingMode=PickingMode.Ignore;
-   button.Add(icon);
-   var label=new Label(labels[i]){pickingMode=PickingMode.Ignore};
-   label.AddToClassList("ps-vault-v7-category-label");
-   button.Add(label);
-   var glow=Container("ps-vault-v7-category-glow");
-   glow.pickingMode=PickingMode.Ignore;
-   button.Add(glow);
-   bar.Add(button);
-  }
-  return bar;
- }
-
- VisualElement VaultGridBadge(string text,string className){
-  var badge=Container("ps-vault-grid-badge "+className);
-  badge.Add(new Label(text){pickingMode=PickingMode.Ignore});
-  return badge;
  }
 
  Button ManagementListRow(string id,VisualElement leading,string primary,string secondary,bool selected,System.Action onClick){
@@ -415,19 +299,21 @@ public sealed partial class PackspireUiFoundation {
   return row;
  }
 
- Button ManagementReelRow(string id,string primary,string secondary,bool selected,System.Action onClick,VisualElement leading=null){
+ Button ManagementReelRow(string id,string primary,string secondary,bool selected,System.Action onClick,VisualElement leading=null,bool includeLegacyPlates=true){
   var row=new Button(onClick){userData=id,tooltip=primary};
   row.AddToClassList("ps-list-item");
   row.AddToClassList("ps-mgmt-reel-row");
   if(selected)row.AddToClassList("ps-selected");
-  row.Add(PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ArchiveTabWeapon,
-   "ps-management-v6-bg ps-mgmt-reel-plate ps-mgmt-reel-plate-normal"
-  ));
-  row.Add(PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ArchiveTabAll,
-   "ps-management-v6-bg ps-mgmt-reel-plate ps-mgmt-reel-plate-selected"
-  ));
+  if(includeLegacyPlates){
+   row.Add(PackspireUiFactory.ManagementV6Art(
+    PackspireUiFactory.ManagementV6Piece.ArchiveTabWeapon,
+    "ps-management-v6-bg ps-mgmt-reel-plate ps-mgmt-reel-plate-normal"
+   ));
+   row.Add(PackspireUiFactory.ManagementV6Art(
+    PackspireUiFactory.ManagementV6Piece.ArchiveTabAll,
+    "ps-management-v6-bg ps-mgmt-reel-plate ps-mgmt-reel-plate-selected"
+   ));
+  }
   var accent=Container("ps-list-item-mark");
   accent.pickingMode=PickingMode.Ignore;
   row.Add(accent);
@@ -450,6 +336,114 @@ public sealed partial class PackspireUiFoundation {
   }
   row.Add(copy);
   return row;
+ }
+
+ Button CodexIndexRow(string id,string primary,string secondary,bool selected,System.Action onClick,VisualElement leading=null){
+  var row=new Button(onClick){userData=id,tooltip=primary};
+  // Deliberately do not reuse the legacy codex row classes here. Several old
+  // style sheets still contain ornate reel selectors for those names and can
+  // re-apply them after an asset refresh.
+  row.AddToClassList("ps-codex-v9-index-entry");
+  row.EnableInClassList("ps-codex-v9-current",selected);
+  row.style.position=Position.Relative;
+  row.style.width=Length.Percent(100);
+  row.style.height=72;
+  row.style.minHeight=72;
+  row.style.maxHeight=72;
+  row.style.marginBottom=8;
+  row.style.paddingLeft=14;
+  row.style.paddingRight=14;
+  row.style.paddingTop=8;
+  row.style.paddingBottom=8;
+  row.style.flexDirection=FlexDirection.Row;
+  row.style.alignItems=Align.Center;
+  row.style.flexShrink=0;
+  row.style.backgroundImage=StyleKeyword.None;
+  row.style.backgroundColor=selected
+   ?new Color(0.12f,0.035f,0.105f,0.98f)
+   :new Color(0.025f,0.03f,0.065f,0.96f);
+  row.style.borderLeftWidth=selected?3:1;
+  row.style.borderRightWidth=1;
+  row.style.borderTopWidth=1;
+  row.style.borderBottomWidth=1;
+  row.style.borderLeftColor=selected
+   ?new Color(0.19f,0.94f,1f,1f)
+   :new Color(0.39f,0.30f,0.25f,0.8f);
+  row.style.borderRightColor=new Color(0.39f,0.30f,0.25f,0.8f);
+  row.style.borderTopColor=new Color(0.39f,0.30f,0.25f,0.8f);
+  row.style.borderBottomColor=new Color(0.39f,0.30f,0.25f,0.8f);
+  row.style.borderTopLeftRadius=8;
+  row.style.borderTopRightRadius=8;
+  row.style.borderBottomLeftRadius=8;
+  row.style.borderBottomRightRadius=8;
+
+  var accent=Container("ps-codex-v9-index-accent");
+  accent.pickingMode=PickingMode.Ignore;
+  accent.style.position=Position.Absolute;
+  accent.style.left=0;
+  accent.style.top=8;
+  accent.style.bottom=8;
+  accent.style.width=3;
+  accent.style.backgroundColor=selected
+   ?new Color(0.19f,0.94f,1f,1f)
+   :Color.clear;
+  row.Add(accent);
+
+  if(leading!=null){
+   leading.pickingMode=PickingMode.Ignore;
+   leading.AddToClassList("ps-codex-v9-index-leading");
+   leading.style.width=48;
+   leading.style.height=48;
+   leading.style.minWidth=48;
+   leading.style.minHeight=48;
+   leading.style.maxWidth=48;
+   leading.style.maxHeight=48;
+   leading.style.marginRight=12;
+   leading.style.flexShrink=0;
+   row.Add(leading);
+  }
+
+  var copy=Container("ps-codex-v9-index-copy");
+  copy.pickingMode=PickingMode.Ignore;
+  copy.style.flexGrow=1;
+  copy.style.flexShrink=1;
+  copy.style.justifyContent=Justify.Center;
+  var name=new Label(primary){pickingMode=PickingMode.Ignore};
+  name.AddToClassList("ps-codex-v9-index-name");
+  name.style.fontSize=18;
+  name.style.color=selected
+   ?new Color(1f,0.88f,0.72f,1f)
+   :new Color(0.89f,0.84f,0.76f,1f);
+  copy.Add(name);
+  if(!string.IsNullOrEmpty(secondary)){
+   var sub=new Label(secondary){pickingMode=PickingMode.Ignore};
+   sub.AddToClassList("ps-codex-v9-index-subtitle");
+   sub.style.fontSize=11;
+   sub.style.color=new Color(0.56f,0.55f,0.62f,1f);
+   copy.Add(sub);
+  }
+  row.Add(copy);
+  return row;
+ }
+
+ void ApplyCodexIndexRowState(Button row,bool selected){
+  if(row==null)return;
+  row.style.backgroundImage=StyleKeyword.None;
+  row.style.backgroundColor=selected
+   ?new Color(0.12f,0.035f,0.105f,0.98f)
+   :new Color(0.025f,0.03f,0.065f,0.96f);
+  row.style.borderLeftWidth=selected?3:1;
+  row.style.borderLeftColor=selected
+   ?new Color(0.19f,0.94f,1f,1f)
+   :new Color(0.39f,0.30f,0.25f,0.8f);
+  var accent=row.Q<VisualElement>(className:"ps-codex-v9-index-accent");
+  if(accent!=null)accent.style.backgroundColor=selected
+   ?new Color(0.19f,0.94f,1f,1f)
+   :Color.clear;
+  var label=row.Q<Label>(className:"ps-codex-v9-index-name");
+  if(label!=null)label.style.color=selected
+   ?new Color(1f,0.88f,0.72f,1f)
+   :new Color(0.89f,0.84f,0.76f,1f);
  }
 
  VisualElement CodexIndexMark(string glyph,bool unknown=false){
@@ -749,10 +743,5 @@ public sealed partial class PackspireUiFoundation {
   return portrait;
  }
 
- bool VaultItemInLoadout(MetaSave meta,string uid)=>meta.loadouts!=null&&meta.loadouts.Any(l=>l.slots!=null&&l.slots.Any(s=>s.itemUid==uid));
- string VaultLoadoutName(MetaSave meta,string uid){
-  var loadout=meta.loadouts?.FirstOrDefault(l=>l.slots!=null&&l.slots.Any(s=>s.itemUid==uid));
-  return loadout?.name??"";
- }
 }
 }

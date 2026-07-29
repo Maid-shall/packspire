@@ -160,7 +160,7 @@
 
 /* Vault: collection grid is the broad browsing field; the selected item owns the right. */
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     flex-basis: 57%;
     width: 57%;
     max-width: 59%;
@@ -169,36 +169,36 @@
     padding-right: 22px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-column {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-column {
     flex-basis: 43%;
     width: 43%;
     max-width: 45%;
     min-width: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface,
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface,
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface {
     background-color: rgba(6, 5, 21, 0.34);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     padding: 12px 12px 10px 14px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface {
     padding: 12px 20px 16px 22px;
     border-left-width: 1px;
     border-left-color: rgba(81, 229, 255, 0.72);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
     padding-top: 8px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     position: relative;
     width: 22.8%;
     min-width: 112px;
@@ -213,17 +213,17 @@
     overflow: visible;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card:hover {
     background-color: rgba(42, 17, 60, 0.88);
     border-color: rgba(236, 104, 175, 0.84);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     background-color: rgba(62, 13, 54, 0.88);
     border-color: rgba(255, 105, 177, 0.95);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     width: 100%;
     height: 106px;
     min-height: 106px;
@@ -231,18 +231,18 @@
     background-color: rgba(3, 3, 15, 0.7);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-image {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-image {
     width: 94%;
     height: 94%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-name {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-name {
     color: rgb(235, 219, 190);
     font-size: 13px;
     -unity-text-align: middle-center;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-header {
+.ps-vault-final.ps-management-v3 .ps-vault-item-header {
     min-height: 330px;
     height: 43%;
     max-height: 390px;
@@ -252,35 +252,35 @@
     background-color: rgba(3, 3, 16, 0.32);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-host {
     width: 52%;
     height: 100%;
     min-height: 290px;
     margin-right: 18px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-frame {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-frame {
     width: 100%;
     height: 100%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-image {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-image {
     width: 96%;
     height: 96%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host {
     width: 48%;
     justify-content: center;
     padding-right: 12px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
     color: rgb(255, 218, 144);
     font-size: 27px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-scroll {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-scroll {
     border-top-width: 1px;
     border-top-color: rgba(214, 143, 85, 0.58);
     padding-top: 10px;
@@ -901,7 +901,7 @@
 
 /* Vault: open inventory ledger at left, presentation-scale item at right. */
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     flex-basis: 55%;
     width: 55%;
     max-width: 56%;
@@ -909,13 +909,13 @@
     padding-right: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-column {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-column {
     flex-basis: 45%;
     width: 45%;
     max-width: 46%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     padding: 26px 25px 22px 24px;
     background-color: rgba(255, 255, 255, 0);
     background-image: resource("Art/UI/PopDark/ManagementV4/inventory-surface-v2");
@@ -926,7 +926,7 @@
     -unity-slice-bottom: 86;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface {
     padding: 22px 30px 42px 38px;
     background-color: rgba(255, 255, 255, 0);
     background-image: resource("Art/UI/PopDark/ManagementV4/detail-surface-v2");
@@ -938,7 +938,7 @@
     border-left-width: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     width: 22.7%;
     height: 164px;
     min-height: 164px;
@@ -956,7 +956,7 @@
     border-bottom-color: rgba(232, 92, 158, 0.58);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     background-color: rgba(72, 10, 50, 0.88);
     border-left-width: 2px;
     border-right-width: 2px;
@@ -964,12 +964,12 @@
     border-bottom-width: 3px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     height: 119px;
     min-height: 119px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-header {
+.ps-vault-final.ps-management-v3 .ps-vault-item-header {
     height: 54%;
     min-height: 390px;
     max-height: 500px;
@@ -978,18 +978,18 @@
     background-color: rgba(2, 2, 14, 0.16);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-host {
     width: 58%;
     min-height: 360px;
     margin-right: 14px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host {
     width: 42%;
     padding-right: 4px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
     font-size: 31px;
 }
 
@@ -1452,7 +1452,7 @@
 }
 
 /* Protect the authored asymmetrical ornaments from crossing a 9-slice seam. */
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface,
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface,
 .ps-status-v2.ps-management-v3 .ps-status-character-surface,
 .ps-rite-v3 .ps-rite-left {
     -unity-slice-left: 176;
@@ -1461,7 +1461,7 @@
     -unity-slice-bottom: 76;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface,
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface,
 .ps-rite-v3 .ps-rite-right-shell,
 .ps-shop-v3 .ps-shop-detail-host {
     -unity-slice-left: 78;
@@ -1581,7 +1581,7 @@
 }
 
 /* Vault / armory: inventory 56%, item presentation 44%. */
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     width: 56%;
     min-width: 56%;
     max-width: 56%;
@@ -1590,21 +1590,21 @@
     padding-right: 12px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-column {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-column {
     width: 44%;
     min-width: 0;
     max-width: 44%;
     flex-basis: 44%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     padding: 12px 8px 10px 8px;
     background-image: none;
     background-color: rgba(4, 4, 20, 0.34);
     border-width: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface {
     padding: 12px 14px 10px 28px;
     background-image: none;
     background-color: rgba(3, 4, 18, 0.26);
@@ -1615,11 +1615,11 @@
     border-bottom-width: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     padding: 6px 4px 20px 5px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     width: 22.6%;
     height: 178px;
     min-height: 178px;
@@ -1638,7 +1638,7 @@
     border-bottom-color: rgba(205, 153, 86, 0.48);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     padding: 13px 12px 10px 12px;
     background-image: resource("Art/UI/PopDark/ManagementV5/vault-item-frame-cropped");
     -unity-background-scale-mode: stretch-to-fill;
@@ -1650,12 +1650,12 @@
     border-width: 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     height: 129px;
     min-height: 129px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-header {
+.ps-vault-final.ps-management-v3 .ps-vault-item-header {
     height: 58%;
     min-height: 330px;
     max-height: 520px;
@@ -1667,26 +1667,26 @@
     border-bottom-color: rgba(193, 137, 75, 0.45);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-host {
     width: 52%;
     height: 100%;
     min-height: 310px;
     margin-right: 22px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host {
     width: 48%;
     height: 100%;
     padding: 28px 4px 18px 0;
     justify-content: center;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
     font-size: 34px;
     color: rgb(255, 219, 153);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-scroll {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-scroll {
     width: 100%;
     padding: 8px 8px 16px 4px;
 }
@@ -2342,8 +2342,8 @@
 
 /* Vault V9 final cascade guard.
    Keep this at EOF so legacy Vault V2/V7 dimensions cannot cover the footer. */
-.ps-vault-v9.ps-management-v3 .ps-mgmt-body,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-main-row {
+.ps-vault-final.ps-management-v3 .ps-mgmt-body,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-main-row {
     width: 100%;
     min-width: 0;
     min-height: 0;
@@ -2355,7 +2355,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     width: 42%;
     min-width: 42%;
     max-width: 42%;
@@ -2369,7 +2369,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-record-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-record-column {
     width: auto;
     min-width: 0;
     max-width: none;
@@ -2383,7 +2383,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-header {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header {
     height: 128px;
     min-height: 128px;
     max-height: 128px;
@@ -2392,14 +2392,14 @@
     padding: 5px 9px 3px 9px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-selective-section-head {
+.ps-vault-final.ps-management-v3 .ps-selective-section-head {
     height: 39px;
     min-height: 39px;
     max-height: 39px;
     margin-bottom: 1px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-bar {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-bar {
     width: 100%;
     height: 57px;
     min-height: 57px;
@@ -2410,7 +2410,7 @@
     flex-wrap: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category {
     width: 19%;
     min-width: 0;
     max-width: none;
@@ -2425,19 +2425,19 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
     width: 27px;
     min-width: 27px;
     height: 27px;
     min-height: 27px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .unity-button__text {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .unity-button__text {
     font-size: 10px;
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-context {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-context {
     height: 22px;
     min-height: 22px;
     max-height: 22px;
@@ -2447,7 +2447,7 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     width: 100%;
     height: auto;
     min-height: 0;
@@ -2457,7 +2457,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll {
     width: 100%;
     height: auto;
     min-height: 0;
@@ -2466,8 +2466,8 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -2476,7 +2476,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     width: 100%;
     min-height: 100%;
     padding: 5px 0 12px 3px;
@@ -2485,8 +2485,8 @@
     align-content: flex-start;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     width: 23%;
     min-width: 23%;
     max-width: 23%;
@@ -2500,7 +2500,7 @@
     padding: 7px 7px 6px 7px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     width: 100%;
     height: 104px;
     min-height: 104px;
@@ -2508,7 +2508,7 @@
     margin: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-footer {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-footer {
     position: relative;
     width: auto;
     height: 42px;
@@ -2521,7 +2521,7 @@
     overflow: visible;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-rarity-filter {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-rarity-filter {
     width: 238px;
     min-width: 238px;
     max-width: 238px;
@@ -2532,7 +2532,7 @@
     flex-shrink: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort {
     min-width: 0;
     height: 28px;
     min-height: 28px;
@@ -2541,23 +2541,23 @@
     flex-shrink: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-hero,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail {
     width: 100%;
     min-width: 0;
     max-width: 100%;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-copy,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lower,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-panel {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-copy,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lower,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-panel {
     min-width: 0;
     max-width: 100%;
     flex-shrink: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -2566,7 +2566,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-action {
     width: auto;
     min-width: 0;
     max-width: none;
@@ -2579,11 +2579,11 @@
 /* Vault V10: persistent protection badge, compact occupied-shape readout,
    and one dedicated protection action. Keep this at true EOF so legacy
    management selectors cannot restore the retired comparison layout. */
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     position: relative;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-lock {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-lock {
     display: none;
     position: absolute;
     right: 3px;
@@ -2600,21 +2600,21 @@
     border-radius: 13px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
     display: flex;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-lock-icon {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-lock-icon {
     width: 19px;
     height: 19px;
     -unity-background-image-tint-color: rgb(255, 220, 137);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity {
     padding-right: 8px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-facts {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-facts {
     width: 100%;
     min-width: 0;
     min-height: 74px;
@@ -2623,23 +2623,23 @@
     align-items: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-copy-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-copy-column {
     min-width: 0;
     flex-grow: 1;
     flex-shrink: 1;
     padding-right: 8px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-facts .ps-vault-v9-description {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-facts .ps-vault-v9-description {
     margin: 0 0 7px 0;
     white-space: normal;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-facts .ps-vault-v9-durability {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-facts .ps-vault-v9-durability {
     margin: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape {
     width: 100px;
     min-width: 100px;
     height: 76px;
@@ -2654,25 +2654,25 @@
     border-bottom-color: rgba(76, 218, 229, 0.58);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-title {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-title {
     margin-bottom: 5px;
     color: rgb(225, 199, 164);
     font-size: 9px;
     letter-spacing: 1px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-grid {
     align-items: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-row {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-row {
     height: 17px;
     min-height: 17px;
     flex-direction: row;
     justify-content: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell {
     width: 16px;
     min-width: 16px;
     height: 16px;
@@ -2683,28 +2683,28 @@
     border-color: rgba(105, 91, 119, 0.54);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell.ps-filled {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-filled {
     background-color: rgb(111, 77, 132);
     border-color: rgb(242, 189, 111);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-fire {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-fire {
     background-color: rgb(163, 50, 65);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-water {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-water {
     background-color: rgb(43, 105, 139);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-wind {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-wind {
     background-color: rgb(49, 137, 116);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-earth {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-earth {
     background-color: rgb(132, 99, 50);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     height: 55px;
     min-height: 55px;
     padding: 4px 0 0 0;
@@ -2712,7 +2712,7 @@
     overflow: visible;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action {
     position: relative;
     width: 218px;
     min-width: 218px;
@@ -2730,12 +2730,12 @@
     color: rgb(255, 222, 165);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
     color: rgb(255, 231, 184);
     -unity-background-image-tint-color: rgb(255, 177, 201);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-icon {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-icon {
     width: 27px;
     min-width: 27px;
     height: 27px;
@@ -2743,7 +2743,7 @@
     margin-right: 8px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-state {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-state {
     position: absolute;
     right: 11px;
     bottom: 3px;
@@ -2757,7 +2757,7 @@
    The old V2/V7 rules remain for older screens; this final scope owns Vault.
    ======================================================================== */
 
-.ps-vault-v9.ps-management-v3 .ps-mgmt-header {
+.ps-vault-final.ps-management-v3 .ps-mgmt-header {
     height: 78px;
     min-height: 78px;
     padding: 2px 25px 0 27px;
@@ -2766,29 +2766,29 @@
     border-bottom-color: rgba(180, 111, 70, 0.38);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-management-brand {
+.ps-vault-final.ps-management-v3 .ps-management-brand {
     height: 74px;
     min-height: 74px;
     padding-bottom: 7px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-management-brand-crest {
+.ps-vault-final.ps-management-v3 .ps-management-brand-crest {
     width: 64px;
     height: 64px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-management-brand .ps-chrome-title {
+.ps-vault-final.ps-management-v3 .ps-management-brand .ps-chrome-title {
     font-size: 28px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-management-brand-flourish {
+.ps-vault-final.ps-management-v3 .ps-management-brand-flourish {
     left: 61px;
     width: 330px;
     height: 34px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-mgmt-body,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-main-row {
+.ps-vault-final.ps-management-v3 .ps-mgmt-body,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-main-row {
     min-height: 0;
     flex-grow: 1;
     flex-direction: row;
@@ -2797,7 +2797,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     width: 42%;
     min-width: 42%;
     max-width: 42%;
@@ -2812,7 +2812,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-record-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-record-column {
     position: relative;
     width: 58%;
     min-width: 58%;
@@ -2826,7 +2826,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-divider {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-divider {
     position: absolute;
     left: -14px;
     top: 12px;
@@ -2837,7 +2837,7 @@
 }
 
 /* Inventory: a compact catalogue, not a wall of full-size cards. */
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-header {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header {
     height: 132px;
     min-height: 132px;
     max-height: 132px;
@@ -2845,17 +2845,17 @@
     background-color: rgba(5, 4, 23, 0.7);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-selective-section-head {
+.ps-vault-final.ps-management-v3 .ps-selective-section-head {
     min-height: 42px;
     height: 42px;
     margin-bottom: 3px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-selective-section-head .ps-title {
+.ps-vault-final.ps-management-v3 .ps-selective-section-head .ps-title {
     font-size: 20px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-bar {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-bar {
     height: 57px;
     min-height: 57px;
     margin: 1px 0 2px 0;
@@ -2863,7 +2863,7 @@
     flex-direction: row;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category {
     height: 57px;
     min-height: 57px;
     min-width: 0;
@@ -2877,23 +2877,23 @@
     border-bottom-color: rgba(159, 108, 60, 0.48);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category.ps-selected {
     color: rgb(255, 225, 174);
     background-color: rgba(102, 12, 61, 0.7);
     border-bottom-width: 2px;
     border-bottom-color: rgb(64, 220, 233);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
     width: 28px;
     height: 28px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .unity-button__text {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .unity-button__text {
     font-size: 11px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-context {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-context {
     height: 20px;
     min-height: 20px;
     margin: 0;
@@ -2902,26 +2902,26 @@
     font-size: 11px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     min-height: 0;
     flex-grow: 1;
     padding: 4px 8px 2px 8px;
     background-color: rgba(2, 2, 15, 0.79);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
     width: 100%;
     height: 100%;
     min-height: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll .unity-scroller--vertical {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll .unity-scroller--vertical {
     width: 5px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     width: 100%;
     min-height: 100%;
     padding: 5px 0 13px 3px;
@@ -2930,7 +2930,7 @@
     align-content: flex-start;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     position: relative;
     width: 23%;
     height: 137px;
@@ -2945,12 +2945,12 @@
     overflow: visible;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card:hover {
     background-color: rgba(32, 10, 42, 0.96);
     border-color: rgba(243, 91, 154, 0.82);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     padding: 7px 7px 6px 7px;
     background-image: none;
     background-color: rgba(88, 10, 56, 0.94);
@@ -2958,12 +2958,12 @@
     border-color: rgb(255, 83, 155);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-frame,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card .ps-management-selection-corners {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-frame,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card .ps-management-selection-corners {
     display: none;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     width: 100%;
     height: 104px;
     min-height: 104px;
@@ -2973,7 +2973,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-image {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-image {
     width: 100%;
     height: 100%;
     min-width: 100%;
@@ -2981,7 +2981,7 @@
     -unity-background-scale-mode: scale-and-crop;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-name {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-name {
     height: 22px;
     min-height: 22px;
     margin-top: 3px;
@@ -2991,13 +2991,13 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-badges {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-badges {
     position: absolute;
     left: 3px;
     top: 3px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-footer {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-footer {
     height: 42px;
     min-height: 42px;
     max-height: 42px;
@@ -3010,7 +3010,7 @@
     background-color: rgba(3, 3, 17, 0.84);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-rarity-filter {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-rarity-filter {
     width: 238px;
     height: 32px;
     min-height: 32px;
@@ -3022,13 +3022,13 @@
     border-color: rgba(171, 117, 65, 0.68);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort-label {
     width: 44px;
     color: rgba(215, 191, 160, 0.76);
     font-size: 10px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort {
     min-width: 0;
     height: 28px;
     min-height: 28px;
@@ -3041,14 +3041,14 @@
     border-width: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-count {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-count {
     margin-left: auto;
     color: rgb(222, 198, 162);
     font-size: 12px;
 }
 
 /* Upper record: one shared art stage with concise identity copy. */
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-hero {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero {
     width: 100%;
     height: 48%;
     min-height: 255px;
@@ -3062,7 +3062,7 @@
     border-bottom-color: rgba(184, 126, 66, 0.62);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity {
     width: 45%;
     min-width: 45%;
     height: 100%;
@@ -3071,7 +3071,7 @@
     justify-content: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-hero-art {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero-art {
     width: 55%;
     min-width: 55%;
     height: 100%;
@@ -3082,7 +3082,7 @@
     justify-content: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-hero-art .ps-mgmt-detail-art-frame {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero-art .ps-mgmt-detail-art-frame {
     width: 100%;
     height: 100%;
     min-width: 100%;
@@ -3096,7 +3096,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-item-art {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-item-art {
     width: 100%;
     height: 100%;
     min-width: 100%;
@@ -3104,12 +3104,12 @@
     -unity-background-scale-mode: scale-and-crop;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-copy {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-copy {
     width: 100%;
     min-width: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-page-tabs {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-page-tabs {
     width: 100%;
     height: 31px;
     min-height: 31px;
@@ -3117,7 +3117,7 @@
     flex-direction: row;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-page-tab {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-page-tab {
     min-width: 86px;
     height: 29px;
     min-height: 29px;
@@ -3133,19 +3133,19 @@
     border-color: rgba(155, 105, 66, 0.42);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-page-tab.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-page-tab.ps-selected {
     color: rgb(255, 223, 168);
     background-color: rgba(101, 12, 61, 0.82);
     border-color: rgba(250, 82, 151, 0.92);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-page-index {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-page-index {
     margin-left: 7px;
     color: rgb(73, 220, 232);
     font-size: 9px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-name-row {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-name-row {
     width: 100%;
     min-width: 0;
     margin: 1px 0 3px 0;
@@ -3153,7 +3153,7 @@
     align-items: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-item-name {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-item-name {
     min-width: 0;
     flex-shrink: 1;
     color: rgb(255, 218, 153);
@@ -3161,24 +3161,24 @@
     white-space: normal;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-inuse {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-inuse {
     margin-left: 7px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-meta {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-meta {
     margin: 0 0 8px 1px;
     color: rgb(221, 194, 157);
     font-size: 12px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-description {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-description {
     margin: 0 0 10px 1px;
     color: rgb(232, 218, 197);
     font-size: 13px;
     white-space: normal;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-durability {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-durability {
     margin-top: 5px;
     padding-top: 7px;
     color: rgb(76, 220, 233);
@@ -3188,26 +3188,26 @@
 }
 
 /* Lower record: a single reversible card beside the two build-defining effects. */
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail > .unity-scroll-view__content-and-vertical-scroll-container,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail .unity-scroll-view__content-container {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail .unity-scroll-view__content-container {
     width: 100%;
     height: 100%;
     min-height: 0;
     flex-grow: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail {
     padding: 0 7px 0 8px;
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail .unity-scroller {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail .unity-scroller {
     display: none;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lower {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lower {
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -3215,7 +3215,7 @@
     flex-wrap: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-card-panel {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card-panel {
     width: 36%;
     min-width: 36%;
     height: 100%;
@@ -3226,7 +3226,7 @@
     border-right-color: rgba(177, 121, 66, 0.48);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lower-header {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lower-header {
     width: 100%;
     height: 34px;
     min-height: 34px;
@@ -3235,14 +3235,14 @@
     align-items: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lower-title {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lower-title {
     min-width: 0;
     flex-grow: 1;
     color: rgb(239, 208, 166);
     font-size: 14px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-flip {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-flip {
     width: 92px;
     height: 28px;
     min-height: 28px;
@@ -3255,18 +3255,18 @@
     border-radius: 13px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-card-face {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card-face {
     min-height: 0;
     flex-grow: 1;
     align-items: center;
     justify-content: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-card-face-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card-face-label {
     display: none;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-equipment-card-preview.ps-vault-v9-card {
+.ps-vault-final.ps-management-v3 .ps-equipment-card-preview.ps-vault-v9-card {
     width: 148px;
     min-width: 148px;
     max-width: 148px;
@@ -3276,7 +3276,7 @@
     margin: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-panel {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-panel {
     width: 64%;
     min-width: 64%;
     height: 100%;
@@ -3284,7 +3284,7 @@
     padding: 5px 4px 5px 19px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect {
     min-height: 86px;
     flex-grow: 1;
     margin: 0 0 7px 0;
@@ -3294,35 +3294,35 @@
     border-bottom-width: 1px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-color-effect {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-color-effect {
     border-left-color: rgb(242, 73, 145);
     border-bottom-color: rgba(210, 102, 142, 0.38);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-link-effect {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-link-effect {
     border-left-color: rgb(59, 218, 232);
     border-bottom-color: rgba(61, 218, 232, 0.38);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-eyebrow {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-eyebrow {
     color: rgba(220, 197, 169, 0.68);
     font-size: 9px;
     letter-spacing: 1px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-name {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-name {
     margin: 1px 0 3px 0;
     color: rgb(255, 218, 154);
     font-size: 18px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-body {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-body {
     color: rgb(232, 218, 198);
     font-size: 12px;
     white-space: normal;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     height: 47px;
     min-height: 47px;
     margin-top: auto;
@@ -3331,7 +3331,7 @@
     justify-content: flex-end;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-action {
     width: 116px;
     height: 41px;
     min-height: 41px;
@@ -3348,19 +3348,19 @@
     border-radius: 18px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-action.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-action.ps-selected {
     color: rgb(255, 226, 178);
     background-color: rgba(92, 12, 60, 0.9);
     border-color: rgb(244, 79, 147);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-action-icon {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-action-icon {
     width: 25px;
     height: 25px;
     margin-right: 6px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-comparison {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-comparison {
     min-height: 58px;
     margin: 0 0 6px 0;
     padding: 5px 8px;
@@ -3371,29 +3371,29 @@
     border-color: rgba(84, 212, 224, 0.54);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-compare-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-compare-column {
     min-width: 0;
     flex-grow: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-compare-eyebrow {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-compare-eyebrow {
     color: rgb(73, 213, 226);
     font-size: 8px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-compare-name {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-compare-name {
     color: rgb(243, 216, 177);
     font-size: 12px;
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-versus {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-versus {
     margin: 0 10px;
     color: rgb(241, 76, 145);
     font-size: 13px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-heirloom-page {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-heirloom-page {
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -3403,7 +3403,7 @@
     align-content: flex-start;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-heirloom-page .ps-vault-v9-effect {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-heirloom-page .ps-vault-v9-effect {
     width: 47%;
     min-height: 104px;
     margin: 0 2.5% 12px 0;
@@ -4116,7 +4116,7 @@
 }
 
 /* Vault and codex: dedicated inventory frames and tab plaques. */
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     position: relative;
     padding: 17px 15px 19px 15px;
     background-image: none;
@@ -4125,14 +4125,14 @@
     overflow: visible;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-frame-art {
+.ps-vault-final.ps-management-v3 .ps-vault-frame-art {
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-frame-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-frame-selected {
     display: none;
     left: -2%;
     top: -2%;
@@ -4140,11 +4140,11 @@
     height: 104%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected .ps-vault-frame-normal {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected .ps-vault-frame-normal {
     display: none;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected .ps-vault-frame-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected .ps-vault-frame-selected {
     display: flex;
 }
 
@@ -4494,7 +4494,7 @@
 }
 
 /* Five-part category rails from the approved armory / rank references. */
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-header .ps-mgmt-filter-bar,
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header .ps-mgmt-filter-bar,
 .ps-status-v2.ps-management-v3 .ps-status-roles-header .ps-mgmt-filter-bar {
     width: 100%;
     min-width: 0;
@@ -4503,7 +4503,7 @@
     justify-content: space-between;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-header .ps-mgmt-filter,
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header .ps-mgmt-filter,
 .ps-status-v2.ps-management-v3 .ps-status-roles-header .ps-mgmt-filter {
     width: 19%;
     min-width: 0;
@@ -4519,7 +4519,7 @@
     font-size: 12px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-header .ps-management-filter-medallion,
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header .ps-management-filter-medallion,
 .ps-status-v2.ps-management-v3 .ps-status-roles-header .ps-management-filter-medallion {
     width: 32px;
     height: 32px;
@@ -4634,7 +4634,7 @@
 }
 
 /* Vault: four substantial catalogue cards and a broad product sheet. */
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     width: 51%;
     min-width: 51%;
     max-width: 51%;
@@ -4643,27 +4643,27 @@
     padding-right: 14px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-column {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-column {
     width: 46%;
     max-width: 46%;
     flex-basis: 46%;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     padding: 10px 8px 10px 8px;
     background-color: rgba(3, 3, 17, 0.68);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-surface {
     padding: 8px 13px 10px 25px;
     background-color: rgba(2, 3, 17, 0.72);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     padding: 7px 2px 30px 4px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card {
     width: 23%;
     height: 190px;
     min-height: 190px;
@@ -4673,7 +4673,7 @@
     background-color: rgba(3, 3, 16, 0.88);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     padding: 15px 13px 12px 13px;
     background-image: resource("Art/UI/PopDark/ManagementV5/vault-item-frame-cropped");
     -unity-background-scale-mode: stretch-to-fill;
@@ -4683,17 +4683,17 @@
     -unity-slice-bottom: 145;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     height: 137px;
     min-height: 137px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-grid-name {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-name {
     font-size: 14px;
     color: rgb(244, 222, 190);
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-header {
+.ps-vault-final.ps-management-v3 .ps-vault-item-header {
     height: 43%;
     min-height: 265px;
     max-height: 390px;
@@ -4701,24 +4701,24 @@
     padding: 5px 2px 10px 2px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-art-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-art-host {
     width: 57%;
     height: 100%;
     min-height: 250px;
     margin-right: 19px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host {
     width: 43%;
     height: 100%;
     padding: 22px 4px 14px 0;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host .ps-title {
     font-size: 30px;
 }
 
-.ps-vault-v2.ps-management-v3 .ps-vault-item-detail-scroll {
+.ps-vault-final.ps-management-v3 .ps-vault-item-detail-scroll {
     padding: 7px 8px 40px 3px;
 }
 
@@ -4907,6 +4907,306 @@
     min-height: 0;
     padding: 8px 9px 45px 5px;
     flex-grow: 1;
+}
+
+/* Codex V3: vault-like density with fixed tab pages. */
+.ps-codex-v3.ps-management-v3 .ps-codex-index-column {
+    width: 29%;
+    min-width: 29%;
+    max-width: 29%;
+    flex-basis: 29%;
+    margin-right: 22px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-column {
+    width: 68%;
+    min-width: 68%;
+    max-width: 68%;
+    flex-basis: 68%;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-index-header {
+    min-height: 70px;
+    padding: 4px 7px 7px 7px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-index-surface {
+    min-height: 0;
+    padding: 7px 8px 12px 7px;
+    flex-grow: 1;
+    background-color: rgba(3, 3, 17, 0.82);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-index-row {
+    min-height: 66px;
+    margin-bottom: 7px;
+    padding-left: 18px;
+    background-color: rgba(5, 5, 23, 0.84);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-surface {
+    min-height: 0;
+    height: 100%;
+    padding: 9px 13px 12px 24px;
+    background-color: rgba(2, 3, 17, 0.83);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-hero {
+    height: 31%;
+    min-height: 182px;
+    max-height: 248px;
+    flex-direction: row;
+    flex-shrink: 0;
+    margin-bottom: 7px;
+    padding: 5px 6px 10px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(193, 137, 75, 0.58);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-specimen-art {
+    width: 42%;
+    min-width: 42%;
+    max-width: 42%;
+    height: 100%;
+    padding: 8px 18px 8px 8px;
+    background-color: rgba(3, 3, 16, 0);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-header {
+    width: 58%;
+    min-width: 58%;
+    max-width: 58%;
+    min-height: 0;
+    padding: 18px 14px 8px 20px;
+    justify-content: center;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-header .ps-title {
+    margin-bottom: 9px;
+    font-size: 31px;
+    color: rgb(255, 222, 166);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-record-scroll {
+    min-height: 0;
+    padding: 0;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.ps-codex-v3-record {
+    min-height: 0;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.ps-codex-v3-tabs {
+    height: 58px;
+    min-height: 58px;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-shrink: 0;
+    padding: 3px 4px 7px 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(195, 139, 77, 0.62);
+}
+
+.ps-codex-v3-tab {
+    min-width: 0;
+    height: 44px;
+    margin-right: 5px;
+    padding: 7px 10px 6px 10px;
+    flex-grow: 1;
+    color: rgb(214, 187, 155);
+    font-size: 14px;
+    background-color: rgba(9, 7, 27, 0.94);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(94, 63, 103, 0.72);
+}
+
+.ps-codex-v3-tab:hover {
+    color: rgb(255, 228, 184);
+    background-color: rgba(47, 14, 55, 0.96);
+    border-bottom-color: rgb(239, 72, 147);
+}
+
+.ps-codex-v3-tab.ps-selected {
+    color: rgb(255, 231, 187);
+    background-color: rgba(100, 13, 59, 0.96);
+    border-bottom-color: rgb(66, 226, 236);
+}
+
+.ps-codex-v3-page {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 12px 4px 4px 4px;
+}
+
+.ps-codex-v3-grid {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+}
+
+.ps-codex-v3-candidate {
+    width: 32%;
+    height: 46%;
+    min-height: 78px;
+    margin-right: 1%;
+    margin-bottom: 2%;
+    padding: 12px 12px 10px 12px;
+    flex-direction: row;
+    align-items: flex-start;
+    background-color: rgba(7, 5, 25, 0.90);
+    border-left-width: 2px;
+    border-left-color: rgb(238, 63, 142);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(199, 143, 78, 0.62);
+}
+
+.ps-codex-v3-candidate.ps-undiscovered {
+    opacity: 0.55;
+    border-left-color: rgba(116, 97, 132, 0.78);
+}
+
+.ps-codex-v3-candidate.ps-empty {
+    opacity: 0.30;
+}
+
+.ps-codex-v3-candidate-glyph {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    margin-right: 10px;
+    color: rgb(77, 225, 236);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+    background-color: rgba(21, 10, 43, 0.96);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(240, 72, 148, 0.78);
+    border-right-color: rgba(72, 223, 235, 0.72);
+    border-top-color: rgba(240, 72, 148, 0.78);
+    border-bottom-color: rgba(72, 223, 235, 0.72);
+}
+
+.ps-codex-v3-candidate-copy {
+    min-width: 0;
+    flex-grow: 1;
+    color: rgb(255, 221, 170);
+    font-size: 17px;
+}
+
+.ps-codex-v3-candidate-body {
+    margin-top: 7px;
+    color: rgb(196, 181, 184);
+    font-size: 12px;
+    white-space: normal;
+}
+
+.ps-codex-v3-pager {
+    height: 45px;
+    min-height: 45px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ps-codex-v3-page-button {
+    width: 44px;
+    min-width: 44px;
+    height: 36px;
+    padding: 0;
+    color: rgb(255, 221, 169);
+    font-size: 25px;
+    background-color: rgba(46, 12, 47, 0.94);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(236, 67, 143);
+}
+
+.ps-codex-v3-page-indicators {
+    min-width: 150px;
+    margin-left: 15px;
+    margin-right: 15px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.ps-codex-v3-page-indicator {
+    margin-left: 3px;
+    margin-right: 3px;
+    color: rgba(127, 102, 144, 0.82);
+    font-size: 11px;
+}
+
+.ps-codex-v3-page-indicator.ps-selected {
+    color: rgb(68, 224, 236);
+}
+
+.ps-codex-v3-page-count {
+    min-width: 54px;
+    margin-right: 15px;
+    color: rgb(217, 190, 159);
+    font-size: 12px;
+    -unity-text-align: middle-center;
+}
+
+.ps-codex-v3-card-page {
+    min-height: 0;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+}
+
+.ps-codex-v3-card-head {
+    width: 74%;
+    height: 42px;
+    min-height: 42px;
+    margin-bottom: 4px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-codex-v3-card-label {
+    color: rgb(255, 221, 171);
+    font-size: 18px;
+}
+
+.ps-codex-v3-flip {
+    width: 128px;
+    height: 34px;
+    padding: 3px 16px 3px 16px;
+    color: rgb(255, 225, 180);
+    font-size: 13px;
+    background-color: rgba(91, 12, 59, 0.96);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(65, 220, 233);
+}
+
+.ps-codex-v3-card-page .ps-vault-v9-card-face {
+    width: 74%;
+    min-height: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-codex-v3-card-page .ps-vault-v9-card {
+    width: 198px;
+    min-width: 198px;
+    max-width: 198px;
+    height: 278px;
+    min-height: 278px;
+    max-height: 278px;
 }
 
 /* Packing: shelf / current magic circle / selected item dossier. */
@@ -5293,7 +5593,7 @@
 }
 
 /* Equipment cards are supporting evidence, not the first or largest block. */
-.ps-vault-v2 .ps-equipment-card-pair,
+.ps-vault-final .ps-equipment-card-pair,
 .ps-codex-v2 .ps-equipment-card-pair,
 .ps-shop-v3 .ps-equipment-card-pair {
     min-height: 250px;
@@ -5303,7 +5603,7 @@
     padding-bottom: 12px;
 }
 
-.ps-vault-v2 .ps-equipment-card-preview.ps-battle-card,
+.ps-vault-final .ps-equipment-card-preview.ps-battle-card,
 .ps-codex-v2 .ps-equipment-card-preview.ps-battle-card,
 .ps-shop-v3 .ps-equipment-card-preview.ps-battle-card {
     width: 145px;
@@ -5594,8 +5894,8 @@
 }
 
 /* Vault V9 true EOF geometry guard. */
-.ps-vault-v9.ps-management-v3 .ps-mgmt-body,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-main-row {
+.ps-vault-final.ps-management-v3 .ps-mgmt-body,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-main-row {
     width: 100%;
     min-width: 0;
     min-height: 0;
@@ -5607,7 +5907,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-column {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-column {
     width: 42%;
     min-width: 42%;
     max-width: 42%;
@@ -5621,7 +5921,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-record-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-record-column {
     width: auto;
     min-width: 0;
     max-width: none;
@@ -5635,7 +5935,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-header {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-header {
     height: 128px;
     min-height: 128px;
     max-height: 128px;
@@ -5644,14 +5944,14 @@
     padding: 5px 9px 3px 9px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-selective-section-head {
+.ps-vault-final.ps-management-v3 .ps-selective-section-head {
     height: 39px;
     min-height: 39px;
     max-height: 39px;
     margin-bottom: 1px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-bar {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-bar {
     width: 100%;
     height: 57px;
     min-height: 57px;
@@ -5662,7 +5962,7 @@
     flex-wrap: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category {
     width: 19%;
     min-width: 0;
     max-width: none;
@@ -5677,19 +5977,19 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
     width: 27px;
     min-width: 27px;
     height: 27px;
     min-height: 27px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .unity-button__text {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .unity-button__text {
     font-size: 10px;
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-context {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-context {
     height: 22px;
     min-height: 22px;
     max-height: 22px;
@@ -5699,7 +5999,7 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-inventory-surface {
+.ps-vault-final.ps-management-v3 .ps-vault-inventory-surface {
     width: 100%;
     height: auto;
     min-height: 0;
@@ -5709,7 +6009,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll {
     width: 100%;
     height: auto;
     min-height: 0;
@@ -5718,8 +6018,8 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -5728,7 +6028,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid {
+.ps-vault-final.ps-management-v3 .ps-vault-grid {
     width: 100%;
     min-height: 100%;
     padding: 5px 0 12px 3px;
@@ -5737,8 +6037,8 @@
     align-content: flex-start;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card,
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card,
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
     width: 23%;
     min-width: 23%;
     max-width: 23%;
@@ -5752,7 +6052,7 @@
     padding: 7px 7px 6px 7px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-art {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
     width: 100%;
     height: 104px;
     min-height: 104px;
@@ -5760,7 +6060,7 @@
     margin: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-footer {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-footer {
     position: relative;
     width: auto;
     height: 42px;
@@ -5773,7 +6073,7 @@
     overflow: visible;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-rarity-filter {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-rarity-filter {
     width: 238px;
     min-width: 238px;
     max-width: 238px;
@@ -5784,7 +6084,7 @@
     flex-shrink: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort {
     min-width: 0;
     height: 28px;
     min-height: 28px;
@@ -5793,23 +6093,23 @@
     flex-shrink: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-hero,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-detail {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-detail {
     width: 100%;
     min-width: 0;
     max-width: 100%;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-copy,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lower,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-effect-panel {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-copy,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lower,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-effect-panel {
     min-width: 0;
     max-width: 100%;
     flex-shrink: 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -5818,7 +6118,7 @@
     overflow: hidden;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-action {
     width: auto;
     min-width: 0;
     max-width: none;
@@ -5829,11 +6129,11 @@
 }
 
 /* Vault V10 true EOF state/action guard. */
-.ps-vault-v9.ps-management-v3 .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
     display: flex;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-facts {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-facts {
     width: 100%;
     min-width: 0;
     min-height: 74px;
@@ -5842,14 +6142,14 @@
     align-items: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-identity-copy-column {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity-copy-column {
     min-width: 0;
     flex-grow: 1;
     flex-shrink: 1;
     padding-right: 8px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     height: 55px;
     min-height: 55px;
     padding: 4px 0 0 0;
@@ -5857,7 +6157,7 @@
     overflow: visible;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action {
     width: 104px;
     min-width: 104px;
     max-width: 104px;
@@ -5871,14 +6171,14 @@
 }
 
 /* Vault V11: compact lock control and click-to-inspect card modal. */
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     height: 42px;
     min-height: 42px;
     max-height: 42px;
     padding-top: 3px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action {
     padding: 0 12px;
     border-radius: 18px;
     flex-direction: row;
@@ -5886,12 +6186,12 @@
     justify-content: center;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action .ps-pop-action-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action .ps-pop-action-label {
     font-size: 12px;
     margin-left: 5px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-icon {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-icon {
     width: 18px;
     min-width: 18px;
     max-width: 18px;
@@ -5900,7 +6200,7 @@
     max-height: 18px;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
     border-left-color: rgb(250, 82, 151);
     border-right-color: rgb(250, 82, 151);
     border-top-color: rgb(250, 82, 151);
@@ -5908,8 +6208,8 @@
     background-color: rgba(111, 17, 66, 0.86);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-card:hover,
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-card.ps-demon-card:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card:hover,
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card.ps-demon-card:hover {
     translate: 0 0;
     scale: 1 1 1;
 }
@@ -6001,7 +6301,7 @@
 }
 
 /* Vault V12: readable sort bar and a single circular lock control. */
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-footer {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-footer {
     height: 50px;
     min-height: 50px;
     max-height: 50px;
@@ -6011,7 +6311,7 @@
     border-top-color: rgba(211, 150, 78, 0.82);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-rarity-filter {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-rarity-filter {
     width: 310px;
     min-width: 310px;
     max-width: 310px;
@@ -6024,7 +6324,7 @@
     border-color: rgba(213, 151, 76, 0.88);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort-label {
     width: 66px;
     min-width: 66px;
     color: rgb(246, 218, 172);
@@ -6032,7 +6332,7 @@
     -unity-font-style: bold;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort {
     height: 34px;
     min-height: 34px;
     max-height: 34px;
@@ -6042,9 +6342,9 @@
     background-color: rgb(4, 3, 15);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort .unity-base-field__input,
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort .unity-base-popup-field__input,
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort .unity-popup-field__input {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort .unity-base-field__input,
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort .unity-base-popup-field__input,
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort .unity-popup-field__input {
     height: 32px;
     min-height: 32px;
     padding: 0 8px;
@@ -6054,14 +6354,14 @@
     border-width: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort .unity-base-popup-field__text,
-.ps-vault-v9.ps-management-v3 .ps-vault-v8-sort .unity-popup-field__text {
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort .unity-base-popup-field__text,
+.ps-vault-final.ps-management-v3 .ps-vault-v8-sort .unity-popup-field__text {
     color: rgb(255, 237, 202);
     font-size: 14px;
     -unity-font-style: bold;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-actions {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
     height: 64px;
     min-height: 64px;
     max-height: 64px;
@@ -6070,7 +6370,7 @@
     justify-content: flex-end;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action {
     width: 58px;
     min-width: 58px;
     max-width: 58px;
@@ -6091,17 +6391,17 @@
     scale: 0.94 0.94 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action:hover {
     opacity: 0.94;
     scale: 1 1 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action:active {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action:active {
     opacity: 1;
     scale: 0.91 0.91 1;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-lock-action.ps-locked {
     background-color: rgba(0, 0, 0, 0);
     border-width: 0;
     opacity: 1;
@@ -6109,7 +6409,7 @@
 }
 
 /* Vault V13: coherent category tabs. */
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-bar {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-bar {
     height: 58px;
     min-height: 58px;
     max-height: 58px;
@@ -6119,7 +6419,7 @@
     border-bottom-color: rgba(194, 132, 71, 0.72);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category {
     height: 50px;
     min-height: 50px;
     max-height: 50px;
@@ -6135,12 +6435,12 @@
     border-bottom-color: rgba(151, 98, 57, 0.56);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category:hover {
     background-color: rgba(35, 9, 39, 0.96);
     border-bottom-color: rgba(239, 87, 148, 0.92);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category.ps-selected {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category.ps-selected {
     background-color: rgba(92, 10, 55, 0.96);
     border-left-width: 1px;
     border-right-width: 1px;
@@ -6152,8 +6452,8 @@
     border-bottom-color: rgb(57, 226, 240);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-icon,
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-icon,
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category .ps-management-filter-medallion {
     width: 29px;
     min-width: 29px;
     max-width: 29px;
@@ -6165,7 +6465,7 @@
     flex-shrink: 0;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-label {
     height: 16px;
     min-height: 16px;
     margin: 0;
@@ -6176,11 +6476,11 @@
     white-space: nowrap;
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
     color: rgb(255, 234, 191);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category-glow {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category-glow {
     position: absolute;
     left: 22%;
     right: 22%;
@@ -6189,7 +6489,7 @@
     background-color: rgba(0, 0, 0, 0);
 }
 
-.ps-vault-v9.ps-management-v3 .ps-vault-v7-category.ps-selected .ps-vault-v7-category-glow {
+.ps-vault-final.ps-management-v3 .ps-vault-v7-category.ps-selected .ps-vault-v7-category-glow {
     background-color: rgb(66, 230, 242);
 }
 
@@ -6238,4 +6538,937 @@
 .unity-base-dropdown__checkmark,
 .unity-generic-dropdown-menu__checkmark {
     color: rgb(65, 225, 239);
+}
+
+/* ========================================================================
+   Vault V11 — equipment showcase and full heirloom record
+   ======================================================================== */
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero {
+    position: relative;
+    width: 100%;
+    height: 49%;
+    min-height: 280px;
+    max-height: 380px;
+    margin: 0 0 7px 0;
+    padding: 0;
+    flex-direction: column;
+    background-color: rgba(2, 3, 17, 0.76);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 128, 65, 0.68);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-hero-art {
+    display: none;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-identity,
+.ps-vault-final.ps-management-v3 .ps-mgmt-detail-summary-host {
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-start;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-equipment-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 14px 30px 10px 18px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-meta {
+    height: 18px;
+    min-height: 18px;
+    margin: 0 0 1px 2px;
+    color: rgb(91, 215, 230);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-name-row {
+    height: 39px;
+    min-height: 39px;
+    margin: 0;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-item-name {
+    font-size: 26px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-description {
+    height: 34px;
+    min-height: 34px;
+    margin: 0 0 5px 2px;
+    color: rgb(226, 210, 189);
+    font-size: 12px;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-showcase {
+    width: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-art-column {
+    width: 70%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    margin-right: 17px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-art-frame {
+    min-height: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(9, 5, 30, 0.78);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(131, 74, 153, 0.4);
+    border-bottom-color: rgba(208, 129, 72, 0.42);
+    border-radius: 160px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-item-art {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-durability {
+    width: 100%;
+    height: 28px;
+    min-height: 28px;
+    margin: 3px 0 0 0;
+    padding: 4px 10px 0 10px;
+    color: rgb(75, 222, 235);
+    font-size: 13px;
+    -unity-text-align: middle-left;
+    background-color: rgba(2, 5, 18, 0.78);
+    border-top-width: 1px;
+    border-top-color: rgba(67, 215, 230, 0.58);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape {
+    width: 176px;
+    min-width: 176px;
+    height: 100%;
+    min-height: 0;
+    padding: 4px 8px 7px 8px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(3, 3, 16, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(240, 72, 142);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(64, 211, 227, 0.5);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-title {
+    height: 25px;
+    min-height: 25px;
+    margin: 0 0 7px 0;
+    color: rgb(255, 218, 157);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-grid {
+    width: 132px;
+    min-width: 132px;
+    height: 132px;
+    min-height: 132px;
+    padding: 3px;
+    justify-content: center;
+    background-color: rgb(1, 2, 9);
+    border-width: 1px;
+    border-color: rgba(201, 139, 75, 0.82);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-row {
+    width: 124px;
+    height: 41px;
+    min-height: 41px;
+    margin: 0;
+    flex-direction: row;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell {
+    width: 39px;
+    min-width: 39px;
+    height: 39px;
+    min-height: 39px;
+    margin: 1px;
+    background-color: rgb(3, 4, 12);
+    border-width: 1px;
+    border-color: rgba(91, 78, 92, 0.72);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-filled {
+    background-color: rgb(160, 48, 107);
+    border-color: rgb(255, 109, 174);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-fire {
+    background-color: rgb(191, 60, 47);
+    border-color: rgb(255, 150, 87);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-water {
+    background-color: rgb(37, 111, 149);
+    border-color: rgb(76, 222, 239);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-wind {
+    background-color: rgb(46, 137, 98);
+    border-color: rgb(86, 236, 165);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell.ps-element-earth {
+    background-color: rgb(139, 106, 46);
+    border-color: rgb(240, 194, 92);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-page-arrow {
+    position: absolute;
+    top: 42%;
+    width: 45px;
+    min-width: 45px;
+    height: 66px;
+    min-height: 66px;
+    padding: 0;
+    color: rgb(255, 225, 173);
+    font-size: 34px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: rgba(77, 8, 51, 0.96);
+    border-width: 2px;
+    border-color: rgb(244, 73, 143);
+    border-radius: 22px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-page-arrow:hover {
+    color: rgb(255, 248, 216);
+    background-color: rgb(125, 13, 71);
+    border-color: rgb(72, 224, 238);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-page-arrow.ps-forward {
+    right: 5px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-page-arrow.ps-back {
+    left: 5px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: 15px 30px 16px 30px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    background-color: rgba(2, 3, 17, 0.76);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-heading {
+    width: 100%;
+    height: 94px;
+    min-height: 94px;
+    padding: 4px 16px 9px 18px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(211, 140, 70, 0.72);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-eyebrow {
+    color: rgb(63, 217, 233);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-title {
+    margin: 2px 0 1px 0;
+    color: rgb(255, 218, 153);
+    font-size: 29px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-subtitle {
+    color: rgba(224, 207, 184, 0.76);
+    font-size: 11px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-hero {
+    width: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    padding: 14px 5px 0 18px;
+    flex-direction: row;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-art {
+    width: 45%;
+    min-width: 45%;
+    height: 100%;
+    min-height: 0;
+    margin-right: 18px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(12, 5, 31, 0.82);
+    border-width: 1px;
+    border-color: rgba(179, 87, 149, 0.62);
+    border-radius: 170px;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-art-image {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-records {
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-records .ps-vault-v9-effect {
+    width: 100%;
+    min-height: 0;
+    margin: 0 0 8px 0;
+    padding: 9px 12px 8px 14px;
+    flex-grow: 1;
+    background-color: rgba(6, 4, 23, 0.86);
+    border-left-width: 2px;
+    border-left-color: rgb(241, 73, 143);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(62, 211, 228, 0.42);
+}
+
+.ps-vault-final.ps-management-v3 .ps-vault-v11-heirloom-page .ps-vault-v11-page-arrow {
+    top: 46%;
+}
+
+/* Codex V4: fixed record + full-height lore leaf */
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-facts-page,
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    background-color: rgba(2, 3, 17, 0.78);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-facts-page {
+    padding: 8px 34px 12px 17px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-facts-heading {
+    width: 100%;
+    height: 47px;
+    min-height: 47px;
+    padding: 1px 7px 5px 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(208, 137, 69, 0.62);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-eyebrow {
+    color: rgb(66, 218, 232);
+    font-size: 9px;
+    letter-spacing: 1.7px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-facts-title {
+    margin-top: 1px;
+    color: rgb(255, 219, 157);
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-facts-grid {
+    width: 100%;
+    min-height: 0;
+    margin-top: 8px;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact {
+    width: 49%;
+    height: 31%;
+    min-height: 54px;
+    margin: 0 1% 2% 0;
+    padding: 7px 9px 7px 8px;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(8, 5, 29, 0.88);
+    border-left-width: 2px;
+    border-left-color: rgb(241, 70, 142);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(61, 211, 228, 0.42);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact.ps-undiscovered {
+    opacity: 0.58;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact.ps-empty {
+    opacity: 0.3;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact-glyph {
+    width: 31px;
+    min-width: 31px;
+    height: 31px;
+    min-height: 31px;
+    margin-right: 8px;
+    color: rgb(255, 105, 168);
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: rgba(56, 9, 52, 0.92);
+    border-width: 1px;
+    border-color: rgba(78, 218, 231, 0.55);
+    border-radius: 15px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact-copy {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact-title {
+    height: 21px;
+    min-height: 21px;
+    color: rgb(255, 220, 160);
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-fact-body {
+    min-height: 27px;
+    color: rgba(231, 216, 202, 0.88);
+    font-size: 10px;
+    white-space: normal;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-arrow {
+    position: absolute;
+    top: 42%;
+    width: 42px;
+    min-width: 42px;
+    height: 62px;
+    min-height: 62px;
+    padding: 0;
+    color: rgb(255, 226, 174);
+    font-size: 32px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: rgba(75, 8, 51, 0.97);
+    border-width: 2px;
+    border-color: rgb(244, 72, 143);
+    border-radius: 21px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-arrow:hover {
+    color: rgb(255, 249, 220);
+    background-color: rgb(124, 13, 72);
+    border-color: rgb(73, 224, 238);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-arrow.ps-forward {
+    right: 3px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-arrow.ps-back {
+    left: 5px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-mark {
+    position: absolute;
+    right: 12px;
+    bottom: 5px;
+    height: 22px;
+    min-height: 22px;
+    padding: 2px 8px 0 8px;
+    flex-direction: row;
+    color: rgba(224, 207, 184, 0.62);
+    font-size: 9px;
+    background-color: rgba(2, 3, 16, 0.82);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(67, 214, 229, 0.48);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-page-mark .ps-current {
+    color: rgb(255, 111, 173);
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-page {
+    padding: 14px 31px 16px 31px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-heading {
+    width: 100%;
+    height: 92px;
+    min-height: 92px;
+    padding: 3px 15px 9px 17px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(211, 141, 70, 0.72);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-title {
+    margin: 2px 0 0 0;
+    color: rgb(255, 218, 153);
+    font-size: 29px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-subtitle {
+    color: rgb(246, 102, 165);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-body {
+    width: 100%;
+    min-height: 0;
+    padding: 14px 6px 0 17px;
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-art {
+    width: 44%;
+    min-width: 44%;
+    height: 100%;
+    min-height: 0;
+    margin-right: 20px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(9, 5, 29, 0.88);
+    border-width: 1px;
+    border-color: rgba(183, 89, 151, 0.64);
+    border-radius: 160px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-art-image {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-flavor-copy {
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-lore-section {
+    width: 100%;
+    min-height: 0;
+    margin-bottom: 9px;
+    padding: 9px 12px 8px 14px;
+    flex-grow: 1;
+    background-color: rgba(7, 4, 24, 0.88);
+    border-left-width: 2px;
+    border-left-color: rgb(241, 72, 142);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(64, 211, 228, 0.42);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-lore-title {
+    height: 25px;
+    min-height: 25px;
+    color: rgb(255, 220, 160);
+    font-size: 15px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-lore-body {
+    color: rgba(232, 218, 202, 0.9);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-unknown-art {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-v4-unknown-glyph {
+    color: rgba(246, 102, 164, 0.7);
+    font-size: 82px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+/* Codex V5 — equipment records share the Vault information hierarchy. */
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-hero {
+    position: relative;
+    width: 100%;
+    height: 51%;
+    min-height: 292px;
+    max-height: 392px;
+    margin: 0 0 8px 0;
+    padding: 14px 30px 12px 18px;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: rgba(2, 3, 17, 0.79);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(201, 133, 68, 0.64);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-hero .ps-mgmt-detail-art-host {
+    width: 49%;
+    min-width: 49%;
+    height: 100%;
+    min-height: 0;
+    margin: 0 20px 0 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(9, 5, 30, 0.84);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(132, 74, 154, 0.42);
+    border-bottom-color: rgba(210, 134, 69, 0.48);
+    border-radius: 180px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-hero .ps-mgmt-detail-art-frame,
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-art {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-hero .ps-mgmt-detail-summary-host {
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-identity {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 2px 0 0 0;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-meta {
+    height: 20px;
+    min-height: 20px;
+    margin: 0 0 2px 1px;
+    color: rgb(70, 216, 231);
+    font-size: 10px;
+    letter-spacing: 1.4px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-name {
+    height: 41px;
+    min-height: 41px;
+    margin: 0;
+    color: rgb(255, 219, 155);
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-description {
+    height: 42px;
+    min-height: 42px;
+    margin: 0 0 8px 1px;
+    color: rgba(232, 216, 197, 0.91);
+    font-size: 11px;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shapes {
+    min-height: 0;
+    padding: 8px 11px 8px 12px;
+    flex-grow: 1;
+    background-color: rgba(5, 4, 22, 0.86);
+    border-left-width: 2px;
+    border-left-color: rgb(242, 72, 143);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(65, 211, 228, 0.48);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shapes-heading {
+    width: 100%;
+    height: 25px;
+    min-height: 25px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shapes-title {
+    color: rgb(255, 219, 157);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shapes-count {
+    color: rgba(83, 216, 229, 0.82);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shapes-row {
+    width: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shape {
+    width: 72px;
+    min-width: 72px;
+    height: 72px;
+    min-height: 72px;
+    padding: 3px;
+    justify-content: center;
+    background-color: rgba(12, 11, 26, 0.95);
+    border-width: 1px;
+    border-color: rgba(154, 137, 160, 0.62);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shape-row {
+    width: 64px;
+    height: 16px;
+    min-height: 16px;
+    flex-direction: row;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shape-cell {
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    min-height: 14px;
+    margin: 1px;
+    background-color: rgb(20, 19, 31);
+    border-width: 1px;
+    border-color: rgba(91, 87, 103, 0.62);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-shape-cell.ps-filled {
+    background-color: rgb(112, 105, 128);
+    border-color: rgb(220, 206, 183);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-lower {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 278px;
+    padding: 12px 34px 15px 18px;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: rgba(2, 3, 17, 0.78);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-panel,
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-link-panel {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    padding: 10px 14px 11px 14px;
+    background-color: rgba(7, 4, 25, 0.9);
+    border-top-width: 1px;
+    border-top-color: rgba(199, 130, 67, 0.58);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(64, 211, 228, 0.45);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-panel {
+    width: 40%;
+    min-width: 40%;
+    margin-right: 15px;
+    align-items: center;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-link-panel {
+    min-width: 0;
+    flex-grow: 1;
+    border-left-width: 2px;
+    border-left-color: rgb(242, 72, 143);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-eyebrow {
+    width: 100%;
+    height: 18px;
+    min-height: 18px;
+    color: rgb(68, 215, 230);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-panel-title {
+    width: 100%;
+    height: 29px;
+    min-height: 29px;
+    margin-bottom: 6px;
+    color: rgb(255, 219, 157);
+    font-size: 17px;
+    -unity-font-style: bold;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(207, 136, 69, 0.52);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-header {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+    margin-bottom: 6px;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-header .ps-codex-item-v5-panel-title {
+    width: auto;
+    min-width: 0;
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-flip {
+    width: 88px;
+    height: 25px;
+    min-height: 25px;
+    margin-left: 8px;
+    padding: 0 8px;
+    color: rgb(247, 218, 176);
+    font-size: 9px;
+    background-color: rgba(76, 12, 58, 0.94);
+    border-width: 1px;
+    border-color: rgba(241, 75, 145, 0.9);
+    border-radius: 12px;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-flip:hover {
+    color: rgb(255, 242, 213);
+    background-color: rgba(126, 20, 85, 0.96);
+    border-color: rgb(255, 108, 168);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card-stage {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(2, 2, 15, 0.58);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-left-color: rgba(242, 72, 143, 0.28);
+    border-right-color: rgba(65, 215, 230, 0.28);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card {
+    position: relative;
+    width: 126px;
+    min-width: 126px;
+    max-width: 126px;
+    height: 180px;
+    min-height: 180px;
+    max-height: 180px;
+    margin: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card-face-label {
+    display: none;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 126px;
+    min-width: 126px;
+    max-width: 126px;
+    height: 178px;
+    min-height: 178px;
+    max-height: 178px;
+    margin: 0;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card:hover,
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card.ps-demon-card:hover {
+    translate: 0 0;
+    scale: 1 1 1;
+    rotate: 0deg;
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-link-rule {
+    min-height: 86px;
+    margin: 8px 0 10px 0;
+    padding: 13px 15px 12px 15px;
+    color: rgb(240, 222, 197);
+    font-size: 14px;
+    white-space: normal;
+    background-color: rgba(15, 7, 34, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(67, 215, 230);
+}
+
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-note {
+    margin-top: auto;
+    padding: 9px 11px 7px 11px;
+    color: rgba(207, 191, 178, 0.65);
+    font-size: 9px;
+    white-space: normal;
+    border-top-width: 1px;
+    border-top-color: rgba(196, 127, 65, 0.42);
 }
