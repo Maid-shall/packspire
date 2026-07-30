@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="gridboard-stage" class="ps-gboard-stage">
+        <ui:VisualElement name="gridboard-viewport" class="ps-gboard-viewport" />
+    </ui:VisualElement>
+    <ui:VisualElement name="gridboard-combat-stage" class="ps-gboard-combat-stage" />
+    <ui:VisualElement name="gridboard-map-stats" class="ps-gboard-map-stats" />
+    <ui:Label name="gridboard-mode-toast" class="ps-gboard-mode-toast" picking-mode="Ignore" />
+    <ui:VisualElement name="gridboard-dock" class="ps-gboard-dock" />
+    <ui:VisualElement name="gridboard-player-hud" class="ps-gboard-player-hud" picking-mode="Ignore" />
+    <ui:VisualElement name="gridboard-route-palette" class="ps-gboard-route-palette" />
+    <ui:VisualElement name="gridboard-hand" class="ps-battle-hand ps-gboard-hand-fan" />
+    <ui:VisualElement name="gridboard-combat-rail" class="ps-gboard-combat-rail" />
+    <ui:VisualElement name="gridboard-selected" class="ps-gboard-selected" />
+    <ui:VisualElement name="gridboard-cell-detail" class="ps-gboard-cell-detail" picking-mode="Ignore" />
+    <ui:VisualElement name="gridboard-gate" class="ps-gboard-gate" />
+</ui:UXML>

@@ -231,7 +231,7 @@ public sealed partial class PackspireUiFoundation {
  return pair;
  }
 
- VisualElement BuildEquipmentCardFacePreview(ItemInstance item,ItemDef definition,RunState run,bool exploration){
+ VisualElement BuildEquipmentCardElement(ItemInstance item,ItemDef definition,RunState run,bool exploration){
   if(item==null||definition==null)return null;
   string battleId=definition.grantedCards?.FirstOrDefault(
    value=>value!=null&&!string.IsNullOrEmpty(value.battleCardId))?.battleCardId;
@@ -250,12 +250,8 @@ public sealed partial class PackspireUiFoundation {
    inventory=new System.Collections.Generic.List<ItemInstance>{item}
   };
 
-  var face=Container("ps-vault-v9-card-face");
-  face.pickingMode=PickingMode.Ignore;
-  var label=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
-  label.AddToClassList("ps-vault-v9-card-face-label");
-  face.Add(label);
-  var card=Container("ps-battle-card ps-equipment-card-preview ps-vault-v9-card");
+  var card=new Button(){text=string.Empty,pickingMode=PickingMode.Ignore};
+  card.AddToClassList("ps-battle-card");
   card.pickingMode=PickingMode.Ignore;
   if(exploration){
    var explorationCard=BuildEquipmentExplorationCard(explorationId,battle,definition,item.uid);
@@ -263,6 +259,19 @@ public sealed partial class PackspireUiFoundation {
   }else{
    PopulateBattleCard(card,battle,previewRun,true);
   }
+  return card;
+ }
+
+ VisualElement BuildEquipmentCardFacePreview(ItemInstance item,ItemDef definition,RunState run,bool exploration){
+  var card=BuildEquipmentCardElement(item,definition,run,exploration);
+  if(card==null)return null;
+  var face=Container("ps-vault-v9-card-face");
+  face.pickingMode=PickingMode.Ignore;
+  var label=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  label.AddToClassList("ps-vault-v9-card-face-label");
+  face.Add(label);
+  card.AddToClassList("ps-equipment-card-preview");
+  card.AddToClassList("ps-vault-v9-card");
   face.Add(card);
   return face;
  }

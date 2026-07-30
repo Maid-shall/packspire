@@ -41,63 +41,38 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void BuildResultShell(){
-  resultShell=Container("ps-result-screen ps-dark-surface");
+  resultShell=CloneView("UI/PackspireResultView","ps-result-screen ps-dark-surface");
+  if(resultShell==null){
+   Debug.LogError("Result view could not be created.");
+   return;
+  }
   resultShell.EnableInClassList("ps-result-clear",false);
   resultShell.EnableInClassList("ps-result-defeat",false);
 
-  var backgroundHost=Container("ps-layer-background");
+  var backgroundHost=RequireViewElement<VisualElement>(resultShell,"result-background");
   var bg=HubBackgroundArt();
   if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-result-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  backgroundHost.Add(shade);
-  resultShell.Add(backgroundHost);
+  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
 
-  var contentHost=Container("ps-layer-content");
-  var body=Container("ps-result-body");
-
-  var visualCol=Container("ps-result-col-visual");
-  resultVisualHost=Container("ps-result-visual-host");
-  visualCol.Add(resultVisualHost);
-  resultTitleOverlay=Container("ps-result-title-overlay");
-  resultTitleOverlay.pickingMode=PickingMode.Ignore;
-  resultTitleLabel=new Label(){pickingMode=PickingMode.Ignore};
-  resultTitleLabel.AddToClassList("ps-result-title");
-  resultTitleOverlay.Add(resultTitleLabel);
-  resultSubtitleLabel=new Label(){pickingMode=PickingMode.Ignore};
-  resultSubtitleLabel.AddToClassList("ps-result-subtitle");
-  resultTitleOverlay.Add(resultSubtitleLabel);
-  visualCol.Add(resultTitleOverlay);
-  body.Add(visualCol);
-
-  var summaryCol=Container("ps-result-col-summary");
+  resultVisualHost=RequireViewElement<VisualElement>(resultShell,"result-visual-host");
+  resultTitleOverlay=RequireViewElement<VisualElement>(resultShell,"result-title-overlay");
+  resultTitleLabel=RequireViewElement<Label>(resultShell,"result-title");
+  resultSubtitleLabel=RequireViewElement<Label>(resultShell,"result-subtitle");
+  var summaryCol=RequireViewElement<VisualElement>(resultShell,"result-summary-column");
   summaryCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-result-detail-corner"));
-  resultCauseLabel=new Label(){pickingMode=PickingMode.Ignore};
-  resultCauseLabel.AddToClassList("ps-result-cause");
-  summaryCol.Add(resultCauseLabel);
-  resultPrimaryStatsHost=Container("ps-result-primary-stats");
-  summaryCol.Add(resultPrimaryStatsHost);
-  resultRecordScroll=new ScrollView(ScrollViewMode.Vertical);
-  resultRecordScroll.AddToClassList("ps-result-record-scroll");
+  resultCauseLabel=RequireViewElement<Label>(resultShell,"result-cause");
+  resultPrimaryStatsHost=RequireViewElement<VisualElement>(resultShell,"result-primary-stats");
+  resultRecordScroll=RequireViewElement<ScrollView>(resultShell,"result-record-scroll");
   resultRecordScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-  summaryCol.Add(resultRecordScroll);
-  resultUnlockHost=Container("ps-result-unlock-host");
-  summaryCol.Add(resultUnlockHost);
-  resultHeirloomHost=Container("ps-result-heirloom-host");
-  summaryCol.Add(resultHeirloomHost);
-  var footer=Container("ps-result-footer");
+  resultUnlockHost=RequireViewElement<VisualElement>(resultShell,"result-unlock-host");
+  resultHeirloomHost=RequireViewElement<VisualElement>(resultShell,"result-heirloom-host");
+  var footer=RequireViewElement<VisualElement>(resultShell,"result-footer");
   resultReturnButton=PackspireUiFactory.Button("拠点へ帰還",ReturnFromResultScreen);
   resultReturnButton.AddToClassList("ps-primary-action");
   resultReturnButton.AddToClassList("ps-chrome-action");
   resultReturnButton.AddToClassList("ps-result-return-btn");
   PackspireUiFactory.DecorateActionButton(resultReturnButton,true);
   footer.Add(resultReturnButton);
-  summaryCol.Add(footer);
-  body.Add(summaryCol);
-
-  contentHost.Add(body);
-  resultShell.Add(contentHost);
   screenRoot.Add(resultShell);
  }
 

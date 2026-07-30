@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="reward-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-reward-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="reward-header" class="ps-reward-header">
+            <ui:Label name="reward-header-type" class="ps-reward-header-type" picking-mode="Ignore" />
+            <ui:Label name="reward-header-place" class="ps-reward-header-place" picking-mode="Ignore" />
+            <ui:Label name="reward-header-text" class="ps-reward-header-text" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-reward-body">
+            <ui:VisualElement name="reward-candidate-column" class="ps-reward-col-candidates">
+                <ui:ScrollView name="reward-candidate-scroll" class="ps-reward-candidate-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="reward-candidate-list" class="ps-reward-candidate-list" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="reward-detail-column" class="ps-reward-col-detail">
+                <ui:VisualElement name="reward-detail-art" class="ps-reward-detail-art-host" />
+                <ui:ScrollView name="reward-detail-scroll" class="ps-reward-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="reward-footer" class="ps-reward-footer">
+            <ui:Label name="reward-selection-status" class="ps-reward-selection-status" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

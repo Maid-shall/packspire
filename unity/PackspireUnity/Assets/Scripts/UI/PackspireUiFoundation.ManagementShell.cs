@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +18,10 @@ public sealed partial class PackspireUiFoundation {
  int statusRoleFilter;
 
  VisualElement BuildManagementShell(string eyebrow,string title,ManagementLayout layout,out ScrollView listScroll,out ScrollView detailScroll){
+  if(TryBuildManagementView(eyebrow,title,layout,out var view,out listScroll,out detailScroll))
+   return view;
+  if(layout!=ManagementLayout.VaultListDetail)
+   throw new InvalidOperationException($"Management UXML is missing for {layout}.");
   var shell=Container("ps-mgmt-screen ps-mgmt-layout-"+LayoutClass(layout)+" ps-dark-surface");
   var backgroundHost=Container("ps-layer-background");
   var bg=HubBackgroundArt();
@@ -30,12 +35,11 @@ public sealed partial class PackspireUiFoundation {
   shell.AddToClassList("ps-management-v3");
   var contentHost=Container("ps-layer-content");
   var header=Container("ps-mgmt-header");
-  var pageCrest=layout switch{
-   ManagementLayout.StatusOverview=>PackspireUiFactory.ManagementChrome.RoleCrest,
-   ManagementLayout.CompendiumReelDetail=>PackspireUiFactory.ManagementChrome.RoleCrest,
-   _=>PackspireUiFactory.ManagementChrome.VaultCrest
-  };
-  header.Add(ManagementBrand(eyebrow,title,pageCrest));
+  header.Add(ManagementBrand(
+   eyebrow,
+   title,
+   PackspireUiFactory.ManagementChrome.VaultCrest
+  ));
   contentHost.Add(header);
 
   var body=Container("ps-mgmt-body");
@@ -46,102 +50,10 @@ public sealed partial class PackspireUiFoundation {
   mgmtVaultGrid=null;
   mgmtVaultFooter=null;
 
-  if(layout==ManagementLayout.StatusOverview){
-   // Formal 3-column: character | learned roles | role detail (siblings under main row).
-   shell.AddToClassList("ps-status-v2");
-   body.AddToClassList("ps-status-main-row");
-
-   var characterCol=Container("ps-status-character-column");
-   characterCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
-   var characterSurface=Container("ps-status-character-surface");
-   var characterScroll=new ScrollView(ScrollViewMode.Vertical);
-   characterScroll.AddToClassList("ps-status-character-scroll");
-   characterScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-   StretchMgmtScrollContent(characterScroll);
-   mgmtOverviewHost=Container("ps-status-character-host");
-   characterScroll.Add(mgmtOverviewHost);
-   characterSurface.Add(characterScroll);
-   characterCol.Add(characterSurface);
-   body.Add(characterCol);
-
-   var rolesCol=Container("ps-status-roles-column");
-   rolesCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
-   var rolesSurface=Container("ps-status-roles-surface");
-   mgmtListHeader=Container("ps-mgmt-list-header ps-status-roles-header");
-   rolesSurface.Add(mgmtListHeader);
-   listScroll=new ScrollView(ScrollViewMode.Vertical);
-   listScroll.AddToClassList("ps-mgmt-list-scroll");
-   listScroll.AddToClassList("ps-status-roles-scroll");
-   listScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-   StretchMgmtScrollContent(listScroll);
-   rolesSurface.Add(listScroll);
-   rolesCol.Add(rolesSurface);
-   body.Add(rolesCol);
-
-   var detailCol=Container("ps-status-role-detail-column");
-   var detailSurface=Container("ps-status-role-detail-surface");
-   detailSurface.Add(PackspireUiFactory.ManagementArt(PackspireUiFactory.ManagementChrome.DetailCorner,"ps-mgmt-open-corner ps-management-detail-corner"));
-   mgmtDetailHero=Container("ps-mgmt-detail-hero ps-status-detail-header");
-   mgmtDetailHero.style.display=DisplayStyle.None;
-   mgmtDetailArtHost=Container("ps-mgmt-detail-art-host ps-status-role-image ps-art-vignette");
-   mgmtDetailSummaryHost=Container("ps-mgmt-detail-summary-host ps-status-role-identity");
-   mgmtDetailHero.Add(mgmtDetailArtHost);
-   mgmtDetailHero.Add(mgmtDetailSummaryHost);
-   detailSurface.Add(mgmtDetailHero);
-   detailScroll=new ScrollView(ScrollViewMode.Vertical);
-   detailScroll.AddToClassList("ps-mgmt-detail-scroll");
-   detailScroll.AddToClassList("ps-status-role-detail-scroll");
-   detailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-   StretchMgmtScrollContent(detailScroll,false);
-   detailSurface.Add(detailScroll);
-   detailCol.Add(detailSurface);
-   body.Add(detailCol);
-  }else if(layout==ManagementLayout.CompendiumReelDetail){
-   // Compact discovery index | fixed, tabbed record.
-   // The record deliberately does not scroll: large collections are paged
-   // inside each information tab instead of becoming a web-like long page.
-   // V8 is the complete Codex presentation. Attaching the retired
-   // compatibility generations here also resurrects their half-height record
-   // viewport and ornamental selected-row plates.
-   shell.AddToClassList("ps-codex-v8");
-   body.AddToClassList("ps-codex-main-row");
-   var listCol=Container("ps-mgmt-col-list ps-codex-index-column");
-   listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-mgmt-column-boundary"));
-   mgmtListHeader=Container("ps-mgmt-list-header ps-codex-index-header");
-   listCol.Add(mgmtListHeader);
-   var listSurface=Container("ps-codex-index-surface");
-   listScroll=new ScrollView(ScrollViewMode.Vertical);
-   listScroll.AddToClassList("ps-mgmt-list-scroll");
-   listScroll.AddToClassList("ps-codex-index-scroll");
-   listScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-   StretchMgmtScrollContent(listScroll);
-   listSurface.Add(listScroll);
-   listCol.Add(listSurface);
-   body.Add(listCol);
-
-   var detailCol=Container("ps-mgmt-col-detail ps-codex-record-column");
-   var detailSurface=Container("ps-codex-record-surface");
-   mgmtDetailHero=Container("ps-mgmt-detail-hero ps-codex-record-hero");
-   mgmtDetailHero.style.display=DisplayStyle.None;
-   mgmtDetailArtHost=Container("ps-art-vignette ps-mgmt-focal-art ps-codex-specimen-art");
-   mgmtDetailSummaryHost=Container("ps-mgmt-detail-summary-host ps-codex-record-header");
-   mgmtDetailHero.Add(mgmtDetailArtHost);
-   mgmtDetailHero.Add(mgmtDetailSummaryHost);
-   detailSurface.Add(mgmtDetailHero);
-   detailScroll=new ScrollView(ScrollViewMode.Vertical);
-   detailScroll.AddToClassList("ps-mgmt-detail-scroll");
-   detailScroll.AddToClassList("ps-codex-record-scroll");
-   detailScroll.verticalScrollerVisibility=ScrollerVisibility.Hidden;
-   detailScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
-   StretchMgmtScrollContent(detailScroll,true);
-   detailSurface.Add(detailScroll);
-   detailCol.Add(detailSurface);
-   body.Add(detailCol);
-  }else{
-   // Vault V9: compact inventory | one cohesive item record.
-   // The record owns its art, card face and effect copy; it never scrolls.
+  // Kept only as a recovery view when the dedicated vault assets are missing.
    shell.AddToClassList("ps-vault-final");
-   body.AddToClassList("ps-vault-main-row ps-vault-v9-main-row");
+   body.AddToClassList("ps-vault-main-row");
+   body.AddToClassList("ps-vault-v9-main-row");
    var listCol=Container("ps-mgmt-col-list ps-vault-inventory-column");
    mgmtListHeader=Container("ps-mgmt-list-header ps-vault-inventory-header");
    listCol.Add(mgmtListHeader);
@@ -176,13 +88,13 @@ public sealed partial class PackspireUiFoundation {
     mgmtDetailHero.Add(mgmtDetailSummaryHost);
    detailCol.Add(mgmtDetailHero);
    detailScroll=new ScrollView(ScrollViewMode.Vertical);
-   detailScroll.AddToClassList("ps-mgmt-detail-scroll ps-vault-v9-detail");
+   detailScroll.AddToClassList("ps-mgmt-detail-scroll");
+   detailScroll.AddToClassList("ps-vault-v9-detail");
    detailScroll.verticalScrollerVisibility=ScrollerVisibility.Hidden;
    detailScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
    StretchMgmtScrollContent(detailScroll,false);
    detailCol.Add(detailScroll);
-   body.Add(detailCol);
-  }
+  body.Add(detailCol);
 
   contentHost.Add(body);
   shell.Add(contentHost);

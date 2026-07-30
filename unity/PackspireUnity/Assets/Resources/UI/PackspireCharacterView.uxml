@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="character-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="character-header" class="ps-mgmt-header" />
+        <ui:VisualElement class="ps-roster-body">
+            <ui:VisualElement name="character-reel-column" class="ps-roster-col-reel">
+                <ui:Label text="キャラクター" class="ps-roster-reel-heading" picking-mode="Ignore" />
+                <ui:ScrollView name="character-reel-scroll" class="ps-roster-reel-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="character-reel" class="ps-roster-reel" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-roster-col-art">
+                <ui:VisualElement name="character-art-host" class="ps-roster-art-host" />
+            </ui:VisualElement>
+            <ui:VisualElement name="character-detail-column" class="ps-roster-col-detail">
+                <ui:ScrollView name="character-detail-scroll" class="ps-roster-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="character-detail-body" class="ps-roster-detail-body" />
+                </ui:ScrollView>
+                <ui:VisualElement name="character-footer" class="ps-roster-footer" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

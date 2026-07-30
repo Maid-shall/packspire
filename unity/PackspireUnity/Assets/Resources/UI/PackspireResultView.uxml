@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="result-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-result-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement class="ps-result-body">
+            <ui:VisualElement class="ps-result-col-visual">
+                <ui:VisualElement name="result-visual-host" class="ps-result-visual-host" />
+                <ui:VisualElement name="result-title-overlay" class="ps-result-title-overlay" picking-mode="Ignore">
+                    <ui:Label name="result-title" class="ps-result-title" picking-mode="Ignore" />
+                    <ui:Label name="result-subtitle" class="ps-result-subtitle" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="result-summary-column" class="ps-result-col-summary">
+                <ui:Label name="result-cause" class="ps-result-cause" picking-mode="Ignore" />
+                <ui:VisualElement name="result-primary-stats" class="ps-result-primary-stats" />
+                <ui:ScrollView name="result-record-scroll" class="ps-result-record-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                <ui:VisualElement name="result-unlock-host" class="ps-result-unlock-host" />
+                <ui:VisualElement name="result-heirloom-host" class="ps-result-heirloom-host" />
+                <ui:VisualElement name="result-footer" class="ps-result-footer" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

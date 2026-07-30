@@ -42,75 +42,46 @@ public sealed partial class PackspireUiFoundation {
   var meta=game.UiMeta;
   EnsureExpeditionDungeonSelection(meta);
 
-  expeditionShell=Container("ps-expedition-screen ps-dark-surface");
-  var backgroundHost=Container("ps-layer-background");
+  expeditionShell=CloneView("UI/PackspireExpeditionView","ps-expedition-screen ps-dark-surface");
+  if(expeditionShell==null){
+   Debug.LogError("Expedition view could not be created.");
+   return;
+  }
+  var backgroundHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-background");
   var bg=HubBackgroundArt();
   if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-mgmt-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  backgroundHost.Add(shade);
-  expeditionShell.Add(backgroundHost);
+  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
 
-  var contentHost=Container("ps-layer-content");
-  var header=Container("ps-mgmt-header ps-exp-header");
+  var header=RequireViewElement<VisualElement>(expeditionShell,"expedition-header");
   header.Add(ChromeBrand("EXPEDITION  /  BRIEF","遠征準備",PackspireUiFactory.PopIcon.Gate));
-  contentHost.Add(header);
 
-  var body=Container("ps-expedition-body");
-
-  var destCol=Container("ps-exp-col-dest");
+  var destCol=RequireViewElement<VisualElement>(expeditionShell,"expedition-destination-column");
   destCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-exp-column-boundary"));
-  var destHead=new Label("遠征先"){pickingMode=PickingMode.Ignore};
-  destHead.AddToClassList("ps-typo-section");
-  destHead.AddToClassList("ps-exp-dest-heading");
-  destCol.Add(destHead);
-  var destFrame=Container("ps-surface-outer ps-exp-dest-frame");
-  expeditionDestScroll=new ScrollView(ScrollViewMode.Vertical);
-  expeditionDestScroll.AddToClassList("ps-exp-dest-scroll");
+  var destFrame=RequireViewElement<VisualElement>(expeditionShell,"expedition-destination-frame");
+  expeditionDestScroll=RequireViewElement<ScrollView>(expeditionShell,"expedition-destination-scroll");
   expeditionDestScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   expeditionDestScroll.scrollOffset=new Vector2(0,expeditionDestScrollY);
-  expeditionDestList=Container("ps-exp-dest-list");
-  expeditionDestScroll.Add(expeditionDestList);
-  destFrame.Add(expeditionDestScroll);
+  expeditionDestList=RequireViewElement<VisualElement>(expeditionShell,"expedition-destination-list");
   AddSurfaceOuterCorners(destFrame);
-  destCol.Add(destFrame);
-  body.Add(destCol);
 
-  var artCol=Container("ps-exp-col-art");
-  expeditionArtHost=Container("ps-frame-focal ps-exp-art-host");
-  expeditionArtImageHost=Container("ps-exp-art-image-host");
-  expeditionArtHost.Add(expeditionArtImageHost);
-  expeditionArtLockOverlay=Container("ps-exp-art-lock");
+  expeditionArtHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-art-host");
+  expeditionArtImageHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-art-image");
+  expeditionArtLockOverlay=RequireViewElement<VisualElement>(expeditionShell,"expedition-art-lock");
   expeditionArtLockOverlay.pickingMode=PickingMode.Ignore;
   expeditionArtLockOverlay.style.display=DisplayStyle.None;
-  expeditionArtHost.Add(expeditionArtLockOverlay);
-  var caption=Container("ps-exp-art-caption");
-  caption.pickingMode=PickingMode.Ignore;
-  expeditionArtCaptionName=new Label(){pickingMode=PickingMode.Ignore};
-  expeditionArtCaptionName.AddToClassList("ps-exp-art-caption-name");
-  expeditionArtCaptionSub=new Label(){pickingMode=PickingMode.Ignore};
-  expeditionArtCaptionSub.AddToClassList("ps-exp-art-caption-sub");
-  caption.Add(expeditionArtCaptionName);
-  caption.Add(expeditionArtCaptionSub);
-  expeditionArtHost.Add(caption);
-  var vignette=Container("ps-exp-art-vignette");
-  vignette.pickingMode=PickingMode.Ignore;
-  expeditionArtHost.Add(vignette);
+  expeditionArtCaptionName=RequireViewElement<Label>(expeditionShell,"expedition-art-caption-name");
+  expeditionArtCaptionSub=RequireViewElement<Label>(expeditionShell,"expedition-art-caption-sub");
   expeditionArtHost.Add(PackspireUiFactory.CornerDecorationHost());
   AddSurfaceOuterCorners(expeditionArtHost);
-  artCol.Add(expeditionArtHost);
-  body.Add(artCol);
 
-  expeditionDetailColumn=Container("ps-exp-col-detail ps-expedition-detail-column ps-surface-quiet");
+  expeditionDetailColumn=RequireViewElement<VisualElement>(expeditionShell,"expedition-detail-column");
   expeditionDetailColumn.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-exp-detail-corner"));
   expeditionDetailColumn.style.minHeight=0;
   expeditionDetailColumn.style.flexGrow=1;
   expeditionDetailColumn.style.flexShrink=1;
   expeditionDetailColumn.style.overflow=Overflow.Hidden;
 
-  expeditionDetailScroll=new ScrollView(ScrollViewMode.Vertical);
-  expeditionDetailScroll.AddToClassList("ps-expedition-detail-scroll");
+  expeditionDetailScroll=RequireViewElement<ScrollView>(expeditionShell,"expedition-detail-scroll");
   expeditionDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   expeditionDetailScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;
   expeditionDetailScroll.scrollOffset=new Vector2(0,expeditionDetailScrollY);
@@ -119,34 +90,19 @@ public sealed partial class PackspireUiFoundation {
   expeditionDetailScroll.style.minHeight=0;
   expeditionDetailScroll.style.overflow=Overflow.Hidden;
 
-  expeditionDetailBody=Container("ps-expedition-detail-body");
-  expeditionDungeonInfoHost=Container("ps-exp-section destination-section");
-  expeditionCharacterHost=Container("ps-exp-section character-section");
-  expeditionTraitHost=Container("ps-exp-section trait-section");
-  expeditionSkillHost=Container("ps-exp-section skill-section");
-  expeditionLoadoutHost=Container("ps-exp-section loadout-section");
-  expeditionDetailBody.Add(expeditionDungeonInfoHost);
-  expeditionDetailBody.Add(expeditionCharacterHost);
-  expeditionDetailBody.Add(expeditionTraitHost);
-  expeditionDetailBody.Add(expeditionSkillHost);
-  expeditionDetailBody.Add(expeditionLoadoutHost);
-  expeditionDetailScroll.Add(expeditionDetailBody);
-  expeditionDetailColumn.Add(expeditionDetailScroll);
+  expeditionDetailBody=RequireViewElement<VisualElement>(expeditionShell,"expedition-detail-body");
+  expeditionDungeonInfoHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-dungeon-info");
+  expeditionCharacterHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-character");
+  expeditionTraitHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-trait");
+  expeditionSkillHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-skill");
+  expeditionLoadoutHost=RequireViewElement<VisualElement>(expeditionShell,"expedition-loadout");
 
-  expeditionDepartFooter=Container("ps-expedition-departure-footer");
+  expeditionDepartFooter=RequireViewElement<VisualElement>(expeditionShell,"expedition-footer");
   expeditionDepartFooter.style.flexGrow=0;
   expeditionDepartFooter.style.flexShrink=0;
-  expeditionDepartReason=new Label(){pickingMode=PickingMode.Ignore};
-  expeditionDepartReason.AddToClassList("ps-exp-depart-reason");
-  expeditionDepartReason.AddToClassList("departure-disabled-reason");
-  expeditionDepartFooter.Add(expeditionDepartReason);
+  expeditionDepartReason=RequireViewElement<Label>(expeditionShell,"expedition-depart-reason");
   expeditionDepartButton=BuildExpeditionDeparturePrimaryButton(meta);
   expeditionDepartFooter.Add(expeditionDepartButton);
-  expeditionDetailColumn.Add(expeditionDepartFooter);
-  body.Add(expeditionDetailColumn);
-
-  contentHost.Add(body);
-  expeditionShell.Add(contentHost);
   screenRoot.Add(expeditionShell);
 
   PopulateExpeditionDestList(meta);

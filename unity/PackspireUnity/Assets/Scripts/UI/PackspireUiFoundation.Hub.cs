@@ -35,30 +35,32 @@ public sealed partial class PackspireUiFoundation {
   var meta=game.UiMeta;
   var facilities=HubFacilityCatalog.NavFacilities();
 
-  hubShell=Container("ps-hub-v4");
+  hubShell=CloneView("UI/PackspireHubView","ps-hub-v4");
+  if(hubShell==null){
+   Debug.LogError("Hub view could not be created.");
+   return;
+  }
   screenRoot.Add(hubShell);
 
-  var bgLayer=Container("ps-hub-layer-bg");
-  bgLayer.pickingMode=PickingMode.Ignore;
+  var bgLayer=RequireViewElement<VisualElement>(hubShell,"hub-background");
+  var bgArtHost=RequireViewElement<VisualElement>(hubShell,"hub-background-art");
   var hubBg=HubBackgroundArt();
-  if(hubBg!=null)bgLayer.Add(Image(hubBg,new Rect(0,0,1,1),"ps-hub-v4-bg",ScaleMode.ScaleAndCrop));
-  bgLayer.Add(Container("ps-hub-v4-shade-left"));
-  bgLayer.Add(Container("ps-hub-v4-shade-center"));
-  bgLayer.Add(Container("ps-hub-v4-shade-right"));
+  if(hubBg!=null){
+   bgArtHost.style.backgroundImage=new StyleBackground(hubBg);
+   PackspireUiFactory.ApplyBackgroundScaleMode(bgArtHost,ScaleMode.ScaleAndCrop);
+  }
   bgLayer.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Home,"ps-hub-nav-watermark"));
   foreach(var child in bgLayer.Children())child.pickingMode=PickingMode.Ignore;
-  hubShell.Add(bgLayer);
 
-  var hudLayer=Container("ps-hub-layer-hud ps-hub-v4-columns");
+  var hudLayer=RequireViewElement<VisualElement>(hubShell,"hub-columns");
   hudLayer.Add(BuildHubNavColumn(facilities));
   hudLayer.Add(BuildHubCharacterColumn(meta));
   hudLayer.Add(BuildHubBriefingColumn(meta));
-  hubShell.Add(hudLayer);
 
   hubStreetGuideModal=BuildHubStreetGuideModal();
   hubStreetGuideModal.style.display=DisplayStyle.None;
   hubStreetGuideModal.pickingMode=PickingMode.Ignore;
-  hubShell.Add(hubStreetGuideModal);
+  RequireViewElement<VisualElement>(hubShell,"hub-overlay-host").Add(hubStreetGuideModal);
 
   hubShell.RegisterCallback<KeyDownEvent>(OnHubKeyDown);
   hubShell.focusable=true;

@@ -125,7 +125,11 @@ public sealed partial class PackspireUiFoundation {
   gridBoardZoom=1f;
   gridBoardPan=Vector2.zero;
 
-  gridBoardRoot=Container("ps-gboard");
+  gridBoardRoot=CloneView("UI/PackspireGridBoardView","ps-gboard");
+  if(gridBoardRoot==null){
+   Debug.LogError("Grid board view could not be created.");
+   return;
+  }
   if(gridBoardMakaiBackground!=null){
    gridBoardRoot.style.backgroundImage=new StyleBackground(gridBoardMakaiBackground);
    PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardRoot,ScaleMode.StretchToFill);
@@ -133,8 +137,8 @@ public sealed partial class PackspireUiFoundation {
   screenRoot.Add(gridBoardRoot);
 
   // Map stage is the right pane (dock stays on the left).
-  gridBoardStage=Container("ps-gboard-stage");
-  gridBoardViewport=Container("ps-gboard-viewport");
+  gridBoardStage=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-stage");
+  gridBoardViewport=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-viewport");
   gridBoardViewport.RegisterCallback<WheelEvent>(OnGridBoardWheel,TrickleDown.TrickleDown);
   gridBoardViewport.RegisterCallback<PointerDownEvent>(OnGridBoardPointerDown,TrickleDown.TrickleDown);
   gridBoardViewport.RegisterCallback<PointerMoveEvent>(OnGridBoardPointerMove,TrickleDown.TrickleDown);
@@ -160,7 +164,7 @@ public sealed partial class PackspireUiFoundation {
   gridBoardActorLayer.pickingMode=PickingMode.Ignore;
   gridBoardViewport.Add(gridBoardActorLayer);
   EnsureBattleAssets();
-  gridBoardCombatStage=Container("ps-gboard-combat-stage");
+  gridBoardCombatStage=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-combat-stage");
   gridBoardCombatStage.style.display=DisplayStyle.None;
   gridBoardCombatEnemyFocus=Container("ps-gboard-enemy-focus");
   var enemyEyebrow=new Label("HOSTILE SIGNATURE"){pickingMode=PickingMode.Ignore};
@@ -226,18 +230,12 @@ public sealed partial class PackspireUiFoundation {
   gridBoardCombatCardPreview=Container("ps-gboard-combat-card-preview");
   gridBoardCombatActionView.Add(gridBoardCombatCardPreview);
   gridBoardCombatStage.Add(gridBoardCombatActionView);
-  gridBoardStage.Add(gridBoardViewport);
   gridBoardStage.RegisterCallback<PointerEnterEvent>(_=>SetGridBoardMapHover(true));
   gridBoardStage.RegisterCallback<PointerLeaveEvent>(_=>SetGridBoardMapHover(false));
 
-  gridBoardRoot.Add(gridBoardStage);
-  // The enemy dossier belongs to the persistent screen shell, not to the
-  // panned board. It therefore stays fixed at the right edge in battle.
-  gridBoardRoot.Add(gridBoardCombatStage);
-
   // The board owns the entire screen. Only compact, decision-relevant chips
   // remain in the upper-right; the old full-width banner is intentionally gone.
-  gridBoardMapStats=Container("ps-gboard-map-stats");
+  gridBoardMapStats=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-map-stats");
   gridBoardDoomLabel=new Label(""){pickingMode=PickingMode.Ignore};
   gridBoardDoomLabel.AddToClassList("ps-gboard-stat-chip");
   gridBoardDoomLabel.AddToClassList("ps-gboard-stat-turn");
@@ -256,17 +254,15 @@ public sealed partial class PackspireUiFoundation {
   });
   finishTop.AddToClassList("ps-gboard-top-finish");
   gridBoardMapStats.Add(finishTop);
-  gridBoardRoot.Add(gridBoardMapStats);
 
-  gridBoardModeToast=new Label("封印格子\n探索"){pickingMode=PickingMode.Ignore};
-  gridBoardModeToast.AddToClassList("ps-gboard-mode-toast");
-  gridBoardRoot.Add(gridBoardModeToast);
+  gridBoardModeToast=RequireViewElement<Label>(gridBoardRoot,"gridboard-mode-toast");
+  gridBoardModeToast.text="封印格子\n探索";
   gridBoardModeToast.schedule.Execute(()=>gridBoardModeToast?.AddToClassList("ps-gboard-mode-toast-out")).StartingIn(1350);
   gridBoardModeToast.schedule.Execute(()=>{
    if(gridBoardModeToast!=null)gridBoardModeToast.style.display=DisplayStyle.None;
   }).StartingIn(1750);
 
-  var dock=Container("ps-gboard-dock");
+  var dock=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-dock");
   var panel=Container("ps-gboard-panel");
   if(gridBoardInfoHeaderArt!=null){
    var ornament=Container("ps-gboard-panel-ornament");
@@ -297,7 +293,7 @@ public sealed partial class PackspireUiFoundation {
   gridBoardConsumablesRoot.style.display=DisplayStyle.None;
   panel.Add(gridBoardConsumablesRoot);
 
-  gridBoardGateActions=Container("ps-gboard-gate");
+  gridBoardGateActions=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-gate");
   gridBoardGateActions.style.display=DisplayStyle.None;
 
   // Path-only contextual controls (hidden until a route is being drawn).
@@ -329,7 +325,7 @@ public sealed partial class PackspireUiFoundation {
   dock.RegisterCallback<PointerEnterEvent>(_=>SetGridBoardDockHover(true));
   dock.RegisterCallback<PointerLeaveEvent>(_=>SetGridBoardDockHover(false));
 
-  gridBoardPlayerHud=Container("ps-gboard-player-hud");
+  gridBoardPlayerHud=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-player-hud");
   gridBoardPlayerHud.pickingMode=PickingMode.Ignore;
   var playerHudOrnamentClip=Container("ps-gboard-player-hud-ornament-clip");
   var playerHudOrnament=Container("ps-gboard-player-hud-ornament");
@@ -382,15 +378,13 @@ public sealed partial class PackspireUiFoundation {
   // The top-edge reveal strip owns header hover. The portrait itself should
   // never reserve an invisible click-blocking rectangle over the map.
   hero.pickingMode=PickingMode.Ignore;
-  gridBoardRoot.Add(dock);
   // Vital information never moves between exploration and combat.
   gridBoardPlayerHud.Add(hero);
-  gridBoardRoot.Add(gridBoardPlayerHud);
 
   // Path drawing gets its own compact board overlay. These are deliberately
   // separate from the retired exploration dossier so they remain reachable
   // while the whole map stays visible.
-  gridBoardRoutePalette=Container("ps-gboard-route-palette");
+  gridBoardRoutePalette=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-route-palette");
   gridBoardRoutePalette.style.display=DisplayStyle.None;
   var undoRoute=MakeGridAction("↶",()=>{
    if(GridBoardSystem.UndoSegment(run,out var msg))ShowToast(msg);
@@ -417,23 +411,19 @@ public sealed partial class PackspireUiFoundation {
   clearRoute.AddToClassList("ps-gboard-route-icon");
   clearRoute.AddToClassList("ps-gboard-route-cancel");
   gridBoardRoutePalette.Add(clearRoute);
-  gridBoardRoot.Add(gridBoardRoutePalette);
-
   // The exploration hand is deliberately quiet: cards individually rise on
   // hover, rather than opening a full wall across the dungeon.
   gridBoardHandOpen=false;
-  gridBoardHandRoot=Container("ps-battle-hand");
-  gridBoardHandRoot.AddToClassList("ps-gboard-hand-fan");
+  gridBoardHandRoot=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-hand");
   gridBoardHandRoot.RegisterCallback<PointerLeaveEvent>(_=>ClearGridHandFocus());
   SyncGridHandChrome();
-  gridBoardRoot.Add(gridBoardHandRoot);
 
   // Shared explore/combat energy rail under the fan.
   gridBoardEnergyRail=Container("ps-gboard-en-rail");
   gridBoardEnergyLabel=new Label(""){pickingMode=PickingMode.Ignore};
   gridBoardEnergyLabel.AddToClassList("ps-gboard-en-label");
   gridBoardEnergyRail.Add(gridBoardEnergyLabel);
-  gridBoardCombatRail=Container("ps-gboard-combat-rail");
+  gridBoardCombatRail=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-combat-rail");
   gridBoardCombatRail.style.display=DisplayStyle.None;
   gridBoardSkillButton=MakeGridAction("SKILL",()=>{
    if(game.UiBattle==null||battleInputLocked){ShowToast("戦闘中ではない");return;}
@@ -452,7 +442,6 @@ public sealed partial class PackspireUiFoundation {
   gridBoardPlayerHud?.Add(gridBoardEnergyRail);
   // Battle actions need their own lower-right dock. Keeping them inside the
   // EN rail made both groups cramped and prevented independent composition.
-  gridBoardRoot.Add(gridBoardCombatRail);
 
   // A stable home for future dice resolution. It sits above the combat hand so
   // card → roll → result reads without covering the grid.
@@ -470,16 +459,11 @@ public sealed partial class PackspireUiFoundation {
   gridBoardResolveTray.Add(gridBoardResolveDice);
   if(gridBoardCombatActionView!=null)gridBoardCombatActionView.Add(gridBoardResolveTray);
 
-  gridBoardSelectedHost=Container("ps-gboard-selected");
+  gridBoardSelectedHost=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-selected");
   gridBoardSelectedHost.style.display=DisplayStyle.None;
-  gridBoardRoot.Add(gridBoardSelectedHost);
-  gridBoardCellDetail=Container("ps-gboard-cell-detail");
+  gridBoardCellDetail=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-cell-detail");
   gridBoardCellDetail.pickingMode=PickingMode.Ignore;
   gridBoardCellDetail.style.display=DisplayStyle.None;
-  gridBoardRoot.Add(gridBoardCellDetail);
-  // Gate decisions must not live in the retired right dossier: that column is
-  // hidden during exploration. Keep them at the screen root as a real modal.
-  gridBoardRoot.Add(gridBoardGateActions);
   BuildGridBoardEventOverlay();
 
   RefreshGridBoard();

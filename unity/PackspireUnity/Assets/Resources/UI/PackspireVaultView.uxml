@@ -1,0 +1,82 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="vault-layout" class="ps-vault-fixed__layout">
+        <ui:VisualElement name="vault-background" class="ps-vault-fixed__background" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-vault-fixed__shade" picking-mode="Ignore" />
+        <ui:VisualElement name="vault-header" class="ps-vault-fixed__header">
+            <ui:VisualElement name="vault-back-host" class="ps-vault-fixed__back-host" />
+            <ui:VisualElement name="vault-brand-host" class="ps-vault-fixed__brand-host" />
+            <ui:VisualElement class="ps-vault-fixed__header-flourish" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="vault-inventory" class="ps-vault-fixed__inventory">
+            <ui:VisualElement name="vault-list-header" class="ps-vault-fixed__list-header" />
+            <ui:VisualElement class="ps-vault-fixed__list-surface">
+                <ui:ScrollView name="vault-list-scroll" class="ps-vault-fixed__list-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="vault-grid" class="ps-vault-fixed__grid" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="vault-footer" class="ps-vault-fixed__footer">
+                <ui:Button name="vault-sort-button" class="ps-vault-v7-rarity-filter" tooltip="並べ替え条件を選択">
+                    <ui:Label text="並べ替え" class="ps-vault-v8-sort-label" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-value" class="ps-vault-v8-sort" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-arrow" text="▼" class="ps-vault-v8-sort-arrow" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Label name="vault-count" class="ps-vault-v7-count" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="vault-sort-menu" class="ps-vault-fixed__sort-menu">
+                <ui:Label text="並べ替え条件" class="ps-vault-fixed__sort-menu-title" picking-mode="Ignore" />
+                <ui:Button name="vault-sort-option-0" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-0" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-0" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-1" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-1" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-1" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-2" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-2" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-2" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-3" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-3" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-3" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-4" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-4" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-4" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-5" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-5" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-5" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="vault-sort-option-6" class="ps-vault-fixed__sort-option">
+                    <ui:Label name="vault-sort-option-mark-6" class="ps-vault-fixed__sort-option-mark" picking-mode="Ignore" />
+                    <ui:Label name="vault-sort-option-label-6" class="ps-vault-fixed__sort-option-label" picking-mode="Ignore" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="vault-detail" class="ps-vault-fixed__detail">
+            <ui:VisualElement name="vault-standard-detail" class="ps-vault-fixed__standard-detail">
+                <ui:VisualElement class="ps-vault-fixed__detail-divider" picking-mode="Ignore" />
+                <ui:VisualElement name="vault-art-stage" class="ps-vault-fixed__art-stage" />
+                <ui:VisualElement name="vault-info-stage" class="ps-vault-fixed__info-stage" />
+                <ui:VisualElement name="vault-card-stage" class="ps-vault-fixed__card-stage">
+                    <ui:VisualElement class="ps-vault-fixed__card-header">
+                        <ui:Label name="vault-card-title" class="ps-vault-fixed__card-title" picking-mode="Ignore" />
+                        <ui:Button name="vault-card-flip" class="ps-vault-fixed__flip">
+                            <ui:Label name="vault-card-combat-label" text="戦闘" class="ps-vault-fixed__flip-label" picking-mode="Ignore" />
+                            <ui:Label name="vault-card-exploration-label" text="探索" class="ps-vault-fixed__flip-label" picking-mode="Ignore" />
+                        </ui:Button>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="vault-card-host" class="ps-vault-fixed__card-host" />
+                </ui:VisualElement>
+                <ui:VisualElement name="vault-color-effect" class="ps-vault-fixed__effect-slot ps-vault-fixed__effect-slot--color" />
+                <ui:VisualElement name="vault-link-effect" class="ps-vault-fixed__effect-slot ps-vault-fixed__effect-slot--link" />
+                <ui:VisualElement name="vault-actions" class="ps-vault-fixed__actions" />
+            </ui:VisualElement>
+            <ui:VisualElement name="vault-empty-detail" class="ps-vault-fixed__empty-detail" />
+            <ui:ScrollView name="vault-heirloom-detail" class="ps-vault-fixed__heirloom-detail" mode="Vertical" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

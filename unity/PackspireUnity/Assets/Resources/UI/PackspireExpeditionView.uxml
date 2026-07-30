@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="expedition-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="expedition-header" class="ps-mgmt-header ps-exp-header" />
+        <ui:VisualElement class="ps-expedition-body">
+            <ui:VisualElement name="expedition-destination-column" class="ps-exp-col-dest">
+                <ui:Label text="遠征先" class="ps-typo-section ps-exp-dest-heading" picking-mode="Ignore" />
+                <ui:VisualElement name="expedition-destination-frame" class="ps-surface-outer ps-exp-dest-frame">
+                    <ui:ScrollView name="expedition-destination-scroll" class="ps-exp-dest-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="expedition-destination-list" class="ps-exp-dest-list" />
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-exp-col-art">
+                <ui:VisualElement name="expedition-art-host" class="ps-frame-focal ps-exp-art-host">
+                    <ui:VisualElement name="expedition-art-image" class="ps-exp-art-image-host" />
+                    <ui:VisualElement name="expedition-art-lock" class="ps-exp-art-lock" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-exp-art-caption" picking-mode="Ignore">
+                        <ui:Label name="expedition-art-caption-name" class="ps-exp-art-caption-name" picking-mode="Ignore" />
+                        <ui:Label name="expedition-art-caption-sub" class="ps-exp-art-caption-sub" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-exp-art-vignette" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="expedition-detail-column" class="ps-exp-col-detail ps-expedition-detail-column ps-surface-quiet">
+                <ui:ScrollView name="expedition-detail-scroll" class="ps-expedition-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="expedition-detail-body" class="ps-expedition-detail-body">
+                        <ui:VisualElement name="expedition-dungeon-info" class="ps-exp-section destination-section" />
+                        <ui:VisualElement name="expedition-character" class="ps-exp-section character-section" />
+                        <ui:VisualElement name="expedition-trait" class="ps-exp-section trait-section" />
+                        <ui:VisualElement name="expedition-skill" class="ps-exp-section skill-section" />
+                        <ui:VisualElement name="expedition-loadout" class="ps-exp-section loadout-section" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:VisualElement name="expedition-footer" class="ps-expedition-departure-footer">
+                    <ui:Label name="expedition-depart-reason" class="ps-exp-depart-reason departure-disabled-reason" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

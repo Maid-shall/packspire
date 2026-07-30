@@ -42,53 +42,37 @@ public sealed partial class PackspireUiFoundation {
   if(string.IsNullOrEmpty(selectedFactionId)||!IsFactionVisibleInGraph(meta,selectedFactionId))
    selectedFactionId=VisibleFactions(meta).FirstOrDefault()?.id??meta.currentFaction;
 
-  factionShell=Container("ps-faction-screen ps-dark-surface");
+  factionShell=CloneView("UI/PackspireFactionView","ps-faction-screen ps-dark-surface");
+  if(factionShell==null){
+   Debug.LogError("Faction view could not be created.");
+   return;
+  }
   if(showAllFactionsForLayoutPreview)factionShell.AddToClassList("ps-faction-layout-preview");
-  var backgroundHost=Container("ps-layer-background");
+  var backgroundHost=RequireViewElement<VisualElement>(factionShell,"faction-background");
   var bg=HubBackgroundArt();
   if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-mgmt-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  backgroundHost.Add(shade);
-  factionShell.Add(backgroundHost);
+  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
 
-  var contentHost=Container("ps-layer-content");
-  var header=Container("ps-mgmt-header");
+  var header=RequireViewElement<VisualElement>(factionShell,"faction-header");
   header.Add(ChromeBrand("FACTION  /  LEDGER","勢力",PackspireUiFactory.PopIcon.RoleFaction));
-  contentHost.Add(header);
 
-  var body=Container("ps-faction-body");
-  var graphCol=Container("ps-faction-col-graph");
+  var graphCol=RequireViewElement<VisualElement>(factionShell,"faction-graph-column");
   graphCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-faction-column-boundary"));
-  factionGraphHost=Container("ps-faction-graph-host");
+  factionGraphHost=RequireViewElement<VisualElement>(factionShell,"faction-graph-host");
   AddSurfaceOuterCorners(factionGraphHost);
-  factionGraphEdges=Container("ps-faction-graph-edges");
+  factionGraphEdges=RequireViewElement<VisualElement>(factionShell,"faction-graph-edges");
   factionGraphEdges.pickingMode=PickingMode.Ignore;
-  factionGraphNodes=Container("ps-faction-graph-nodes");
-  factionGraphHost.Add(factionGraphEdges);
-  factionGraphHost.Add(factionGraphNodes);
+  factionGraphNodes=RequireViewElement<VisualElement>(factionShell,"faction-graph-nodes");
   factionGraphHost.RegisterCallback<GeometryChangedEvent>(OnFactionGraphGeometryChanged);
-  graphCol.Add(factionGraphHost);
   factionEdgeLayoutReady=false;
   factionGraphLastSize=Vector2.zero;
-  body.Add(graphCol);
 
-  var detailCol=Container("ps-faction-col-detail");
-  var detailSurface=Container("ps-faction-detail-surface");
+  var detailSurface=RequireViewElement<VisualElement>(factionShell,"faction-detail-surface");
   detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-faction-detail-corner"));
-  factionDetailHeader=Container("ps-faction-detail-header");
-  detailSurface.Add(factionDetailHeader);
-  factionDetailScroll=new ScrollView(ScrollViewMode.Vertical);
-  factionDetailScroll.AddToClassList("ps-faction-detail-scroll");
+  factionDetailHeader=RequireViewElement<VisualElement>(factionShell,"faction-detail-header");
+  factionDetailScroll=RequireViewElement<ScrollView>(factionShell,"faction-detail-scroll");
   factionDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   StretchMgmtScrollContent(factionDetailScroll,false);
-  detailSurface.Add(factionDetailScroll);
-  detailCol.Add(detailSurface);
-  body.Add(detailCol);
-
-  contentHost.Add(body);
-  factionShell.Add(contentHost);
   screenRoot.Add(factionShell);
 
   PopulateFactionGraph(meta);

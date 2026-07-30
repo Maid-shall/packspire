@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="shop-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="shop-header" class="ps-shop-header">
+            <ui:Label name="shop-header-gold" class="ps-shop-header-gold" picking-mode="Ignore" />
+            <ui:Label name="shop-dev-hint" text="DEVプレビュー" class="ps-shop-dev-hint" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-shop-body">
+            <ui:VisualElement name="shop-merchant-column" class="ps-shop-col-merchant" />
+            <ui:VisualElement name="shop-list-column" class="ps-shop-col-list">
+                <ui:VisualElement name="shop-filter-host" class="ps-shop-filter-host" />
+                <ui:VisualElement class="ps-shop-stock-heading">
+                    <ui:Label text="本日の品" class="ps-shop-stock-heading-text" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:ScrollView name="shop-product-scroll" class="ps-shop-product-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="shop-product-grid" class="ps-shop-product-grid" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="shop-detail-column" class="ps-shop-col-detail">
+                <ui:VisualElement name="shop-detail-host" class="ps-shop-detail-host">
+                    <ui:ScrollView name="shop-detail-scroll" class="ps-shop-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

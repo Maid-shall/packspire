@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="battle-background" picking-mode="Ignore" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" />
+    <ui:VisualElement name="battle-items" class="ps-battle-items" />
+    <ui:VisualElement name="battle-fx" class="ps-battle-fx-layer" picking-mode="Ignore" />
+    <ui:VisualElement name="battle-hand" class="ps-battle-hand" picking-mode="Ignore" />
+    <ui:VisualElement name="battle-hand-meta" class="ps-battle-hand-meta">
+        <ui:Label name="battle-hand-meta-info" class="ps-battle-hand-meta-info" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement name="battle-skill-column" class="ps-battle-skill-col" picking-mode="Ignore" />
+</ui:UXML>

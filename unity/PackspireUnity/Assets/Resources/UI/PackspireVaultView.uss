@@ -1,0 +1,1151 @@
+/* Vault presentation isolated from the legacy management cascade.
+ * All dimensions use the 1280 x 720 logical PanelSettings coordinate system.
+ */
+
+.ps-vault-fixed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    background-color: rgb(3, 3, 16);
+}
+
+.ps-vault-fixed__layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__background,
+.ps-vault-fixed__shade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.ps-vault-fixed__background .unity-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-vault-fixed__shade {
+    background-color: rgba(2, 1, 14, 0.64);
+}
+
+.ps-vault-fixed__header {
+    position: absolute;
+    left: 20px;
+    top: 8px;
+    width: 1240px;
+    height: 70px;
+    overflow: visible;
+}
+
+.ps-vault-fixed__header-flourish {
+    position: absolute;
+    left: 520px;
+    top: 22px;
+    width: 680px;
+    height: 42px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 83, 158);
+}
+
+.ps-vault-fixed__back-host {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 118px;
+    height: 44px;
+}
+
+.ps-vault-fixed__back {
+    width: 118px;
+    min-width: 118px;
+    height: 42px;
+    min-height: 42px;
+    margin: 0;
+    padding: 3px 12px 3px 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/ManagementV4/secondary-action-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__back:hover,
+.ps-vault-fixed__back:focus {
+    -unity-background-image-tint-color: rgb(255, 223, 181);
+}
+
+.ps-vault-fixed__back:disabled {
+    opacity: 0.45;
+}
+
+.ps-vault-fixed__back-icon {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+    margin-right: 5px;
+}
+
+.ps-vault-fixed__back-label {
+    color: rgb(244, 220, 184);
+    font-size: 13px;
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__brand-host {
+    position: absolute;
+    left: 132px;
+    top: 0;
+    width: 400px;
+    height: 70px;
+}
+
+.ps-vault-fixed__brand-host .ps-management-brand {
+    width: 400px;
+    height: 68px;
+    min-height: 68px;
+    padding: 0;
+    padding-bottom: 0;
+    overflow: visible;
+}
+
+.ps-vault-fixed__brand-host .ps-management-brand-crest {
+    width: 62px;
+    height: 62px;
+    margin-right: 8px;
+}
+
+.ps-vault-fixed__brand-host .ps-chrome-title {
+    font-size: 36px;
+    color: rgb(255, 222, 163);
+    letter-spacing: 0;
+}
+
+.ps-vault-fixed__brand-host .ps-chrome-eyebrow {
+    font-size: 11px;
+    color: rgb(202, 166, 112);
+    letter-spacing: 0;
+}
+
+.ps-vault-fixed__brand-host .ps-management-brand .ps-chrome-brand-copy {
+    min-height: 64px;
+    justify-content: center;
+}
+
+.ps-vault-fixed__brand-host .ps-management-brand-flourish {
+    left: 55px;
+    bottom: -1px;
+    width: 352px;
+    height: 42px;
+}
+
+.ps-vault-fixed__inventory {
+    position: absolute;
+    left: 24px;
+    top: 82px;
+    width: 566px;
+    height: 624px;
+    overflow: hidden;
+    background-color: rgba(5, 3, 20, 0.88);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(238, 68, 141, 0.64);
+    border-right-color: rgba(238, 68, 141, 0.64);
+    border-top-color: rgba(238, 68, 141, 0.62);
+    border-bottom-color: rgba(86, 225, 237, 0.42);
+}
+
+.ps-vault-fixed__list-header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 554px;
+    height: 112px;
+    padding: 0 8px 2px 8px;
+    overflow: hidden;
+    background-color: rgba(15, 6, 31, 0.72);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(240, 82, 151, 0.35);
+}
+
+.ps-vault-fixed__list-header .ps-section-head,
+.ps-vault-fixed__list-header .ps-selective-section-head {
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 2px 0 0 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-fixed__list-header .ps-section-head .ps-typo-eyebrow {
+    display: none;
+}
+
+.ps-vault-fixed__list-header .ps-section-head .ps-typo-section {
+    width: 100%;
+    height: 42px;
+    margin: 0;
+    color: rgb(255, 221, 160);
+    font-size: 20px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category-bar {
+    width: 100%;
+    height: 60px;
+    min-height: 60px;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category {
+    width: 19.2%;
+    min-width: 0;
+    height: 58px;
+    min-height: 58px;
+    margin: 0 2px 0 0;
+    padding: 5px 8px 3px 8px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category:hover,
+.ps-vault-fixed__list-header .ps-vault-v7-category:focus {
+    -unity-background-image-tint-color: rgb(255, 226, 195);
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category-glow {
+    display: none;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category-icon,
+.ps-vault-fixed__list-header .ps-management-filter-medallion {
+    display: none;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category-label,
+.ps-vault-fixed__list-header .unity-button__text {
+    color: rgb(240, 213, 170);
+    width: 100%;
+    font-size: 13px;
+    white-space: nowrap;
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
+    color: rgb(255, 238, 200);
+    -unity-font-style: normal;
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-context {
+    display: none;
+}
+
+.ps-vault-fixed__list-surface {
+    position: absolute;
+    left: 0;
+    top: 112px;
+    width: 554px;
+    height: 464px;
+    overflow: hidden;
+    background-color: rgba(2, 3, 15, 0.54);
+}
+
+.ps-vault-fixed__list-scroll {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__list-scroll > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-fixed__list-scroll > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__grid {
+    width: 100%;
+    min-height: 100%;
+    padding: 6px 4px 10px 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-card,
+.ps-vault-fixed__grid .ps-vault-grid-card:hover,
+.ps-vault-fixed__grid .ps-vault-grid-card:active,
+.ps-vault-fixed__grid .ps-vault-grid-card:focus,
+.ps-vault-fixed__grid .ps-vault-grid-card.ps-selected {
+    position: relative;
+    width: 128px;
+    min-width: 128px;
+    max-width: 128px;
+    height: 106px;
+    min-height: 106px;
+    max-height: 106px;
+    margin: 0 8px 8px 0;
+    padding: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-card.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-selected");
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-art {
+    position: absolute;
+    left: 12px;
+    top: 7px;
+    width: 104px;
+    height: 74px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-name {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 10px;
+    height: 18px;
+    min-height: 18px;
+    padding: 0;
+    color: rgb(242, 218, 185);
+    font-size: 10px;
+    white-space: nowrap;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-rarity {
+    position: absolute;
+    left: 58px;
+    bottom: 2px;
+    width: 12px;
+    height: 10px;
+    font-size: 6px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-badges {
+    position: absolute;
+    left: auto;
+    right: 2px;
+    top: 2px;
+    width: auto;
+    height: 18px;
+    flex-direction: row;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-filled");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element .unity-label {
+    color: rgb(255, 240, 213);
+    font-size: 9px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element.ps-element-fire {
+    -unity-background-image-tint-color: rgb(255, 87, 71);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element.ps-element-water {
+    -unity-background-image-tint-color: rgb(57, 189, 235);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element.ps-element-wind {
+    -unity-background-image-tint-color: rgb(74, 210, 124);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-element.ps-element-earth {
+    -unity-background-image-tint-color: rgb(229, 174, 69);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-lock {
+    position: absolute;
+    display: none;
+    right: 3px;
+    top: auto;
+    bottom: 3px;
+    width: 30px;
+    height: 30px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/lock-badge");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+    display: flex;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-lock-icon {
+    display: none;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-badge {
+    width: 18px;
+    min-width: 18px;
+    height: 18px;
+    min-height: 18px;
+    margin-right: 2px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(68, 14, 45, 0.94);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(255, 92, 157);
+    border-right-color: rgb(255, 92, 157);
+    border-top-color: rgb(255, 92, 157);
+    border-bottom-color: rgb(255, 92, 157);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-badge .unity-label {
+    color: rgb(255, 229, 185);
+    font-size: 8px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__footer {
+    position: absolute;
+    left: 0;
+    top: 576px;
+    width: 554px;
+    height: 48px;
+    padding: 6px 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(8, 4, 24, 0.94);
+    border-top-width: 1px;
+    border-top-color: rgba(239, 76, 148, 0.42);
+}
+
+.ps-vault-fixed__footer .ps-vault-v7-rarity-filter {
+    width: 292px;
+    min-width: 292px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 12px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-control");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__footer .ps-vault-v7-rarity-filter:hover,
+.ps-vault-fixed__footer .ps-vault-v7-rarity-filter:focus {
+    -unity-background-image-tint-color: rgb(255, 224, 183);
+}
+
+.ps-vault-fixed__footer .ps-vault-v8-sort-label {
+    width: 62px;
+    font-size: 11px;
+}
+
+.ps-vault-fixed__footer .ps-vault-v8-sort {
+    min-width: 0;
+    height: 28px;
+    min-height: 28px;
+    flex-grow: 1;
+    color: rgb(244, 222, 191);
+    font-size: 11px;
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__footer .ps-vault-v8-sort-arrow {
+    width: 16px;
+    min-width: 16px;
+    color: rgb(214, 176, 118);
+    font-size: 9px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__footer .ps-vault-v7-count {
+    width: 86px;
+    color: rgb(101, 213, 227);
+    font-size: 11px;
+    -unity-text-align: middle-right;
+}
+
+.ps-vault-fixed__sort-menu {
+    display: none;
+    position: absolute;
+    left: 8px;
+    top: 328px;
+    width: 292px;
+    height: 248px;
+    padding: 8px;
+    background-color: rgba(3, 3, 15, 0.98);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(132, 88, 62);
+    border-right-color: rgb(132, 88, 62);
+    border-top-color: rgb(214, 160, 101);
+    border-bottom-color: rgb(132, 88, 62);
+}
+
+.ps-vault-fixed__sort-menu.ps-open {
+    display: flex;
+}
+
+.ps-vault-fixed__sort-menu-title {
+    height: 24px;
+    min-height: 24px;
+    padding-left: 8px;
+    color: rgb(107, 215, 229);
+    font-size: 10px;
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__sort-option {
+    width: 274px;
+    height: 27px;
+    min-height: 27px;
+    margin-bottom: 2px;
+    padding: 0 10px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(4, 4, 18, 0.96);
+    background-image: resource("Art/UI/PopDark/ManagementV4/tab-idle-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__sort-option:hover,
+.ps-vault-fixed__sort-option:focus {
+    -unity-background-image-tint-color: rgb(255, 224, 183);
+}
+
+.ps-vault-fixed__sort-option.ps-selected {
+    background-image: resource("Art/UI/PopDark/ManagementV4/tab-selected-v2");
+}
+
+.ps-vault-fixed__sort-option-mark {
+    width: 18px;
+    min-width: 18px;
+    color: rgba(218, 177, 117, 0.42);
+    font-size: 8px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__sort-option.ps-selected .ps-vault-fixed__sort-option-mark {
+    color: rgb(93, 226, 238);
+}
+
+.ps-vault-fixed__sort-option-label {
+    min-width: 0;
+    flex-grow: 1;
+    color: rgb(226, 207, 184);
+    font-size: 11px;
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__sort-option.ps-selected .ps-vault-fixed__sort-option-label {
+    color: rgb(255, 232, 194);
+    -unity-font-style: bold;
+}
+
+.ps-vault-fixed__detail {
+    position: absolute;
+    left: 604px;
+    top: 82px;
+    width: 652px;
+    height: 624px;
+    overflow: hidden;
+    background-color: rgba(3, 2, 16, 0.42);
+    border-top-width: 1px;
+    border-top-color: rgba(237, 71, 142, 0.38);
+}
+
+.ps-vault-fixed__standard-detail,
+.ps-vault-fixed__empty-detail,
+.ps-vault-fixed__heirloom-detail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 652px;
+    height: 624px;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__empty-detail {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-fixed__heirloom-detail {
+    display: none;
+}
+
+.ps-vault-fixed__heirloom-detail > .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-vault-fixed__heirloom-detail > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport,
+.ps-vault-fixed__heirloom-detail .unity-scroll-view__content-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-page {
+    position: relative;
+    width: 652px;
+    height: 624px;
+    min-height: 624px;
+    padding: 12px 16px;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-heading {
+    width: 100%;
+    height: 82px;
+    min-height: 82px;
+    padding: 2px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(194, 132, 76, 0.55);
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-eyebrow {
+    height: 16px;
+    min-height: 16px;
+    color: rgb(89, 205, 221);
+    font-size: 9px;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-title {
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    color: rgb(251, 221, 169);
+    font-size: 24px;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-subtitle {
+    height: 22px;
+    min-height: 22px;
+    margin: 0;
+    color: rgb(205, 193, 181);
+    font-size: 10px;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-hero {
+    width: 100%;
+    height: 480px;
+    min-height: 480px;
+    padding: 12px 0 0 0;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-art {
+    width: 270px;
+    min-width: 270px;
+    height: 440px;
+    margin-right: 16px;
+    padding: 30px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-art-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-heirloom-records {
+    min-width: 0;
+    height: 440px;
+    flex-grow: 1;
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v9-effect {
+    width: 100%;
+    min-height: 112px;
+    margin: 0 0 8px 0;
+    padding: 12px 18px;
+    background-color: rgba(5, 4, 22, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(59, 218, 232);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(61, 218, 232, 0.38);
+}
+
+.ps-vault-fixed__heirloom-detail .ps-vault-v11-page-arrow {
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+}
+
+.ps-vault-fixed__art-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 318px;
+    height: 310px;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(4, 3, 25, 0.68);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(83, 226, 238, 0.56);
+}
+
+.ps-vault-fixed__hero-art {
+    position: absolute;
+    left: 14px;
+    top: 4px;
+    width: 290px;
+    height: 278px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__durability {
+    position: absolute;
+    left: 14px;
+    top: 282px;
+    width: 290px;
+    height: 26px;
+    margin: 0;
+    padding: 3px 0 0 0;
+    color: rgb(76, 220, 233);
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    border-top-width: 1px;
+    border-top-color: rgba(72, 217, 230, 0.5);
+}
+
+.ps-vault-fixed__info-stage {
+    position: absolute;
+    left: 332px;
+    top: 0;
+    width: 320px;
+    height: 310px;
+    padding: 8px 4px 4px 0;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__meta {
+    width: 100%;
+    height: 18px;
+    min-height: 18px;
+    margin: 0;
+    color: rgb(91, 215, 230);
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.ps-vault-fixed__name-row {
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    margin: 2px 0 0 0;
+    padding: 0;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-fixed__name {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    color: rgb(251, 221, 169);
+    font-size: 27px;
+    flex-grow: 1;
+    white-space: nowrap;
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__description {
+    width: 100%;
+    height: 60px;
+    min-height: 60px;
+    margin: 0;
+    padding: 2px 0;
+    color: rgb(205, 193, 181);
+    font-size: 12px;
+    white-space: normal;
+}
+
+.ps-vault-fixed__shape-block {
+    position: absolute;
+    left: 0;
+    top: 148px;
+    width: 100%;
+    height: 158px;
+    min-height: 158px;
+    margin: 0;
+    padding: 5px 0 0 0;
+    overflow: hidden;
+    border-top-width: 1px;
+    border-top-color: rgba(204, 124, 72, 0.52);
+}
+
+.ps-vault-fixed__shape-heading {
+    width: 100%;
+    height: 26px;
+    min-height: 26px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-vault-fixed__shape-title {
+    color: rgb(239, 208, 166);
+    font-size: 14px;
+}
+
+.ps-vault-fixed__shape-count {
+    color: rgb(89, 205, 221);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.ps-vault-fixed__shape-row {
+    width: 100%;
+    height: 128px;
+    min-height: 128px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__shape-grid {
+    width: 126px;
+    min-width: 126px;
+    max-width: 126px;
+    height: 126px;
+    min-height: 126px;
+    max-height: 126px;
+    margin: 0;
+    padding: 6px;
+    flex-shrink: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__shape-grid-row {
+    width: 114px;
+    height: 38px;
+    min-height: 38px;
+    flex-direction: row;
+}
+
+.ps-vault-fixed__shape-cell {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    min-height: 36px;
+    margin: 1px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-empty");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__shape-cell.ps-filled {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-filled");
+}
+
+.ps-vault-fixed__shape-cell.ps-element-fire {
+    -unity-background-image-tint-color: rgb(255, 103, 91);
+}
+
+.ps-vault-fixed__shape-cell.ps-element-water {
+    -unity-background-image-tint-color: rgb(77, 218, 239);
+}
+
+.ps-vault-fixed__shape-cell.ps-element-wind {
+    -unity-background-image-tint-color: rgb(89, 224, 157);
+}
+
+.ps-vault-fixed__shape-cell.ps-element-earth {
+    -unity-background-image-tint-color: rgb(242, 190, 88);
+}
+
+.ps-vault-fixed__detail-divider {
+    position: absolute;
+    left: 0;
+    top: 306px;
+    width: 652px;
+    height: 16px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-fixed__card-stage {
+    position: absolute;
+    left: 0;
+    top: 322px;
+    width: 230px;
+    height: 302px;
+    padding: 4px 8px;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-fixed__card-header {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-vault-fixed__card-title {
+    min-width: 0;
+    color: rgb(239, 208, 166);
+    font-size: 15px;
+    flex-grow: 1;
+}
+
+.ps-vault-fixed__flip {
+    position: relative;
+    width: 98px;
+    min-width: 98px;
+    height: 25px;
+    min-height: 25px;
+    padding: 0;
+    flex-direction: row;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__flip-label {
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(3, 4, 16, 0.88);
+    color: rgb(177, 158, 160);
+    font-size: 8px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-fixed__flip-label.ps-selected {
+    background-color: rgba(133, 13, 61, 0.92);
+    color: rgb(255, 228, 195);
+    -unity-font-style: bold;
+}
+
+.ps-vault-fixed__card-host {
+    position: relative;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 2px 0 0 0;
+    padding: 0;
+    overflow: visible;
+}
+
+.ps-vault-fixed__card-host .ps-battle-card {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0;
+    translate: 0 0;
+    scale: 1 1;
+}
+
+.ps-vault-fixed__card-host .ps-battle-card:hover,
+.ps-vault-fixed__card-host .ps-battle-card.ps-demon-card:hover {
+    translate: 0 0;
+    scale: 1 1;
+}
+
+.ps-vault-fixed__effect-slot {
+    position: absolute;
+    left: 238px;
+    width: 414px;
+    height: 112px;
+    overflow: hidden;
+}
+
+.ps-vault-fixed__effect-slot--color {
+    top: 322px;
+}
+
+.ps-vault-fixed__effect-slot--link {
+    top: 438px;
+}
+
+.ps-vault-fixed__effect {
+    width: 414px;
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+    margin: 0;
+    padding: 15px 104px 10px 22px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-vault-fixed__effect--color {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-color-v5");
+}
+
+.ps-vault-fixed__effect--link {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+}
+
+.ps-vault-fixed__effect .ps-vault-v9-effect-eyebrow {
+    height: 13px;
+    min-height: 13px;
+    margin: 0;
+    color: rgb(226, 122, 117);
+    font-size: 9px;
+}
+
+.ps-vault-fixed__effect--link .ps-vault-v9-effect-eyebrow {
+    color: rgb(83, 216, 233);
+}
+
+.ps-vault-fixed__effect .ps-vault-v9-effect-name {
+    height: 27px;
+    min-height: 27px;
+    margin: 0;
+    color: rgb(250, 220, 172);
+    font-size: 18px;
+}
+
+.ps-vault-fixed__effect .ps-vault-v9-effect-body {
+    margin: 0;
+    color: rgb(229, 213, 194);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.ps-vault-fixed__actions {
+    position: absolute;
+    left: 238px;
+    top: 554px;
+    width: 414px;
+    height: 66px;
+    padding: 4px 4px 0 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ps-vault-fixed__actions .ps-vault-v9-lock-action,
+.ps-vault-fixed__actions .ps-vault-v16-next-item {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    margin: 0 0 0 8px;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+}
+
+.ps-vault-fixed__actions .ps-vault-v9-lock-action {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-lock");
+    opacity: 0.42;
+    -unity-background-image-tint-color: rgb(126, 116, 132);
+}
+
+.ps-vault-fixed__actions .ps-vault-v9-lock-action:hover,
+.ps-vault-fixed__actions .ps-vault-v9-lock-action:focus {
+    opacity: 0.72;
+}
+
+.ps-vault-fixed__actions .ps-vault-v9-lock-action.ps-locked {
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-fixed__actions .ps-vault-v16-next-item {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+}
+
+.ps-vault-fixed__empty-detail .ps-empty-state {
+    width: 360px;
+}

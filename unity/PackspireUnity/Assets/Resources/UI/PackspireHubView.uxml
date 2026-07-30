@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="hub-background" class="ps-hub-layer-bg" picking-mode="Ignore">
+        <ui:VisualElement name="hub-background-art" class="ps-hub-v4-bg" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-hub-v4-shade-left" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-hub-v4-shade-center" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-hub-v4-shade-right" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement name="hub-columns" class="ps-hub-layer-hud ps-hub-v4-columns" />
+    <ui:VisualElement name="hub-overlay-host" />
+</ui:UXML>

@@ -4,6 +4,7 @@
 
 Unity UIを作成・修正する前に、必ず
 [`docs/ui/UI_IMPLEMENTATION_RULES.md`](docs/ui/UI_IMPLEMENTATION_RULES.md)
+と[`docs/ui/UI_ARCHITECTURE.md`](docs/ui/UI_ARCHITECTURE.md)
 を読むこと。この規則は画面単位の依頼や一時的なプロンプトより優先する。
 
 - ホーム画面の現行プロダクト表現を最上位のブランド基準とする。
@@ -19,9 +20,11 @@ Unity UIを作成・修正する前に、必ず
 - 装飾量、文字サイズ、コントラスト、余白、視線の主役を見た目として審査する。
 - 「素材を使った」「コンパイルが通った」だけで完成としない。
 - `V2`、`V3`、`Final2`のような追加上書きUSSを作らない。
-- 保管庫・図鑑の正本USSは
-  `unity/PackspireUnity/Assets/Resources/UI/PackspireVaultCodexFinal.uss`
-  とする。
+- 保管庫の正本は`PackspireVaultView.uxml`と`PackspireVaultView.uss`、
+  図鑑の正本は`PackspireCompendiumView.uxml`と
+  `PackspireVaultCodexFinal.uss`とする。
+- 固定構造はUXML、見た目は画面固有USS、データと操作はC#へ置く。
+- document rootへ画面用USSを一括登録しない。
 - 作業終了時に、旧セレクタ、未参照素材、一時ファイル、不要な複製を整理する。
 
 無関係な既存変更は戻さず、依頼対象の画面だけを変更すること。

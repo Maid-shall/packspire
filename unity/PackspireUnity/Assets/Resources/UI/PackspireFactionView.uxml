@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="faction-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="faction-header" class="ps-mgmt-header" />
+        <ui:VisualElement class="ps-faction-body">
+            <ui:VisualElement name="faction-graph-column" class="ps-faction-col-graph">
+                <ui:VisualElement name="faction-graph-host" class="ps-faction-graph-host">
+                    <ui:VisualElement name="faction-graph-edges" class="ps-faction-graph-edges" picking-mode="Ignore" />
+                    <ui:VisualElement name="faction-graph-nodes" class="ps-faction-graph-nodes" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-faction-col-detail">
+                <ui:VisualElement name="faction-detail-surface" class="ps-faction-detail-surface">
+                    <ui:VisualElement name="faction-detail-header" class="ps-faction-detail-header" />
+                    <ui:ScrollView name="faction-detail-scroll" class="ps-faction-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

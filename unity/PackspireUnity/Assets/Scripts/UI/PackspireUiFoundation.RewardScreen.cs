@@ -53,73 +53,55 @@ public sealed partial class PackspireUiFoundation {
   if(string.IsNullOrEmpty(selectedRewardId)||!rewards.Contains(selectedRewardId))
    selectedRewardId=rewards.Length>0?rewards[0]:"";
 
-  rewardShell=Container("ps-reward-screen ps-dark-surface");
-  var backgroundHost=Container("ps-layer-background");
+  rewardShell=CloneView("UI/PackspireRewardView","ps-reward-screen ps-dark-surface");
+  if(rewardShell==null){
+   Debug.LogError("Reward view could not be created.");
+   return;
+  }
+  var backgroundHost=RequireViewElement<VisualElement>(rewardShell,"reward-background");
   var bg=HubBackgroundArt();
   if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-reward-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  backgroundHost.Add(shade);
-  rewardShell.Add(backgroundHost);
+  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
 
-  var contentHost=Container("ps-layer-content");
-  var header=Container("ps-reward-header");
-  header.Add(PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Reward,"ps-reward-header-icon"));
-  rewardHeaderType=new Label(rewardPreviewMode?"戦利品（DEV）":"戦利品"){pickingMode=PickingMode.Ignore};
-  rewardHeaderType.AddToClassList("ps-reward-header-type");
-  header.Add(rewardHeaderType);
+  RequireViewElement<VisualElement>(rewardShell,"reward-header").Insert(
+   0,
+   PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Reward,"ps-reward-header-icon")
+  );
+  rewardHeaderType=RequireViewElement<Label>(rewardShell,"reward-header-type");
+  rewardHeaderType.text=rewardPreviewMode?"戦利品（DEV）":"戦利品";
   string place=rewardPreviewMode?"試掘の間":"封印格子";
-  rewardHeaderPlace=new Label(place){pickingMode=PickingMode.Ignore};
-  rewardHeaderPlace.AddToClassList("ps-reward-header-place");
-  header.Add(rewardHeaderPlace);
-  rewardHeaderText=new Label("暗い卓上に、わずかな光が戦利品だけを照らしている。"){pickingMode=PickingMode.Ignore};
-  rewardHeaderText.AddToClassList("ps-reward-header-text");
-  header.Add(rewardHeaderText);
-  contentHost.Add(header);
+  rewardHeaderPlace=RequireViewElement<Label>(rewardShell,"reward-header-place");
+  rewardHeaderPlace.text=place;
+  rewardHeaderText=RequireViewElement<Label>(rewardShell,"reward-header-text");
+  rewardHeaderText.text="暗い卓上に、わずかな光が戦利品だけを照らしている。";
 
-  var body=Container("ps-reward-body");
-  var candidateCol=Container("ps-reward-col-candidates");
+  var candidateCol=RequireViewElement<VisualElement>(rewardShell,"reward-candidate-column");
   candidateCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-reward-column-boundary"));
-  rewardCandidateScroll=new ScrollView(ScrollViewMode.Vertical);
-  rewardCandidateScroll.AddToClassList("ps-reward-candidate-scroll");
+  rewardCandidateScroll=RequireViewElement<ScrollView>(rewardShell,"reward-candidate-scroll");
   rewardCandidateScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rewardCandidateScroll.scrollOffset=new Vector2(0,rewardCandidateScrollY);
-  rewardCandidateList=Container("ps-reward-candidate-list");
-  rewardCandidateScroll.Add(rewardCandidateList);
-  candidateCol.Add(rewardCandidateScroll);
-  body.Add(candidateCol);
+  rewardCandidateList=RequireViewElement<VisualElement>(rewardShell,"reward-candidate-list");
 
-  var detailCol=Container("ps-reward-col-detail");
+  var detailCol=RequireViewElement<VisualElement>(rewardShell,"reward-detail-column");
   detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-reward-detail-corner"));
-  rewardDetailArtHost=Container("ps-reward-detail-art-host");
-  detailCol.Add(rewardDetailArtHost);
-  rewardDetailScroll=new ScrollView(ScrollViewMode.Vertical);
-  rewardDetailScroll.AddToClassList("ps-reward-detail-scroll");
+  rewardDetailArtHost=RequireViewElement<VisualElement>(rewardShell,"reward-detail-art");
+  rewardDetailScroll=RequireViewElement<ScrollView>(rewardShell,"reward-detail-scroll");
   rewardDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-  detailCol.Add(rewardDetailScroll);
-  body.Add(detailCol);
-  contentHost.Add(body);
 
-  var footer=Container("ps-reward-footer");
-  rewardSelectionStatus=new Label(){pickingMode=PickingMode.Ignore};
-  rewardSelectionStatus.AddToClassList("ps-reward-selection-status");
-  footer.Add(rewardSelectionStatus);
+  rewardSelectionStatus=RequireViewElement<Label>(rewardShell,"reward-selection-status");
+  var actions=RequireViewElement<VisualElement>(rewardShell,"reward-footer");
   rewardConfirmButton=PackspireUiFactory.Button("この戦利品を獲得する",ConfirmRewardSelection);
   rewardConfirmButton.AddToClassList("ps-primary-action");
   rewardConfirmButton.AddToClassList("ps-chrome-action");
   PackspireUiFactory.DecorateActionButton(rewardConfirmButton,true);
-  footer.Add(rewardConfirmButton);
+  actions.Add(rewardConfirmButton);
   rewardReturnButton=PackspireUiFactory.Button(rewardPreviewMode?"プレビューを閉じる":"地図へ戻る",()=>{
    if(rewardPreviewMode)CloseRewardPreview();
    else game.UiReturnToMap();
   });
   rewardReturnButton.AddToClassList("ps-chrome-action");
   PackspireUiFactory.DecorateActionButton(rewardReturnButton,false);
-  footer.Add(rewardReturnButton);
-  contentHost.Add(footer);
-
-  rewardShell.Add(contentHost);
+  actions.Add(rewardReturnButton);
   screenRoot.Add(rewardShell);
 
   RefreshRewardCandidates(true);

@@ -67,6 +67,14 @@ public sealed partial class PackspireUiFoundation {
   var art=Container("ps-vault-grid-art");
   art.pickingMode=PickingMode.Ignore;
   art.Add(VaultItemArt(def.id,"ps-vault-grid-image"));
+  var layout=def.cells==null||def.cells.Length==0?null:BackpackSystem.Layout(def,0,item);
+  if(layout!=null&&layout.Count>0){
+   var element=layout[0].element;
+   var elementPip=Container("ps-vault-grid-element ps-element-"+element.ToString().ToLowerInvariant());
+   elementPip.pickingMode=PickingMode.Ignore;
+   elementPip.Add(new Label(ElementGlyph(element)){pickingMode=PickingMode.Ignore});
+   art.Add(elementPip);
+  }
   var badges=Container("ps-vault-grid-badges");
   badges.pickingMode=PickingMode.Ignore;
   if(heir)badges.Add(VaultGridBadge("家","ps-vault-badge-heirloom"));

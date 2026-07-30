@@ -22,19 +22,23 @@ public sealed partial class PackspireUiFoundation {
   packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,packingRotation);
   var build=BackpackSystem.Build(run);
 
-  var root=Container("ps-rite ps-rite-v3");
+  var root=CloneView("UI/PackspirePackingView","ps-rite ps-rite-v3");
+  if(root==null){
+   Debug.LogError("Packing view could not be created.");
+   return;
+  }
   root.pickingMode=PickingMode.Position;
   packingRootElement=root;
   screenRoot.Add(root);
   var courtyard=HubBackgroundArt();
-  if(courtyard!=null)
-   root.Add(Image(courtyard,new Rect(0,0,1,1),"ps-rite-scene-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-rite-scene-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  root.Add(shade);
+  if(courtyard!=null){
+   var background=RequireViewElement<VisualElement>(root,"packing-background");
+   background.style.backgroundImage=new StyleBackground(courtyard);
+   PackspireUiFactory.ApplyBackgroundScaleMode(background,ScaleMode.ScaleAndCrop);
+  }
   RegisterPackingDrag(root);
 
-  var top=Container("ps-rite-top");
+  var top=RequireViewElement<VisualElement>(root,"packing-top");
   DressRiteFrame(top);
   var brand=Container("ps-rite-brand");
   var brandMark=Container("ps-rite-brand-mark");
@@ -69,10 +73,7 @@ public sealed partial class PackspireUiFoundation {
    topActions.Add(back);
   }
   top.Add(topActions);
-  root.Add(top);
-
-  var body=Container("ps-rite-body");
-  root.Add(body);
+  var body=RequireViewElement<VisualElement>(root,"packing-body");
 
   // Left: floating equip tray (header + filters pinned above scroll)
   var left=Container("ps-rite-left");

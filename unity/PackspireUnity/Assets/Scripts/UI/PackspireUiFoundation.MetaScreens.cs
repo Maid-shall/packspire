@@ -165,7 +165,7 @@ public sealed partial class PackspireUiFoundation {
   if(string.IsNullOrEmpty(selectedVaultUid)||!meta.stash.Any(x=>x.uid==selectedVaultUid))
    selectedVaultUid=meta.stash.FirstOrDefault()?.uid??"";
 
-  var shell=BuildManagementShell("VAULT  /  ARMORY","保管庫",ManagementLayout.VaultListDetail,out _,out _);
+  var shell=BuildVaultFixedView("VAULT  /  ARMORY","保管庫");
   screenRoot.Add(shell);
   RefreshVaultScreen(true);
  }
@@ -203,6 +203,10 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshVaultDetail(MetaSave meta){
+  if(vaultFixedRoot!=null){
+   RefreshVaultFixedDetail(meta);
+   return;
+  }
   ClearMgmtDetailHero();
   mgmtDetailScroll?.Clear();
   var stash=CurrentVaultStash(meta);
@@ -224,7 +228,8 @@ public sealed partial class PackspireUiFoundation {
 
   var identity=Container("ps-vault-v11-equipment-hero");
   var metaLine=PackspireUiFactory.Body($"RANK {Mathf.Max(1,selected.temper+1)}　／　{ItemTypeLabel(def.type)}");
-  metaLine.AddToClassList("ps-vault-v9-meta ps-vault-v11-meta");
+  metaLine.AddToClassList("ps-vault-v9-meta");
+  metaLine.AddToClassList("ps-vault-v11-meta");
   var nameRow=Container("ps-mgmt-detail-name-row ps-vault-v9-name-row");
   var name=PackspireUiFactory.Title(def.name);
   name.AddToClassList("ps-vault-v9-item-name");
@@ -244,7 +249,8 @@ public sealed partial class PackspireUiFoundation {
   artFrame.Add(VaultItemArt(def.id,"ps-vault-v9-item-art ps-vault-v11-item-art"));
   artColumn.Add(artFrame);
   var durability=PackspireUiFactory.Body($"耐久　{selected.durability} / {def.baseDurability}");
-  durability.AddToClassList("ps-vault-v9-durability ps-vault-v11-durability");
+  durability.AddToClassList("ps-vault-v9-durability");
+  durability.AddToClassList("ps-vault-v11-durability");
   artColumn.Add(durability);
   showcase.Add(artColumn);
   var infoColumn=Container("ps-vault-v17-info-column");
@@ -272,14 +278,16 @@ public sealed partial class PackspireUiFoundation {
   flip.EnableInClassList("ps-exploration-active",vaultCardExploration);
   var flipBackground=Container("ps-vault-v9-flip-bg");
   flipBackground.pickingMode=PickingMode.Ignore;
-  flipBackground.transform.scale=new Vector3(vaultCardExploration?-1f:1f,1f,1f);
+  flipBackground.style.scale=new Scale(new Vector3(vaultCardExploration?-1f:1f,1f,1f));
   flip.Add(flipBackground);
   var combatFaceLabel=new Label("戦闘"){pickingMode=PickingMode.Ignore};
-  combatFaceLabel.AddToClassList("ps-vault-v9-flip-label ps-combat");
+  combatFaceLabel.AddToClassList("ps-vault-v9-flip-label");
+  combatFaceLabel.AddToClassList("ps-combat");
   combatFaceLabel.EnableInClassList("ps-selected",!vaultCardExploration);
   flip.Add(combatFaceLabel);
   var explorationFaceLabel=new Label("探索"){pickingMode=PickingMode.Ignore};
-  explorationFaceLabel.AddToClassList("ps-vault-v9-flip-label ps-exploration");
+  explorationFaceLabel.AddToClassList("ps-vault-v9-flip-label");
+  explorationFaceLabel.AddToClassList("ps-exploration");
   explorationFaceLabel.EnableInClassList("ps-selected",vaultCardExploration);
   flip.Add(explorationFaceLabel);
   cardHeader.Add(flip);
@@ -322,25 +330,16 @@ public sealed partial class PackspireUiFoundation {
    }
   );
   actions.Add(lockButton);
-  var nextItemButton=VaultPageArrow(true,()=>{
-   if(heirloom){
+  if(heirloom){
+   var recordButton=VaultPageArrow(true,()=>{
     vaultRecordPage=1;
     RefreshVaultDetail(meta);
-    return;
-   }
-   var visible=CurrentVaultStash(meta);
-   if(visible.Count==0)return;
-   int currentIndex=visible.FindIndex(entry=>entry.uid==selectedVaultUid);
-   int nextIndex=currentIndex<0?0:(currentIndex+1)%visible.Count;
-   selectedVaultUid=visible[nextIndex].uid;
-   vaultRecordPage=0;
-   UpdateMgmtVaultGridSelection(selectedVaultUid);
-   RefreshVaultDetail(meta);
-  });
-  nextItemButton.AddToClassList("ps-vault-v16-next-item");
-  nextItemButton.tooltip="次の装備";
+   });
+   recordButton.AddToClassList("ps-vault-v16-next-item");
+   recordButton.tooltip="家宝の記録を見る";
+   effectPanel.Add(recordButton);
+  }
   effectPanel.Add(actions);
-  effectPanel.Add(nextItemButton);
   lower.Add(effectPanel);
  mgmtDetailScroll?.Add(lower);
 }
@@ -462,7 +461,7 @@ public sealed partial class PackspireUiFoundation {
 
  Button VaultPageArrow(bool forward,System.Action onClick){
   var button=PackspireUiFactory.Button("",onClick);
-  button.transform.scale=new Vector3(forward?1f:-1f,1f,1f);
+  button.style.scale=new Scale(new Vector3(forward?1f:-1f,1f,1f));
   button.AddToClassList("ps-vault-v11-page-arrow");
   button.AddToClassList(forward?"ps-forward":"ps-back");
   button.tooltip=forward?"家宝の記録を見る":"装備の記録へ戻る";
@@ -518,6 +517,7 @@ public sealed partial class PackspireUiFoundation {
  void BuildVaultAgain(){RefreshVaultScreen(false);}
  void RefreshVaultScreen(bool rebuildList){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
+  CloseVaultSortMenu();
   var meta=game.UiMeta;
   var stash=CurrentVaultStash(meta);
   if(vaultFilter<0||vaultFilter>4)vaultFilter=0;
@@ -538,31 +538,11 @@ public sealed partial class PackspireUiFoundation {
    context.AddToClassList("ps-vault-v7-context");
    mgmtListHeader.Add(context);
    if(mgmtVaultFooter!=null){
-    mgmtVaultFooter.Clear();
     mgmtVaultFooter.pickingMode=PickingMode.Position;
-    var sortWrap=Container("ps-vault-v7-rarity-filter");
-    sortWrap.pickingMode=PickingMode.Position;
-    var sortLabel=new Label("並べ替え"){
-     pickingMode=PickingMode.Ignore
-    };
-    sortLabel.AddToClassList("ps-vault-v8-sort-label");
-    sortWrap.Add(sortLabel);
     vaultSortMode=Mathf.Clamp(vaultSortMode,0,VaultSortChoices.Count-1);
-    var sortField=new DropdownField(VaultSortChoices,vaultSortMode);
-    sortField.pickingMode=PickingMode.Position;
-    sortField.SetEnabled(true);
-    sortField.AddToClassList("ps-vault-v8-sort");
-    sortField.RegisterValueChangedCallback(_=>{
-     int next=sortField.index;
-     if(next<0||next==vaultSortMode)return;
-     vaultSortMode=next;
-     RefreshVaultScreen(true);
-    });
-    sortWrap.Add(sortField);
-    mgmtVaultFooter.Add(sortWrap);
-    var count=PackspireUiFactory.Body($"{stash.Count} / {Mathf.Max(240,meta.stash.Count)}");
-    count.AddToClassList("ps-vault-v7-count");
-    mgmtVaultFooter.Add(count);
+    UpdateVaultSortMenuSelection();
+    if(vaultFixedCount!=null)
+     vaultFixedCount.text=$"{stash.Count} / {Mathf.Max(240,meta.stash.Count)}";
     mgmtVaultFooter.BringToFront();
    }
    PopulateVaultGrid(meta,stash);

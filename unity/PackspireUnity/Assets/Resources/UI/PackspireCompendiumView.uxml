@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="compendium-layout" class="ps-management-v3 ps-codex-v8" style="flex-grow: 1;">
+        <ui:VisualElement name="compendium-background" class="ps-layer-background" picking-mode="Ignore">
+            <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-layer-content">
+            <ui:VisualElement name="compendium-header" class="ps-mgmt-header" />
+            <ui:VisualElement class="ps-mgmt-body ps-codex-main-row">
+                <ui:VisualElement name="compendium-index-column" class="ps-mgmt-col-list ps-codex-index-column">
+                    <ui:VisualElement name="compendium-list-header" class="ps-mgmt-list-header ps-codex-index-header" />
+                    <ui:VisualElement class="ps-codex-index-surface">
+                        <ui:ScrollView name="compendium-list-scroll" class="ps-mgmt-list-scroll ps-codex-index-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="compendium-record-column" class="ps-mgmt-col-detail ps-codex-record-column">
+                    <ui:VisualElement class="ps-codex-record-surface">
+                        <ui:VisualElement name="compendium-detail-hero" class="ps-mgmt-detail-hero ps-codex-record-hero">
+                            <ui:VisualElement name="compendium-detail-art" class="ps-art-vignette ps-mgmt-focal-art ps-codex-specimen-art" />
+                            <ui:VisualElement name="compendium-detail-summary" class="ps-mgmt-detail-summary-host ps-codex-record-header" />
+                        </ui:VisualElement>
+                        <ui:ScrollView name="compendium-detail-scroll" class="ps-mgmt-detail-scroll ps-codex-record-scroll" mode="Vertical" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

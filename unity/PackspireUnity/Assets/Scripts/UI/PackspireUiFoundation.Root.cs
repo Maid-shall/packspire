@@ -10,28 +10,9 @@ public sealed partial class PackspireUiFoundation {
    var attached=root.styleSheets[i];
    if(attached!=null&&attached.name.StartsWith("Packspire"))root.styleSheets.Remove(attached);
   }
-  string[] styleSheetPaths={
-   "UI/PackspireTheme",
-   "UI/PackspirePacking",
-   "UI/PackspireRoute",
-   "UI/PackspireGridBoard",
-   "UI/PackspireRoster",
-   "UI/PackspireBattle",
-   "UI/PackspirePolish",
-   "UI/PackspirePopDark",
-   "UI/PackspireManagement",
-   "UI/PackspireMeta",
-   "UI/PackspireCommerce",
-   "UI/PackspireHub",
-   "UI/PackspireOrnaments",
-   "UI/PackspireManagementV3",
-   "UI/PackspireVaultCodexFinal"
-  };
-  foreach(var path in styleSheetPaths){
-   var sheet=PackspireResources.Load<StyleSheet>(path);
-   if(sheet!=null)root.styleSheets.Add(sheet);
-   else Debug.LogWarning($"Missing Packspire style sheet: {path}");
-  }
+  // Only foundation chrome belongs at document scope. Screen styling is
+  // attached to screenRoot by the router so unrelated views cannot override it.
+  AddStyleSheet(root,"UI/PackspireTheme");
   screenRoot=new VisualElement{name="screen-root",pickingMode=PickingMode.Position};screenRoot.AddToClassList("ps-screen-host");root.Add(screenRoot);
   transitionRoot=new VisualElement{name="transition-root",pickingMode=PickingMode.Ignore};transitionRoot.AddToClassList("ps-transition-host");root.Add(transitionRoot);
   dim=Layer("transition-dim");leftPaper=Layer("transition-paper transition-paper-left");rightPaper=Layer("transition-paper transition-paper-right");scrollPaper=Layer("transition-scroll");battleShade=Layer("transition-battle");

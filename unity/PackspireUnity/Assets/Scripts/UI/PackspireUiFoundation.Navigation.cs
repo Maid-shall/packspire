@@ -28,6 +28,8 @@ public sealed partial class PackspireUiFoundation {
 
  void BuildNavHud(){
   navHudRoot=Container("ps-nav-hud ps-layer-navigation");
+  AddStyleSheet(navHudRoot,"UI/PackspireMeta");
+  AddStyleSheet(navHudRoot,"UI/PackspireManagementV3");
   navHudRoot.pickingMode=PickingMode.Ignore;
   navHudRoot.style.display=DisplayStyle.None;
 
@@ -134,7 +136,10 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   navHudRoot.pickingMode=PickingMode.Ignore;
+  bool vaultOwnsBack=game.UiScreen==ScreenId.Vault&&vaultFixedBackButton!=null;
+  navBackButton.style.display=vaultOwnsBack?DisplayStyle.None:DisplayStyle.Flex;
   navBackButton.SetEnabled(navBackStack.Count>0);
+  vaultFixedBackButton?.SetEnabled(navBackStack.Count>0);
   foreach(var child in navMenuDrawer.Children()){
    if(child is not Button item||item.userData is not ScreenId id)continue;
    bool current=id==game.UiScreen;

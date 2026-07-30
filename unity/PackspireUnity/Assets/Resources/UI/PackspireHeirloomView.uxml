@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="heirloom-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="heirloom-header" class="ps-mgmt-header ps-heirloom-header" />
+        <ui:VisualElement class="ps-heirloom-body">
+            <ui:VisualElement name="heirloom-portrait-column" class="ps-heirloom-col-portrait">
+                <ui:VisualElement name="heirloom-portrait-host" class="ps-heirloom-portrait-host" />
+            </ui:VisualElement>
+            <ui:VisualElement name="heirloom-growth-column" class="ps-heirloom-col-growth">
+                <ui:ScrollView name="heirloom-growth-scroll" class="ps-heirloom-growth-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="heirloom-growth-body" class="ps-heirloom-growth-body" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

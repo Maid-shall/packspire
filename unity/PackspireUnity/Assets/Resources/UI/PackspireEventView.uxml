@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="event-background" picking-mode="Ignore" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" />
+    <ui:VisualElement name="event-mist" class="ps-event-mist">
+        <ui:VisualElement name="event-dialog" class="ps-event-panel">
+            <ui:VisualElement name="event-header" />
+            <ui:VisualElement name="event-body" />
+            <ui:VisualElement name="event-choices" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

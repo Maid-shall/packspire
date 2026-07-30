@@ -42,46 +42,32 @@ public sealed partial class PackspireUiFoundation {
  void BuildBattle(){
   EnsureBattleAssets();
   battleUiBuilt=true;
-  battleRoot=Container("ps-battle-screen ps-battle");
+  battleRoot=CloneView("UI/PackspireBattleView","ps-battle-screen ps-battle");
+  if(battleRoot==null){
+   Debug.LogError("Battle view could not be created.");
+   return;
+  }
   screenRoot.Add(battleRoot);
-  BuildBattleBackground(battleRoot);
+  BuildBattleBackground(RequireViewElement<VisualElement>(battleRoot,"battle-background"));
 
-  battleConsumablesRoot=Container("ps-battle-items");
-  battleRoot.Add(battleConsumablesRoot);
+  battleConsumablesRoot=RequireViewElement<VisualElement>(battleRoot,"battle-items");
 
-  battleRoot.Add(BuildBattleActor(false));
-  battleRoot.Add(BuildBattleHud(false));
-  battleRoot.Add(BuildBattleActor(true));
-  battleRoot.Add(BuildBattleHud(true));
-  battleRoot.Add(BuildBattleIntentBadge());
-
-  battleFxLayer=Container("ps-battle-fx-layer");
+  battleFxLayer=RequireViewElement<VisualElement>(battleRoot,"battle-fx");
   battleFxLayer.pickingMode=PickingMode.Ignore;
-  battleRoot.Add(battleFxLayer);
+  int actorIndex=battleRoot.IndexOf(battleFxLayer);
+  battleRoot.Insert(actorIndex++,BuildBattleActor(false));
+  battleRoot.Insert(actorIndex++,BuildBattleHud(false));
+  battleRoot.Insert(actorIndex++,BuildBattleActor(true));
+  battleRoot.Insert(actorIndex++,BuildBattleHud(true));
+  battleRoot.Insert(actorIndex,BuildBattleIntentBadge());
 
   // Hand first (above enemy HUD when overlapping), then chrome under the cards
-  battleHandRoot=Container("ps-battle-hand");
+  battleHandRoot=RequireViewElement<VisualElement>(battleRoot,"battle-hand");
   battleHandRoot.pickingMode=PickingMode.Ignore;
-  battleRoot.Add(battleHandRoot);
 
   // EN / END TURN sit under the card fan
-  var handMeta=Container("ps-battle-hand-meta");
-  handMeta.style.backgroundColor=new Color(0.05f,0.035f,0.02f,0.94f);
-  handMeta.style.borderTopColor=new Color(0.46f,0.32f,0.17f,1f);
-  handMeta.style.borderBottomColor=new Color(0.12f,0.08f,0.05f,1f);
-  handMeta.style.borderLeftColor=new Color(0.32f,0.21f,0.13f,1f);
-  handMeta.style.borderRightColor=new Color(0.18f,0.12f,0.07f,1f);
-  handMeta.style.borderTopWidth=2;
-  handMeta.style.borderBottomWidth=2;
-  handMeta.style.borderLeftWidth=2;
-  handMeta.style.borderRightWidth=2;
-  handMeta.style.paddingTop=6;
-  handMeta.style.paddingBottom=6;
-  handMeta.style.paddingLeft=10;
-  handMeta.style.paddingRight=10;
-  battleSkillMetaLabel=new Label(""){pickingMode=PickingMode.Ignore};
-  battleSkillMetaLabel.AddToClassList("ps-battle-hand-meta-info");
-  handMeta.Add(battleSkillMetaLabel);
+  var handMeta=RequireViewElement<VisualElement>(battleRoot,"battle-hand-meta");
+  battleSkillMetaLabel=RequireViewElement<Label>(battleRoot,"battle-hand-meta-info");
   battleEndTurnButton=PackspireUiFactory.Button("END TURN",()=>{
    if(battleInputLocked)return;
    game.UiEndBattleTurn();
@@ -89,36 +75,17 @@ public sealed partial class PackspireUiFoundation {
   battleEndTurnButton.AddToClassList("ps-battle-btn");
   battleEndTurnButton.AddToClassList("ps-battle-btn-end");
   ApplyBattlePlate(battleEndTurnButton,battlePlateWide,ScaleMode.StretchToFill);
-  battleEndTurnButton.style.width=200;
-  battleEndTurnButton.style.height=56;
-  battleEndTurnButton.style.minWidth=200;
-  battleEndTurnButton.style.minHeight=56;
-  battleEndTurnButton.style.fontSize=18;
-  battleEndTurnButton.style.color=new Color(0.77f,0.66f,0.38f,1f);
-  battleEndTurnButton.style.unityTextOutlineColor=new Color(0.03f,0.015f,0.01f,0.95f);
-  battleEndTurnButton.style.unityTextOutlineWidth=1;
   handMeta.Add(battleEndTurnButton);
-  battleRoot.Add(handMeta);
 
   // Skill last so it stays above hand/actors for hit-testing
-  var skillCol=Container("ps-battle-skill-col");
+  var skillCol=RequireViewElement<VisualElement>(battleRoot,"battle-skill-column");
   skillCol.pickingMode=PickingMode.Ignore;
   battleSkillButton=PackspireUiFactory.Button("SKILL",OnBattleSkillClicked);
   battleSkillButton.AddToClassList("ps-battle-btn");
   battleSkillButton.AddToClassList("ps-battle-btn-skill");
   battleSkillButton.pickingMode=PickingMode.Position;
   ApplyBattlePlate(battleSkillButton,battlePlateHex,ScaleMode.StretchToFill);
-  // Force size in code — USS alone was missed when classes were space-joined.
-  battleSkillButton.style.width=150;
-  battleSkillButton.style.height=150;
-  battleSkillButton.style.minWidth=150;
-  battleSkillButton.style.minHeight=150;
-  battleSkillButton.style.fontSize=22;
-  battleSkillButton.style.color=new Color(0.77f,0.66f,0.38f,1f);
-  battleSkillButton.style.unityTextOutlineColor=new Color(0.03f,0.015f,0.01f,0.95f);
-  battleSkillButton.style.unityTextOutlineWidth=1;
   skillCol.Add(battleSkillButton);
-  battleRoot.Add(skillCol);
 
   RefreshBattleUi();
   ShowBattleStartBanner();

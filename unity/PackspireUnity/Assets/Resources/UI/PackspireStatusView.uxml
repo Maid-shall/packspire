@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="status-layout" class="ps-management-v3 ps-status-v2" style="flex-grow: 1;">
+        <ui:VisualElement name="status-background" class="ps-layer-background" picking-mode="Ignore">
+            <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-layer-content">
+            <ui:VisualElement name="status-header" class="ps-mgmt-header" />
+            <ui:VisualElement class="ps-mgmt-body ps-status-main-row">
+                <ui:VisualElement name="status-character-column" class="ps-status-character-column">
+                    <ui:VisualElement class="ps-status-character-surface">
+                        <ui:ScrollView name="status-character-scroll" class="ps-status-character-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                            <ui:VisualElement name="status-character-host" class="ps-status-character-host" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="status-roles-column" class="ps-status-roles-column">
+                    <ui:VisualElement class="ps-status-roles-surface">
+                        <ui:VisualElement name="status-list-header" class="ps-mgmt-list-header ps-status-roles-header" />
+                        <ui:ScrollView name="status-list-scroll" class="ps-mgmt-list-scroll ps-status-roles-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="status-detail-column" class="ps-status-role-detail-column">
+                    <ui:VisualElement name="status-detail-surface" class="ps-status-role-detail-surface">
+                        <ui:VisualElement name="status-detail-hero" class="ps-mgmt-detail-hero ps-status-detail-header">
+                            <ui:VisualElement name="status-detail-art" class="ps-mgmt-detail-art-host ps-status-role-image ps-art-vignette" />
+                            <ui:VisualElement name="status-detail-summary" class="ps-mgmt-detail-summary-host ps-status-role-identity" />
+                        </ui:VisualElement>
+                        <ui:ScrollView name="status-detail-scroll" class="ps-mgmt-detail-scroll ps-status-role-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -18,66 +18,45 @@ public sealed partial class PackspireUiFoundation {
   if(string.IsNullOrEmpty(selectedCharacterId)||!CharacterCatalog.All.ContainsKey(selectedCharacterId))
    selectedCharacterId=CharacterCatalog.DefaultId;
 
-  rosterShell=Container("ps-roster-screen ps-dark-surface");
-  var backgroundHost=Container("ps-layer-background");
+  rosterShell=CloneView("UI/PackspireCharacterView","ps-roster-screen ps-dark-surface");
+  if(rosterShell==null){
+   Debug.LogError("Character view could not be created.");
+   return;
+  }
+  var backgroundHost=RequireViewElement<VisualElement>(rosterShell,"character-background");
   var bg=HubBackgroundArt();
   if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Add(Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
-  var shade=Container("ps-mgmt-shade");
-  shade.pickingMode=PickingMode.Ignore;
-  backgroundHost.Add(shade);
-  rosterShell.Add(backgroundHost);
+  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
 
-  var contentHost=Container("ps-layer-content");
-  var header=Container("ps-mgmt-header");
+  var header=RequireViewElement<VisualElement>(rosterShell,"character-header");
   header.Add(ChromeBrand("ROSTER  /  RECRUIT","遠征者の選択",PackspireUiFactory.PopIcon.RoleCurrent));
-  contentHost.Add(header);
 
-  var body=Container("ps-roster-body");
-  var reelCol=Container("ps-roster-col-reel");
+  var reelCol=RequireViewElement<VisualElement>(rosterShell,"character-reel-column");
   reelCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-roster-column-boundary"));
-  var reelHead=new Label("キャラクター"){pickingMode=PickingMode.Ignore};
-  reelHead.AddToClassList("ps-roster-reel-heading");
-  reelCol.Add(reelHead);
-  rosterReelScroll=new ScrollView(ScrollViewMode.Vertical);
-  rosterReelScroll.AddToClassList("ps-roster-reel-scroll");
+  rosterReelScroll=RequireViewElement<ScrollView>(rosterShell,"character-reel-scroll");
   rosterReelScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rosterReelScroll.scrollOffset=new Vector2(0,rosterReelScrollY);
-  var reel=Container("ps-roster-reel");
+  var reel=RequireViewElement<VisualElement>(rosterShell,"character-reel");
   reel.name="roster-reel";
   foreach(var character in CharacterCatalog.Roster){
    var def=character;
    reel.Add(ManagementReelRow(def.id,def.name,"",def.id==selectedCharacterId,()=>SelectRosterCharacter(def.id)));
   }
-  rosterReelScroll.Add(reel);
-  reelCol.Add(rosterReelScroll);
-  body.Add(reelCol);
 
-  var artCol=Container("ps-roster-col-art");
-  rosterArtHost=Container("ps-roster-art-host");
-  artCol.Add(rosterArtHost);
-  body.Add(artCol);
+  rosterArtHost=RequireViewElement<VisualElement>(rosterShell,"character-art-host");
 
-  var detailCol=Container("ps-roster-col-detail");
+  var detailCol=RequireViewElement<VisualElement>(rosterShell,"character-detail-column");
   detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-roster-detail-corner"));
-  rosterDetailScrollHost=new ScrollView(ScrollViewMode.Vertical);
-  rosterDetailScrollHost.AddToClassList("ps-roster-detail-scroll");
+  rosterDetailScrollHost=RequireViewElement<ScrollView>(rosterShell,"character-detail-scroll");
   rosterDetailScrollHost.verticalScrollerVisibility=ScrollerVisibility.Auto;
-  rosterDetailBody=Container("ps-roster-detail-body");
-  rosterDetailScrollHost.Add(rosterDetailBody);
-  detailCol.Add(rosterDetailScrollHost);
-  var footer=Container("ps-roster-footer");
+  rosterDetailBody=RequireViewElement<VisualElement>(rosterShell,"character-detail-body");
+  var footer=RequireViewElement<VisualElement>(rosterShell,"character-footer");
   rosterConfirmButton=PackspireUiFactory.Button(meta.characterMade?"このキャラクターを選ぶ":"このキャラで始める",ConfirmRosterSelection);
   rosterConfirmButton.AddToClassList("ps-primary-action");
   rosterConfirmButton.AddToClassList("ps-chrome-action");
   rosterConfirmButton.AddToClassList("ps-roster-confirm");
   PackspireUiFactory.DecorateActionButton(rosterConfirmButton,true);
   footer.Add(rosterConfirmButton);
-  detailCol.Add(footer);
-  body.Add(detailCol);
-
-  contentHost.Add(body);
-  rosterShell.Add(contentHost);
   screenRoot.Add(rosterShell);
 
   RefreshRosterArt();
