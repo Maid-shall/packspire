@@ -2245,3 +2245,58 @@
 .ps-gboard .ps-gboard-side-preview.ps-demon-card .ps-battle-card-text {
     font-size: 14px;
 }
+
+/* Obsidian misprint route board */
+.ps-gboard {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-route-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(7, 8, 8);
+}
+.ps-gboard .ps-gboard-stage,
+.ps-gboard .ps-gboard-combat-stage { background-color: rgba(0, 0, 0, 0); }
+.ps-gboard .ps-gboard-map-stats,
+.ps-gboard .ps-gboard-dock,
+.ps-gboard .ps-gboard-player-hud,
+.ps-gboard .ps-gboard-combat-rail,
+.ps-gboard .ps-gboard-selected,
+.ps-gboard .ps-gboard-cell-detail {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-gboard .ps-gboard-route-palette,
+.ps-gboard .ps-gboard-gate-dialog {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-gboard .ps-gboard-gate-dialog .unity-label { color: rgb(42, 35, 27); }
+.ps-gboard .ps-gboard-panel-title,
+.ps-gboard .ps-gboard-combat-title,
+.ps-gboard .ps-gboard-hero-name { color: rgb(231, 204, 163); }
+.ps-gboard .ps-gboard-action,
+.ps-gboard .ps-gboard-endturn,
+.ps-gboard .ps-gboard-route-start,
+.ps-gboard .ps-gboard-gate-next {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(230, 203, 163);
+}
+.ps-gboard .ps-gboard-cell.ps-gboard-path,
+.ps-gboard .ps-gboard-cell.ps-gboard-goal { border-bottom-color: rgb(50, 182, 188); }
+.ps-gboard .ps-gboard-cell.ps-gboard-current,
+.ps-gboard .ps-gboard-cell.ps-gboard-selected { border-bottom-color: rgb(190, 48, 37); }
+.ps-gboard .ps-gboard-mode-toast {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    color: rgb(26, 22, 18);
+}

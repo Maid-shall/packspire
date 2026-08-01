@@ -2,6 +2,9 @@
     <ui:VisualElement name="result-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-result-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--result" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--paper-corner" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
         <ui:VisualElement class="ps-result-body">
             <ui:VisualElement class="ps-result-col-visual">

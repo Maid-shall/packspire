@@ -33,29 +33,12 @@ public sealed partial class PackspireUiFoundation {
  bool vaultFixedSortMenuOpen;
 
  VisualElement BuildVaultFixedView(string eyebrow,string title){
-  var template=PackspireResources.Load<VisualTreeAsset>("UI/PackspireVaultView");
-  var sheet=PackspireResources.Load<StyleSheet>("UI/PackspireVaultView");
-  if(template==null||sheet==null){
-   Debug.LogError("Vault fixed view assets are missing.");
-   return BuildManagementShell(
-    eyebrow,
-    title,
-    ManagementLayout.VaultListDetail,
-    out _,
-    out _
-   );
-  }
-
-  var shell=Container("ps-vault-fixed");
-  shell.styleSheets.Add(sheet);
-  template.CloneTree(shell);
+  var shell=CloneView("UI/PackspireVaultView","ps-vault-fixed");
+  if(shell==null)
+   throw new InvalidOperationException("Vault view template is missing.");
   vaultFixedRoot=shell;
 
-  var background=shell.Q<VisualElement>("vault-background");
-  var backgroundTexture=HubBackgroundArt();
-  if(backgroundTexture==null)backgroundTexture=CourtyardArt();
-  if(backgroundTexture!=null)
-   background.Add(Image(backgroundTexture,new Rect(0,0,1,1),"ps-vault-fixed__background-image",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(shell,"vault-background");
 
   var backHost=RequireViewElement<VisualElement>(shell,"vault-back-host");
   vaultFixedBackButton=PackspireUiFactory.Button("",NavGoBack);
@@ -71,12 +54,9 @@ public sealed partial class PackspireUiFoundation {
   vaultFixedBackButton.Add(backLabel);
   backHost.Add(vaultFixedBackButton);
 
-  var brandHost=RequireViewElement<VisualElement>(shell,"vault-brand-host");
-  brandHost.Add(ManagementBrand(
-   eyebrow,
-   title,
-   PackspireUiFactory.ManagementChrome.VaultCrest
-  ));
+  RequireViewElement<VisualElement>(shell,"vault-brand-host");
+  RequireViewElement<Label>(shell,"vault-header-eyebrow").text=eyebrow;
+  RequireViewElement<Label>(shell,"vault-header-title").text=title;
 
   mgmtListHeader=shell.Q<VisualElement>("vault-list-header");
   mgmtListScroll=shell.Q<ScrollView>("vault-list-scroll");

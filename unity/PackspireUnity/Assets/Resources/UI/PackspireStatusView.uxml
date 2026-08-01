@@ -1,10 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:VisualElement name="status-layout" class="ps-management-v3 ps-status-v2" style="flex-grow: 1;">
+    <ui:VisualElement name="status-layout" class="ps-management-v3 ps-status-v2">
         <ui:VisualElement name="status-background" class="ps-layer-background" picking-mode="Ignore">
             <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--status" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--ledger" picking-mode="Ignore" />
         <ui:VisualElement class="ps-layer-content">
-            <ui:VisualElement name="status-header" class="ps-mgmt-header" />
+            <ui:VisualElement name="status-header" class="ps-mgmt-header">
+                <ui:VisualElement class="ps-misprint-header-copy">
+                    <ui:Label name="status-header-eyebrow" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                    <ui:Label name="status-header-title" class="ps-misprint-header-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement class="ps-mgmt-body ps-status-main-row">
                 <ui:VisualElement name="status-character-column" class="ps-status-character-column">
                     <ui:VisualElement class="ps-status-character-surface">

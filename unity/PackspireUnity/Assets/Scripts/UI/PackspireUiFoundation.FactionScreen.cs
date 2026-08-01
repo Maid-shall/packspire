@@ -48,18 +48,12 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   if(showAllFactionsForLayoutPreview)factionShell.AddToClassList("ps-faction-layout-preview");
-  var backgroundHost=RequireViewElement<VisualElement>(factionShell,"faction-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(factionShell,"faction-background");
 
-  var header=RequireViewElement<VisualElement>(factionShell,"faction-header");
-  header.Add(ChromeBrand("FACTION  /  LEDGER","勢力",PackspireUiFactory.PopIcon.RoleFaction));
+  RequireViewElement<VisualElement>(factionShell,"faction-header");
 
-  var graphCol=RequireViewElement<VisualElement>(factionShell,"faction-graph-column");
-  graphCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-faction-column-boundary"));
+  RequireViewElement<VisualElement>(factionShell,"faction-graph-column");
   factionGraphHost=RequireViewElement<VisualElement>(factionShell,"faction-graph-host");
-  AddSurfaceOuterCorners(factionGraphHost);
   factionGraphEdges=RequireViewElement<VisualElement>(factionShell,"faction-graph-edges");
   factionGraphEdges.pickingMode=PickingMode.Ignore;
   factionGraphNodes=RequireViewElement<VisualElement>(factionShell,"faction-graph-nodes");
@@ -67,8 +61,7 @@ public sealed partial class PackspireUiFoundation {
   factionEdgeLayoutReady=false;
   factionGraphLastSize=Vector2.zero;
 
-  var detailSurface=RequireViewElement<VisualElement>(factionShell,"faction-detail-surface");
-  detailSurface.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-faction-detail-corner"));
+  RequireViewElement<VisualElement>(factionShell,"faction-detail-surface");
   factionDetailHeader=RequireViewElement<VisualElement>(factionShell,"faction-detail-header");
   factionDetailScroll=RequireViewElement<ScrollView>(factionShell,"faction-detail-scroll");
   factionDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;

@@ -16,6 +16,10 @@ UI Toolkitの責務は次の三層に固定する。
 `PackspireUiFoundation.Router.cs` は遷移だけを担当し、画面参照の破棄は
 `PackspireUiFoundation.ScreenCleanup.cs` が担当する。
 
+責務分離は推奨ではなく実装条件とする。C# Presenterは状態を意味クラスとして
+USSへ渡し、固定座標・固定色・背景画像・装飾用インラインスタイルを所有しない。
+固定の装飾要素と差込口はUXML、状態ごとの視覚差分はUSSへ置く。
+
 ## Resource Scope
 
 - document rootへ付けるUSSは`PackspireTheme.uss`だけにする。

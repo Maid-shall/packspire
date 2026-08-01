@@ -1,4 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--map" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--route-arrow" picking-mode="Ignore" />
     <ui:VisualElement name="gridboard-stage" class="ps-gboard-stage">
         <ui:VisualElement name="gridboard-viewport" class="ps-gboard-viewport" />
     </ui:VisualElement>

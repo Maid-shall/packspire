@@ -15,17 +15,13 @@ public sealed partial class PackspireUiFoundation {
  Label battleIntentKind,battleIntentValue,battleIntentHint;
  Label battleSkillMetaLabel;
  Button battleSkillButton,battleEndTurnButton;
- Texture2D battleEnvFarBg,battleEnvMidBg,battleSceneBg;
  Texture2D battleIconDamage,battleIconBlock,battleIconHeal,battleIconEnergy,battleIconClaw;
  Texture2D battlePlateWide,battlePlateHex,battleMeterFrame;
  int battleFloaterSerial;
  bool battleStartBannerShown;
 
  void EnsureBattleAssets(){
-  if(battleSceneBg!=null&&battleIconDamage!=null&&battlePlateHex!=null)return;
-  battleSceneBg=PackspireResources.Load<Texture2D>("Art/Battle/battle-bg-forest-ground-v1");
-  battleEnvFarBg=PackspireResources.Load<Texture2D>("Art/RouteKeyed/far-background-v1");
-  battleEnvMidBg=PackspireResources.Load<Texture2D>("Art/RouteKeyed/midground-v1");
+  if(battleIconDamage!=null&&battlePlateHex!=null)return;
   battleIconDamage=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-damage");
   battleIconBlock=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-block");
   battleIconHeal=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-heal");
@@ -48,7 +44,7 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   screenRoot.Add(battleRoot);
-  BuildBattleBackground(RequireViewElement<VisualElement>(battleRoot,"battle-background"));
+  RequireViewElement<VisualElement>(battleRoot,"battle-background");
 
   battleConsumablesRoot=RequireViewElement<VisualElement>(battleRoot,"battle-items");
 
@@ -89,23 +85,6 @@ public sealed partial class PackspireUiFoundation {
 
   RefreshBattleUi();
   ShowBattleStartBanner();
- }
-
- void BuildBattleBackground(VisualElement root){
-  if(battleSceneBg!=null)
-   root.Add(Image(battleSceneBg,new Rect(0,0,1,1),"ps-battle-bg ps-battle-bg-scene",ScaleMode.ScaleAndCrop));
-  else {
-   if(battleEnvFarBg!=null)
-    root.Add(Image(battleEnvFarBg,new Rect(0,0,1,1),"ps-battle-bg ps-battle-bg-far",ScaleMode.ScaleAndCrop));
-   if(battleEnvMidBg!=null)
-    root.Add(Image(battleEnvMidBg,new Rect(0,0,1,1),"ps-battle-bg ps-battle-bg-mid",ScaleMode.ScaleAndCrop));
-  }
-  var dim=Container("ps-battle-bg-dim");
-  dim.pickingMode=PickingMode.Ignore;
-  root.Add(dim);
-  var veil=Container("ps-battle-bg-ground-veil");
-  veil.pickingMode=PickingMode.Ignore;
-  root.Add(veil);
  }
 
  void ShowBattleStartBanner(){

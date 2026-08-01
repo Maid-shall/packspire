@@ -27,18 +27,11 @@ public sealed partial class PackspireUiFoundation {
   shell=CloneView(viewPath,rootClass);
   if(shell==null)return false;
 
-  var background=RequireViewElement<VisualElement>(shell,prefix+"-background");
-  var backgroundTexture=HubBackgroundArt();
-  if(backgroundTexture==null)backgroundTexture=CourtyardArt();
-  if(backgroundTexture!=null)
-   background.Insert(0,Image(backgroundTexture,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(shell,prefix+"-background");
 
-  var header=RequireViewElement<VisualElement>(shell,prefix+"-header");
-  header.Add(ManagementBrand(
-   eyebrow,
-   title,
-   PackspireUiFactory.ManagementChrome.RoleCrest
-  ));
+  RequireViewElement<VisualElement>(shell,prefix+"-header");
+  RequireViewElement<Label>(shell,prefix+"-header-eyebrow").text=eyebrow;
+  RequireViewElement<Label>(shell,prefix+"-header-title").text=title;
 
   mgmtOverviewHost=null;
   mgmtDetailHero=RequireViewElement<VisualElement>(shell,prefix+"-detail-hero");
@@ -50,32 +43,17 @@ public sealed partial class PackspireUiFoundation {
   detailScroll=RequireViewElement<ScrollView>(shell,prefix+"-detail-scroll");
 
   if(layout==ManagementLayout.StatusOverview){
-   var characterColumn=RequireViewElement<VisualElement>(shell,"status-character-column");
-   characterColumn.Add(PackspireUiFactory.SystemOrnament(
-    PackspireUiFactory.PopOrnament.VerticalBoundary,
-    "ps-mgmt-column-boundary"
-   ));
-   var rolesColumn=RequireViewElement<VisualElement>(shell,"status-roles-column");
-   rolesColumn.Add(PackspireUiFactory.SystemOrnament(
-    PackspireUiFactory.PopOrnament.VerticalBoundary,
-    "ps-mgmt-column-boundary"
-   ));
-   var detailSurface=RequireViewElement<VisualElement>(shell,"status-detail-surface");
-   detailSurface.Insert(0,PackspireUiFactory.ManagementArt(
-    PackspireUiFactory.ManagementChrome.DetailCorner,
-    "ps-mgmt-open-corner ps-management-detail-corner"
-   ));
+   RequireViewElement<VisualElement>(shell,"status-character-column");
+   RequireViewElement<VisualElement>(shell,"status-roles-column");
+   RequireViewElement<VisualElement>(shell,"status-detail-surface");
    var characterScroll=RequireViewElement<ScrollView>(shell,"status-character-scroll");
    mgmtOverviewHost=RequireViewElement<VisualElement>(shell,"status-character-host");
    StretchMgmtScrollContent(characterScroll);
    StretchMgmtScrollContent(listScroll);
    StretchMgmtScrollContent(detailScroll,false);
   }else{
-   var indexColumn=RequireViewElement<VisualElement>(shell,"compendium-index-column");
-   indexColumn.Add(PackspireUiFactory.SystemOrnament(
-    PackspireUiFactory.PopOrnament.VerticalBoundary,
-    "ps-mgmt-column-boundary"
-   ));
+   BindCompendiumView(shell);
+   RequireViewElement<VisualElement>(shell,"compendium-index-column");
    StretchMgmtScrollContent(listScroll);
    StretchMgmtScrollContent(detailScroll,true);
   }
@@ -86,5 +64,47 @@ public sealed partial class PackspireUiFoundation {
   mgmtDetailScroll=detailScroll;
   return true;
  }
-}
+
+ void BindCompendiumView(VisualElement shell){
+  compendiumViewRoot=RequireViewElement<VisualElement>(shell,"compendium-layout");
+  compendiumItemRecord=RequireViewElement<VisualElement>(shell,"compendium-item-record");
+  compendiumGenericRecord=RequireViewElement<VisualElement>(shell,"compendium-generic-record");
+  compendiumItemArtHost=RequireViewElement<VisualElement>(shell,"compendium-item-art");
+  compendiumItemShapeHost=RequireViewElement<VisualElement>(shell,"compendium-shape-list");
+  compendiumItemCardPanel=RequireViewElement<VisualElement>(shell,"compendium-card-panel");
+  compendiumItemCardStage=RequireViewElement<VisualElement>(shell,"compendium-card-stage");
+  compendiumItemLinkHost=RequireViewElement<VisualElement>(shell,"compendium-link-effect");
+  compendiumItemMeta=RequireViewElement<Label>(shell,"compendium-item-meta");
+  compendiumItemName=RequireViewElement<Label>(shell,"compendium-item-name");
+  compendiumItemDescription=RequireViewElement<Label>(shell,"compendium-item-description");
+  compendiumItemShapeCount=RequireViewElement<Label>(shell,"compendium-shape-count");
+  compendiumAcquisitionSource=RequireViewElement<Label>(shell,"compendium-acquisition-source");
+  compendiumAcquisitionTier=RequireViewElement<Label>(shell,"compendium-acquisition-tier");
+  compendiumDiscoveryCount=RequireViewElement<Label>(shell,"compendium-discovery-count");
+
+  compendiumItemTab=RequireViewElement<Button>(shell,"compendium-tab-items");
+  compendiumRoleTab=RequireViewElement<Button>(shell,"compendium-tab-roles");
+  compendiumEnemyTab=RequireViewElement<Button>(shell,"compendium-tab-enemies");
+  compendiumCombatTab=RequireViewElement<Button>(shell,"compendium-card-combat");
+  compendiumExplorationTab=RequireViewElement<Button>(shell,"compendium-card-exploration");
+  var nextPage=RequireViewElement<Button>(shell,"compendium-item-next-page");
+
+  compendiumItemTab.clicked+=()=>SelectCompendiumTab(0);
+  compendiumRoleTab.clicked+=()=>SelectCompendiumTab(1);
+  compendiumEnemyTab.clicked+=()=>SelectCompendiumTab(2);
+  compendiumCombatTab.clicked+=()=>SelectCompendiumCardFace(false);
+  compendiumExplorationTab.clicked+=()=>SelectCompendiumCardFace(true);
+  nextPage.clicked+=ShowCompendiumLorePage;
+
+  RequireViewElement<VisualElement>(shell,"compendium-tab-items-icon").Add(
+   PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Weapon)
+  );
+  RequireViewElement<VisualElement>(shell,"compendium-tab-roles-icon").Add(
+   PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.RoleCurrent)
+  );
+  RequireViewElement<VisualElement>(shell,"compendium-tab-enemies-icon").Add(
+   PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.RoleComposite)
+  );
+ }
+ }
 }

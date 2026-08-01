@@ -85,12 +85,25 @@ public sealed partial class PackspireUiFoundation {
  void ClearHubReferences(){
   hubShell=null;
   hubFacilityScroll=null;
+  hubNavButtons=null;
   hubCharacterHost=null;
+  hubCharacterStudyFront=null;
+  hubCharacterStudyBack=null;
   hubBriefingHost=null;
+  hubEquipmentRoleArt=null;
+  hubEquipmentHeirloomArt=null;
   hubGoldLabel=null;
+  hubCharacterNameLabel=null;
+  hubDestinationNameLabel=null;
+  hubDestinationCodeLabel=null;
+  hubMissionTitleLabel=null;
+  hubMissionDestinationLabel=null;
+  hubMissionLoadoutLabel=null;
+  hubMissionCargoLabel=null;
+  hubVaultIndexCountLabel=null;
+  hubCodexIndexCountLabel=null;
   hubStreetGuideEntry=null;
   hubStreetGuideModal=null;
-  hubStreetGuideList=null;
   hubStreetGuideDetail=null;
   hubStreetGuideFacilityScroll=null;
   hubStreetGuideOpen=false;

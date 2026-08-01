@@ -58,10 +58,7 @@ public sealed partial class PackspireUiFoundation {
    Debug.LogError("Reward view could not be created.");
    return;
   }
-  var backgroundHost=RequireViewElement<VisualElement>(rewardShell,"reward-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(rewardShell,"reward-background");
 
   RequireViewElement<VisualElement>(rewardShell,"reward-header").Insert(
    0,
@@ -75,15 +72,13 @@ public sealed partial class PackspireUiFoundation {
   rewardHeaderText=RequireViewElement<Label>(rewardShell,"reward-header-text");
   rewardHeaderText.text="暗い卓上に、わずかな光が戦利品だけを照らしている。";
 
-  var candidateCol=RequireViewElement<VisualElement>(rewardShell,"reward-candidate-column");
-  candidateCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-reward-column-boundary"));
+  RequireViewElement<VisualElement>(rewardShell,"reward-candidate-column");
   rewardCandidateScroll=RequireViewElement<ScrollView>(rewardShell,"reward-candidate-scroll");
   rewardCandidateScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rewardCandidateScroll.scrollOffset=new Vector2(0,rewardCandidateScrollY);
   rewardCandidateList=RequireViewElement<VisualElement>(rewardShell,"reward-candidate-list");
 
-  var detailCol=RequireViewElement<VisualElement>(rewardShell,"reward-detail-column");
-  detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-reward-detail-corner"));
+  RequireViewElement<VisualElement>(rewardShell,"reward-detail-column");
   rewardDetailArtHost=RequireViewElement<VisualElement>(rewardShell,"reward-detail-art");
   rewardDetailScroll=RequireViewElement<ScrollView>(rewardShell,"reward-detail-scroll");
   rewardDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;

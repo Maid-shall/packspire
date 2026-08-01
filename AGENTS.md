@@ -24,6 +24,8 @@ Unity UIを作成・修正する前に、必ず
   図鑑の正本は`PackspireCompendiumView.uxml`と
   `PackspireVaultCodexFinal.uss`とする。
 - 固定構造はUXML、見た目は画面固有USS、データと操作はC#へ置く。
+- 三層の責務を混ぜない。C#へ固定座標・固定色・背景画像・装飾目的の
+  インラインスタイルを置かず、状態は意味クラスとしてUSSへ渡す。
 - document rootへ画面用USSを一括登録しない。
 - 作業終了時に、旧セレクタ、未参照素材、一時ファイル、不要な複製を整理する。
 

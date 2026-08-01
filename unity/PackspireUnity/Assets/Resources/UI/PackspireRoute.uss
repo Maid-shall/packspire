@@ -1449,3 +1449,50 @@
     border-top-color: rgba(150, 125, 80, 0.35);
     border-bottom-color: rgba(150, 125, 80, 0.35);
 }
+
+/* Obsidian misprint event folio */
+.ps-event-screen {
+    background-color: rgb(7, 8, 8);
+}
+.ps-event-background-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-ledger-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-event-screen .ps-event-mist { background-color: rgba(1, 2, 2, 0.10); }
+.ps-event-screen .ps-event-panel {
+    padding: 24px 30px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-event-screen #event-header {
+    min-height: 76px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-event-screen #event-header .unity-label { color: rgb(25, 21, 17); }
+.ps-event-screen #event-body .unity-label { color: rgb(42, 35, 27); font-size: 14px; }
+.ps-event-screen .ps-event-choice {
+    min-height: 62px;
+    margin-bottom: 8px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-event-choice-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-event-screen .ps-event-choice .unity-label { color: rgb(42, 35, 27); }
+.ps-event-screen .ps-event-choice:hover {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-reward-ticket-v1");
+}

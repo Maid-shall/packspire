@@ -368,7 +368,11 @@ public static class PackspireContentAssetBuilder {
 
  static CharacterContent[] Characters()=>new[]{
   Character("ren","蓮","鉄鎧の剣士","前線で敵の刃を受け止める遠征者。",0,0,"不屈","最大HP+4","maxHpBonus",4,"ren_rush","突撃","敵に10ダメージ。戦闘中1回。"),
-  Character("mio","澪","影走りの斥候","隙を見逃さない探索の専門家。",1,1,"先読み","戦闘開始時に1枚追加ドロー","openingDraw",1,"mio_read","見切り","8ブロック、1枚ドロー。戦闘中1回。"),
+  Character("mio","澪","影走りの斥候","隙を見逃さない探索の専門家。",1,1,"先読み","戦闘開始時に1枚追加ドロー","openingDraw",1,"mio_read","見切り","8ブロック、1枚ドロー。戦闘中1回。",
+   null,null,null,
+   "Art/Portraits/ObsidianMisprint/hero-mio-front-study-v1",
+   "Art/Portraits/ObsidianMisprint/hero-mio-front-study-v1",
+   "Art/Portraits/ObsidianMisprint/hero-mio-hub-v1"),
   Character("kuro","玄","城壁の守人","最初の一撃を凌ぐ重装の護衛。",2,0,"堅守","戦闘開始時に4ブロック","openingBlock",4,"kuro_bulwark","鉄壁","14ブロック。戦闘中1回。"),
   Character("hina","陽菜","錬装の技師","装備と道具の扱いに長けた工匠。",3,2,"整備","戦闘勝利時の所持金+3","winGold",3,"hina_repair","応急修理","HPを10回復。戦闘中1回。"),
   Character("sena","瀬名","炉脚の闘士","蹴りで戦場を切り開く遠征者。",0,0,"炉脚","最大HP+2","maxHpBonus",2,"sena_kick","蹴旋","敵に14ダメージ。戦闘中1回。",

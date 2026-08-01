@@ -210,17 +210,17 @@ public sealed partial class PackspireUiFoundation {
  }
 
  VisualElement CharacterPortrait(CharacterDef def,string className){
-  var tex=PopDarkPortraitArt(def);
+  var tex=game.ResolveCharacterPortrait(def);
   if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
   return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
  }
  VisualElement CharacterPortraitFront(CharacterDef def,string className){
-  var tex=PopDarkPortraitArt(def);
+  var tex=game.ResolveCharacterPortraitFront(def);
   if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
   return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
  }
  VisualElement CharacterPortraitHub(CharacterDef def,string className){
-  var tex=PopDarkPortraitArt(def);
+  var tex=game.ResolveCharacterPortraitHub(def);
   if(tex!=null&&tex!=game.UiCharacterArt)return BuildPortraitDisplay(tex,className);
   return Atlas(game.UiCharacterArt,CharacterUv(def?.portraitBody??0,def?.portraitHair??0),className);
  }

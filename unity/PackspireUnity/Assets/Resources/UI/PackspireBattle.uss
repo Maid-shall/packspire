@@ -1176,3 +1176,60 @@
 .ps-battle-card.ps-demon-card-disabled {
     opacity: 0.46;
 }
+
+/* Obsidian misprint battle proof */
+.ps-battle-screen { background-color: rgb(7, 8, 8); }
+.ps-battle-background-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-combat-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-battle-screen .ps-battle-bg-dim { background-color: rgba(2, 3, 3, 0.08); }
+.ps-battle-screen .ps-battle-bg-ground-veil { background-color: rgba(1, 2, 2, 0.18); }
+
+.ps-battle-screen .ps-battle-hud,
+.ps-battle-screen .ps-battle-intent-badge,
+.ps-battle-screen .ps-battle-hand-meta {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-battle-screen .ps-battle-hud-name { color: rgb(232, 205, 164); }
+.ps-battle-screen .ps-battle-intent-kind { color: rgb(195, 55, 42); }
+.ps-battle-screen .ps-battle-intent-hint { color: rgba(224, 203, 170, 0.76); }
+
+.ps-battle-screen .ps-battle-btn {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(231, 204, 163);
+}
+.ps-battle-screen .ps-battle-btn-end {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-hazard-strip-v1");
+    color: rgb(235, 211, 174);
+}
+.ps-battle-screen .ps-battle-start-banner {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-battle-screen .ps-battle-start-title { color: rgb(23, 20, 17); }
+.ps-battle-screen .ps-battle-start-sub { color: rgba(35, 29, 23, 0.78); }
+.ps-battle-screen .ps-battle-meter-hp .ps-battle-meter-fill { background-color: rgb(188, 47, 37); }
+.ps-battle-screen .ps-battle-meter-block .ps-battle-meter-fill { background-color: rgb(52, 180, 186); }
+.ps-battle-screen .ps-battle-status-chip {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}

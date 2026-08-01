@@ -23,16 +23,11 @@ public sealed partial class PackspireUiFoundation {
    Debug.LogError("Character view could not be created.");
    return;
   }
-  var backgroundHost=RequireViewElement<VisualElement>(rosterShell,"character-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(rosterShell,"character-background");
 
-  var header=RequireViewElement<VisualElement>(rosterShell,"character-header");
-  header.Add(ChromeBrand("ROSTER  /  RECRUIT","遠征者の選択",PackspireUiFactory.PopIcon.RoleCurrent));
+  RequireViewElement<VisualElement>(rosterShell,"character-header");
 
-  var reelCol=RequireViewElement<VisualElement>(rosterShell,"character-reel-column");
-  reelCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-roster-column-boundary"));
+  RequireViewElement<VisualElement>(rosterShell,"character-reel-column");
   rosterReelScroll=RequireViewElement<ScrollView>(rosterShell,"character-reel-scroll");
   rosterReelScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rosterReelScroll.scrollOffset=new Vector2(0,rosterReelScrollY);
@@ -45,8 +40,7 @@ public sealed partial class PackspireUiFoundation {
 
   rosterArtHost=RequireViewElement<VisualElement>(rosterShell,"character-art-host");
 
-  var detailCol=RequireViewElement<VisualElement>(rosterShell,"character-detail-column");
-  detailCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-roster-detail-corner"));
+  RequireViewElement<VisualElement>(rosterShell,"character-detail-column");
   rosterDetailScrollHost=RequireViewElement<ScrollView>(rosterShell,"character-detail-scroll");
   rosterDetailScrollHost.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rosterDetailBody=RequireViewElement<VisualElement>(rosterShell,"character-detail-body");

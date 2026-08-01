@@ -2,8 +2,16 @@
     <ui:VisualElement name="character-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--character" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--halftone" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="character-header" class="ps-mgmt-header" />
+        <ui:VisualElement name="character-header" class="ps-mgmt-header">
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="ROSTER / RECRUIT" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="遠征者の選択" class="ps-misprint-header-title" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement class="ps-roster-body">
             <ui:VisualElement name="character-reel-column" class="ps-roster-col-reel">
                 <ui:Label text="キャラクター" class="ps-roster-reel-heading" picking-mode="Ignore" />

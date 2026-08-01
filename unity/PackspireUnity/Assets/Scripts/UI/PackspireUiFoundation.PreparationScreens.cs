@@ -30,39 +30,11 @@ public sealed partial class PackspireUiFoundation {
   root.pickingMode=PickingMode.Position;
   packingRootElement=root;
   screenRoot.Add(root);
-  var courtyard=HubBackgroundArt();
-  if(courtyard!=null){
-   var background=RequireViewElement<VisualElement>(root,"packing-background");
-   background.style.backgroundImage=new StyleBackground(courtyard);
-   PackspireUiFactory.ApplyBackgroundScaleMode(background,ScaleMode.ScaleAndCrop);
-  }
+  RequireViewElement<VisualElement>(root,"packing-background");
   RegisterPackingDrag(root);
 
-  var top=RequireViewElement<VisualElement>(root,"packing-top");
-  DressRiteFrame(top);
-  var brand=Container("ps-rite-brand");
-  var brandMark=Container("ps-rite-brand-mark");
-  brandMark.pickingMode=PickingMode.Ignore;
-  brandMark.Add(PackspireUiFactory.ManagementArt(
-   PackspireUiFactory.ManagementChrome.PackingCrest,
-   "ps-rite-brand-icon ps-management-page-crest"
-  ));
-  brand.Add(brandMark);
-  var topTitle=Container("ps-rite-top-title");
-  var topEyebrow=new Label("ATELIER  /  FORGE"){pickingMode=PickingMode.Ignore};
-  topEyebrow.AddToClassList("ps-rite-top-eyebrow");
-  topEyebrow.AddToClassList("ps-chrome-eyebrow");
-  topTitle.Add(topEyebrow);
-  var topName=new Label("収納術式"){pickingMode=PickingMode.Ignore};
-  topName.AddToClassList("ps-rite-top-name");
-  topName.AddToClassList("ps-chrome-title");
-  topTitle.Add(topName);
-  var topSub=new Label("鍛冶場の窯で術装を編む"){pickingMode=PickingMode.Ignore};
-  topSub.AddToClassList("ps-rite-top-sub");
-  topTitle.Add(topSub);
-  brand.Add(topTitle);
-  top.Add(brand);
-  var topActions=Container("ps-rite-top-actions");
+  RequireViewElement<VisualElement>(root,"packing-top");
+  var topActions=RequireViewElement<VisualElement>(root,"packing-top-actions");
   if(game.UiPackingAtBase){
    var back=PackspireUiFactory.Button("戻る",()=>{
     game.UiPackingCapture();
@@ -72,26 +44,17 @@ public sealed partial class PackspireUiFoundation {
    back.AddToClassList("ps-rite-chip");
    topActions.Add(back);
   }
-  top.Add(topActions);
-  var body=RequireViewElement<VisualElement>(root,"packing-body");
+  RequireViewElement<VisualElement>(root,"packing-body");
 
   // Left: floating equip tray (header + filters pinned above scroll)
-  var left=Container("ps-rite-left");
-  DressRiteFrame(left);
-  left.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-rite-column-boundary"));
-  var leftHeader=Container("ps-rite-left-header");
-  leftHeader.Add(RiteSectionHead("01","術装"));
+  RequireViewElement<VisualElement>(root,"packing-left");
   packingFilterRowElement=BuildPackingFilterRow();
-  leftHeader.Add(packingFilterRowElement);
-  left.Add(leftHeader);
-  var listScroll=new ScrollView(ScrollViewMode.Vertical);
+  RequireViewElement<VisualElement>(root,"packing-filter-host").Add(packingFilterRowElement);
+  var listScroll=RequireViewElement<ScrollView>(root,"packing-equip-scroll");
   packingEquipScrollElement=listScroll;
-  listScroll.AddToClassList("ps-rite-equip-scroll");
   listScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   listScroll.scrollOffset=new Vector2(0,packingEquipScrollY);
-  var grid=Container("ps-rite-equip-grid");
-  int cols=Screen.width>=1600?5:Screen.width>=1280?4:3;
-  float tilePct=(100f/cols)-1.8f;
+  var grid=RequireViewElement<VisualElement>(root,"packing-equip-grid");
   foreach(var item in run.inventory){
    StorageFormulaSystem.EnsureItemRolled(item);
    var def=GameCatalog.Items[item.templateId];
@@ -101,7 +64,6 @@ public sealed partial class PackspireUiFoundation {
    bool selectedRow=entry.uid==selectedPackingUid;
    var tile=new VisualElement();
    tile.AddToClassList("ps-rite-equip-tile");
-   tile.style.width=Length.Percent(tilePct);
    tile.focusable=true;
    tile.pickingMode=PickingMode.Position;
    tile.tooltip=def.name;
@@ -119,15 +81,11 @@ public sealed partial class PackspireUiFoundation {
    BindPackingDragSource(tile,entry.uid,formula,true);
    grid.Add(tile);
   }
-  if(grid.childCount==0)listScroll.Add(RiteEmptyNote(run.inventory.Count==0?"術装がありません":"この分類にはありません"));
-  else listScroll.Add(grid);
-  left.Add(listScroll);
-  body.Add(left);
+  if(grid.childCount==0)grid.Add(RiteEmptyNote(run.inventory.Count==0?"術装がありません":"この分類にはありません"));
 
   // Center: ritual kiln (no admin box)
-  var center=Container("ps-rite-center");
-  var kilnRow=Container("ps-rite-kiln-row");
-  var kiln=Container("ps-rite-kiln");
+  var center=RequireViewElement<VisualElement>(root,"packing-center");
+  var kiln=RequireViewElement<VisualElement>(root,"packing-kiln");
   packingKilnElement=kiln;
   kiln.AddToClassList("ps-rite-core-"+formula.core.id);
   kiln.Add(BuildMagicCircleLayers(formula));
@@ -138,12 +96,8 @@ public sealed partial class PackspireUiFoundation {
   kiln.Add(circle);
   if(!string.IsNullOrEmpty(selectedPackingUid))
    kiln.Add(BuildPackingSelectDock(run,formula));
-  kilnRow.Add(kiln);
-  center.Add(kilnRow);
-
-  var kilnRail=Container("ps-rite-kiln-rail");
+  var kilnRail=RequireViewElement<VisualElement>(root,"packing-kiln-rail");
   packingKilnRailElement=kilnRail;
-  DressRiteFrame(kilnRail);
   kilnRail.Add(BuildPackingColorCounters(build));
   var railSpacer=Container("ps-rite-rail-spacer");
   kilnRail.Add(railSpacer);
@@ -152,19 +106,11 @@ public sealed partial class PackspireUiFoundation {
   cardsBtn.AddToClassList("ps-rite-tool-primary");
   cardsBtn.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.CardCheck,"ps-rite-tool-icon"));
   kilnRail.Add(cardsBtn);
-  center.Add(kilnRail);
   StartPackingCirclePulse(center);
-  body.Add(center);
 
-  var rightShell=Container("ps-rite-right-shell");
-  DressRiteFrame(rightShell);
-  rightShell.Add(PackspireUiFactory.ManagementArt(
-   PackspireUiFactory.ManagementChrome.DetailCorner,
-   "ps-rite-detail-corner ps-management-detail-corner"
-  ));
-  var right=new ScrollView(ScrollViewMode.Vertical);
+  RequireViewElement<VisualElement>(root,"packing-right-shell");
+  var right=RequireViewElement<ScrollView>(root,"packing-right-scroll");
   packingRightScrollElement=right;
-  right.AddToClassList("ps-rite-right");
   right.scrollOffset=new Vector2(0,packingRightScrollY);
   if(!packingTemplateCommitted){
    BuildFormulaTemplateBrowser(right);
@@ -174,9 +120,6 @@ public sealed partial class PackspireUiFoundation {
    if(selected!=null)BuildPackingItemDetail(right,selected,build);
    else BuildPackingOverview(right,run,build);
   }
-  rightShell.Add(right);
-  body.Add(rightShell);
-
   if(packingFormulaOpen){packingPopupElement=BuildFormulaPopup(run,formula);root.Add(packingPopupElement);}
   if(packingCardsOpen){packingPopupElement=BuildCardsPopup(run,build);root.Add(packingPopupElement);}
 

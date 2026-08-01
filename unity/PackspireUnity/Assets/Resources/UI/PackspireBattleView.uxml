@@ -1,5 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:VisualElement name="battle-background" picking-mode="Ignore" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;" />
+    <ui:VisualElement name="battle-background" class="ps-battle-background-layer" picking-mode="Ignore">
+        <ui:VisualElement class="ps-battle-bg-dim" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-battle-bg-ground-veil" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--battle" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--proof-slash" picking-mode="Ignore" />
     <ui:VisualElement name="battle-items" class="ps-battle-items" />
     <ui:VisualElement name="battle-fx" class="ps-battle-fx-layer" picking-mode="Ignore" />
     <ui:VisualElement name="battle-hand" class="ps-battle-hand" picking-mode="Ignore" />

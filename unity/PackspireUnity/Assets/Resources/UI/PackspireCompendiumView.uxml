@@ -1,19 +1,93 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:VisualElement name="compendium-layout" class="ps-management-v3 ps-codex-v8" style="flex-grow: 1;">
+    <ui:VisualElement name="compendium-layout" class="ps-management-v3 ps-codex-v8 ps-codex-show-generic">
         <ui:VisualElement name="compendium-background" class="ps-layer-background" picking-mode="Ignore">
             <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--compendium" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--page-target" picking-mode="Ignore" />
         <ui:VisualElement class="ps-layer-content">
-            <ui:VisualElement name="compendium-header" class="ps-mgmt-header" />
+            <ui:VisualElement name="compendium-header" class="ps-mgmt-header">
+                <ui:VisualElement class="ps-misprint-header-copy">
+                    <ui:Label name="compendium-header-eyebrow" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                    <ui:Label name="compendium-header-title" class="ps-misprint-header-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement class="ps-mgmt-body ps-codex-main-row">
                 <ui:VisualElement name="compendium-index-column" class="ps-mgmt-col-list ps-codex-index-column">
-                    <ui:VisualElement name="compendium-list-header" class="ps-mgmt-list-header ps-codex-index-header" />
+                    <ui:VisualElement name="compendium-list-header" class="ps-mgmt-list-header ps-codex-index-header">
+                        <ui:Button name="compendium-tab-items" text="装備" class="ps-codex-category-tab">
+                            <ui:VisualElement name="compendium-tab-items-icon" class="ps-codex-category-icon" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="compendium-tab-roles" text="役職" class="ps-codex-category-tab">
+                            <ui:VisualElement name="compendium-tab-roles-icon" class="ps-codex-category-icon" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="compendium-tab-enemies" text="敵" class="ps-codex-category-tab">
+                            <ui:VisualElement name="compendium-tab-enemies-icon" class="ps-codex-category-icon" picking-mode="Ignore" />
+                        </ui:Button>
+                    </ui:VisualElement>
                     <ui:VisualElement class="ps-codex-index-surface">
                         <ui:ScrollView name="compendium-list-scroll" class="ps-mgmt-list-scroll ps-codex-index-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
                     </ui:VisualElement>
+                    <ui:VisualElement class="ps-codex-index-footer">
+                        <ui:Label text="並べ替え・入手順" class="ps-codex-sort-label" />
+                        <ui:Label name="compendium-discovery-count" text="0 / 0" class="ps-codex-discovery-count" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="compendium-record-column" class="ps-mgmt-col-detail ps-codex-record-column">
-                    <ui:VisualElement class="ps-codex-record-surface">
+                    <ui:VisualElement name="compendium-item-record" class="ps-codex-item-record">
+                        <ui:VisualElement class="ps-codex-item-hero">
+                            <ui:VisualElement name="compendium-item-art" class="ps-codex-item-art" />
+                            <ui:VisualElement class="ps-codex-item-summary">
+                                <ui:Label name="compendium-item-meta" text="RANK Common / 武器" class="ps-codex-item-meta" />
+                                <ui:Label name="compendium-item-name" text="欠けた剣" class="ps-codex-item-name" />
+                                <ui:Label name="compendium-item-description" text="" class="ps-codex-item-description" />
+                                <ui:VisualElement class="ps-codex-shape-gallery">
+                                    <ui:VisualElement class="ps-codex-shape-heading">
+                                        <ui:Label text="占有形状" class="ps-codex-shape-title" />
+                                        <ui:Label name="compendium-shape-count" text="0 PATTERNS" class="ps-codex-shape-count" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="compendium-shape-list" class="ps-codex-shape-list" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-codex-item-lower">
+                            <ui:VisualElement name="compendium-card-panel" class="ps-codex-card-panel ps-combat">
+                                <ui:Label text="戦闘カード" class="ps-codex-card-heading" />
+                                <ui:VisualElement name="compendium-card-stage" class="ps-codex-card-stage" picking-mode="Ignore" />
+                                <ui:VisualElement class="ps-codex-card-toggle">
+                                    <ui:Button name="compendium-card-combat" text="戦闘" class="ps-codex-card-toggle-button ps-selected" />
+                                    <ui:Button name="compendium-card-exploration" text="探索" class="ps-codex-card-toggle-button" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="ps-codex-item-side">
+                                <ui:VisualElement name="compendium-link-effect" class="ps-codex-link-host" />
+                                <ui:VisualElement class="ps-codex-acquisition-panel">
+                                    <ui:VisualElement class="ps-codex-acquisition-heading">
+                                        <ui:Label text="入手情報" class="ps-codex-acquisition-title" />
+                                        <ui:Label text="ACQUISITION" class="ps-codex-acquisition-eyebrow" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="ps-codex-acquisition-row">
+                                        <ui:Label text="◆" class="ps-codex-acquisition-icon" />
+                                        <ui:Label text="主な入手先" class="ps-codex-acquisition-key" />
+                                        <ui:Label name="compendium-acquisition-source" text="" class="ps-codex-acquisition-value" />
+                                    </ui:VisualElement>
+                                    <ui:VisualElement class="ps-codex-acquisition-row">
+                                        <ui:Label text="▲" class="ps-codex-acquisition-icon" />
+                                        <ui:Label text="出現帯" class="ps-codex-acquisition-key" />
+                                        <ui:Label name="compendium-acquisition-tier" text="" class="ps-codex-acquisition-value" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-codex-archive-footer">
+                            <ui:Label text="ARCHIVE NOTE / 固定記録について" class="ps-codex-archive-note-title" />
+                            <ui:Label text="カードは戦闘・探索面を切り替えて確認できる。色特性は入手時に変化するため記録しない。" class="ps-codex-archive-note-body" />
+                            <ui:Label text="1 / 2" class="ps-codex-archive-page-count" />
+                            <ui:Button name="compendium-item-next-page" text="›" class="ps-codex-item-next-page" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="compendium-generic-record" class="ps-codex-record-surface">
                         <ui:VisualElement name="compendium-detail-hero" class="ps-mgmt-detail-hero ps-codex-record-hero">
                             <ui:VisualElement name="compendium-detail-art" class="ps-art-vignette ps-mgmt-focal-art ps-codex-specimen-art" />
                             <ui:VisualElement name="compendium-detail-summary" class="ps-mgmt-detail-summary-host ps-codex-record-header" />

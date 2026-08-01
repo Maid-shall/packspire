@@ -4531,3 +4531,811 @@
     font-size: 9px;
     white-space: normal;
 }
+
+/* Compendium: approved archive layout -------------------------------- */
+
+.ps-codex-v8 {
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-index-column {
+    width: 36%;
+    min-width: 36%;
+    max-width: 36%;
+    padding-right: 13px;
+}
+
+.ps-codex-v8 .ps-codex-record-column {
+    position: relative;
+    width: 64%;
+    min-width: 64%;
+    max-width: 64%;
+    padding-left: 15px;
+}
+
+.ps-codex-v8 .ps-codex-index-header {
+    height: 58px;
+    min-height: 58px;
+    margin-bottom: 6px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ps-codex-v8 .ps-codex-category-tab {
+    position: relative;
+    width: 32.5%;
+    min-width: 32.5%;
+    height: 52px;
+    min-height: 52px;
+    margin: 0;
+    padding: 0 8px 0 31px;
+    color: rgb(218, 197, 174);
+    font-size: 12px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(232, 220, 207);
+}
+
+.ps-codex-v8 .ps-codex-category-tab.ps-selected {
+    color: rgb(255, 226, 184);
+    -unity-font-style: normal;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-category-tab:hover {
+    -unity-background-image-tint-color: rgb(255, 245, 244);
+}
+
+.ps-codex-v8 .ps-codex-category-icon {
+    position: absolute;
+    left: 10px;
+    top: 13px;
+    width: 25px;
+    height: 25px;
+}
+
+.ps-codex-v8 .ps-codex-category-icon .ps-management-art,
+.ps-codex-v8 .ps-codex-category-icon .ps-system-icon {
+    width: 27px;
+    height: 27px;
+    -unity-background-image-tint-color: rgb(244, 198, 174);
+}
+
+.ps-codex-v8 .ps-codex-category-tab.ps-selected .ps-management-art,
+.ps-codex-v8 .ps-codex-category-tab.ps-selected .ps-system-icon {
+    -unity-background-image-tint-color: rgb(255, 99, 153);
+}
+
+.ps-codex-v8 .ps-codex-index-surface {
+    min-height: 0;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-index-scroll {
+    min-height: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    position: relative;
+    width: 100%;
+    height: 68px;
+    min-height: 68px;
+    max-height: 68px;
+    margin: 0 0 6px 0;
+    padding: 7px 20px 7px 11px;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(198, 184, 169, 0.72);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry:hover {
+    -unity-background-image-tint-color: rgba(242, 224, 208, 0.88);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry.ps-codex-v9-current {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-accent {
+    position: absolute;
+    left: 7px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-v9-current .ps-codex-v9-index-accent {
+    background-color: rgb(74, 232, 241);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-leading {
+    width: 49px;
+    min-width: 49px;
+    max-width: 49px;
+    height: 49px;
+    min-height: 49px;
+    max-height: 49px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-copy {
+    min-width: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: center;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-name {
+    color: rgb(226, 207, 184);
+    font-size: 16px;
+}
+
+.ps-codex-v8 .ps-codex-v9-current .ps-codex-v9-index-name {
+    color: rgb(255, 226, 184);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-subtitle {
+    color: rgba(169, 161, 168, 0.72);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-index-footer {
+    height: 36px;
+    min-height: 36px;
+    margin-top: 4px;
+    padding: 0 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(225, 205, 183, 0.75);
+}
+
+.ps-codex-v8 .ps-codex-sort-label {
+    color: rgb(229, 207, 180);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-discovery-count {
+    color: rgb(83, 216, 233);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-item-record,
+.ps-codex-v8 .ps-codex-record-surface {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-codex-v8.ps-codex-show-item .ps-codex-item-record {
+    display: flex;
+}
+
+.ps-codex-v8.ps-codex-show-item .ps-codex-record-surface {
+    display: none;
+}
+
+.ps-codex-v8.ps-codex-show-generic .ps-codex-item-record {
+    display: none;
+}
+
+.ps-codex-v8.ps-codex-show-generic .ps-codex-record-surface {
+    display: flex;
+}
+
+.ps-codex-v8 .ps-codex-item-record {
+    flex-direction: column;
+    background-color: rgba(1, 3, 14, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 47%;
+    min-height: 47%;
+    max-height: 47%;
+    padding: 0 0 8px 0;
+    flex-direction: row;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(173, 91, 63, 0.58);
+}
+
+.ps-codex-v8 .ps-codex-item-art {
+    width: 45%;
+    min-width: 45%;
+    height: 100%;
+    padding: 8px 12px;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.23);
+}
+
+.ps-codex-v8 .ps-codex-item-art-image {
+    width: 95%;
+    height: 95%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-codex-v8 .ps-codex-item-summary {
+    width: 55%;
+    min-width: 0;
+    height: 100%;
+    padding: 10px 4px 0 16px;
+}
+
+.ps-codex-v8 .ps-codex-item-meta {
+    height: 17px;
+    min-height: 17px;
+    color: rgb(79, 213, 225);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-item-name {
+    height: 37px;
+    min-height: 37px;
+    color: rgb(255, 222, 170);
+    font-size: 27px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-item-description {
+    height: 35px;
+    min-height: 35px;
+    margin-bottom: 4px;
+    color: rgba(230, 215, 196, 0.82);
+    font-size: 10px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-shape-gallery {
+    min-height: 0;
+    padding: 7px 6px 7px 11px;
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-top-color: rgba(166, 94, 61, 0.5);
+}
+
+.ps-codex-v8 .ps-codex-shape-heading {
+    height: 22px;
+    min-height: 22px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-codex-v8 .ps-codex-shape-title {
+    color: rgb(244, 216, 177);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-shape-count {
+    color: rgb(79, 213, 225);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-shape-list {
+    height: 68px;
+    min-height: 68px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape {
+    width: 61px;
+    min-width: 61px;
+    max-width: 61px;
+    height: 61px;
+    min-height: 61px;
+    max-height: 61px;
+    margin: 0 0 0 5px;
+    padding: 2px;
+    flex-shrink: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.84);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-row {
+    width: 57px;
+    height: 19px;
+    min-height: 19px;
+    flex-direction: row;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell {
+    width: 17px;
+    min-width: 17px;
+    max-width: 17px;
+    height: 17px;
+    min-height: 17px;
+    max-height: 17px;
+    margin: 1px;
+    border-width: 1px;
+    border-color: rgba(104, 99, 112, 0.62);
+    background-color: rgba(8, 9, 20, 0.94);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell.ps-filled {
+    border-color: rgb(235, 215, 188);
+    background-color: rgb(221, 201, 171);
+}
+
+.ps-codex-v8 .ps-codex-item-lower {
+    height: 44%;
+    min-height: 44%;
+    max-height: 44%;
+    padding: 8px 2px 5px 0;
+    flex-direction: row;
+}
+
+.ps-codex-v8 .ps-codex-card-panel {
+    width: 35%;
+    min-width: 35%;
+    max-width: 35%;
+    height: 100%;
+    margin-right: 12px;
+    padding: 2px 8px 4px 8px;
+    flex-shrink: 0;
+    border-left-width: 1px;
+    border-left-color: rgba(240, 74, 140, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-card-heading {
+    position: absolute;
+    left: 8px;
+    top: 3px;
+    height: 24px;
+    color: rgb(244, 214, 176);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-card-toggle {
+    position: absolute;
+    right: 8px;
+    top: 1px;
+    width: 101px;
+    height: 25px;
+    flex-direction: row;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button {
+    position: relative;
+    width: 50%;
+    min-width: 50%;
+    height: 25px;
+    min-height: 25px;
+    padding: 0;
+    color: rgba(177, 158, 160, 0.9);
+    font-size: 9px;
+    -unity-font-style: normal;
+    background-image: none;
+    background-color: rgba(5, 6, 16, 0.82);
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button.ps-selected {
+    color: rgb(255, 227, 191);
+    -unity-font-style: bold;
+    background-image: none;
+    background-color: rgba(171, 24, 71, 0.88);
+}
+
+.ps-codex-v8 .ps-codex-card-stage {
+    min-height: 0;
+    padding-top: 28px;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 176px;
+    min-height: 176px;
+    max-height: 176px;
+    margin: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card-face-label {
+    display: none;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 175px;
+    min-height: 175px;
+    max-height: 175px;
+    margin: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card:hover,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview:hover {
+    translate: 0 0;
+    scale: 1 1 1;
+    rotate: 0deg;
+}
+
+.ps-codex-v8 .ps-codex-item-side {
+    min-width: 0;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-link-host {
+    width: 100%;
+    height: 51%;
+    min-height: 51%;
+    max-height: 51%;
+}
+
+.ps-codex-v8 .ps-codex-link-effect {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 18px 116px 12px 23px;
+    flex-grow: 0;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-eyebrow {
+    height: 13px;
+    margin: 0;
+    color: rgb(83, 216, 233);
+    font-size: 8px;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-name {
+    height: 23px;
+    margin: 0;
+    color: rgb(250, 220, 172);
+    font-size: 16px;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-body {
+    margin: 0;
+    color: rgb(229, 213, 194);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    width: 100%;
+    min-height: 0;
+    margin-top: 6px;
+    padding: 9px 16px 8px 16px;
+    flex-grow: 1;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(212, 174, 115, 0.72);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-heading {
+    height: 20px;
+    min-height: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(184, 124, 58, 0.58);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-title {
+    color: rgb(247, 215, 169);
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-eyebrow {
+    color: rgba(215, 166, 91, 0.8);
+    font-size: 8px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-row {
+    height: 25px;
+    min-height: 25px;
+    padding: 2px 3px;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(136, 91, 51, 0.34);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-icon {
+    width: 21px;
+    min-width: 21px;
+    color: rgb(211, 161, 84);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-key {
+    width: 92px;
+    min-width: 92px;
+    color: rgb(226, 198, 161);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-value {
+    min-width: 0;
+    color: rgb(242, 218, 184);
+    font-size: 10px;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-archive-footer {
+    position: relative;
+    height: 9%;
+    min-height: 9%;
+    max-height: 9%;
+    padding: 5px 105px 4px 37px;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(199, 155, 102, 0.62);
+}
+
+.ps-codex-v8 .ps-codex-archive-note-title {
+    height: 18px;
+    color: rgb(242, 210, 167);
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-archive-note-body {
+    color: rgba(207, 192, 178, 0.72);
+    font-size: 8px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-archive-page-count {
+    position: absolute;
+    right: 67px;
+    bottom: 17px;
+    color: rgb(224, 205, 180);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-item-next-page {
+    position: absolute;
+    right: 8px;
+    bottom: 2px;
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    min-height: 50px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-record-surface.ps-codex-lore-mode .ps-codex-record-hero,
+.ps-codex-v8 .ps-codex-record-surface.ps-codex-lore-mode .ps-codex-record-scroll {
+    display: none;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: 22px 64px 22px 28px;
+    flex-direction: column;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(179, 151, 123, 0.42);
+    background-color: rgb(5, 6, 17);
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-heading {
+    height: 104px;
+    min-height: 104px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-eyebrow {
+    color: rgb(56, 209, 230);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-title {
+    color: rgb(255, 214, 148);
+    font-size: 30px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-subtitle {
+    color: rgb(255, 71, 148);
+    font-size: 13px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-body {
+    position: relative;
+    width: 100%;
+    height: 0;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-copy {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section {
+    position: relative;
+    width: 100%;
+    height: 0;
+    min-height: 112px;
+    margin-bottom: 14px;
+    padding: 14px 22px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: rgba(23, 6, 19, 0.88);
+    border-left-width: 3px;
+    border-left-color: rgb(255, 56, 143);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(163, 102, 51, 0.75);
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section.ps-last {
+    margin-bottom: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section-title {
+    color: rgb(255, 214, 148);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section-body {
+    margin-top: 8px;
+    color: rgb(224, 214, 209);
+    font-size: 14px;
+    white-space: normal;
+    flex-grow: 1;
+}
+
+/* ===== Obsidian misprint compendium ===== */
+.ps-codex-v8 .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-codex-v8 .ps-mgmt-bg { display: none; }
+.ps-codex-v8 .ps-mgmt-shade { background-color: rgba(2, 3, 3, 0.12); }
+.ps-codex-v8 .ps-mgmt-header {
+    height: 64px;
+    min-height: 64px;
+    padding-right: 64px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-category-tab {
+    height: 48px;
+    min-height: 48px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(226, 202, 163);
+}
+.ps-codex-v8 .ps-codex-category-tab.ps-selected { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1"); color: rgb(25, 21, 17); }
+#compendium-tab-items-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-packing-v1"); }
+#compendium-tab-roles-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-status-v1"); }
+#compendium-tab-enemies-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-battle-v1"); }
+
+.ps-codex-v8 .ps-codex-index-surface,
+.ps-codex-v8 .ps-codex-record-surface { background-color: rgba(1, 3, 3, 0.64); }
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    min-height: 62px;
+    margin-bottom: 6px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-codex-v8 .ps-codex-v9-index-entry.ps-codex-v9-current { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
+.ps-codex-v8 .ps-codex-v9-index-accent { display: none; }
+.ps-codex-v8 .ps-codex-v9-index-name { color: rgb(229, 204, 165); font-size: 17px; }
+
+.ps-codex-v8 .ps-codex-record-header,
+.ps-codex-v8 .ps-codex-card-heading,
+.ps-codex-v8 .ps-codex-shape-heading {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-b-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-item-name { color: rgb(235, 207, 165); font-size: 30px; }
+.ps-codex-v8 .ps-codex-item-description { color: rgba(226, 205, 174, 0.80); font-size: 12px; }
+.ps-codex-v8 .ps-codex-item-hero { border-bottom-width: 1px; border-bottom-color: rgb(55, 180, 186); }
+
+.ps-codex-v8 .ps-codex-link-host {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-acquisition-heading,
+.ps-codex-v8 .ps-codex-acquisition-key { color: rgb(126, 36, 29); }
+.ps-codex-v8 .ps-codex-acquisition-value { color: rgb(41, 34, 27); }
+.ps-codex-v8 .ps-codex-archive-footer {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-item-next-page {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+/* End Obsidian misprint compendium overrides. */

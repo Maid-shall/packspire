@@ -9,6 +9,27 @@ public sealed partial class PackspireUiFoundation {
  const int CompendiumEntriesPerPage=6;
  const string CompendiumLoreOverlayName="ps-codex-v10-lore-overlay";
 
+ VisualElement compendiumViewRoot;
+ VisualElement compendiumItemRecord;
+ VisualElement compendiumGenericRecord;
+ VisualElement compendiumItemArtHost;
+ VisualElement compendiumItemShapeHost;
+ VisualElement compendiumItemCardPanel;
+ VisualElement compendiumItemCardStage;
+ VisualElement compendiumItemLinkHost;
+ Button compendiumItemTab;
+ Button compendiumRoleTab;
+ Button compendiumEnemyTab;
+ Button compendiumCombatTab;
+ Button compendiumExplorationTab;
+ Label compendiumDiscoveryCount;
+ Label compendiumItemMeta;
+ Label compendiumItemName;
+ Label compendiumItemDescription;
+ Label compendiumItemShapeCount;
+ Label compendiumAcquisitionSource;
+ Label compendiumAcquisitionTier;
+
  sealed class CompendiumEntry {
   public string title;
   public string body;
@@ -31,61 +52,42 @@ public sealed partial class PackspireUiFoundation {
   compendiumCardExploration=false;
  }
 
+ void SelectCompendiumTab(int tab){
+  tab=Mathf.Clamp(tab,0,2);
+  if(compendiumTab==tab)return;
+  compendiumTab=tab;
+  selectedCompendiumId="";
+  RefreshCompendiumScreen(true);
+ }
+
+ void SelectCompendiumCardFace(bool exploration){
+  if(compendiumCardExploration==exploration)return;
+  compendiumCardExploration=exploration;
+  RefreshCompendiumDetail(game.UiMeta);
+ }
+
+ void ShowCompendiumLorePage(){
+  compendiumDetailPage=1;
+  RefreshCompendiumScreen(true);
+ }
+
+ void SetCompendiumRecordMode(bool showItemRecord){
+  if(compendiumViewRoot==null)return;
+  compendiumViewRoot.EnableInClassList("ps-codex-show-item",showItemRecord);
+  compendiumViewRoot.EnableInClassList("ps-codex-show-generic",!showItemRecord);
+ }
+
+ void UpdateCompendiumTabState(){
+  compendiumItemTab?.EnableInClassList("ps-selected",compendiumTab==0);
+  compendiumRoleTab?.EnableInClassList("ps-selected",compendiumTab==1);
+  compendiumEnemyTab?.EnableInClassList("ps-selected",compendiumTab==2);
+ }
+
  void PrepareCompendiumRecordViewport(){
   if(mgmtDetailScroll==null)return;
   mgmtDetailScroll.RemoveFromClassList("ps-codex-page-two");
-
-  // Size the complete right-hand hierarchy, not only the ScrollView. Older
-  // compendium USS constrained the record surface to its content height,
-  // which made Archive II collapse into a short strip at the top.
-  var surface=mgmtDetailScroll.parent;
-  if(surface!=null){
-   surface.Q<VisualElement>(CompendiumLoreOverlayName)?.RemoveFromHierarchy();
-   surface.style.position=Position.Relative;
-   surface.style.width=Length.Percent(100);
-   surface.style.height=Length.Percent(100);
-   surface.style.minHeight=0;
-   surface.style.maxHeight=Length.Percent(100);
-   surface.style.flexGrow=1;
-   surface.style.flexShrink=1;
-  }
-  var column=surface?.parent;
-  if(column!=null){
-   column.style.position=Position.Relative;
-   column.style.height=Length.Percent(100);
-   column.style.minHeight=0;
-   column.style.maxHeight=Length.Percent(100);
-   column.style.flexGrow=1;
-   column.style.flexShrink=1;
-  }
-
-  // Keep the viewport dimensions inline as a fail-safe while Unity refreshes
-  // imported USS assets. Archive II must always own the full record column.
-  mgmtDetailScroll.style.position=Position.Absolute;
-  mgmtDetailScroll.style.display=DisplayStyle.Flex;
-  mgmtDetailScroll.style.left=0;
-  mgmtDetailScroll.style.top=0;
-  mgmtDetailScroll.style.right=0;
-  mgmtDetailScroll.style.bottom=0;
-  mgmtDetailScroll.style.width=Length.Percent(100);
-  mgmtDetailScroll.style.height=Length.Percent(100);
-  mgmtDetailScroll.style.minHeight=Length.Percent(100);
-  mgmtDetailScroll.style.maxHeight=Length.Percent(100);
-  mgmtDetailScroll.style.flexGrow=1;
-  mgmtDetailScroll.style.flexShrink=1;
-
-  var content=mgmtDetailScroll.contentContainer;
-  if(content==null)return;
-  content.style.position=Position.Absolute;
-  content.style.left=0;
-  content.style.top=0;
-  content.style.right=0;
-  content.style.bottom=0;
-  content.style.width=Length.Percent(100);
-  content.style.height=Length.Percent(100);
-  content.style.minHeight=Length.Percent(100);
-  content.style.flexGrow=1;
-  content.style.flexShrink=1;
+  compendiumGenericRecord?.RemoveFromClassList("ps-codex-lore-mode");
+  compendiumGenericRecord?.Q<VisualElement>(CompendiumLoreOverlayName)?.RemoveFromHierarchy();
  }
 
  void BuildCompendiumTwoPageRecord(
@@ -98,6 +100,7 @@ public sealed partial class PackspireUiFoundation {
  string flavorLegacy
  ){
   if(mgmtDetailScroll==null)return;
+  SetCompendiumRecordMode(false);
   PrepareCompendiumRecordViewport();
   compendiumDetailPage=Mathf.Clamp(compendiumDetailPage,0,1);
   mgmtDetailScroll.EnableInClassList("ps-codex-page-two",compendiumDetailPage==1);
@@ -123,64 +126,23 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
 
-  if(mgmtDetailHero!=null)mgmtDetailHero.style.display=DisplayStyle.None;
-  // Archive II is mounted directly on the right-hand surface. Keeping it out
-  // of the ScrollView avoids the legacy content-height rules that used to
-  // collapse this page into a short plaque at the top.
+  compendiumGenericRecord?.AddToClassList("ps-codex-lore-mode");
   var flavor=Container("ps-codex-v10-lore-page");
   flavor.name=CompendiumLoreOverlayName;
-  flavor.style.position=Position.Absolute;
-  flavor.style.left=0;
-  flavor.style.top=0;
-  flavor.style.right=0;
-  flavor.style.bottom=0;
-  flavor.style.width=Length.Percent(100);
-  flavor.style.height=Length.Percent(100);
-  flavor.style.minHeight=Length.Percent(100);
-  flavor.style.paddingLeft=28;
-  flavor.style.paddingRight=64;
-  flavor.style.paddingTop=22;
-  flavor.style.paddingBottom=22;
-  flavor.style.flexDirection=FlexDirection.Column;
-  flavor.style.backgroundImage=StyleKeyword.None;
-  flavor.style.backgroundColor=new Color(0.018f,0.022f,0.055f,0.98f);
   var flavorHeading=Container("ps-codex-v10-lore-heading");
-  flavorHeading.style.height=104;
-  flavorHeading.style.minHeight=104;
-  flavorHeading.style.flexShrink=0;
   var flavorEyebrow=new Label($"{recordKind} / ARCHIVE II"){pickingMode=PickingMode.Ignore};
   flavorEyebrow.AddToClassList("ps-codex-v10-lore-eyebrow");
-  flavorEyebrow.style.fontSize=12;
-  flavorEyebrow.style.color=new Color(0.22f,0.82f,0.90f,1f);
   flavorHeading.Add(flavorEyebrow);
   var flavorTitle=new Label(recordName){pickingMode=PickingMode.Ignore};
   flavorTitle.AddToClassList("ps-codex-v10-lore-title");
-  flavorTitle.style.fontSize=30;
-  flavorTitle.style.color=new Color(1f,0.84f,0.58f,1f);
   flavorHeading.Add(flavorTitle);
   var subtitle=new Label("出自と逸話"){pickingMode=PickingMode.Ignore};
   subtitle.AddToClassList("ps-codex-v10-lore-subtitle");
-  subtitle.style.fontSize=13;
-  subtitle.style.color=new Color(1f,0.28f,0.58f,1f);
   flavorHeading.Add(subtitle);
   flavor.Add(flavorHeading);
 
   var body=Container("ps-codex-v10-lore-body");
-  body.style.position=Position.Relative;
-  body.style.width=Length.Percent(100);
-  body.style.height=0;
-  body.style.minHeight=0;
-  body.style.flexGrow=1;
-  body.style.flexShrink=1;
   var copy=Container("ps-codex-v10-lore-copy");
-  copy.style.position=Position.Absolute;
-  copy.style.left=0;
-  copy.style.top=0;
-  copy.style.right=0;
-  copy.style.bottom=0;
-  copy.style.width=Length.Percent(100);
-  copy.style.height=Length.Percent(100);
-  copy.style.flexDirection=FlexDirection.Column;
   copy.Add(CompendiumLoreSection("記録断片",flavorLead,0));
   copy.Add(CompendiumLoreSection("出自",flavorOrigin,1));
   copy.Add(CompendiumLoreSection("伝承",flavorLegacy,2));
@@ -188,13 +150,7 @@ public sealed partial class PackspireUiFoundation {
   flavor.Add(body);
   flavor.Add(CompendiumPageMark(2));
   flavor.Add(CompendiumRecordPageArrow(false));
-  var detailSurface=mgmtDetailScroll.parent;
-  if(detailSurface!=null){
-   mgmtDetailScroll.style.display=DisplayStyle.None;
-   detailSurface.Add(flavor);
-  }else{
-   mgmtDetailScroll.Add(flavor);
-  }
+  compendiumGenericRecord?.Add(flavor);
  }
 
  VisualElement CompendiumFact(CompendiumEntry entry,bool empty=false){
@@ -217,36 +173,12 @@ public sealed partial class PackspireUiFoundation {
 
  VisualElement CompendiumLoreSection(string title,string body,int index){
   var section=Container("ps-codex-v10-lore-section");
-  section.style.position=Position.Relative;
-  section.style.width=Length.Percent(100);
-  section.style.height=0;
-  section.style.minHeight=112;
-  section.style.flexGrow=1;
-  section.style.flexShrink=1;
-  section.style.marginBottom=index==2?0:14;
-  section.style.paddingLeft=22;
-  section.style.paddingRight=22;
-  section.style.paddingTop=14;
-  section.style.paddingBottom=14;
-  section.style.backgroundImage=StyleKeyword.None;
-  section.style.backgroundColor=new Color(0.09f,0.025f,0.075f,0.88f);
-  section.style.borderLeftWidth=3;
-  section.style.borderLeftColor=new Color(1f,0.22f,0.56f,1f);
-  section.style.borderBottomWidth=1;
-  section.style.borderBottomColor=new Color(0.64f,0.40f,0.20f,0.75f);
+  section.EnableInClassList("ps-last",index==2);
   var heading=new Label(title){pickingMode=PickingMode.Ignore};
   heading.AddToClassList("ps-codex-v10-lore-section-title");
-  heading.style.fontSize=20;
-  heading.style.color=new Color(1f,0.84f,0.58f,1f);
-  heading.style.flexShrink=0;
   section.Add(heading);
   var text=new Label(string.IsNullOrEmpty(body)?"記録はまだ綴られていない。":body){pickingMode=PickingMode.Ignore};
   text.AddToClassList("ps-codex-v10-lore-section-body");
-  text.style.whiteSpace=WhiteSpace.Normal;
-  text.style.fontSize=14;
-  text.style.color=new Color(0.88f,0.84f,0.82f,1f);
-  text.style.marginTop=8;
-  text.style.flexGrow=1;
   section.Add(text);
   return section;
  }
@@ -354,46 +286,25 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
 
-  if(mgmtDetailHero!=null)mgmtDetailHero.AddToClassList("ps-codex-item-v5-hero");
-  SetMgmtDetailHeroArt(VaultItemArt(item.id,"ps-codex-item-v5-art"));
+  SetCompendiumRecordMode(true);
+  compendiumItemArtHost.Clear();
+  compendiumItemArtHost.Add(VaultItemArt(item.id,"ps-codex-item-art-image"));
+  compendiumItemMeta.text=$"RANK {item.rarity} / {ItemTypeLabel(item.type)}";
+  compendiumItemName.text=item.name;
+  compendiumItemDescription.text=string.IsNullOrEmpty(item.description)
+   ?"固定説明はまだ記録されていない。"
+   :item.description;
 
-  var identity=Container("ps-codex-item-v5-identity");
-  var meta=PackspireUiFactory.Body($"RANK {item.rarity}　／　{ItemTypeLabel(item.type)}");
-  meta.AddToClassList("ps-codex-item-v5-meta");
-  identity.Add(meta);
-  var name=PackspireUiFactory.Title(item.name);
-  name.AddToClassList("ps-codex-item-v5-name");
-  identity.Add(name);
-  var description=PackspireUiFactory.Body(
-   string.IsNullOrEmpty(item.description)?"固定説明はまだ記録されていない。":item.description
-  );
-  description.AddToClassList("ps-codex-item-v5-description");
-  identity.Add(description);
-  identity.Add(CompendiumShapeGallery(item));
-  SetMgmtDetailHeroSummary(identity);
+  var variants=CompendiumShapeVariants(item);
+  compendiumItemShapeCount.text=$"{variants.Count} PATTERN{(variants.Count==1?"":"S")}";
+  compendiumItemShapeHost.Clear();
+  foreach(var variant in variants)compendiumItemShapeHost.Add(CompendiumNeutralShape(variant));
 
-  var lower=Container("ps-codex-item-v5-lower");
-  var cardPanel=Container("ps-codex-item-v5-card-panel");
-  cardPanel.AddToClassList(compendiumCardExploration?"ps-exploration":"ps-combat");
-  var cardEyebrow=new Label(compendiumCardExploration?"FIXED EXPLORATION CARD":"FIXED BATTLE CARD"){
-   pickingMode=PickingMode.Ignore
-  };
-  cardEyebrow.AddToClassList("ps-codex-item-v5-eyebrow");
-  cardPanel.Add(cardEyebrow);
-  var cardHeader=Container("ps-codex-item-v5-card-header");
-  var cardTitle=new Label(compendiumCardExploration?"探索カード":"戦闘カード"){
-   pickingMode=PickingMode.Ignore
-  };
-  cardTitle.AddToClassList("ps-codex-item-v5-panel-title");
-  cardHeader.Add(cardTitle);
-  var flip=PackspireUiFactory.Button(compendiumCardExploration?"戦闘面へ":"探索面へ",()=>{
-   compendiumCardExploration=!compendiumCardExploration;
-   RefreshCompendiumDetail(game.UiMeta);
-  });
-  flip.AddToClassList("ps-codex-item-v5-card-flip");
-  cardHeader.Add(flip);
-  cardPanel.Add(cardHeader);
-  var cardStage=Container("ps-codex-item-v5-card-stage");
+  compendiumItemCardPanel.EnableInClassList("ps-combat",!compendiumCardExploration);
+  compendiumItemCardPanel.EnableInClassList("ps-exploration",compendiumCardExploration);
+  compendiumCombatTab.EnableInClassList("ps-selected",!compendiumCardExploration);
+  compendiumExplorationTab.EnableInClassList("ps-selected",compendiumCardExploration);
+  compendiumItemCardStage.Clear();
   var itemInstance=new ItemInstance(item.id);
   var card=BuildEquipmentCardFacePreview(itemInstance,item,game.UiRun,compendiumCardExploration);
   if(card!=null){
@@ -404,61 +315,31 @@ public sealed partial class PackspireUiFoundation {
     evt.StopPropagation();
     ShowVaultCardModal(itemInstance,item,compendiumCardExploration);
    });
-   cardStage.Add(card);
+   compendiumItemCardStage.Add(card);
   }else{
-   cardStage.Add(PackspireUiFactory.EmptyState(
+   compendiumItemCardStage.Add(PackspireUiFactory.EmptyState(
     compendiumCardExploration?"探索カードなし":"戦闘カードなし",
     $"この装備には固定の{(compendiumCardExploration?"探索":"戦闘")}カードが登録されていません。"
    ));
   }
-  cardPanel.Add(cardStage);
-  lower.Add(cardPanel);
 
-  var side=Container("ps-codex-item-v6-side");
+  compendiumItemLinkHost.Clear();
   var linkPanel=VaultEffectRecord(
    "LINK効果",
    string.IsNullOrEmpty(item.linkRule)?"固有LINKなし":"装備LINK",
    ItemFixedLinkSummary(item),
-   "ps-vault-v9-link-effect ps-codex-v8-link-effect"
+   "ps-vault-v9-link-effect ps-codex-link-effect"
   );
-  side.Add(linkPanel);
-
-  var notePanel=Container("ps-codex-item-v6-note-panel");
-  var noteEyebrow=new Label("ARCHIVE NOTE"){pickingMode=PickingMode.Ignore};
-  noteEyebrow.AddToClassList("ps-codex-item-v5-eyebrow");
-  notePanel.Add(noteEyebrow);
-  var noteTitle=new Label("固定記録について"){pickingMode=PickingMode.Ignore};
-  noteTitle.AddToClassList("ps-codex-item-v6-note-title");
-  notePanel.Add(noteTitle);
-  var fixedNote=new Label("カードは左の切替ボタンで戦闘面／探索面を確認できる。色特性は入手時に変化するため記録しない。"){
-   pickingMode=PickingMode.Ignore
-  };
-  fixedNote.AddToClassList("ps-codex-item-v5-note");
-  notePanel.Add(fixedNote);
-  side.Add(notePanel);
-  lower.Add(side);
-  lower.Add(CompendiumPageMark(1));
-  lower.Add(CompendiumRecordPageArrow(true));
-  mgmtDetailScroll.Add(lower);
+  compendiumItemLinkHost.Add(linkPanel);
+  compendiumAcquisitionSource.text=ItemAcquisitionSource(item);
+  compendiumAcquisitionTier.text=$"TIER {Mathf.Max(1,item.acquisitionTier)} 以降";
  }
 
- VisualElement CompendiumShapeGallery(ItemDef item){
-  var gallery=Container("ps-codex-item-v5-shapes");
-  var heading=Container("ps-codex-item-v5-shapes-heading");
-  var title=new Label("取り得る形状"){pickingMode=PickingMode.Ignore};
-  title.AddToClassList("ps-codex-item-v5-shapes-title");
-  heading.Add(title);
-  var variants=CompendiumShapeVariants(item);
-  var count=new Label($"{variants.Count} PATTERN{(variants.Count==1?"":"S")}"){pickingMode=PickingMode.Ignore};
-  count.AddToClassList("ps-codex-item-v5-shapes-count");
-  heading.Add(count);
-  gallery.Add(heading);
-
-  var row=Container("ps-codex-item-v5-shapes-row");
-  foreach(var variant in variants)row.Add(CompendiumNeutralShape(variant));
-  gallery.Add(row);
-  return gallery;
- }
+ static string ItemAcquisitionSource(ItemDef item)=>item.type switch{
+  ItemType.Supply=>"探索・商店",
+  ItemType.Rune=>"遠征報酬・特殊宝箱",
+  _=>"遠征報酬・商店"
+ };
 
  List<Vector2Int[]> CompendiumShapeVariants(ItemDef item){
   var source=item?.cells??Array.Empty<CellDef>();

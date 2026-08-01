@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  void BuildEvent(){
-  var run=game.UiRun;
   var content=game.UiCurrentEvent;
   var screen=CloneView("UI/PackspireEventView","ps-event-screen");
   if(screen==null){
@@ -12,16 +11,12 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   screenRoot.Add(screen);
-  if(game.UiDungeonArt!=null)
-   RequireViewElement<VisualElement>(screen,"event-background").Add(
-    Atlas(game.UiDungeonArt,DungeonUv(run?.dungeon??"old_spire"),"ps-event-background")
-   );
-  RequireViewElement<VisualElement>(screen,"event-header").Add(
-   ChromeBrand(content?.eyebrow??"ANOMALY  /  RITE",content?.title??"異変",PackspireUiFactory.PopIcon.Objective)
-  );
-  RequireViewElement<VisualElement>(screen,"event-body").Add(
-   PackspireUiFactory.Body(content?.body??"異変は静かに揺らいでいる。")
-  );
+  RequireViewElement<VisualElement>(screen,"event-background");
+  RequireViewElement<VisualElement>(screen,"event-header");
+  RequireViewElement<Label>(screen,"event-header-eyebrow").text=content?.eyebrow??"ANOMALY / RITE";
+  RequireViewElement<Label>(screen,"event-header-title").text=content?.title??"異変";
+  RequireViewElement<VisualElement>(screen,"event-body");
+  RequireViewElement<Label>(screen,"event-body-copy").text=content?.body??"異変は静かに揺らいでいる。";
   var choiceHost=RequireViewElement<VisualElement>(screen,"event-choices");
   var choices=content?.choices??System.Array.Empty<EventChoiceContent>();
   for(int i=0;i<choices.Length;i++){

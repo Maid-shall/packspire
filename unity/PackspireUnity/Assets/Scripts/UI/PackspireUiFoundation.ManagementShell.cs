@@ -252,86 +252,27 @@ public sealed partial class PackspireUiFoundation {
 
  Button CodexIndexRow(string id,string primary,string secondary,bool selected,System.Action onClick,VisualElement leading=null){
   var row=new Button(onClick){userData=id,tooltip=primary};
-  // Deliberately do not reuse the legacy codex row classes here. Several old
-  // style sheets still contain ornate reel selectors for those names and can
-  // re-apply them after an asset refresh.
   row.AddToClassList("ps-codex-v9-index-entry");
   row.EnableInClassList("ps-codex-v9-current",selected);
-  row.style.position=Position.Relative;
-  row.style.width=Length.Percent(100);
-  row.style.height=72;
-  row.style.minHeight=72;
-  row.style.maxHeight=72;
-  row.style.marginBottom=8;
-  row.style.paddingLeft=14;
-  row.style.paddingRight=14;
-  row.style.paddingTop=8;
-  row.style.paddingBottom=8;
-  row.style.flexDirection=FlexDirection.Row;
-  row.style.alignItems=Align.Center;
-  row.style.flexShrink=0;
-  row.style.backgroundImage=StyleKeyword.None;
-  row.style.backgroundColor=selected
-   ?new Color(0.12f,0.035f,0.105f,0.98f)
-   :new Color(0.025f,0.03f,0.065f,0.96f);
-  row.style.borderLeftWidth=selected?3:1;
-  row.style.borderRightWidth=1;
-  row.style.borderTopWidth=1;
-  row.style.borderBottomWidth=1;
-  row.style.borderLeftColor=selected
-   ?new Color(0.19f,0.94f,1f,1f)
-   :new Color(0.39f,0.30f,0.25f,0.8f);
-  row.style.borderRightColor=new Color(0.39f,0.30f,0.25f,0.8f);
-  row.style.borderTopColor=new Color(0.39f,0.30f,0.25f,0.8f);
-  row.style.borderBottomColor=new Color(0.39f,0.30f,0.25f,0.8f);
-  row.style.borderTopLeftRadius=8;
-  row.style.borderTopRightRadius=8;
-  row.style.borderBottomLeftRadius=8;
-  row.style.borderBottomRightRadius=8;
 
   var accent=Container("ps-codex-v9-index-accent");
   accent.pickingMode=PickingMode.Ignore;
-  accent.style.position=Position.Absolute;
-  accent.style.left=0;
-  accent.style.top=8;
-  accent.style.bottom=8;
-  accent.style.width=3;
-  accent.style.backgroundColor=selected
-   ?new Color(0.19f,0.94f,1f,1f)
-   :Color.clear;
   row.Add(accent);
 
   if(leading!=null){
    leading.pickingMode=PickingMode.Ignore;
    leading.AddToClassList("ps-codex-v9-index-leading");
-   leading.style.width=48;
-   leading.style.height=48;
-   leading.style.minWidth=48;
-   leading.style.minHeight=48;
-   leading.style.maxWidth=48;
-   leading.style.maxHeight=48;
-   leading.style.marginRight=12;
-   leading.style.flexShrink=0;
    row.Add(leading);
   }
 
   var copy=Container("ps-codex-v9-index-copy");
   copy.pickingMode=PickingMode.Ignore;
-  copy.style.flexGrow=1;
-  copy.style.flexShrink=1;
-  copy.style.justifyContent=Justify.Center;
   var name=new Label(primary){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-codex-v9-index-name");
-  name.style.fontSize=18;
-  name.style.color=selected
-   ?new Color(1f,0.88f,0.72f,1f)
-   :new Color(0.89f,0.84f,0.76f,1f);
   copy.Add(name);
   if(!string.IsNullOrEmpty(secondary)){
    var sub=new Label(secondary){pickingMode=PickingMode.Ignore};
    sub.AddToClassList("ps-codex-v9-index-subtitle");
-   sub.style.fontSize=11;
-   sub.style.color=new Color(0.56f,0.55f,0.62f,1f);
    copy.Add(sub);
   }
   row.Add(copy);
@@ -340,22 +281,7 @@ public sealed partial class PackspireUiFoundation {
 
  void ApplyCodexIndexRowState(Button row,bool selected){
   if(row==null)return;
-  row.style.backgroundImage=StyleKeyword.None;
-  row.style.backgroundColor=selected
-   ?new Color(0.12f,0.035f,0.105f,0.98f)
-   :new Color(0.025f,0.03f,0.065f,0.96f);
-  row.style.borderLeftWidth=selected?3:1;
-  row.style.borderLeftColor=selected
-   ?new Color(0.19f,0.94f,1f,1f)
-   :new Color(0.39f,0.30f,0.25f,0.8f);
-  var accent=row.Q<VisualElement>(className:"ps-codex-v9-index-accent");
-  if(accent!=null)accent.style.backgroundColor=selected
-   ?new Color(0.19f,0.94f,1f,1f)
-   :Color.clear;
-  var label=row.Q<Label>(className:"ps-codex-v9-index-name");
-  if(label!=null)label.style.color=selected
-   ?new Color(1f,0.88f,0.72f,1f)
-   :new Color(0.89f,0.84f,0.76f,1f);
+  row.EnableInClassList("ps-codex-v9-current",selected);
  }
 
  VisualElement CodexIndexMark(string glyph,bool unknown=false){

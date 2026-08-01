@@ -1062,9 +1062,9 @@ MonoBehaviour:
     portrait: {fileID: 0}
     portraitFront: {fileID: 0}
     portraitHub: {fileID: 0}
-    legacyPortraitResource: 
-    legacyPortraitFrontResource: 
-    legacyPortraitHubResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-mio-front-study-v1
+    legacyPortraitFrontResource: Art/Portraits/ObsidianMisprint/hero-mio-front-study-v1
+    legacyPortraitHubResource: Art/Portraits/ObsidianMisprint/hero-mio-hub-v1
     traitName: "\u5148\u8AAD\u307F"
     traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B1\u679A\u8FFD\u52A0\u30C9\u30ED\u30FC"
     traitKind: openingDraw

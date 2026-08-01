@@ -1,6 +1,42 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="packing-background" class="ps-rite-scene-bg" picking-mode="Ignore" />
     <ui:VisualElement class="ps-rite-scene-shade" picking-mode="Ignore" />
-    <ui:VisualElement name="packing-top" class="ps-rite-top" />
-    <ui:VisualElement name="packing-body" class="ps-rite-body" />
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--packing" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--proof-slash" picking-mode="Ignore" />
+    <ui:VisualElement name="packing-top" class="ps-rite-top">
+        <ui:VisualElement class="ps-rite-brand">
+            <ui:VisualElement class="ps-rite-brand-mark" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-rite-top-title">
+                <ui:Label text="ATELIER / FORGE" class="ps-rite-top-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="収納術式" class="ps-rite-top-name" picking-mode="Ignore" />
+                <ui:Label text="鍛冶場の窯で術装を編む" class="ps-rite-top-sub" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="packing-top-actions" class="ps-rite-top-actions" />
+    </ui:VisualElement>
+    <ui:VisualElement name="packing-body" class="ps-rite-body">
+        <ui:VisualElement name="packing-left" class="ps-rite-left">
+            <ui:VisualElement class="ps-rite-left-header">
+                <ui:VisualElement class="ps-rite-panel-head">
+                    <ui:Label text="01" class="ps-rite-panel-index" picking-mode="Ignore" />
+                    <ui:Label text="術装" class="ps-rite-panel-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-rite-panel-rule" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="packing-filter-host" />
+            </ui:VisualElement>
+            <ui:ScrollView name="packing-equip-scroll" class="ps-rite-equip-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="packing-equip-grid" class="ps-rite-equip-grid" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="packing-center" class="ps-rite-center">
+            <ui:VisualElement class="ps-rite-kiln-row">
+                <ui:VisualElement name="packing-kiln" class="ps-rite-kiln" />
+            </ui:VisualElement>
+            <ui:VisualElement name="packing-kiln-rail" class="ps-rite-kiln-rail" />
+        </ui:VisualElement>
+        <ui:VisualElement name="packing-right-shell" class="ps-rite-right-shell">
+            <ui:ScrollView name="packing-right-scroll" class="ps-rite-right" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

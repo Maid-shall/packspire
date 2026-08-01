@@ -2,9 +2,18 @@
     <ui:VisualElement name="shop-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--shop" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--ledger" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
         <ui:VisualElement name="shop-header" class="ps-shop-header">
-            <ui:Label name="shop-header-gold" class="ps-shop-header-gold" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="NIGHT MARKET / SHOP" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="悪魔商店" class="ps-misprint-header-title" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-shop-gold-plaque">
+                <ui:Label name="shop-header-gold" class="ps-shop-header-gold" picking-mode="Ignore" />
+            </ui:VisualElement>
             <ui:Label name="shop-dev-hint" text="DEVプレビュー" class="ps-shop-dev-hint" picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:VisualElement class="ps-shop-body">

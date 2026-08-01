@@ -252,3 +252,96 @@
     -unity-text-outline-width: 1px;
     -unity-text-outline-color: rgba(8, 4, 2, 0.92);
 }
+
+/* Obsidian misprint character dossier */
+.ps-roster-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-roster-screen .ps-mgmt-bg { display: none; }
+.ps-roster-screen .ps-mgmt-shade { background-color: rgba(2, 3, 3, 0.14); }
+.ps-roster-screen .ps-layer-content { padding: 12px 20px 16px 20px; }
+
+.ps-roster-screen .ps-mgmt-header {
+    height: 64px;
+    min-height: 64px;
+    padding: 4px 64px 6px 8px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-roster-screen .ps-roster-body { padding: 8px 4px 0 4px; }
+.ps-roster-screen .ps-roster-col-reel { width: 246px; min-width: 246px; max-width: 246px; margin-right: 16px; }
+.ps-roster-screen .ps-roster-col-art { width: 43%; min-width: 390px; margin-right: 18px; }
+.ps-roster-screen .ps-roster-col-detail { min-width: 330px; padding: 10px 12px 8px 18px; border-left-width: 1px; border-left-color: rgba(210, 170, 105, 0.48); }
+
+.ps-roster-screen .ps-roster-reel-heading {
+    height: 46px;
+    margin: 0 0 8px 0;
+    padding: 6px 12px;
+    color: rgb(231, 204, 161);
+    font-size: 25px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-roster-screen .ps-list-item.ps-mgmt-reel-row {
+    height: 64px;
+    min-height: 64px;
+    margin: 0 0 7px 0;
+    padding: 8px 14px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-roster-screen .ps-list-item.ps-mgmt-reel-row.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+}
+
+.ps-roster-screen .ps-mgmt-reel-plate,
+.ps-roster-screen .ps-list-item-mark { display: none; }
+.ps-roster-screen .ps-mgmt-reel-name { color: rgb(230, 204, 164); font-size: 18px; }
+.ps-roster-screen .ps-selected .ps-mgmt-reel-name { color: rgb(232, 218, 186); }
+
+.ps-roster-screen .ps-roster-art-host {
+    background-color: rgba(1, 3, 3, 0.12);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(56, 178, 184);
+}
+.ps-roster-screen .ps-roster-art-image { width: 88%; height: 100%; }
+
+.ps-roster-screen .ps-mgmt-section {
+    min-height: 84px;
+    margin-bottom: 8px;
+    padding: 14px 16px 12px 18px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-roster-screen .ps-mgmt-section-v6-rule { display: none; }
+.ps-roster-screen .ps-mgmt-section-title { color: rgb(129, 37, 29); font-size: 15px; }
+.ps-roster-screen .ps-mgmt-section-body { color: rgb(38, 32, 25); font-size: 12px; }
+
+.ps-roster-screen .ps-roster-confirm {
+    height: 52px;
+    min-height: 52px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    color: rgb(231, 204, 164);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}

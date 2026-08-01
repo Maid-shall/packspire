@@ -2,8 +2,16 @@
     <ui:VisualElement name="faction-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--faction" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--brush" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="faction-header" class="ps-mgmt-header" />
+        <ui:VisualElement name="faction-header" class="ps-mgmt-header">
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="FACTION / LEDGER" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="勢力" class="ps-misprint-header-title" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement class="ps-faction-body">
             <ui:VisualElement name="faction-graph-column" class="ps-faction-col-graph">
                 <ui:VisualElement name="faction-graph-host" class="ps-faction-graph-host">

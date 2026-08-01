@@ -587,17 +587,8 @@ public sealed partial class PackspireUiFoundation {
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Compendium){RebuildScreen(BuildCompendium);return;}
   if(compendiumTab>2)compendiumTab=0;
   var meta=game.UiMeta;
-  // The compendium used to refresh only its right-hand record. That left the
-  // already-instantiated legacy reel rows alive after switching to the new
-  // archive presentation. Always rebuild the index so no old VisualElements
-  // can survive a page flip, selection change, or hot reload.
-  mgmtListHeader.Clear();
-  mgmtListHeader.Add(ManagementFilterBar(new[]{"装備","役職","敵"},compendiumTab,tab=>{
-   if(compendiumTab==tab)return;
-   compendiumTab=tab;
-   selectedCompendiumId="";
-   RefreshCompendiumScreen(true);
-  }));
+  UpdateCompendiumTabState();
+  UpdateCompendiumDiscoveryCount(meta);
   PopulateCompendiumList(meta);
   RefreshCompendiumDetail(meta);
  }
@@ -609,6 +600,23 @@ public sealed partial class PackspireUiFoundation {
   else if(compendiumTab==1)PopulateRoleCompendiumList(meta);
   else PopulateEnemyCompendiumList(meta);
   RestoreMgmtListScroll();
+ }
+
+ void UpdateCompendiumDiscoveryCount(MetaSave meta){
+  if(compendiumDiscoveryCount==null)return;
+  int known;
+  int total;
+  if(compendiumTab==0){
+   total=GameCatalog.Items.Count;
+   known=GameCatalog.Items.Keys.Count(id=>meta.discoveredItems.Contains(id));
+  }else if(compendiumTab==1){
+   total=GameCatalog.Roles.Count;
+   known=GameCatalog.Roles.Keys.Count(id=>meta.jobLevels.Any(level=>level.id==id&&level.value>0));
+  }else{
+   total=GameCatalog.Enemies.Count();
+   known=GameCatalog.Enemies.Count(enemy=>meta.discoveredEnemies.Contains(enemy.id));
+  }
+  compendiumDiscoveryCount.text=$"{known} / {total}";
  }
 
  static string CompendiumCategoryMark(int tab,string fallback)=>tab switch{0=>"装",1=>"役",2=>"敵",_=>fallback};

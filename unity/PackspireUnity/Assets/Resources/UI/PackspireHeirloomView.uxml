@@ -2,8 +2,17 @@
     <ui:VisualElement name="heirloom-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--heirloom" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--wax" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="heirloom-header" class="ps-mgmt-header ps-heirloom-header" />
+        <ui:VisualElement name="heirloom-header" class="ps-mgmt-header ps-heirloom-header">
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="HEIRLOOM / RELIC" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="家宝" class="ps-misprint-header-title" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="heirloom-slot-host" class="ps-heirloom-slot-host" />
+        </ui:VisualElement>
         <ui:VisualElement class="ps-heirloom-body">
             <ui:VisualElement name="heirloom-portrait-column" class="ps-heirloom-col-portrait">
                 <ui:VisualElement name="heirloom-portrait-host" class="ps-heirloom-portrait-host" />

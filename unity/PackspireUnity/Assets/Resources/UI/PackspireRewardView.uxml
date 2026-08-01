@@ -2,6 +2,9 @@
     <ui:VisualElement name="reward-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-reward-shade" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--reward" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--wax" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
         <ui:VisualElement name="reward-header" class="ps-reward-header">
             <ui:Label name="reward-header-type" class="ps-reward-header-type" picking-mode="Ignore" />

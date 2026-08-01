@@ -9,7 +9,9 @@
     width: 1280px;
     height: 720px;
     overflow: hidden;
-    background-color: rgb(3, 3, 16);
+    background-color: rgb(8, 9, 9);
+    color: rgb(224, 199, 158);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
 }
 
 .ps-vault-fixed__layout {
@@ -30,14 +32,47 @@
     bottom: 0;
 }
 
-.ps-vault-fixed__background .unity-image {
-    width: 100%;
-    height: 100%;
+.ps-vault-fixed__background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
     -unity-background-scale-mode: scale-and-crop;
 }
 
 .ps-vault-fixed__shade {
-    background-color: rgba(2, 1, 14, 0.64);
+    background-color: rgba(2, 4, 5, 0.22);
+}
+
+.ps-vault-fixed__ledger-spine,
+.ps-vault-fixed__registration-mark,
+.ps-vault-fixed__screen-seal {
+    position: absolute;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-fixed__ledger-spine {
+    left: 0;
+    top: 88px;
+    width: 48px;
+    height: 520px;
+    opacity: 0.18;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-ledger-spine-v1");
+}
+
+.ps-vault-fixed__registration-mark {
+    left: -24px;
+    bottom: -26px;
+    width: 136px;
+    height: 136px;
+    opacity: 0.16;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+}
+
+.ps-vault-fixed__screen-seal {
+    right: 82px;
+    top: 14px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.78;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-vault-v1");
 }
 
 .ps-vault-fixed__header {
@@ -55,9 +90,9 @@
     top: 22px;
     width: 680px;
     height: 42px;
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
     -unity-background-scale-mode: stretch-to-fill;
-    -unity-background-image-tint-color: rgb(255, 83, 158);
+    opacity: 0.68;
 }
 
 .ps-vault-fixed__back-host {
@@ -79,7 +114,7 @@
     align-items: center;
     justify-content: flex-start;
     background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/UI/PopDark/ManagementV4/secondary-action-v2");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
@@ -111,47 +146,41 @@
     position: absolute;
     left: 132px;
     top: 0;
-    width: 400px;
+    width: 390px;
     height: 70px;
+    flex-direction: row;
+    align-items: center;
 }
 
-.ps-vault-fixed__brand-host .ps-management-brand {
-    width: 400px;
-    height: 68px;
-    min-height: 68px;
-    padding: 0;
-    padding-bottom: 0;
-    overflow: visible;
+.ps-vault-fixed__brand-crest {
+    width: 58px;
+    min-width: 58px;
+    height: 58px;
+    margin-right: 10px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-vault-v1");
+    -unity-background-scale-mode: scale-to-fit;
 }
 
-.ps-vault-fixed__brand-host .ps-management-brand-crest {
-    width: 62px;
-    height: 62px;
-    margin-right: 8px;
-}
-
-.ps-vault-fixed__brand-host .ps-chrome-title {
-    font-size: 36px;
-    color: rgb(255, 222, 163);
-    letter-spacing: 0;
-}
-
-.ps-vault-fixed__brand-host .ps-chrome-eyebrow {
-    font-size: 11px;
-    color: rgb(202, 166, 112);
-    letter-spacing: 0;
-}
-
-.ps-vault-fixed__brand-host .ps-management-brand .ps-chrome-brand-copy {
-    min-height: 64px;
+.ps-vault-fixed__brand-copy {
+    min-width: 0;
+    height: 64px;
+    flex-grow: 1;
     justify-content: center;
 }
 
-.ps-vault-fixed__brand-host .ps-management-brand-flourish {
-    left: 55px;
-    bottom: -1px;
-    width: 352px;
+.ps-vault-fixed__brand-eyebrow {
+    height: 16px;
+    color: rgb(198, 159, 98);
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.ps-vault-fixed__brand-title {
     height: 42px;
+    color: rgb(235, 207, 164);
+    font-size: 31px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
 }
 
 .ps-vault-fixed__inventory {
@@ -161,15 +190,15 @@
     width: 566px;
     height: 624px;
     overflow: hidden;
-    background-color: rgba(5, 3, 20, 0.88);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
+    background-color: rgba(1, 3, 3, 0.76);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(238, 68, 141, 0.64);
-    border-right-color: rgba(238, 68, 141, 0.64);
-    border-top-color: rgba(238, 68, 141, 0.62);
-    border-bottom-color: rgba(86, 225, 237, 0.42);
+    border-left-color: rgba(205, 168, 106, 0.42);
+    border-right-color: rgba(205, 168, 106, 0.42);
+    border-top-color: rgba(205, 168, 106, 0.56);
+    border-bottom-color: rgba(55, 180, 186, 0.42);
 }
 
 .ps-vault-fixed__list-header {
@@ -180,9 +209,11 @@
     height: 112px;
     padding: 0 8px 2px 8px;
     overflow: hidden;
-    background-color: rgba(15, 6, 31, 0.72);
+    background-color: rgba(1, 3, 3, 0.72);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
+    -unity-background-scale-mode: stretch-to-fill;
     border-bottom-width: 1px;
-    border-bottom-color: rgba(240, 82, 151, 0.35);
+    border-bottom-color: rgba(205, 168, 106, 0.34);
 }
 
 .ps-vault-fixed__list-header .ps-section-head,
@@ -204,8 +235,9 @@
     width: 100%;
     height: 42px;
     margin: 0;
-    color: rgb(255, 221, 160);
-    font-size: 20px;
+    color: rgb(235, 207, 164);
+    font-size: 19px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
     -unity-text-align: middle-center;
 }
 
@@ -229,13 +261,13 @@
     flex-grow: 1;
     flex-shrink: 1;
     background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
 
 .ps-vault-fixed__list-header .ps-vault-v7-category.ps-selected {
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
 }
 
 .ps-vault-fixed__list-header .ps-vault-v7-category:hover,
@@ -254,7 +286,7 @@
 
 .ps-vault-fixed__list-header .ps-vault-v7-category-label,
 .ps-vault-fixed__list-header .unity-button__text {
-    color: rgb(240, 213, 170);
+    color: rgb(224, 199, 158);
     width: 100%;
     font-size: 13px;
     white-space: nowrap;
@@ -263,7 +295,7 @@
 }
 
 .ps-vault-fixed__list-header .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
-    color: rgb(255, 238, 200);
+    color: rgb(31, 24, 19);
     -unity-font-style: normal;
 }
 
@@ -278,7 +310,7 @@
     width: 554px;
     height: 464px;
     overflow: hidden;
-    background-color: rgba(2, 3, 15, 0.54);
+    background-color: rgba(1, 3, 3, 0.58);
 }
 
 .ps-vault-fixed__list-scroll {
@@ -321,13 +353,13 @@
     flex-shrink: 0;
     overflow: visible;
     background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-normal");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
 
 .ps-vault-fixed__grid .ps-vault-grid-card.ps-selected {
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-selected");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
 }
 
 .ps-vault-fixed__grid .ps-vault-grid-art {
@@ -475,9 +507,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(8, 4, 24, 0.94);
+    background-color: rgba(1, 3, 3, 0.92);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
     border-top-width: 1px;
-    border-top-color: rgba(239, 76, 148, 0.42);
+    border-top-color: rgba(205, 168, 106, 0.42);
 }
 
 .ps-vault-fixed__footer .ps-vault-v7-rarity-filter {
@@ -489,7 +523,7 @@
     flex-direction: row;
     align-items: center;
     background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-control");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
@@ -537,7 +571,9 @@
     width: 292px;
     height: 248px;
     padding: 8px;
-    background-color: rgba(3, 3, 15, 0.98);
+    background-color: rgba(3, 4, 4, 0.98);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -569,8 +605,8 @@
     padding: 0 10px;
     flex-direction: row;
     align-items: center;
-    background-color: rgba(4, 4, 18, 0.96);
-    background-image: resource("Art/UI/PopDark/ManagementV4/tab-idle-v2");
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
@@ -581,7 +617,7 @@
 }
 
 .ps-vault-fixed__sort-option.ps-selected {
-    background-image: resource("Art/UI/PopDark/ManagementV4/tab-selected-v2");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
 }
 
 .ps-vault-fixed__sort-option-mark {
@@ -616,9 +652,9 @@
     width: 652px;
     height: 624px;
     overflow: hidden;
-    background-color: rgba(3, 2, 16, 0.42);
+    background-color: rgba(1, 3, 3, 0.44);
     border-top-width: 1px;
-    border-top-color: rgba(237, 71, 142, 0.38);
+    border-top-color: rgba(205, 168, 106, 0.44);
 }
 
 .ps-vault-fixed__standard-detail,
@@ -753,9 +789,9 @@
     width: 318px;
     height: 310px;
     overflow: hidden;
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-halftone-v1");
     -unity-background-scale-mode: scale-to-fit;
-    background-color: rgba(4, 3, 25, 0.68);
+    background-color: rgba(1, 3, 3, 0.48);
     border-bottom-width: 1px;
     border-bottom-color: rgba(83, 226, 238, 0.56);
 }
@@ -812,7 +848,7 @@
     padding: 0;
     flex-direction: row;
     align-items: center;
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-brush-underline-v1");
     -unity-background-scale-mode: stretch-to-fill;
 }
 
@@ -822,6 +858,7 @@
     padding: 0;
     color: rgb(251, 221, 169);
     font-size: 27px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
     flex-grow: 1;
     white-space: nowrap;
     -unity-text-align: middle-left;
@@ -846,8 +883,10 @@
     height: 158px;
     min-height: 158px;
     margin: 0;
-    padding: 5px 0 0 0;
+    padding: 8px 12px 0 12px;
     overflow: hidden;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
     border-top-width: 1px;
     border-top-color: rgba(204, 124, 72, 0.52);
 }
@@ -939,7 +978,7 @@
     top: 306px;
     width: 652px;
     height: 16px;
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
     -unity-background-scale-mode: stretch-to-fill;
 }
 
@@ -962,6 +1001,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-b-v1");
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .ps-vault-fixed__card-title {
@@ -980,7 +1021,7 @@
     padding: 0;
     flex-direction: row;
     overflow: hidden;
-    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
     -unity-background-scale-mode: stretch-to-fill;
     border-width: 0;
 }
@@ -1052,7 +1093,7 @@
     min-height: 112px;
     max-height: 112px;
     margin: 0;
-    padding: 15px 104px 10px 22px;
+    padding: 15px 92px 10px 22px;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0);
     -unity-background-scale-mode: stretch-to-fill;
@@ -1060,11 +1101,13 @@
 }
 
 .ps-vault-fixed__effect--color {
-    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-color-v5");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-image-tint-color: rgb(207, 93, 72);
 }
 
 .ps-vault-fixed__effect--link {
-    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-image-tint-color: rgb(73, 181, 187);
 }
 
 .ps-vault-fixed__effect .ps-vault-v9-effect-eyebrow {

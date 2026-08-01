@@ -1,10 +1,20 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:VisualElement name="vault-layout" class="ps-vault-fixed__layout">
+    <Style src="project://database/Assets/Resources/UI/PackspireVaultView.uss?fileID=7433441132597879392&amp;guid=a7c2480694234da9a2da9c61a5a7c9d3&amp;type=3#PackspireVaultView" />
+    <ui:VisualElement name="vault-layout" class="ps-vault-fixed ps-vault-fixed__layout">
         <ui:VisualElement name="vault-background" class="ps-vault-fixed__background" picking-mode="Ignore" />
         <ui:VisualElement class="ps-vault-fixed__shade" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-vault-fixed__ledger-spine" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-vault-fixed__registration-mark" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-vault-fixed__screen-seal" picking-mode="Ignore" />
         <ui:VisualElement name="vault-header" class="ps-vault-fixed__header">
             <ui:VisualElement name="vault-back-host" class="ps-vault-fixed__back-host" />
-            <ui:VisualElement name="vault-brand-host" class="ps-vault-fixed__brand-host" />
+            <ui:VisualElement name="vault-brand-host" class="ps-vault-fixed__brand-host">
+                <ui:VisualElement class="ps-vault-fixed__brand-crest" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-vault-fixed__brand-copy">
+                    <ui:Label name="vault-header-eyebrow" class="ps-vault-fixed__brand-eyebrow" picking-mode="Ignore" />
+                    <ui:Label name="vault-header-title" class="ps-vault-fixed__brand-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement class="ps-vault-fixed__header-flourish" picking-mode="Ignore" />
         </ui:VisualElement>
 

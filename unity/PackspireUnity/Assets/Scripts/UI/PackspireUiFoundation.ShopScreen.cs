@@ -72,19 +72,9 @@ public sealed partial class PackspireUiFoundation {
    Debug.LogError("Shop view could not be created.");
    return;
   }
-  var backgroundHost=RequireViewElement<VisualElement>(shopShell,"shop-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(shopShell,"shop-background");
 
-  var header=RequireViewElement<VisualElement>(shopShell,"shop-header");
-  header.Insert(0,ManagementBrand(
-   "NIGHT MARKET  /  SHOP","悪魔商店",PackspireUiFactory.ManagementChrome.ShopCrest
-  ));
-  header.Insert(1,PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ShopGold,
-   "ps-management-v6-bg ps-shop-gold-plaque"
-  ));
+  RequireViewElement<VisualElement>(shopShell,"shop-header");
   shopHeaderGoldLabel=RequireViewElement<Label>(shopShell,"shop-header-gold");
   shopDevHintLabel=RequireViewElement<Label>(shopShell,"shop-dev-hint");
   shopDevHintLabel.style.display=shopPreviewMode?DisplayStyle.Flex:DisplayStyle.None;
@@ -92,8 +82,7 @@ public sealed partial class PackspireUiFoundation {
   var merchantCol=RequireViewElement<VisualElement>(shopShell,"shop-merchant-column");
   BuildShopMerchantSceneShell(merchantCol);
 
-  var listCol=RequireViewElement<VisualElement>(shopShell,"shop-list-column");
-  listCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-shop-column-boundary"));
+  RequireViewElement<VisualElement>(shopShell,"shop-list-column");
   shopFilterHost=RequireViewElement<VisualElement>(shopShell,"shop-filter-host");
   shopProductScroll=RequireViewElement<ScrollView>(shopShell,"shop-product-scroll");
   shopProductScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
@@ -103,10 +92,6 @@ public sealed partial class PackspireUiFoundation {
 
   var detailCol=RequireViewElement<VisualElement>(shopShell,"shop-detail-column");
   shopDetailHost=RequireViewElement<VisualElement>(shopShell,"shop-detail-host");
-  shopDetailHost.Insert(0,PackspireUiFactory.ManagementArt(
-   PackspireUiFactory.ManagementChrome.DetailCorner,
-   "ps-shop-detail-corner ps-management-detail-corner"
-  ));
   shopDetailScroll=RequireViewElement<ScrollView>(shopShell,"shop-detail-scroll");
   shopDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   shopMerchantTransactionLayer.RemoveFromHierarchy();

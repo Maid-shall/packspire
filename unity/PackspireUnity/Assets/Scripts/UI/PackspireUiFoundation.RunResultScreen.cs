@@ -49,17 +49,13 @@ public sealed partial class PackspireUiFoundation {
   resultShell.EnableInClassList("ps-result-clear",false);
   resultShell.EnableInClassList("ps-result-defeat",false);
 
-  var backgroundHost=RequireViewElement<VisualElement>(resultShell,"result-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(resultShell,"result-background");
 
   resultVisualHost=RequireViewElement<VisualElement>(resultShell,"result-visual-host");
   resultTitleOverlay=RequireViewElement<VisualElement>(resultShell,"result-title-overlay");
   resultTitleLabel=RequireViewElement<Label>(resultShell,"result-title");
   resultSubtitleLabel=RequireViewElement<Label>(resultShell,"result-subtitle");
-  var summaryCol=RequireViewElement<VisualElement>(resultShell,"result-summary-column");
-  summaryCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-result-detail-corner"));
+  RequireViewElement<VisualElement>(resultShell,"result-summary-column");
   resultCauseLabel=RequireViewElement<Label>(resultShell,"result-cause");
   resultPrimaryStatsHost=RequireViewElement<VisualElement>(resultShell,"result-primary-stats");
   resultRecordScroll=RequireViewElement<ScrollView>(resultShell,"result-record-scroll");

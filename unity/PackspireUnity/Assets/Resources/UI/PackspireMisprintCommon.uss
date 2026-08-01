@@ -1,0 +1,171 @@
+.ps-roster-screen,
+.ps-management-v3,
+.ps-vault-fixed,
+.ps-heirloom-screen,
+.ps-faction-screen,
+.ps-expedition-screen,
+.ps-rite,
+.ps-gboard,
+.ps-battle-screen,
+.ps-reward-screen,
+.ps-shop-screen,
+.ps-event-screen,
+.ps-result-screen {
+    color: rgb(225, 202, 164);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-misprint-mark {
+    position: absolute;
+    right: 88px;
+    top: 14px;
+    width: 52px;
+    height: 52px;
+    opacity: 0.82;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-misprint-mark--character { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-character-v1"); }
+.ps-misprint-mark--status { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-status-v1"); }
+.ps-misprint-mark--vault { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-vault-v1"); }
+.ps-misprint-mark--compendium { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-compendium-v1"); }
+.ps-misprint-mark--heirloom { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-heirloom-v1"); }
+.ps-misprint-mark--faction { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-faction-v1"); }
+.ps-misprint-mark--expedition { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-expedition-v1"); }
+.ps-misprint-mark--packing { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-packing-v1"); }
+.ps-misprint-mark--map { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1"); }
+.ps-misprint-mark--battle { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-battle-v1"); }
+.ps-misprint-mark--reward { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-reward-v1"); }
+.ps-misprint-mark--shop { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-shop-v1"); }
+.ps-misprint-mark--event { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-event-v1"); }
+.ps-misprint-mark--result { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-defeat-v1"); }
+.ps-result-clear .ps-misprint-mark--result { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-victory-v1"); }
+
+.ps-misprint-register {
+    position: absolute;
+    left: -22px;
+    bottom: -24px;
+    width: 132px;
+    height: 132px;
+    opacity: 0.22;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-misprint-decor {
+    position: absolute;
+    opacity: 0.16;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-misprint-decor--halftone {
+    left: 265px;
+    top: 96px;
+    width: 390px;
+    height: 440px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-halftone-v1");
+}
+.ps-misprint-decor--ledger {
+    left: 0;
+    top: 105px;
+    width: 54px;
+    height: 510px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-ledger-spine-v1");
+}
+.ps-misprint-decor--paper-corner {
+    right: -10px;
+    bottom: -10px;
+    width: 175px;
+    height: 175px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-paper-corner-v1");
+}
+.ps-misprint-decor--page-target {
+    right: 28px;
+    bottom: 58px;
+    width: 96px;
+    height: 96px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-page-target-v1");
+}
+.ps-misprint-decor--wax {
+    right: 155px;
+    top: 18px;
+    width: 104px;
+    height: 80px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1");
+}
+.ps-misprint-decor--brush {
+    left: 36px;
+    top: 64px;
+    width: 320px;
+    height: 64px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-brush-underline-v1");
+}
+.ps-misprint-decor--route-arrow {
+    left: 46px;
+    bottom: 62px;
+    width: 170px;
+    height: 112px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-route-arrow-v1");
+}
+.ps-misprint-decor--proof-slash {
+    right: 18px;
+    top: 110px;
+    width: 180px;
+    height: 300px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-proof-slash-v1");
+}
+.ps-misprint-decor--binder {
+    right: 34px;
+    top: 54px;
+    width: 74px;
+    height: 88px;
+    opacity: 0.30;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-binder-clip-v1");
+}
+
+.ps-misprint-screen-rule {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-misprint-header-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding-left: 16px;
+}
+
+.ps-misprint-header-eyebrow {
+    color: rgb(205, 168, 106);
+    font-size: 11px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.ps-misprint-header-title {
+    color: rgb(234, 214, 179);
+    font-size: 28px;
+    white-space: nowrap;
+}
+
+.ps-shop-gold-plaque {
+    width: 152px;
+    height: 42px;
+    margin-right: 16px;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-shop-gold-plaque .ps-shop-header-gold {
+    color: rgb(45, 34, 25);
+    font-size: 17px;
+}
+
+.ps-event-screen .ps-event-body-copy {
+    color: rgb(43, 35, 28);
+    font-size: 16px;
+    white-space: normal;
+}

@@ -756,3 +756,139 @@
     min-height: 48px;
     width: 100%;
 }
+
+/* ===== Obsidian misprint commerce and outcome ===== */
+.ps-reward-screen .ps-layer-background,
+.ps-shop-screen .ps-layer-background,
+.ps-result-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-ledger-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-reward-screen .ps-mgmt-bg,
+.ps-shop-screen .ps-mgmt-bg,
+.ps-result-screen .ps-mgmt-bg { display: none; }
+.ps-reward-screen .ps-reward-shade,
+.ps-shop-screen .ps-mgmt-shade,
+.ps-result-screen .ps-result-shade { background-color: rgba(2, 3, 3, 0.10); }
+
+.ps-reward-screen .ps-reward-header,
+.ps-shop-screen .ps-shop-header {
+    height: 66px;
+    min-height: 66px;
+    padding-right: 64px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+/* Reward claim ledger */
+.ps-reward-screen .ps-reward-col-candidates { background-color: rgba(1, 3, 3, 0.68); border-right-width: 1px; border-right-color: rgba(205, 168, 106, 0.48); }
+.ps-reward-screen .ps-reward-candidate-row {
+    min-height: 72px;
+    margin-bottom: 7px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-reward-screen .ps-reward-candidate-row.ps-selected { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
+.ps-reward-screen .ps-reward-candidate-name { color: rgb(231, 205, 165); font-size: 18px; }
+.ps-reward-screen .ps-reward-col-detail {
+    padding: 14px 18px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-reward-screen .ps-reward-detail-label { color: rgb(126, 36, 29); }
+.ps-reward-screen .ps-reward-detail-body { color: rgb(41, 34, 27); }
+.ps-reward-screen .ps-primary-action {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    color: rgb(231, 204, 163);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+/* Shop stock ledger */
+.ps-shop-screen .ps-shop-col-merchant { background-color: rgba(1, 3, 3, 0.20); }
+.ps-shop-screen .ps-shop-col-list { background-color: rgba(1, 3, 3, 0.68); border-left-width: 1px; border-left-color: rgba(205, 168, 106, 0.46); }
+.ps-shop-screen .ps-shop-stock-heading {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-shop-screen .ps-shop-product-card {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-shop-screen .ps-shop-product-card.ps-selected { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
+.ps-shop-screen .ps-shop-product-plate,
+.ps-shop-screen .ps-management-selection-corners { display: none; }
+.ps-shop-screen .ps-shop-dialogue-plaque,
+.ps-shop-screen .ps-shop-col-detail,
+.ps-shop-screen .ps-shop-detail-block {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-shop-screen .ps-shop-dialogue,
+.ps-shop-screen .ps-shop-detail-body { color: rgb(41, 34, 27); }
+.ps-shop-screen .ps-shop-detail-label { color: rgb(126, 36, 29); }
+.ps-shop-screen .ps-shop-price-paper {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-shop-screen .ps-shop-buy-btn,
+.ps-shop-screen .ps-shop-leave-btn {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(231, 204, 163);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+/* Run result proof */
+.ps-result-screen .ps-result-title-overlay {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-result-screen .ps-result-title,
+.ps-result-screen .ps-result-subtitle { color: rgb(25, 21, 17); }
+.ps-result-screen .ps-result-col-summary {
+    padding: 16px 20px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-result-screen .ps-result-cause,
+.ps-result-screen .ps-result-stat-label { color: rgb(126, 36, 29); }
+.ps-result-screen .ps-result-stat-value,
+.ps-result-screen .ps-result-body-line { color: rgb(41, 34, 27); }
+.ps-result-screen .ps-result-stat-row { border-bottom-color: rgba(126, 36, 29, 0.28); }
+.ps-result-screen .ps-result-return-btn {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(231, 204, 163);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}

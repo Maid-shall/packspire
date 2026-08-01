@@ -28,22 +28,16 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
 
-  var backgroundHost=RequireViewElement<VisualElement>(heirloomShell,"heirloom-background");
-  var bg=HubBackgroundArt();
-  if(bg==null)bg=CourtyardArt();
-  if(bg!=null)backgroundHost.Insert(0,Image(bg,new Rect(0,0,1,1),"ps-mgmt-bg",ScaleMode.ScaleAndCrop));
+  RequireViewElement<VisualElement>(heirloomShell,"heirloom-background");
 
-  var header=RequireViewElement<VisualElement>(heirloomShell,"heirloom-header");
-  header.Add(ChromeBrand("HEIRLOOM  /  RELIC","家宝",PackspireUiFactory.PopIcon.Heirloom));
+  RequireViewElement<VisualElement>(heirloomShell,"heirloom-header");
   heirloomSlotButton=BuildHeirloomSlotButton();
-  header.Add(heirloomSlotButton);
+  RequireViewElement<VisualElement>(heirloomShell,"heirloom-slot-host").Add(heirloomSlotButton);
 
-  var portraitCol=RequireViewElement<VisualElement>(heirloomShell,"heirloom-portrait-column");
-  portraitCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.VerticalBoundary,"ps-heirloom-column-boundary"));
+  RequireViewElement<VisualElement>(heirloomShell,"heirloom-portrait-column");
   heirloomPortraitHost=RequireViewElement<VisualElement>(heirloomShell,"heirloom-portrait-host");
 
-  var growthCol=RequireViewElement<VisualElement>(heirloomShell,"heirloom-growth-column");
-  growthCol.Add(PackspireUiFactory.SystemOrnament(PackspireUiFactory.PopOrnament.OpenCorner,"ps-heirloom-detail-corner"));
+  RequireViewElement<VisualElement>(heirloomShell,"heirloom-growth-column");
   heirloomGrowthScroll=RequireViewElement<ScrollView>(heirloomShell,"heirloom-growth-scroll");
   heirloomGrowthScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   heirloomGrowthScroll.horizontalScrollerVisibility=ScrollerVisibility.Hidden;

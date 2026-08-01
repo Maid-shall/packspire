@@ -6,16 +6,18 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  static readonly string[] CharacterStyleSheets={
-  "UI/PackspireRoster","UI/PackspirePolish","UI/PackspirePopDark",
-  "UI/PackspireManagement","UI/PackspireMeta","UI/PackspireOrnaments"
+  "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireRoster",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] HubStyleSheets={
   "UI/PackspireRoster","UI/PackspirePolish","UI/PackspirePopDark",
-  "UI/PackspireHub","UI/PackspireOrnaments"
+  "UI/PackspireBattle","UI/PackspireHub","UI/PackspireOrnaments"
  };
  static readonly string[] StatusStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] VaultStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
@@ -25,45 +27,50 @@ public sealed partial class PackspireUiFoundation {
  static readonly string[] CompendiumStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
   "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
-  "UI/PackspireVaultCodexFinal"
+  "UI/PackspireVaultCodexFinal","UI/PackspireMisprintCommon"
  };
  static readonly string[] HeirloomStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] FactionStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] ExpeditionStyleSheets={
   "UI/PackspireRoute","UI/PackspirePolish","UI/PackspirePopDark",
   "UI/PackspireManagement","UI/PackspireMeta","UI/PackspireOrnaments",
-  "UI/PackspireManagementV3"
+  "UI/PackspireManagementV3","UI/PackspireMisprintCommon"
  };
  static readonly string[] PackingStyleSheets={
-  "UI/PackspirePacking","UI/PackspirePolish","UI/PackspirePopDark",
-  "UI/PackspireOrnaments","UI/PackspireManagementV3"
+  "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireOrnaments",
+  "UI/PackspireManagementV3","UI/PackspirePacking",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] GridBoardStyleSheets={
-  "UI/PackspireRoute","UI/PackspireGridBoard","UI/PackspireBattle",
-  "UI/PackspirePolish"
+  "UI/PackspireRoute","UI/PackspireBattle","UI/PackspirePolish",
+  "UI/PackspireGridBoard","UI/PackspireMisprintCommon"
  };
  static readonly string[] BattleStyleSheets={
-  "UI/PackspireRoute","UI/PackspireGridBoard","UI/PackspireBattle",
-  "UI/PackspirePolish","UI/PackspireManagementV3"
+  "UI/PackspireRoute","UI/PackspireGridBoard","UI/PackspirePolish",
+  "UI/PackspireManagementV3","UI/PackspireBattle",
+  "UI/PackspireMisprintCommon"
  };
  static readonly string[] CommerceStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireCommerce","UI/PackspireOrnaments",
-  "UI/PackspireManagementV3"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
+  "UI/PackspireCommerce","UI/PackspireMisprintCommon"
  };
  static readonly string[] EventStyleSheets={
-  "UI/PackspireRoute","UI/PackspirePolish","UI/PackspirePopDark"
+  "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireRoute",
+  "UI/PackspireMisprintCommon"
  };
 
  void ApplyScreenStyleSheets(ScreenId screen){
   if(screenRoot==null)return;
-  RemovePackspireStyleSheets(screenRoot);
+  RemoveAllStyleSheets(screenRoot);
   foreach(var path in StyleSheetsFor(screen))
    AddStyleSheet(screenRoot,path);
  }
@@ -88,25 +95,23 @@ public sealed partial class PackspireUiFoundation {
   _=>CompendiumStyleSheets
  };
 
- static void AddStyleSheet(VisualElement target,string resourcePath){
-  if(target==null||string.IsNullOrEmpty(resourcePath))return;
+ static StyleSheet AddStyleSheet(VisualElement target,string resourcePath){
+  if(target==null||string.IsNullOrEmpty(resourcePath))return null;
   var sheet=PackspireResources.Load<StyleSheet>(resourcePath);
   if(sheet==null){
    Debug.LogError($"Missing UI style sheet: {resourcePath}");
-   return;
+   return null;
   }
   for(int index=0;index<target.styleSheets.count;index++)
-   if(target.styleSheets[index]==sheet)return;
+   if(target.styleSheets[index]==sheet)return sheet;
   target.styleSheets.Add(sheet);
+  return sheet;
  }
 
- static void RemovePackspireStyleSheets(VisualElement target){
+ static void RemoveAllStyleSheets(VisualElement target){
   if(target==null)return;
-  for(int index=target.styleSheets.count-1;index>=0;index--){
-   var sheet=target.styleSheets[index];
-   if(sheet!=null&&sheet.name.StartsWith("Packspire",StringComparison.Ordinal))
-    target.styleSheets.Remove(sheet);
-  }
+  for(int index=target.styleSheets.count-1;index>=0;index--)
+   target.styleSheets.Remove(target.styleSheets[index]);
  }
 
  VisualElement CloneView(string resourcePath,string rootClass){
