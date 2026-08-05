@@ -67,7 +67,6 @@ public sealed partial class PackspireUiFoundation {
   resultReturnButton.AddToClassList("ps-primary-action");
   resultReturnButton.AddToClassList("ps-chrome-action");
   resultReturnButton.AddToClassList("ps-result-return-btn");
-  PackspireUiFactory.DecorateActionButton(resultReturnButton,true);
   footer.Add(resultReturnButton);
   screenRoot.Add(resultShell);
  }
@@ -96,8 +95,14 @@ public sealed partial class PackspireUiFoundation {
  void RefreshResultVisual(RunResultViewModel model){
   if(resultVisualHost==null)return;
   resultVisualHost.Clear();
+  string resultArtPath=model.resultType==RunResultType.Clear
+   ?"Art/UI/ObsidianMisprintResult/result-clear-certified-v1"
+   :"Art/UI/ObsidianMisprintResult/result-defeat-returned-v1";
+  var resultArt=PackspireResources.Load<Texture2D>(resultArtPath);
   string dungeonId=string.IsNullOrEmpty(model.backgroundHintDungeonId)?"old_spire":model.backgroundHintDungeonId;
-  if(game.UiDungeonArt!=null)
+  if(resultArt!=null)
+   resultVisualHost.Add(Image(resultArt,new Rect(0,0,1,1),"ps-result-visual-art",ScaleMode.ScaleAndCrop));
+  else if(game.UiDungeonArt!=null)
    resultVisualHost.Add(Atlas(game.UiDungeonArt,DungeonUv(dungeonId),"ps-result-visual-art"));
   else {
    var fallback=Container("ps-result-visual-fallback");

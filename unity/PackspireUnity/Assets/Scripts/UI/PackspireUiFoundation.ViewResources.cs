@@ -8,7 +8,7 @@ public sealed partial class PackspireUiFoundation {
  static readonly string[] CharacterStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
   "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireRoster",
-  "UI/PackspireMisprintCommon"
+  "UI/PackspireMisprintCommon","UI/PackspireCharacter"
  };
  static readonly string[] HubStyleSheets={
   "UI/PackspireRoster","UI/PackspirePolish","UI/PackspirePopDark",
@@ -53,6 +53,10 @@ public sealed partial class PackspireUiFoundation {
   "UI/PackspireRoute","UI/PackspireBattle","UI/PackspirePolish",
   "UI/PackspireGridBoard","UI/PackspireMisprintCommon"
  };
+ static readonly string[] CourierRouteStyleSheets={
+  "UI/PackspirePolish","UI/PackspireMisprintCommon",
+  "UI/PackspireDocketCard","UI/PackspireCourierRoute"
+ };
  static readonly string[] BattleStyleSheets={
   "UI/PackspireRoute","UI/PackspireGridBoard","UI/PackspirePolish",
   "UI/PackspireManagementV3","UI/PackspireBattle",
@@ -85,6 +89,7 @@ public sealed partial class PackspireUiFoundation {
   ScreenId.Faction=>FactionStyleSheets,
   ScreenId.Expedition=>ExpeditionStyleSheets,
   ScreenId.Pack=>PackingStyleSheets,
+  ScreenId.Route=>CourierRouteStyleSheets,
   ScreenId.GridBoard=>GridBoardStyleSheets,
   ScreenId.Battle=>BattleStyleSheets,
   ScreenId.Reward=>CommerceStyleSheets,
@@ -97,6 +102,11 @@ public sealed partial class PackspireUiFoundation {
 
  static StyleSheet AddStyleSheet(VisualElement target,string resourcePath){
   if(target==null||string.IsNullOrEmpty(resourcePath))return null;
+#if UNITY_EDITOR
+  // UI assets are edited while Play Mode is running during visual iteration.
+  // Reload the current imported asset instead of rebuilding from a stale cache entry.
+  PackspireResources.Invalidate<StyleSheet>(resourcePath);
+#endif
   var sheet=PackspireResources.Load<StyleSheet>(resourcePath);
   if(sheet==null){
    Debug.LogError($"Missing UI style sheet: {resourcePath}");
@@ -115,6 +125,9 @@ public sealed partial class PackspireUiFoundation {
  }
 
  VisualElement CloneView(string resourcePath,string rootClass){
+#if UNITY_EDITOR
+  PackspireResources.Invalidate<VisualTreeAsset>(resourcePath);
+#endif
   var template=PackspireResources.Load<VisualTreeAsset>(resourcePath);
   if(template==null){
    Debug.LogError($"Missing UI view template: {resourcePath}");

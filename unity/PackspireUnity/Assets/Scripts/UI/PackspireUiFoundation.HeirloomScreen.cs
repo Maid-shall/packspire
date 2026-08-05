@@ -132,7 +132,7 @@ public sealed partial class PackspireUiFoundation {
   var crest=heirloomSlotButton.Q(className:"ps-heirloom-slot-crest");
   if(item!=null&&GameCatalog.Items.ContainsKey(item.templateId)){
    var def=GameCatalog.Items[item.templateId];
-   heirloomSlotArt.Add(Atlas(game.UiEquipmentArt,ItemUv(def.id),"ps-heirloom-slot-image"));
+   heirloomSlotArt.Add(VaultItemDisplayArt(def.id,"ps-heirloom-slot-image"));
    heirloomSlotGlyph.style.display=DisplayStyle.None;
    if(crest!=null)crest.style.display=DisplayStyle.Flex;
    heirloomSlotButton.tooltip="家宝を選び直す";
@@ -159,7 +159,7 @@ public sealed partial class PackspireUiFoundation {
   var def=GameCatalog.Items[item.templateId];
   var artFrame=Container("ps-heirloom-portrait-art");
   artFrame.pickingMode=PickingMode.Ignore;
-  artFrame.Add(Atlas(game.UiEquipmentArt,ItemUv(def.id),"ps-heirloom-portrait-image"));
+  artFrame.Add(VaultItemDisplayArt(def.id,"ps-heirloom-portrait-image"));
   heirloomPortraitHost.Add(artFrame);
 
   var nameRow=Container("ps-heirloom-name-row");

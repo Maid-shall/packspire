@@ -34,6 +34,11 @@ public static class PackspireResources {
   return null;
  }
 
+ public static void Invalidate<T>(string path) where T:UnityEngine.Object {
+  if(string.IsNullOrWhiteSpace(path))return;
+  Cache.Remove(typeof(T).FullName+"|"+path);
+ }
+
 #if UNITY_EDITOR
  public static void ClearCacheForTests()=>Cache.Clear();
 #endif

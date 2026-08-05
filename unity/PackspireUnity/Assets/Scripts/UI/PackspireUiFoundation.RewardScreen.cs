@@ -65,12 +65,14 @@ public sealed partial class PackspireUiFoundation {
    PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Reward,"ps-reward-header-icon")
   );
   rewardHeaderType=RequireViewElement<Label>(rewardShell,"reward-header-type");
-  rewardHeaderType.text=rewardPreviewMode?"戦利品（DEV）":"戦利品";
-  string place=rewardPreviewMode?"試掘の間":"封印格子";
+  rewardHeaderType.text=rewardPreviewMode?"戦利品（DEV）":game.UiCourierCargoReward?"回収物":"戦利品";
+  string place=rewardPreviewMode?"試掘の間":game.UiCourierCargoReward?game.UiCourierCargoNode?.title??"配達経路":"封印格子";
   rewardHeaderPlace=RequireViewElement<Label>(rewardShell,"reward-header-place");
   rewardHeaderPlace.text=place;
   rewardHeaderText=RequireViewElement<Label>(rewardShell,"reward-header-text");
-  rewardHeaderText.text="暗い卓上に、わずかな光が戦利品だけを照らしている。";
+  rewardHeaderText.text=game.UiCourierCargoReward
+   ?"回収する一品を選ぶ。選ばなかった荷物は経路に残る。"
+   :"暗い卓上に、わずかな光が戦利品だけを照らしている。";
 
   RequireViewElement<VisualElement>(rewardShell,"reward-candidate-column");
   rewardCandidateScroll=RequireViewElement<ScrollView>(rewardShell,"reward-candidate-scroll");
@@ -88,14 +90,12 @@ public sealed partial class PackspireUiFoundation {
   rewardConfirmButton=PackspireUiFactory.Button("この戦利品を獲得する",ConfirmRewardSelection);
   rewardConfirmButton.AddToClassList("ps-primary-action");
   rewardConfirmButton.AddToClassList("ps-chrome-action");
-  PackspireUiFactory.DecorateActionButton(rewardConfirmButton,true);
   actions.Add(rewardConfirmButton);
-  rewardReturnButton=PackspireUiFactory.Button(rewardPreviewMode?"プレビューを閉じる":"地図へ戻る",()=>{
+  rewardReturnButton=PackspireUiFactory.Button(rewardPreviewMode?"プレビューを閉じる":game.UiCourierCargoReward?"回収を断念":"地図へ戻る",()=>{
    if(rewardPreviewMode)CloseRewardPreview();
    else game.UiReturnToMap();
   });
   rewardReturnButton.AddToClassList("ps-chrome-action");
-  PackspireUiFactory.DecorateActionButton(rewardReturnButton,false);
   actions.Add(rewardReturnButton);
   screenRoot.Add(rewardShell);
 
@@ -124,7 +124,7 @@ public sealed partial class PackspireUiFoundation {
    if(rewardId==selectedRewardId)row.AddToClassList("ps-selected");
    var art=Container("ps-reward-candidate-art");
    art.pickingMode=PickingMode.Ignore;
-   art.Add(Atlas(game.UiEquipmentArt,ItemUv(rewardId),"ps-reward-candidate-image"));
+   art.Add(VaultItemDisplayArt(rewardId,"ps-reward-candidate-image"));
    row.Add(art);
    var copy=Container("ps-reward-candidate-copy");
    copy.pickingMode=PickingMode.Ignore;
@@ -164,7 +164,7 @@ public sealed partial class PackspireUiFoundation {
    rewardDetailScroll.Add(PackspireUiFactory.EmptyState("候補を選択","左から戦利品を選んでください。"));
    return;
   }
-  rewardDetailArtHost.Add(Atlas(game.UiEquipmentArt,ItemUv(selectedRewardId),"ps-reward-detail-image"));
+  rewardDetailArtHost.Add(VaultItemDisplayArt(selectedRewardId,"ps-reward-detail-image"));
   rewardDetailScroll.Add(PackspireUiFactory.Title(item.name));
   rewardDetailScroll.Add(RewardDetailBlock("種類",ItemTypeLabel(item.type)));
   if(item.cells!=null&&item.cells.Length>0){

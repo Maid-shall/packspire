@@ -1,0 +1,295 @@
+.ps-battle-card.ps-docket-card {
+    width: 168px;
+    height: 78px;
+    min-width: 168px;
+    min-height: 78px;
+    max-width: 168px;
+    max-height: 252px;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    transition-property: height, translate, scale, opacity;
+    transition-duration: 0.16s;
+    transition-timing-function: ease-out;
+}
+
+.ps-battle-card.ps-docket-card:hover,
+.ps-battle-card.ps-docket-card.ps-docket-expanded,
+.ps-battle-card.ps-docket-card.ps-gboard-fan-selected {
+    height: 252px;
+    min-height: 252px;
+    overflow: visible;
+}
+
+.ps-battle-card.ps-docket-card:hover {
+    translate: 0 -24px;
+    scale: 1.04 1.04 1;
+}
+
+.ps-docket {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 168px;
+    height: 252px;
+    -unity-background-scale-mode: stretch-to-fill;
+    color: rgb(39, 34, 29);
+}
+
+.ps-docket-card.ps-docket-combat .ps-docket {
+    background-image: resource("Art/UI/Cards/InfernalDocket/infernal-docket-combat-v1");
+}
+
+.ps-docket-card.ps-docket-explore .ps-docket {
+    background-image: resource("Art/UI/Cards/InfernalDocket/infernal-docket-explore-v1");
+    color: rgb(230, 218, 190);
+}
+
+.ps-docket__receipt,
+.ps-docket__main {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+}
+
+.ps-docket__receipt {
+    top: 10px;
+    height: 61px;
+}
+
+.ps-docket__receipt-kind {
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 42px;
+    height: 12px;
+    font-size: 7px;
+    letter-spacing: 1px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    color: rgb(150, 39, 31);
+}
+
+.ps-docket-explore .ps-docket__receipt-kind { color: rgb(80, 199, 213); }
+
+.ps-docket__receipt-cost {
+    position: absolute;
+    left: 7px;
+    top: 17px;
+    width: 28px;
+    height: 30px;
+    font-size: 24px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.ps-docket__receipt-name {
+    position: absolute;
+    left: 39px;
+    right: 7px;
+    top: 15px;
+    height: 25px;
+    font-size: 14px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    white-space: normal;
+}
+
+.ps-docket__receipt-code {
+    position: absolute;
+    left: 40px;
+    right: 7px;
+    bottom: 2px;
+    height: 10px;
+    font-size: 6px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-left;
+    opacity: 0.72;
+}
+
+.ps-docket__seal-glyph {
+    position: absolute;
+    left: 67px;
+    top: 62px;
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: rgb(134, 35, 29);
+    rotate: -8deg;
+}
+
+.ps-docket-explore .ps-docket__seal-glyph { color: rgb(74, 190, 207); }
+
+.ps-docket__main {
+    top: 82px;
+    bottom: 12px;
+}
+
+.ps-docket__main-header {
+    height: 18px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-docket__main-kind,
+.ps-docket__main-code {
+    height: 14px;
+    font-size: 6px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-left;
+    opacity: 0.78;
+}
+
+.ps-docket__main-kind { flex-grow: 1; color: rgb(149, 39, 31); }
+.ps-docket-explore .ps-docket__main-kind { color: rgb(75, 194, 209); }
+.ps-docket__main-code { width: 64px; -unity-text-align: middle-right; }
+
+.ps-docket__main-name {
+    height: 28px;
+    margin-top: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 17px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    white-space: normal;
+}
+
+.ps-docket__metrics {
+    height: 33px;
+    margin-top: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
+    flex-direction: row;
+}
+
+.ps-docket__metric {
+    width: 39px;
+    justify-content: center;
+}
+
+.ps-docket__metric--formula { flex-grow: 1; }
+
+.ps-docket__metric-key {
+    height: 10px;
+    font-size: 6px;
+    letter-spacing: 1px;
+    opacity: 0.62;
+}
+
+.ps-docket__metric-value {
+    height: 19px;
+    font-size: 15px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-font-style: bold;
+}
+
+.ps-docket__main-text {
+    height: 57px;
+    margin-top: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 5px;
+    font-size: 9px;
+    line-height: 13px;
+    white-space: normal;
+    -unity-text-align: upper-left;
+}
+
+.ps-docket__growth {
+    position: absolute;
+    right: 4px;
+    bottom: 25px;
+    height: 12px;
+    flex-direction: row;
+}
+
+.ps-docket__growth.ps-empty { display: none; }
+
+.ps-docket__growth-stage {
+    width: 11px;
+    height: 11px;
+    margin-left: 2px;
+    font-size: 6px;
+    -unity-text-align: middle-center;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(218, 201, 173, 0.44);
+    border-right-color: rgba(218, 201, 173, 0.44);
+    border-top-color: rgba(218, 201, 173, 0.44);
+    border-bottom-color: rgba(218, 201, 173, 0.44);
+}
+
+.ps-docket__growth-stage.ps-selected {
+    color: rgb(247, 233, 199);
+    background-color: rgb(48, 140, 153);
+}
+
+.ps-docket__footer {
+    position: absolute;
+    left: 7px;
+    right: 7px;
+    bottom: 2px;
+    height: 15px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-docket__source,
+.ps-docket__status {
+    height: 13px;
+    font-size: 6px;
+    letter-spacing: 0.5px;
+    -unity-text-align: middle-left;
+    opacity: 0.76;
+}
+
+.ps-docket__source { flex-grow: 1; }
+.ps-docket__status { width: 52px; -unity-text-align: middle-right; }
+.ps-docket__status.ps-alert { color: rgb(176, 43, 33); opacity: 1; }
+
+.ps-docket__lock {
+    position: absolute;
+    right: 15px;
+    top: 91px;
+    min-width: 45px;
+    height: 16px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 7px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: rgb(242, 218, 181);
+    background-color: rgb(136, 35, 30);
+    rotate: 5deg;
+}
+
+.ps-docket-card.ps-docket-authorized .ps-docket__lock { display: none; }
+.ps-docket-card.ps-docket-held .ps-docket__lock { display: flex; }
+
+.ps-docket-card.ps-battle-card-disabled { opacity: 0.48; }
+.ps-docket-card.ps-docket-attack .ps-docket__main-name { color: rgb(157, 39, 31); }
+.ps-docket-card.ps-docket-defense .ps-docket__main-name { color: rgb(38, 104, 118); }
+.ps-docket-card.ps-docket-curse .ps-docket__main-name { color: rgb(168, 82, 164); }
+.ps-docket-explore .ps-docket__main-name { color: rgb(238, 223, 192); }
+
+.ps-equipment-card-preview.ps-docket-card,
+.ps-gboard-card-view-card.ps-docket-card,
+.ps-gboard-side-preview.ps-docket-card,
+.ps-vault-v9-card.ps-docket-card {
+    height: 252px;
+    min-height: 252px;
+    overflow: visible;
+}

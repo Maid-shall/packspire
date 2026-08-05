@@ -8,7 +8,7 @@ public partial class PackspireGame : MonoBehaviour {
 
 
  public static PackspireGame Instance { get; private set; }
- MetaSave meta; RunState run; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string message=""; bool packingAtBase,developerPanel; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
+ MetaSave meta; RunState run; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string message=""; bool packingAtBase,packingAtRelay,developerPanel; string courierBattleNodeId="",courierEventNodeId="",courierCargoNodeId=""; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
  ScreenId lastVisualScreen; bool visualScreenTracked;
@@ -16,10 +16,14 @@ public partial class PackspireGame : MonoBehaviour {
  public static readonly bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
  public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
- public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase;
+ public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase; public bool UiPackingAtRelay=>packingAtRelay;
+ public CourierRouteState UiCourierRoute=>run?.courierRoute;
+ public bool UiCourierCargoReward=>!string.IsNullOrEmpty(courierCargoNodeId);
+ public CourierRouteNodeDef UiCourierCargoNode=>CourierRouteSystem.Node(courierCargoNodeId);
  public GridBoardRunState UiGridBoard=>gridBoard;
  public bool UiUsesGridBoard=>gridBoard!=null;
  public BattleState UiBattle=>battle;
+ public DungeonDef UiCurrentDungeon=>ResolveRunDungeon();
  public EventContent UiCurrentEvent{
   get{
    string id=gridBoard?.pendingEventId;
@@ -96,6 +100,19 @@ public partial class PackspireGame : MonoBehaviour {
   GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="DEV: 封印格子盤（配置→一筆→進行）";
+  UiDevCloseWithoutRestore();
+ }
+ public void UiDevOpenCourierRoute(){
+  if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
+  RoleFrameworkSystem.Normalize(meta);
+  run.role=meta.currentRole;
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+  packingAtBase=false;
+  battle=null;
+  gridBoard=null;
+  courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
+  screen=ScreenId.Route;
+  message="DEV: 配達経路台帳を開きました。";
   UiDevCloseWithoutRestore();
  }
  public void UiResetGridBoard(){
@@ -194,6 +211,91 @@ public partial class PackspireGame : MonoBehaviour {
  public bool UiChangeFaction(string id){if(meta.currentFaction==id)return true;if(!GameCatalog.Factions.Any(x=>x.id==id)||meta.baseGold<20)return false;meta.baseGold-=20;meta.currentFaction=id;SaveSystem.Save(meta);return true;}
  public void UiSelectLoadout(string id){LoadoutSystem.Select(meta,id);SaveSystem.Save(meta);}
  public void UiStartExpedition(string dungeonId){StartRun(dungeonId);}
+ public void UiCourierRouteSelect(string nodeId){
+   if(!CourierRouteSystem.Select(run?.courierRoute,nodeId))return;
+   PackspireUiFoundation.Instance?.ForceRefreshScreen();
+ }
+ public void UiCourierRouteUseSeal(string sealKey){
+  CourierRouteSystem.UseSeal(run?.courierRoute,sealKey,out message);
+  PackspireUiFoundation.Instance?.ForceRefreshScreen();
+ }
+ public void UiCourierRouteOpenRelayPacking(){
+  if(!CourierRouteSystem.OpenRelayPacking(run,out _,out message))return;
+  packingAtBase=false;
+  packingAtRelay=true;
+  screen=ScreenId.Pack;
+ }
+ public bool UiCourierRouteBeginTravel(){
+  if(run==null||run.courierRoute==null)return false;
+  return CourierRouteSystem.Commit(run,out message);
+ }
+ public void UiCourierRouteCompleteTravel(){
+  if(run==null||run.courierRoute==null||!CourierRouteSystem.CompleteTravel(run.courierRoute))return;
+  if(run.courierRoute.failed){PackspireUiFoundation.Instance?.ForceRefreshScreen();return;}
+  DispatchCourierLocation();
+ }
+ public void UiCourierRouteCommit(){
+  if(!UiCourierRouteBeginTravel())return;
+  UiCourierRouteCompleteTravel();
+ }
+ public void UiCourierRouteFinish(){
+  if(run?.courierRoute==null)return;
+  if(run.courierRoute.failed){FinishRun(false);return;}
+  if(run.courierRoute.complete){FinishRun(true);return;}
+  message="次の配達区間を選択してください。";
+ }
+ void DispatchCourierLocation(){
+  if(run?.courierRoute?.awaitingResolution!=true)return;
+  var node=CourierRouteSystem.Node(run.courierRoute.currentNodeId);
+  if(node==null){message="配達地点の情報が見つかりません。";return;}
+  switch(node.resolution){
+   case CourierResolutionKind.Battle:
+    courierBattleNodeId=node.id;
+    StartBattle(false);
+    break;
+   case CourierResolutionKind.Cargo:
+    courierCargoNodeId=node.id;
+    screen=ScreenId.Reward;
+    break;
+   case CourierResolutionKind.Event:
+    courierEventNodeId=node.id;
+    screen=ScreenId.Event;
+    break;
+   case CourierResolutionKind.MiniGame:
+    ResolveCourierLocation(new CourierLocationOutcome{
+     performance=1,message="この特殊地点のミニゲームは後続実装です。今回は標準結果で解決しました。"
+    });
+    break;
+   default:
+    ResolveCourierLocation(new CourierLocationOutcome());
+    break;
+  }
+ }
+ void ResolveCourierLocation(CourierLocationOutcome outcome){
+  if(!CourierRouteSystem.ResolveCurrent(run,outcome,out message))return;
+  courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
+  battle=null;
+  if(run.courierRoute.failed){FinishRun(false);return;}
+  if(run.courierRoute.complete){FinishRun(true);return;}
+  screen=ScreenId.Route;
+  PackspireUiFoundation.Instance?.ForceRefreshScreen();
+ }
+ public void UiSetRoleBranch(string roleId,int branch){
+  RoleFrameworkSystem.SetBranch(meta,roleId,branch);
+  SaveSystem.Save(meta);
+ }
+ public void UiSetActiveRole(string roleId){
+  string core=RoleFrameworkSystem.CoreRoleId(roleId);
+  if(!RoleFrameworkSystem.CoreRoleIds.Contains(core))return;
+  meta.currentRole=core;
+  RoleFrameworkSystem.Normalize(meta);
+  SaveSystem.Save(meta);
+ }
+ public void UiSetQualificationSeal(string roleId){
+  meta.qualificationSealId=roleId??"";
+  RoleFrameworkSystem.Normalize(meta);
+  SaveSystem.Save(meta);
+ }
  public void UiSelectCharacter(string characterId){
   if(!CharacterCatalog.All.ContainsKey(characterId))return;
   meta.selectedCharacterId=characterId;
@@ -234,7 +336,11 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public bool UiEndBattleTurn(){
   if(run==null||battle==null)return false;
-  var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
+  var dungeon=ResolveRunDungeon();
+  if(dungeon==null){
+   Debug.LogError("Cannot end battle turn because no dungeon content is available.");
+   return false;
+  }
   var gridPressure=GridBoardSystem.EnemyDamageBonus(gridBoard);
   var fx=BattleSystem.EndTurnFx(run,battle,dungeon.damage+gridPressure);
   var ui=PackspireUiFoundation.Instance;
@@ -283,33 +389,52 @@ public partial class PackspireGame : MonoBehaviour {
  public void UiPackingRemove(string uid){if(run==null)return;var placement=run.placements.FirstOrDefault(x=>x.itemUid==uid);if(placement!=null)run.placements.Remove(placement);}
  public void UiPackingSetBackpack(string id){UiPackingSetCore(id);}
  public void UiPackingSetCore(string id){
-  if(run==null||!StorageFormulaCatalog.Cores.ContainsKey(id))return;
+  if(run==null||packingAtRelay||!StorageFormulaCatalog.Cores.ContainsKey(id))return;
   run.coreId=id;
   run.backpack=id;
  }
- public void UiPackingSetConduit(string id){if(run==null||!StorageFormulaCatalog.Conduits.ContainsKey(id))return;run.conduitId=id;}
- public void UiPackingSetResonance(string id){if(run==null||!StorageFormulaCatalog.Resonances.ContainsKey(id))return;run.resonanceId=id;}
- public void UiPackingSetStability(string id){if(run==null||!StorageFormulaCatalog.Stabilities.ContainsKey(id))return;run.stabilityId=id;}
+ public void UiPackingSetConduit(string id){if(run==null||packingAtRelay||!StorageFormulaCatalog.Conduits.ContainsKey(id))return;run.conduitId=id;}
+ public void UiPackingSetResonance(string id){if(run==null||packingAtRelay||!StorageFormulaCatalog.Resonances.ContainsKey(id))return;run.resonanceId=id;}
+ public void UiPackingSetStability(string id){if(run==null||packingAtRelay||!StorageFormulaCatalog.Stabilities.ContainsKey(id))return;run.stabilityId=id;}
  public void UiPackingToggleCard(string slot){if(run==null)return;if(run.selectedCardSlots.Contains(slot))run.selectedCardSlots.Remove(slot);else run.selectedCardSlots.Add(slot);}
  public void UiPackingCapture(){
   if(run==null)return;
+  if(!packingAtBase){
+   BackpackSystem.Build(run);
+   return;
+  }
   LoadoutSystem.Capture(meta,run);
   meta.selectedBackpack=run.coreId;
   SaveSystem.Save(meta);
  }
  public void UiPackingSave(){
   UiPackingCapture();
-  if(!packingAtBase)ReturnToExpeditionScreen();
+  if(packingAtRelay){
+   CourierRouteSystem.RefreshPackingEffects(run,meta);
+   packingAtRelay=false;
+   message="中継所で収納術式を確定しました。次の区間を選択してください。";
+   screen=ScreenId.Route;
+  } else if(!packingAtBase)ReturnToExpeditionScreen();
  }
  public void UiTakeReward(string itemId){
   if(run==null||!GameCatalog.Items.ContainsKey(itemId))return;
   var loot=new ItemInstance(itemId){identified=false};
   StorageFormulaSystem.EnsureItemRolled(loot);
   run.lootBag.Add(loot);
+  if(!string.IsNullOrEmpty(courierCargoNodeId)){
+   ResolveCourierLocation(new CourierLocationOutcome{cargoRecovered=true,message=$"{GameCatalog.Items[itemId].name}を回収しました。"});
+   return;
+  }
   ReturnToExpeditionScreen();
  }
  public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
- public void UiReturnToMap()=>ReturnToExpeditionScreen();
+ public void UiReturnToMap(){
+  if(!string.IsNullOrEmpty(courierCargoNodeId)){
+   ResolveCourierLocation(new CourierLocationOutcome{cargoRecovered=false});
+   return;
+  }
+  ReturnToExpeditionScreen();
+ }
  public void UiResolveEvent(int choice){
   if(run==null)return;
   var current=UiCurrentEvent;
@@ -339,6 +464,10 @@ public partial class PackspireGame : MonoBehaviour {
    SaveSystem.Save(meta);
   }
   if(gridBoard!=null)gridBoard.pendingEventId="";
+  if(!string.IsNullOrEmpty(courierEventNodeId)){
+   ResolveCourierLocation(new CourierLocationOutcome{message=message});
+   return;
+  }
   ReturnToExpeditionScreen();
  }
  public void UiBeginGridEvent(){
@@ -358,20 +487,23 @@ public partial class PackspireGame : MonoBehaviour {
  void ReturnToExpeditionScreen(){
   screen=gridBoard!=null?ScreenId.GridBoard:ScreenId.Expedition;
  }
- void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;message="荷造りセットを編集";screen=ScreenId.Pack;}
+ void OpenPacking(){run=LoadoutSystem.CreateRun(meta,"");packingAtBase=true;packingAtRelay=false;message="荷造りセットを編集";screen=ScreenId.Pack;}
  void StartRun(string dungeon){
   try{
    message="ダンジョンを生成中…";
    run=LoadoutSystem.CreateRun(meta,dungeon);
+   RoleFrameworkSystem.Normalize(meta);
+   run.role=meta.currentRole;
    var discovered=ReactionSystem.DiscoverRoles(meta,run);
    if(discovered.Count>0)SaveSystem.Save(meta);
    packingAtBase=false;
+   packingAtRelay=false;
    battle=null;
-   gridBoard=GridBoardSystem.Create(run.dungeon);
-   GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
-   GridBoardSystem.SyncExplorePool(gridBoard,run);
-   message="封印格子を展開した";
-   screen=ScreenId.GridBoard;
+   gridBoard=null;
+   courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
+   run.courierRoute=CourierRouteSystem.Create(run,meta);
+   message="配達経路台帳を開きました。次の区間を選択してください。";
+   screen=ScreenId.Route;
   }catch(Exception ex){
    run=null;gridBoard=null;screen=ScreenId.Expedition;
    message="遠征開始エラー："+ex.Message;
@@ -381,28 +513,59 @@ public partial class PackspireGame : MonoBehaviour {
  void StartBattle(bool boss){
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);
-  var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
+  var dungeon=ResolveRunDungeon();
+  if(dungeon==null){
+   Debug.LogError("Cannot start battle because no dungeon content is available.");
+   return;
+  }
   EnemyDef enemy=null;
   if(gridBoard!=null&&!string.IsNullOrEmpty(gridBoard.pendingEnemyId))
    enemy=GameCatalog.Enemies.FirstOrDefault(x=>x.id==gridBoard.pendingEnemyId);
   if(gridBoard!=null)gridBoard.pendingEnemyId="";
   if(enemy==null&&LockBattleShowcaseArt){
    enemy=GameCatalog.Enemies.FirstOrDefault(x=>x.id=="dragon")
-    ??GameCatalog.Enemies.First(x=>x.tier==(boss?3:Mathf.Min(2,1+run.battlesWon/3)));
+    ??GameCatalog.Enemies.FirstOrDefault(x=>x.tier==(boss?3:Mathf.Min(2,1+run.battlesWon/3)))
+    ??GameCatalog.Enemies.FirstOrDefault();
   } else if(enemy==null){
    var pool=GameCatalog.Enemies.Where(x=>boss?x.tier==3:x.tier==Mathf.Min(2,1+run.battlesWon/3)).ToArray();
-   enemy=pool[UnityEngine.Random.Range(0,pool.Length)];
+   enemy=pool.Length>0
+    ?pool[UnityEngine.Random.Range(0,pool.Length)]
+    :GameCatalog.Enemies.FirstOrDefault();
+  }
+  if(enemy==null){
+   Debug.LogError("Cannot start battle because no enemy content is available.");
+   return;
   }
   float pressureScale=GridBoardSystem.EnemyHpMultiplier(gridBoard);
   battle=BattleSystem.Begin(run,enemy,dungeon.hpScale*pressureScale);
   // Same-screen combat when on the seal grid; legacy full battle screen otherwise.
   screen=gridBoard!=null?ScreenId.GridBoard:ScreenId.Battle;
  }
+
+ DungeonDef ResolveRunDungeon(){
+  string[] candidates={run?.dungeon,gridBoard?.dungeonId,PackspireContent.Data.balance.defaultDungeonId};
+  DungeonDef dungeon=null;
+  foreach(string candidate in candidates){
+   if(string.IsNullOrEmpty(candidate))continue;
+   dungeon=GameCatalog.Dungeons.FirstOrDefault(value=>value.id==candidate);
+   if(dungeon!=null)break;
+  }
+  dungeon??=GameCatalog.Dungeons.FirstOrDefault();
+  if(dungeon==null)return null;
+  if(run!=null)run.dungeon=dungeon.id;
+  if(gridBoard!=null)gridBoard.dungeonId=dungeon.id;
+  return dungeon;
+ }
  void WinBattle(){
   int goldBonus=CharacterSystem.WinGoldBonus(run);
   run.battlesWon++;run.gold+=12+run.battlesWon*3+goldBonus;run.hp=Mathf.Min(run.maxHp,run.hp+3);
   if(goldBonus>0)message=$"勝利　+{goldBonus}G（{CharacterSystem.OfRun(run).traitName}）";
-  bool boss=battle!=null&&battle.enemy.tier==3;
+  if(!string.IsNullOrEmpty(courierBattleNodeId)){
+   string battleResult=string.IsNullOrEmpty(message)?"追跡者を退けました。":message;
+   ResolveCourierLocation(new CourierLocationOutcome{message=battleResult});
+   return;
+  }
+  bool boss=gridBoard==null&&battle!=null&&battle.enemy.tier==3;
   battle=null;
   if(boss){FinishRun(true);return;}
   screen=ScreenId.Reward;
@@ -429,6 +592,7 @@ public partial class PackspireGame : MonoBehaviour {
   meta.runs++;SaveSystem.Save(meta);
   battle=null;
   gridBoard=null;
+  courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
   message=win?"遠征成功。戦利品をすべて保管しました":"探索終了。戦利品と獲得ゴールドは持ち帰れません";
   screen=win?ScreenId.GameClear:ScreenId.GameOver;
  }

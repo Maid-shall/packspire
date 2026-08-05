@@ -8,9 +8,9 @@
         <ui:VisualElement class="ps-rite-brand">
             <ui:VisualElement class="ps-rite-brand-mark" picking-mode="Ignore" />
             <ui:VisualElement class="ps-rite-top-title">
-                <ui:Label text="ATELIER / FORGE" class="ps-rite-top-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="収納術式" class="ps-rite-top-name" picking-mode="Ignore" />
-                <ui:Label text="鍛冶場の窯で術装を編む" class="ps-rite-top-sub" picking-mode="Ignore" />
+                <ui:Label text="PACKSPIRE / PACKING / LOADOUT" class="ps-rite-top-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="荷造り" class="ps-rite-top-name" picking-mode="Ignore" />
+                <ui:Label text="術式を構築し、荷物を整えます。" class="ps-rite-top-sub" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="packing-top-actions" class="ps-rite-top-actions" />
@@ -20,7 +20,7 @@
             <ui:VisualElement class="ps-rite-left-header">
                 <ui:VisualElement class="ps-rite-panel-head">
                     <ui:Label text="01" class="ps-rite-panel-index" picking-mode="Ignore" />
-                    <ui:Label text="術装" class="ps-rite-panel-title" picking-mode="Ignore" />
+                    <ui:Label text="所持品一覧" class="ps-rite-panel-title" picking-mode="Ignore" />
                     <ui:VisualElement class="ps-rite-panel-rule" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:VisualElement name="packing-filter-host" />
@@ -30,6 +30,10 @@
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="packing-center" class="ps-rite-center">
+            <ui:VisualElement class="ps-rite-board-heading">
+                <ui:Label text="術式収納盤" class="ps-rite-board-heading-title" picking-mode="Ignore" />
+                <ui:Label text="6 × 4" class="ps-rite-board-heading-size" picking-mode="Ignore" />
+            </ui:VisualElement>
             <ui:VisualElement class="ps-rite-kiln-row">
                 <ui:VisualElement name="packing-kiln" class="ps-rite-kiln" />
             </ui:VisualElement>

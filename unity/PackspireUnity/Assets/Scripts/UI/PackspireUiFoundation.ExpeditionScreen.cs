@@ -27,6 +27,9 @@ public sealed partial class PackspireUiFoundation {
  Button expeditionDepartButton;
  Label expeditionDepartReason;
  Label expeditionDepartLabel;
+ Label expeditionAuthDestination;
+ Label expeditionAuthCourier;
+ Label expeditionAuthLoadout;
  float expeditionDestScrollY;
  float expeditionDetailScrollY;
  bool expeditionLayoutAudited;
@@ -82,6 +85,9 @@ public sealed partial class PackspireUiFoundation {
 
   expeditionDepartFooter=RequireViewElement<VisualElement>(expeditionShell,"expedition-footer");
   expeditionDepartReason=RequireViewElement<Label>(expeditionShell,"expedition-depart-reason");
+  expeditionAuthDestination=RequireViewElement<Label>(expeditionShell,"expedition-auth-destination");
+  expeditionAuthCourier=RequireViewElement<Label>(expeditionShell,"expedition-auth-courier");
+  expeditionAuthLoadout=RequireViewElement<Label>(expeditionShell,"expedition-auth-loadout");
   expeditionDepartButton=BuildExpeditionDeparturePrimaryButton(meta);
   expeditionDepartFooter.Add(expeditionDepartButton);
   screenRoot.Add(expeditionShell);
@@ -298,7 +304,9 @@ public sealed partial class PackspireUiFoundation {
  void PopulateExpeditionDestList(MetaSave meta){
   if(expeditionDestList==null)return;
   expeditionDestList.Clear();
+  int index=0;
   foreach(var dungeon in VisibleExpeditionDungeons(meta)){
+   index++;
    bool unlocked=IsDungeonUnlocked(meta,dungeon.id);
    bool previewLocked=ExpeditionLayoutPreviewEnabled()&&!unlocked;
    var thumb=Atlas(game.UiDungeonArt,DungeonUv(dungeon.id),"ps-exp-dest-thumb");
@@ -316,6 +324,9 @@ public sealed partial class PackspireUiFoundation {
     thumb,
     badge);
    row.AddToClassList("ps-exp-dest-row");
+   var number=new Label(ToRoman(index)){pickingMode=PickingMode.Ignore};
+   number.AddToClassList("ps-exp-dest-index");
+   row.Insert(2,number);
    if(!unlocked){
     row.AddToClassList("ps-locked");
     row.AddToClassList("ps-exp-dest-locked");
@@ -325,6 +336,10 @@ public sealed partial class PackspireUiFoundation {
    expeditionDestList.Add(row);
   }
  }
+
+ static string ToRoman(int value)=>value switch{
+  1=>"I",2=>"II",3=>"III",4=>"IV",5=>"V",6=>"VI",7=>"VII",8=>"VIII",9=>"IX",_=>value.ToString()
+ };
 
  string ExpeditionDestSubline(DungeonDef dungeon,bool unlocked){
   if(!unlocked)return "到達前";
@@ -664,8 +679,14 @@ public sealed partial class PackspireUiFoundation {
  void RefreshExpeditionDepart(MetaSave meta){
   if(expeditionDepartButton==null||expeditionDepartReason==null)return;
   bool unlocked=IsDungeonUnlocked(meta,selectedDungeonId);
+  var dungeon=GameCatalog.Dungeons.FirstOrDefault(x=>x.id==selectedDungeonId)??GameCatalog.Dungeons[0];
+  var character=CharacterCatalog.Get(meta.selectedCharacterId);
+  var loadout=LoadoutSystem.Active(meta);
+  if(expeditionAuthDestination!=null)expeditionAuthDestination.text=dungeon.name;
+  if(expeditionAuthCourier!=null)expeditionAuthCourier.text=character.name;
+  if(expeditionAuthLoadout!=null)expeditionAuthLoadout.text=loadout.name;
   expeditionDepartButton.SetEnabled(unlocked);
-  expeditionDepartReason.text=unlocked?"":ExpeditionUnlockHint(meta,GameCatalog.Dungeons.First(x=>x.id==selectedDungeonId));
+  expeditionDepartReason.text=unlocked?"":ExpeditionUnlockHint(meta,dungeon);
  }
 }
 }

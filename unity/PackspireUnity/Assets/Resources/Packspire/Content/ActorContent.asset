@@ -784,7 +784,7 @@ MonoBehaviour:
         duration: 3
     phases: []
     portrait: {fileID: 0}
-    legacyPortraitResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-ren-front-v1
   - id: rats
     name: "\u6D1E\u7A74\u30CD\u30BA\u30DF\u306E\u7FA4\u308C"
     tier: 1
@@ -808,7 +808,7 @@ MonoBehaviour:
       effects: []
     phases: []
     portrait: {fileID: 0}
-    legacyPortraitResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-kuro-front-v1
   - id: porter
     name: "\u9306\u3073\u305F\u8377\u904B\u3073\u4EBA\u5F62"
     tier: 1
@@ -832,7 +832,7 @@ MonoBehaviour:
       effects: []
     phases: []
     portrait: {fileID: 0}
-    legacyPortraitResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-hina-front-v1
   - id: mage
     name: "\u80DE\u5B50\u306E\u9B54\u5C0E\u5E2B"
     tier: 2
@@ -1034,9 +1034,9 @@ MonoBehaviour:
     portrait: {fileID: 0}
     portraitFront: {fileID: 0}
     portraitHub: {fileID: 0}
-    legacyPortraitResource: 
-    legacyPortraitFrontResource: 
-    legacyPortraitHubResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-ren-portrait-v1
+    legacyPortraitFrontResource: Art/Portraits/ObsidianMisprint/hero-ren-front-v1
+    legacyPortraitHubResource: Art/Portraits/ObsidianMisprint/hero-ren-front-v1
     traitName: "\u4E0D\u5C48"
     traitText: "\u6700\u5927HP+4"
     traitKind: maxHpBonus
@@ -1090,9 +1090,9 @@ MonoBehaviour:
     portrait: {fileID: 0}
     portraitFront: {fileID: 0}
     portraitHub: {fileID: 0}
-    legacyPortraitResource: 
-    legacyPortraitFrontResource: 
-    legacyPortraitHubResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-kuro-portrait-v1
+    legacyPortraitFrontResource: Art/Portraits/ObsidianMisprint/hero-kuro-front-v1
+    legacyPortraitHubResource: Art/Portraits/ObsidianMisprint/hero-kuro-front-v1
     traitName: "\u5805\u5B88"
     traitText: "\u6226\u95D8\u958B\u59CB\u6642\u306B4\u30D6\u30ED\u30C3\u30AF"
     traitKind: openingBlock
@@ -1118,9 +1118,9 @@ MonoBehaviour:
     portrait: {fileID: 0}
     portraitFront: {fileID: 0}
     portraitHub: {fileID: 0}
-    legacyPortraitResource: 
-    legacyPortraitFrontResource: 
-    legacyPortraitHubResource: 
+    legacyPortraitResource: Art/Portraits/ObsidianMisprint/hero-hina-portrait-v1
+    legacyPortraitFrontResource: Art/Portraits/ObsidianMisprint/hero-hina-front-v1
+    legacyPortraitHubResource: Art/Portraits/ObsidianMisprint/hero-hina-front-v1
     traitName: "\u6574\u5099"
     traitText: "\u6226\u95D8\u52DD\u5229\u6642\u306E\u6240\u6301\u91D1+3"
     traitKind: winGold

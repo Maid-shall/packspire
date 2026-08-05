@@ -22,6 +22,194 @@ public sealed class PackspireEditModeTests {
   Assert.That(save.selectedLoadoutId,Is.EqualTo("loadout-1"));
   Assert.That(save.selectedCharacterId,Is.Not.Empty);
   Assert.That(save.memoryReactions,Is.Not.Null);
+  Assert.That(save.roleBranches,Has.Count.EqualTo(4));
+  Assert.That(RoleFrameworkSystem.CoreRoleIds,Does.Contain(save.currentRole));
+ }
+
+ [Test]
+ public void LegacyAdvancedRole_BecomesOneQualificationSeal(){
+  var advanced=GameCatalog.Roles.Values.First(role=>
+   !RoleFrameworkSystem.CoreRoleIds.Contains(role.id)&&RoleFrameworkSystem.CoreRoleIds.Contains(role.family));
+  var save=new MetaSave{currentRole=advanced.id,unlockedRoles=new(){advanced.id}};
+
+  RoleFrameworkSystem.MigrateLegacyRole(save);
+  RoleFrameworkSystem.Normalize(save);
+
+  Assert.That(save.currentRole,Is.EqualTo(advanced.family));
+  Assert.That(save.qualificationSealId,Is.EqualTo(advanced.id));
+ }
+
+ [Test]
+ public void CourierRoute_HasTenSegmentsWithTwoMeaningfulBranchesPerPhase(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout"};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+
+  var available=CourierRouteSystem.Available(run.courierRoute);
+
+  Assert.That(available.Count,Is.EqualTo(2));
+  Assert.That(available.Select(x=>x.kind),Is.EquivalentTo(new[]{"RELAY","EVENT"}));
+  Assert.That(Enumerable.Range(1,9).All(phase=>CourierRouteSystem.Nodes.Count(node=>node.phase==phase)==2),Is.True);
+  Assert.That(CourierRouteSystem.Node("destination").phase,Is.EqualTo(CourierRouteSystem.TotalSegments));
+  Assert.That(run.courierRoute.seals.Any(x=>x.roleSignature&&x.name=="先読印"),Is.True);
+ }
+
+ [Test]
+ public void CourierRoute_SealAndCommitAdvancePressureDeterministically(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout"};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+
+  Assert.That(CourierRouteSystem.UseSeal(run.courierRoute,"role-signature",out _),Is.True);
+  Assert.That(CourierRouteSystem.Select(run.courierRoute,"broken_stair"),Is.True);
+  Assert.That(CourierRouteSystem.Commit(run,out _),Is.True);
+
+  Assert.That(run.courierRoute.currentNodeId,Is.EqualTo("broken_stair"));
+  Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(0));
+  Assert.That(run.courierRoute.travelPending,Is.True);
+  Assert.That(run.courierRoute.travelFromNodeId,Is.EqualTo("dispatch"));
+  Assert.That(run.courierRoute.travelToNodeId,Is.EqualTo("broken_stair"));
+  Assert.That(CourierRouteSystem.CompleteTravel(run.courierRoute),Is.True);
+  Assert.That(run.hp,Is.EqualTo(42));
+  Assert.That(run.courierRoute.awaitingResolution,Is.True);
+  Assert.That(run.courierRoute.pendingResolution,Is.EqualTo(CourierResolutionKind.Event));
+  Assert.That(CourierRouteSystem.Available(run.courierRoute),Is.Empty,
+   "A location must resolve through its own handler before another route branch can be chosen.");
+  Assert.That(CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _),Is.True);
+  Assert.That(run.courierRoute.awaitingResolution,Is.False);
+  Assert.That(run.courierRoute.travelPending,Is.False);
+  Assert.That(run.courierRoute.travelFromNodeId,Is.Empty);
+  Assert.That(run.courierRoute.travelToNodeId,Is.Empty);
+ }
+
+ [Test]
+ public void CourierRoute_RequiresTenResolvedLocationsBeforeDeliveryCompletes(){
+  var meta=new MetaSave{currentRole="guardian"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="guardian",hp=42,maxHp=42};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+  string[] route={
+   "ash_market","quiet_shaft","cinder_tunnel","reliquary_post","drowned_archive",
+   "ash_hospital","glass_aqueduct","courier_catacomb","final_relay","destination"
+  };
+
+  foreach(string nodeId in route){
+   Assert.That(CourierRouteSystem.Select(run.courierRoute,nodeId),Is.True,nodeId);
+   Assert.That(CourierRouteSystem.Commit(run,out _),Is.True,nodeId);
+   Assert.That(run.courierRoute.complete,Is.False,"Arrival alone is not a completed delivery.");
+   Assert.That(CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _),Is.True,nodeId);
+  }
+
+  Assert.That(run.courierRoute.clearedSegments,Is.EqualTo(CourierRouteSystem.TotalSegments));
+  Assert.That(run.courierRoute.complete,Is.True);
+  Assert.That(run.courierRoute.resolvedNodeIds,Is.EquivalentTo(route));
+ }
+
+ [Test]
+ public void CourierRoute_SeparatesLocationRolesAndReservesMinigameExtension(){
+  Assert.That(CourierRouteSystem.Node("broken_stair").resolution,Is.EqualTo(CourierResolutionKind.Event));
+  Assert.That(CourierRouteSystem.Node("cinder_tunnel").resolution,Is.EqualTo(CourierResolutionKind.Battle));
+  Assert.That(CourierRouteSystem.Node("quiet_shaft").resolution,Is.EqualTo(CourierResolutionKind.Cargo));
+  Assert.That(CourierRouteSystem.Node("ash_market").resolution,Is.EqualTo(CourierResolutionKind.Relay));
+  Assert.That(CourierRouteSystem.Node("destination").resolution,Is.EqualTo(CourierResolutionKind.Delivery));
+  Assert.That(CourierRouteSystem.Nodes.Any(node=>node.resolution==CourierResolutionKind.MiniGame),Is.False,
+   "Minigame is an extension contract only; no route location should require it yet.");
+ }
+
+ [Test]
+ public void CourierRoute_LocationOutcomeCanChangeDeliveryPressure(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout",hp=42,maxHp=42};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+  CourierRouteSystem.Select(run.courierRoute,"ash_market");
+  CourierRouteSystem.Commit(run,out _);
+
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome{dayDelta=2},out _);
+
+  Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(4));
+ }
+
+ [Test]
+ public void CourierRoute_CargoOutcomeBuildsDeliveryProof(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout",hp=42,maxHp=42};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+  CourierRouteSystem.Select(run.courierRoute,"ash_market");
+  CourierRouteSystem.Commit(run,out _);
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _);
+  CourierRouteSystem.Select(run.courierRoute,"quiet_shaft");
+  CourierRouteSystem.Commit(run,out _);
+  run.lootBag.Add(new ItemInstance("sword"));
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome{cargoRecovered=true},out _);
+
+  Assert.That(run.courierRoute.recoveredCargoCount,Is.EqualTo(1));
+  Assert.That(run.lootBag,Has.Count.EqualTo(1));
+ }
+
+ [Test]
+ public void CourierRoute_RecoveredCargoCanOnlyEnterStorageAtRelay(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout",hp=42,maxHp=42};
+  run.courierRoute=CourierRouteSystem.Create(run,meta);
+
+  CourierRouteSystem.Select(run.courierRoute,"ash_market");
+  CourierRouteSystem.Commit(run,out _);
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _);
+  Assert.That(CourierRouteSystem.OpenRelayPacking(run,out _,out _),Is.True);
+
+  CourierRouteSystem.Select(run.courierRoute,"quiet_shaft");
+  CourierRouteSystem.Commit(run,out _);
+  run.lootBag.Add(new ItemInstance("sword"));
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome{cargoRecovered=true},out _);
+  Assert.That(run.lootBag,Has.Count.EqualTo(1));
+  Assert.That(CourierRouteSystem.OpenRelayPacking(run,out _,out _),Is.False);
+
+  CourierRouteSystem.Select(run.courierRoute,"cinder_tunnel");
+  CourierRouteSystem.Commit(run,out _);
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _);
+  CourierRouteSystem.Select(run.courierRoute,"reliquary_post");
+  CourierRouteSystem.Commit(run,out _);
+  run.lootBag.Add(new ItemInstance("shield"));
+  CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome(),out _);
+
+  Assert.That(CourierRouteSystem.OpenRelayPacking(run,out int transferred,out _),Is.True);
+  Assert.That(transferred,Is.EqualTo(2));
+  Assert.That(run.lootBag,Is.Empty);
+  Assert.That(run.inventory,Has.Count.EqualTo(2));
+ }
+
+ [Test]
+ public void DeliverySeals_AreDerivedFromPackingColorsAndPreserveSpentCharges(){
+  var meta=new MetaSave{currentRole="scout"};
+  RoleFrameworkSystem.Normalize(meta);
+  var run=new RunState{role="scout"};
+  var colors=new Dictionary<Element,int>{
+   [Element.Fire]=3,[Element.Water]=0,[Element.Wind]=2,[Element.Earth]=1
+  };
+
+  var seals=DeliverySealSystem.Build(run,meta,colors);
+
+  Assert.That(seals.Any(seal=>seal.roleSignature),Is.True);
+  Assert.That(seals.Single(seal=>seal.key=="color-fire").maxCharges,Is.EqualTo(2));
+  Assert.That(seals.Single(seal=>seal.key=="color-wind").target,Is.EqualTo(DeliverySealSystem.RouteTarget));
+  Assert.That(seals.Single(seal=>seal.key=="color-earth").target,Is.EqualTo(DeliverySealSystem.DelayTarget));
+  run.courierRoute=new CourierRouteState{seals=seals};
+  Assert.That(CourierRouteSystem.UseSeal(run.courierRoute,"color-earth",out _),Is.True);
+  Assert.That(run.courierRoute.delayShield,Is.EqualTo(1));
+  seals.Single(seal=>seal.key=="color-fire").charges--;
+
+  var refreshed=DeliverySealSystem.Refresh(seals,run,meta,colors);
+  Assert.That(refreshed.Single(seal=>seal.key=="color-fire").charges,Is.EqualTo(1));
+  var withoutFire=new Dictionary<Element,int>(colors){[Element.Fire]=0};
+  var retired=DeliverySealSystem.Refresh(refreshed,run,meta,withoutFire);
+  Assert.That(retired.Single(seal=>seal.key=="color-fire").available,Is.False);
+  var restored=DeliverySealSystem.Refresh(retired,run,meta,colors);
+  Assert.That(restored.Single(seal=>seal.key=="color-fire").charges,Is.EqualTo(1));
  }
 
  [Test]

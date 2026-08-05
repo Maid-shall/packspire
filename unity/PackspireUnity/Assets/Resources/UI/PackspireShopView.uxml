@@ -32,6 +32,9 @@
                     <ui:ScrollView name="shop-detail-scroll" class="ps-shop-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="shop-transaction-column" class="ps-shop-col-transaction">
+                <ui:Label text="PURCHASE INVOICE" class="ps-shop-transaction-heading" picking-mode="Ignore" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

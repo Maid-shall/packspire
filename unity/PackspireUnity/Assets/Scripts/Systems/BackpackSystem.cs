@@ -109,21 +109,18 @@ public static class BackpackSystem {
     .Where(other=>other!=p&&Adjacent(run,p,other))
     .Select(other=>run.inventory.First(x=>x.uid==other.itemUid).templateId)
     .ToList();
-   var grants=ExpandedGrants(def);
    var ids=StorageFormulaSystem.ResolveCardIds(def,neighbors,formula.resonance);
    for(int copy=0;copy<ids.Length;copy++){
     if(!GameCatalog.Cards.ContainsKey(ids[copy]))continue;
     var card=FromDef(GameCatalog.Cards[ids[copy]],def.name,item.uid);
-    if(grants.Count>0)card.explorationCardId=grants[Mathf.Min(copy,grants.Count-1)].explorationCardId;
-    if(string.IsNullOrEmpty(card.explorationCardId))card.explorationCardId=def.explorationCardId;
     card.slotKey=$"{item.uid}:{ids[copy]}:{copy}";
     result.candidates.Add(card);
    }
   }
 
   StorageFormulaSystem.ApplyResonanceLinks(run,formula.resonance,result.candidates,result.links);
-  StorageFormulaSystem.ApplyConduitBonuses(formula.conduit,result.colors,result.candidates);
-  StorageFormulaSystem.ApplyColorTraits(run,result.colors,result.candidates);
+  // LINK owns battle-card upgrades. Color matches are converted into delivery
+  // seals by DeliverySealSystem; the adopted expedition loop has no card reverse.
 
   foreach(var card in result.candidates){
    var item=run.inventory.FirstOrDefault(x=>x.uid==card.sourceItemUid);
@@ -163,22 +160,6 @@ public static class BackpackSystem {
   };
   card.effects=ContentDatabase.CardEffects(d.id);
   return card;
- }
-
- static List<GrantedCardDef> ExpandedGrants(ItemDef item){
-  var result=new List<GrantedCardDef>();
-  foreach(var grant in item?.grantedCards??System.Array.Empty<GrantedCardDef>()){
-   if(grant==null||string.IsNullOrEmpty(grant.battleCardId))continue;
-   for(int i=0;i<Mathf.Max(1,grant.count);i++)
-    result.Add(grant);
-  }
-  if(result.Count==0){
-   foreach(var cardId in item?.cardIds??System.Array.Empty<string>())
-    result.Add(new GrantedCardDef{
-     battleCardId=cardId,explorationCardId=item.explorationCardId,count=1
-    });
-  }
-  return result;
  }
 
  static List<CardInstance> RoleCards(string role){

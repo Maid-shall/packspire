@@ -48,6 +48,10 @@ public sealed partial class PackspireUiFoundation {
    RequireViewElement<VisualElement>(shell,"status-detail-surface");
    var characterScroll=RequireViewElement<ScrollView>(shell,"status-character-scroll");
    mgmtOverviewHost=RequireViewElement<VisualElement>(shell,"status-character-host");
+   statusAppointmentEyebrow=RequireViewElement<Label>(shell,"status-appointment-eyebrow");
+   statusAppointmentTitle=RequireViewElement<Label>(shell,"status-appointment-title");
+   statusAppointmentDetail=RequireViewElement<Label>(shell,"status-appointment-detail");
+   statusAppointmentAction=RequireViewElement<Label>(shell,"status-appointment-action");
    StretchMgmtScrollContent(characterScroll);
    StretchMgmtScrollContent(listScroll);
    StretchMgmtScrollContent(detailScroll,false);

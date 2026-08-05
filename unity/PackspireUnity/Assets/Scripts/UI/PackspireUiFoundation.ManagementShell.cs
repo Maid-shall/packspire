@@ -14,8 +14,11 @@ public sealed partial class PackspireUiFoundation {
  VisualElement mgmtDetailSummaryHost;
  ScrollView mgmtDetailScroll;
  VisualElement mgmtListHeader;
+ Label statusAppointmentEyebrow;
+ Label statusAppointmentTitle;
+ Label statusAppointmentDetail;
+ Label statusAppointmentAction;
  float mgmtListScrollY;
- int statusRoleFilter;
 
  VisualElement BuildManagementShell(string eyebrow,string title,ManagementLayout layout,out ScrollView listScroll,out ScrollView detailScroll){
   if(TryBuildManagementView(eyebrow,title,layout,out var view,out listScroll,out detailScroll))

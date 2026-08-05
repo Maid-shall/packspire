@@ -43,7 +43,6 @@ public sealed partial class PackspireUiFoundation {
  bool gridBoardMapHover,gridBoardDockHover,gridBoardHeaderHover;
  Vector2 gridBoardPointerStart,gridBoardPanAtStart;
  Vector2 gridBoardLastLayoutPos=new(float.NaN,float.NaN);
- Texture2D gridBoardMakaiBackground,gridBoardBoardSurface,gridBoardHudTop,gridBoardEnergyRailArt,gridBoardInfoHeaderArt,gridBoardPlayerHudArt;
  int gridBoardFloaterSerial;
  const float GridZoomMin=0.55f;
  const float GridZoomMax=1.9f;
@@ -51,7 +50,8 @@ public sealed partial class PackspireUiFoundation {
  // A closed hand should still show enough of every card to read the identity.
  // It is a deliberate composition element at the bottom of the expedition,
  // not a hidden drawer.
- const float GridHandPeekSink=132f;
+ // The hand now shows detachable receipt stubs instead of hiding full cards.
+ const float GridHandPeekSink=18f;
  const float GridHandWidth=760f;
  const float GridHandCardWidth=168f;
  // Board y=0 is top of screen, so "up" on UI decreases y.
@@ -95,23 +95,6 @@ public sealed partial class PackspireUiFoundation {
   gridBoardCells.Clear();
  }
 
- void EnsureGridBoardEnvironmentArt(){
-  if(gridBoardMakaiBackground==null)
-   gridBoardMakaiBackground=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-makai-bg-01");
-  if(gridBoardBoardSurface==null)
-   gridBoardBoardSurface=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-board-surface-01");
-  if(gridBoardHudTop==null)
-   gridBoardHudTop=PackspireResources.LoadFirst<Texture2D>(
-    "Art/UI/Product/dungeon-hud-top-compact-v1",
-    "Art/UI/Product/dungeon-hud-top-layout-v2");
-  if(gridBoardEnergyRailArt==null)
-   gridBoardEnergyRailArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-energy-simple-layout-v3");
-  if(gridBoardInfoHeaderArt==null)
-   gridBoardInfoHeaderArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-info-header-layout-v2");
-  if(gridBoardPlayerHudArt==null)
-   gridBoardPlayerHudArt=PackspireResources.Load<Texture2D>("Art/UI/Product/dungeon-player-status-cluster-v2");
- }
-
  void BuildGridBoard(){
   var run=game.UiGridBoard;
   if(run==null){
@@ -120,7 +103,6 @@ public sealed partial class PackspireUiFoundation {
   }
   SuspendGridBoard();
   gridBoardBuilt=true;
-  EnsureGridBoardEnvironmentArt();
   // Zoom controls are intentionally not exposed in this layout pass.
   gridBoardZoom=1f;
   gridBoardPan=Vector2.zero;
@@ -129,10 +111,6 @@ public sealed partial class PackspireUiFoundation {
   if(gridBoardRoot==null){
    Debug.LogError("Grid board view could not be created.");
    return;
-  }
-  if(gridBoardMakaiBackground!=null){
-   gridBoardRoot.style.backgroundImage=new StyleBackground(gridBoardMakaiBackground);
-   PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardRoot,ScaleMode.StretchToFill);
   }
   screenRoot.Add(gridBoardRoot);
 
@@ -147,10 +125,6 @@ public sealed partial class PackspireUiFoundation {
   gridBoardViewport.RegisterCallback<GeometryChangedEvent>(OnGridViewportGeometryChanged);
 
   gridBoardGrid=Container("ps-gboard-grid");
-  if(gridBoardBoardSurface!=null&&!GridBoardSystem.HasAuthoredLayout(run)){
-   gridBoardGrid.style.backgroundImage=new StyleBackground(gridBoardBoardSurface);
-   PackspireUiFactory.ApplyBackgroundScaleMode(gridBoardGrid,ScaleMode.StretchToFill);
-  }
   gridBoardGrid.EnableInClassList("ps-gboard-irregular",
    GridBoardSystem.HasAuthoredLayout(run));
   gridBoardGrid.style.position=Position.Absolute;
@@ -264,13 +238,9 @@ public sealed partial class PackspireUiFoundation {
 
   var dock=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-dock");
   var panel=Container("ps-gboard-panel");
-  if(gridBoardInfoHeaderArt!=null){
-   var ornament=Container("ps-gboard-panel-ornament");
-   ornament.pickingMode=PickingMode.Ignore;
-   ornament.style.backgroundImage=new StyleBackground(gridBoardInfoHeaderArt);
-   PackspireUiFactory.ApplyBackgroundScaleMode(ornament,ScaleMode.StretchToFill);
-   panel.Add(ornament);
-  }
+  var ornament=Container("ps-gboard-panel-ornament");
+  ornament.pickingMode=PickingMode.Ignore;
+  panel.Add(ornament);
   // The right dock is deliberately an open reading column.  The environment
   // and the important controls carry the ornamental weight; framing this too
   // would make the expedition screen feel like a stack of windows.
@@ -327,14 +297,6 @@ public sealed partial class PackspireUiFoundation {
 
   gridBoardPlayerHud=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-player-hud");
   gridBoardPlayerHud.pickingMode=PickingMode.Ignore;
-  var playerHudOrnamentClip=Container("ps-gboard-player-hud-ornament-clip");
-  var playerHudOrnament=Container("ps-gboard-player-hud-ornament");
-  if(gridBoardPlayerHudArt!=null){
-   playerHudOrnament.style.backgroundImage=new StyleBackground(gridBoardPlayerHudArt);
-   PackspireUiFactory.ApplyBackgroundScaleMode(playerHudOrnament,ScaleMode.ScaleToFit);
-  }
-  playerHudOrnamentClip.Add(playerHudOrnament);
-  gridBoardPlayerHud.Add(playerHudOrnamentClip);
   var hero=Container("ps-gboard-hero");
   var heroRow=Container("ps-gboard-hero-row");
   gridBoardPortraitHost=Container("ps-gboard-portrait");

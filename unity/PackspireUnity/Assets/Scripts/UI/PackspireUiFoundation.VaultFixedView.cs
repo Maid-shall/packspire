@@ -235,7 +235,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void PopulateVaultFixedArt(ItemInstance selected,ItemDef def){
-  vaultFixedArtStage.Add(VaultItemArt(def.id,"ps-vault-fixed__hero-art"));
+  vaultFixedArtStage.Add(VaultItemDisplayArt(def.id,"ps-vault-fixed__hero-art"));
   var durability=PackspireUiFactory.Body($"耐久  {selected.durability} / {def.baseDurability}");
   durability.AddToClassList("ps-vault-fixed__durability");
   vaultFixedArtStage.Add(durability);

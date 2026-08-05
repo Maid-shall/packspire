@@ -9,6 +9,11 @@ public sealed partial class PackspireUiFoundation {
  VisualElement factionGraphHost;
  VisualElement factionGraphEdges;
  VisualElement factionGraphNodes;
+ VisualElement factionEmissaryStudyFront;
+ VisualElement factionEmissaryStudyBack;
+ VisualElement factionEmissaryHost;
+ Label factionEmissaryName;
+ Label factionEmissaryTitle;
  VisualElement factionDetailHeader;
  ScrollView factionDetailScroll;
  bool factionGraphEdgesDirty;
@@ -54,10 +59,13 @@ public sealed partial class PackspireUiFoundation {
 
   RequireViewElement<VisualElement>(factionShell,"faction-graph-column");
   factionGraphHost=RequireViewElement<VisualElement>(factionShell,"faction-graph-host");
-  factionGraphEdges=RequireViewElement<VisualElement>(factionShell,"faction-graph-edges");
-  factionGraphEdges.pickingMode=PickingMode.Ignore;
+  factionGraphEdges=null;
   factionGraphNodes=RequireViewElement<VisualElement>(factionShell,"faction-graph-nodes");
-  factionGraphHost.RegisterCallback<GeometryChangedEvent>(OnFactionGraphGeometryChanged);
+  factionEmissaryStudyFront=RequireViewElement<VisualElement>(factionShell,"faction-emissary-study-front");
+  factionEmissaryStudyBack=RequireViewElement<VisualElement>(factionShell,"faction-emissary-study-back");
+  factionEmissaryHost=RequireViewElement<VisualElement>(factionShell,"faction-emissary-host");
+  factionEmissaryName=RequireViewElement<Label>(factionShell,"faction-emissary-name");
+  factionEmissaryTitle=RequireViewElement<Label>(factionShell,"faction-emissary-title");
   factionEdgeLayoutReady=false;
   factionGraphLastSize=Vector2.zero;
 
@@ -68,9 +76,22 @@ public sealed partial class PackspireUiFoundation {
   StretchMgmtScrollContent(factionDetailScroll,false);
   screenRoot.Add(factionShell);
 
+  PopulateFactionEmissary(meta);
   PopulateFactionGraph(meta);
   RefreshFactionDetail(meta);
-  ScheduleFactionEdgeRefresh();
+ }
+
+ void PopulateFactionEmissary(MetaSave meta){
+  if(factionEmissaryHost==null)return;
+  var character=CharacterCatalog.Get(meta.selectedCharacterId);
+  factionEmissaryStudyFront.Clear();
+  factionEmissaryStudyBack.Clear();
+  factionEmissaryHost.Clear();
+  factionEmissaryStudyFront.Add(CharacterPortraitFront(character,"ps-faction-emissary-study-image"));
+  factionEmissaryStudyBack.Add(CharacterPortraitFront(character,"ps-faction-emissary-study-image ps-faction-emissary-study-image-back"));
+  factionEmissaryHost.Add(CharacterPortraitFront(character,"ps-faction-emissary-image"));
+  factionEmissaryName.text=character.name;
+  factionEmissaryTitle.text=character.title;
  }
 
  bool FactionLayoutPreviewEnabled(){
@@ -97,22 +118,19 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void PopulateFactionGraph(MetaSave meta){
-  if(factionGraphNodes==null||factionGraphEdges==null)return;
+  if(factionGraphNodes==null)return;
   factionGraphNodes.Clear();
-  factionGraphEdges.Clear();
+  factionGraphEdges?.Clear();
   factionEdgeLayoutReady=false;
   factionGraphLastSize=Vector2.zero;
   var visible=VisibleFactions(meta).ToList();
   if(visible.Count==0)return;
 
-  float maxRep=Mathf.Max(1f,visible.Max(f=>meta.factionRep.FirstOrDefault(x=>x.id==f.id)?.value??0f));
   foreach(var faction in visible){
    float rep=meta.factionRep.FirstOrDefault(x=>x.id==faction.id)?.value??0f;
-   if(!FactionGraphLayout.TryGetValue(faction.id,out var pos))continue;
-   var node=BuildFactionGraphNode(meta,faction,rep,maxRep,pos);
+   var node=BuildFactionGraphNode(meta,faction,rep);
    factionGraphNodes.Add(node);
   }
-  ScheduleFactionEdgeRefresh();
  }
 
  void OnFactionGraphGeometryChanged(GeometryChangedEvent evt){
@@ -205,25 +223,56 @@ public sealed partial class PackspireUiFoundation {
   return line;
  }
 
- VisualElement BuildFactionGraphNode(MetaSave meta,FactionDef faction,float rep,float maxRep,Vector2 pos){
-  float influence=Mathf.Lerp(0.35f,1f,rep/maxRep);
+ VisualElement BuildFactionGraphNode(MetaSave meta,FactionDef faction,float rep){
   bool discovered=IsFactionDiscovered(meta,faction.id);
   var node=new Button(()=>SelectFactionNode(faction.id)){tooltip=faction.name,userData=faction.id};
   node.AddToClassList("ps-faction-graph-node");
-  node.style.position=Position.Absolute;
-  node.style.left=Length.Percent(pos.x*100f);
-  node.style.top=Length.Percent(pos.y*100f);
-  node.style.translate=new Translate(new Length(-50,LengthUnit.Percent),new Length(-50,LengthUnit.Percent));
-  node.style.width=Mathf.RoundToInt(88f+56f*influence);
-  node.style.height=Mathf.RoundToInt(88f+56f*influence);
   if(faction.id==meta.currentFaction)node.AddToClassList("ps-faction-affiliated");
   if(faction.id==selectedFactionId)node.AddToClassList("ps-selected");
   if(discovered)node.AddToClassList("ps-faction-discovered");
   else if(FactionLayoutPreviewEnabled())node.AddToClassList("ps-faction-preview-undiscovered");
-  node.Add(Atlas(game.UiFactionArt,FactionUv(faction.id),"ps-faction-graph-emblem"));
+
+  int index=GameCatalog.Factions.ToList().FindIndex(x=>x.id==faction.id)+1;
+  var number=new Label(index.ToString("00")){pickingMode=PickingMode.Ignore};
+  number.AddToClassList("ps-faction-registry-index");
+  node.Add(number);
+
+  var identity=Container("ps-faction-registry-identity");
+  identity.pickingMode=PickingMode.Ignore;
+  identity.Add(Atlas(game.UiFactionArt,FactionUv(faction.id),"ps-faction-graph-emblem"));
+  var identityCopy=Container("ps-faction-registry-identity-copy");
   var name=new Label(faction.name){pickingMode=PickingMode.Ignore};
   name.AddToClassList("ps-faction-graph-name");
-  node.Add(name);
+  identityCopy.Add(name);
+  var description=new Label(faction.description){pickingMode=PickingMode.Ignore};
+  description.AddToClassList("ps-faction-registry-description");
+  identityCopy.Add(description);
+  identity.Add(identityCopy);
+  node.Add(identity);
+
+  int rank=Mathf.Clamp(Mathf.FloorToInt(rep/25f),0,faction.ranks.Length-1);
+  float threshold=Mathf.Max(25f,(rank+1)*25f);
+  var rankColumn=Container("ps-faction-registry-rank");
+  var rankLabel=new Label(faction.ranks[rank]){pickingMode=PickingMode.Ignore};
+  rankLabel.AddToClassList("ps-faction-registry-rank-name");
+  rankColumn.Add(rankLabel);
+  var progress=Container("ps-faction-registry-progress");
+  var fill=Container("ps-faction-registry-progress-fill");
+  fill.style.width=Length.Percent(Mathf.Clamp01(rep/threshold)*100f);
+  progress.Add(fill);
+  rankColumn.Add(progress);
+  var reputation=new Label($"REP {rep:0} / {threshold:0}"){pickingMode=PickingMode.Ignore};
+  reputation.AddToClassList("ps-faction-registry-reputation");
+  rankColumn.Add(reputation);
+  node.Add(rankColumn);
+
+  var effect=new Label(FactionEffectSummary(faction.id,rank)){pickingMode=PickingMode.Ignore};
+  effect.AddToClassList("ps-faction-registry-effect");
+  node.Add(effect);
+
+  var next=new Label("\u203a"){pickingMode=PickingMode.Ignore};
+  next.AddToClassList("ps-faction-registry-next");
+  node.Add(next);
   return node;
  }
 
@@ -234,7 +283,6 @@ public sealed partial class PackspireUiFoundation {
   }
   selectedFactionId=factionId;
   UpdateFactionGraphSelection();
-  UpdateFactionEdgeEmphasis();
   RefreshFactionDetail(game.UiMeta);
  }
 
@@ -336,7 +384,6 @@ public sealed partial class PackspireUiFoundation {
     if(game.UiChangeFaction(selected.id)){
      ShowToast(selected.name+"へ所属を変更しました");
      UpdateFactionGraphSelection();
-     UpdateFactionEdgeEmphasis();
      RefreshFactionDetail(game.UiMeta);
     }
    });

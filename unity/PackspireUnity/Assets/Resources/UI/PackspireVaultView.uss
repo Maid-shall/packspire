@@ -1066,7 +1066,7 @@
 }
 
 .ps-vault-fixed__card-host .ps-battle-card:hover,
-.ps-vault-fixed__card-host .ps-battle-card.ps-demon-card:hover {
+.ps-vault-fixed__card-host .ps-battle-card.ps-docket-card:hover {
     translate: 0 0;
     scale: 1 1;
 }
@@ -1189,6 +1189,76 @@
     background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
 }
 
+.ps-vault-fixed__grid > .ps-empty-state {
+    width: 440px;
+    min-width: 440px;
+    max-width: 440px;
+    height: 92px;
+    min-height: 92px;
+    max-height: 92px;
+    margin: 22px 48px 0 48px;
+    padding: 17px 30px 14px 32px;
+    flex-grow: 0;
+    align-items: flex-start;
+    justify-content: center;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-vault-fixed__grid > .ps-empty-state .ps-title {
+    margin: 0 0 7px 0;
+    padding: 0;
+    color: rgb(238, 207, 166);
+    font-size: 17px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__grid > .ps-empty-state .ps-body {
+    margin: 0;
+    padding: 0;
+    color: rgb(172, 160, 146);
+    font-size: 11px;
+    -unity-text-align: middle-left;
+}
+
 .ps-vault-fixed__empty-detail .ps-empty-state {
-    width: 360px;
+    width: 432px;
+    min-width: 432px;
+    max-width: 432px;
+    height: 188px;
+    min-height: 188px;
+    max-height: 188px;
+    margin: 0;
+    padding: 38px 52px 32px 58px;
+    flex-grow: 0;
+    align-items: flex-start;
+    justify-content: center;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-vault-fixed__empty-detail .ps-empty-state .ps-title {
+    margin: 0 0 10px 0;
+    padding: 0;
+    color: rgb(65, 46, 34);
+    font-size: 24px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-left;
+}
+
+.ps-vault-fixed__empty-detail .ps-empty-state .ps-body {
+    margin: 0;
+    padding: 0;
+    color: rgb(103, 75, 57);
+    font-size: 12px;
+    -unity-text-align: middle-left;
 }

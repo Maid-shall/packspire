@@ -8,42 +8,68 @@
     <ui:VisualElement class="ps-layer-content">
         <ui:VisualElement name="expedition-header" class="ps-mgmt-header ps-exp-header">
             <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="EXPEDITION / BRIEF" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="遠征準備" class="ps-misprint-header-title" picking-mode="Ignore" />
+                <ui:Label text="EXPEDITION / DESTINATION" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="遠征先選択" class="ps-misprint-header-title" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement class="ps-expedition-body">
-            <ui:VisualElement name="expedition-destination-column" class="ps-exp-col-dest">
-                <ui:Label text="遠征先" class="ps-typo-section ps-exp-dest-heading" picking-mode="Ignore" />
-                <ui:VisualElement name="expedition-destination-frame" class="ps-surface-outer ps-exp-dest-frame">
-                    <ui:ScrollView name="expedition-destination-scroll" class="ps-exp-dest-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
-                        <ui:VisualElement name="expedition-destination-list" class="ps-exp-dest-list" />
+            <ui:VisualElement class="ps-expedition-workspace">
+                <ui:VisualElement class="ps-exp-col-art">
+                    <ui:VisualElement name="expedition-art-host" class="ps-exp-art-host">
+                        <ui:VisualElement name="expedition-art-image" class="ps-exp-art-image-host" />
+                        <ui:VisualElement name="expedition-art-lock" class="ps-exp-art-lock" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-exp-art-caption" picking-mode="Ignore">
+                            <ui:Label name="expedition-art-caption-name" class="ps-exp-art-caption-name" picking-mode="Ignore" />
+                            <ui:Label name="expedition-art-caption-sub" class="ps-exp-art-caption-sub" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="expedition-destination-column" class="ps-exp-col-dest">
+                    <ui:VisualElement class="ps-exp-dest-heading">
+                        <ui:Label text="配達先一覧" class="ps-exp-dest-heading-title" picking-mode="Ignore" />
+                        <ui:Label text="DESTINATION REGISTRY" class="ps-exp-dest-heading-sub" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="expedition-destination-frame" class="ps-exp-dest-frame">
+                        <ui:ScrollView name="expedition-destination-scroll" class="ps-exp-dest-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                            <ui:VisualElement name="expedition-destination-list" class="ps-exp-dest-list" />
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="expedition-detail-column" class="ps-exp-col-detail ps-expedition-detail-column">
+                    <ui:Label text="選択中の配達先情報" class="ps-exp-detail-heading" picking-mode="Ignore" />
+                    <ui:Label text="DESTINATION BRIEF" class="ps-exp-detail-heading-sub" picking-mode="Ignore" />
+                    <ui:ScrollView name="expedition-detail-scroll" class="ps-expedition-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="expedition-detail-body" class="ps-expedition-detail-body">
+                            <ui:VisualElement name="expedition-dungeon-info" class="ps-exp-section destination-section" />
+                            <ui:VisualElement name="expedition-character" class="ps-exp-section character-section" />
+                            <ui:VisualElement name="expedition-trait" class="ps-exp-section trait-section" />
+                            <ui:VisualElement name="expedition-skill" class="ps-exp-section skill-section" />
+                            <ui:VisualElement name="expedition-loadout" class="ps-exp-section loadout-section" />
+                        </ui:VisualElement>
                     </ui:ScrollView>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement class="ps-exp-col-art">
-                <ui:VisualElement name="expedition-art-host" class="ps-frame-focal ps-exp-art-host">
-                    <ui:VisualElement name="expedition-art-image" class="ps-exp-art-image-host" />
-                    <ui:VisualElement name="expedition-art-lock" class="ps-exp-art-lock" picking-mode="Ignore" />
-                    <ui:VisualElement class="ps-exp-art-caption" picking-mode="Ignore">
-                        <ui:Label name="expedition-art-caption-name" class="ps-exp-art-caption-name" picking-mode="Ignore" />
-                        <ui:Label name="expedition-art-caption-sub" class="ps-exp-art-caption-sub" picking-mode="Ignore" />
-                    </ui:VisualElement>
-                    <ui:VisualElement class="ps-exp-art-vignette" picking-mode="Ignore" />
+            <ui:VisualElement name="expedition-footer" class="ps-expedition-departure-footer">
+                <ui:VisualElement class="ps-exp-auth-ribbon">
+                    <ui:Label text="出発許可証" class="ps-exp-auth-ribbon-title" picking-mode="Ignore" />
+                    <ui:Label text="DISPATCH AUTHORIZATION" class="ps-exp-auth-ribbon-sub" picking-mode="Ignore" />
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="expedition-detail-column" class="ps-exp-col-detail ps-expedition-detail-column ps-surface-quiet">
-                <ui:ScrollView name="expedition-detail-scroll" class="ps-expedition-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
-                    <ui:VisualElement name="expedition-detail-body" class="ps-expedition-detail-body">
-                        <ui:VisualElement name="expedition-dungeon-info" class="ps-exp-section destination-section" />
-                        <ui:VisualElement name="expedition-character" class="ps-exp-section character-section" />
-                        <ui:VisualElement name="expedition-trait" class="ps-exp-section trait-section" />
-                        <ui:VisualElement name="expedition-skill" class="ps-exp-section skill-section" />
-                        <ui:VisualElement name="expedition-loadout" class="ps-exp-section loadout-section" />
-                    </ui:VisualElement>
-                </ui:ScrollView>
-                <ui:VisualElement name="expedition-footer" class="ps-expedition-departure-footer">
+                <ui:VisualElement class="ps-exp-auth-copy">
+                    <ui:Label text="配達先" class="ps-exp-auth-label" picking-mode="Ignore" />
+                    <ui:Label name="expedition-auth-destination" class="ps-exp-auth-value ps-exp-auth-destination" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-exp-auth-copy">
+                    <ui:Label text="配達人" class="ps-exp-auth-label" picking-mode="Ignore" />
+                    <ui:Label name="expedition-auth-courier" class="ps-exp-auth-value" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-exp-auth-copy">
+                    <ui:Label text="荷造り" class="ps-exp-auth-label" picking-mode="Ignore" />
+                    <ui:Label name="expedition-auth-loadout" class="ps-exp-auth-value" picking-mode="Ignore" />
                     <ui:Label name="expedition-depart-reason" class="ps-exp-depart-reason departure-disabled-reason" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-exp-auth-action-host">
+                    <ui:Label text="BEGIN DISPATCH" class="ps-exp-auth-action-sub" picking-mode="Ignore" />
+                    <ui:Label text="出発手続きを進める" class="ps-exp-auth-action-copy" picking-mode="Ignore" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

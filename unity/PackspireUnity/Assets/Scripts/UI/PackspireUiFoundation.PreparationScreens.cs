@@ -22,7 +22,7 @@ public sealed partial class PackspireUiFoundation {
   packingRotation=StorageFormulaSystem.ClampRotation(formula.core.rotation,packingRotation);
   var build=BackpackSystem.Build(run);
 
-  var root=CloneView("UI/PackspirePackingView","ps-rite ps-rite-v3");
+  var root=CloneView("UI/PackspirePackingView","ps-rite");
   if(root==null){
    Debug.LogError("Packing view could not be created.");
    return;
@@ -98,10 +98,10 @@ public sealed partial class PackspireUiFoundation {
    kiln.Add(BuildPackingSelectDock(run,formula));
   var kilnRail=RequireViewElement<VisualElement>(root,"packing-kiln-rail");
   packingKilnRailElement=kilnRail;
-  kilnRail.Add(BuildPackingColorCounters(build));
+  kilnRail.Add(BuildPackingSealCounters(run,build));
   var railSpacer=Container("ps-rite-rail-spacer");
   kilnRail.Add(railSpacer);
-  var cardsBtn=PackspireUiFactory.Button($"術式札  {run.selectedCardSlots.Count}",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
+  var cardsBtn=PackspireUiFactory.Button($"戦闘札・配達印",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
   cardsBtn.AddToClassList("ps-rite-tool");
   cardsBtn.AddToClassList("ps-rite-tool-primary");
   cardsBtn.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.CardCheck,"ps-rite-tool-icon"));

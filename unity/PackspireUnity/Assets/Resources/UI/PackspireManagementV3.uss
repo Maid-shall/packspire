@@ -6116,7 +6116,7 @@
 }
 
 .ps-vault-final.ps-management-v3 .ps-vault-v9-card:hover,
-.ps-vault-final.ps-management-v3 .ps-vault-v9-card.ps-demon-card:hover {
+.ps-vault-final.ps-management-v3 .ps-vault-v9-card.ps-docket-card:hover {
     translate: 0 0;
     scale: 1 1 1;
 }
@@ -6180,7 +6180,7 @@
 }
 
 .ps-vault-card-modal-face .ps-vault-v9-card:hover,
-.ps-vault-card-modal-face .ps-vault-v9-card.ps-demon-card:hover {
+.ps-vault-card-modal-face .ps-vault-v9-card.ps-docket-card:hover {
     translate: 0 0;
     scale: 1 1 1;
 }
@@ -7352,7 +7352,7 @@
 }
 
 .ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card:hover,
-.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card.ps-demon-card:hover {
+.ps-codex-v3.ps-management-v3 .ps-codex-item-v5-card .ps-vault-v9-card.ps-docket-card:hover {
     translate: 0 0;
     scale: 1 1 1;
     rotate: 0deg;
@@ -7599,6 +7599,545 @@
 .ps-heirloom-screen .ps-heirloom-progress-track { background-color: rgb(17, 18, 17); }
 .ps-heirloom-screen .ps-heirloom-progress-fill { background-color: rgb(52, 181, 187); }
 
+/* Heirloom provenance ledger: fixed structure in UXML, data-only content in C#. */
+.ps-heirloom-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-heirloom-screen .ps-heirloom-layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+}
+
+.ps-heirloom-screen .ps-heirloom-register-mark {
+    position: absolute;
+    left: 12px;
+    top: 16px;
+    width: 136px;
+    height: 74px;
+    opacity: 0.48;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-ledger-spine {
+    position: absolute;
+    left: 520px;
+    top: 84px;
+    width: 18px;
+    height: 614px;
+    opacity: 0.62;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-ledger-spine-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-heirloom-screen .ps-heirloom-header {
+    position: absolute;
+    left: 176px;
+    top: 14px;
+    width: 1082px;
+    height: 70px;
+    min-height: 70px;
+    padding: 0 88px 0 18px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-heirloom-screen .ps-heirloom-header .ps-misprint-header-copy {
+    width: 100%;
+    height: 66px;
+    padding: 2px 0 0 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-header .ps-misprint-header-eyebrow {
+    position: absolute;
+    left: 218px;
+    top: 16px;
+    width: 310px;
+    height: 18px;
+    color: rgb(192, 54, 41);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.ps-heirloom-screen .ps-heirloom-header .ps-misprint-header-title {
+    width: 370px;
+    height: 39px;
+    color: rgb(237, 207, 166);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-left;
+}
+
+.ps-heirloom-screen .ps-heirloom-header-note {
+    width: 560px;
+    height: 18px;
+    color: rgba(203, 184, 158, 0.72);
+    font-size: 9px;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-host {
+    position: absolute;
+    right: 0;
+    top: 7px;
+    width: 78px;
+    height: 56px;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot,
+.ps-heirloom-screen .ps-heirloom-slot:hover,
+.ps-heirloom-screen .ps-heirloom-slot:focus {
+    position: relative;
+    width: 78px;
+    min-width: 78px;
+    max-width: 78px;
+    height: 56px;
+    min-height: 56px;
+    max-height: 56px;
+    margin: 0;
+    padding: 5px 18px 5px 5px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+    translate: 0 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-empty {
+    opacity: 0.8;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-art {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 42px;
+    height: 42px;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-image {
+    width: 42px;
+    height: 42px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-glyph {
+    position: absolute;
+    left: 22px;
+    top: 9px;
+    width: 32px;
+    height: 32px;
+    color: rgb(210, 171, 113);
+    font-size: 24px;
+}
+
+.ps-heirloom-screen .ps-heirloom-body {
+    position: absolute;
+    left: 26px;
+    top: 88px;
+    width: 1228px;
+    height: 610px;
+    min-height: 610px;
+    padding: 0;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.ps-heirloom-screen .ps-heirloom-col-portrait {
+    position: relative;
+    width: 494px;
+    min-width: 494px;
+    max-width: 494px;
+    height: 610px;
+    padding: 0 24px 0 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-right-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-object-stage {
+    position: absolute;
+    left: 22px;
+    top: 8px;
+    width: 420px;
+    height: 350px;
+    opacity: 0.44;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-halftone-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-object-target {
+    position: absolute;
+    left: 88px;
+    top: 28px;
+    width: 246px;
+    height: 246px;
+    opacity: 0.52;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-page-target-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-object-caption {
+    position: absolute;
+    left: 18px;
+    top: 10px;
+    width: 190px;
+    height: 18px;
+    color: rgba(205, 169, 109, 0.68);
+    font-size: 9px;
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-host {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 470px;
+    height: 596px;
+    min-height: 596px;
+    padding: 20px 24px 12px 24px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-art {
+    width: 420px;
+    height: 330px;
+    min-height: 330px;
+    max-height: 330px;
+    margin: 0 0 5px 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-image {
+    width: 94%;
+    height: 94%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row {
+    width: 420px;
+    height: 46px;
+    min-height: 46px;
+    margin: 0 0 4px 0;
+    padding: 0 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-b-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row .ps-title {
+    color: rgb(238, 207, 164);
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-stat {
+    width: 420px;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 4px 10px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(192, 153, 97, 0.28);
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-label {
+    width: 154px;
+    min-width: 154px;
+    margin: 0 12px 0 0;
+    color: rgb(172, 137, 91);
+    font-size: 9px;
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-value {
+    min-width: 0;
+    margin: 0;
+    color: rgb(227, 207, 180);
+    font-size: 11px;
+    flex-grow: 1;
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-host > .ps-empty-state {
+    position: absolute;
+    left: 36px;
+    top: 126px;
+    width: 392px;
+    min-width: 392px;
+    max-width: 392px;
+    height: 152px;
+    min-height: 152px;
+    max-height: 152px;
+    margin: 0;
+    padding: 30px 38px;
+    align-items: flex-start;
+    justify-content: center;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-host > .ps-empty-state .ps-title {
+    margin: 0 0 8px 0;
+    padding: 0;
+    color: rgb(236, 205, 163);
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-host > .ps-empty-state .ps-body {
+    margin: 0;
+    padding: 0;
+    color: rgb(178, 163, 143);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-label {
+    position: absolute;
+    left: 18px;
+    bottom: 12px;
+    width: 410px;
+    height: 38px;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(204, 166, 104, 0.44);
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-title {
+    color: rgb(230, 200, 158);
+    font-size: 14px;
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-en {
+    margin-left: 12px;
+    color: rgba(192, 55, 42, 0.82);
+    font-size: 8px;
+}
+
+.ps-heirloom-screen .ps-heirloom-col-growth {
+    position: relative;
+    width: 734px;
+    min-width: 734px;
+    max-width: 734px;
+    height: 610px;
+    min-height: 610px;
+    padding: 0 0 0 18px;
+    overflow: hidden;
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-head {
+    width: 716px;
+    height: 76px;
+    min-height: 76px;
+    padding: 8px 0 8px 14px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(204, 166, 104, 0.52);
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-copy {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-title {
+    color: rgb(238, 207, 165);
+    font-size: 23px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-en,
+.ps-heirloom-screen .ps-heirloom-generation-label {
+    color: rgb(74, 197, 207);
+    font-size: 9px;
+}
+
+.ps-heirloom-screen .ps-heirloom-generation {
+    width: 138px;
+    height: 54px;
+    padding-left: 16px;
+    justify-content: center;
+    border-left-width: 1px;
+    border-left-color: rgba(203, 165, 105, 0.42);
+}
+
+.ps-heirloom-screen .ps-heirloom-generation-value {
+    color: rgb(237, 205, 160);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-scroll {
+    width: 716px;
+    height: 534px;
+    min-height: 534px;
+    margin: 0;
+    padding: 8px 10px 18px 8px;
+    background-color: rgba(1, 3, 3, 0.28);
+    border-left-width: 1px;
+    border-left-color: rgba(204, 165, 104, 0.42);
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-scroll .unity-scroller--vertical {
+    width: 7px;
+    opacity: 0.65;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body {
+    width: 684px;
+    padding: 0 2px 22px 2px;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body > .ps-chrome-section {
+    width: 100%;
+    height: 34px;
+    min-height: 34px;
+    margin: 4px 0 5px 0;
+    padding: 0 8px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-copy {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-en {
+    width: 108px;
+    color: rgb(74, 202, 213);
+    font-size: 8px;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-jp {
+    color: rgb(232, 201, 159);
+    font-size: 15px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-board-section,
+.ps-heirloom-screen .ps-heirloom-progress,
+.ps-heirloom-screen .ps-heirloom-history,
+.ps-heirloom-screen .ps-heirloom-scar-row {
+    width: 100%;
+    min-height: 64px;
+    margin: 0 0 6px 0;
+    padding: 11px 16px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-board-title {
+    margin: 0 0 4px 0;
+    color: rgb(226, 193, 150);
+    font-size: 14px;
+}
+
+.ps-heirloom-screen .ps-heirloom-board-body {
+    color: rgb(187, 174, 155);
+    font-size: 10px;
+}
+
+.ps-heirloom-screen .ps-heirloom-progress-track {
+    height: 8px;
+    min-height: 8px;
+    margin: 6px 0;
+    background-color: rgb(17, 18, 17);
+    border-width: 1px;
+    border-color: rgba(206, 168, 106, 0.46);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate {
+    width: 100%;
+    min-height: 72px;
+    margin: 0 0 6px 0;
+    padding: 9px 18px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate-silhouette {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    margin-right: 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-page-target-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate .ps-heirloom-board-title {
+    color: rgb(102, 50, 34);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate .ps-heirloom-board-body,
+.ps-heirloom-screen .ps-heirloom-candidate-lock {
+    color: rgb(79, 62, 48);
+}
+
+.ps-heirloom-screen .ps-heirloom-modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.82);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker {
+    left: 214px;
+    right: 214px;
+    top: 96px;
+    bottom: 82px;
+    padding: 22px 26px;
+    background-color: rgba(2, 3, 3, 0.98);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-ledger-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    border-width: 1px;
+    border-color: rgba(207, 169, 108, 0.62);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-card {
+    width: 150px;
+    min-width: 150px;
+    height: 178px;
+    min-height: 178px;
+    margin: 0 10px 10px 0;
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-card.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+}
+
 /* Faction relationship proof */
 .ps-faction-screen .ps-faction-graph-host {
     background-color: rgba(1, 3, 3, 0.28);
@@ -7694,3 +8233,1235 @@
     border-bottom-width: 0;
 }
 /* End Obsidian misprint management screen overrides. */
+
+/* Status role dossier: character study / current appointment / role candidates. */
+.ps-status-v2.ps-management-v3 .ps-layer-content {
+    padding: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-main-row {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 2px 18px 14px 18px;
+    flex-direction: row;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-character-column {
+    position: relative;
+    width: 43%;
+    min-width: 43%;
+    max-width: 43%;
+    margin: 0 12px 0 0;
+    padding: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(177, 139, 76, 0.52);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-character-surface {
+    position: relative;
+    min-height: 0;
+    flex-grow: 1;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2 .ps-status-study {
+    position: absolute;
+    top: 72px;
+    width: 145px;
+    height: 360px;
+    opacity: 0.3;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-v2 .ps-status-study-front {
+    left: 8px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-courier-study-front-v1");
+}
+
+.ps-status-v2 .ps-status-study-back {
+    right: 8px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-courier-study-back-v1");
+}
+
+.ps-status-v2 .ps-status-character-scroll {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-status-v2 .ps-status-character-host {
+    height: 600px;
+    min-height: 600px;
+}
+
+.ps-status-v2 .ps-status-character-block {
+    position: relative;
+    height: 600px;
+    min-height: 600px;
+    flex-grow: 1;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-character-art {
+    position: absolute;
+    left: 88px;
+    right: 76px;
+    top: 0;
+    bottom: 34px;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2 .ps-status-character-art-glow,
+.ps-status-v2 .ps-status-character-art-fade,
+.ps-status-v2 .ps-surface-corner {
+    display: none;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-character-art-image {
+    width: 100%;
+    height: 100%;
+    scale: 1.08 1.08 1;
+    transform-origin: center bottom;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-v2 .ps-status-character-summary {
+    position: absolute;
+    left: 76px;
+    bottom: 0;
+    width: 230px;
+    min-height: 54px;
+    padding: 7px 12px 6px 14px;
+    background-color: rgba(2, 3, 3, 0.9);
+    border-left-width: 2px;
+    border-left-color: rgb(172, 42, 31);
+}
+
+.ps-status-v2 .ps-status-character-name {
+    color: rgb(233, 211, 176);
+    font-size: 20px;
+}
+
+.ps-status-v2 .ps-status-character-title {
+    color: rgb(47, 173, 181);
+    font-size: 9px;
+}
+
+.ps-status-v2 .ps-status-character-summary .ps-status-field,
+.ps-status-v2 .ps-status-character-summary .ps-space-scroll-tail {
+    display: none;
+}
+
+.ps-status-v2 .ps-status-workspace {
+    min-width: 0;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.ps-status-v2 .ps-status-workspace-top {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    margin-bottom: 8px;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-column {
+    width: 59%;
+    min-width: 0;
+    max-width: none;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-roles-column {
+    width: 41%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-surface {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 18px 20px 16px 20px;
+    background-image: resource("Art/UI/ObsidianMisprintStatus/current-role-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-detail-header {
+    height: 174px;
+    min-height: 174px;
+    max-height: 174px;
+    margin: 0 0 8px 0;
+    padding: 6px 8px 5px 8px;
+    flex-direction: row;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-image {
+    width: 43%;
+    height: 150px;
+    min-height: 150px;
+    margin-right: 10px;
+}
+
+.ps-status-v2 .ps-mgmt-detail-art-frame,
+.ps-status-v2 .ps-mgmt-detail-art-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-identity {
+    width: 57%;
+    padding: 12px 4px 0 4px;
+    justify-content: flex-start;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-name {
+    color: rgb(232, 209, 172);
+    font-size: 26px;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-meta {
+    color: rgb(181, 53, 39);
+    font-size: 12px;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-scroll {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 4px 8px 0 8px;
+    border-top-width: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-node {
+    min-height: 54px;
+    margin: 0 0 5px 0;
+    padding: 7px 10px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(178, 139, 77, 0.4);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section-title,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-title {
+    color: rgb(52, 172, 180);
+    font-size: 10px;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section-body,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-body {
+    color: rgb(218, 197, 165);
+    font-size: 10px;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-roles-surface {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 0 2px 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-roles-header {
+    min-height: 58px;
+    height: 58px;
+    padding: 0 2px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-v2 .ps-status-roles-header .ps-mgmt-filter-bar {
+    min-height: 34px;
+    height: 34px;
+}
+
+.ps-status-v2 .ps-status-roles-header .ps-mgmt-filter {
+    min-width: 38px;
+    min-height: 28px;
+    height: 28px;
+    margin-right: 3px;
+    padding: 2px 4px;
+    font-size: 9px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+}
+
+.ps-status-v2 .ps-status-roles-header .ps-mgmt-filter-plate,
+.ps-status-v2 .ps-status-roles-header .ps-mgmt-filter-icon {
+    display: none;
+}
+
+.ps-status-v2 .ps-status-roles-scroll {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 2px 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-ticket {
+    position: relative;
+    height: 80px;
+    min-height: 80px;
+    margin: 0 0 5px 0;
+    padding: 8px 14px;
+    background-image: resource("Art/UI/ObsidianMisprintStatus/role-ticket-standard-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-ticket.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintStatus/role-ticket-selected-v1");
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-v2 .ps-status-role-ticket:hover {
+    -unity-background-image-tint-color: rgb(246, 225, 190);
+}
+
+.ps-status-v2 .ps-status-role-seal-host {
+    display: none;
+}
+
+.ps-status-v2 .ps-status-role-ticket-name {
+    color: rgb(49, 37, 27);
+    font-size: 18px;
+}
+
+.ps-status-v2 .ps-status-role-ticket-kind,
+.ps-status-v2 .ps-status-role-ticket-lv {
+    color: rgba(71, 48, 33, 0.8);
+    font-size: 9px;
+}
+
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-name,
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-kind,
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-lv {
+    color: rgb(35, 22, 17);
+}
+
+.ps-status-v2 .ps-status-role-kind-icon,
+.ps-status-v2 .ps-status-role-ticket-plate,
+.ps-status-v2 .ps-list-item-mark {
+    display: none;
+}
+
+.ps-status-v2 .ps-status-role-equip-seal {
+    right: 8px;
+    bottom: 8px;
+}
+
+.ps-status-v2 .ps-status-appointment {
+    position: relative;
+    height: 116px;
+    min-height: 116px;
+    padding: 19px 34px 16px 36px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintStatus/appointment-order-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-status-v2 .ps-status-appointment-copy {
+    width: 68%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ps-status-v2 .ps-status-appointment-eyebrow {
+    color: rgba(142, 65, 47, 0.72);
+    font-size: 8px;
+}
+
+.ps-status-v2 .ps-status-appointment-title {
+    color: rgb(55, 38, 29);
+    font-size: 23px;
+}
+
+.ps-status-v2 .ps-status-appointment-detail {
+    color: rgba(72, 47, 34, 0.82);
+    font-size: 11px;
+}
+
+.ps-status-v2 .ps-status-appointment-action {
+    width: 32%;
+    padding-left: 82px;
+    color: rgb(139, 45, 35);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+}
+
+/* Faction registry: emissary study / organization ledger / allegiance contract. */
+.ps-faction-screen .ps-faction-body {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 2px 18px 14px 18px;
+}
+
+.ps-faction-screen .ps-faction-top-row {
+    min-height: 0;
+    height: 432px;
+    flex-grow: 1;
+    flex-direction: row;
+    margin-bottom: 8px;
+}
+
+.ps-faction-screen .ps-faction-emissary-column {
+    position: relative;
+    width: 35%;
+    min-width: 35%;
+    height: 100%;
+    overflow: hidden;
+    border-right-width: 1px;
+    border-right-color: rgba(197, 157, 91, 0.54);
+}
+
+.ps-faction-screen .ps-faction-emissary-host {
+    position: absolute;
+    left: 14%;
+    right: 2%;
+    top: -10px;
+    bottom: 0;
+}
+
+.ps-faction-screen .ps-faction-emissary-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-emissary-study {
+    position: absolute;
+    top: 92px;
+    width: 31%;
+    height: 260px;
+    opacity: 0.12;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-front { left: 0; }
+.ps-faction-screen .ps-faction-emissary-study-back { right: 0; }
+
+.ps-faction-screen .ps-faction-emissary-study-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-image-back {
+    scale: -1 1;
+}
+
+.ps-faction-screen .ps-faction-emissary-caption {
+    position: absolute;
+    left: 8px;
+    bottom: 12px;
+    min-width: 174px;
+    padding: 8px 12px 7px 14px;
+    background-color: rgba(2, 3, 3, 0.86);
+    border-left-width: 2px;
+    border-left-color: rgb(172, 42, 31);
+}
+
+.ps-faction-screen .ps-faction-emissary-eyebrow,
+.ps-faction-screen .ps-faction-emissary-title {
+    color: rgb(43, 176, 184);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-emissary-name {
+    color: rgb(232, 207, 169);
+    font-size: 22px;
+}
+
+.ps-faction-screen .ps-faction-col-graph {
+    width: 65%;
+    min-width: 65%;
+    max-width: 65%;
+    min-height: 0;
+    margin: 0;
+    padding: 0 0 0 14px;
+    border-right-width: 0;
+}
+
+.ps-faction-screen .ps-faction-registry-heading {
+    height: 44px;
+    min-height: 44px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 157, 91, 0.58);
+}
+
+.ps-faction-screen .ps-faction-registry-title {
+    color: rgb(232, 207, 169);
+    font-size: 22px;
+}
+
+.ps-faction-screen .ps-faction-registry-eyebrow {
+    margin-left: 14px;
+    color: rgb(41, 173, 181);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-graph-host {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 5px 0 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-graph-nodes {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-graph-node {
+    position: relative;
+    width: 100%;
+    height: 82px;
+    min-height: 82px;
+    margin-bottom: 4px;
+    padding: 8px 15px 8px 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-image: resource("Art/UI/ObsidianMisprintFaction/registry-row-standard-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-graph-node.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintFaction/registry-row-selected-v1");
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-faction-screen .ps-faction-graph-node:hover {
+    -unity-background-image-tint-color: rgb(243, 222, 183);
+}
+
+.ps-faction-screen .ps-faction-registry-index {
+    width: 4%;
+    color: rgb(177, 49, 38);
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.ps-faction-screen .ps-faction-registry-identity {
+    width: 29%;
+    min-width: 0;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.ps-faction-screen .ps-faction-graph-emblem {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    min-height: 46px;
+    margin: 0 8px 0 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-registry-identity-copy {
+    min-width: 0;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.ps-faction-screen .ps-faction-graph-name {
+    max-width: none;
+    margin: 0 0 2px 0;
+    color: rgb(231, 207, 169);
+    font-size: 17px;
+}
+
+.ps-faction-screen .ps-faction-registry-description {
+    color: rgba(207, 188, 157, 0.72);
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-faction-screen .ps-faction-registry-rank {
+    width: 28%;
+    min-width: 0;
+    height: 100%;
+    justify-content: center;
+    padding: 0 12px;
+}
+
+.ps-faction-screen .ps-faction-registry-rank-name {
+    color: rgb(230, 205, 166);
+    font-size: 12px;
+}
+
+.ps-faction-screen .ps-faction-registry-progress {
+    width: 100%;
+    height: 3px;
+    margin: 5px 0 3px 0;
+    background-color: rgba(225, 201, 160, 0.22);
+}
+
+.ps-faction-screen .ps-faction-registry-progress-fill {
+    height: 100%;
+    background-color: rgb(44, 177, 184);
+}
+
+.ps-faction-screen .ps-faction-registry-reputation {
+    color: rgba(202, 181, 148, 0.66);
+    font-size: 8px;
+}
+
+.ps-faction-screen .ps-faction-registry-effect {
+    width: 31%;
+    min-width: 0;
+    color: rgb(211, 190, 157);
+    font-size: 9px;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-registry-next {
+    width: 8%;
+    color: rgb(42, 182, 190);
+    font-size: 26px;
+    -unity-text-align: middle-center;
+}
+
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-registry-index,
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-graph-name,
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-registry-description,
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-registry-rank-name,
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-registry-reputation,
+.ps-faction-screen .ps-faction-graph-node.ps-selected .ps-faction-registry-effect {
+    color: rgb(32, 20, 16);
+}
+
+.ps-faction-screen .ps-faction-col-detail {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 172px;
+    min-height: 172px;
+    max-height: 172px;
+}
+
+.ps-faction-screen .ps-faction-detail-surface {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    padding: 18px 30px 17px 34px;
+    background-image: resource("Art/UI/ObsidianMisprintFaction/allegiance-contract-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-faction-screen .ps-faction-detail-header {
+    width: 30%;
+    height: 100%;
+    margin: 0;
+    padding: 4px 12px 4px 0;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-width: 0;
+}
+
+.ps-faction-screen .ps-faction-detail-art {
+    width: 68px;
+    min-width: 68px;
+    height: 68px;
+    min-height: 68px;
+    margin-right: 10px;
+}
+
+.ps-faction-screen .ps-faction-detail-identity .ps-title {
+    margin-bottom: 3px;
+    color: rgb(50, 34, 25);
+    font-size: 19px;
+}
+
+.ps-faction-screen .ps-faction-detail-identity .ps-body {
+    color: rgba(79, 49, 34, 0.82);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-detail-scroll {
+    width: 70%;
+    height: 100%;
+    min-height: 0;
+    padding: 0 92px 0 12px;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-detail-body {
+    min-height: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section,
+.ps-faction-screen .ps-faction-detail-body .ps-faction-relations {
+    width: 32%;
+    min-width: 32%;
+    min-height: 46px;
+    margin: 0 1% 4px 0;
+    padding: 3px 8px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-v6-rule {
+    display: none;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-title {
+    margin-bottom: 1px;
+    color: rgb(139, 47, 36);
+    font-size: 8px;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-body,
+.ps-faction-screen .ps-faction-relation-row .ps-typo-item,
+.ps-faction-screen .ps-faction-relation-row .ps-typo-secondary {
+    color: rgb(55, 38, 28);
+    font-size: 8px;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-progress {
+    width: 31%;
+    height: 3px;
+    margin: 34px 1% 0 -33%;
+    background-color: rgba(107, 69, 43, 0.24);
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-progress-fill {
+    background-color: rgb(157, 47, 36);
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-action {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    width: 140px;
+    height: 38px;
+    color: rgb(117, 37, 30);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(140, 49, 37, 0.62);
+    border-right-color: rgba(140, 49, 37, 0.62);
+    border-top-color: rgba(140, 49, 37, 0.62);
+    border-bottom-color: rgba(140, 49, 37, 0.62);
+}
+
+.ps-faction-screen .ps-space-scroll-tail {
+    display: none;
+}
+
+/* Expedition destination: route engraving / registry / dispatch authorization. */
+.ps-expedition-screen .ps-expedition-body {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 0 18px 10px 18px;
+}
+
+.ps-expedition-screen .ps-expedition-workspace {
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    margin-bottom: 6px;
+}
+
+.ps-expedition-screen .ps-exp-col-art {
+    position: relative;
+    width: 47%;
+    min-width: 47%;
+    max-width: 47%;
+    min-height: 0;
+    padding: 0 10px 0 0;
+}
+
+.ps-expedition-screen .ps-exp-art-host {
+    position: relative;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/route-engraving-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 1px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-right-color: rgba(197, 157, 91, 0.45);
+    overflow: hidden;
+}
+
+.ps-expedition-screen .ps-exp-art-image-host,
+.ps-expedition-screen .ps-exp-art-vignette {
+    display: none;
+}
+
+.ps-expedition-screen .ps-exp-art-caption {
+    position: absolute;
+    left: 18px;
+    bottom: 12px;
+    width: 230px;
+    min-height: 54px;
+    padding: 8px 12px 7px 14px;
+    background-color: rgba(1, 3, 3, 0.88);
+    border-left-width: 2px;
+    border-left-color: rgb(175, 43, 32);
+}
+
+.ps-expedition-screen .ps-exp-art-caption-name {
+    color: rgb(231, 207, 168);
+    font-size: 18px;
+}
+
+.ps-expedition-screen .ps-exp-art-caption-sub {
+    color: rgba(198, 181, 153, 0.72);
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-expedition-screen .ps-exp-col-dest {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    min-height: 0;
+    margin: 0;
+    padding: 0 9px;
+    border-right-width: 1px;
+    border-right-color: rgba(197, 157, 91, 0.4);
+}
+
+.ps-expedition-screen .ps-exp-dest-heading {
+    min-height: 42px;
+    height: 42px;
+    padding: 3px 6px 5px 6px;
+    flex-direction: column;
+    justify-content: center;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 157, 91, 0.52);
+}
+
+.ps-expedition-screen .ps-exp-dest-heading-title {
+    color: rgb(231, 207, 168);
+    font-size: 17px;
+}
+
+.ps-expedition-screen .ps-exp-dest-heading-sub,
+.ps-expedition-screen .ps-exp-detail-heading-sub {
+    color: rgb(45, 176, 183);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-dest-frame {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 5px 0 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-scroll,
+.ps-expedition-screen .ps-exp-dest-list {
+    min-height: 0;
+    flex-grow: 1;
+}
+
+.ps-expedition-screen .ps-exp-dest-row {
+    position: relative;
+    min-height: 53px;
+    height: 53px;
+    margin: 0 0 4px 0;
+    padding: 6px 36px 6px 9px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/destination-ticket-standard-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-row.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/destination-ticket-selected-v1");
+}
+
+.ps-expedition-screen .ps-exp-dest-row:hover {
+    -unity-background-image-tint-color: rgb(244, 224, 190);
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-list-item-mark,
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-gem {
+    display: none;
+}
+
+.ps-expedition-screen .ps-exp-dest-index {
+    width: 28px;
+    min-width: 28px;
+    color: rgb(121, 49, 38);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-dest-thumb {
+    width: 40px;
+    min-width: 40px;
+    height: 38px;
+    min-height: 38px;
+    margin: 0 8px 0 2px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-copy {
+    min-width: 0;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-name {
+    color: rgb(54, 39, 29);
+    font-size: 13px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-sub {
+    color: rgba(85, 57, 38, 0.76);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-exp-dest-index,
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-pop-list-row-name,
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-pop-list-row-sub {
+    color: rgb(35, 22, 17);
+}
+
+.ps-expedition-screen .ps-exp-col-detail {
+    width: 29%;
+    min-width: 29%;
+    max-width: 29%;
+    min-height: 0;
+    padding: 0 0 0 11px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-detail-heading {
+    height: 24px;
+    color: rgb(231, 207, 168);
+    font-size: 16px;
+}
+
+.ps-expedition-screen .ps-exp-detail-heading-sub {
+    height: 16px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 157, 91, 0.52);
+}
+
+.ps-expedition-screen .ps-expedition-detail-scroll {
+    min-height: 0;
+    flex-grow: 1;
+    padding: 5px 5px 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-expedition-detail-body {
+    min-height: 0;
+    flex-direction: column;
+}
+
+.ps-expedition-screen .ps-exp-section {
+    margin: 0 0 5px 0;
+    padding: 8px 10px;
+    background-image: none;
+    background-color: rgba(2, 4, 4, 0.5);
+    border-left-width: 1px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(196, 157, 92, 0.42);
+    border-bottom-color: rgba(196, 157, 92, 0.3);
+}
+
+.ps-expedition-screen .character-section,
+.ps-expedition-screen .trait-section,
+.ps-expedition-screen .skill-section {
+    display: none;
+}
+
+.ps-expedition-screen .ps-section-head .ps-typo-eyebrow {
+    color: rgb(43, 176, 184);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-section .ps-typo-section,
+.ps-expedition-screen .ps-exp-dungeon-name,
+.ps-expedition-screen .ps-exp-loadout-detail-heading {
+    color: rgb(229, 204, 164);
+}
+
+.ps-expedition-screen .ps-exp-dungeon-name {
+    margin: 6px 0 4px 0;
+    font-size: 22px;
+}
+
+.ps-expedition-screen .ps-exp-section .ps-typo-body,
+.ps-expedition-screen .ps-exp-section .ps-typo-secondary,
+.ps-expedition-screen .ps-exp-info-label,
+.ps-expedition-screen .ps-exp-info-value,
+.ps-expedition-screen .ps-exp-info-stack-label,
+.ps-expedition-screen .ps-exp-info-stack-value {
+    color: rgb(202, 184, 156);
+    font-size: 9px;
+}
+
+.ps-expedition-screen .ps-exp-info-row {
+    min-height: 23px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(198, 158, 91, 0.24);
+}
+
+.ps-expedition-screen .ps-exp-loadout-row {
+    min-height: 42px;
+    margin-bottom: 3px;
+    padding: 5px 9px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-expedition-screen .ps-exp-loadout-row.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+}
+
+.ps-expedition-screen .ps-exp-loadout-edit {
+    min-height: 34px;
+    margin-top: 5px;
+}
+
+.ps-expedition-screen .ps-expedition-departure-footer {
+    position: relative;
+    width: 100%;
+    height: 145px;
+    min-height: 145px;
+    max-height: 145px;
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 26px 17px 24px;
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/dispatch-authorization-wide-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon {
+    width: 8%;
+    min-width: 8%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon-title {
+    color: rgb(243, 222, 182);
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon-sub {
+    color: rgba(243, 222, 182, 0.72);
+    font-size: 6px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-auth-copy {
+    width: 16%;
+    min-width: 0;
+    height: 72%;
+    justify-content: center;
+    padding: 0 12px;
+}
+
+.ps-expedition-screen .ps-exp-auth-label {
+    color: rgba(126, 61, 45, 0.72);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-auth-value {
+    color: rgb(58, 40, 29);
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-expedition-screen .ps-exp-auth-destination {
+    font-size: 20px;
+}
+
+.ps-expedition-screen .ps-exp-depart-reason {
+    color: rgb(142, 44, 34);
+    font-size: 7px;
+    white-space: normal;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-host {
+    width: 44%;
+    height: 100%;
+    padding: 0 24px 0 292px;
+    justify-content: center;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-sub {
+    color: rgba(133, 52, 40, 0.72);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-copy {
+    color: rgb(129, 42, 33);
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary {
+    position: absolute;
+    right: 22px;
+    top: 20px;
+    width: 39%;
+    height: 104px;
+    min-height: 104px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary .ps-pop-button-plate,
+.ps-expedition-screen .ps-exp-depart-primary .ps-pop-primary-label {
+    display: none;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary:hover {
+    background-color: rgba(152, 50, 39, 0.08);
+}
+.ps-status-branch-choices {
+    flex-direction: row;
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.ps-status-branch-choice {
+    flex-grow: 1;
+    min-height: 68px;
+    margin-right: 8px;
+    white-space: normal;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-status-branch-choice.ps-selected {
+    color: rgb(213, 49, 38);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1");
+}
+
+.ps-status-qualification > Button {
+    min-height: 38px;
+    margin-top: 5px;
+}
+
+.ps-status-qualification > Button.ps-selected {
+    color: rgb(50, 190, 196);
+}
+.ps-status-appoint-action {
+    min-height: 44px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}

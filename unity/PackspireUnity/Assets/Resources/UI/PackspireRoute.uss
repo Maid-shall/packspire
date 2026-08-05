@@ -1496,3 +1496,235 @@
 .ps-event-screen .ps-event-choice:hover {
     background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-reward-ticket-v1");
 }
+
+/* Event correspondence: one authored folio rather than stacked CSS cards. */
+.ps-event-screen .ps-event-route-strip {
+    position: absolute;
+    left: 254px;
+    right: 244px;
+    top: 8px;
+    height: 72px;
+    padding: 9px 22px;
+    flex-direction: row;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-event-screen .ps-event-route-cell {
+    width: 128px;
+    height: 48px;
+    padding: 0 12px;
+    justify-content: center;
+    border-right-width: 1px;
+    border-right-color: rgba(85, 62, 41, 0.28);
+}
+.ps-event-screen .ps-event-route-cell--wide {
+    flex-grow: 1;
+    width: 210px;
+}
+.ps-event-screen .ps-event-route-key {
+    font-size: 8px;
+    color: rgb(103, 74, 46);
+}
+.ps-event-screen .ps-event-route-value {
+    margin-top: 2px;
+    font-size: 18px;
+    color: rgb(43, 34, 26);
+}
+.ps-event-screen .ps-event-route-value--risk {
+    color: rgb(139, 42, 31);
+}
+.ps-event-screen .ps-event-route-sub {
+    margin-top: 2px;
+    font-size: 9px;
+    color: rgb(78, 60, 43);
+}
+
+.ps-event-screen .ps-event-mist {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(1, 2, 2, 0.04);
+}
+.ps-event-screen .ps-event-panel {
+    position: absolute;
+    left: 142px;
+    right: 40px;
+    top: 86px;
+    bottom: 24px;
+    width: auto;
+    height: auto;
+    padding: 24px 27px 18px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-event-screen .ps-event-case-layout {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+}
+.ps-event-screen .ps-event-illustration-pane {
+    width: 41%;
+    min-width: 0;
+    margin: 5px 15px 8px 2px;
+    overflow: hidden;
+    border-right-width: 1px;
+    border-right-color: rgba(69, 52, 37, 0.34);
+}
+.ps-event-screen .ps-event-illustration {
+    position: absolute;
+    left: 0;
+    right: 14px;
+    top: 0;
+    bottom: 52px;
+    background-image: resource("Art/UI/ObsidianMisprintEvent/event-found-correspondence-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-event-screen .ps-event-evidence-code {
+    position: absolute;
+    left: 12px;
+    bottom: 14px;
+    width: 310px;
+    height: 28px;
+    padding: 5px 9px;
+    font-size: 9px;
+    color: rgb(54, 43, 32);
+    background-color: rgba(231, 216, 181, 0.74);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(85, 63, 41, 0.44);
+    border-right-color: rgba(85, 63, 41, 0.44);
+    border-top-color: rgba(85, 63, 41, 0.44);
+    border-bottom-color: rgba(85, 63, 41, 0.44);
+}
+
+.ps-event-screen .ps-event-copy-pane {
+    width: 27%;
+    min-width: 0;
+    padding: 8px 17px 8px 5px;
+}
+.ps-event-screen #event-header.ps-event-header {
+    min-height: 94px;
+    padding: 8px 4px 12px;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(74, 54, 37, 0.42);
+}
+.ps-event-screen .ps-event-header-eyebrow {
+    font-size: 9px;
+    color: rgb(134, 45, 33);
+}
+.ps-event-screen .ps-event-header-title {
+    margin-top: 8px;
+    font-size: 26px;
+    white-space: normal;
+    color: rgb(39, 31, 24);
+}
+.ps-event-screen #event-body.ps-event-body {
+    min-height: 104px;
+    padding: 14px 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(74, 54, 37, 0.30);
+}
+.ps-event-screen #event-body .ps-event-body-copy {
+    font-size: 12px;
+    white-space: normal;
+    color: rgb(51, 41, 31);
+}
+.ps-event-screen .ps-event-correspondence {
+    flex-grow: 1;
+    margin-top: 12px;
+    padding: 12px;
+    background-color: rgba(105, 78, 48, 0.06);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(82, 61, 41, 0.32);
+    border-right-color: rgba(82, 61, 41, 0.32);
+    border-top-color: rgba(82, 61, 41, 0.32);
+    border-bottom-color: rgba(82, 61, 41, 0.32);
+}
+.ps-event-screen .ps-event-correspondence-key {
+    margin-bottom: 5px;
+    font-size: 8px;
+    color: rgb(115, 78, 44);
+}
+.ps-event-screen .ps-event-correspondence-rule {
+    height: 1px;
+    margin: 7px 0 10px;
+    background-color: rgba(100, 70, 42, 0.28);
+}
+.ps-event-screen .ps-event-correspondence-value {
+    font-size: 10px;
+    color: rgb(51, 40, 30);
+}
+.ps-event-screen .ps-event-correspondence-note {
+    margin-top: 9px;
+    font-size: 10px;
+    white-space: normal;
+    color: rgb(70, 54, 39);
+}
+
+.ps-event-screen .ps-event-choice-pane {
+    flex-grow: 1;
+    min-width: 300px;
+    padding: 10px 4px 5px 13px;
+}
+.ps-event-screen .ps-event-choice-heading {
+    height: 34px;
+    padding-left: 8px;
+    font-size: 11px;
+    color: rgb(70, 51, 34);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(80, 57, 38, 0.34);
+}
+.ps-event-screen .ps-event-choice-list {
+    flex-grow: 1;
+    min-height: 0;
+    padding-top: 8px;
+}
+.ps-event-screen .ps-event-choice {
+    position: relative;
+    min-height: 112px;
+    margin-bottom: 8px;
+    padding: 18px 20px 14px 56px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-event-choice-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-event-screen .ps-event-choice-index {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 32px;
+    height: 34px;
+    font-size: 22px;
+    color: rgb(116, 40, 31);
+}
+.ps-event-screen .ps-event-choice .ps-card-title {
+    font-size: 17px;
+    white-space: normal;
+    color: rgb(45, 35, 27);
+}
+.ps-event-screen .ps-event-choice .ps-card-body {
+    margin-top: 7px;
+    font-size: 11px;
+    white-space: normal;
+    color: rgb(79, 60, 43);
+}
+.ps-event-screen .ps-event-choice:hover,
+.ps-event-screen .ps-event-choice:focus {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-reward-ticket-v1");
+}
+.ps-event-screen .ps-event-folio-footer {
+    height: 20px;
+    margin-top: 4px;
+    padding-right: 12px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    -unity-text-align: middle-right;
+    color: rgba(80, 59, 39, 0.74);
+}

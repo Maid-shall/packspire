@@ -3,18 +3,58 @@
     <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--event" picking-mode="Ignore" />
     <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
     <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--binder" picking-mode="Ignore" />
+
+    <ui:VisualElement class="ps-event-route-strip" picking-mode="Ignore">
+        <ui:VisualElement class="ps-event-route-cell ps-event-route-cell--wide">
+            <ui:Label text="SECTOR" class="ps-event-route-key" />
+            <ui:Label text="CANTO III-2" class="ps-event-route-value" />
+            <ui:Label text="BRIMSTONE CAUSEWAY" class="ps-event-route-sub" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-event-route-cell">
+            <ui:Label text="TURN" class="ps-event-route-key" />
+            <ui:Label text="03 / 12" class="ps-event-route-value" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-event-route-cell">
+            <ui:Label text="RISK" class="ps-event-route-key" />
+            <ui:Label text="▲ ▲ △" class="ps-event-route-value ps-event-route-value--risk" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-event-route-cell ps-event-route-cell--wide">
+            <ui:Label text="COURIER CONDITION / PREVIEW" class="ps-event-route-key" />
+            <ui:Label text="HP 42 → 38    FOCUS 5 → 4    LOAD 22.6 / 45G" class="ps-event-route-sub" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+
     <ui:VisualElement name="event-mist" class="ps-event-mist">
         <ui:VisualElement name="event-dialog" class="ps-event-panel">
-            <ui:VisualElement name="event-header">
-                <ui:VisualElement class="ps-misprint-header-copy">
-                    <ui:Label name="event-header-eyebrow" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                    <ui:Label name="event-header-title" class="ps-misprint-header-title" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-event-case-layout">
+                <ui:VisualElement class="ps-event-illustration-pane" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-event-illustration" />
+                    <ui:Label text="ROUTE AUTHORIZATION    03-AC-4179" class="ps-event-evidence-code" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="ps-event-copy-pane">
+                    <ui:VisualElement name="event-header" class="ps-event-header">
+                        <ui:Label name="event-header-eyebrow" class="ps-event-header-eyebrow" picking-mode="Ignore" />
+                        <ui:Label name="event-header-title" class="ps-event-header-title" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="event-body" class="ps-event-body">
+                        <ui:Label name="event-body-copy" class="ps-event-body-copy" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-event-correspondence" picking-mode="Ignore">
+                        <ui:Label text="SENDER / RECORDS DEPT." class="ps-event-correspondence-key" />
+                        <ui:Label text="ADDRESS / UNKNOWN" class="ps-event-correspondence-key" />
+                        <ui:VisualElement class="ps-event-correspondence-rule" />
+                        <ui:Label text="EVIDENCE / SEALED CORRESPONDENCE" class="ps-event-correspondence-value" />
+                        <ui:Label text="封緘は損なわれていない。回収後の記録は未登録。" class="ps-event-correspondence-note" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement class="ps-event-choice-pane">
+                    <ui:Label text="SELECT RESPONSE" class="ps-event-choice-heading" picking-mode="Ignore" />
+                    <ui:VisualElement name="event-choices" class="ps-event-choice-list" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="event-body">
-                <ui:Label name="event-body-copy" class="ps-event-body-copy" picking-mode="Ignore" />
-            </ui:VisualElement>
-            <ui:VisualElement name="event-choices" />
+            <ui:Label text="INFERNAL COURIER ARCHIVE / FIELD CORRESPONDENCE" class="ps-event-folio-footer" picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

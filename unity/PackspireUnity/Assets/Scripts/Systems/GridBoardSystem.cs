@@ -1293,7 +1293,7 @@ public static class GridBoardSystem {
    run.pendingGate="return";
    run.moving=false;
    run.moveT=0f;
-   run.message="帰還点を見つけた — 持ち帰るかを選べ";
+   run.message="帰還点を見つけた — 持ち帰るか選べ";
   }
  }
 

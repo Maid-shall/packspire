@@ -111,6 +111,7 @@ public sealed partial class PackspireUiFoundation {
   if(game.UiGridBoard!=null&&game.UiScreen==ScreenId.GridBoard)return false;
   switch(game.UiScreen){
    case ScreenId.GridBoard:
+   case ScreenId.Route:
    case ScreenId.Battle:
    case ScreenId.Reward:
    case ScreenId.Event:

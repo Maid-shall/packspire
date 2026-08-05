@@ -157,12 +157,13 @@ public sealed partial class PackspireUiFoundation {
   panel.RegisterCallback<ClickEvent>(evt=>evt.StopPropagation());
   DressRiteFrame(panel);
 
+  var seals=PackingDeliverySeals(run,build);
   var header=Container("ps-rite-popup-header");
   var headerTitle=Container("ps-rite-popup-title-block");
-  var headerEye=new Label("DECK  /  COMBAT + EXPLORE"){pickingMode=PickingMode.Ignore};
+  var headerEye=new Label("DECK  /  COMBAT + DELIVERY SEALS"){pickingMode=PickingMode.Ignore};
   headerEye.AddToClassList("ps-rite-top-eyebrow");
   headerTitle.Add(headerEye);
-  var headerName=new Label($"術式札  {build.candidates.Count} 枚"){pickingMode=PickingMode.Ignore};
+  var headerName=new Label($"戦闘札 {build.candidates.Count} / 配達印 {seals.Sum(value=>value.maxCharges)}"){pickingMode=PickingMode.Ignore};
   headerName.AddToClassList("ps-rite-top-name");
   headerTitle.Add(headerName);
   header.Add(headerTitle);
@@ -170,64 +171,50 @@ public sealed partial class PackspireUiFoundation {
   close.AddToClassList("ps-rite-chip");
   header.Add(close);
   panel.Add(header);
-  panel.Add(RiteMetaLine("術式に置いた装備は全て両面札になる。左＝戦闘面、右＝探索面。個別の採用選択は不要。"));
+  panel.Add(RiteMetaLine("装備配置は二つの準備を同時に決めます。隣接LINKは戦闘札を強化し、色一致は航路で使う配達印になります。"));
 
   var split=Container("ps-rite-deck-split");
-
-  // Left: combat face. Placement into the storage formula is the only adoption rule.
   var combatCol=Container("ps-rite-deck-col");
-  var combatHead=new Label("戦闘面"){pickingMode=PickingMode.Ignore};
+  var combatHead=new Label("戦闘札"){pickingMode=PickingMode.Ignore};
   combatHead.AddToClassList("ps-rite-deck-col-title");
   combatCol.Add(combatHead);
   var combatScroll=new ScrollView(ScrollViewMode.Vertical);
   combatScroll.AddToClassList("ps-rite-deck-col-scroll");
   var combatCards=Container("ps-rite-cards");
   foreach(var card in build.candidates){
-   var button=new Button(()=>{}){text=$"● {card.name}　{card.cost}EN\n{card.text}"};
-   button.AddToClassList("ps-rite-card");
-   button.pickingMode=PickingMode.Ignore;
-   button.AddToClassList("ps-selected");
-   combatCards.Add(button);
+   var cardView=Container("ps-rite-card");
+   cardView.AddToClassList("ps-selected");
+   cardView.Add(new Label($"◆ {card.name}  {card.cost}EN\n{card.text}"){pickingMode=PickingMode.Ignore});
+   combatCards.Add(cardView);
   }
-  if(build.candidates.Count==0)
-   combatScroll.Add(PackspireUiFactory.Body("装備を魔方陣に置くと戦闘カード候補が出ます。"));
+  if(build.candidates.Count==0)combatCards.Add(PackspireUiFactory.Body("装備を術式へ配置すると戦闘札が追加されます。"));
   combatScroll.Add(combatCards);
   combatCol.Add(combatScroll);
   split.Add(combatCol);
 
-  // Right: the reverse face of the same formula cards. Effects are still provisional.
-  var exploreCol=Container("ps-rite-deck-col");
-  exploreCol.AddToClassList("ps-rite-deck-col-explore");
-  var exploreHead=new Label("探索面（設計中）"){pickingMode=PickingMode.Ignore};
-  exploreHead.AddToClassList("ps-rite-deck-col-title");
-  exploreCol.Add(exploreHead);
-  exploreCol.Add(PackspireUiFactory.Body("左の各札に対応する裏面。盤面術式の種類と成長効果は次の段階で定義する。"));
-  var exploreScroll=new ScrollView(ScrollViewMode.Vertical);
-  exploreScroll.AddToClassList("ps-rite-deck-col-scroll");
-  var exploreCards=Container("ps-rite-cards");
-  foreach(var entry in BuildExploreDeckPreview(run,build)){
-   var button=new Button(()=>{}){text=$"◇ {entry.name}　{entry.cost}EN\n{entry.text}"};
-   button.AddToClassList("ps-rite-card");
-   button.AddToClassList("ps-rite-card-explore");
-   button.SetEnabled(false);
-   exploreCards.Add(button);
+  var sealCol=Container("ps-rite-deck-col");
+  sealCol.AddToClassList("ps-rite-deck-col-seals");
+  var sealHead=new Label("配達印"){pickingMode=PickingMode.Ignore};
+  sealHead.AddToClassList("ps-rite-deck-col-title");
+  sealCol.Add(sealHead);
+  var sealScroll=new ScrollView(ScrollViewMode.Vertical);
+  sealScroll.AddToClassList("ps-rite-deck-col-scroll");
+  var sealCards=Container("ps-rite-cards");
+  foreach(var seal in seals){
+   var sealView=Container("ps-rite-card");
+   sealView.AddToClassList("ps-rite-card-seal");
+   if(seal.roleSignature)sealView.AddToClassList("ps-role-signature");
+   sealView.Add(new Label($"◆ {seal.name}  ×{seal.maxCharges}\n{seal.source} / {seal.text}"){pickingMode=PickingMode.Ignore});
+   sealCards.Add(sealView);
   }
-  exploreScroll.Add(exploreCards);
-  exploreCol.Add(exploreScroll);
-  split.Add(exploreCol);
+  if(seals.Count==0)sealCards.Add(PackspireUiFactory.Body("色を一致させると配達印が追加されます。"));
+  sealScroll.Add(sealCards);
+  sealCol.Add(sealScroll);
+  split.Add(sealCol);
 
   panel.Add(split);
   overlay.Add(panel);
   return overlay;
- }
-
- /// <summary>Provisional reverse-face view for every formula card. Effects are defined later.</summary>
- static List<(string name,int cost,string text)> BuildExploreDeckPreview(RunState run,DeckBuildResult build){
-  var list=new List<(string name,int cost,string text)>();
-  if(build?.candidates==null)return list;
-  foreach(var card in build.candidates)
-   list.Add(($"探索：{card.source}",1,$"「{card.name}」の裏面。盤面術式の種類・形状・成熟効果は未定義。"));
-  return list;
  }
 
  VisualElement BuildRiteGrid(RunState run,ActiveStorageFormula formula){

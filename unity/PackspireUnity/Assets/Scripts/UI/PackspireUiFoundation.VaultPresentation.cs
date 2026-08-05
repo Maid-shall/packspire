@@ -102,6 +102,29 @@ public sealed partial class PackspireUiFoundation {
   return Atlas(texture,new Rect(0f,0f,1f,1f),className);
  }
 
+ VisualElement VaultItemDisplayArt(string itemId,string className){
+  var asset=VaultItemDisplayArtAsset(itemId);
+  var texture=string.IsNullOrEmpty(asset)
+   ?null
+   :PackspireResources.Load<Texture2D>($"Art/Equipment/ObsidianMisprint/{asset}");
+  return texture==null
+   ?VaultItemArt(itemId,className)
+   :Atlas(texture,new Rect(0f,0f,1f,1f),className);
+ }
+
+ static string VaultItemDisplayArtAsset(string itemId){
+  return itemId switch{
+   "sword" or "dagger" or "spear"=>"sword-display-v1",
+   "shield" or "buckler" or "charm"=>"shield-display-v1",
+   "plate"=>"plate-display-v1",
+   "crystal"=>"crystal-display-v1",
+   "flask" or "bomb"=>"flask-display-v1",
+   "herb"=>"herb-display-v1",
+   "ember"=>"ember-display-v1",
+   _=>string.Empty
+  };
+ }
+
  static string VaultItemArtAsset(string itemId){
   return itemId switch{
    "sword" or "dagger" or "spear" or "ember"=>"vault-item-sword-v1",

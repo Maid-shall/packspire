@@ -2093,7 +2093,7 @@
 }
 
 .ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card:hover,
-.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card.ps-demon-card:hover {
+.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card.ps-docket-card:hover {
     translate: 0 0;
     scale: 1 1 1;
     rotate: 0deg;
@@ -5338,4 +5338,494 @@
     background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1");
     -unity-background-scale-mode: scale-to-fit;
 }
+
+/* Final archive fit: the specimen print is mounted on a matching dark plate,
+   and the complete docket remains inside the right-hand paper leaf. */
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 432px;
+    min-height: 432px;
+    background-color: rgb(5, 4, 31);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    background-color: rgba(3, 4, 5, 0.90);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    left: 50px;
+    top: 92px;
+    width: 372px;
+    height: 332px;
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 292px;
+    height: 292px;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    height: 177px;
+    min-height: 177px;
+}
+.ps-codex-v8 .ps-codex-dossier-column {
+    padding: 16px 24px 14px 24px;
+}
+.ps-codex-v8 .ps-codex-link-host {
+    height: 92px;
+    min-height: 92px;
+    max-height: 92px;
+}
+.ps-codex-v8 .ps-codex-link-effect { padding: 8px 12px; }
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    height: 96px;
+    min-height: 96px;
+    padding: 7px 10px;
+}
+.ps-codex-v8 .ps-codex-card-panel {
+    height: 349px;
+    min-height: 349px;
+    margin-top: 4px;
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    position: relative;
+    width: 100%;
+    height: 312px;
+    min-height: 312px;
+    padding: 4px 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    width: 146px;
+    min-width: 146px;
+    max-width: 146px;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    margin-left: 0;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    height: 48px;
+    min-height: 48px;
+    margin-top: 2px;
+    padding: 6px 52px 5px 12px;
+}
 /* End Obsidian misprint compendium overrides. */
+
+/* ===== Compendium archive: specimen / dossier composition ===== */
+.ps-codex-v8 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: visible;
+    border-radius: 0;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+.ps-codex-v8 > .ps-layer-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+.ps-codex-v8 .ps-mgmt-header {
+    position: absolute;
+    left: 170px;
+    top: 12px;
+    width: 1088px;
+    height: 58px;
+    min-height: 58px;
+    padding: 0 70px 0 20px;
+}
+.ps-codex-v8 .ps-codex-main-row {
+    position: absolute;
+    left: 18px;
+    top: 78px;
+    width: 1244px;
+    height: 624px;
+    min-height: 624px;
+    padding: 0;
+    flex-direction: row;
+}
+.ps-codex-v8 .ps-codex-index-column {
+    width: 342px;
+    min-width: 342px;
+    max-width: 342px;
+    height: 624px;
+    padding: 0 12px 0 0;
+    border-right-width: 1px;
+    border-right-color: rgba(173, 136, 80, 0.45);
+}
+.ps-codex-v8 .ps-codex-index-header {
+    height: 48px;
+    min-height: 48px;
+    margin: 0 0 10px 0;
+}
+.ps-codex-v8 .ps-codex-category-tab {
+    height: 44px;
+    min-height: 44px;
+    margin-right: 3px;
+    padding: 0 8px;
+    font-size: 13px;
+}
+.ps-codex-v8 .ps-codex-index-surface {
+    height: 518px;
+    min-height: 518px;
+    padding: 4px 5px;
+    background-color: rgba(1, 2, 2, 0.36);
+}
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    min-height: 68px;
+    margin-bottom: 5px;
+    padding: 7px 14px;
+}
+.ps-codex-v8 .ps-codex-v9-index-name { font-size: 16px; }
+.ps-codex-v8 .ps-codex-index-footer {
+    height: 44px;
+    min-height: 44px;
+    padding: 4px 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-record-column {
+    width: 902px;
+    height: 624px;
+    min-height: 624px;
+    padding: 0 0 0 14px;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-record {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-specimen-column {
+    width: 55%;
+    min-width: 0;
+    height: 100%;
+    padding: 4px 16px 0 8px;
+    border-right-width: 1px;
+    border-right-color: rgba(174, 138, 84, 0.48);
+}
+.ps-codex-v8 .ps-codex-item-hero {
+    width: 100%;
+    height: 445px;
+    min-height: 445px;
+    flex-direction: column;
+    position: relative;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    right: 8px;
+    height: 94px;
+    padding: 8px 10px;
+    background-image: none;
+    background-color: rgba(3, 4, 3, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgb(57, 181, 186);
+}
+.ps-codex-v8 .ps-codex-item-meta {
+    font-size: 10px;
+    color: rgb(56, 188, 193);
+}
+.ps-codex-v8 .ps-codex-item-name {
+    margin-top: 2px;
+    font-size: 28px;
+    color: rgb(235, 210, 171);
+}
+.ps-codex-v8 .ps-codex-item-description {
+    font-size: 10px;
+    color: rgba(221, 202, 173, 0.78);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    position: absolute;
+    left: 68px;
+    top: 100px;
+    width: 345px;
+    height: 330px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 310px;
+    height: 310px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    width: 100%;
+    height: 164px;
+    min-height: 164px;
+    margin: 0;
+    padding: 10px 15px 12px 15px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-shape-heading {
+    height: 30px;
+    min-height: 30px;
+    padding: 0 8px;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(124, 76, 52, 0.38);
+}
+.ps-codex-v8 .ps-codex-shape-title,
+.ps-codex-v8 .ps-codex-shape-count { color: rgb(87, 57, 40); }
+.ps-codex-v8 .ps-codex-shape-list {
+    min-height: 0;
+    padding: 7px 8px 0 8px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.ps-codex-v8 .ps-codex-dossier-column {
+    width: 45%;
+    min-width: 0;
+    height: 100%;
+    padding: 18px 22px 16px 22px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-link-host {
+    width: 100%;
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+    margin: 0 0 6px 0;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(126, 70, 48, 0.35);
+}
+.ps-codex-v8 .ps-codex-link-effect {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    padding: 12px 14px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-eyebrow { color: rgb(34, 121, 123); }
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-name { color: rgb(57, 39, 28); }
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-body { color: rgb(91, 65, 49); }
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    width: 100%;
+    height: 124px;
+    min-height: 124px;
+    margin: 0;
+    padding: 9px 12px;
+    flex-grow: 0;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(126, 70, 48, 0.35);
+}
+.ps-codex-v8 .ps-codex-acquisition-title { color: rgb(65, 43, 31); }
+.ps-codex-v8 .ps-codex-acquisition-eyebrow,
+.ps-codex-v8 .ps-codex-acquisition-icon,
+.ps-codex-v8 .ps-codex-acquisition-key { color: rgb(124, 45, 34); }
+.ps-codex-v8 .ps-codex-acquisition-value { color: rgb(67, 48, 36); }
+.ps-codex-v8 .ps-codex-card-panel {
+    width: 100%;
+    height: 282px;
+    min-height: 282px;
+    margin: 6px 0 0 0;
+    padding: 0;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-docket-heading {
+    height: 34px;
+    min-height: 34px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.ps-codex-v8 .ps-codex-card-heading {
+    width: 48%;
+    height: 28px;
+    padding: 0 4px;
+    font-size: 11px;
+    color: rgb(76, 52, 38);
+    background-image: none;
+}
+.ps-codex-v8 .ps-codex-card-toggle {
+    width: 50%;
+    height: 28px;
+    min-height: 28px;
+    flex-direction: row;
+}
+.ps-codex-v8 .ps-codex-card-toggle-button {
+    width: 50%;
+    height: 28px;
+    min-height: 28px;
+    color: rgb(86, 63, 49);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-card-toggle-button.ps-selected {
+    color: rgb(236, 207, 166);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    height: 245px;
+    min-height: 245px;
+    padding: 2px 0 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    width: 138px;
+    min-width: 138px;
+    max-width: 138px;
+    height: 195px;
+    min-height: 195px;
+    max-height: 195px;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    height: 60px;
+    min-height: 60px;
+    margin-top: 3px;
+    padding: 8px 56px 7px 15px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-archive-note-title { color: rgb(65, 43, 31); }
+.ps-codex-v8 .ps-codex-archive-note-body { color: rgb(99, 70, 52); }
+.ps-codex-v8 .ps-codex-archive-page-count { right: 40px; bottom: 22px; color: rgb(126, 45, 34); }
+.ps-codex-v8 .ps-codex-item-next-page {
+    right: 5px;
+    bottom: 8px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+}
+
+/* Authoritative archive leaf fit. Keep the shipped docket at its native
+   portrait size; the paper is partitioned around it instead of scaling it. */
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 432px;
+    min-height: 432px;
+    background-color: rgb(5, 4, 31);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    background-color: rgba(3, 4, 5, 0.90);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    left: 72px;
+    top: 108px;
+    width: 330px;
+    height: 310px;
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 286px;
+    height: 286px;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    height: 177px;
+    min-height: 177px;
+}
+.ps-codex-v8 .ps-codex-dossier-column {
+    position: relative;
+    padding: 16px 24px 14px 24px;
+}
+.ps-codex-v8 .ps-codex-link-host {
+    height: 92px;
+    min-height: 92px;
+    max-height: 92px;
+}
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    height: 96px;
+    min-height: 96px;
+    padding: 7px 10px;
+}
+.ps-codex-v8 .ps-codex-card-panel {
+    position: absolute;
+    left: 24px;
+    right: auto;
+    top: 214px;
+    bottom: 62px;
+    width: 299px;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+}
+.ps-codex-v8 .ps-codex-docket-heading {
+    width: 100%;
+    align-self: stretch;
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex-grow: 1;
+    padding: 4px 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0 0 0 65px;
+    translate: 0 0;
+    align-self: flex-start;
+    overflow: hidden;
+}
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-panel,
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-stage {
+    width: 299px;
+    min-width: 299px;
+    max-width: 299px;
+    overflow: visible;
+}
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-stage {
+    align-items: flex-start;
+}
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 12px;
+    width: auto;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 6px 52px 5px 12px;
+}

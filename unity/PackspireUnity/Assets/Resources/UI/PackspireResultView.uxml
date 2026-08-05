@@ -4,24 +4,50 @@
     </ui:VisualElement>
     <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--result" picking-mode="Ignore" />
     <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--paper-corner" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-layer-content">
+    <ui:VisualElement class="ps-layer-content ps-result-content">
+        <ui:VisualElement class="ps-result-topline" picking-mode="Ignore">
+            <ui:VisualElement class="ps-result-brand-block">
+                <ui:Label text="PACKSPIRE" class="ps-result-brand" />
+                <ui:Label text="INFERNAL COURIER ARCHIVE / ROUTE OUTCOME" class="ps-result-brand-sub" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-result-report-id">
+                <ui:Label text="REPORT ID" class="ps-result-kicker" />
+                <ui:Label text="03-AC-4179" class="ps-result-id-value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <ui:VisualElement class="ps-result-body">
             <ui:VisualElement class="ps-result-col-visual">
                 <ui:VisualElement name="result-visual-host" class="ps-result-visual-host" />
                 <ui:VisualElement name="result-title-overlay" class="ps-result-title-overlay" picking-mode="Ignore">
-                    <ui:Label name="result-title" class="ps-result-title" picking-mode="Ignore" />
-                    <ui:Label name="result-subtitle" class="ps-result-subtitle" picking-mode="Ignore" />
+                    <ui:Label text="DELIVERY OUTCOME" class="ps-result-kicker ps-result-title-kicker" />
+                    <ui:Label name="result-title" class="ps-result-title" />
+                    <ui:Label name="result-subtitle" class="ps-result-subtitle" />
                 </ui:VisualElement>
+                <ui:VisualElement class="ps-result-state-stamp ps-result-state-stamp--defeat" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-result-state-stamp ps-result-state-stamp--clear" picking-mode="Ignore" />
             </ui:VisualElement>
+
             <ui:VisualElement name="result-summary-column" class="ps-result-col-summary">
+                <ui:VisualElement class="ps-result-report-heading" picking-mode="Ignore">
+                    <ui:Label text="DELIVERY REPORT" class="ps-result-kicker" />
+                    <ui:Label text="配送記録報告書" class="ps-result-report-title" />
+                </ui:VisualElement>
                 <ui:Label name="result-cause" class="ps-result-cause" picking-mode="Ignore" />
                 <ui:VisualElement name="result-primary-stats" class="ps-result-primary-stats" />
                 <ui:ScrollView name="result-record-scroll" class="ps-result-record-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
                 <ui:VisualElement name="result-unlock-host" class="ps-result-unlock-host" />
                 <ui:VisualElement name="result-heirloom-host" class="ps-result-heirloom-host" />
-                <ui:VisualElement name="result-footer" class="ps-result-footer" />
             </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="result-footer" class="ps-result-footer">
+            <ui:VisualElement class="ps-result-footer-copy" picking-mode="Ignore">
+                <ui:Label text="DISPOSITION / RECEIPT" class="ps-result-kicker" />
+                <ui:Label text="記録を保管し、拠点へ帰還します。" class="ps-result-footer-title" />
+                <ui:Label text="今回の経路・取得物・家宝進捗は配送台帳へ記録されます。" class="ps-result-footer-note" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-result-footer-seal" picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

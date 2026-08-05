@@ -10,7 +10,10 @@ public sealed partial class PackspireUiFoundation {
  void BuildStatus(){
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var allLearned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var allLearned=RoleFrameworkSystem.CoreRoleIds
+   .Where(GameCatalog.Roles.ContainsKey)
+   .Select(id=>new IdInt(id,Mathf.Max(1,meta.jobLevels.FirstOrDefault(x=>x.id==id)?.value??1)))
+   .ToList();
   var learned=FilteredStatusRoles(allLearned);
   if(learned.Count>0){
    if(string.IsNullOrEmpty(selectedRoleId)||!learned.Any(x=>x.id==selectedRoleId))
@@ -31,34 +34,11 @@ public sealed partial class PackspireUiFoundation {
  void PopulateStatusHeader(){
   if(mgmtListHeader==null)return;
   mgmtListHeader.Clear();
-  mgmtListHeader.Add(ManagementFilterBar(
-   new[]{"基本","上級","複合","勢力","隠し"},
-   statusRoleFilter,
-   index=>{
-    if(statusRoleFilter==index)return;
-    statusRoleFilter=index;
-    selectedRoleId="";
-    RefreshStatusScreen();
-   }
-  ));
-  mgmtListHeader.Add(SelectiveSectionHead("ROLES","習得役職"));
+  mgmtListHeader.Add(SelectiveSectionHead("FOUR CORE ROLES","基礎役職"));
  }
 
  System.Collections.Generic.List<IdInt> FilteredStatusRoles(System.Collections.Generic.List<IdInt> learned){
-  if(statusRoleFilter<0||statusRoleFilter>4)statusRoleFilter=0;
-  return learned.Where(level=>RoleMatchesStatusFilter(GameCatalog.Roles[level.id],statusRoleFilter)).ToList();
- }
-
- static bool RoleMatchesStatusFilter(RoleDef role,int filter){
-  if(role==null)return false;
-  string kind=role.kind??string.Empty;
-  return filter switch{
-   1=>kind.Contains("上級"),
-   2=>kind.Contains("複合"),
-   3=>kind.Contains("勢力"),
-   4=>kind.Contains("隠し"),
-   _=>!kind.Contains("上級")&&!kind.Contains("複合")&&!kind.Contains("勢力")&&!kind.Contains("隠し")
-  };
+  return learned.Where(level=>RoleFrameworkSystem.CoreRoleIds.Contains(level.id)).ToList();
  }
 
  void PopulateStatusList(System.Collections.Generic.List<IdInt> learned,MetaSave meta){
@@ -90,12 +70,14 @@ public sealed partial class PackspireUiFoundation {
   if(mgmtDetailScroll!=null)mgmtDetailScroll.scrollOffset=Vector2.zero;
 
   if(string.IsNullOrEmpty(selectedRoleId)||!learned.Any(x=>x.id==selectedRoleId)){
+   ClearStatusAppointment();
    if(mgmtDetailHero!=null)mgmtDetailHero.style.display=DisplayStyle.None;
    mgmtDetailScroll.Add(PackspireUiFactory.EmptyState("役職を選択","中央の一覧から習得済み役職を選ぶと詳細が表示されます。"));
    return;
   }
   var selectedLevel=learned.First(x=>x.id==selectedRoleId);
   var selected=GameCatalog.Roles[selectedRoleId];
+  RefreshStatusAppointment(selected,selectedLevel.value,selected.id==meta.currentRole);
   SetMgmtDetailHeroArt(Atlas(game.UiRoleArt,RoleUv(selected.id),"ps-mgmt-detail-art-image"));
   var nameTitle=PackspireUiFactory.Title(selected.name);
   nameTitle.AddToClassList("ps-status-role-detail-name");
@@ -114,20 +96,48 @@ public sealed partial class PackspireUiFoundation {
   var body=Container("ps-status-role-detail-body");
   body.Add(ManagementSection("説明",selected.description));
   body.Add(ManagementSection("現在発動中の効果",selected.description,selectedLevel.value<1));
-  var trackHead=SelectiveSectionHead("","成長の軌跡");
-  trackHead.AddToClassList("ps-status-track-head");
-  body.Add(trackHead);
-  body.Add(StatusLevelTrack(selected,selectedLevel.value));
-  if(selectedLevel.value<7)
-   body.Add(ManagementSection("次に到達する効果","Lv.7 で解放\n"+game.UiRoleMilestone(selected.id,false)));
-  else if(selectedLevel.value<selected.maxLevel)
-   body.Add(ManagementSection("次に到達する効果",$"Lv.{selected.maxLevel} で解放\n"+game.UiRoleMilestone(selected.id,true)));
-  var expand=Container("ps-status-role-expand");
-  expand.pickingMode=PickingMode.Ignore;
-  expand.Add(ManagementSection("派生・上級職","解放条件が公開されたときに追記されます。",true));
-  body.Add(expand);
-  if(selected.id!=meta.currentRole)
-   body.Add(ManagementSection("転職","専用イベントまたは施設から変更できます。"));
+  var appoint=PackspireUiFactory.Button(selected.id==meta.currentRole?"現役職":"この役職を任命",()=>{
+   game.UiSetActiveRole(selected.id);
+   RefreshStatusScreen();
+  });
+  appoint.AddToClassList("ps-status-appoint-action");
+  appoint.SetEnabled(selected.id!=meta.currentRole);
+  body.Add(appoint);
+  var framework=RoleFrameworkSystem.Get(selected.id);
+  body.Add(ManagementSection("探索固有印",$"{framework.sealName}\n{framework.sealText}"));
+  var branchIndex=RoleFrameworkSystem.Branch(meta,selected.id);
+  var branches=Container("ps-status-branch-choices");
+  for(int index=0;index<framework.branches.Length;index++){
+   int choice=index;
+   var branch=framework.branches[index];
+   var button=PackspireUiFactory.Button($"{branch.name}\n{branch.text}",()=>{
+    game.UiSetRoleBranch(selected.id,choice);
+    RefreshStatusScreen();
+   });
+   button.AddToClassList("ps-status-branch-choice");
+   button.EnableInClassList("ps-selected",index==branchIndex);
+   branches.Add(button);
+  }
+  body.Add(SelectiveSectionHead("BRANCH","役職分岐"));
+  body.Add(branches);
+  var qualification=Container("ps-status-qualification");
+  qualification.Add(SelectiveSectionHead("QUALIFICATION SEAL","資格印（一枠）"));
+  var clearQualification=PackspireUiFactory.Button("資格印を外す",()=>{
+   game.UiSetQualificationSeal("");
+   RefreshStatusScreen();
+  });
+  clearQualification.EnableInClassList("ps-selected",string.IsNullOrEmpty(meta.qualificationSealId));
+  qualification.Add(clearQualification);
+  foreach(var roleId in meta.unlockedRoles.Where(id=>GameCatalog.Roles.ContainsKey(id)&&!RoleFrameworkSystem.CoreRoleIds.Contains(id)).Take(6)){
+   string id=roleId;
+   var option=PackspireUiFactory.Button(GameCatalog.Roles[id].name,()=>{
+    game.UiSetQualificationSeal(id);
+    RefreshStatusScreen();
+   });
+   option.EnableInClassList("ps-selected",meta.qualificationSealId==id);
+   qualification.Add(option);
+  }
+  body.Add(qualification);
   var tail=Container("ps-space-scroll-tail");
   tail.pickingMode=PickingMode.Ignore;
   body.Add(tail);
@@ -138,12 +148,31 @@ public sealed partial class PackspireUiFoundation {
   }).ExecuteLater(0);
  }
 
+ void RefreshStatusAppointment(RoleDef role,int level,bool isCurrent){
+  if(statusAppointmentEyebrow==null)return;
+  statusAppointmentEyebrow.text="PACK 03 / APPOINTMENT ORDER";
+  statusAppointmentTitle.text="役職任命書";
+  statusAppointmentDetail.text=$"［{role.name}］  Lv.{level}/{role.maxLevel}";
+  statusAppointmentAction.text=isCurrent?"現役職":"任命候補";
+ }
+
+ void ClearStatusAppointment(){
+  if(statusAppointmentEyebrow==null)return;
+  statusAppointmentEyebrow.text="PACK 03 / APPOINTMENT ORDER";
+  statusAppointmentTitle.text="役職任命書";
+  statusAppointmentDetail.text="登録された役職はありません";
+  statusAppointmentAction.text="記録待ち";
+ }
+
  void BuildStatusAgain(){RefreshStatusScreen();}
  void RefreshStatusScreen(){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Status){RebuildScreen(BuildStatus);return;}
   var meta=game.UiMeta;
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var allLearned=meta.jobLevels.Where(x=>x.value>0&&GameCatalog.Roles.ContainsKey(x.id)).ToList();
+  var allLearned=RoleFrameworkSystem.CoreRoleIds
+   .Where(GameCatalog.Roles.ContainsKey)
+   .Select(id=>new IdInt(id,Mathf.Max(1,meta.jobLevels.FirstOrDefault(x=>x.id==id)?.value??1)))
+   .ToList();
   var learned=FilteredStatusRoles(allLearned);
   if(learned.Count>0&&!learned.Any(x=>x.id==selectedRoleId))selectedRoleId=learned[0].id;
   if(learned.Count==0)selectedRoleId="";
@@ -246,7 +275,7 @@ public sealed partial class PackspireUiFoundation {
   var showcase=Container("ps-vault-v11-showcase");
   var artColumn=Container("ps-vault-v11-art-column");
   var artFrame=Container("ps-vault-v11-art-frame");
-  artFrame.Add(VaultItemArt(def.id,"ps-vault-v9-item-art ps-vault-v11-item-art"));
+  artFrame.Add(VaultItemDisplayArt(def.id,"ps-vault-v9-item-art ps-vault-v11-item-art"));
   artColumn.Add(artFrame);
   var durability=PackspireUiFactory.Body($"耐久　{selected.durability} / {def.baseDurability}");
   durability.AddToClassList("ps-vault-v9-durability");
@@ -488,7 +517,7 @@ public sealed partial class PackspireUiFoundation {
 
   var hero=Container("ps-vault-v11-heirloom-hero");
   var art=Container("ps-vault-v11-heirloom-art");
-  art.Add(VaultItemArt(def.id,"ps-vault-v11-heirloom-art-image"));
+  art.Add(VaultItemDisplayArt(def.id,"ps-vault-v11-heirloom-art-image"));
   hero.Add(art);
   var history=item.history??new HeirloomHistory();
   var records=Container("ps-vault-v11-heirloom-records");

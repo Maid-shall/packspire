@@ -50,6 +50,7 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   var preview=Container("ps-battle-card ps-gboard-card-view-card");
+  preview.AddToClassList("ps-docket-expanded");
   preview.pickingMode=PickingMode.Ignore;
   PopulateBattleCard(preview,card,game.UiRun,affordable);
   gridBoardCombatCardPreview.Add(preview);
@@ -78,18 +79,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    gridBoardSelectedHost.style.display=DisplayStyle.None;
    return;
   }
-  // Inline size/pos so PackspireBattle.uss (.ps-battle-card 168x236) cannot win.
-  const float cardW=236f;
-  const float cardH=354f;
   gridBoardSelectedHost.style.display=DisplayStyle.Flex;
-  gridBoardSelectedHost.style.backgroundColor=Color.clear;
-  gridBoardSelectedHost.style.position=Position.Absolute;
-  // Planning preview overlays the right edge of the map; exploration has no
-  // persistent dossier column competing for this space.
-  gridBoardSelectedHost.style.right=34;
-  gridBoardSelectedHost.style.top=82;
-  gridBoardSelectedHost.style.width=cardW;
-  gridBoardSelectedHost.style.height=cardH;
   VisualElement preview;
   if(committed){
    preview=new Button(()=>{
@@ -102,13 +92,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   preview.AddToClassList("ps-battle-card");
   preview.AddToClassList("ps-gboard-selected-card");
   preview.AddToClassList("ps-gboard-side-preview");
-  preview.style.position=Position.Relative;
-  preview.style.width=cardW;
-  preview.style.height=cardH;
-  preview.style.minWidth=cardW;
-  preview.style.minHeight=cardH;
-  preview.style.maxWidth=cardW;
-  preview.style.maxHeight=cardH;
+  preview.AddToClassList("ps-docket-expanded");
   PopulateGridPlaceCard(preview,card);
   gridBoardSelectedHost.Add(preview);
  }
@@ -322,48 +306,12 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
  }
 
  void PopulateGridPlaceCard(VisualElement slot,CardInstance card){
-  // Skill frame (combat-card-01) for place cards — same chrome as battle.
   ApplyExplorationCardPresentation(slot,card);
-  var illustration=Container("ps-battle-card-art");
-  var sourceItem=game.UiRun?.inventory?.FirstOrDefault(value=>value.uid==card.sourceItemUid);
-  if(sourceItem!=null)
-   illustration.Add(Atlas(game.UiEquipmentArt,ItemUv(sourceItem.templateId),"ps-battle-card-art-image"));
-  else if(GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)&&exploration.artwork!=null){
-   var art=new Image{sprite=exploration.artwork,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
-   art.AddToClassList("ps-battle-card-art-image");
-   illustration.Add(art);
-  } else {
-   var glyph=new Label(GridPlaceGlyph(card)){pickingMode=PickingMode.Ignore};
-   glyph.AddToClassList("ps-gboard-card-glyph");
-   illustration.Add(glyph);
-  }
-  slot.Add(illustration);
-  var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
-  cost.AddToClassList("ps-battle-card-cost");
-  slot.Add(cost);
-  var name=new Label(card.name){pickingMode=PickingMode.Ignore};
-  name.AddToClassList("ps-battle-card-name");
-  slot.Add(name);
-  var body=new Label(card.text){pickingMode=PickingMode.Ignore};
-  body.AddToClassList("ps-battle-card-text");
-  slot.Add(body);
-  var foot=Container("ps-battle-card-foot");
-  var source=new Label("配置"){pickingMode=PickingMode.Ignore};
-  source.AddToClassList("ps-battle-card-source");
-  foot.Add(source);
-  var tag=new Label("GRID"){pickingMode=PickingMode.Ignore};
-  tag.AddToClassList("ps-battle-card-durability");
-  foot.Add(tag);
-  slot.Add(foot);
-  AddExplorationDemonCardOverlay(slot,card);
- }
-
- static string GridPlaceGlyph(CardInstance card){
-  if(card==null)return "◆";
-  if(card.id.Contains("lamp")||card.name.Contains("灯り"))return "灯";
-  if(card.id.Contains("fog")||card.name.Contains("霧"))return "霧";
-  if(card.id.Contains("seal")||card.name.Contains("封鎖"))return "封";
-  return "◆";
+  GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration);
+  int stages=exploration?.stages?.Length??0;
+  PopulateDocketCard(
+   slot,card,card.text,"配置 / 経路局","GRID / 携行",string.Empty,true,true,stages
+  );
  }
 
 }

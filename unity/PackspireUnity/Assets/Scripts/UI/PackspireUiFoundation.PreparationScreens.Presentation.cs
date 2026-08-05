@@ -5,31 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
-// Packing character, rite-circle, resonance, and filter presentation.
- VisualElement BuildPackingCharacterLayers(){
-  var strip=Container("ps-rite-character");
-  strip.pickingMode=PickingMode.Ignore;
-  (string path,string cls)[] layers={
-   ("Art/HubRig/Character/character-legs","ps-rite-character-layer ps-rite-char-far"),
-   ("Art/HubRig/Character/character-torso","ps-rite-character-layer ps-rite-char-mid"),
-   ("Art/HubRig/Character/character-back-hair","ps-rite-character-layer ps-rite-char-mid"),
-   ("Art/HubRig/Character/character-face","ps-rite-character-layer ps-rite-char-near"),
-   ("Art/HubRig/Character/character-eyes","ps-rite-character-layer ps-rite-char-near"),
-   ("Art/HubRig/Character/character-front-hair","ps-rite-character-layer ps-rite-char-near"),
-   ("Art/HubRig/Character/character-ahoge","ps-rite-character-layer ps-rite-char-front"),
-   ("Art/HubRig/Character/character-arm-left","ps-rite-character-layer ps-rite-char-near"),
-   ("Art/HubRig/Character/character-arm-right","ps-rite-character-layer ps-rite-char-front"),
-   ("Art/HubRig/Character/character-cloth","ps-rite-character-layer ps-rite-char-front"),
-  };
-  foreach(var layer in layers){
-   var tex=PackspireResources.Load<Texture2D>(layer.path);
-   if(tex==null)continue;
-   var image=new Image{image=tex,uv=new Rect(0,0,1,1),scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
-   foreach(var cls in layer.cls.Split(' '))if(!string.IsNullOrEmpty(cls))image.AddToClassList(cls);
-   strip.Add(image);
-  }
-  return strip;
- }
+// Rite-circle, resonance, and filter presentation.
 
  sealed class RiteCircleFx {
   public string coreId;

@@ -53,9 +53,11 @@ public sealed partial class PackspireUiFoundation {
   gridBoardMapStats?.EnableInClassList("ps-gboard-map-stats-combat",inBattle);
   if(gridBoardTypeLabel!=null)gridBoardTypeLabel.text=inBattle?"戦闘":"封印格子";
   if(gridBoardTitleLabel!=null)
-   gridBoardTitleLabel.text=inBattle?(game.UiBattle.enemy?.name??"交戦中"):(string.IsNullOrEmpty(run.pendingGate)?phase:run.pendingGate=="next"?"次区画":"帰還点");
+   gridBoardTitleLabel.text=inBattle?(game.UiBattle.enemy?.name??"交戦中"):
+    (string.IsNullOrEmpty(run.pendingGate)?phase:run.pendingGate=="next"?"次区画":"帰還点");
   if(gridBoardStatusLabel!=null)
-   gridBoardStatusLabel.text=inBattle?"戦闘中":(string.IsNullOrEmpty(run.pendingGate)?ink:GridBoardSystem.AreaLabel(run));
+   gridBoardStatusLabel.text=inBattle?"戦闘中":
+    (string.IsNullOrEmpty(run.pendingGate)?ink:GridBoardSystem.AreaLabel(run));
 
   if(inBattle){
    RefreshGridCombatStage();
@@ -145,6 +147,7 @@ public sealed partial class PackspireUiFoundation {
    ve.EnableInClassList("ps-gboard-event",showPlace&&displayPlace=="event");
    ve.EnableInClassList("ps-gboard-next",showPlace&&displayPlace=="next");
    ve.EnableInClassList("ps-gboard-return",showPlace&&displayPlace=="return");
+   ve.EnableInClassList("ps-gboard-delivery",showPlace&&displayPlace=="delivery");
    ve.EnableInClassList("ps-gboard-calamity",showPlace&&displayPlace=="calamity");
    int calamityTier=GridBoardSystem.DoomTier(run);
    ve.EnableInClassList("ps-gboard-calamity-tier-1",showPlace&&displayPlace=="calamity"&&calamityTier==1);
@@ -174,7 +177,7 @@ public sealed partial class PackspireUiFoundation {
      "goal"=>"✧",
      _=>!showPlace?"":displayPlace switch{
       "lamp"=>"✦", "fog"=>"☾", "seal"=>"◇",
-      "event"=>"✧", "next"=>"➜", "return"=>"↶", _=>""
+      "event"=>"✧", "next"=>"➜", "return"=>"↶", "delivery"=>"封", _=>""
      }
     };
     if(!discovered)
@@ -302,21 +305,6 @@ public sealed partial class PackspireUiFoundation {
   if(gridBoardHandRoot==null)return;
   bool open=gridBoardHandOpen||gridBoardCombatMode;
   gridBoardHandRoot.EnableInClassList("ps-gboard-hand-open",open);
-  gridBoardHandRoot.style.left=StyleKeyword.Auto;
-  gridBoardHandRoot.style.right=StyleKeyword.Auto;
-  gridBoardHandRoot.style.left=Length.Percent(58);
-  gridBoardHandRoot.style.marginLeft=-GridHandWidth*0.5f;
-  gridBoardHandRoot.style.bottom=gridBoardCombatMode?-72:(open?54:0);
-  gridBoardHandRoot.style.width=GridHandWidth;
-  // The visible cards stay fixed inside this compact hit strip. The separate
-  // hover preview is picking-disabled, so it cannot feed back into layout.
-  gridBoardHandRoot.style.height=gridBoardCombatMode?260:(open?344:96);
-  gridBoardHandRoot.style.overflow=Overflow.Visible;
-  gridBoardHandRoot.style.backgroundColor=Color.clear;
-  gridBoardHandRoot.style.borderLeftWidth=0;
-  gridBoardHandRoot.style.borderRightWidth=0;
-  gridBoardHandRoot.style.borderTopWidth=0;
-  gridBoardHandRoot.style.borderBottomWidth=0;
  }
 
  void RefreshGridEnergyRail(GridBoardRunState board){
@@ -375,10 +363,11 @@ public sealed partial class PackspireUiFoundation {
     game.UiAdvanceGridArea();
    }));
   } else {
-   choices.Add(MakeGridAction("戦利品を持って帰還する",()=>{
+   var confirm=MakeGridAction("戦利品を持って帰還する",()=>{
     game.UiConfirmGridReturn();
     ForceRefreshScreen();
-   }));
+   });
+   choices.Add(confirm);
   }
   choices.Add(MakeGridAction("まだ探索する",()=>{
    game.UiDeclineGridGate();

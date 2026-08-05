@@ -131,13 +131,13 @@ public sealed partial class PackspireUiFoundation {
   right.Add(BuildShapePreview(selected,packingRotation));
   string elements=string.Join(" · ",def.cells.Select((cell,i)=>ElementLabel(selected.colors!=null&&i<selected.colors.Count?selected.colors[i]:cell.element)));
   right.Add(RiteMetaLine($"属性  {elements}"));
-  AddPackingTraitLines(right,run,build,selected);
+  AddPackingSealContribution(right,run,build,selected);
   AddPackingLinkLines(right,run,build,selected);
  }
 
  void BuildPackingOverview(VisualElement right,RunState run,DeckBuildResult build){
   right.Add(RiteSectionHead("03","発動効果"));
-  AddPackingTraitLines(right,run,build,null);
+  AddPackingDeliverySealLines(right,run,build);
   AddPackingLinkLines(right,run,build,null);
   if(build.stability!=null&&build.stability.runaway)
    right.Add(RiteEffectCard("安定式", "過負荷", "暴走状態です。安定式を見直してください。", true));
@@ -274,31 +274,37 @@ public sealed partial class PackspireUiFoundation {
   return row;
  }
 
- void AddPackingTraitLines(VisualElement right,RunState run,DeckBuildResult build,ItemInstance focus){
-  right.Add(RiteSectionHead("","色特性"));
-  var lines=0;
-  IEnumerable<ItemInstance> items=focus!=null
-   ?new[]{focus}
-   :run.placements.Select(p=>run.inventory.FirstOrDefault(x=>x.uid==p.itemUid)).Where(x=>x!=null);
-  foreach(var item in items){
-   StorageFormulaSystem.EnsureItemRolled(item);
-   var trait=StorageFormulaCatalog.Trait(item.traitId);
-   if(trait==null){
-    if(focus!=null){right.Add(RiteEmptyNote("色特性なし"));lines++;}
-    continue;
-   }
-   int matches=0;
-   build.colors.TryGetValue(trait.element,out matches);
-   bool placed=run.placements.Any(x=>x.itemUid==item.uid);
-   bool active=placed&&matches>=trait.requiredMatches;
-   if(focus==null&&!active)continue;
-   var def=GameCatalog.Items[item.templateId];
-   string head=focus!=null?trait.name:$"{def.name}  /  {trait.name}";
-   string state=active?"発動中":placed?$"未発動 {ElementLabel(trait.element)}{matches}/{trait.requiredMatches}":"未配置";
-   right.Add(RiteEffectCard(head,state,TraitEffectLabel(trait),active));
+ void AddPackingDeliverySealLines(VisualElement right,RunState run,DeckBuildResult build){
+  right.Add(RiteSectionHead("","配達印"));
+  var seals=PackingDeliverySeals(run,build);
+  foreach(var seal in seals)
+   right.Add(RiteEffectCard(
+    seal.name,
+    $"{seal.source}  /  {seal.charges}回",
+    $"{seal.text}  [{seal.target}]",
+    seal.charges>0));
+  if(seals.Count==0)right.Add(RiteEmptyNote("現在使用できる配達印はありません。"));
+ }
+
+ void AddPackingSealContribution(VisualElement right,RunState run,DeckBuildResult build,ItemInstance focus){
+  right.Add(RiteSectionHead("","配達印への寄与"));
+  var placement=run.placements.FirstOrDefault(value=>value.itemUid==focus.uid);
+  if(placement==null){
+   right.Add(RiteEmptyNote("術式へ配置すると、色一致が配達印の使用回数になります。"));
+   return;
+  }
+  var analysis=BackpackSystem.Analyze(focus,placement,run);
+  int lines=0;
+  foreach(var pair in analysis.matches.Where(value=>value.Value>0)){
+   int charges=DeliverySealSystem.Charges(pair.Key,build.colors);
+   right.Add(RiteEffectCard(
+    DeliverySealSystem.Name(pair.Key),
+    $"{ElementLabel(pair.Key)}一致 +{pair.Value}",
+    $"術式全体で {charges}回使用可能。{DeliverySealSystem.Effect(pair.Key)}",
+    charges>0));
    lines++;
   }
-  if(lines==0)right.Add(RiteEmptyNote(focus!=null?"色特性なし":"発動中の色特性はありません"));
+  if(lines==0)right.Add(RiteEmptyNote("この配置から得られる色一致はありません。"));
  }
 
  void AddPackingLinkLines(VisualElement right,RunState run,DeckBuildResult build,ItemInstance focus){
@@ -487,33 +493,42 @@ public sealed partial class PackspireUiFoundation {
   return parts.Count==0?"効果あり":string.Join("　",parts);
  }
 
- VisualElement BuildPackingColorCounters(DeckBuildResult build){
-  var bar=Container("ps-rite-color-bar");
-  bar.Add(PackingColorChip(Element.Fire,build.colors[Element.Fire]));
-  bar.Add(PackingColorChip(Element.Water,build.colors[Element.Water]));
-  bar.Add(PackingColorChip(Element.Wind,build.colors[Element.Wind]));
-  bar.Add(PackingColorChip(Element.Earth,build.colors[Element.Earth]));
+ VisualElement BuildPackingSealCounters(RunState run,DeckBuildResult build){
+  var bar=Container("ps-rite-seal-bar");
+  foreach(var seal in PackingDeliverySeals(run,build))
+   bar.Add(PackingSealChip(seal));
   return bar;
  }
 
- VisualElement PackingColorChip(Element element,int count){
-  var chip=Container("ps-rite-color-chip");
-  chip.AddToClassList("ps-element-"+element.ToString().ToLowerInvariant());
-  var orbTex=RiteOrbTexture(element);
+ List<DeliverySealState> PackingDeliverySeals(RunState run,DeckBuildResult build){
+  var current=run?.courierRoute?.seals;
+  return current==null
+   ?DeliverySealSystem.Build(run,game.UiMeta,build.colors)
+   :DeliverySealSystem.Refresh(current,run,game.UiMeta,build.colors).Where(seal=>seal.available).ToList();
+ }
+
+ VisualElement PackingSealChip(DeliverySealState seal){
+  var chip=Container("ps-rite-seal-chip");
+  chip.AddToClassList("ps-seal-"+seal.target.ToLowerInvariant());
+  Texture2D orbTex=null;
+  Element element;
+  if(seal.key.StartsWith("color-")&&System.Enum.TryParse(seal.key.Substring(6),true,out element))
+   orbTex=RiteOrbTexture(element);
   if(orbTex!=null){
    var orb=new Image{image=orbTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
-   orb.AddToClassList("ps-rite-color-orb");
+   orb.AddToClassList("ps-rite-seal-orb");
    orb.AddToClassList("ps-rite-orb-live");
    chip.Add(orb);
   } else {
-   var orb=Container("ps-rite-color-orb");
+   var orb=Container("ps-rite-seal-orb");
    orb.pickingMode=PickingMode.Ignore;
    chip.Add(orb);
   }
-  var value=new Label(count.ToString()){pickingMode=PickingMode.Ignore};
-  value.AddToClassList("ps-rite-color-value");
+  var value=new Label($"{seal.name} ×{seal.charges}"){pickingMode=PickingMode.Ignore};
+  value.AddToClassList("ps-rite-seal-value");
   chip.Add(value);
   return chip;
  }
+
 }
 }

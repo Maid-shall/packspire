@@ -9,6 +9,7 @@ public sealed partial class PackspireUiFoundation {
   ClearRosterReferences();
   ClearHubReferences();
   ClearPackingReferences();
+  ClearCourierRouteReferences();
   ClearShopReferences();
   ClearRewardReferences();
   ClearResultReferences();
@@ -23,6 +24,10 @@ public sealed partial class PackspireUiFoundation {
   mgmtDetailSummaryHost=null;
   mgmtDetailScroll=null;
   mgmtListHeader=null;
+  statusAppointmentEyebrow=null;
+  statusAppointmentTitle=null;
+  statusAppointmentDetail=null;
+  statusAppointmentAction=null;
  }
 
  void ClearFactionReferences(){
@@ -30,6 +35,12 @@ public sealed partial class PackspireUiFoundation {
   factionGraphHost=null;
   factionGraphEdges=null;
   factionGraphNodes=null;
+  factionEmissaryStudyFront=null;
+  factionEmissaryStudyBack=null;
+  factionEmissaryHost=null;
+  factionEmissaryName=null;
+  factionEmissaryTitle=null;
+  factionDetailHeader=null;
   factionDetailScroll=null;
  }
 
@@ -55,6 +66,9 @@ public sealed partial class PackspireUiFoundation {
   expeditionDepartButton=null;
   expeditionDepartReason=null;
   expeditionDepartLabel=null;
+  expeditionAuthDestination=null;
+  expeditionAuthCourier=null;
+  expeditionAuthLoadout=null;
   expeditionLoadoutDetailHost=null;
   expeditionLayoutAudited=false;
  }
@@ -76,10 +90,15 @@ public sealed partial class PackspireUiFoundation {
  void ClearRosterReferences(){
   rosterShell=null;
   rosterReelScroll=null;
+  rosterReelHost=null;
   rosterArtHost=null;
   rosterDetailScrollHost=null;
   rosterDetailBody=null;
+  rosterDossierPortraitHost=null;
   rosterConfirmButton=null;
+  rosterArtCaptionName=null;
+  rosterArtCaptionTitle=null;
+  rosterConfirmLabel=null;
  }
 
  void ClearHubReferences(){

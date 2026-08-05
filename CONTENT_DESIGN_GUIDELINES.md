@@ -1,15 +1,17 @@
 # PACKSPIRE コンテンツ設計指針
 
 最終更新: 2026-07-26
-状態: 役職編・第一稿
+状態: 旧役職反応網を保管した移行資料
 
-この文書は、役職・装備・戦闘カード・探索カードを追加するときの設計上の正本です。現行実装の説明は [GAME_AND_SYSTEMS.md](GAME_AND_SYSTEMS.md)、作業順は [ROADMAP_AND_TASKS.md](ROADMAP_AND_TASKS.md)、現在のIDと数値は [DATA_REFERENCE.md](DATA_REFERENCE.md)、未採用案は [UNIMPLEMENTED_IDEAS.md](UNIMPLEMENTED_IDEAS.md) を参照します。
+この文書の役職反応網は既存データの読み解きと移行のために残します。新しい役職・荷物・探索設計では [SYSTEM_REWORK_2026-08.md](SYSTEM_REWORK_2026-08.md) を正本とし、全役職パッシブの同時発動や役職数の無制限な追加は行いません。現行実装の説明は [GAME_AND_SYSTEMS.md](GAME_AND_SYSTEMS.md)、作業順は [ROADMAP_AND_TASKS.md](ROADMAP_AND_TASKS.md) を参照してください。
 
 具体的な既存職の再配置、深層反応職、複数解放レシピの第一稿は [ROLE_REACTION_NETWORK.md](ROLE_REACTION_NETWORK.md) に分離します。
 
 数値、最大Lv、固有名、解放条件の回数は、試遊前の第一稿では確定しません。最初に「何と何を掛け合わせる役職か」を決め、その後に数値を入れます。
 
 ## 1. 全体原則
+
+> 以下は旧案です。移行後は基本4職（必要なら特殊職1つ）、現役職1つ、小さな分岐ツリー、資格印1枠を基準とします。
 
 PACKSPIREの役職は、一つを選んで他を捨てるクラスではありません。
 

@@ -16,24 +16,38 @@
             <ui:VisualElement class="ps-mgmt-body ps-status-main-row">
                 <ui:VisualElement name="status-character-column" class="ps-status-character-column">
                     <ui:VisualElement class="ps-status-character-surface">
+                        <ui:VisualElement class="ps-status-study ps-status-study-front" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-status-study ps-status-study-back" picking-mode="Ignore" />
                         <ui:ScrollView name="status-character-scroll" class="ps-status-character-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
                             <ui:VisualElement name="status-character-host" class="ps-status-character-host" />
                         </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="status-roles-column" class="ps-status-roles-column">
-                    <ui:VisualElement class="ps-status-roles-surface">
-                        <ui:VisualElement name="status-list-header" class="ps-mgmt-list-header ps-status-roles-header" />
-                        <ui:ScrollView name="status-list-scroll" class="ps-mgmt-list-scroll ps-status-roles-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
-                    </ui:VisualElement>
-                </ui:VisualElement>
-                <ui:VisualElement name="status-detail-column" class="ps-status-role-detail-column">
-                    <ui:VisualElement name="status-detail-surface" class="ps-status-role-detail-surface">
-                        <ui:VisualElement name="status-detail-hero" class="ps-mgmt-detail-hero ps-status-detail-header">
-                            <ui:VisualElement name="status-detail-art" class="ps-mgmt-detail-art-host ps-status-role-image ps-art-vignette" />
-                            <ui:VisualElement name="status-detail-summary" class="ps-mgmt-detail-summary-host ps-status-role-identity" />
+                <ui:VisualElement class="ps-status-workspace">
+                    <ui:VisualElement class="ps-status-workspace-top">
+                        <ui:VisualElement name="status-detail-column" class="ps-status-role-detail-column">
+                            <ui:VisualElement name="status-detail-surface" class="ps-status-role-detail-surface">
+                                <ui:VisualElement name="status-detail-hero" class="ps-mgmt-detail-hero ps-status-detail-header">
+                                    <ui:VisualElement name="status-detail-art" class="ps-mgmt-detail-art-host ps-status-role-image" />
+                                    <ui:VisualElement name="status-detail-summary" class="ps-mgmt-detail-summary-host ps-status-role-identity" />
+                                </ui:VisualElement>
+                                <ui:ScrollView name="status-detail-scroll" class="ps-mgmt-detail-scroll ps-status-role-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                            </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:ScrollView name="status-detail-scroll" class="ps-mgmt-detail-scroll ps-status-role-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                        <ui:VisualElement name="status-roles-column" class="ps-status-roles-column">
+                            <ui:VisualElement class="ps-status-roles-surface">
+                                <ui:VisualElement name="status-list-header" class="ps-mgmt-list-header ps-status-roles-header" />
+                                <ui:ScrollView name="status-list-scroll" class="ps-mgmt-list-scroll ps-status-roles-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="status-appointment" class="ps-status-appointment">
+                        <ui:VisualElement class="ps-status-appointment-copy">
+                            <ui:Label name="status-appointment-eyebrow" class="ps-status-appointment-eyebrow" picking-mode="Ignore" />
+                            <ui:Label name="status-appointment-title" class="ps-status-appointment-title" picking-mode="Ignore" />
+                            <ui:Label name="status-appointment-detail" class="ps-status-appointment-detail" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label name="status-appointment-action" class="ps-status-appointment-action" picking-mode="Ignore" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

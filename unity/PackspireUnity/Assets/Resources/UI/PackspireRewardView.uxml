@@ -13,11 +13,20 @@
         </ui:VisualElement>
         <ui:VisualElement class="ps-reward-body">
             <ui:VisualElement name="reward-candidate-column" class="ps-reward-col-candidates">
+                <ui:VisualElement class="ps-reward-recovered-stage" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-reward-recovered-parcel" />
+                    <ui:VisualElement class="ps-reward-recovered-copy">
+                        <ui:Label text="RECOVERED CONTENTS" class="ps-reward-recovered-eyebrow" />
+                        <ui:Label text="回収品候補" class="ps-reward-recovered-title" />
+                        <ui:Label text="戦場から回収された封緘物。受領する一品を選択。" class="ps-reward-recovered-body" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:ScrollView name="reward-candidate-scroll" class="ps-reward-candidate-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
                     <ui:VisualElement name="reward-candidate-list" class="ps-reward-candidate-list" />
                 </ui:ScrollView>
             </ui:VisualElement>
             <ui:VisualElement name="reward-detail-column" class="ps-reward-col-detail">
+                <ui:Label text="INSPECTION LEDGER" class="ps-reward-detail-heading" picking-mode="Ignore" />
                 <ui:VisualElement name="reward-detail-art" class="ps-reward-detail-art-host" />
                 <ui:ScrollView name="reward-detail-scroll" class="ps-reward-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
             </ui:VisualElement>

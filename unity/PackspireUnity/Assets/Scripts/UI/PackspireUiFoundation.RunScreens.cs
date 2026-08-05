@@ -22,7 +22,7 @@ public sealed partial class PackspireUiFoundation {
   for(int i=0;i<choices.Length;i++){
    int choiceIndex=i;
    var choice=choices[i];
-   choiceHost.Add(Choice(choice.label,EffectSummary(choice),()=>game.UiResolveEvent(choiceIndex)));
+   choiceHost.Add(Choice(i,choice.label,EffectSummary(choice),()=>game.UiResolveEvent(choiceIndex)));
   }
  }
  static string EffectSummary(EventChoiceContent choice){
@@ -35,9 +35,12 @@ public sealed partial class PackspireUiFoundation {
   }
   return string.Join("　／　",parts);
  }
- VisualElement Choice(string title,string description,System.Action action){
+ VisualElement Choice(int index,string title,string description,System.Action action){
   var button=PackspireUiFactory.Card(title,description,action);
   button.AddToClassList("ps-event-choice");
+  var number=new Label($"{index+1:00}"){pickingMode=PickingMode.Ignore};
+  number.AddToClassList("ps-event-choice-index");
+  button.Insert(0,number);
   return button;
  }
 }

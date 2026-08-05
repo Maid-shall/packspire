@@ -2,22 +2,42 @@
     <ui:VisualElement name="heirloom-background" class="ps-layer-background" picking-mode="Ignore">
         <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
     </ui:VisualElement>
-    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--heirloom" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--wax" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-layer-content">
+    <ui:VisualElement class="ps-heirloom-register-mark" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-heirloom-ledger-spine" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-layer-content ps-heirloom-layout">
         <ui:VisualElement name="heirloom-header" class="ps-mgmt-header ps-heirloom-header">
             <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="HEIRLOOM / RELIC" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="家宝" class="ps-misprint-header-title" picking-mode="Ignore" />
+                <ui:Label text="THE HEIRLOOM / LEGACY" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="家宝 / 継承" class="ps-misprint-header-title" picking-mode="Ignore" />
+                <ui:Label text="受け継がれた遺物は、配達人の痕跡と共に強化される。" class="ps-heirloom-header-note" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:VisualElement name="heirloom-slot-host" class="ps-heirloom-slot-host" />
         </ui:VisualElement>
+
         <ui:VisualElement class="ps-heirloom-body">
             <ui:VisualElement name="heirloom-portrait-column" class="ps-heirloom-col-portrait">
+                <ui:VisualElement class="ps-heirloom-object-stage" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-heirloom-object-target" picking-mode="Ignore" />
+                    <ui:Label text="HEIRLOOM OBJECT / FRONT" class="ps-heirloom-object-caption" picking-mode="Ignore" />
+                </ui:VisualElement>
                 <ui:VisualElement name="heirloom-portrait-host" class="ps-heirloom-portrait-host" />
+                <ui:VisualElement class="ps-heirloom-provenance-label" picking-mode="Ignore">
+                    <ui:Label text="来歴 / 所有者の記録" class="ps-heirloom-provenance-title" picking-mode="Ignore" />
+                    <ui:Label text="PROVENANCE / RECORD" class="ps-heirloom-provenance-en" picking-mode="Ignore" />
+                </ui:VisualElement>
             </ui:VisualElement>
+
             <ui:VisualElement name="heirloom-growth-column" class="ps-heirloom-col-growth">
+                <ui:VisualElement class="ps-heirloom-dossier-head" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-heirloom-dossier-copy">
+                        <ui:Label text="継承記録" class="ps-heirloom-dossier-title" picking-mode="Ignore" />
+                        <ui:Label text="RESONANCE / INHERITANCE DOSSIER" class="ps-heirloom-dossier-en" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-heirloom-generation">
+                        <ui:Label text="GENERATION" class="ps-heirloom-generation-label" picking-mode="Ignore" />
+                        <ui:Label text="II" class="ps-heirloom-generation-value" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:ScrollView name="heirloom-growth-scroll" class="ps-heirloom-growth-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
                     <ui:VisualElement name="heirloom-growth-body" class="ps-heirloom-growth-body" />
                 </ui:ScrollView>

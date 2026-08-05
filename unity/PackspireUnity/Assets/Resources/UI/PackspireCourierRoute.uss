@@ -1,0 +1,566 @@
+.ps-courier-route-shell,
+.ps-courier-route {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-courier-route {
+    overflow: hidden;
+    color: rgb(229, 211, 173);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    background-color: rgb(5, 6, 6);
+}
+
+.ps-route-ledger-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-route-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-route-title-block {
+    position: absolute;
+    left: 26px;
+    top: 16px;
+    width: 500px;
+    height: 78px;
+    padding-left: 18px;
+    padding-right: 24px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-route-title-index {
+    width: 62px;
+    height: 52px;
+    margin-right: 14px;
+    font-size: 39px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-center;
+    color: rgb(193, 55, 40);
+    border-right-width: 1px;
+    border-right-color: rgba(193, 148, 81, 0.68);
+}
+
+.ps-route-title-copy {
+    width: 455px;
+    height: 56px;
+    justify-content: center;
+}
+
+.ps-route-title-eyebrow {
+    height: 13px;
+    font-size: 8px;
+    -unity-font-style: bold;
+    color: rgb(75, 202, 208);
+}
+
+.ps-route-title {
+    height: 31px;
+    font-size: 25px;
+    -unity-font-style: bold;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    color: rgb(243, 222, 179);
+}
+
+.ps-route-destination {
+    height: 16px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(190, 126, 71);
+}
+
+.ps-route-map-viewport {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgb(13, 13, 11);
+}
+
+.ps-route-map-content,
+.ps-route-map-ink,
+.ps-route-links,
+.ps-route-node-host {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2000px;
+    height: 720px;
+}
+
+.ps-route-map-content { transform-origin: 0 0; }
+
+.ps-route-map-ink {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-route-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: 1;
+    -unity-background-image-tint-color: rgb(180, 166, 137);
+}
+
+.ps-route-map-heading {
+    position: absolute;
+    left: 48px;
+    top: 105px;
+    width: 230px;
+    height: 60px;
+    padding-left: 14px;
+    padding-right: 16px;
+    justify-content: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-route-map-heading__title {
+    height: 26px;
+    font-size: 21px;
+    -unity-font-style: bold;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    color: rgb(237, 215, 173);
+}
+
+.ps-route-map-heading__meta { height: 13px; font-size: 8px; color: rgb(68, 199, 207); }
+.ps-route-map-heading__underline { position: absolute; left: -5px; bottom: 0; width: 128px; height: 10px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-proof-slash-v1"); -unity-background-scale-mode: stretch-to-fill; }
+
+.ps-route-map-watermark {
+    position: absolute;
+    left: 735px;
+    top: 58px;
+    width: 570px;
+    height: 570px;
+    opacity: 0.13;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-page-target-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-route-map-registration {
+    position: absolute;
+    width: 142px;
+    height: 142px;
+    opacity: 0.25;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-route-map-registration--a { left: 80px; top: 64px; }
+.ps-route-map-registration--b { left: 1778px; top: 522px; rotate: 180deg; }
+
+.ps-route-map-controls {
+    position: absolute;
+    left: 35px;
+    bottom: 24px;
+    width: 112px;
+    height: 36px;
+    padding: 3px 5px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-route-map-control {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    padding: 3px;
+    margin-right: 2px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-route-map-control:hover { background-color: rgba(55, 190, 196, 0.18); }
+.ps-route-map-control__icon { width: 24px; height: 24px; -unity-background-scale-mode: scale-to-fit; }
+.ps-route-map-control--focus .ps-route-map-control__icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1"); }
+.ps-route-map-control--fit .ps-route-map-control__icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-expedition-v1"); }
+.ps-route-map-zoom { width: 43px; height: 24px; font-size: 10px; color: rgb(83, 208, 215); -unity-text-align: middle-center; }
+
+.ps-route-link {
+    position: absolute;
+    height: 5px;
+    transform-origin: left center;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0.68;
+}
+
+.ps-route-link__stroke {
+    position: absolute;
+    left: 0;
+    top: -46px;
+    width: 100%;
+    height: 96px;
+    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-link-handdrawn-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(216, 199, 160);
+}
+
+.ps-route-link--available { opacity: 0.94; }
+.ps-route-link--available .ps-route-link__stroke { -unity-background-image-tint-color: rgb(55, 200, 209); scale: 1 1.08 1; }
+.ps-route-link--selected { opacity: 1; }
+.ps-route-link--selected .ps-route-link__stroke { -unity-background-image-tint-color: rgb(222, 55, 37); scale: 1 1.16 1; }
+.ps-route-link--resolved { opacity: 0.68; }
+.ps-route-link--resolved .ps-route-link__stroke { -unity-background-image-tint-color: rgb(188, 148, 79); }
+.ps-route-link--traveling { opacity: 1; }
+.ps-route-link--traveling .ps-route-link__stroke { -unity-background-image-tint-color: rgb(66, 216, 220); scale: 1 1.08 1; }
+
+.ps-route-link__arrow {
+    position: absolute;
+    right: -6px;
+    top: -5px;
+    width: 13px;
+    height: 13px;
+    rotate: 45deg;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(134, 111, 72);
+    border-right-color: rgb(134, 111, 72);
+    border-top-color: rgb(134, 111, 72);
+    border-bottom-color: rgb(134, 111, 72);
+    background-color: rgb(10, 11, 11);
+}
+
+.ps-route-link--available .ps-route-link__arrow { border-left-color: rgb(77, 224, 230); border-right-color: rgb(77, 224, 230); border-top-color: rgb(77, 224, 230); border-bottom-color: rgb(77, 224, 230); }
+.ps-route-link--selected .ps-route-link__arrow { border-left-color: rgb(239, 75, 52); border-right-color: rgb(239, 75, 52); border-top-color: rgb(239, 75, 52); border-bottom-color: rgb(239, 75, 52); background-color: rgb(77, 17, 12); }
+
+.ps-route-link--dispatch-to-ash_market { left: 140px; top: 630px; width: 241px; rotate: -41.6deg; }
+.ps-route-link--dispatch-to-broken_stair { left: 140px; top: 630px; width: 184px; rotate: 12.5deg; }
+.ps-route-link--ash_market-to-quiet_shaft { left: 320px; top: 470px; width: 228px; rotate: -37.9deg; }
+.ps-route-link--ash_market-to-bell_bridge { left: 320px; top: 470px; width: 206px; rotate: 29.1deg; }
+.ps-route-link--broken_stair-to-bell_bridge { left: 320px; top: 670px; width: 206px; rotate: -29.1deg; }
+.ps-route-link--quiet_shaft-to-cinder_tunnel { left: 500px; top: 330px; width: 206px; rotate: -29.1deg; }
+.ps-route-link--bell_bridge-to-cinder_tunnel { left: 500px; top: 570px; width: 385px; rotate: -62.1deg; }
+.ps-route-link--bell_bridge-to-sealed_gate { left: 500px; top: 570px; width: 197px; rotate: -24deg; }
+.ps-route-link--cinder_tunnel-to-reliquary_post { left: 680px; top: 230px; width: 193px; rotate: -21.3deg; }
+.ps-route-link--cinder_tunnel-to-gallows_square { left: 680px; top: 230px; width: 255px; rotate: 45deg; }
+.ps-route-link--sealed_gate-to-gallows_square { left: 680px; top: 490px; width: 197px; rotate: -24deg; }
+.ps-route-link--reliquary_post-to-drowned_archive { left: 860px; top: 160px; width: 206px; rotate: 29.1deg; }
+.ps-route-link--gallows_square-to-drowned_archive { left: 860px; top: 410px; width: 234px; rotate: -39.8deg; }
+.ps-route-link--gallows_square-to-silent_causeway { left: 860px; top: 410px; width: 228px; rotate: 37.9deg; }
+.ps-route-link--drowned_archive-to-ash_hospital { left: 1040px; top: 260px; width: 211px; rotate: -31.4deg; }
+.ps-route-link--drowned_archive-to-condemned_station { left: 1040px; top: 260px; width: 255px; rotate: 45deg; }
+.ps-route-link--silent_causeway-to-condemned_station { left: 1040px; top: 550px; width: 211px; rotate: -31.4deg; }
+.ps-route-link--ash_hospital-to-glass_aqueduct { left: 1220px; top: 150px; width: 211px; rotate: 31.4deg; }
+.ps-route-link--condemned_station-to-glass_aqueduct { left: 1220px; top: 440px; width: 255px; rotate: -45deg; }
+.ps-route-link--condemned_station-to-infernal_customs { left: 1220px; top: 440px; width: 228px; rotate: 37.9deg; }
+.ps-route-link--glass_aqueduct-to-courier_catacomb { left: 1400px; top: 260px; width: 211px; rotate: -31.4deg; }
+.ps-route-link--glass_aqueduct-to-black_bell_yard { left: 1400px; top: 260px; width: 248px; rotate: 43.4deg; }
+.ps-route-link--infernal_customs-to-black_bell_yard { left: 1400px; top: 580px; width: 234px; rotate: -39.8deg; }
+.ps-route-link--courier_catacomb-to-final_relay { left: 1580px; top: 150px; width: 201px; rotate: 26.6deg; }
+.ps-route-link--black_bell_yard-to-final_relay { left: 1580px; top: 430px; width: 262px; rotate: -46.5deg; }
+.ps-route-link--black_bell_yard-to-pursuer_gate { left: 1580px; top: 430px; width: 222px; rotate: 35.8deg; }
+.ps-route-link--final_relay-to-destination { left: 1760px; top: 240px; width: 193px; rotate: -21.3deg; }
+.ps-route-link--pursuer_gate-to-destination { left: 1760px; top: 560px; width: 430px; rotate: -65.2deg; }
+
+.ps-route-node {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    min-height: 100px;
+    padding: 0;
+    align-items: center;
+    color: rgb(224, 205, 166);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    opacity: 0.43;
+}
+
+.ps-route-node__phase { position: absolute; left: -4px; top: 2px; width: 31px; height: 20px; font-size: 11px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(195, 153, 84); }
+.ps-route-node__medallion { position: absolute; left: 10px; top: -4px; width: 80px; height: 80px; align-items: center; justify-content: center; background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-stamp-v1"); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(166, 137, 89); }
+.ps-route-node__stamp--start { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-start-stamp-v1"); -unity-background-image-tint-color: rgb(205, 177, 121); }
+.ps-route-node__stamp--relay { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-relay-stamp-v1"); -unity-background-image-tint-color: rgb(68, 190, 194); }
+.ps-route-node__stamp--pursuit { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-pursuit-stamp-v1"); -unity-background-image-tint-color: rgb(199, 66, 49); }
+.ps-route-node__stamp--cargo { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-cargo-stamp-v1"); -unity-background-image-tint-color: rgb(204, 151, 64); }
+.ps-route-node__stamp--event { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-event-stamp-v1"); -unity-background-image-tint-color: rgb(151, 104, 174); }
+.ps-route-node__stamp--destination { background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-destination-stamp-v1"); -unity-background-image-tint-color: rgb(229, 210, 167); }
+.ps-route-node__unknown { width: 50px; height: 50px; font-size: 24px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(175, 149, 104); }
+.ps-route-node__title { display: none; position: absolute; left: -23px; top: 69px; width: 146px; height: 27px; padding-left: 7px; padding-right: 7px; font-size: 14px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(246, 225, 184); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1"); -unity-background-scale-mode: stretch-to-fill; overflow: hidden; }
+.ps-route-node__kind { display: none; position: absolute; left: -11px; top: 95px; width: 122px; height: 18px; font-size: 10px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(74, 203, 211); }
+.ps-route-node--unknown .ps-route-node__medallion { left: 17px; top: 2px; width: 66px; height: 66px; background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-stamp-v1"); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(125, 105, 72); }
+.ps-route-node.ps-resolved { opacity: 0.58; }
+.ps-route-node.ps-available,
+.ps-route-node.ps-current,
+.ps-route-node.ps-selected { opacity: 1; }
+.ps-route-node:disabled { opacity: 0.26; }
+.ps-route-node.ps-resolved:disabled { opacity: 0.58; }
+.ps-route-node.ps-current:disabled { opacity: 1; }
+.ps-route-node.ps-available .ps-route-node__title,
+.ps-route-node.ps-current .ps-route-node__title,
+.ps-route-node.ps-selected .ps-route-node__title,
+.ps-route-node.ps-available .ps-route-node__kind,
+.ps-route-node.ps-current .ps-route-node__kind,
+.ps-route-node.ps-selected .ps-route-node__kind { display: flex; }
+.ps-route-node.ps-available .ps-route-node__medallion,
+.ps-route-node.ps-current .ps-route-node__medallion { scale: 1.05 1.05 1; }
+.ps-route-node.ps-available:hover .ps-route-node__medallion { scale: 1.12 1.12 1; }
+.ps-route-node.ps-selected .ps-route-node__medallion { scale: 1.14 1.14 1; }
+.ps-route-node.ps-selected .ps-route-node__kind { color: rgb(241, 92, 65); }
+.ps-route-node.ps-travel-target .ps-route-node__medallion { scale: 1.12 1.12 1; }
+.ps-route-node.ps-travel-target .ps-route-node__kind { color: rgb(72, 214, 219); }
+.ps-route-node__current-marker { position: absolute; right: -7px; top: -8px; width: 37px; height: 37px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1"); -unity-background-scale-mode: scale-to-fit; }
+
+.ps-route-courier-position {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: visible;
+}
+.ps-route-courier-position.ps-visible { display: flex; }
+.ps-route-traveling .ps-route-courier-position,
+.ps-route-courier-position.ps-route-courier-position--traveling {
+    display: flex;
+    opacity: 1;
+}
+.ps-route-courier-marker {
+    display: flex;
+    position: absolute;
+    left: -54px;
+    top: -96px;
+    width: 108px;
+    height: 112px;
+    transform-origin: center bottom;
+}
+.ps-route-courier-marker.ps-route-courier-marker--traveling {
+    opacity: 1;
+    scale: 1.12 1.12;
+}
+.ps-route-courier-marker--traveling .ps-route-courier-marker__sprite { display: flex; opacity: 1; }
+.ps-route-courier-marker--traveling .ps-route-courier-marker__ground { opacity: 1; -unity-background-image-tint-color: rgb(85, 231, 233); }
+.ps-route-courier-marker--traveling .ps-route-courier-marker__tag { display: flex; opacity: 1; }
+.ps-route-courier-marker__ground {
+    position: absolute;
+    left: 24px;
+    bottom: 2px;
+    width: 60px;
+    height: 24px;
+    opacity: 0.82;
+    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-stamp-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(62, 213, 218);
+}
+.ps-route-courier-marker__sprite {
+    display: none;
+    position: absolute;
+    left: 9px;
+    bottom: 7px;
+    width: 90px;
+    height: 104px;
+}
+.ps-route-courier-marker--animated .ps-route-courier-marker__sprite { display: flex; }
+.ps-route-courier-marker__fallback {
+    position: absolute;
+    left: 17px;
+    bottom: 7px;
+    width: 74px;
+    height: 101px;
+    overflow: hidden;
+}
+.ps-route-courier-marker--animated .ps-route-courier-marker__fallback { display: none; }
+.ps-route-courier-marker__fallback-image { width: 74px; height: 101px; -unity-background-scale-mode: scale-to-fit; }
+.ps-route-courier-marker--left .ps-route-courier-marker__sprite,
+.ps-route-courier-marker--left .ps-route-courier-marker__fallback { scale: -1 1 1; }
+.ps-route-courier-marker__tag {
+    position: absolute;
+    left: 76px;
+    top: 24px;
+    min-width: 88px;
+    height: 39px;
+    padding: 5px 9px 4px 10px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-route-courier-marker__label { height: 17px; font-size: 10px; -unity-font-style: bold; color: rgb(244, 225, 184); white-space: nowrap; }
+.ps-route-courier-marker__days { height: 8px; flex-direction: row; align-items: center; }
+.ps-route-courier-marker__day { width: 8px; height: 3px; margin-right: 3px; background-color: rgb(222, 207, 170); }
+.ps-route-courier-marker__day.ps-spent { background-color: rgb(60, 207, 214); }
+.ps-route-traveling .ps-route-node-detail { display: none; }
+
+.ps-route-node--phase-0 { left: 90px; top: 580px; }
+.ps-route-node--phase-1 { left: 270px; }
+.ps-route-node--phase-2 { left: 450px; }
+.ps-route-node--phase-3 { left: 630px; }
+.ps-route-node--phase-4 { left: 810px; }
+.ps-route-node--phase-5 { left: 990px; }
+.ps-route-node--phase-6 { left: 1170px; }
+.ps-route-node--phase-7 { left: 1350px; }
+.ps-route-node--phase-8 { left: 1530px; }
+.ps-route-node--phase-9 { left: 1710px; }
+.ps-route-node--phase-10 { left: 1890px; top: 120px; }
+.ps-route-node--phase-1.ps-route-node--lane-0 { top: 420px; }
+.ps-route-node--phase-1.ps-route-node--lane-1 { top: 620px; }
+.ps-route-node--phase-2.ps-route-node--lane-0 { top: 280px; }
+.ps-route-node--phase-2.ps-route-node--lane-1 { top: 520px; }
+.ps-route-node--phase-3.ps-route-node--lane-0 { top: 180px; }
+.ps-route-node--phase-3.ps-route-node--lane-1 { top: 440px; }
+.ps-route-node--phase-4.ps-route-node--lane-0 { top: 110px; }
+.ps-route-node--phase-4.ps-route-node--lane-1 { top: 360px; }
+.ps-route-node--phase-5.ps-route-node--lane-0 { top: 210px; }
+.ps-route-node--phase-5.ps-route-node--lane-1 { top: 500px; }
+.ps-route-node--phase-6.ps-route-node--lane-0 { top: 100px; }
+.ps-route-node--phase-6.ps-route-node--lane-1 { top: 390px; }
+.ps-route-node--phase-7.ps-route-node--lane-0 { top: 210px; }
+.ps-route-node--phase-7.ps-route-node--lane-1 { top: 530px; }
+.ps-route-node--phase-8.ps-route-node--lane-0 { top: 100px; }
+.ps-route-node--phase-8.ps-route-node--lane-1 { top: 380px; }
+.ps-route-node--phase-9.ps-route-node--lane-0 { top: 190px; }
+.ps-route-node--phase-9.ps-route-node--lane-1 { top: 510px; }
+
+.ps-route-node-detail {
+    display: none;
+    position: absolute;
+    left: 175px;
+    top: 450px;
+    width: 350px;
+    height: 238px;
+    padding: 24px 32px 20px 46px;
+    overflow: hidden;
+    color: rgb(49, 36, 26);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 32;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    -unity-slice-scale: 1px;
+}
+.ps-route-node-detail.ps-visible { display: flex; }
+.ps-route-node-detail--phase-0 { left: 175px; top: 450px; }
+.ps-route-node-detail--phase-1 { left: 365px; }
+.ps-route-node-detail--phase-2 { left: 545px; }
+.ps-route-node-detail--phase-3 { left: 725px; }
+.ps-route-node-detail--phase-4 { left: 905px; }
+.ps-route-node-detail--phase-5 { left: 1085px; }
+.ps-route-node-detail--phase-6 { left: 1265px; }
+.ps-route-node-detail--phase-7 { left: 1445px; }
+.ps-route-node-detail--phase-8 { left: 1250px; }
+.ps-route-node-detail--phase-9 { left: 1430px; }
+.ps-route-node-detail--phase-10 { left: 1610px; top: 85px; }
+.ps-route-node-detail--phase-1.ps-route-node-detail--lane-0 { top: 385px; }
+.ps-route-node-detail--phase-1.ps-route-node-detail--lane-1 { top: 470px; }
+.ps-route-node-detail--phase-2.ps-route-node-detail--lane-0 { top: 245px; }
+.ps-route-node-detail--phase-2.ps-route-node-detail--lane-1 { top: 420px; }
+.ps-route-node-detail--phase-3.ps-route-node-detail--lane-0 { top: 145px; }
+.ps-route-node-detail--phase-3.ps-route-node-detail--lane-1 { top: 340px; }
+.ps-route-node-detail--phase-4.ps-route-node-detail--lane-0 { top: 75px; }
+.ps-route-node-detail--phase-4.ps-route-node-detail--lane-1 { top: 260px; }
+.ps-route-node-detail--phase-5.ps-route-node-detail--lane-0 { top: 175px; }
+.ps-route-node-detail--phase-5.ps-route-node-detail--lane-1 { top: 400px; }
+.ps-route-node-detail--phase-6.ps-route-node-detail--lane-0 { top: 65px; }
+.ps-route-node-detail--phase-6.ps-route-node-detail--lane-1 { top: 290px; }
+.ps-route-node-detail--phase-7.ps-route-node-detail--lane-0 { top: 175px; }
+.ps-route-node-detail--phase-7.ps-route-node-detail--lane-1 { top: 430px; }
+.ps-route-node-detail--phase-8.ps-route-node-detail--lane-0 { top: 65px; }
+.ps-route-node-detail--phase-8.ps-route-node-detail--lane-1 { top: 280px; }
+.ps-route-node-detail--phase-9.ps-route-node-detail--lane-0 { top: 155px; }
+.ps-route-node-detail--phase-9.ps-route-node-detail--lane-1 { top: 410px; }
+.ps-route-node-detail__wax { position: absolute; right: 14px; top: 8px; width: 34px; height: 34px; opacity: 0.72; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1"); -unity-background-scale-mode: scale-to-fit; }
+.ps-route-node-detail__content { width: 272px; height: 194px; }
+.ps-route-detail-eyebrow { width: 198px; height: 14px; font-size: 8px; -unity-font-style: bold; color: rgb(129, 49, 37); }
+.ps-route-dossier-title { width: 238px; height: 34px; font-size: 22px; -unity-font-style: bold; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); color: rgb(42, 31, 23); overflow: hidden; }
+.ps-route-dossier-subtitle { width: 272px; height: 18px; font-size: 10px; -unity-font-style: bold; color: rgb(105, 66, 40); overflow: hidden; }
+.ps-route-dossier-rule { height: 1px; margin-top: 2px; margin-bottom: 3px; background-color: rgba(119, 66, 42, 0.62); }
+.ps-route-detail-row { height: 21px; flex-direction: row; align-items: center; border-bottom-width: 1px; border-bottom-color: rgba(119, 83, 55, 0.24); }
+.ps-route-detail-key { width: 72px; font-size: 9px; -unity-font-style: bold; color: rgb(128, 63, 43); }
+.ps-route-detail-value { width: 198px; font-size: 10px; -unity-font-style: bold; color: rgb(45, 35, 27); overflow: hidden; }
+.ps-route-detail-section { height: 18px; margin-top: 3px; font-size: 9px; -unity-font-style: bold; color: rgb(132, 48, 37); }
+.ps-route-detail-body { width: 272px; height: 42px; font-size: 10px; -unity-font-style: bold; white-space: normal; color: rgb(53, 40, 30); overflow: hidden; }
+.ps-route-detail-confirm { position: absolute; right: 2px; bottom: -1px; height: 14px; font-size: 8px; -unity-font-style: bold; color: rgb(143, 48, 36); }
+
+.ps-route-seal-drawer {
+    position: absolute;
+    right: 0;
+    top: 98px;
+    width: 218px;
+    height: 548px;
+    padding: 16px 18px 17px 30px;
+    translate: 218px 0;
+    overflow: visible;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-left-width: 1px;
+    border-left-color: rgba(190, 145, 77, 0.72);
+    transition-property: translate;
+    transition-duration: 0.16s;
+}
+.ps-seal-drawer-open .ps-route-seal-drawer { translate: 0 0; }
+.ps-route-seal-drawer__toggle { position: absolute; left: -36px; top: 104px; width: 36px; height: 154px; padding: 8px 4px; align-items: center; justify-content: center; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1"); -unity-background-scale-mode: stretch-to-fill; border-left-width: 1px; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(211, 177, 113, 0.78); border-top-color: rgba(211, 177, 113, 0.78); border-bottom-color: rgba(211, 177, 113, 0.78); }
+.ps-route-seal-drawer__toggle-mark { width: 24px; height: 24px; margin-bottom: 7px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1"); -unity-background-scale-mode: scale-to-fit; }
+.ps-route-seal-drawer__toggle-label { width: 20px; font-size: 11px; -unity-font-style: bold; white-space: normal; -unity-text-align: middle-center; color: rgb(238, 216, 174); }
+.ps-route-seal-ledger__heading { width: 166px; height: 38px; padding-left: 7px; border-bottom-width: 1px; border-bottom-color: rgba(184, 142, 77, 0.55); }
+.ps-route-seal-ledger__title { height: 22px; font-size: 15px; -unity-font-style: bold; color: rgb(235, 214, 174); }
+.ps-route-seal-ledger__english { height: 11px; font-size: 7px; color: rgb(69, 198, 206); }
+.ps-route-seal-arrow { width: 166px; min-width: 166px; height: 20px; padding: 0; font-size: 17px; color: rgb(210, 179, 123); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgba(0, 0, 0, 0); }
+.ps-route-seal-arrow:hover { color: rgb(79, 218, 224); }
+.ps-route-seal-scroll { width: 166px; height: 336px; }
+.ps-route-seal-host { width: 166px; align-items: center; padding-top: 2px; }
+.ps-route-protocol { position: relative; width: 152px; min-width: 152px; height: 80px; min-height: 80px; margin-bottom: 3px; padding: 0; color: rgb(229, 207, 166); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: rgba(0, 0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; }
+.ps-route-protocol:hover { color: rgb(246, 224, 181); translate: -2px 0; }
+.ps-route-protocol.ps-selected { translate: -3px 0; }
+.ps-route-protocol.ps-spent { opacity: 0.42; }
+.ps-route-protocol__mark { position: absolute; left: 7px; top: 7px; width: 64px; height: 64px; align-items: center; justify-content: center; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1"); -unity-background-scale-mode: scale-to-fit; }
+.ps-route-protocol:hover .ps-route-protocol__mark,
+.ps-route-protocol.ps-selected .ps-route-protocol__mark { scale: 1.07 1.07 1; }
+.ps-route-protocol__icon { width: 31px; height: 31px; -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(236, 210, 166); }
+.ps-route-protocol__icon--route { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-expedition-v1"); }
+.ps-route-protocol__icon--delay { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-event-v1"); }
+.ps-route-protocol__icon--seal { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-status-v1"); }
+.ps-route-protocol__name { position: absolute; left: 72px; top: 17px; width: 72px; height: 22px; font-size: 11px; -unity-font-style: bold; overflow: hidden; }
+.ps-route-protocol__charge { position: absolute; left: 72px; top: 43px; width: 72px; height: 17px; font-size: 9px; -unity-font-style: bold; color: rgb(68, 195, 202); }
+.ps-route-protocol__selection { display: none; position: absolute; left: 2px; top: 2px; width: 74px; height: 74px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1"); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(211, 62, 42); }
+.ps-route-protocol.ps-selected .ps-route-protocol__selection { display: flex; }
+.ps-route-seal-detail { width: 166px; height: 91px; padding: 8px 9px 6px 9px; border-top-width: 1px; border-top-color: rgba(183, 141, 76, 0.52); }
+.ps-route-seal-detail__name { height: 20px; font-size: 12px; -unity-font-style: bold; color: rgb(238, 216, 174); overflow: hidden; }
+.ps-route-seal-detail__effect { height: 35px; font-size: 8px; white-space: normal; color: rgb(191, 174, 143); overflow: hidden; }
+.ps-route-seal-apply { display: none; align-self: flex-end; width: 92px; height: 26px; padding: 0 8px; font-size: 9px; -unity-font-style: bold; color: rgb(239, 215, 171); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1"); -unity-background-scale-mode: stretch-to-fill; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; }
+.ps-route-seal-apply.ps-visible { display: flex; }
+.ps-route-seal-apply:disabled { opacity: 0.36; }
+
+.ps-route-status-strip { position: absolute; right: 96px; top: 16px; width: 430px; height: 64px; padding: 5px 10px; flex-direction: row; align-items: center; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1"); -unity-background-scale-mode: stretch-to-fill; border-bottom-width: 1px; border-bottom-color: rgba(214, 174, 104, 0.72); }
+.ps-route-status-portrait { width: 52px; height: 52px; margin-right: 10px; padding: 4px; overflow: hidden; background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-stamp-v1"); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(208, 170, 98); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; }
+.ps-route-status-portrait-image { width: 44px; height: 44px; -unity-background-scale-mode: scale-and-crop; }
+.ps-route-status { height: 50px; padding: 3px 11px; border-right-width: 1px; border-right-color: rgba(162, 124, 67, 0.3); justify-content: center; }
+.ps-route-status--hp { width: 126px; }
+.ps-route-status--recovered { width: 78px; flex-direction: row; align-items: center; }
+.ps-route-status--deadline { width: 150px; border-right-width: 0; }
+.ps-route-status--recovered.ps-hidden { display: none; }
+.ps-route-status-key { width: 29px; font-size: 8px; -unity-font-style: bold; color: rgb(200, 164, 102); }
+.ps-route-status-value { height: 26px; font-size: 18px; -unity-font-style: bold; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); color: rgb(246, 226, 184); }
+.ps-route-status-value--days { height: 25px; font-size: 18px; color: rgb(241, 220, 178); }
+.ps-route-hp-bar { width: 106px; height: 5px; }
+.ps-route-hp-bar .unity-progress-bar__background { background-color: rgb(24, 22, 20); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(111, 89, 54); border-right-color: rgb(111, 89, 54); border-top-color: rgb(111, 89, 54); border-bottom-color: rgb(111, 89, 54); }
+.ps-route-hp-bar .unity-progress-bar__progress { background-color: rgb(196, 48, 59); }
+.ps-route-hp-bar .unity-progress-bar__title { display: none; }
+.ps-route-deadline-meter { width: 130px; height: 8px; flex-direction: row; align-items: center; }
+.ps-route-deadline-segment { width: 5px; height: 6px; margin-right: 2px; background-color: rgb(198, 184, 153); }
+.ps-route-deadline-segment.ps-expired { background-color: rgb(57, 55, 50); }
+.ps-route-deadline-segment.ps-warning { background-color: rgb(187, 56, 42); }
+
+.ps-route-relay-pack { display: none; position: absolute; left: 36px; bottom: 72px; width: 158px; height: 36px; padding: 4px 10px; font-size: 10px; -unity-font-style: bold; white-space: normal; color: rgb(54, 42, 30); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-event-choice-v1"); -unity-background-scale-mode: stretch-to-fill; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; -unity-text-align: middle-center; }
+.ps-route-relay-pack.ps-visible { display: flex; }
+.ps-route-finish { display: none; position: absolute; right: 42px; bottom: 28px; width: 210px; height: 56px; padding: 8px 28px; font-size: 14px; -unity-font-style: bold; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); color: rgb(238, 214, 172); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1"); -unity-background-scale-mode: stretch-to-fill; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; -unity-text-align: middle-center; }
+.ps-route-finish.ps-visible { display: flex; }
+.ps-route-finish:hover { color: rgb(244, 226, 190); scale: 1.015 1.015 1; }

@@ -107,12 +107,12 @@ public sealed partial class PackspireUiFoundation {
   var run=game.UiRun;
   var battle=game.UiBattle;
   if(run==null||battle?.enemy==null||battle.enemy.damages==null||battle.enemy.damages.Length==0)return false;
-  var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
+  var dungeon=game.UiCurrentDungeon;
   int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
   int baseDamage=battle.enemy.damages[moveIndex];
   int pressure=GridBoardSystem.EnemyDamageBonus(game.UiGridBoard);
   rawDamage=baseDamage>0
-   ?BattleSystem.Damage(baseDamage+dungeon.damage+pressure,battle.enemyStatuses,run.statuses)
+   ?BattleSystem.Damage(baseDamage+(dungeon?.damage??0)+pressure,battle.enemyStatuses,run.statuses)
    :0;
   var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
   specialMove=baseDamage==0||move!=null&&move.kind!=EnemyMoveKind.Attack;

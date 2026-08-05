@@ -276,7 +276,7 @@ public sealed partial class PackspireUiFoundation {
    BuildCompendiumTwoPageRecord(
    "EQUIPMENT ORIGIN",item.name,
    new List<CompendiumEntry>(),
-   VaultItemArt(item.id,"ps-codex-v4-flavor-art-image"),
+   VaultItemDisplayArt(item.id,"ps-codex-v4-flavor-art-image"),
    string.IsNullOrEmpty(item.description)
      ?$"{item.name}について、遠征者が持ち帰った断片的な記録が残されている。"
      :item.description,
@@ -288,7 +288,7 @@ public sealed partial class PackspireUiFoundation {
 
   SetCompendiumRecordMode(true);
   compendiumItemArtHost.Clear();
-  compendiumItemArtHost.Add(VaultItemArt(item.id,"ps-codex-item-art-image"));
+  compendiumItemArtHost.Add(VaultItemDisplayArt(item.id,"ps-codex-item-art-image"));
   compendiumItemMeta.text=$"RANK {item.rarity} / {ItemTypeLabel(item.type)}";
   compendiumItemName.text=item.name;
   compendiumItemDescription.text=string.IsNullOrEmpty(item.description)

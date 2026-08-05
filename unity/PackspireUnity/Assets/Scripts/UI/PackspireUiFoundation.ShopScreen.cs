@@ -94,8 +94,9 @@ public sealed partial class PackspireUiFoundation {
   shopDetailHost=RequireViewElement<VisualElement>(shopShell,"shop-detail-host");
   shopDetailScroll=RequireViewElement<ScrollView>(shopShell,"shop-detail-scroll");
   shopDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
+  var transactionCol=RequireViewElement<VisualElement>(shopShell,"shop-transaction-column");
   shopMerchantTransactionLayer.RemoveFromHierarchy();
-  detailCol.Add(shopMerchantTransactionLayer);
+  transactionCol.Add(shopMerchantTransactionLayer);
   screenRoot.Add(shopShell);
 
   ApplyShopMerchantPresentation();
@@ -149,10 +150,6 @@ public sealed partial class PackspireUiFoundation {
   shopMerchantScene.Add(shopMerchantCounterLayer);
 
   shopMerchantTransactionLayer=Container("ps-shop-merchant-transaction-layer");
-  shopMerchantTransactionLayer.Add(PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ShopPrice,
-   "ps-management-v6-bg ps-shop-price-paper"
-  ));
   shopSelectedNameLabel=new Label(){pickingMode=PickingMode.Ignore};
   shopSelectedNameLabel.AddToClassList("ps-shop-tx-name");
   shopMerchantTransactionLayer.Add(shopSelectedNameLabel);
@@ -170,10 +167,6 @@ public sealed partial class PackspireUiFoundation {
   shopBuyButton.AddToClassList("ps-primary-action");
   shopBuyButton.AddToClassList("ps-chrome-action");
   shopBuyButton.AddToClassList("ps-shop-buy-btn");
-  shopBuyButton.Insert(0,PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ShopBuy,
-   "ps-management-v6-bg ps-shop-buy-art"
-  ));
   actions.Add(shopBuyButton);
   shopLeaveButton=PackspireUiFactory.Button("地図へ戻る",()=>{
    if(shopPreviewMode)CloseShopPreview();
@@ -181,7 +174,6 @@ public sealed partial class PackspireUiFoundation {
   });
   shopLeaveButton.AddToClassList("ps-chrome-action");
   shopLeaveButton.AddToClassList("ps-shop-leave-btn");
-  PackspireUiFactory.DecorateActionButton(shopLeaveButton,false);
   actions.Add(shopLeaveButton);
   shopMerchantTransactionLayer.Add(actions);
   shopFutureMerchantActionLayer=Container("ps-shop-future-merchant-actions");
@@ -389,7 +381,7 @@ public sealed partial class PackspireUiFoundation {
   shopDetailScroll.Add(ShopDetailBlock("ランク / 価格",$"STANDARD　{ShopItemPrice(item):N0}G"));
   var artFrame=Container("ps-shop-detail-art");
   artFrame.pickingMode=PickingMode.Ignore;
-  artFrame.Add(Atlas(game.UiEquipmentArt,ItemUv(selectedShopId),"ps-shop-detail-image"));
+  artFrame.Add(VaultItemDisplayArt(selectedShopId,"ps-shop-detail-image"));
   shopDetailScroll.Add(artFrame);
   shopDetailScroll.Add(ShopDetailBlock("種類",ItemTypeLabel(item.type)));
   if(item.cells!=null&&item.cells.Length>0){

@@ -34,6 +34,7 @@ public sealed partial class PackspireUiFoundation {
    case ScreenId.Faction: BuildFaction(); break;
    case ScreenId.Expedition: BuildExpedition(); break;
    case ScreenId.Pack: BuildPacking(); break;
+   case ScreenId.Route: BuildCourierRoute(); break;
    case ScreenId.GridBoard: BuildGridBoard(); break;
    case ScreenId.Battle: BuildBattle(); break;
    case ScreenId.Reward: BuildReward(); break;

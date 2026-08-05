@@ -241,7 +241,7 @@ public sealed partial class PackspireUiFoundation {
   var run=game.UiRun;
   var battle=game.UiBattle;
   if(run==null||battle==null)return;
-  var dungeon=GameCatalog.Dungeons.First(x=>x.id==run.dungeon);
+  var dungeon=game.UiCurrentDungeon;
 
   if(PackspireGame.LockBattleShowcaseArt)
    battlePlayerName.text=CharacterCatalog.Get("sena").name;
@@ -279,7 +279,7 @@ public sealed partial class PackspireUiFoundation {
   }
   int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
   int baseDamage=battle.enemy.damages[moveIndex];
-  int rawIntent=baseDamage>0?BattleSystem.Damage(baseDamage+dungeon.damage,battle.enemyStatuses,run.statuses):0;
+  int rawIntent=baseDamage>0?BattleSystem.Damage(baseDamage+(dungeon?.damage??0),battle.enemyStatuses,run.statuses):0;
   var authoredMove=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
   var moveEffects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
   RefreshBattleIntent(rawIntent,baseDamage==0,run.block,moveEffects,authoredMove);
@@ -416,56 +416,17 @@ public sealed partial class PackspireUiFoundation {
 
  void PopulateBattleCard(VisualElement slot,CardInstance card,RunState run,bool affordable){
   ApplyBattleCardPresentation(slot,card,run);
-  var illustration=Container("ps-battle-card-art");
   var sourceItem=run.inventory.FirstOrDefault(x=>x.uid==card.sourceItemUid);
-  if(GameCatalog.Cards.TryGetValue(card.id,out var authoredCard)&&authoredCard.artwork!=null){
-   var art=new Image{sprite=authoredCard.artwork,scaleMode=ScaleMode.ScaleAndCrop,pickingMode=PickingMode.Ignore};
-   art.AddToClassList("ps-battle-card-art-image");
-   illustration.Add(art);
-  } else if(sourceItem!=null)
-   illustration.Add(Atlas(game.UiEquipmentArt,ItemUv(sourceItem.templateId),"ps-battle-card-art-image"));
-  else if(!string.IsNullOrEmpty(run.role))
-   illustration.Add(Atlas(game.UiRoleArt,RoleUv(run.role),"ps-battle-card-art-image"));
-  if(!affordable)illustration.AddToClassList("ps-battle-card-art-disabled");
-  slot.Add(illustration);
-  // The cost crest is part of the frame and intentionally overlaps the art.
-  // Add it after the illustration so the art can never cover the number.
-  var cost=new Label(card.cost.ToString()){pickingMode=PickingMode.Ignore};
-  cost.AddToClassList("ps-battle-card-cost");
-  slot.Add(cost);
-  var name=new Label(card.name){pickingMode=PickingMode.Ignore};
-  name.AddToClassList("ps-battle-card-name");
-  slot.Add(name);
-  var body=new Label(BattleCardDisplayTextWithKeywords(card)){pickingMode=PickingMode.Ignore};
-  body.AddToClassList("ps-battle-card-text");
-  slot.Add(body);
-  string formula=DemonCardDiceFormula(card);
-  if(!string.IsNullOrEmpty(formula)){
-   slot.AddToClassList("ps-demon-card-has-formula");
-   var formulaLabel=new Label(formula){pickingMode=PickingMode.Ignore};
-   formulaLabel.AddToClassList("ps-demon-card-formula");
-   slot.Add(formulaLabel);
-  }
+  string formula=DocketDiceFormula(card);
   string sourceName=card.source;
   if(sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var itemDef))sourceName=itemDef.name;
-  var foot=Container("ps-battle-card-foot");
-  var source=new Label(sourceName){pickingMode=PickingMode.Ignore};
-  source.AddToClassList("ps-battle-card-source");
-  foot.Add(source);
   int maximumDurability=sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var durabilityItem)
    ?durabilityItem.baseDurability:6;
   string durability=sourceItem!=null?$"DUR {sourceItem.durability}/{maximumDurability}":card.roleCard?"ROLE":"BASIC";
-  var dur=new Label(durability){pickingMode=PickingMode.Ignore};
-  dur.AddToClassList("ps-battle-card-durability");
-  if(sourceItem!=null&&sourceItem.durability<=1)dur.AddToClassList("ps-battle-card-durability-low");
-  foot.Add(dur);
-  slot.Add(foot);
-  if(!affordable){
-   var lockLabel=new Label("LOW EN"){pickingMode=PickingMode.Ignore};
-   lockLabel.AddToClassList("ps-battle-card-lock");
-   slot.Add(lockLabel);
-  }
-  AddBattleDemonCardOverlay(slot,card,run);
+  PopulateDocketCard(
+   slot,card,BattleCardDisplayTextWithKeywords(card),sourceName,durability,
+   formula,affordable,false
+  );
  }
 
  static string BattleCardDisplayTextWithKeywords(CardInstance card){

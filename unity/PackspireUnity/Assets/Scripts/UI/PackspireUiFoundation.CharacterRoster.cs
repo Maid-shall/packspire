@@ -5,15 +5,20 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  VisualElement rosterShell;
  ScrollView rosterReelScroll;
+ VisualElement rosterReelHost;
  VisualElement rosterArtHost;
  ScrollView rosterDetailScrollHost;
  VisualElement rosterDetailBody;
+ VisualElement rosterDossierPortraitHost;
  Button rosterConfirmButton;
+ Label rosterArtCaptionName;
+ Label rosterArtCaptionTitle;
+ Label rosterConfirmLabel;
  float rosterReelScrollY;
 
  void BuildCharacter(){
   var meta=game.UiMeta;
-  if(string.IsNullOrEmpty(selectedCharacterId)||!CharacterCatalog.All.ContainsKey(selectedCharacterId))
+  if(!string.IsNullOrEmpty(meta.selectedCharacterId)&&CharacterCatalog.All.ContainsKey(meta.selectedCharacterId))
    selectedCharacterId=meta.selectedCharacterId;
   if(string.IsNullOrEmpty(selectedCharacterId)||!CharacterCatalog.All.ContainsKey(selectedCharacterId))
    selectedCharacterId=CharacterCatalog.DefaultId;
@@ -24,33 +29,30 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   RequireViewElement<VisualElement>(rosterShell,"character-background");
-
   RequireViewElement<VisualElement>(rosterShell,"character-header");
-
   RequireViewElement<VisualElement>(rosterShell,"character-reel-column");
   rosterReelScroll=RequireViewElement<ScrollView>(rosterShell,"character-reel-scroll");
   rosterReelScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rosterReelScroll.scrollOffset=new Vector2(0,rosterReelScrollY);
-  var reel=RequireViewElement<VisualElement>(rosterShell,"character-reel");
-  reel.name="roster-reel";
-  foreach(var character in CharacterCatalog.Roster){
-   var def=character;
-   reel.Add(ManagementReelRow(def.id,def.name,"",def.id==selectedCharacterId,()=>SelectRosterCharacter(def.id)));
-  }
+  rosterReelHost=RequireViewElement<VisualElement>(rosterShell,"character-reel");
+  rosterReelHost.name="roster-reel";
+  foreach(var character in CharacterCatalog.Roster)
+   rosterReelHost.Add(BuildRosterCharacterRow(character));
 
   rosterArtHost=RequireViewElement<VisualElement>(rosterShell,"character-art-host");
+  rosterArtCaptionName=RequireViewElement<Label>(rosterShell,"character-art-caption-name");
+  rosterArtCaptionTitle=RequireViewElement<Label>(rosterShell,"character-art-caption-title");
 
   RequireViewElement<VisualElement>(rosterShell,"character-detail-column");
   rosterDetailScrollHost=RequireViewElement<ScrollView>(rosterShell,"character-detail-scroll");
   rosterDetailScrollHost.verticalScrollerVisibility=ScrollerVisibility.Auto;
   rosterDetailBody=RequireViewElement<VisualElement>(rosterShell,"character-detail-body");
-  var footer=RequireViewElement<VisualElement>(rosterShell,"character-footer");
-  rosterConfirmButton=PackspireUiFactory.Button(meta.characterMade?"このキャラクターを選ぶ":"このキャラで始める",ConfirmRosterSelection);
-  rosterConfirmButton.AddToClassList("ps-primary-action");
-  rosterConfirmButton.AddToClassList("ps-chrome-action");
-  rosterConfirmButton.AddToClassList("ps-roster-confirm");
-  PackspireUiFactory.DecorateActionButton(rosterConfirmButton,true);
-  footer.Add(rosterConfirmButton);
+  rosterDossierPortraitHost=RequireViewElement<VisualElement>(rosterShell,"character-dossier-portrait-host");
+  RequireViewElement<VisualElement>(rosterShell,"character-footer");
+  rosterConfirmButton=RequireViewElement<Button>(rosterShell,"character-confirm");
+  rosterConfirmLabel=RequireViewElement<Label>(rosterShell,"character-confirm-label");
+  rosterConfirmLabel.text=meta.characterMade?"この配達人を選ぶ":"この配達人で始める";
+  rosterConfirmButton.clicked+=ConfirmRosterSelection;
   screenRoot.Add(rosterShell);
 
   RefreshRosterArt();
@@ -58,6 +60,38 @@ public sealed partial class PackspireUiFoundation {
   rosterReelScroll?.schedule.Execute(()=>{
    if(rosterReelScroll!=null)rosterReelScroll.scrollOffset=new Vector2(0,rosterReelScrollY);
   }).ExecuteLater(0);
+ }
+
+ Button BuildRosterCharacterRow(CharacterDef character){
+  var row=new Button(()=>SelectRosterCharacter(character.id)){userData=character.id};
+  row.AddToClassList("ps-character-roster-row");
+  row.AddToClassList("ps-list-item");
+  if(character.id==selectedCharacterId)row.AddToClassList("ps-selected");
+
+  row.Add(BuildRosterCharacterPortrait(character,"ps-character-roster-portrait"));
+  var copy=Container("ps-character-roster-copy");
+  var name=new Label(character.name){pickingMode=PickingMode.Ignore};
+  name.AddToClassList("ps-character-roster-name");
+  copy.Add(name);
+  var title=new Label(character.title){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-character-roster-title");
+  copy.Add(title);
+  row.Add(copy);
+  var register=new Label("◇"){pickingMode=PickingMode.Ignore};
+  register.AddToClassList("ps-character-roster-register");
+  row.Add(register);
+  return row;
+ }
+
+ Image BuildRosterCharacterPortrait(CharacterDef character,string className){
+  var sprite=game.ResolveCharacterPortraitSprite(character);
+  if(sprite!=null)
+   return SpriteImage(sprite,new Rect(0,0,1,1),className,ScaleMode.ScaleAndCrop);
+  var texture=game.ResolveCharacterPortrait(character);
+  var uv=texture==game.UiCharacterArt
+   ?CharacterUv(character.portraitBody,character.portraitHair)
+   :new Rect(0,0,1,1);
+  return Image(texture,uv,className,ScaleMode.ScaleAndCrop);
  }
 
  void SelectRosterCharacter(string characterId){
@@ -88,6 +122,12 @@ public sealed partial class PackspireUiFoundation {
   rosterArtHost.Clear();
   var character=CharacterCatalog.Get(selectedCharacterId);
   rosterArtHost.Add(CharacterPortraitFront(character,"ps-roster-art-image"));
+  if(rosterDossierPortraitHost!=null){
+   rosterDossierPortraitHost.Clear();
+   rosterDossierPortraitHost.Add(BuildRosterCharacterPortrait(character,"ps-character-dossier-portrait-image"));
+  }
+  if(rosterArtCaptionName!=null)rosterArtCaptionName.text=character.name;
+  if(rosterArtCaptionTitle!=null)rosterArtCaptionTitle.text=character.title;
  }
 
  void RefreshRosterDetail(){
@@ -99,7 +139,8 @@ public sealed partial class PackspireUiFoundation {
   rosterDetailBody.Add(ManagementSection("説明",character.description));
   rosterDetailBody.Add(ManagementSection("特性",$"{character.traitName}\n{character.traitText}"));
   rosterDetailBody.Add(ManagementSection("能動スキル",$"{character.activeSkillName}\n{character.activeSkillText}"));
-  rosterDetailBody.Add(ManagementSection("出自","—"));
+  string sight=character.explorationSightBonus==0?"補正なし":$"視界補正 +{character.explorationSightBonus}";
+  rosterDetailBody.Add(ManagementSection("探索適性",sight));
  }
 
  void ConfirmRosterSelection(){
