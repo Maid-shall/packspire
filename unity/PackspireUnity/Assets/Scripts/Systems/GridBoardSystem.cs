@@ -85,7 +85,7 @@ public class GridBoardRunState {
  public bool sightIncludesDiagonals=true;
  /// <summary>0 keeps discovered cells forever; positive values enable optional memory decay.</summary>
  public int memoryDecayTurns;
- public GridBoardPhase phase=GridBoardPhase.Place;
+ public GridBoardPhase phase=GridBoardPhase.Path;
  public int energy=3;
  public int energyMax=3;
  public List<GridCellState> cells=new();
@@ -157,7 +157,7 @@ public static class GridBoardSystem {
    generationSeed=generationSeed==0?Guid.NewGuid().GetHashCode():generationSeed,
    areaCount=AreaCountForDungeon(resolvedDungeonId),
    areaIndex=0,
-   phase=GridBoardPhase.Place,
+   phase=GridBoardPhase.Path,
    energy=balance.baseEnergy,
    energyMax=balance.baseEnergy,
    doomMax=balance.gridDoomMax,
@@ -262,7 +262,7 @@ public static class GridBoardSystem {
   run.areaTurn=0;
   run.explorationTurnPending=false;
   run.size=AreaSize(run);
-  run.phase=GridBoardPhase.Place;
+  run.phase=GridBoardPhase.Path;
   run.pendingBattle=false;
   run.pendingEnemyId="";
   run.pendingEvent=false;
@@ -711,56 +711,18 @@ public static class GridBoardSystem {
   cell.grow=0;
  }
 
- /// <summary>Build the exploration-side faces from the same placed equipment that builds combat cards.</summary>
+ /// <summary>The optional grid minigame no longer owns an exploration-card hand.</summary>
  public static void SyncExplorePool(GridBoardRunState board,RunState gameRun){
   if(board==null)return;
   board.explorePool.Clear();
-  if(gameRun!=null){
-   foreach(var combatCard in BackpackSystem.Build(gameRun).candidates){
-    if(board.removedExplorationSlotKeys?.Contains("explore:"+combatCard.slotKey)==true)continue;
-    var item=gameRun.inventory.FirstOrDefault(x=>x.uid==combatCard.sourceItemUid);
-    if(item==null||!GameCatalog.Items.TryGetValue(item.templateId,out var def))continue;
-    var explore=ExploreFace(combatCard,def);
-    board.explorePool.Add(explore);
-   }
-  }
   SeedHand(board);
- }
-
- static CardInstance ExploreFace(CardInstance combatCard,ItemDef item){
-  string id=!string.IsNullOrEmpty(combatCard.explorationCardId)
-   ?combatCard.explorationCardId:item.explorationCardId;
-  if(!GameCatalog.ExplorationCards.TryGetValue(id,out var def))
-   def=GameCatalog.ExplorationCards["gb_lamp"];
-  return new CardInstance{
-   id=def.id,name=$"{item.name}：{def.name}",text=def.text,cost=def.cost,type=CardType.Skill,source=item.name,
-   sourceItemUid=combatCard.sourceItemUid,slotKey="explore:"+combatCard.slotKey
-  };
  }
 
  static void SeedHand(GridBoardRunState run){
   run.hand.Clear();
-  if(run.explorePool!=null&&run.explorePool.Count>0){
-   int count=Mathf.Min(5,run.explorePool.Count);
-   foreach(var card in run.explorePool.OrderBy(_=>UnityEngine.Random.value).Take(count))
-    run.hand.Add(card.Clone());
-   run.selectedCardUid="";
-   return;
-  }
-  run.hand.Add(MakeCard("gb_lamp"));
-  run.hand.Add(MakeCard("gb_fog"));
-  run.hand.Add(MakeCard("gb_seal"));
-  run.hand.Add(MakeCard("gb_lamp"));
-  run.hand.Add(MakeCard("gb_seal"));
   run.selectedCardUid="";
- }
-
- static CardInstance MakeCard(string id){
-  var def=GameCatalog.ExplorationCards[id];
-  return new CardInstance{
-   id=def.id,name=def.name,cost=def.cost,text=def.text,type=CardType.Skill,
-   source="grid-board",slotKey=Guid.NewGuid().ToString("N")
-  };
+  run.phase=GridBoardPhase.Path;
+  ResetPath(run);
  }
 
  public static GridCellState Cell(GridBoardRunState run,int x,int y){
@@ -1026,15 +988,11 @@ public static class GridBoardSystem {
   return true;
  }
 
- /// <summary>Return to placing only when not mid-run and path can be discarded.</summary>
+ /// <summary>Exploration cards were retired; idle boards remain in route-drawing mode.</summary>
  public static void EnsureCanPlace(GridBoardRunState run){
   if(run==null||run.phase==GridBoardPhase.Run||run.phase==GridBoardPhase.Done)return;
-  if(run.phase==GridBoardPhase.Place)return;
-  // Path started but empty segments → allow place again by clearing path.
-  if(run.segmentEnds==null||run.segmentEnds.Count==0){
-   run.phase=GridBoardPhase.Place;
-   ResetPath(run);
-  }
+  run.phase=GridBoardPhase.Path;
+  if(run.path==null||run.path.Count==0)ResetPath(run);
  }
 
  public static void BeginPathPhase(GridBoardRunState run){
@@ -1047,16 +1005,13 @@ public static class GridBoardSystem {
 
  public static void BeginPlacePhase(GridBoardRunState run){
   if(run==null||run.phase==GridBoardPhase.Run||run.phase==GridBoardPhase.Done)return;
-  run.phase=GridBoardPhase.Place;
-  ResetPath(run);
-  run.message="カードを置ける。封鎖は曲がるための壁";
+  BeginPathPhase(run);
  }
 
  public static void ClearPath(GridBoardRunState run){
   if(run==null||run.phase!=GridBoardPhase.Path)return;
   ResetPath(run);
-  run.phase=GridBoardPhase.Place;
-  run.message="ルートをやめて配置に戻った";
+  run.message="経路を消去しました。";
  }
 
  static void ResetPath(GridBoardRunState run){
@@ -1441,7 +1396,7 @@ public static class GridBoardSystem {
   if(run==null)return;
   run.moving=false;
   run.moveT=0f;
-  run.phase=GridBoardPhase.Place;
+  run.phase=GridBoardPhase.Path;
   run.path.Clear();
   run.segmentEnds.Clear();
   run.pathIndex=0;

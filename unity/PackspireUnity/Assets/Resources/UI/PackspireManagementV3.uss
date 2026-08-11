@@ -6207,6 +6207,70 @@
     -unity-text-align: middle-center;
 }
 
+/* Shared vault/codex card inspection.
+ * The docket is the popup surface: do not place it inside a second frame. */
+.ps-vault-card-modal-stage {
+    width: 336px;
+    min-width: 336px;
+    max-width: 336px;
+    height: 504px;
+    min-height: 504px;
+    max-height: 504px;
+    padding: 0;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0;
+}
+
+.ps-vault-card-modal-heading,
+.ps-vault-card-modal-hint,
+.ps-vault-card-modal-face > .ps-vault-v9-card-face-label {
+    display: none;
+}
+
+.ps-vault-card-modal-face.ps-vault-v9-card-face {
+    position: relative;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    translate: 0 0;
+    scale: 2 2 1;
+}
+
+.ps-vault-card-modal-face > .ps-equipment-card-preview.ps-vault-v9-card,
+.ps-vault-card-modal-face > .ps-equipment-card-preview.ps-vault-v9-card:hover,
+.ps-vault-card-modal-face > .ps-equipment-card-preview.ps-vault-v9-card.ps-docket-card:hover {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0;
+    translate: 0 0;
+    scale: 1 1 1;
+}
+
 /* Vault V12: readable sort bar and a single circular lock control. */
 .ps-vault-final.ps-management-v3 .ps-vault-v7-footer {
     height: 50px;
@@ -7608,6 +7672,23 @@
     height: 720px;
     overflow: hidden;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-equipment-card-face-seal {
+    justify-content: center;
+}
+
+.ps-equipment-seal-preview {
+    width: 156px;
+    min-height: 112px;
+    padding: 12px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(8, 10, 12, 0.94);
+    border-left-width: 3px;
+    border-left-color: rgb(194, 57, 42);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.62);
 }
 
 .ps-heirloom-screen .ps-heirloom-layout {
@@ -9464,4 +9545,318 @@
     margin-bottom: 10px;
     background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
     -unity-background-scale-mode: stretch-to-fill;
+}
+
+/* ===== Home-derived editorial material profile =====
+   Status, heirloom, and faction keep their shipped compositions. These rules
+   align their surface hierarchy with the current hub instead of layering a
+   separate distressed-paper kit over every region. */
+.ps-status-v2 .ps-layer-background,
+.ps-heirloom-screen .ps-layer-background,
+.ps-faction-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(9, 10, 9);
+}
+
+.ps-status-v2 .ps-mgmt-shade,
+.ps-heirloom-screen .ps-mgmt-shade,
+.ps-faction-screen .ps-mgmt-shade {
+    background-color: rgba(2, 3, 3, 0.07);
+}
+
+.ps-status-v2 .ps-misprint-register,
+.ps-status-v2 .ps-misprint-decor,
+.ps-status-v2 .ps-misprint-mark,
+.ps-heirloom-screen .ps-misprint-register,
+.ps-heirloom-screen .ps-misprint-decor,
+.ps-heirloom-screen .ps-misprint-mark,
+.ps-faction-screen .ps-misprint-register,
+.ps-faction-screen .ps-misprint-decor,
+.ps-faction-screen .ps-misprint-mark {
+    opacity: 0.04;
+}
+
+.ps-status-v2 .ps-mgmt-header,
+.ps-heirloom-screen .ps-mgmt-header,
+.ps-faction-screen .ps-mgmt-header,
+.ps-heirloom-screen .ps-heirloom-header {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.16);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.62);
+}
+
+.ps-status-v2 .ps-misprint-header-title,
+.ps-heirloom-screen .ps-misprint-header-title,
+.ps-faction-screen .ps-misprint-header-title,
+.ps-heirloom-screen .ps-heirloom-header .ps-misprint-header-title {
+    color: rgb(238, 216, 178);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
+}
+
+.ps-status-v2 .ps-misprint-header-eyebrow,
+.ps-heirloom-screen .ps-misprint-header-eyebrow,
+.ps-faction-screen .ps-misprint-header-eyebrow,
+.ps-status-v2 .ps-status-character-title,
+.ps-faction-screen .ps-faction-registry-eyebrow,
+.ps-faction-screen .ps-faction-emissary-eyebrow {
+    color: rgb(55, 188, 194);
+}
+
+/* Status / role ledger */
+.ps-status-v2.ps-management-v3 .ps-status-character-surface,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-surface,
+.ps-status-v2.ps-management-v3 .ps-status-roles-surface {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.18);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-surface {
+    border-right-width: 1px;
+    border-right-color: rgba(190, 151, 88, 0.42);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-detail-header,
+.ps-status-v2.ps-management-v3 .ps-status-roles-header {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.50);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-name,
+.ps-status-v2 .ps-status-character-name,
+.ps-status-v2 .ps-status-role-ticket-name {
+    color: rgb(235, 213, 177);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-node {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.22);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section-title,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-title {
+    color: rgb(55, 188, 194);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-mgmt-section-body,
+.ps-status-v2.ps-management-v3 .ps-status-role-detail-body .ps-progress-track-body {
+    color: rgb(210, 191, 159);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-ticket,
+.ps-status-v2 .ps-status-branch-choice {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.28);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.44);
+}
+
+.ps-status-v2.ps-management-v3 .ps-status-role-ticket.ps-selected,
+.ps-status-v2 .ps-status-branch-choice.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-name,
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-kind,
+.ps-status-v2 .ps-status-role-ticket.ps-selected .ps-status-role-ticket-lv,
+.ps-status-v2 .ps-status-branch-choice.ps-selected {
+    color: rgb(30, 23, 18);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ps-status-v2 .ps-status-role-ticket-kind,
+.ps-status-v2 .ps-status-role-ticket-lv {
+    color: rgb(177, 160, 134);
+}
+
+.ps-status-v2 .ps-status-appointment {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-mission-briefing-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-status-v2 .ps-status-appointment-action {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    color: rgb(61, 25, 20);
+}
+
+/* Heirloom provenance */
+.ps-heirloom-screen .ps-heirloom-register-mark,
+.ps-heirloom-screen .ps-heirloom-ledger-spine,
+.ps-heirloom-screen .ps-heirloom-object-stage,
+.ps-heirloom-screen .ps-heirloom-object-target {
+    opacity: 0.05;
+}
+
+.ps-heirloom-screen .ps-heirloom-col-portrait,
+.ps-heirloom-screen .ps-heirloom-col-growth,
+.ps-heirloom-screen .ps-heirloom-growth-scroll {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.16);
+}
+
+.ps-heirloom-screen .ps-heirloom-col-portrait {
+    border-right-width: 1px;
+    border-right-color: rgba(190, 151, 88, 0.44);
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row,
+.ps-heirloom-screen .ps-heirloom-stat,
+.ps-heirloom-screen .ps-heirloom-dossier-head,
+.ps-heirloom-screen .ps-heirloom-growth-body > .ps-chrome-section,
+.ps-heirloom-screen .ps-heirloom-board-section,
+.ps-heirloom-screen .ps-heirloom-progress,
+.ps-heirloom-screen .ps-heirloom-history,
+.ps-heirloom-screen .ps-heirloom-scar-row {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.20);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row .ps-title,
+.ps-heirloom-screen .ps-heirloom-dossier-title,
+.ps-heirloom-screen .ps-heirloom-generation-value,
+.ps-heirloom-screen .ps-heirloom-board-title,
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-jp {
+    color: rgb(235, 213, 177);
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-label,
+.ps-heirloom-screen .ps-heirloom-dossier-en,
+.ps-heirloom-screen .ps-heirloom-generation-label,
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-en {
+    color: rgb(55, 188, 194);
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-value,
+.ps-heirloom-screen .ps-heirloom-board-body {
+    color: rgb(190, 174, 147);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate,
+.ps-heirloom-screen .ps-heirloom-picker-card,
+.ps-heirloom-screen .ps-heirloom-portrait-host > .ps-empty-state {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.26);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate.ps-selected,
+.ps-heirloom-screen .ps-heirloom-picker-card.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate .ps-heirloom-board-title,
+.ps-heirloom-screen .ps-heirloom-candidate .ps-heirloom-board-body,
+.ps-heirloom-screen .ps-heirloom-candidate-lock {
+    color: rgb(224, 203, 169);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate.ps-selected .ps-heirloom-board-title,
+.ps-heirloom-screen .ps-heirloom-candidate.ps-selected .ps-heirloom-board-body,
+.ps-heirloom-screen .ps-heirloom-candidate.ps-selected .ps-heirloom-candidate-lock {
+    color: rgb(31, 24, 19);
+}
+
+.ps-heirloom-screen .ps-heirloom-slot {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(7, 8, 8);
+}
+
+/* Faction registry */
+.ps-faction-screen .ps-faction-graph-host,
+.ps-faction-screen .ps-faction-graph-nodes {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.14);
+    border-bottom-width: 0;
+}
+
+.ps-faction-screen .ps-faction-registry-heading {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(190, 151, 88, 0.54);
+}
+
+.ps-faction-screen .ps-faction-registry-title,
+.ps-faction-screen .ps-faction-emissary-name,
+.ps-faction-screen .ps-faction-graph-name {
+    color: rgb(235, 213, 177);
+}
+
+.ps-faction-screen .ps-faction-graph-node {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.24);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.44);
+}
+
+.ps-faction-screen .ps-faction-graph-node.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-faction-screen .ps-faction-registry-description,
+.ps-faction-screen .ps-faction-registry-reputation,
+.ps-faction-screen .ps-faction-registry-effect {
+    color: rgb(180, 164, 138);
+}
+
+.ps-faction-screen .ps-faction-detail-surface {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-mission-briefing-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-faction-screen .ps-faction-detail-surface .ps-title,
+.ps-faction-screen .ps-faction-detail-surface .ps-mgmt-section-title {
+    color: rgb(129, 42, 32);
+}
+
+.ps-faction-screen .ps-faction-detail-surface .ps-body,
+.ps-faction-screen .ps-faction-detail-surface .ps-mgmt-section-body,
+.ps-faction-screen .ps-faction-detail-surface .ps-faction-relation-row .ps-typo-item,
+.ps-faction-screen .ps-faction-detail-surface .ps-faction-relation-row .ps-typo-secondary {
+    color: rgb(57, 41, 30);
 }

@@ -30,7 +30,7 @@ public sealed partial class PackspireUiFoundation {
 
  void PopulateDocketCard(
   VisualElement slot,CardInstance card,string body,string source,string status,
-  string formula,bool affordable,bool exploration,int growthStages=0
+  bool affordable,bool exploration,int growthStages=0
  ){
   var template=DocketCardTemplate();
   if(slot==null||card==null||template==null)return;
@@ -46,17 +46,13 @@ public sealed partial class PackspireUiFoundation {
    exploration?ExplorationCardPresentationKind(route):"technique";
   string code=DocketTrackingCode(card,exploration);
   string glyph=exploration?ExplorationCardPresentationGlyph(kind):BattleCardPresentationGlyph(kind);
-  SetDocketLabel(slot,"docket-receipt-kind",exploration?"経路控":"執行控");
+  SetDocketLabel(slot,"docket-receipt-kind",exploration?"ROUTE":"BATTLE");
   SetDocketLabel(slot,"docket-receipt-cost",card.cost.ToString());
-  SetDocketLabel(slot,"docket-receipt-name",card.name);
-  SetDocketLabel(slot,"docket-receipt-code",code);
   SetDocketLabel(slot,"docket-seal-glyph",glyph);
-  SetDocketLabel(slot,"docket-main-kind",exploration?"ROUTE / 探索票":"EXECUTION / 戦闘票");
   SetDocketLabel(slot,"docket-main-code",code);
   SetDocketLabel(slot,"docket-main-name",card.name);
-  SetDocketLabel(slot,"docket-main-cost",card.cost.ToString());
-  SetDocketLabel(slot,"docket-main-formula",string.IsNullOrEmpty(formula)?DocketActionSummary(card,exploration):formula);
-  SetDocketLabel(slot,"docket-main-text",body);
+  PopulateDocketEffectText(slot,string.IsNullOrWhiteSpace(body)?DocketActionSentence(card):body);
+  SetDocketLabel(slot,"docket-result",DocketResultSummary(card));
   SetDocketLabel(slot,"docket-source",string.IsNullOrEmpty(source)?"REGISTRY ISSUE":source);
   var statusLabel=SetDocketLabel(slot,"docket-status",status);
   if(statusLabel!=null&&!string.IsNullOrEmpty(status)&&
@@ -64,13 +60,78 @@ public sealed partial class PackspireUiFoundation {
   SetDocketLabel(slot,"docket-lock",affordable?string.Empty:"LOW EN / 保留");
   slot.EnableInClassList("ps-docket-authorized",affordable);
   slot.EnableInClassList("ps-docket-held",!affordable);
-  PopulateDocketGrowth(slot.Q<VisualElement>("docket-growth"),growthStages);
+  var artwork=slot.Q<VisualElement>("docket-art");
+  var sprite=exploration?null:BattleCardArtwork(card.id);
+  if(artwork!=null&&sprite!=null)artwork.style.backgroundImage=new StyleBackground(sprite);
+ }
+
+ static Sprite BattleCardArtwork(string id){
+  string file=id switch {
+   "basicStrike"=>"basic-strike-evidence-v1",
+   "basicGuard"=>"basic-guard-evidence-v1",
+   "basicTactic"=>"basic-tactic-evidence-v1",
+   "slash"=>"judgment-stamp-evidence-v1",
+   "guard"=>"dead-letter-guard-evidence-v1",
+   "spark"=>"address-designation-evidence-v1",
+   "mend"=>"emergency-mend-evidence-v1",
+   "stab"=>"strikethrough-evidence-v1",
+   "brace"=>"brace-evidence-v1",
+   "focus"=>"focus-evidence-v1",
+   "bomb"=>"bomb-evidence-v1",
+   "pierce"=>"pierce-evidence-v1",
+   "parry"=>"misdelivery-parry-evidence-v1",
+   "acid"=>"acid-evidence-v1",
+   "tailwind"=>"tailwind-evidence-v1",
+   "devour"=>"devour-evidence-v1",
+   "inferno"=>"inferno-evidence-v1",
+   "echoWall"=>"echo-wall-evidence-v1",
+   "starBomb"=>"star-bomb-evidence-v1",
+   _=>string.Empty
+  };
+  return string.IsNullOrEmpty(file)?null:PackspireResources.Load<Sprite>("Art/Cards/EvidenceCollage/"+file);
  }
 
  static Label SetDocketLabel(VisualElement root,string name,string value){
   var label=root?.Q<Label>(name);
   if(label!=null)label.text=value??string.Empty;
   return label;
+ }
+
+ static void PopulateDocketEffectText(VisualElement root,string text){
+  var host=root?.Q<VisualElement>("docket-main-text");
+  if(host==null)return;
+  host.Clear();
+  string normalized=(text??string.Empty).Replace("\r\n","\n").Replace('\r','\n');
+  foreach(string line in normalized.Split('\n')){
+   var row=new VisualElement{pickingMode=PickingMode.Ignore};
+   row.AddToClassList("ps-docket__effect-row");
+   var matches=System.Text.RegularExpressions.Regex.Matches(
+    line,@"(?:\d+[dD]\d+(?:\s*[+\-−]\s*\d+)?|[+\-−]?\d+(?:[/.]\d+)?)"
+   );
+   int cursor=0;
+   foreach(System.Text.RegularExpressions.Match match in matches){
+    AddDocketEffectRun(row,line.Substring(cursor,match.Index-cursor),false);
+    AddDocketEffectRun(row,match.Value,true);
+    cursor=match.Index+match.Length;
+   }
+   AddDocketEffectRun(row,line.Substring(cursor),false);
+   if(row.childCount==0)AddDocketEffectRun(row," ",false);
+   host.Add(row);
+  }
+ }
+
+ static void AddDocketEffectRun(VisualElement row,string text,bool emphasized){
+  if(row==null||string.IsNullOrEmpty(text))return;
+  var run=new VisualElement{pickingMode=PickingMode.Ignore};
+  run.AddToClassList("ps-docket__effect-run");
+  run.AddToClassList(emphasized?"ps-docket__effect-run--value":"ps-docket__effect-run--copy");
+  var backing=new Label(text){pickingMode=PickingMode.Ignore};
+  backing.AddToClassList("ps-docket__effect-backing");
+  var label=new Label(text){pickingMode=PickingMode.Ignore};
+  label.AddToClassList(emphasized?"ps-docket__effect-value":"ps-docket__effect-copy");
+  run.Add(backing);
+  run.Add(label);
+  row.Add(run);
  }
 
  static string DocketTrackingCode(CardInstance card,bool exploration){
@@ -80,13 +141,22 @@ public sealed partial class PackspireUiFoundation {
   return $"INF-{(exploration?"R":"E")}{Mathf.Abs(card?.cost??0):00}-{checksum:000}";
  }
 
- static string DocketActionSummary(CardInstance card,bool exploration){
-  if(exploration)return "ROUTE AUTH";
-  if(card.damage>0)return DocketDiceFormula(card);
-  if(card.block>0)return $"BLOCK {card.block}";
-  if(card.heal>0)return $"HEAL {card.heal}";
-  if(card.energy>0)return $"ENERGY +{card.energy}";
-  return card.type==CardType.Power?"PROTOCOL":"EXECUTE";
+ static string DocketActionSentence(CardInstance card){
+  if(card==null)return string.Empty;
+  if(card.damage>0)return $"敵に{DocketDiceFormula(card)}ダメージを与える。";
+  if(card.block>0)return $"{card.block}ブロックを得る。";
+  if(card.heal>0)return $"HPを{card.heal}回復する。";
+  if(card.energy>0)return $"ENを{card.energy}回復する。";
+  return card.type==CardType.Power?"常在効果を発動する。":"効果を実行する。";
+ }
+
+ static string DocketResultSummary(CardInstance card){
+  if(card==null)return string.Empty;
+  if(card.damage>0)return $"{DocketDiceFormula(card)}  ダメージ";
+  if(card.block>0)return $"{card.block}  防護";
+  if(card.heal>0)return $"{card.heal}  HP回復";
+  if(card.energy>0)return $"+{card.energy}  EN";
+  return card.type==CardType.Power?"常在効果":"補助";
  }
 
  static void PopulateDocketGrowth(VisualElement host,int stageCount){
@@ -148,13 +218,8 @@ public sealed partial class PackspireUiFoundation {
    return null;
 
   var battle=BackpackSystem.FromDef(battleDefinition,definition.name,item.uid);
-  string explorationId=definition.grantedCards?.FirstOrDefault(
-   value=>value!=null&&value.battleCardId==battleId&&!string.IsNullOrEmpty(value.explorationCardId))?.explorationCardId;
-  if(string.IsNullOrEmpty(explorationId))explorationId=definition.explorationCardId;
-  battle.explorationCardId=explorationId;
-
-  // A preview can point at a vault or codex item. Never add that item to the
-  // active run merely to render its two card faces.
+  // A preview can point at a vault, shop, or codex item. Never add that item
+  // to the active run merely to render its battle ticket.
   var previewRun=new RunState {
    role=run?.role??string.Empty,
    inventory=new System.Collections.Generic.List<ItemInstance>{item}
@@ -179,22 +244,17 @@ public sealed partial class PackspireUiFoundation {
   combatColumn.Add(combatCard);
   pair.Add(combatColumn);
 
-  var exploreColumn=Container("ps-equipment-card-face ps-equipment-card-face-explore");
-  exploreColumn.pickingMode=PickingMode.Ignore;
-  var exploreLabel=new Label("EXPLORE"){pickingMode=PickingMode.Ignore};
-  exploreLabel.AddToClassList("ps-equipment-card-face-label");
-  exploreColumn.Add(exploreLabel);
-  var exploreCard=Container("ps-battle-card ps-equipment-card-preview");
-  exploreCard.AddToClassList("ps-docket-expanded");
-  exploreCard.pickingMode=PickingMode.Ignore;
-  var exploreDefinition=BuildEquipmentExplorationCard(explorationId,battle,definition,item.uid);
-  PopulateEquipmentExplorationCard(exploreCard,exploreDefinition,item);
-  exploreColumn.Add(exploreCard);
-  pair.Add(exploreColumn);
+  var sealColumn=Container("ps-equipment-card-face ps-equipment-card-face-seal");
+  sealColumn.pickingMode=PickingMode.Ignore;
+  var sealLabel=new Label("DELIVERY SEAL"){pickingMode=PickingMode.Ignore};
+  sealLabel.AddToClassList("ps-equipment-card-face-label");
+  sealColumn.Add(sealLabel);
+  sealColumn.Add(EquipmentSealAttributeBadge(definition,"ps-equipment-seal-preview"));
+  pair.Add(sealColumn);
  return pair;
  }
 
- VisualElement BuildEquipmentCardElement(ItemInstance item,ItemDef definition,RunState run,bool exploration){
+ VisualElement BuildEquipmentCardElement(ItemInstance item,ItemDef definition,RunState run){
   if(item==null||definition==null)return null;
   string battleId=definition.grantedCards?.FirstOrDefault(
    value=>value!=null&&!string.IsNullOrEmpty(value.battleCardId))?.battleCardId;
@@ -204,10 +264,6 @@ public sealed partial class PackspireUiFoundation {
    return null;
 
   var battle=BackpackSystem.FromDef(battleDefinition,definition.name,item.uid);
-  string explorationId=definition.grantedCards?.FirstOrDefault(
-   value=>value!=null&&value.battleCardId==battleId&&!string.IsNullOrEmpty(value.explorationCardId))?.explorationCardId;
-  if(string.IsNullOrEmpty(explorationId))explorationId=definition.explorationCardId;
-  battle.explorationCardId=explorationId;
   var previewRun=new RunState{
    role=run?.role??string.Empty,
    inventory=new System.Collections.Generic.List<ItemInstance>{item}
@@ -217,21 +273,16 @@ public sealed partial class PackspireUiFoundation {
   card.AddToClassList("ps-battle-card");
   card.AddToClassList("ps-docket-expanded");
   card.pickingMode=PickingMode.Ignore;
-  if(exploration){
-   var explorationCard=BuildEquipmentExplorationCard(explorationId,battle,definition,item.uid);
-   PopulateEquipmentExplorationCard(card,explorationCard,item);
-  }else{
-   PopulateBattleCard(card,battle,previewRun,true);
-  }
+  PopulateBattleCard(card,battle,previewRun,true);
   return card;
  }
 
- VisualElement BuildEquipmentCardFacePreview(ItemInstance item,ItemDef definition,RunState run,bool exploration){
-  var card=BuildEquipmentCardElement(item,definition,run,exploration);
+ VisualElement BuildEquipmentCardFacePreview(ItemInstance item,ItemDef definition,RunState run){
+  var card=BuildEquipmentCardElement(item,definition,run);
   if(card==null)return null;
   var face=Container("ps-vault-v9-card-face");
   face.pickingMode=PickingMode.Ignore;
-  var label=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  var label=new Label("戦闘配達票"){pickingMode=PickingMode.Ignore};
   label.AddToClassList("ps-vault-v9-card-face-label");
   face.Add(label);
   card.AddToClassList("ps-equipment-card-preview");
@@ -240,35 +291,21 @@ public sealed partial class PackspireUiFoundation {
   return face;
  }
 
- static CardInstance BuildEquipmentExplorationCard(string explorationId,CardInstance battle,ItemDef item,string itemUid){
-  if(!string.IsNullOrEmpty(explorationId)&&GameCatalog.ExplorationCards.TryGetValue(explorationId,out var definition))
-   return new CardInstance{
-    id=definition.id,
-    name=definition.name,
-    text=definition.text,
-    cost=definition.cost,
-    source=item.name,
-    sourceItemUid=itemUid,
-    explorationCardId=definition.id
-   };
-  return new CardInstance{
-   id=string.IsNullOrEmpty(explorationId)?battle.id:explorationId,
-   name=battle.name,
-   text=battle.text,
-   cost=battle.cost,
-   source=item.name,
-   sourceItemUid=itemUid,
-   explorationCardId=explorationId
-  };
- }
-
- void PopulateEquipmentExplorationCard(VisualElement slot,CardInstance card,ItemInstance item){
-  ApplyExplorationCardPresentation(slot,card);
-  GameCatalog.ExplorationCards.TryGetValue(card.id,out var definition);
-  int stages=definition?.stages?.Length??0;
-  PopulateDocketCard(
-   slot,card,card.text,card.source,"GRID / 携行",string.Empty,true,true,stages
-  );
+ VisualElement EquipmentSealAttributeBadge(ItemDef item,string className){
+  var badge=Container("ps-equipment-seal-attribute "+className);
+  badge.AddToClassList("ps-seal-"+item.sealAttribute.ToString().ToLowerInvariant());
+  var mark=new Label("印"){pickingMode=PickingMode.Ignore};
+  mark.AddToClassList("ps-equipment-seal-attribute__mark");
+  badge.Add(mark);
+  var copy=Container("ps-equipment-seal-attribute__copy");
+  var name=new Label(DeliverySealSystem.Name(item.sealAttribute)){pickingMode=PickingMode.Ignore};
+  name.AddToClassList("ps-equipment-seal-attribute__name");
+  copy.Add(name);
+  var effect=new Label(DeliverySealSystem.Effect(item.sealAttribute)){pickingMode=PickingMode.Ignore};
+  effect.AddToClassList("ps-equipment-seal-attribute__effect");
+  copy.Add(effect);
+  badge.Add(copy);
+  return badge;
  }
 
  static string DocketDiceFormula(CardInstance card){

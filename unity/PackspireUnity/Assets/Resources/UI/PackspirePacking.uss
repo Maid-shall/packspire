@@ -2762,3 +2762,190 @@
     border-top-width: 0;
     border-bottom-width: 0;
 }
+
+/* ===== Home-derived editorial material profile =====
+   Preserve the packing screen geometry and replace only its material layer. */
+.ps-rite .ps-rite-scene-bg {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(9, 10, 9);
+}
+
+.ps-rite .ps-rite-scene-shade {
+    background-color: rgba(2, 3, 3, 0.07);
+}
+
+.ps-rite .ps-rite-veil,
+.ps-rite .ps-rite-vignette-l,
+.ps-rite .ps-rite-vignette-r,
+.ps-rite .ps-rite-vignette-b,
+.ps-rite .ps-rite-sparks,
+.ps-rite .ps-rite-floats {
+    opacity: 0.06;
+}
+
+.ps-rite .ps-rite-top {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.16);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.62);
+}
+
+.ps-rite .ps-rite-top-name,
+.ps-rite .ps-rite-panel-title,
+.ps-rite .ps-rite-board-heading-title {
+    color: rgb(238, 216, 178);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
+}
+
+.ps-rite .ps-rite-top-eyebrow,
+.ps-rite .ps-rite-panel-index,
+.ps-rite .ps-rite-board-heading-size,
+.ps-rite .ps-rite-circle-label {
+    color: rgb(55, 188, 194);
+}
+
+.ps-rite .ps-rite-top-sub,
+.ps-rite .ps-rite-meta,
+.ps-rite .ps-rite-select-caption {
+    color: rgb(181, 163, 135);
+}
+
+.ps-rite .ps-rite-left,
+.ps-rite .ps-rite-center,
+.ps-rite .ps-rite-right-shell {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.20);
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-rite .ps-rite-left {
+    border-right-width: 1px;
+    border-right-color: rgba(188, 149, 87, 0.42);
+}
+
+.ps-rite .ps-rite-center {
+    border-right-width: 1px;
+    border-right-color: rgba(188, 149, 87, 0.42);
+}
+
+.ps-rite .ps-rite-left-header,
+.ps-rite .ps-rite-board-heading,
+.ps-rite .ps-rite-template-head {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(188, 149, 87, 0.50);
+}
+
+.ps-rite .ps-rite-filter {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.42);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(184, 145, 84, 0.42);
+    color: rgb(220, 199, 165);
+}
+
+.ps-rite .ps-rite-filter.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(58, 196, 202);
+    color: rgb(29, 23, 18);
+}
+
+.ps-rite .ps-rite-equip-tile {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.30);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(181, 143, 82, 0.44);
+}
+
+.ps-rite .ps-rite-equip-tile.ps-selected {
+    background-image: none;
+    background-color: rgba(13, 41, 42, 0.52);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(53, 196, 202);
+    border-right-color: rgb(53, 196, 202);
+    border-top-color: rgb(53, 196, 202);
+    border-bottom-color: rgb(53, 196, 202);
+}
+
+.ps-rite .ps-rite-equip-name,
+.ps-rite .ps-rite-equip-badge {
+    color: rgb(231, 209, 173);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.90);
+}
+
+.ps-rite .ps-rite-cell {
+    background-color: rgba(12, 15, 15, 0.78);
+    border-left-color: rgba(204, 167, 102, 0.66);
+    border-right-color: rgba(204, 167, 102, 0.66);
+    border-top-color: rgba(204, 167, 102, 0.66);
+    border-bottom-color: rgba(204, 167, 102, 0.66);
+}
+
+.ps-rite .ps-rite-kiln-rail {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-rite .ps-rite-right,
+.ps-rite .ps-rite-right .ps-title,
+.ps-rite .ps-rite-right .ps-rite-panel-title,
+.ps-rite .ps-rite-template-list-name,
+.ps-rite .ps-rite-detail-name,
+.ps-rite .ps-rite-effect-title {
+    color: rgb(235, 213, 176);
+}
+
+.ps-rite .ps-rite-right .ps-body,
+.ps-rite .ps-rite-template-list-sub,
+.ps-rite .ps-rite-detail-desc,
+.ps-rite .ps-rite-effect-detail {
+    color: rgb(179, 163, 137);
+}
+
+.ps-rite .ps-rite-template-list-card,
+.ps-rite .ps-rite-detail-card,
+.ps-rite .ps-rite-effect {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.22);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-rite .ps-rite-template-list-card.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(55, 194, 200);
+}
+
+.ps-rite .ps-rite-template-list-card.ps-selected .ps-rite-template-list-name,
+.ps-rite .ps-rite-template-list-card.ps-selected .ps-rite-template-list-sub {
+    color: rgb(30, 24, 19);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ps-rite .ps-rite-template-save,
+.ps-rite .ps-rite-select-btn-primary {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(31, 24, 19);
+}

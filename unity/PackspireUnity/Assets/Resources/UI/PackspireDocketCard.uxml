@@ -1,36 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <Style src="project://database/Assets/Resources/UI/PackspireDocketCard.uss?fileID=7433441132597879392&amp;guid=cc7fa849a3eadf2489862aeace6f24ea&amp;type=3#PackspireDocketCard" />
     <ui:VisualElement name="docket-visual" class="ps-docket">
-        <ui:VisualElement class="ps-docket__receipt" picking-mode="Ignore">
-            <ui:Label name="docket-receipt-kind" class="ps-docket__receipt-kind" picking-mode="Ignore" />
-            <ui:Label name="docket-receipt-cost" class="ps-docket__receipt-cost" picking-mode="Ignore" />
-            <ui:Label name="docket-receipt-name" class="ps-docket__receipt-name" picking-mode="Ignore" />
-            <ui:Label name="docket-receipt-code" class="ps-docket__receipt-code" picking-mode="Ignore" />
+        <ui:VisualElement name="docket-art" class="ps-docket__art" picking-mode="Ignore">
+            <ui:VisualElement class="ps-docket__art-shade" picking-mode="Ignore" />
         </ui:VisualElement>
-        <ui:Label name="docket-seal-glyph" class="ps-docket__seal-glyph" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-docket__frame" picking-mode="Ignore" />
         <ui:VisualElement class="ps-docket__main" picking-mode="Ignore">
-            <ui:VisualElement class="ps-docket__main-header" picking-mode="Ignore">
-                <ui:Label name="docket-main-kind" class="ps-docket__main-kind" picking-mode="Ignore" />
-                <ui:Label name="docket-main-code" class="ps-docket__main-code" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-docket__title-row" picking-mode="Ignore">
+                <ui:Label name="docket-main-name" class="ps-docket__main-name" picking-mode="Ignore" />
             </ui:VisualElement>
-            <ui:Label name="docket-main-name" class="ps-docket__main-name" picking-mode="Ignore" />
-            <ui:VisualElement class="ps-docket__metrics" picking-mode="Ignore">
-                <ui:VisualElement class="ps-docket__metric" picking-mode="Ignore">
-                    <ui:Label text="COST" class="ps-docket__metric-key" picking-mode="Ignore" />
-                    <ui:Label name="docket-main-cost" class="ps-docket__metric-value" picking-mode="Ignore" />
-                </ui:VisualElement>
-                <ui:VisualElement class="ps-docket__metric ps-docket__metric--formula" picking-mode="Ignore">
-                    <ui:Label text="ACTION" class="ps-docket__metric-key" picking-mode="Ignore" />
-                    <ui:Label name="docket-main-formula" class="ps-docket__metric-value" picking-mode="Ignore" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:Label name="docket-main-text" class="ps-docket__main-text" picking-mode="Ignore" />
-            <ui:VisualElement name="docket-growth" class="ps-docket__growth" picking-mode="Ignore" />
-            <ui:VisualElement class="ps-docket__footer" picking-mode="Ignore">
-                <ui:Label name="docket-source" class="ps-docket__source" picking-mode="Ignore" />
-                <ui:Label name="docket-status" class="ps-docket__status" picking-mode="Ignore" />
-            </ui:VisualElement>
+            <ui:VisualElement class="ps-docket__rule" picking-mode="Ignore" />
+            <ui:VisualElement name="docket-main-text" class="ps-docket__main-text" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:Label name="docket-receipt-cost" class="ps-docket__cost" picking-mode="Ignore" />
         <ui:Label name="docket-lock" class="ps-docket__lock" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

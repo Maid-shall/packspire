@@ -5,34 +5,31 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
+ static readonly Rect BattleShowcasePlayerUv=new Rect(0.075f,0.078f,0.85f,0.854f);
+ static readonly Rect BattleShowcaseEnemyUv=new Rect(0.08f,0.135f,0.84f,0.825f);
  bool battleUiBuilt,battleInputLocked;
- VisualElement battleRoot,battleHandRoot,battlePlayerStatuses,battleEnemyStatuses,battleConsumablesRoot;
- VisualElement battleFxLayer,battlePlayerActor,battleEnemyActor,battleIntentBadge;
- Label battlePlayerName,battleEnemyName;
- Label battlePlayerHpLabel,battlePlayerBlockLabel,battleEnemyHpLabel,battleEnemyBlockLabel;
- VisualElement battlePlayerHpFill,battlePlayerBlockFill,battleEnemyHpFill,battleEnemyBlockFill;
- Image battlePlayerPortrait,battleEnemyPortrait,battleIntentIcon;
- Label battleIntentKind,battleIntentValue,battleIntentHint;
- Label battleSkillMetaLabel;
- Button battleSkillButton,battleEndTurnButton;
+ VisualElement battleRoot,battleStage,battlePlayerLane,battleEnemyLane,battlePlayerCombatant,battleEnemyCombatant,battleEnemyLine;
+ VisualElement battleHandRoot,battlePlayerStatuses,battleEnemyStatuses;
+ VisualElement battleFxLayer,battlePlayerActor,battleEnemyActor,battleIntentList,battlePlayerHud,battleEnemyHud;
+ VisualElement battleHoverDetail,battleDeckOverlay,battleDeckGrid;
+ Label battleRoundLabel;
+ Label battlePlayerHpLabel,battlePlayerBlockLabel,battlePlayerEnergyLabel,battleEnemyHpLabel,battleEnemyBlockLabel;
+ Label battleDrawCountLabel,battleDiscardCountLabel,battleSkillLabel;
+ Label battleHoverEyebrow,battleHoverTitle,battleHoverBody,battleDeckTitle,battleDeckSummary;
+ VisualElement battlePlayerHpFill,battleEnemyHpFill;
+ Image battlePlayerPortrait,battleEnemyPortrait;
+ Button battleSkillButton,battleDrawButton,battleDiscardButton,battleEndTurnButton;
  Texture2D battleIconDamage,battleIconBlock,battleIconHeal,battleIconEnergy,battleIconClaw;
- Texture2D battlePlateWide,battlePlateHex,battleMeterFrame;
  int battleFloaterSerial;
  bool battleStartBannerShown;
 
  void EnsureBattleAssets(){
-  if(battleIconDamage!=null&&battlePlateHex!=null)return;
+  if(battleIconDamage!=null)return;
   battleIconDamage=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-damage");
   battleIconBlock=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-block");
   battleIconHeal=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-heal");
   battleIconEnergy=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-energy");
   battleIconClaw=PackspireResources.Load<Texture2D>("Art/Battle/Icons/icon-claw");
-  battlePlateWide=PackspireResources.LoadFirst<Texture2D>(
-   "Art/UI/PopDark/btn-wide-v1",
-   "Art/UI/ChromeDD/btn-plate-wide",
-   "Art/Battle/Chrome/btn-plate-wide");
-  battlePlateHex=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/btn-plate-hex");
-  battleMeterFrame=PackspireResources.Load<Texture2D>("Art/Battle/Chrome/meter-frame-v");
  }
 
  void BuildBattle(){
@@ -45,43 +42,64 @@ public sealed partial class PackspireUiFoundation {
   }
   screenRoot.Add(battleRoot);
   RequireViewElement<VisualElement>(battleRoot,"battle-background");
-
-  battleConsumablesRoot=RequireViewElement<VisualElement>(battleRoot,"battle-items");
-
+  battleRoundLabel=RequireViewElement<Label>(battleRoot,"battle-round");
+  battleStage=RequireViewElement<VisualElement>(battleRoot,"battle-stage");
+  battlePlayerLane=RequireViewElement<VisualElement>(battleRoot,"battle-player-lane");
+  battleEnemyLane=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-lane");
+  battlePlayerCombatant=RequireViewElement<VisualElement>(battleRoot,"battle-player-combatant");
+  battleEnemyCombatant=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-combatant");
+  battleEnemyLine=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-line");
+  battlePlayerActor=RequireViewElement<VisualElement>(battleRoot,"battle-player-actor");
+  battleEnemyActor=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-actor");
+  battlePlayerPortrait=RequireViewElement<Image>(battleRoot,"battle-player-portrait");
+  battleEnemyPortrait=RequireViewElement<Image>(battleRoot,"battle-enemy-portrait");
+  battlePlayerPortrait.scaleMode=ScaleMode.ScaleToFit;
+  battleEnemyPortrait.scaleMode=ScaleMode.ScaleToFit;
+  battlePlayerHud=RequireViewElement<VisualElement>(battleRoot,"battle-player-hud");
+  battleEnemyHud=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-hud");
+  battlePlayerHpLabel=RequireViewElement<Label>(battleRoot,"battle-player-hp-label");
+  battlePlayerBlockLabel=RequireViewElement<Label>(battleRoot,"battle-player-block-label");
+  battlePlayerEnergyLabel=RequireViewElement<Label>(battleRoot,"battle-player-energy-label");
+  battleDrawCountLabel=RequireViewElement<Label>(battleRoot,"battle-draw-count");
+  battleDiscardCountLabel=RequireViewElement<Label>(battleRoot,"battle-discard-count");
+  battleEnemyHpLabel=RequireViewElement<Label>(battleRoot,"battle-enemy-hp-label");
+  battleEnemyBlockLabel=RequireViewElement<Label>(battleRoot,"battle-enemy-block-label");
+  battlePlayerHpFill=RequireViewElement<VisualElement>(battleRoot,"battle-player-hp-fill");
+  battleEnemyHpFill=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-hp-fill");
+  battlePlayerStatuses=RequireViewElement<VisualElement>(battleRoot,"battle-player-statuses");
+  battleEnemyStatuses=RequireViewElement<VisualElement>(battleRoot,"battle-enemy-statuses");
+  battleIntentList=RequireViewElement<VisualElement>(battleRoot,"battle-intent-list");
   battleFxLayer=RequireViewElement<VisualElement>(battleRoot,"battle-fx");
-  battleFxLayer.pickingMode=PickingMode.Ignore;
-  int actorIndex=battleRoot.IndexOf(battleFxLayer);
-  battleRoot.Insert(actorIndex++,BuildBattleActor(false));
-  battleRoot.Insert(actorIndex++,BuildBattleHud(false));
-  battleRoot.Insert(actorIndex++,BuildBattleActor(true));
-  battleRoot.Insert(actorIndex++,BuildBattleHud(true));
-  battleRoot.Insert(actorIndex,BuildBattleIntentBadge());
-
-  // Hand first (above enemy HUD when overlapping), then chrome under the cards
   battleHandRoot=RequireViewElement<VisualElement>(battleRoot,"battle-hand");
+  battleFxLayer.pickingMode=PickingMode.Ignore;
   battleHandRoot.pickingMode=PickingMode.Ignore;
 
-  // EN / END TURN sit under the card fan
-  var handMeta=RequireViewElement<VisualElement>(battleRoot,"battle-hand-meta");
-  battleSkillMetaLabel=RequireViewElement<Label>(battleRoot,"battle-hand-meta-info");
-  battleEndTurnButton=PackspireUiFactory.Button("END TURN",()=>{
+  battleSkillButton=RequireViewElement<Button>(battleRoot,"battle-skill-button");
+  battleSkillLabel=RequireViewElement<Label>(battleRoot,"battle-skill-label");
+  battleDrawButton=RequireViewElement<Button>(battleRoot,"battle-draw-button");
+  battleDiscardButton=RequireViewElement<Button>(battleRoot,"battle-discard-button");
+  battleEndTurnButton=RequireViewElement<Button>(battleRoot,"battle-end-turn");
+  battleSkillButton.clicked+=OnBattleSkillClicked;
+  battleDrawButton.clicked+=()=>OpenBattlePile("山札",game.UiRun?.draw);
+  battleDiscardButton.clicked+=()=>OpenBattlePile("捨て札",game.UiRun?.discard);
+  battleEndTurnButton.clicked+=()=>{
    if(battleInputLocked)return;
    game.UiEndBattleTurn();
-  });
-  battleEndTurnButton.AddToClassList("ps-battle-btn");
-  battleEndTurnButton.AddToClassList("ps-battle-btn-end");
-  ApplyBattlePlate(battleEndTurnButton,battlePlateWide,ScaleMode.StretchToFill);
-  handMeta.Add(battleEndTurnButton);
+  };
+  battleSkillButton.RegisterCallback<PointerEnterEvent>(_=>
+   ShowBattleHoverDetail("ACTIVE SKILL","発動スキル",game.UiActiveSkillTooltip));
+  battleSkillButton.RegisterCallback<PointerLeaveEvent>(_=>HideBattleHoverDetail());
 
-  // Skill last so it stays above hand/actors for hit-testing
-  var skillCol=RequireViewElement<VisualElement>(battleRoot,"battle-skill-column");
-  skillCol.pickingMode=PickingMode.Ignore;
-  battleSkillButton=PackspireUiFactory.Button("SKILL",OnBattleSkillClicked);
-  battleSkillButton.AddToClassList("ps-battle-btn");
-  battleSkillButton.AddToClassList("ps-battle-btn-skill");
-  battleSkillButton.pickingMode=PickingMode.Position;
-  ApplyBattlePlate(battleSkillButton,battlePlateHex,ScaleMode.StretchToFill);
-  skillCol.Add(battleSkillButton);
+  battleHoverDetail=RequireViewElement<VisualElement>(battleRoot,"battle-hover-detail");
+  battleHoverEyebrow=RequireViewElement<Label>(battleRoot,"battle-hover-eyebrow");
+  battleHoverTitle=RequireViewElement<Label>(battleRoot,"battle-hover-title");
+  battleHoverBody=RequireViewElement<Label>(battleRoot,"battle-hover-body");
+  battleDeckOverlay=RequireViewElement<VisualElement>(battleRoot,"battle-deck-overlay");
+  battleDeckGrid=RequireViewElement<VisualElement>(battleRoot,"battle-deck-grid");
+  battleDeckTitle=RequireViewElement<Label>(battleRoot,"battle-deck-title");
+  battleDeckSummary=RequireViewElement<Label>(battleRoot,"battle-deck-summary");
+  RequireViewElement<Button>(battleRoot,"battle-deck-backdrop").clicked+=CloseBattlePile;
+  RequireViewElement<Button>(battleRoot,"battle-deck-close").clicked+=CloseBattlePile;
 
   RefreshBattleUi();
   ShowBattleStartBanner();
@@ -107,132 +125,12 @@ public sealed partial class PackspireUiFoundation {
   banner.schedule.Execute(()=>banner.RemoveFromHierarchy()).StartingIn(1750);
  }
 
- VisualElement BuildBattleActor(bool player){
-  var wrap=Container(player?"ps-battle-actor ps-battle-actor-player":"ps-battle-actor ps-battle-actor-enemy");
-  wrap.pickingMode=PickingMode.Ignore;
-  if(player)battlePlayerActor=wrap;else battleEnemyActor=wrap;
-  if(player){
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null)
-    battlePlayerPortrait=SpriteImage(game.UiShowcaseHeroSprite,new Rect(0,0,1,1),"ps-battle-actor-image",ScaleMode.ScaleToFit);
-   else if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null)
-    battlePlayerPortrait=Atlas(game.UiShowcaseHeroArt,new Rect(0,0,1,1),"ps-battle-actor-image");
-   else
-    battlePlayerPortrait=Atlas(game.UiCharacterArt,new Rect(0,0,1,1),"ps-battle-actor-image");
-   wrap.Add(battlePlayerPortrait);
-  } else {
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseDragonArt!=null)
-    battleEnemyPortrait=Atlas(game.UiShowcaseDragonArt,new Rect(0,0,1,1),"ps-battle-actor-image");
-   else
-    battleEnemyPortrait=Atlas(game.UiEnemyArt,new Rect(0,0,1,1),"ps-battle-actor-image");
-   wrap.Add(battleEnemyPortrait);
-  }
-  return wrap;
- }
-
- VisualElement BuildBattleHud(bool player){
-  if(player){
-   var hud=Container("ps-battle-hud ps-battle-hud-player");
-   var playerMeta=Container("ps-battle-player-meta");
-   battlePlayerName=new Label(""){pickingMode=PickingMode.Ignore};
-   battlePlayerName.AddToClassList("ps-battle-hud-name");
-   playerMeta.Add(battlePlayerName);
-   hud.Add(playerMeta);
-   var playerBars=Container("ps-battle-vbars");
-   playerBars.Add(BuildMeter(out battlePlayerHpFill,out battlePlayerHpLabel,"ps-battle-meter-hp",true,"HP"));
-   playerBars.Add(BuildMeter(out battlePlayerBlockFill,out battlePlayerBlockLabel,"ps-battle-meter-block",true,"BLOCK"));
-   hud.Add(playerBars);
-   battlePlayerStatuses=Container("ps-battle-status-row");
-   hud.Add(battlePlayerStatuses);
-   return hud;
-  }
-  var enemyHud=Container("ps-battle-hud ps-battle-hud-enemy");
-  var enemyMeta=Container("ps-battle-enemy-meta");
-  battleEnemyName=new Label(""){pickingMode=PickingMode.Ignore};
-  battleEnemyName.AddToClassList("ps-battle-hud-name");
-  enemyMeta.Add(battleEnemyName);
-  enemyHud.Add(enemyMeta);
-  var enemyBars=Container("ps-battle-vbars");
-  enemyBars.Add(BuildMeter(out battleEnemyHpFill,out battleEnemyHpLabel,"ps-battle-meter-hp",true,"HP"));
-  enemyBars.Add(BuildMeter(out battleEnemyBlockFill,out battleEnemyBlockLabel,"ps-battle-meter-block",true,"BLOCK"));
-  enemyHud.Add(enemyBars);
-  battleEnemyStatuses=Container("ps-battle-status-row");
-  enemyHud.Add(battleEnemyStatuses);
-  return enemyHud;
- }
-
- VisualElement BuildBattleIntentBadge(){
-  battleIntentBadge=Container("ps-battle-intent-badge");
-  battleIntentBadge.pickingMode=PickingMode.Ignore;
-  var next=new Label("NEXT"){pickingMode=PickingMode.Ignore};
-  next.AddToClassList("ps-battle-intent-next");
-  battleIntentBadge.Add(next);
-  var row=Container("ps-battle-intent-row");
-  row.pickingMode=PickingMode.Ignore;
-  battleIntentIcon=new Image{scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
-  battleIntentIcon.AddToClassList("ps-battle-intent-icon");
-  row.Add(battleIntentIcon);
-  battleIntentValue=new Label("0"){pickingMode=PickingMode.Ignore};
-  battleIntentValue.AddToClassList("ps-battle-intent-value");
-  row.Add(battleIntentValue);
-  battleIntentBadge.Add(row);
-  battleIntentKind=new Label("ATTACK"){pickingMode=PickingMode.Ignore};
-  battleIntentKind.AddToClassList("ps-battle-intent-kind");
-  battleIntentBadge.Add(battleIntentKind);
-  battleIntentHint=new Label(""){pickingMode=PickingMode.Ignore};
-  battleIntentHint.AddToClassList("ps-battle-intent-hint");
-  battleIntentBadge.Add(battleIntentHint);
-  return battleIntentBadge;
- }
-
- VisualElement BuildMeter(out VisualElement fill,out Label label,string toneClass,bool vertical,string caption=""){
-  var meter=Container(vertical?"ps-battle-meter ps-battle-meter-v "+toneClass:"ps-battle-meter "+toneClass);
-  bool framed=vertical&&battleMeterFrame!=null;
-  if(framed)meter.AddToClassList("ps-battle-meter-framed");
-  var track=Container("ps-battle-meter-track");
-  fill=Container("ps-battle-meter-fill");
-  // Force fill color in code — USS alone was hidden behind opaque frame art.
-  if(toneClass.Contains("hp"))fill.style.backgroundColor=new Color(0.91f,0.21f,0.19f,1f);
-  else if(toneClass.Contains("block"))fill.style.backgroundColor=new Color(0.22f,0.69f,0.91f,1f);
-  track.Add(fill);
-  meter.Add(track);
-  if(framed){
-   var frame=new Image{image=battleMeterFrame,scaleMode=ScaleMode.StretchToFill,pickingMode=PickingMode.Ignore};
-   frame.AddToClassList("ps-battle-meter-frame");
-   meter.Add(frame);
-  }
-  // Numbers stay off the gauges; captions (HP / BLOCK) remain below.
-  label=null;
-  if(!string.IsNullOrEmpty(caption)){
-   var cap=new Label(caption){pickingMode=PickingMode.Ignore};
-   cap.AddToClassList("ps-battle-meter-caption");
-   meter.Add(cap);
-  }
-  return meter;
- }
-
- static void ApplyBattlePlate(VisualElement button,Texture2D plate,ScaleMode mode){
-  if(button==null||plate==null)return;
-  button.style.backgroundImage=new StyleBackground(plate);
-  PackspireUiFactory.ApplyBackgroundScaleMode(button,mode);
-  button.style.backgroundColor=Color.clear;
-  button.style.borderTopWidth=0;
-  button.style.borderRightWidth=0;
-  button.style.borderBottomWidth=0;
-  button.style.borderLeftWidth=0;
-  button.style.paddingTop=0;
-  button.style.paddingRight=0;
-  button.style.paddingBottom=0;
-  button.style.paddingLeft=0;
-  button.style.unityBackgroundImageTintColor=Color.white;
- }
-
  void OnBattleSkillClicked(){
   if(battleInputLocked||battleSkillButton==null||!battleSkillButton.enabledSelf)return;
   if(!game.UiUseActiveSkill())RefreshBattleUi();
  }
 
  public void RefreshBattleUi(){
-  // Same-screen combat on the seal grid: refresh GridBoard chrome instead of full battle screen.
   if(gridBoardBuilt&&game.UiScreen==ScreenId.GridBoard){
    RefreshGridBoard();
    return;
@@ -243,96 +141,94 @@ public sealed partial class PackspireUiFoundation {
   if(run==null||battle==null)return;
   var dungeon=game.UiCurrentDungeon;
 
-  if(PackspireGame.LockBattleShowcaseArt)
-   battlePlayerName.text=CharacterCatalog.Get("sena").name;
-  else
-   battlePlayerName.text=CharacterCatalog.Get(run.characterId).name;
-  if(battlePlayerPortrait!=null){
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null){
-    battlePlayerPortrait.sprite=game.UiShowcaseHeroSprite;
-    battlePlayerPortrait.uv=new Rect(0,0,1,1);
-   } else if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null){
-    battlePlayerPortrait.image=game.UiShowcaseHeroArt;
-    battlePlayerPortrait.uv=new Rect(0,0,1,1);
-   } else {
-    var character=CharacterCatalog.Get(run.characterId);
-    ApplyCharacterPortraitImage(battlePlayerPortrait,character);
-   }
-   battlePlayerPortrait.style.display=DisplayStyle.Flex;
-  }
-  SetMeter(battlePlayerHpFill,battlePlayerHpLabel,run.hp,run.maxHp,$"{run.hp}/{run.maxHp}",true);
-  SetMeter(battlePlayerBlockFill,battlePlayerBlockLabel,run.block,24,$"{run.block}",true);
+  battleRoot.RemoveFromClassList("is-dungeon-old-spire");
+  battleRoot.RemoveFromClassList("is-dungeon-ash-forge");
+  battleRoot.RemoveFromClassList("is-dungeon-hollow-archive");
+  string dungeonClass=dungeon?.id=="ash_forge"?"is-dungeon-ash-forge":
+   dungeon?.id=="hollow_archive"?"is-dungeon-hollow-archive":"is-dungeon-old-spire";
+  battleRoot.AddToClassList(dungeonClass);
+  battleRoundLabel.text=$"ROUND {battle.move+1:00}";
+
+  var character=CharacterCatalog.Get(PackspireGame.LockBattleShowcaseArt?"mio":run.characterId);
+  if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null){
+   battlePlayerPortrait.sprite=game.UiShowcaseHeroSprite;
+   battlePlayerPortrait.uv=BattleShowcasePlayerUv;
+  } else if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroArt!=null){
+   battlePlayerPortrait.image=game.UiShowcaseHeroArt;
+   battlePlayerPortrait.uv=BattleShowcasePlayerUv;
+  } else ApplyCharacterPortraitImage(battlePlayerPortrait,character);
+  battlePlayerPortrait.style.display=DisplayStyle.Flex;
+
+  SetMeter(battlePlayerHpFill,battlePlayerHpLabel,run.hp,run.maxHp,$"{run.hp}/{run.maxHp}",false);
+  RefreshBattleBlock(battlePlayerHud,battlePlayerBlockLabel,run.block);
+  int baseEnergy=Mathf.Max(1,PackspireContent.Data.balance.baseEnergy);
+  battlePlayerEnergyLabel.text=$"{run.energy} / {baseEnergy}";
   RefreshStatuses(battlePlayerStatuses,run.statuses);
 
-  battleEnemyName.text=battle.enemy.name;
-  if(battleEnemyPortrait!=null){
-   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseDragonArt!=null){
-    battleEnemyPortrait.image=game.UiShowcaseDragonArt;
-    battleEnemyPortrait.uv=new Rect(0,0,1,1);
-   } else if(battle.enemy.HasPortraitAsset){
-    battleEnemyPortrait.image=game.ResolveEnemyPortrait(battle.enemy);
-    battleEnemyPortrait.uv=new Rect(0,0,1,1);
-   } else {
-    battleEnemyPortrait.image=game.UiEnemyArt;
-    battleEnemyPortrait.uv=EnemyUv(battle.enemy.id);
-   }
+  if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseDragonArt!=null){
+   battleEnemyPortrait.image=game.UiShowcaseDragonArt;
+   battleEnemyPortrait.uv=BattleShowcaseEnemyUv;
+  } else if(battle.enemy.HasPortraitAsset){
+   battleEnemyPortrait.image=game.ResolveEnemyPortrait(battle.enemy);
+   battleEnemyPortrait.uv=new Rect(0,0,1,1);
+  } else {
+   battleEnemyPortrait.image=game.UiEnemyArt;
+   battleEnemyPortrait.uv=EnemyUv(battle.enemy.id);
   }
+
   int moveIndex=BattleSystem.NextEnemyMoveIndex(battle);
   int baseDamage=battle.enemy.damages[moveIndex];
-  int rawIntent=baseDamage>0?BattleSystem.Damage(baseDamage+(dungeon?.damage??0),battle.enemyStatuses,run.statuses):0;
+  int rawIntent=baseDamage>0
+   ?BattleSystem.Damage(baseDamage+(dungeon?.damage??0),battle.enemyStatuses,run.statuses)
+   :0;
   var authoredMove=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
   var moveEffects=ContentDatabase.EnemyEffects(battle.enemy.id,moveIndex);
-  RefreshBattleIntent(rawIntent,baseDamage==0,run.block,moveEffects,authoredMove);
+  RefreshBattleIntent(rawIntent,baseDamage==0,moveEffects,authoredMove);
 
-  SetMeter(battleEnemyHpFill,battleEnemyHpLabel,Mathf.Max(0,battle.enemyHp),battle.enemyMaxHp,$"{Mathf.Max(0,battle.enemyHp)}/{battle.enemyMaxHp}",true);
-  SetMeter(battleEnemyBlockFill,battleEnemyBlockLabel,battle.enemyBlock,24,$"{battle.enemyBlock}",true);
+  int enemyHp=Mathf.Max(0,battle.enemyHp);
+  SetMeter(battleEnemyHpFill,battleEnemyHpLabel,enemyHp,battle.enemyMaxHp,$"{enemyHp}/{battle.enemyMaxHp}",false);
+  RefreshBattleBlock(battleEnemyHud,battleEnemyBlockLabel,battle.enemyBlock);
   RefreshStatuses(battleEnemyStatuses,battle.enemyStatuses);
-
+  RefreshBattleFormationPresentation(rawIntent,baseDamage==0,moveEffects,authoredMove);
   RefreshBattleHand(run);
-  RefreshBattleConsumables(run);
-  battleSkillMetaLabel.text=$"EN {run.energy}/3   DECK {run.draw.Count}   DISCARD {run.discard.Count}";
-  battleSkillButton.text=game.UiActiveSkillAvailable?"SKILL":"USED";
+  battleDrawCountLabel.text=run.draw.Count.ToString();
+  battleDiscardCountLabel.text=run.discard.Count.ToString();
+  battleSkillLabel.text=game.UiActiveSkillAvailable?game.UiActiveSkillLabel:"使用済み";
   battleSkillButton.tooltip=game.UiActiveSkillTooltip;
   battleSkillButton.SetEnabled(game.UiActiveSkillAvailable);
  }
 
- void RefreshBattleIntent(int rawDamage,bool specialMove,int playerBlock,List<EffectSpec> effects,EnemyMoveContent move=null){
-  if(battleIntentBadge==null)return;
-  bool attack=rawDamage>0;
-  if(battleIntentIcon!=null){
-   if(specialMove&&!attack)
-    battleIntentIcon.image=battleIconEnergy!=null?battleIconEnergy:battleIconBlock;
-   else
-    battleIntentIcon.image=battleIconClaw!=null?battleIconClaw:battleIconDamage;
-   battleIntentIcon.style.display=battleIntentIcon.image!=null?DisplayStyle.Flex:DisplayStyle.None;
+ void RefreshBattleIntent(int rawDamage,bool specialMove,List<EffectSpec> effects,EnemyMoveContent move=null){
+  if(battleIntentList==null)return;
+  battleIntentList.Clear();
+  if(rawDamage>0){
+   AddBattleIntent(battleIconClaw!=null?battleIconClaw:battleIconDamage,
+    rawDamage.ToString(),"is-attack");
+  } else if(specialMove){
+   AddBattleIntent(battleIconEnergy,"◆","is-special");
   }
-  if(battleIntentValue!=null){
-   battleIntentValue.text=attack?rawDamage.ToString():"!";
-   battleIntentValue.EnableInClassList("ps-battle-intent-value-special",!attack);
+  if((move?.block??0)>0)
+    AddBattleIntent(battleIconBlock,move.block.ToString(),"is-guard");
+  if((move?.heal??0)>0)
+    AddBattleIntent(battleIconHeal,move.heal.ToString(),"is-heal");
+  if(effects!=null)foreach(var effect in effects){
+   AddBattleIntent(battleIconEnergy,effect.amount.ToString(),"is-status");
   }
-  if(battleIntentKind!=null)
-   battleIntentKind.text=attack?"ATTACK":"SPECIAL";
-  if(battleIntentHint!=null){
-   var bits=new List<string>();
-   if(attack){
-    int afterBlock=Mathf.Max(0,rawDamage-Mathf.Max(0,playerBlock));
-    bits.Add(playerBlock>0?$"HIT YOU  {afterBlock}":"DIRECT HIT");
-   }
-    if(effects!=null){
-    foreach(var effect in effects.Take(2)){
-     var def=ContentDatabase.Status(effect.type);
-     string name=def!=null?def.name:effect.type;
-     bits.Add($"+{name}{effect.amount}");
-    }
-    if((move?.block??0)>0)bits.Add($"+BLOCK {move.block}");
-    if((move?.heal??0)>0)bits.Add($"+HP {move.heal}");
-   }
-   if(!attack&&(effects==null||effects.Count==0))bits.Add("UNKNOWN MOVE");
-   battleIntentHint.text=string.Join("   ·   ",bits);
+  if(battleIntentList.childCount==0)
+    AddBattleIntent(battleIconEnergy,"?","is-special");
+ }
+
+ void AddBattleIntent(Texture2D icon,string value,string toneClass){
+  var entry=Container("ps-battle-intent-entry "+toneClass);
+  if(icon!=null){
+   var image=new Image{image=icon,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
+   image.AddToClassList("ps-battle-intent-entry__icon");
+   entry.Add(image);
   }
-   battleIntentBadge.tooltip=attack
-    ?$"NEXT ATTACK {rawDamage}"+(playerBlock>0?$"\nAfter BLOCK → {Mathf.Max(0,rawDamage-playerBlock)}":"")
-    :$"NEXT {(string.IsNullOrEmpty(move?.name)?"SPECIAL MOVE":move.name)}";
+  var valueLabel=new Label(value){pickingMode=PickingMode.Ignore};
+  valueLabel.AddToClassList("ps-battle-intent-entry__value");
+  entry.Add(valueLabel);
+  battleIntentList.Add(entry);
  }
 
  static void SetMeter(VisualElement fill,Label label,int value,int max,string text,bool vertical){
@@ -346,26 +242,29 @@ public sealed partial class PackspireUiFoundation {
    fill.style.bottom=1;
    fill.style.height=Length.Percent(ratio*100f);
   } else {
-   fill.style.left=2;
-   fill.style.right=StyleKeyword.Auto;
-   fill.style.top=2;
-   fill.style.bottom=2;
-   fill.style.height=StyleKeyword.Auto;
    fill.style.width=Length.Percent(ratio*100f);
   }
   if(label!=null)label.text=text;
  }
 
+ static void RefreshBattleBlock(VisualElement combatantHud,Label label,int value){
+  bool active=value>0;
+  combatantHud?.EnableInClassList("has-block",active);
+  if(label!=null)label.text=active?value.ToString():string.Empty;
+ }
+
  void RefreshStatuses(VisualElement row,List<StatusState> statuses){
   if(row==null)return;
   row.Clear();
-  if(statuses==null||statuses.Count==0)return;
-  foreach(var status in statuses.Take(7)){
+  int visibleSlots=5;
+  if(statuses!=null)foreach(var status in statuses.Take(visibleSlots)){
    var def=ContentDatabase.Status(status.type);
    bool debuff=def!=null&&def.kind=="debuff";
-   var chip=Container(debuff?"ps-battle-status-chip ps-battle-status-debuff":"ps-battle-status-chip ps-battle-status-buff");
-   chip.tooltip=def!=null?def.name:status.type;
-   chip.Add(new Label(def?.icon??"●"){pickingMode=PickingMode.Ignore});
+   var chip=Container(debuff
+    ?"ps-battle-status-chip ps-battle-status-debuff"
+    :"ps-battle-status-chip ps-battle-status-buff");
+   chip.tooltip=def!=null?$"{def.name}\n{def.description}":status.type;
+   chip.Add(new Label(def?.icon??"◆"){pickingMode=PickingMode.Ignore});
    var count=new Label(status.amount.ToString()){pickingMode=PickingMode.Ignore};
    count.AddToClassList("ps-battle-status-count");
    chip.Add(count);
@@ -379,10 +278,10 @@ public sealed partial class PackspireUiFoundation {
   if(run.hand.Count==0)return;
   int count=run.hand.Count;
   float center=(count-1)*0.5f;
-  // 5枚はゆるい扇、6–7枚は弧をきつめに
-  float spreadDeg=count<=5?6.2f:count==6?7.4f:count==7?7.0f:5.0f;
-  float radius=count<=5?110f:count==6?205f:count==7?198f:155f;
-  float horizontalStep=count<=5?92f:count==6?78f:count==7?66f:58f;
+  float edgeAngle=count<=2?1.5f:count==3?3f:count==4?4.5f:count==5?6f:count==6?7.5f:count==7?9f:count==8?10f:11f;
+  float centerLift=count<=2?1f:count==3?4f:count==4?7f:count==5?10f:count==6?13f:count==7?16f:20f;
+  float horizontalStep=count<=3?126f:count<=5?110f:count==6?96f:count==7?86f:count==8?78f:count==9?70f:62f;
+  string densityClass=count<=3?"ps-battle-card-large":count<=6?"ps-battle-card-standard":count<=8?"ps-battle-card-compact":"ps-battle-card-dense";
   var handSlots=new List<(Button button,float depth)>(count);
   for(int i=0;i<count;i++){
    int index=i;
@@ -394,39 +293,36 @@ public sealed partial class PackspireUiFoundation {
     PlayBattleCardMotion(button,card,()=>game.UiPlayBattleCard(index));
    });
    button.AddToClassList("ps-battle-card");
+   button.AddToClassList(densityClass);
    if(!affordable)button.AddToClassList("ps-battle-card-disabled");
    PopulateBattleCard(button,card,run,affordable);
    float spreadIndex=i-center;
-   float angle=spreadIndex*spreadDeg;
-   float rad=angle*Mathf.Deg2Rad;
-   float arcLift=radius*(1f-Mathf.Cos(rad));
-   float baseRight=(count-1-i)*horizontalStep;
-   float arcShift=radius*Mathf.Sin(rad);
+   float normalized=center>0f?spreadIndex/center:0f;
+   float angle=normalized*edgeAngle;
+   float arcLift=centerLift*(1f-normalized*normalized);
+   float horizontalOffset=spreadIndex*horizontalStep;
    button.style.position=Position.Absolute;
-   button.style.right=baseRight-arcShift;
+   button.style.left=new Length(50f,LengthUnit.Percent);
+   button.style.marginLeft=-78f+horizontalOffset;
    button.style.bottom=arcLift;
    button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
-   button.style.transformOrigin=new TransformOrigin(new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
+   button.style.transformOrigin=new TransformOrigin(
+    new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
    button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
    handSlots.Add((button,Mathf.Abs(spreadIndex)));
   }
-  foreach(var slot in handSlots.OrderByDescending(x=>x.depth))
-   battleHandRoot.Add(slot.button);
+  foreach(var slot in handSlots.OrderByDescending(x=>x.depth))battleHandRoot.Add(slot.button);
  }
 
  void PopulateBattleCard(VisualElement slot,CardInstance card,RunState run,bool affordable){
   ApplyBattleCardPresentation(slot,card,run);
   var sourceItem=run.inventory.FirstOrDefault(x=>x.uid==card.sourceItemUid);
-  string formula=DocketDiceFormula(card);
   string sourceName=card.source;
   if(sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var itemDef))sourceName=itemDef.name;
   int maximumDurability=sourceItem!=null&&GameCatalog.Items.TryGetValue(sourceItem.templateId,out var durabilityItem)
    ?durabilityItem.baseDurability:6;
   string durability=sourceItem!=null?$"DUR {sourceItem.durability}/{maximumDurability}":card.roleCard?"ROLE":"BASIC";
-  PopulateDocketCard(
-   slot,card,BattleCardDisplayTextWithKeywords(card),sourceName,durability,
-   formula,affordable,false
-  );
+  PopulateDocketCard(slot,card,BattleCardDisplayTextWithKeywords(card),sourceName,durability,affordable,false);
  }
 
  static string BattleCardDisplayTextWithKeywords(CardInstance card){
@@ -449,61 +345,87 @@ public sealed partial class PackspireUiFoundation {
   return card.text.Replace($"{card.damage}ダメージ",formula);
  }
 
- void RefreshBattleConsumables(RunState run){
-  if(battleConsumablesRoot==null)return;
-  battleConsumablesRoot.Clear();
-  if(run.consumables.Count==0){
-   battleConsumablesRoot.style.display=DisplayStyle.None;
-   return;
+ void ShowBattleHoverDetail(string eyebrow,string title,string body){
+  if(battleHoverDetail==null)return;
+  battleHoverEyebrow.text=eyebrow;
+  battleHoverTitle.text=title;
+  battleHoverBody.text=string.IsNullOrEmpty(body)?"詳細情報はありません。":body;
+  battleHoverDetail.AddToClassList("is-visible");
+ }
+
+ void HideBattleHoverDetail(){
+  battleHoverDetail?.RemoveFromClassList("is-visible");
+ }
+
+ void OpenBattlePile(string title,IReadOnlyList<CardInstance> cards){
+  if(battleDeckOverlay==null||battleDeckGrid==null)return;
+  battleDeckTitle.text=title;
+  battleDeckGrid.Clear();
+  int count=cards?.Count??0;
+  battleDeckSummary.text=$"{count} 枚の戦闘カード";
+  if(cards!=null){
+   var run=game.UiRun;
+   foreach(var card in cards){
+    var cardView=new VisualElement{pickingMode=PickingMode.Ignore};
+    cardView.AddToClassList("ps-battle-card");
+    cardView.AddToClassList("ps-battle-deck-card");
+    PopulateBattleCard(cardView,card,run,true);
+    battleDeckGrid.Add(cardView);
+   }
   }
-  battleConsumablesRoot.style.display=DisplayStyle.Flex;
-  for(int i=0;i<run.consumables.Count;i++){
-   int index=i;
-   string id=run.consumables[index];
-   var button=new Button(()=>{
-    if(battleInputLocked)return;
-    game.UiUseBattleConsumable(index);
-   });
-   button.AddToClassList("ps-battle-cons");
-   button.tooltip=ConsumableSystem.Name(id);
-   string visual=id=="heal"?"herb":id=="guard"?"buckler":id=="fire"?"bomb":"flask";
-   button.Add(Atlas(game.UiEquipmentArt,ItemUv(visual),"ps-battle-cons-art"));
-   battleConsumablesRoot.Add(button);
-  }
+  battleDeckOverlay.AddToClassList("is-open");
+ }
+
+ void CloseBattlePile(){
+  battleDeckOverlay?.RemoveFromClassList("is-open");
  }
 
  void SuspendBattleUi(){
+  ResetBattleFormationPresentation();
   battleUiBuilt=false;
   battleInputLocked=false;
   battleStartBannerShown=false;
   battleRoot=null;
+  battleStage=null;
+  battlePlayerLane=null;
+  battleEnemyLane=null;
+  battlePlayerCombatant=null;
+  battleEnemyCombatant=null;
+  battleEnemyLine=null;
   battleHandRoot=null;
   battleFxLayer=null;
   battlePlayerActor=null;
   battleEnemyActor=null;
   battlePlayerStatuses=null;
   battleEnemyStatuses=null;
-  battleConsumablesRoot=null;
-  battlePlayerName=null;
-  battleEnemyName=null;
-  battleIntentBadge=null;
-  battleIntentIcon=null;
-  battleIntentKind=null;
-  battleIntentValue=null;
-  battleIntentHint=null;
+  battleIntentList=null;
+  battlePlayerHud=null;
+  battleEnemyHud=null;
   battlePlayerHpLabel=null;
   battlePlayerBlockLabel=null;
+  battlePlayerEnergyLabel=null;
+  battleDrawCountLabel=null;
+  battleDiscardCountLabel=null;
   battleEnemyHpLabel=null;
   battleEnemyBlockLabel=null;
   battlePlayerHpFill=null;
-  battlePlayerBlockFill=null;
   battleEnemyHpFill=null;
-  battleEnemyBlockFill=null;
-  battleSkillMetaLabel=null;
   battleSkillButton=null;
+  battleSkillLabel=null;
+  battleDrawButton=null;
+  battleDiscardButton=null;
   battleEndTurnButton=null;
   battlePlayerPortrait=null;
   battleEnemyPortrait=null;
+  battleRoundLabel=null;
+  battleHoverDetail=null;
+  battleHoverEyebrow=null;
+  battleHoverTitle=null;
+  battleHoverBody=null;
+  battleDeckOverlay=null;
+  battleDeckGrid=null;
+  battleDeckTitle=null;
+  battleDeckSummary=null;
  }
 
  public void PlayBattleActionFx(BattleActionFx fx){
@@ -555,7 +477,9 @@ public sealed partial class PackspireUiFoundation {
   source.SetEnabled(false);
   bool towardEnemy=card.type==CardType.Attack||card.damage>0;
   var target=towardEnemy?battleEnemyActor:battlePlayerActor;
-  var ghost=Container(towardEnemy?"ps-battle-card-flight ps-battle-card-flight-attack":"ps-battle-card-flight ps-battle-card-flight-support");
+  var ghost=Container(towardEnemy
+   ?"ps-battle-card-flight ps-battle-card-flight-attack"
+   :"ps-battle-card-flight ps-battle-card-flight-support");
   ghost.pickingMode=PickingMode.Ignore;
   var title=new Label(card.name){pickingMode=PickingMode.Ignore};
   title.AddToClassList("ps-battle-card-flight-name");
@@ -621,7 +545,9 @@ public sealed partial class PackspireUiFoundation {
    Place();
    floater.AddToClassList("ps-battle-floater-pop");
   }).StartingIn(Mathf.Max(16,delayMs));
-  floater.schedule.Execute(()=>{if(floater.parent!=null)floater.AddToClassList("ps-battle-floater-out");}).StartingIn(Mathf.Max(16,delayMs)+420);
+  floater.schedule.Execute(()=>{
+   if(floater.parent!=null)floater.AddToClassList("ps-battle-floater-out");
+  }).StartingIn(Mathf.Max(16,delayMs)+420);
   floater.schedule.Execute(()=>floater.RemoveFromHierarchy()).StartingIn(Mathf.Max(16,delayMs)+980);
  }
 
@@ -634,7 +560,9 @@ public sealed partial class PackspireUiFoundation {
   actor.schedule.Execute(()=>{
    if(actor==null)return;
    actor.AddToClassList(pulseClass);
-   actor.schedule.Execute(()=>{if(actor!=null)actor.RemoveFromClassList(pulseClass);}).StartingIn(220);
+   actor.schedule.Execute(()=>{
+    if(actor!=null)actor.RemoveFromClassList(pulseClass);
+   }).StartingIn(220);
   }).StartingIn(16);
  }
 }

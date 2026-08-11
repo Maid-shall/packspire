@@ -78,6 +78,7 @@ public sealed partial class PackspireUiFoundation {
   compendiumItemCardPanel=RequireViewElement<VisualElement>(shell,"compendium-card-panel");
   compendiumItemCardStage=RequireViewElement<VisualElement>(shell,"compendium-card-stage");
   compendiumItemLinkHost=RequireViewElement<VisualElement>(shell,"compendium-link-effect");
+  compendiumItemSealAttribute=RequireViewElement<VisualElement>(shell,"compendium-seal-attribute");
   compendiumItemMeta=RequireViewElement<Label>(shell,"compendium-item-meta");
   compendiumItemName=RequireViewElement<Label>(shell,"compendium-item-name");
   compendiumItemDescription=RequireViewElement<Label>(shell,"compendium-item-description");
@@ -89,15 +90,11 @@ public sealed partial class PackspireUiFoundation {
   compendiumItemTab=RequireViewElement<Button>(shell,"compendium-tab-items");
   compendiumRoleTab=RequireViewElement<Button>(shell,"compendium-tab-roles");
   compendiumEnemyTab=RequireViewElement<Button>(shell,"compendium-tab-enemies");
-  compendiumCombatTab=RequireViewElement<Button>(shell,"compendium-card-combat");
-  compendiumExplorationTab=RequireViewElement<Button>(shell,"compendium-card-exploration");
   var nextPage=RequireViewElement<Button>(shell,"compendium-item-next-page");
 
   compendiumItemTab.clicked+=()=>SelectCompendiumTab(0);
   compendiumRoleTab.clicked+=()=>SelectCompendiumTab(1);
   compendiumEnemyTab.clicked+=()=>SelectCompendiumTab(2);
-  compendiumCombatTab.clicked+=()=>SelectCompendiumCardFace(false);
-  compendiumExplorationTab.clicked+=()=>SelectCompendiumCardFace(true);
   nextPage.clicked+=ShowCompendiumLorePage;
 
   RequireViewElement<VisualElement>(shell,"compendium-tab-items-icon").Add(

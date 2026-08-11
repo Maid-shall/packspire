@@ -921,6 +921,7 @@ MonoBehaviour:
     name: "\u52AB\u706B\u7ADC"
     tier: 2
     hp: 62
+    battleFormation: 2
     boardBehavior: 1
     boardSightRange: 6
     boardMoveSteps: 1
@@ -951,6 +952,7 @@ MonoBehaviour:
     name: "\u8377\u55B0\u3089\u3044"
     tier: 3
     hp: 72
+    battleFormation: 3
     boardBehavior: 1
     boardSightRange: 6
     boardMoveSteps: 2

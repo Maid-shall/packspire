@@ -374,7 +374,7 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
- public void EquipmentCardFaces_RemainPairedWhenTheDeckIsBuilt(){
+ public void EquipmentCardsAndSealAttributeRemainLinkedWhenTheDeckIsBuilt(){
   var run=new RunState{role="warrior",backpack="standard"};
   var sword=new ItemInstance("sword");
   run.inventory.Add(sword);
@@ -383,7 +383,7 @@ public sealed class PackspireEditModeTests {
   var swordCards=built.candidates.Where(card=>card.sourceItemUid==sword.uid).ToArray();
   Assert.That(swordCards,Has.Length.EqualTo(2));
   Assert.That(swordCards.All(card=>card.id=="slash"),Is.True);
-  Assert.That(swordCards.All(card=>card.explorationCardId=="gb_seal"),Is.True);
+  Assert.That(GameCatalog.Items["sword"].sealAttribute,Is.EqualTo(DeliverySealAttribute.Incineration));
  }
 
  [Test]
@@ -395,27 +395,11 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
- public void GridBoard_InstallationPersistsAndAdvancesItsAuthoredStage(){
+ public void GridBoard_StartsInPathModeWithoutExplorationCards(){
   var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId,41821);
-  board.enemies.Clear();
-  var target=board.cells.First(cell=>cell.terrain=="floor"&&cell.place=="empty");
-  var card=new CardInstance{
-   id="gb_lamp",name="Lamp",cost=1,slotKey="test-installation",sourceItemUid="item-test"
-  };
-  board.hand.Clear();
-  board.hand.Add(card);
-  GridBoardSystem.SelectCard(board,card.slotKey);
-  Assert.That(GridBoardSystem.TryPlace(board,target.x,target.y,out var message),Is.True,message);
-  var installation=GridBoardSystem.InstallationAt(board,target.x,target.y);
-  Assert.That(installation,Is.Not.Null);
-  Assert.That(installation.cardId,Is.EqualTo("gb_lamp"));
-  Assert.That(GridBoardSystem.InstallationStage(board,target)?.id,Is.EqualTo("spark"));
-  for(int i=0;i<3;i++){
-   board.explorationTurnPending=true;
-   GridBoardSystem.ResolveExplorationTurn(board);
-  }
-  Assert.That(installation.progress,Is.EqualTo(3));
-  Assert.That(GridBoardSystem.InstallationStage(board,target)?.id,Is.EqualTo("beacon"));
+  GridBoardSystem.SyncExplorePool(board,new RunState{role="warrior",backpack="standard"});
+  Assert.That(board.hand,Is.Empty);
+  Assert.That(board.phase,Is.EqualTo(GridBoardPhase.Path));
  }
 
  [Test]
@@ -600,7 +584,7 @@ public sealed class PackspireEditModeTests {
   Assert.That(GridBoardSystem.BeginRun(board,out _),Is.True);
   for(int i=0;i<board.path.Count*3&&board.phase==GridBoardPhase.Run;i++)
    GridBoardSystem.TickRun(board,10f);
-  Assert.That(board.phase,Is.EqualTo(GridBoardPhase.Place));
+  Assert.That(board.phase,Is.EqualTo(GridBoardPhase.Path));
   Assert.That(board.explorationTurn,Is.EqualTo(1));
   Assert.That(board.areaTurn,Is.EqualTo(1));
   Assert.That(board.explorationTurnPending,Is.False);

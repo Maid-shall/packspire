@@ -83,7 +83,7 @@ public static class PackspireContentAssetBuilder {
   };
   cards.statuses=Statuses();
   cards.cards=Cards();
-  cards.explorationCards=ExplorationCards();
+  cards.explorationCards=Array.Empty<ExplorationCardContent>();
   cards.consumables=Consumables();
   items.items=Items();
   items.backpacks=Backpacks();
@@ -162,18 +162,18 @@ public static class PackspireContentAssetBuilder {
   Card("basicStrike","基本攻撃",CardType.Attack,1,"敵に2D6-2ダメージ。",damage:5),
   Card("basicGuard","基本防御",CardType.Skill,1,"5ブロック。",block:5),
   Card("basicTactic","基本戦術",CardType.Skill,0,"2ブロック。",block:2),
-  Card("slash","斬撃",CardType.Attack,1,"敵に2D6ダメージ。",damage:7),
-  Card("guard","防御",CardType.Skill,1,"6ブロック。",block:6),
-  Card("spark","火花",CardType.Power,1,"2D6-3ダメージ。次の攻撃+3。火傷2を2ターン与える。",damage:4,buff:3,
+  Card("slash","裁決押印",CardType.Attack,1,"敵に2D6ダメージ。",damage:7),
+  Card("guard","死信照合",CardType.Skill,1,"6ブロック。",block:6),
+  Card("spark","宛先指定",CardType.Power,1,"2D6-3ダメージ。次の攻撃+3。火傷2を2ターン与える。",damage:4,buff:3,
    effects:new[]{Effect("burn",EffectTarget.Enemy,2,2)}),
   Card("mend","応急手当",CardType.Skill,1,"HPを4回復。",heal:4),
-  Card("stab","刺突",CardType.Attack,0,"敵に2D6-4ダメージ。",damage:3),
+  Card("stab","抹消線",CardType.Attack,0,"敵に2D6-4ダメージ。",damage:3),
   Card("brace","堅守",CardType.Skill,2,"13ブロック。再生2を2ターン得る。",block:13,
    effects:new[]{Effect("regen",EffectTarget.Self,2,2)}),
   Card("focus","整流",CardType.Power,0,"エネルギー+1。",energy:1),
   Card("bomb","爆薬",CardType.Attack,2,"敵に2D6+8ダメージ。廃棄。",damage:15,exhaust:true),
-  Card("pierce","貫通突き",CardType.Attack,2,"敵に2D6+4ダメージ。",damage:11),
-  Card("parry","受け流し",CardType.Skill,0,"3ブロック。",block:3),
+  Card("pierce","経路穿孔",CardType.Attack,2,"敵に2D6+4ダメージ。",damage:11),
+  Card("parry","誤配返送",CardType.Skill,0,"3ブロック。",block:3),
   Card("acid","酸液",CardType.Attack,1,"敵に2D6-1ダメージ。毒3を与える。",damage:6,
    effects:new[]{Effect("poison",EffectTarget.Enemy,3)}),
   Card("tailwind","追い風",CardType.Power,1,"エネルギー+1、4ブロック。",energy:1,block:4),
@@ -181,18 +181,6 @@ public static class PackspireContentAssetBuilder {
   Card("inferno","焔断ち",CardType.Attack,2,"敵に2D6+11ダメージ。",damage:18),
   Card("echoWall","反響障壁",CardType.Skill,1,"12ブロック。",block:12),
   Card("starBomb","星喰い爆薬",CardType.Attack,2,"敵に2D6+17ダメージ。廃棄。",damage:24,exhaust:true)
- };
-
- static ExplorationCardContent[] ExplorationCards()=>new[]{
-  Exploration("gb_lamp","灯","lamp","マスに灯りを置く。ターン経過で成長し、成熟すると導線を支える。",
-   Stage("spark","灯","小さな光が周囲を照らしている。",0),
-   Stage("beacon","狼煙の灯","成熟した灯。周囲2マスを継続して照らす。",3)),
-  Exploration("gb_fog","帳","fog","マスに霧を置く。防護と攪乱に使う探索術式。",
-   Stage("mist","帳","防護と攪乱の霧が漂っている。",0),
-   Stage("deep_mist","深層の霧","成熟した霧。敵の追跡経路を遮る。",3)),
-  Exploration("gb_seal","楔","seal","マスを封鎖する。曲がるための壁を作る探索術式。",
-   Stage("wedge","楔","導線を曲げるための封鎖楔。",0),
-   Stage("lock","封鎖の楔","成熟した封印。導線と敵の双方を遮る。",3))
  };
 
  static ConsumableContent[] Consumables()=>new[]{
@@ -203,15 +191,15 @@ public static class PackspireContentAssetBuilder {
  };
 
  static ItemContent[] Items()=>new[]{
-  Item("sword","欠けた剣",ItemType.Weapon,new[]{"slash","slash"},"縦2マスの剣。火色一致で攻撃を強化する。",
-   new[]{Cell(0,0,Element.Fire),Cell(0,1,Element.Fire)},"盾と隣接: ダメージ+1、ブロック+2。熾火と隣接: 攻撃+2。"),
-  Item("shield","旅人の盾",ItemType.Armor,new[]{"guard","guard"},"横2マスの盾。土色一致で防御を強化する。",
-   new[]{Cell(0,0,Element.Earth),Cell(1,0,Element.Earth)},"剣と隣接: ブロック+2。結晶と隣接: コスト-1。"),
-  Item("ember","熾火のルーン",ItemType.Rune,new[]{"spark"},"火を増幅する1マスルーン。",
+  Item("sword","裁決の手印",ItemType.Weapon,new[]{"slash","slash"},"縦2マスの執行術具。火色一致で押印威力を強化する。",
+   new[]{Cell(0,0,Element.Fire),Cell(0,1,Element.Fire)},"防具と隣接: ダメージ+1、ブロック+2。術式印と隣接: 攻撃+2。"),
+  Item("shield","死信綴り",ItemType.Armor,new[]{"guard","guard"},"横2マスの防護台帳。土色一致で防御を強化する。",
+   new[]{Cell(0,0,Element.Earth),Cell(1,0,Element.Earth)},"武器と隣接: ブロック+2。結晶と隣接: コスト-1。"),
+  Item("ember","宛先杭箱",ItemType.Rune,new[]{"spark"},"敵の行先を指定する1マス術具。",
    new[]{Cell(0,0,Element.Fire,2)},"武器と隣接: その攻撃+2。"),
   Item("herb","薬草袋",ItemType.Supply,new[]{"mend"},"水属性の回復道具。",
    new[]{Cell(0,0,Element.Water)}),
-  Item("dagger","連撃の短剣",ItemType.Weapon,new[]{"stab","stab"},"風属性で軽く扱える短剣。",
+  Item("dagger","抹消リボン",ItemType.Weapon,new[]{"stab","stab"},"風属性で軽く扱える抹消票帯。",
    new[]{Cell(0,0,Element.Wind,2)}),
   Item("plate","古い胸当て",ItemType.Armor,new[]{"brace"},"L字3マスの重防具。",
    new[]{Cell(0,0,Element.Earth),Cell(1,0,Element.Earth),Cell(0,1,Element.Water)}),
@@ -219,9 +207,9 @@ public static class PackspireContentAssetBuilder {
    new[]{Cell(0,0,Element.Water),Cell(0,1,Element.Wind)},"隣接装備のカードコスト-1。"),
   Item("bomb","煤けた爆弾",ItemType.Supply,new[]{"bomb"},"火2点を持つ使い切り爆薬。",
    new[]{Cell(0,0,Element.Fire,2)}),
-  Item("spear","折畳み槍",ItemType.Weapon,new[]{"pierce"},"縦3マスの長柄武器。",
+  Item("spear","路線符炉",ItemType.Weapon,new[]{"pierce"},"経路を刻む縦3マスの測路術具。",
    new[]{Cell(0,0,Element.Wind),Cell(0,1,Element.Fire),Cell(0,2,Element.Wind)}),
-  Item("buckler","歯車の小盾",ItemType.Armor,new[]{"parry"},"土属性の小型盾。",
+  Item("buckler","迷荷の棺笥",ItemType.Armor,new[]{"parry"},"攻撃を一時回収する土属性の封緘箱。",
    new[]{Cell(0,0,Element.Earth)}),
   Item("flask","錬金フラスコ",ItemType.Supply,new[]{"acid"},"水と火の横2マス道具。",
    new[]{Cell(0,0,Element.Water),Cell(1,0,Element.Fire)}),
@@ -558,28 +546,53 @@ public static class PackspireContentAssetBuilder {
    afterUse=exhaust&&afterUse==BattleCardAfterUse.Discard?BattleCardAfterUse.ExhaustBattle:afterUse,
    effects=effects??Array.Empty<EffectContent>(),artwork=LoadCardArtwork(id)};
  static Sprite LoadCardArtwork(string id)=>id switch {
-  "basicStrike"=>LoadSprite("Assets/Resources/Art/Cards/Production/basic-strike-v1.png"),
-  "basicGuard"=>LoadSprite("Assets/Resources/Art/Cards/Production/basic-guard-v1.png"),
-  "tailwind"=>LoadSprite("Assets/Resources/Art/Cards/Production/tailwind-v1.png"),
-  "acid"=>LoadSprite("Assets/Resources/Art/Cards/Production/acid-flask-v1.png"),
+  "basicStrike"=>LoadEvidenceCardArtwork("basic-strike-evidence-v1"),
+  "basicGuard"=>LoadEvidenceCardArtwork("basic-guard-evidence-v1"),
+  "basicTactic"=>LoadEvidenceCardArtwork("basic-tactic-evidence-v1"),
+  "slash"=>LoadEvidenceCardArtwork("judgment-stamp-evidence-v1"),
+  "guard"=>LoadEvidenceCardArtwork("dead-letter-guard-evidence-v1"),
+  "spark"=>LoadEvidenceCardArtwork("address-designation-evidence-v1"),
+  "mend"=>LoadEvidenceCardArtwork("emergency-mend-evidence-v1"),
+  "stab"=>LoadEvidenceCardArtwork("strikethrough-evidence-v1"),
+  "brace"=>LoadEvidenceCardArtwork("brace-evidence-v1"),
+  "focus"=>LoadEvidenceCardArtwork("focus-evidence-v1"),
+  "bomb"=>LoadEvidenceCardArtwork("bomb-evidence-v1"),
+  "pierce"=>LoadEvidenceCardArtwork("pierce-evidence-v1"),
+  "parry"=>LoadEvidenceCardArtwork("misdelivery-parry-evidence-v1"),
+  "acid"=>LoadEvidenceCardArtwork("acid-evidence-v1"),
+  "tailwind"=>LoadEvidenceCardArtwork("tailwind-evidence-v1"),
+  "devour"=>LoadEvidenceCardArtwork("devour-evidence-v1"),
+  "inferno"=>LoadEvidenceCardArtwork("inferno-evidence-v1"),
+  "echoWall"=>LoadEvidenceCardArtwork("echo-wall-evidence-v1"),
+  "starBomb"=>LoadEvidenceCardArtwork("star-bomb-evidence-v1"),
   _=>null
  };
- static ExplorationCardContent Exploration(string id,string name,string place,string text,params ExplorationStageContent[] stages)=>
-  new ExplorationCardContent{id=id,name=name,place=place,text=text,cost=1,kind=ExplorationCardKind.Installation,
-   target=ExplorationTargetKind.Cell,consumeRule=ExplorationConsumeRule.Discard,growthTrigger=ExplorationGrowthTrigger.TurnsElapsed,
-   stages=stages??Array.Empty<ExplorationStageContent>()};
- static ExplorationStageContent Stage(string id,string name,string text,int progress)=>
-  new ExplorationStageContent{id=id,name=name,text=text,minimumProgress=progress};
+ static Sprite LoadEvidenceCardArtwork(string file)=>
+  LoadSprite($"Assets/Resources/Art/Cards/EvidenceCollage/{file}.png");
  static ItemContent Item(string id,string name,ItemType type,string[] cards,string description,CellContent[] cells,string linkRule="",
-  ItemRarity rarity=ItemRarity.Common,int acquisitionTier=1,int baseDurability=6,string[] resonanceTags=null,GrantedCardContent[] grantedCards=null){
-  string exploration=type switch{ItemType.Weapon=>"gb_seal",ItemType.Rune=>"gb_lamp",_=>"gb_fog"};
+  ItemRarity rarity=ItemRarity.Common,int acquisitionTier=1,int baseDurability=6,string[] resonanceTags=null,GrantedCardContent[] grantedCards=null,
+  DeliverySealAttribute? sealAttribute=null){
   var grants=grantedCards??cards.GroupBy(card=>card).Select(group=>new GrantedCardContent{
-   battleCardId=group.Key,explorationCardId=exploration,count=group.Count()
+   battleCardId=group.Key,count=group.Count()
   }).ToArray();
   var item=new ItemContent{id=id,name=name,type=type,rarity=rarity,acquisitionTier=acquisitionTier,baseDurability=baseDurability,
-   resonanceTags=resonanceTags??Array.Empty<string>(),cardIds=cards,grantedCards=grants,description=description,cells=cells,linkRule=linkRule,explorationCardId=exploration};
+   resonanceTags=resonanceTags??Array.Empty<string>(),cardIds=cards,grantedCards=grants,description=description,cells=cells,linkRule=linkRule,
+   sealAttribute=sealAttribute??SealAttributeFor(cells)};
   ConfigureItemReactions(item);
   return item;
+ }
+ static DeliverySealAttribute SealAttributeFor(CellContent[] cells){
+  var primary=(cells??Array.Empty<CellContent>())
+   .GroupBy(cell=>cell.element)
+   .OrderByDescending(group=>group.Sum(cell=>Math.Max(1,cell.value)))
+   .Select(group=>group.Key)
+   .FirstOrDefault();
+  return primary switch{
+   Element.Fire=>DeliverySealAttribute.Incineration,
+   Element.Water=>DeliverySealAttribute.Cooling,
+   Element.Wind=>DeliverySealAttribute.Silence,
+   _=>DeliverySealAttribute.Mending
+  };
  }
  static RoleContent Role(string id,string name,string kind,string description,int max=10){
   string family=new[]{"guardian","bulwark","anchor_knight","iron_vanguard","pack_saint"}.Contains(id)?"guardian"

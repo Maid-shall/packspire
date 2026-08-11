@@ -12,7 +12,7 @@ public partial class PackspireGame : MonoBehaviour {
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
  ScreenId lastVisualScreen; bool visualScreenTracked;
- /// <summary>Temporary art-preview lock: battle always shows 瀬名 + 劫火竜 portraits.</summary>
+ /// <summary>Temporary art-preview lock for the approved battle composition.</summary>
  public static readonly bool LockBattleShowcaseArt=true;
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
  public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
@@ -45,10 +45,9 @@ public partial class PackspireGame : MonoBehaviour {
   roleArt=PackspireResources.Load<Texture2D>("Art/roles-sheet");
   enemyArt=PackspireResources.Load<Texture2D>("Art/enemy-sheet");
   dungeonArt=PackspireResources.Load<Texture2D>("Art/dungeon-sheet");
-  showcaseHeroSprite=PackspireResources.Load<Sprite>("Art/Portraits/hero-sena-kick-v1");
-  if(showcaseHeroSprite==null)
-   showcaseHeroArt=PackspireResources.Load<Texture2D>("Art/Portraits/hero-sena-kick-v1");
-  showcaseDragonArt=PackspireResources.Load<Texture2D>("Art/Portraits/enemy-dragon-v1");
+  showcaseHeroSprite=null;
+  showcaseHeroArt=PackspireResources.Load<Texture2D>("Art/Battle/Actors/battle-courier-mio-v1");
+  showcaseDragonArt=PackspireResources.Load<Texture2D>("Art/Battle/Actors/battle-enemy-bell-warden-v1");
   screen=meta.characterMade?ScreenId.Hub:ScreenId.Character;
   Application.targetFrameRate=60;
  }
@@ -86,8 +85,12 @@ public partial class PackspireGame : MonoBehaviour {
   }
  }
  public void UiDevCloseWithoutRestore(){developerPanel=false;developerHasReturn=false;}
- public void UiDevOpenOldBattle(){
+ public void UiDevOpenBattle(){
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
+  gridBoard=null;
+  packingAtBase=false;
+  packingAtRelay=false;
+  courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
   StartBattle(false);
   UiDevCloseWithoutRestore();
  }

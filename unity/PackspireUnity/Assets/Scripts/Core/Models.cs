@@ -9,9 +9,10 @@ public enum CardType { Attack, Skill, Power }
 public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedition, Pack, Route, GridBoard, Battle, Reward, Shop, Event, Compendium, GameOver, GameClear }
 
 [Serializable] public struct CellDef { public int x,y; public Element element; public int value; public CellDef(int x,int y,Element e,int value=1){this.x=x;this.y=y;element=e;this.value=value;} }
-[Serializable] public class GrantedCardDef { public string battleCardId,explorationCardId; public int count=1; }
+[Serializable] public class GrantedCardDef { public string battleCardId; public int count=1; }
 [Serializable] public class ItemDef {
- public string id,name,description,cardId,linkRule,explorationCardId;
+ public string id,name,description,cardId,linkRule;
+ public DeliverySealAttribute sealAttribute;
  public string[] cardIds,resonanceTags;
  public GrantedCardDef[] grantedCards;
  public ReactionContributionContent[] reactionContributions;
@@ -57,14 +58,14 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 [Serializable] public class EffectSpec { public string type,target="enemy"; public int amount=1,duration; }
 [Serializable] public class StatusState { public string type; public int amount,duration; }
 [Serializable] public class CardInstance {
- public string id,name,text,source,sourceItemUid,slotKey,explorationCardId;
+ public string id,name,text,source,sourceItemUid,slotKey;
  public CardType type;
  public int cost,damage,block,heal,buff,energy,selfDamage,draw;
  public bool exhaust,innate,retain,ethereal,unplayable,recycle,durabilityFree,roleCard;
  public BattleCardAfterUse afterUse;
  public List<EffectSpec> effects=new();
  public CardInstance Clone()=>new(){
-  id=id,name=name,text=text,source=source,sourceItemUid=sourceItemUid,slotKey=slotKey,explorationCardId=explorationCardId,
+  id=id,name=name,text=text,source=source,sourceItemUid=sourceItemUid,slotKey=slotKey,
   type=type,cost=cost,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,draw=draw,
   exhaust=exhaust,innate=innate,retain=retain,ethereal=ethereal,unplayable=unplayable,afterUse=afterUse,
   recycle=recycle,durabilityFree=durabilityFree,roleCard=roleCard,
@@ -99,6 +100,7 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 [Serializable] public class EnemyDef {
  public string id,name;
  public int tier,hp;
+ public BattleFormationScale battleFormation=BattleFormationScale.Normal;
  public EnemyBoardBehavior boardBehavior;
  public int boardSightRange=4;
  public int boardMoveSteps=1;

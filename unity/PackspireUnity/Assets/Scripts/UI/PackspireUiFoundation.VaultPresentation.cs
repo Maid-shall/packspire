@@ -14,7 +14,6 @@ public sealed partial class PackspireUiFoundation {
  VisualElement mgmtVaultFooter;
  int vaultFilter;
  int vaultSortMode;
- bool vaultCardExploration;
  int vaultRecordPage;
  VisualElement vaultCardModal;
 
@@ -114,21 +113,30 @@ public sealed partial class PackspireUiFoundation {
 
  static string VaultItemDisplayArtAsset(string itemId){
   return itemId switch{
-   "sword" or "dagger" or "spear"=>"sword-display-v1",
-   "shield" or "buckler" or "charm"=>"shield-display-v1",
+   "sword"=>"judgment-seal-display-v1",
+   "shield"=>"dead-letter-folio-display-v1",
+   "ember"=>"address-nail-case-display-v1",
+   "dagger"=>"cancellation-ribbon-display-v1",
+   "spear"=>"route-chalk-censer-display-v1",
+   "buckler"=>"lost-parcel-reliquary-display-v1",
+   "charm"=>"shield-display-v1",
    "plate"=>"plate-display-v1",
    "crystal"=>"crystal-display-v1",
    "flask" or "bomb"=>"flask-display-v1",
    "herb"=>"herb-display-v1",
-   "ember"=>"ember-display-v1",
    _=>string.Empty
   };
  }
 
  static string VaultItemArtAsset(string itemId){
   return itemId switch{
-   "sword" or "dagger" or "spear" or "ember"=>"vault-item-sword-v1",
-   "shield" or "buckler" or "charm"=>"vault-item-gear-v1",
+   "sword"=>"vault-item-judgment-seal-v1",
+   "shield"=>"vault-item-dead-letter-folio-v1",
+   "ember"=>"vault-item-address-nail-case-v1",
+   "dagger"=>"vault-item-cancellation-ribbon-v1",
+   "spear"=>"vault-item-route-chalk-censer-v1",
+   "buckler"=>"vault-item-lost-parcel-reliquary-v1",
+   "charm"=>"vault-item-gear-v1",
    "herb"=>"vault-item-herb-v1",
    "plate"=>"vault-item-plate-v1",
    "crystal"=>"vault-item-crystal-v1",

@@ -14,9 +14,7 @@ public sealed partial class PackspireUiFoundation {
  VisualElement vaultFixedCardStage;
  VisualElement vaultFixedCardHost;
  Label vaultFixedCardTitle;
- Button vaultFixedCardFlip;
- Label vaultFixedCardCombatLabel;
- Label vaultFixedCardExplorationLabel;
+ VisualElement vaultFixedSealAttribute;
  VisualElement vaultFixedColorEffect;
  VisualElement vaultFixedLinkEffect;
  VisualElement vaultFixedActions;
@@ -97,18 +95,12 @@ public sealed partial class PackspireUiFoundation {
   vaultFixedCardStage=RequireViewElement<VisualElement>(shell,"vault-card-stage");
   vaultFixedCardHost=RequireViewElement<VisualElement>(shell,"vault-card-host");
   vaultFixedCardTitle=RequireViewElement<Label>(shell,"vault-card-title");
-  vaultFixedCardFlip=RequireViewElement<Button>(shell,"vault-card-flip");
-  vaultFixedCardCombatLabel=RequireViewElement<Label>(shell,"vault-card-combat-label");
-  vaultFixedCardExplorationLabel=RequireViewElement<Label>(shell,"vault-card-exploration-label");
-  vaultFixedCardFlip.clicked+=()=>{
-   vaultCardExploration=!vaultCardExploration;
-   RefreshVaultFixedDetail(game.UiMeta);
-  };
+  vaultFixedSealAttribute=RequireViewElement<VisualElement>(shell,"vault-seal-attribute");
   vaultFixedCardHost.RegisterCallback<ClickEvent>(evt=>{
    var selected=game.UiMeta.stash.FirstOrDefault(item=>item.uid==selectedVaultUid);
    if(selected==null||!GameCatalog.Items.TryGetValue(selected.templateId,out var definition))return;
    evt.StopPropagation();
-   ShowVaultCardModal(selected,definition,vaultCardExploration);
+   ShowVaultCardModal(selected,definition);
   });
   vaultFixedColorEffect=shell.Q<VisualElement>("vault-color-effect");
   vaultFixedLinkEffect=shell.Q<VisualElement>("vault-link-effect");
@@ -134,9 +126,7 @@ public sealed partial class PackspireUiFoundation {
   vaultFixedCardStage=null;
   vaultFixedCardHost=null;
   vaultFixedCardTitle=null;
-  vaultFixedCardFlip=null;
-  vaultFixedCardCombatLabel=null;
-  vaultFixedCardExplorationLabel=null;
+  vaultFixedSealAttribute=null;
   vaultFixedColorEffect=null;
   vaultFixedLinkEffect=null;
   vaultFixedActions=null;
@@ -195,6 +185,7 @@ public sealed partial class PackspireUiFoundation {
   vaultFixedArtStage.Clear();
   vaultFixedInfoStage.Clear();
   vaultFixedCardHost.Clear();
+  vaultFixedSealAttribute.Clear();
   vaultFixedColorEffect.Clear();
   vaultFixedLinkEffect.Clear();
   vaultFixedActions.Clear();
@@ -314,10 +305,9 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void PopulateVaultFixedCard(ItemInstance selected,ItemDef def){
-  vaultFixedCardTitle.text=vaultCardExploration?"探索カード":"戦闘カード";
-  vaultFixedCardCombatLabel.EnableInClassList("ps-selected",!vaultCardExploration);
-  vaultFixedCardExplorationLabel.EnableInClassList("ps-selected",vaultCardExploration);
-  var card=BuildEquipmentCardElement(selected,def,game.UiRun,vaultCardExploration);
+  vaultFixedCardTitle.text="戦闘配達票";
+  vaultFixedSealAttribute.Add(EquipmentSealAttributeBadge(def,"ps-vault-fixed__seal-attribute-badge"));
+  var card=BuildEquipmentCardElement(selected,def,game.UiRun);
   if(card==null){
    vaultFixedCardHost.Add(PackspireUiFactory.EmptyState(
     "カードなし",

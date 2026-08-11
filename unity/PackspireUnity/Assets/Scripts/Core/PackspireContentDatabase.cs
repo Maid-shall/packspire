@@ -9,6 +9,8 @@ public enum ConsumableEffectType { Heal, Block, Damage, Energy }
 public enum CharacterSkillKind { None, Damage, Block, BlockAndDraw, Heal }
 public enum EventEffectType { None, Hp, Gold, RepairAll }
 public enum ItemRarity { Common, Uncommon, Rare, Legendary, Cursed }
+public enum BattleFormationScale { Normal, Small, Large, Boss }
+public enum DeliverySealAttribute { Incineration, Cooling, Silence, Mending }
 public enum BattleCardAfterUse { Discard, ExhaustBattle, RemoveExpedition }
 public enum ExplorationCardKind { Support, Use, Installation, Drawback }
 public enum ExplorationTargetKind { None, Cell, Route, Installation, Enemy }
@@ -38,7 +40,7 @@ public enum ExplorationEffectType {
 }
 
 [Serializable] public class GrantedCardContent {
- public string battleCardId,explorationCardId;
+ public string battleCardId;
  [Min(1)] public int count=1;
 }
 
@@ -68,7 +70,8 @@ public enum ExplorationEffectType {
 }
 
 [Serializable] public class ItemContent {
- public string id,name,description,linkRule,explorationCardId;
+ public string id,name,description,linkRule;
+ public DeliverySealAttribute sealAttribute;
  public ItemType type;
  public ItemRarity rarity;
  [Min(1)] public int acquisitionTier=1;
@@ -159,6 +162,7 @@ public enum EnemyBoardBehavior {
 [Serializable] public class EnemyContent {
  public string id,name;
  public int tier,hp;
+ public BattleFormationScale battleFormation=BattleFormationScale.Normal;
  [Header("Exploration board")]
  public EnemyBoardBehavior boardBehavior=EnemyBoardBehavior.Patrol;
  [Min(1)] public int boardSightRange=4;
@@ -456,7 +460,6 @@ public static class PackspireContent {
   if(value.board.Length!=24)result.errors.Add($"Base storage board has {value.board.Length} cells; expected 24.");
   var itemIds=value.items.Select(x=>x.id).ToHashSet();
   var cardIds=value.cards.Select(x=>x.id).ToHashSet();
-  var explorationCardIds=value.explorationCards.Select(x=>x.id).ToHashSet();
   var statusIds=value.statuses.Select(x=>x.id).ToHashSet();
   var eventIds=value.events.Select(x=>x.id).ToHashSet();
   var enemyIds=value.enemies.Select(x=>x.id).ToHashSet();
@@ -471,19 +474,15 @@ public static class PackspireContent {
    var grants=item.grantedCards??Array.Empty<GrantedCardContent>();
    if(grants.Length>0){
     foreach(var grant in grants){
-     if(grant==null){result.errors.Add($"Item '{item.id}' has a null card face pair.");continue;}
-     if(grant.count<1)result.errors.Add($"Item '{item.id}' has a card face pair with invalid count.");
+     if(grant==null){result.errors.Add($"Item '{item.id}' has a null card grant.");continue;}
+     if(grant.count<1)result.errors.Add($"Item '{item.id}' has a card grant with invalid count.");
      if(!cardIds.Contains(grant.battleCardId))
       result.errors.Add($"Item '{item.id}' references missing battle card '{grant.battleCardId}'.");
-     if(!explorationCardIds.Contains(grant.explorationCardId))
-      result.errors.Add($"Item '{item.id}' references missing exploration card '{grant.explorationCardId}'.");
     }
    } else {
-    result.warnings.Add($"Item '{item.id}' still uses legacy cardIds/explorationCardId fields.");
+    result.warnings.Add($"Item '{item.id}' still uses the legacy cardIds field.");
     foreach(var cardId in item.cardIds??Array.Empty<string>())
      if(!cardIds.Contains(cardId))result.errors.Add($"Item '{item.id}' references missing card '{cardId}'.");
-    if(!explorationCardIds.Contains(item.explorationCardId))
-     result.errors.Add($"Item '{item.id}' references missing exploration card '{item.explorationCardId}'.");
    }
   }
   foreach(var exploration in value.explorationCards){
@@ -645,9 +644,6 @@ public static class PackspireContent {
   }
   Require(value.items.Any(x=>x.id=="sword"),"Default item 'sword' is missing.",result);
   Require(value.cards.Any(x=>x.id=="basicStrike"),"Default card 'basicStrike' is missing.",result);
-  Require(value.explorationCards.Any(x=>x.id=="gb_lamp"),"Default exploration card 'gb_lamp' is missing.",result);
-  Require(value.explorationCards.Any(x=>x.id=="gb_fog"),"Default exploration card 'gb_fog' is missing.",result);
-  Require(value.explorationCards.Any(x=>x.id=="gb_seal"),"Default exploration card 'gb_seal' is missing.",result);
   Require(value.consumables.Any(x=>x.id=="heal"),"Default consumable 'heal' is missing.",result);
   Require(value.consumables.Any(x=>x.id=="guard"),"Default consumable 'guard' is missing.",result);
   Require(value.consumables.Any(x=>x.id=="fire"),"Default consumable 'fire' is missing.",result);

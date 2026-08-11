@@ -29,13 +29,12 @@ public static class GameCatalog {
    .Where(x=>x!=null&&!string.IsNullOrEmpty(x.battleCardId))
    .Select(x=>new GrantedCardDef{
     battleCardId=x.battleCardId,
-    explorationCardId=x.explorationCardId,
     count=Math.Max(1,x.count)
    })
    .ToArray();
   if(grants.Length==0)
    grants=ids.Select(id=>new GrantedCardDef{
-    battleCardId=id,explorationCardId=value.explorationCardId,count=1
+    battleCardId=id,count=1
    }).ToArray();
   var normalizedIds=ids.Length>0
    ?ids.ToArray()
@@ -44,7 +43,7 @@ public static class GameCatalog {
    cardIds=normalizedIds,
    cardId=normalizedIds.FirstOrDefault()??"",
    linkRule=value.linkRule??"",
-   explorationCardId=value.explorationCardId,
+   sealAttribute=value.sealAttribute,
    grantedCards=grants,
    rarity=value.rarity,
    acquisitionTier=Math.Max(1,value.acquisitionTier),
@@ -103,6 +102,7 @@ public static class GameCatalog {
  static EnemyDef ToEnemy(EnemyContent value){
  var enemy=new EnemyDef(value.id,value.name,value.tier,value.hp,(value.moves??Array.Empty<EnemyMoveContent>()).Select(x=>x.damage).ToArray()){
    portraitAsset=value.portrait,
+   battleFormation=value.battleFormation,
    boardBehavior=value.boardBehavior,
    boardSightRange=Math.Max(1,value.boardSightRange),
    boardMoveSteps=Math.Max(0,value.boardMoveSteps),

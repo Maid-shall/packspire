@@ -52,6 +52,11 @@ public sealed partial class PackspireUiFoundation {
   AddDevAction(grid,"ゲームクリア(DEV)",OpenGameClearPreviewFromDev);
   AddDevAction(grid,"封印格子盤(DEV)",()=>DevNavigate(ScreenId.GridBoard,()=>game.UiDevOpenGridBoard()));
   AddDevAction(grid,"配達経路台帳(DEV)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
+  AddDevAction(grid,"戦闘・通常(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Normal));
+  AddDevAction(grid,"戦闘・小型(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Small));
+  AddDevAction(grid,"戦闘・大型(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Large));
+  AddDevAction(grid,"戦闘・ボス(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Boss));
+  AddDevAction(grid,"戦闘・複数(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Multiple));
   scroll.Add(grid);
   developerPanelRoot.Add(scroll);
   var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());

@@ -58,9 +58,7 @@ public sealed partial class PackspireUiFoundation {
   "UI/PackspireDocketCard","UI/PackspireCourierRoute"
  };
  static readonly string[] BattleStyleSheets={
-  "UI/PackspireRoute","UI/PackspireGridBoard","UI/PackspirePolish",
-  "UI/PackspireManagementV3","UI/PackspireBattle",
-  "UI/PackspireMisprintCommon"
+  "UI/PackspireBattle","UI/PackspireMisprintCommon"
  };
  static readonly string[] CommerceStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
@@ -135,6 +133,21 @@ public sealed partial class PackspireUiFoundation {
   }
   var view=Container(rootClass);
   template.CloneTree(view);
+  return view;
+ }
+
+ VisualElement InstantiateView(string resourcePath,string rootClass){
+#if UNITY_EDITOR
+  PackspireResources.Invalidate<VisualTreeAsset>(resourcePath);
+#endif
+  var template=PackspireResources.Load<VisualTreeAsset>(resourcePath);
+  if(template==null){
+   Debug.LogError($"Missing UI view template: {resourcePath}");
+   return null;
+  }
+  var view=template.Instantiate();
+  foreach(var className in rootClass.Split(' '))
+   if(!string.IsNullOrWhiteSpace(className))view.AddToClassList(className);
   return view;
  }
 

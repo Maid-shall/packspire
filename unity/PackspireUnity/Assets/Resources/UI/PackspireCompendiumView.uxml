@@ -73,11 +73,8 @@
                             </ui:VisualElement>
                             <ui:VisualElement name="compendium-card-panel" class="ps-codex-card-panel ps-combat">
                                 <ui:VisualElement class="ps-codex-docket-heading">
-                                    <ui:Label text="配達票プレビュー" class="ps-codex-card-heading" />
-                                    <ui:VisualElement class="ps-codex-card-toggle">
-                                        <ui:Button name="compendium-card-combat" text="戦闘" class="ps-codex-card-toggle-button ps-selected" />
-                                        <ui:Button name="compendium-card-exploration" text="探索" class="ps-codex-card-toggle-button" />
-                                    </ui:VisualElement>
+                                    <ui:Label text="戦闘配達票" class="ps-codex-card-heading" />
+                                    <ui:VisualElement name="compendium-seal-attribute" class="ps-codex-seal-attribute" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="compendium-card-stage" class="ps-codex-card-stage" picking-mode="Ignore" />
                             </ui:VisualElement>

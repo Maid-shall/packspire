@@ -43,7 +43,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  int compendiumDetailTab;
  int compendiumDetailPage;
  string compendiumDetailOwnerId="";
- bool compendiumCardExploration;
  Button developerAccessButton;
  VisualElement developerPanelRoot;
  bool developerOverlayStateKnown;

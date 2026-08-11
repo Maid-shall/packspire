@@ -59,6 +59,26 @@ public static class DeliverySealSystem {
   return Mathf.Clamp((matches+1)/2,1,3);
  }
 
+ public static DeliverySealAttribute Attribute(Element element)=>element switch{
+  Element.Fire=>DeliverySealAttribute.Incineration,
+  Element.Water=>DeliverySealAttribute.Cooling,
+  Element.Wind=>DeliverySealAttribute.Silence,
+  _=>DeliverySealAttribute.Mending
+ };
+
+ public static Element ElementFor(DeliverySealAttribute attribute)=>attribute switch{
+  DeliverySealAttribute.Incineration=>Element.Fire,
+  DeliverySealAttribute.Cooling=>Element.Water,
+  DeliverySealAttribute.Silence=>Element.Wind,
+  _=>Element.Earth
+ };
+
+ public static string Name(DeliverySealAttribute attribute)=>Name(ElementFor(attribute));
+ public static string Target(DeliverySealAttribute attribute)=>Target(ElementFor(attribute));
+ public static string Effect(DeliverySealAttribute attribute)=>Effect(ElementFor(attribute));
+ public static string AttributeSummary(DeliverySealAttribute attribute)=>
+  $"{Name(attribute)} / {Effect(attribute)}";
+
  public static string Name(Element element)=>element switch{
   Element.Fire=>"焼却印",
   Element.Water=>"冷却印",

@@ -15,11 +15,11 @@ MonoBehaviour:
   board: 000000000200000001000000030000000000000001000000030000000000000002000000010000000300000002000000010000000300000000000000020000000100000000000000020000000100000003000000000000000200000003000000
   items:
   - id: sword
-    name: "\u6B20\u3051\u305F\u5263"
-    description: "\u7E262\u30DE\u30B9\u306E\u5263\u3002\u706B\u8272\u4E00\u81F4\u3067\u653B\u6483\u3092\u5F37\u5316\u3059\u308B\u3002"
-    linkRule: "\u76FE\u3068\u96A3\u63A5: \u30C0\u30E1\u30FC\u30B8+1\u3001\u30D6\u30ED\u30C3\u30AF+2\u3002\u71BE\u706B\u3068\u96A3\u63A5:
+    name: "\u88C1\u6C7A\u306E\u624B\u5370"
+    description: "\u7E262\u30DE\u30B9\u306E\u57F7\u884C\u8853\u5177\u3002\u706B\u8272\u4E00\u81F4\u3067\u62BC\u5370\u5A01\u529B\u3092\u5F37\u5316\u3059\u308B\u3002"
+    linkRule: "\u9632\u5177\u3068\u96A3\u63A5: \u30C0\u30E1\u30FC\u30B8+1\u3001\u30D6\u30ED\u30C3\u30AF+2\u3002\u8853\u5F0F\u5370\u3068\u96A3\u63A5:
       \u653B\u6483+2\u3002"
-    explorationCardId: gb_seal
+    sealAttribute: 0
     type: 0
     rarity: 0
     acquisitionTier: 1
@@ -33,7 +33,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: slash
-      explorationCardId: gb_seal
       count: 2
     cardIds:
     - slash
@@ -49,11 +48,11 @@ MonoBehaviour:
       element: 0
     artwork: {fileID: 0}
   - id: shield
-    name: "\u65C5\u4EBA\u306E\u76FE"
-    description: "\u6A2A2\u30DE\u30B9\u306E\u76FE\u3002\u571F\u8272\u4E00\u81F4\u3067\u9632\u5FA1\u3092\u5F37\u5316\u3059\u308B\u3002"
-    linkRule: "\u5263\u3068\u96A3\u63A5: \u30D6\u30ED\u30C3\u30AF+2\u3002\u7D50\u6676\u3068\u96A3\u63A5:
+    name: "\u6B7B\u4FE1\u7DB4\u308A"
+    description: "\u6A2A2\u30DE\u30B9\u306E\u9632\u8B77\u53F0\u5E33\u3002\u571F\u8272\u4E00\u81F4\u3067\u9632\u5FA1\u3092\u5F37\u5316\u3059\u308B\u3002"
+    linkRule: "\u6B66\u5668\u3068\u96A3\u63A5: \u30D6\u30ED\u30C3\u30AF+2\u3002\u7D50\u6676\u3068\u96A3\u63A5:
       \u30B3\u30B9\u30C8-1\u3002"
-    explorationCardId: gb_fog
+    sealAttribute: 3
     type: 1
     rarity: 0
     acquisitionTier: 1
@@ -67,7 +66,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: guard
-      explorationCardId: gb_fog
       count: 2
     cardIds:
     - guard
@@ -83,10 +81,10 @@ MonoBehaviour:
       element: 3
     artwork: {fileID: 0}
   - id: ember
-    name: "\u71BE\u706B\u306E\u30EB\u30FC\u30F3"
-    description: "\u706B\u3092\u5897\u5E45\u3059\u308B1\u30DE\u30B9\u30EB\u30FC\u30F3\u3002"
+    name: "\u5B9B\u5148\u676D\u7BB1"
+    description: "\u6575\u306E\u884C\u5148\u3092\u6307\u5B9A\u3059\u308B1\u30DE\u30B9\u8853\u5177\u3002"
     linkRule: "\u6B66\u5668\u3068\u96A3\u63A5: \u305D\u306E\u653B\u6483+2\u3002"
-    explorationCardId: gb_lamp
+    sealAttribute: 0
     type: 2
     rarity: 0
     acquisitionTier: 1
@@ -105,7 +103,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: spark
-      explorationCardId: gb_lamp
       count: 1
     cardIds:
     - spark
@@ -119,7 +116,7 @@ MonoBehaviour:
     name: "\u85AC\u8349\u888B"
     description: "\u6C34\u5C5E\u6027\u306E\u56DE\u5FA9\u9053\u5177\u3002"
     linkRule: 
-    explorationCardId: gb_fog
+    sealAttribute: 1
     type: 3
     rarity: 0
     acquisitionTier: 1
@@ -128,7 +125,6 @@ MonoBehaviour:
     reactionContributions: []
     grantedCards:
     - battleCardId: mend
-      explorationCardId: gb_fog
       count: 1
     cardIds:
     - mend
@@ -139,10 +135,10 @@ MonoBehaviour:
       element: 1
     artwork: {fileID: 0}
   - id: dagger
-    name: "\u9023\u6483\u306E\u77ED\u5263"
-    description: "\u98A8\u5C5E\u6027\u3067\u8EFD\u304F\u6271\u3048\u308B\u77ED\u5263\u3002"
+    name: "\u62B9\u6D88\u30EA\u30DC\u30F3"
+    description: "\u98A8\u5C5E\u6027\u3067\u8EFD\u304F\u6271\u3048\u308B\u62B9\u6D88\u7968\u5E2F\u3002"
     linkRule: 
-    explorationCardId: gb_seal
+    sealAttribute: 2
     type: 0
     rarity: 0
     acquisitionTier: 1
@@ -161,7 +157,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: stab
-      explorationCardId: gb_seal
       count: 2
     cardIds:
     - stab
@@ -176,7 +171,7 @@ MonoBehaviour:
     name: "\u53E4\u3044\u80F8\u5F53\u3066"
     description: "L\u5B573\u30DE\u30B9\u306E\u91CD\u9632\u5177\u3002"
     linkRule: 
-    explorationCardId: gb_fog
+    sealAttribute: 3
     type: 1
     rarity: 0
     acquisitionTier: 1
@@ -195,7 +190,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: brace
-      explorationCardId: gb_fog
       count: 1
     cardIds:
     - brace
@@ -217,7 +211,7 @@ MonoBehaviour:
     name: "\u5171\u9CF4\u7D50\u6676"
     description: "\u6C34\u3068\u98A8\u306E\u7E262\u30DE\u30B9\u7D50\u6676\u3002"
     linkRule: "\u96A3\u63A5\u88C5\u5099\u306E\u30AB\u30FC\u30C9\u30B3\u30B9\u30C8-1\u3002"
-    explorationCardId: gb_lamp
+    sealAttribute: 1
     type: 2
     rarity: 0
     acquisitionTier: 1
@@ -231,7 +225,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: focus
-      explorationCardId: gb_lamp
       count: 1
     cardIds:
     - focus
@@ -249,7 +242,7 @@ MonoBehaviour:
     name: "\u7164\u3051\u305F\u7206\u5F3E"
     description: "\u706B2\u70B9\u3092\u6301\u3064\u4F7F\u3044\u5207\u308A\u7206\u85AC\u3002"
     linkRule: 
-    explorationCardId: gb_fog
+    sealAttribute: 0
     type: 3
     rarity: 0
     acquisitionTier: 1
@@ -258,7 +251,6 @@ MonoBehaviour:
     reactionContributions: []
     grantedCards:
     - battleCardId: bomb
-      explorationCardId: gb_fog
       count: 1
     cardIds:
     - bomb
@@ -269,10 +261,10 @@ MonoBehaviour:
       element: 0
     artwork: {fileID: 0}
   - id: spear
-    name: "\u6298\u7573\u307F\u69CD"
-    description: "\u7E263\u30DE\u30B9\u306E\u9577\u67C4\u6B66\u5668\u3002"
+    name: "\u8DEF\u7DDA\u7B26\u7089"
+    description: "\u7D4C\u8DEF\u3092\u523B\u3080\u7E263\u30DE\u30B9\u306E\u6E2C\u8DEF\u8853\u5177\u3002"
     linkRule: 
-    explorationCardId: gb_seal
+    sealAttribute: 2
     type: 0
     rarity: 0
     acquisitionTier: 1
@@ -291,7 +283,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: pierce
-      explorationCardId: gb_seal
       count: 1
     cardIds:
     - pierce
@@ -310,10 +301,10 @@ MonoBehaviour:
       element: 2
     artwork: {fileID: 0}
   - id: buckler
-    name: "\u6B6F\u8ECA\u306E\u5C0F\u76FE"
-    description: "\u571F\u5C5E\u6027\u306E\u5C0F\u578B\u76FE\u3002"
+    name: "\u8FF7\u8377\u306E\u68FA\u7B25"
+    description: "\u653B\u6483\u3092\u4E00\u6642\u56DE\u53CE\u3059\u308B\u571F\u5C5E\u6027\u306E\u5C01\u7DD8\u7BB1\u3002"
     linkRule: 
-    explorationCardId: gb_fog
+    sealAttribute: 3
     type: 1
     rarity: 0
     acquisitionTier: 1
@@ -332,7 +323,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: parry
-      explorationCardId: gb_fog
       count: 1
     cardIds:
     - parry
@@ -346,7 +336,7 @@ MonoBehaviour:
     name: "\u932C\u91D1\u30D5\u30E9\u30B9\u30B3"
     description: "\u6C34\u3068\u706B\u306E\u6A2A2\u30DE\u30B9\u9053\u5177\u3002"
     linkRule: 
-    explorationCardId: gb_fog
+    sealAttribute: 1
     type: 3
     rarity: 0
     acquisitionTier: 1
@@ -365,7 +355,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: acid
-      explorationCardId: gb_fog
       count: 1
     cardIds:
     - acid
@@ -383,7 +372,7 @@ MonoBehaviour:
     name: "\u98A8\u8AAD\u307F\u306E\u8B77\u7B26"
     description: "\u98A82\u70B9\u3092\u6301\u3064\u8B77\u7B26\u3002"
     linkRule: 
-    explorationCardId: gb_lamp
+    sealAttribute: 2
     type: 2
     rarity: 0
     acquisitionTier: 1
@@ -402,7 +391,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: tailwind
-      explorationCardId: gb_lamp
       count: 1
     cardIds:
     - tailwind
@@ -416,7 +404,7 @@ MonoBehaviour:
     name: "\u98E2\u3048\u305F\u546A\u5263"
     description: "\u5F37\u529B\u3060\u304C\u4EE3\u511F\u3092\u8981\u6C42\u3059\u308B\u7E262\u30DE\u30B9\u6B66\u5668\u3002"
     linkRule: 
-    explorationCardId: gb_seal
+    sealAttribute: 0
     type: 0
     rarity: 4
     acquisitionTier: 2
@@ -435,7 +423,6 @@ MonoBehaviour:
       perLevel: 0
     grantedCards:
     - battleCardId: devour
-      explorationCardId: gb_seal
       count: 1
     cardIds:
     - devour

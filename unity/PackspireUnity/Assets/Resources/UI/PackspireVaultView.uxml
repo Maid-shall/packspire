@@ -74,10 +74,7 @@
                 <ui:VisualElement name="vault-card-stage" class="ps-vault-fixed__card-stage">
                     <ui:VisualElement class="ps-vault-fixed__card-header">
                         <ui:Label name="vault-card-title" class="ps-vault-fixed__card-title" picking-mode="Ignore" />
-                        <ui:Button name="vault-card-flip" class="ps-vault-fixed__flip">
-                            <ui:Label name="vault-card-combat-label" text="戦闘" class="ps-vault-fixed__flip-label" picking-mode="Ignore" />
-                            <ui:Label name="vault-card-exploration-label" text="探索" class="ps-vault-fixed__flip-label" picking-mode="Ignore" />
-                        </ui:Button>
+                        <ui:VisualElement name="vault-seal-attribute" class="ps-vault-fixed__seal-attribute" />
                     </ui:VisualElement>
                     <ui:VisualElement name="vault-card-host" class="ps-vault-fixed__card-host" />
                 </ui:VisualElement>

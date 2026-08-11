@@ -1043,6 +1043,51 @@
     -unity-font-style: bold;
 }
 
+.ps-vault-fixed__seal-attribute {
+    width: 126px;
+    min-width: 126px;
+    height: 28px;
+    justify-content: center;
+}
+
+.ps-equipment-seal-attribute {
+    height: 28px;
+    padding: 2px 7px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(7, 10, 12, 0.9);
+    border-left-width: 2px;
+    border-left-color: rgb(194, 57, 42);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.56);
+}
+
+.ps-equipment-seal-attribute__mark {
+    width: 22px;
+    color: rgb(209, 62, 45);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.ps-equipment-seal-attribute__copy {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.ps-equipment-seal-attribute__name {
+    color: rgb(241, 211, 172);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-equipment-seal-attribute__effect {
+    color: rgb(55, 197, 203);
+    font-size: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .ps-vault-fixed__card-host {
     position: relative;
     width: 168px;
@@ -1261,4 +1306,219 @@
     color: rgb(103, 75, 57);
     font-size: 12px;
     -unity-text-align: middle-left;
+}
+
+/* ===== Home-derived editorial material profile =====
+   Keep the fixed vault composition; use the hub's open page hierarchy. */
+.ps-vault-fixed__background {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(9, 10, 9);
+}
+
+.ps-vault-fixed__shade {
+    background-color: rgba(2, 3, 3, 0.07);
+}
+
+.ps-vault-fixed__ledger-spine,
+.ps-vault-fixed__registration-mark {
+    opacity: 0.04;
+}
+
+.ps-vault-fixed__header-flourish {
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.62);
+    opacity: 1;
+}
+
+.ps-vault-fixed__back {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-fixed__brand-title,
+.ps-vault-fixed__list-header .ps-section-head .ps-typo-section,
+.ps-vault-fixed__name,
+.ps-vault-fixed__card-title {
+    color: rgb(238, 216, 178);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
+}
+
+.ps-vault-fixed__brand-eyebrow,
+.ps-vault-fixed__meta,
+.ps-vault-fixed__shape-count,
+.ps-vault-fixed__durability {
+    color: rgb(56, 188, 194);
+}
+
+.ps-vault-fixed__inventory,
+.ps-vault-fixed__detail,
+.ps-vault-fixed__list-header,
+.ps-vault-fixed__list-surface {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.22);
+}
+
+.ps-vault-fixed__inventory {
+    border-left-width: 0;
+    border-right-width: 1px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-right-color: rgba(190, 151, 88, 0.48);
+}
+
+.ps-vault-fixed__detail {
+    border-top-width: 0;
+}
+
+.ps-vault-fixed__list-header {
+    border-bottom-color: rgba(190, 151, 88, 0.54);
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.36);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(185, 146, 84, 0.44);
+}
+
+.ps-vault-fixed__list-header .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(57, 197, 203);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-card,
+.ps-vault-fixed__grid .ps-vault-grid-card:hover,
+.ps-vault-fixed__grid .ps-vault-grid-card:active,
+.ps-vault-fixed__grid .ps-vault-grid-card:focus {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.28);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.48);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-card.ps-selected {
+    background-image: none;
+    background-color: rgba(13, 42, 43, 0.48);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(55, 197, 203);
+    border-right-color: rgb(55, 197, 203);
+    border-top-color: rgb(55, 197, 203);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-vault-fixed__grid .ps-vault-grid-name {
+    color: rgb(235, 213, 177);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.92);
+}
+
+.ps-vault-fixed__footer {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-fixed__footer .ps-vault-v7-rarity-filter {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.74);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(130, 92, 58, 0.48);
+    border-right-color: rgba(130, 92, 58, 0.48);
+    border-top-color: rgba(130, 92, 58, 0.48);
+    border-bottom-color: rgba(130, 92, 58, 0.48);
+}
+
+.ps-vault-fixed__sort-menu,
+.ps-vault-fixed__sort-option {
+    background-image: none;
+    background-color: rgba(6, 8, 8, 0.96);
+}
+
+.ps-vault-fixed__sort-option {
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.34);
+}
+
+.ps-vault-fixed__sort-option.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-fixed__sort-option.ps-selected .ps-vault-fixed__sort-option-label {
+    color: rgb(31, 24, 19);
+}
+
+.ps-vault-fixed__art-stage {
+    background-image: none;
+    background-color: rgba(2, 4, 4, 0.14);
+}
+
+.ps-vault-fixed__name-row,
+.ps-vault-fixed__card-header,
+.ps-vault-fixed__detail-divider {
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.48);
+}
+
+.ps-vault-fixed__shape-block {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+}
+
+.ps-vault-fixed__shape-title {
+    color: rgb(59, 43, 31);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ps-vault-fixed__effect--color,
+.ps-vault-fixed__effect--link {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.68);
+    border-left-width: 2px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+}
+
+.ps-vault-fixed__effect--color {
+    border-left-color: rgb(197, 55, 41);
+    border-bottom-color: rgba(197, 55, 41, 0.48);
+}
+
+.ps-vault-fixed__effect--link {
+    border-left-color: rgb(55, 197, 203);
+    border-bottom-color: rgba(55, 197, 203, 0.48);
+}
+
+.ps-vault-fixed__effect .ps-vault-v9-effect-name {
+    color: rgb(237, 215, 178);
+}
+
+.ps-vault-fixed__effect .ps-vault-v9-effect-body {
+    color: rgb(190, 174, 147);
+}
+
+.ps-vault-fixed__grid > .ps-empty-state,
+.ps-vault-fixed__empty-detail .ps-empty-state {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
 }

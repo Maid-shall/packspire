@@ -17,11 +17,10 @@ public sealed partial class PackspireUiFoundation {
  VisualElement compendiumItemCardPanel;
  VisualElement compendiumItemCardStage;
  VisualElement compendiumItemLinkHost;
+ VisualElement compendiumItemSealAttribute;
  Button compendiumItemTab;
  Button compendiumRoleTab;
  Button compendiumEnemyTab;
- Button compendiumCombatTab;
- Button compendiumExplorationTab;
  Label compendiumDiscoveryCount;
  Label compendiumItemMeta;
  Label compendiumItemName;
@@ -49,7 +48,6 @@ public sealed partial class PackspireUiFoundation {
   compendiumDetailOwnerId=ownerId;
   compendiumDetailTab=0;
   compendiumDetailPage=0;
-  compendiumCardExploration=false;
  }
 
  void SelectCompendiumTab(int tab){
@@ -58,12 +56,6 @@ public sealed partial class PackspireUiFoundation {
   compendiumTab=tab;
   selectedCompendiumId="";
   RefreshCompendiumScreen(true);
- }
-
- void SelectCompendiumCardFace(bool exploration){
-  if(compendiumCardExploration==exploration)return;
-  compendiumCardExploration=exploration;
-  RefreshCompendiumDetail(game.UiMeta);
  }
 
  void ShowCompendiumLorePage(){
@@ -203,22 +195,6 @@ public sealed partial class PackspireUiFoundation {
   return mark;
  }
 
- static string ItemCardSummary(ItemDef item,bool exploration){
-  var names=new List<string>();
-  foreach(var grant in item.grantedCards??Array.Empty<GrantedCardDef>()){
-   string id=exploration?grant?.explorationCardId:grant?.battleCardId;
-   if(string.IsNullOrEmpty(id))continue;
-   if(exploration&&GameCatalog.ExplorationCards.TryGetValue(id,out var explore))names.Add(explore.name);
-   else if(!exploration&&GameCatalog.Cards.TryGetValue(id,out var battle))names.Add(battle.name);
-  }
-  if(names.Count==0){
-   string id=exploration?item.explorationCardId:item.cardId;
-   if(exploration&&GameCatalog.ExplorationCards.TryGetValue(id??"",out var explore))names.Add(explore.name);
-   else if(!exploration&&GameCatalog.Cards.TryGetValue(id??"",out var battle))names.Add(battle.name);
-  }
-  return names.Count==0?"登録なし":string.Join(" / ",names.Distinct());
- }
-
  string ItemElementSummary(ItemDef item){
   var groups=(item.cells??Array.Empty<CellDef>())
    .GroupBy(cell=>cell.element)
@@ -300,26 +276,25 @@ public sealed partial class PackspireUiFoundation {
   compendiumItemShapeHost.Clear();
   foreach(var variant in variants)compendiumItemShapeHost.Add(CompendiumNeutralShape(variant));
 
-  compendiumItemCardPanel.EnableInClassList("ps-combat",!compendiumCardExploration);
-  compendiumItemCardPanel.EnableInClassList("ps-exploration",compendiumCardExploration);
-  compendiumCombatTab.EnableInClassList("ps-selected",!compendiumCardExploration);
-  compendiumExplorationTab.EnableInClassList("ps-selected",compendiumCardExploration);
+  compendiumItemCardPanel.EnableInClassList("ps-combat",true);
+  compendiumItemSealAttribute.Clear();
+  compendiumItemSealAttribute.Add(EquipmentSealAttributeBadge(item,"ps-codex-seal-attribute-badge"));
   compendiumItemCardStage.Clear();
   var itemInstance=new ItemInstance(item.id);
-  var card=BuildEquipmentCardFacePreview(itemInstance,item,game.UiRun,compendiumCardExploration);
+  var card=BuildEquipmentCardFacePreview(itemInstance,item,game.UiRun);
   if(card!=null){
    card.AddToClassList("ps-codex-item-v5-card");
    card.pickingMode=PickingMode.Position;
    card.tooltip="クリックでカードを拡大";
    card.RegisterCallback<ClickEvent>(evt=>{
     evt.StopPropagation();
-    ShowVaultCardModal(itemInstance,item,compendiumCardExploration);
+    ShowVaultCardModal(itemInstance,item);
    });
    compendiumItemCardStage.Add(card);
   }else{
    compendiumItemCardStage.Add(PackspireUiFactory.EmptyState(
-    compendiumCardExploration?"探索カードなし":"戦闘カードなし",
-    $"この装備には固定の{(compendiumCardExploration?"探索":"戦闘")}カードが登録されていません。"
+    "戦闘配達票なし",
+    "この装備には固定の戦闘配達票が登録されていません。"
    ));
   }
 
@@ -541,15 +516,14 @@ public sealed partial class PackspireUiFoundation {
 
  List<CompendiumEntry> SkillEntries(ItemDef item){
   var result=new List<CompendiumEntry>{
-   new("固有効果",string.IsNullOrEmpty(item.description)?"記録なし":item.description,"技")
+   new("固有効果",string.IsNullOrEmpty(item.description)?"記録なし":item.description,"技"),
+   new(DeliverySealSystem.Name(item.sealAttribute),DeliverySealSystem.Effect(item.sealAttribute),"印")
   };
   foreach(var grant in item.grantedCards??Array.Empty<GrantedCardDef>()){
    if(!string.IsNullOrEmpty(grant.battleCardId)&&GameCatalog.Cards.TryGetValue(grant.battleCardId,out var battle))
     result.Add(new CompendiumEntry(battle.name,battle.text,"戦"));
-   if(!string.IsNullOrEmpty(grant.explorationCardId)&&GameCatalog.ExplorationCards.TryGetValue(grant.explorationCardId,out var explore))
-    result.Add(new CompendiumEntry(explore.name,explore.text,"探"));
   }
-  if(result.Count==1)result.Add(new CompendiumEntry("追加能力","記録なし","◇",true));
+  if(result.Count==2)result.Add(new CompendiumEntry("追加能力","記録なし","◇",true));
   return result;
  }
 
@@ -567,17 +541,12 @@ public sealed partial class PackspireUiFoundation {
  VisualElement ItemCardsPage(ItemDef item){
   var page=Container("ps-codex-v3-card-page");
   var head=Container("ps-codex-v3-card-head");
-  var label=new Label(compendiumCardExploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  var label=new Label("戦闘配達票"){pickingMode=PickingMode.Ignore};
   label.AddToClassList("ps-codex-v3-card-label");
   head.Add(label);
-  var flip=new Button(()=>{
-   compendiumCardExploration=!compendiumCardExploration;
-   RefreshCompendiumDetail(game.UiMeta);
-  }){text=compendiumCardExploration?"戦闘面へ":"探索面へ"};
-  flip.AddToClassList("ps-codex-v3-flip");
-  head.Add(flip);
+  head.Add(EquipmentSealAttributeBadge(item,"ps-codex-v3-seal-attribute"));
   page.Add(head);
-  var card=BuildEquipmentCardFacePreview(new ItemInstance(item.id),item,game.UiRun,compendiumCardExploration);
+  var card=BuildEquipmentCardFacePreview(new ItemInstance(item.id),item,game.UiRun);
   if(card!=null)page.Add(card);
   else page.Add(PackspireUiFactory.EmptyState("カード記録なし","この装備にはカード面が登録されていません。"));
   return page;

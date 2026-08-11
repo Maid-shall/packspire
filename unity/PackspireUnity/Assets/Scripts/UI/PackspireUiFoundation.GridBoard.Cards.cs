@@ -310,7 +310,7 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
   GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration);
   int stages=exploration?.stages?.Length??0;
   PopulateDocketCard(
-   slot,card,card.text,"配置 / 経路局","GRID / 携行",string.Empty,true,true,stages
+   slot,card,card.text,"配置 / 経路局","GRID / 携行",true,true,stages
   );
  }
 

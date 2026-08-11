@@ -296,39 +296,19 @@ public sealed partial class PackspireUiFoundation {
   var lower=Container("ps-vault-v9-lower");
   var cardPanel=Container("ps-vault-v9-card-panel");
   var cardHeader=Container("ps-vault-v9-lower-header");
-  var cardHeading=new Label(vaultCardExploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  var cardHeading=new Label("戦闘配達票"){pickingMode=PickingMode.Ignore};
   cardHeading.AddToClassList("ps-vault-v9-lower-title");
   cardHeader.Add(cardHeading);
-  var flip=PackspireUiFactory.Button("",()=>{
-   vaultCardExploration=!vaultCardExploration;
-   RefreshVaultDetail(game.UiMeta);
-  });
-  flip.AddToClassList("ps-vault-v9-flip");
-  flip.EnableInClassList("ps-exploration-active",vaultCardExploration);
-  var flipBackground=Container("ps-vault-v9-flip-bg");
-  flipBackground.pickingMode=PickingMode.Ignore;
-  flipBackground.style.scale=new Scale(new Vector3(vaultCardExploration?-1f:1f,1f,1f));
-  flip.Add(flipBackground);
-  var combatFaceLabel=new Label("戦闘"){pickingMode=PickingMode.Ignore};
-  combatFaceLabel.AddToClassList("ps-vault-v9-flip-label");
-  combatFaceLabel.AddToClassList("ps-combat");
-  combatFaceLabel.EnableInClassList("ps-selected",!vaultCardExploration);
-  flip.Add(combatFaceLabel);
-  var explorationFaceLabel=new Label("探索"){pickingMode=PickingMode.Ignore};
-  explorationFaceLabel.AddToClassList("ps-vault-v9-flip-label");
-  explorationFaceLabel.AddToClassList("ps-exploration");
-  explorationFaceLabel.EnableInClassList("ps-selected",vaultCardExploration);
-  flip.Add(explorationFaceLabel);
-  cardHeader.Add(flip);
+  cardHeader.Add(EquipmentSealAttributeBadge(def,"ps-vault-v9-seal-attribute"));
   cardPanel.Add(cardHeader);
- var face=BuildEquipmentCardFacePreview(selected,def,game.UiRun,vaultCardExploration);
+ var face=BuildEquipmentCardFacePreview(selected,def,game.UiRun);
   if(face!=null){
    face.pickingMode=PickingMode.Position;
    face.AddToClassList("ps-vault-v9-card-open");
    face.tooltip="クリックでカードを拡大";
    face.RegisterCallback<ClickEvent>(evt=>{
     evt.StopPropagation();
-    ShowVaultCardModal(selected,def,vaultCardExploration);
+    ShowVaultCardModal(selected,def);
    });
    cardPanel.Add(face);
   }
@@ -373,7 +353,7 @@ public sealed partial class PackspireUiFoundation {
  mgmtDetailScroll?.Add(lower);
 }
 
- void ShowVaultCardModal(ItemInstance item,ItemDef def,bool exploration){
+ void ShowVaultCardModal(ItemInstance item,ItemDef def){
   CloseVaultCardModal();
   if(screenRoot==null||item==null||def==null)return;
   var overlay=Container("ps-vault-card-modal");
@@ -387,10 +367,10 @@ public sealed partial class PackspireUiFoundation {
   stage.RegisterCallback<ClickEvent>(evt=>{
    if(evt.target==stage)CloseVaultCardModal();
   });
-  var heading=new Label(exploration?"探索カード":"戦闘カード"){pickingMode=PickingMode.Ignore};
+  var heading=new Label("戦闘配達票"){pickingMode=PickingMode.Ignore};
   heading.AddToClassList("ps-vault-card-modal-heading");
   stage.Add(heading);
-  var enlarged=BuildEquipmentCardFacePreview(item,def,game.UiRun,exploration);
+  var enlarged=BuildEquipmentCardFacePreview(item,def,game.UiRun);
   if(enlarged!=null){
    enlarged.pickingMode=PickingMode.Position;
    enlarged.AddToClassList("ps-vault-card-modal-face");
