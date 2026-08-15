@@ -65,7 +65,7 @@ public sealed partial class PackspireUiFoundation {
   if(artwork!=null&&sprite!=null)artwork.style.backgroundImage=new StyleBackground(sprite);
  }
 
- static Sprite BattleCardArtwork(string id){
+ internal static Sprite BattleCardArtwork(string id){
   string file=id switch {
    "basicStrike"=>"basic-strike-evidence-v1",
    "basicGuard"=>"basic-guard-evidence-v1",

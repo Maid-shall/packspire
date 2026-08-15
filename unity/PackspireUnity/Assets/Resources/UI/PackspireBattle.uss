@@ -84,62 +84,44 @@
 
 .ps-battle-brand {
     position: absolute;
-    left: 24px;
-    top: 18px;
-    width: 232px;
-    height: 44px;
-    flex-direction: row;
-    align-items: center;
-    padding: 0 12px;
-    background-color: rgba(6, 8, 8, 0.86);
-    border-left-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgba(174, 48, 36, 0.82);
-    border-top-color: rgba(180, 141, 78, 0.48);
-    border-bottom-color: rgba(180, 141, 78, 0.7);
-}
-
-.ps-battle-brand__copy {
-    justify-content: center;
-}
-
-.ps-battle-circle {
-    margin-right: 10px;
-    color: rgb(204, 62, 45);
-    font-size: 24px;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-}
-
-.ps-battle-record-title {
-    color: rgb(245, 227, 190);
-    font-size: 17px;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
-}
-
-.ps-battle-brand__eyebrow {
-    margin-top: -2px;
-    color: rgb(57, 176, 182);
-    font-size: 7px;
+    left: 22px;
+    top: 10px;
+    width: 334px;
+    height: 95px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/Battle/Chrome/BApproved/battle-header-slip-b");
+    -unity-background-scale-mode: stretch-to-fill;
 }
 
 .ps-battle-round-badge {
     position: absolute;
-    right: 24px;
-    top: 18px;
-    width: 124px;
-    height: 38px;
+    right: 22px;
+    top: 0;
+    width: 88px;
+    height: 104px;
     align-items: center;
     justify-content: center;
-    background-image: resource("Art/Battle/Chrome/btn-plate-hex");
+    padding-top: 32px;
+    padding-bottom: 13px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/Battle/Chrome/BApproved/battle-round-tag-b");
     -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-battle-round-caption {
+    width: 100%;
+    margin: 0 0 -2px 0;
+    color: rgb(55, 43, 29);
+    font-size: 8px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    -unity-text-align: middle-center;
 }
 
 .ps-battle-round {
     width: 100%;
     margin: 0;
-    color: rgb(232, 213, 176);
-    font-size: 14px;
+    color: rgb(42, 31, 22);
+    font-size: 22px;
     -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
     -unity-text-align: middle-center;
 }
@@ -1163,9 +1145,9 @@
 
 .ps-battle-command-rail {
     position: relative;
-    width: 166px;
-    height: 58px;
-    margin-bottom: 18px;
+    width: 222px;
+    height: 101px;
+    margin-bottom: 8px;
     padding: 0;
     background-color: rgba(0, 0, 0, 0);
     background-image: none;
@@ -1177,13 +1159,12 @@
     right: 0;
     bottom: 0;
     width: auto;
-    height: 58px;
-    padding: 0 12px;
-    color: rgb(239, 221, 184);
-    font-size: 16px;
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    height: 101px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
     background-color: rgba(0, 0, 0, 0);
-    background-image: resource("Art/Battle/Chrome/btn-plate-wide");
+    background-image: resource("Art/Battle/Chrome/BApproved/battle-end-turn-b");
     -unity-background-scale-mode: stretch-to-fill;
     -unity-background-image-tint-color: rgb(255, 255, 255);
     border-left-width: 0;
@@ -1193,9 +1174,8 @@
 }
 
 .ps-battle-btn-end:hover {
-    translate: 0 -2px;
-    color: rgb(255, 239, 203);
-    -unity-background-image-tint-color: rgb(233, 93, 69);
+    translate: 0 -1px;
+    -unity-background-image-tint-color: rgb(255, 239, 224);
 }
 
 .ps-battle-utility-button--skill {

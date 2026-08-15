@@ -15,6 +15,12 @@ public static class CourierResolutionKind {
  public const string MiniGame="MINIGAME";
 }
 
+public static class CourierRoadWidth {
+ public const string Wide="WIDE";
+ public const string Standard="STANDARD";
+ public const string Narrow="NARROW";
+}
+
 [Serializable]
 public sealed class CourierLocationOutcome {
  public bool success=true,cargoRecovered;
@@ -40,7 +46,7 @@ public sealed class CourierRouteState {
 }
 
 public sealed class CourierRouteNodeDef {
- public string id,title,kind,condition,resolution,resolutionTitle,resolutionText;
+ public string id,title,kind,condition,resolution,resolutionTitle,resolutionText,roadWidth=CourierRoadWidth.Standard;
  public int phase,lane,dayCost,risk;
  public string[] next=Array.Empty<string>();
 }
@@ -59,70 +65,70 @@ public static class CourierRouteSystem {
 
   Node("ash_market","灰市の中継所","RELAY",1,0,2,0,CourierResolutionKind.Relay,
    "中継補給","検札を済ませ、収納術式を整える。",Next("quiet_shaft","bell_bridge"),
-   "遠回りだが安全。HP回復と荷物整理を行える。"),
+   "遠回りだが安全。HP回復と荷物整理を行える。",CourierRoadWidth.Wide),
   Node("broken_stair","崩れ階段","EVENT",1,1,1,1,CourierResolutionKind.Event,
    "崩落路を測量","周囲を照合し、崩落区画から帰還する。",Next("bell_bridge"),
-   "短いが結果次第で追加日数が発生する。"),
+   "短いが結果次第で追加日数が発生する。",CourierRoadWidth.Narrow),
 
   Node("quiet_shaft","無音昇降路","CARGO",2,0,1,1,CourierResolutionKind.Cargo,
    "中継荷を回収","残された荷札を照合し、回収する荷物を選ぶ。",Next("cinder_tunnel"),
-   "回収物を持ち帰れる。戦闘は発生しない。"),
+   "回収物を持ち帰れる。戦闘は発生しない。",CourierRoadWidth.Narrow),
   Node("bell_bridge","鐘楼橋","RELAY",2,1,2,0,CourierResolutionKind.Relay,
    "中継補給","橋の検札所でHPを回復し、収納術式を整える。",Next("cinder_tunnel","sealed_gate"),
-   "日数はかかるが次の分岐へ備えられる。"),
+   "日数はかかるが次の分岐へ備えられる。",CourierRoadWidth.Wide),
 
   Node("cinder_tunnel","燼火隧道","PURSUIT",3,0,1,3,CourierResolutionKind.Battle,
    "隧道の敵影を排除","配達路を塞ぐ敵影を倒して隧道を突破する。",Next("reliquary_post","gallows_square"),
-   "最短経路。強敵との戦闘を避けられない。"),
+   "最短経路。強敵との戦闘を避けられない。",CourierRoadWidth.Narrow),
   Node("sealed_gate","封印関門","EVENT",3,1,2,1,CourierResolutionKind.Event,
    "通関手続き","封印された関門の通行証を照合する。",Next("gallows_square"),
-   "安全だが手続きに日数を要する。"),
+   "安全だが手続きに日数を要する。",CourierRoadWidth.Standard),
 
   Node("reliquary_post","聖遺物郵便局","RELAY",4,0,2,0,CourierResolutionKind.Relay,
    "局内記録を照合","散らばった記録を照らし、配達先を確認する。",Next("drowned_archive"),
-   "HP回復と荷物整理ができる中継所。"),
+   "HP回復と荷物整理ができる中継所。",CourierRoadWidth.Standard),
   Node("gallows_square","絞首広場","PURSUIT",4,1,1,2,CourierResolutionKind.Battle,
    "広場の番人を排除","配達路を塞ぐ番人を倒して突破する。",Next("drowned_archive","silent_causeway"),
-   "短いが番人が巡回する危険経路。"),
+   "短いが番人が巡回する危険経路。",CourierRoadWidth.Wide),
 
   Node("drowned_archive","水没書庫","CARGO",5,0,1,1,CourierResolutionKind.Cargo,
    "宛先台帳を回収","水没した宛先台帳を照合し、回収物を選ぶ。",Next("ash_hospital","condemned_station"),
-   "追加の回収物を得られる可能性がある。"),
+   "追加の回収物を得られる可能性がある。",CourierRoadWidth.Narrow),
   Node("silent_causeway","静寂の高架路","EVENT",5,1,2,0,CourierResolutionKind.Event,
    "高架路を通過","封鎖前に通行手続きを終える。",Next("condemned_station"),
-   "安全だが期限を大きく消費する。"),
+   "安全だが期限を大きく消費する。",CourierRoadWidth.Wide),
 
   Node("ash_hospital","灰療院中継所","RELAY",6,0,2,0,CourierResolutionKind.Relay,
    "診療記録を照合","廃診療棟でHPを回復し、収納術式を整える。",Next("glass_aqueduct"),
-   "最後の中継候補。荷物整理も行える。"),
+   "最後の中継候補。荷物整理も行える。",CourierRoadWidth.Standard),
   Node("condemned_station","廃駅処刑場","PURSUIT",6,1,1,3,CourierResolutionKind.Battle,
    "追跡者を退ける","追跡者を倒し、閉鎖駅を抜ける。",Next("glass_aqueduct","infernal_customs"),
-   "短いが高危険度の戦闘が発生する。"),
+   "短いが高危険度の戦闘が発生する。",CourierRoadWidth.Standard),
 
   Node("glass_aqueduct","硝子導水橋","EVENT",7,0,1,2,CourierResolutionKind.Event,
    "導水路を測量","割れた導水路の安全な足場を確認する。",Next("courier_catacomb","black_bell_yard"),
-   "成功すれば予定通り、失敗すると追加日数が発生する。"),
+   "成功すれば予定通り、失敗すると追加日数が発生する。",CourierRoadWidth.Narrow),
   Node("infernal_customs","地獄通関局","PURSUIT",7,1,1,3,CourierResolutionKind.Battle,
    "通関執行官を排除","執行官を倒し、配達許可を通す。",Next("black_bell_yard"),
-   "短いが戦闘を避けられない。"),
+   "短いが戦闘を避けられない。",CourierRoadWidth.Standard),
 
   Node("courier_catacomb","配達人墓廊","CARGO",8,0,1,2,CourierResolutionKind.Cargo,
    "旧宛先印を回収","墓廊に残る宛先印を確保して出口へ向かう。",Next("final_relay"),
-   "最後の回収物を探せる寄り道。"),
+   "最後の回収物を探せる寄り道。",CourierRoadWidth.Narrow),
   Node("black_bell_yard","黒鐘の中庭","EVENT",8,1,2,1,CourierResolutionKind.Event,
    "黒鐘を停止","鐘が鳴る前に中庭を横断する。",Next("final_relay","pursuer_gate"),
-   "安全寄りだが期限を多く消費する。"),
+   "安全寄りだが期限を多く消費する。",CourierRoadWidth.Wide),
 
   Node("final_relay","第七中継所","RELAY",9,0,2,0,CourierResolutionKind.Relay,
    "最終検札を通過","収納術式を整え、目的地前の検札を抜ける。",Next("destination"),
-   "目的地前で最後のHP回復と荷物整理を行える。"),
+   "目的地前で最後のHP回復と荷物整理を行える。",CourierRoadWidth.Standard),
   Node("pursuer_gate","追跡者の門","PURSUIT",9,1,1,3,CourierResolutionKind.Battle,
    "追跡者の門を突破","門を塞ぐ追跡者を倒し、目的地へ進む。",Next("destination"),
-   "期限は短いが最後の強敵が待つ。"),
+   "期限は短いが最後の強敵が待つ。",CourierRoadWidth.Narrow),
 
   Node("destination","紫晶の封鐘塔","DESTINATION",10,0,1,0,CourierResolutionKind.Delivery,
    "最終配達","受取印へ荷を届け、配達を完了する。",Array.Empty<string>(),
-   "期限内に荷を届ければ遠征成功。")
+   "期限内に荷を届ければ遠征成功。",CourierRoadWidth.Wide)
  };
 
  public static IReadOnlyList<CourierRouteNodeDef> Nodes=>NodesValue;
@@ -314,9 +320,11 @@ public static class CourierRouteSystem {
  static bool FailureReached(CourierRouteState state)=>state.daysElapsed>state.deadlineDays;
 
  static CourierRouteNodeDef Node(string id,string title,string kind,int phase,int lane,int days,int risk,
-  string resolution,string resolutionTitle,string resolutionText,string[] next,string condition="")=>new(){
+  string resolution,string resolutionTitle,string resolutionText,string[] next,string condition="",
+  string roadWidth=CourierRoadWidth.Standard)=>new(){
    id=id,title=title,kind=kind,phase=phase,lane=lane,dayCost=days,risk=risk,
-   resolution=resolution,resolutionTitle=resolutionTitle,resolutionText=resolutionText,next=next,condition=condition
+   resolution=resolution,resolutionTitle=resolutionTitle,resolutionText=resolutionText,next=next,
+   condition=condition,roadWidth=roadWidth
   };
 
  static string[] Next(params string[] ids)=>ids;

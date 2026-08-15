@@ -84,6 +84,11 @@ public partial class PackspireGame : MonoBehaviour {
    }
   }
  }
+ public void UiOpenDeveloperPanel(){
+  developerReturnScreen=screen;
+  developerHasReturn=true;
+  developerPanel=true;
+ }
  public void UiDevCloseWithoutRestore(){developerPanel=false;developerHasReturn=false;}
  public void UiDevOpenBattle(){
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");

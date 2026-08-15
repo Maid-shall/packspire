@@ -115,6 +115,10 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   if(uiReady)RefreshScreen(true);
  }
 
+ public void SetJourneyPrototypeVisible(bool prototypeVisible){
+  if(root!=null)root.style.display=prototypeVisible?DisplayStyle.None:DisplayStyle.Flex;
+ }
+
 #if UNITY_EDITOR
  public void QaResetBuildCounters(){
   qaRefreshScreenBuilds=0;

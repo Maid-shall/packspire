@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Packspire {
@@ -48,15 +49,13 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"キャラ選択",ScreenId.Character);
   AddDevAction(grid,"商店(DEV)",OpenShopPreviewFromDev);
   AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
-  AddDevAction(grid,"ゲームオーバー(DEV)",OpenGameOverPreviewFromDev);
-  AddDevAction(grid,"ゲームクリア(DEV)",OpenGameClearPreviewFromDev);
-  AddDevAction(grid,"封印格子盤(DEV)",()=>DevNavigate(ScreenId.GridBoard,()=>game.UiDevOpenGridBoard()));
   AddDevAction(grid,"配達経路台帳(DEV)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
-  AddDevAction(grid,"戦闘・通常(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Normal));
-  AddDevAction(grid,"戦闘・小型(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Small));
-  AddDevAction(grid,"戦闘・大型(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Large));
-  AddDevAction(grid,"戦闘・ボス(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Boss));
-  AddDevAction(grid,"戦闘・複数(DEV)",()=>OpenBattleFormationPreview(BattleFormationPreview.Multiple));
+  AddDevAction(grid,"シームレス遠征 完成版(DEV)",OpenJourneyAnimationPrototype);
+  AddDevAction(grid,"遠征戦闘・1体(DEV)",()=>OpenJourneyBattlePreview(1,false));
+  AddDevAction(grid,"遠征戦闘・防御表示(DEV)",()=>OpenJourneyBattlePreview(1,false,0,5));
+  AddDevAction(grid,"遠征戦闘・3体レイアウト(DEV)",()=>OpenJourneyBattlePreview(3,false));
+  AddDevAction(grid,"遠征戦闘・手札10枚レイアウト(DEV)",()=>OpenJourneyBattlePreview(1,false,10));
+  AddDevAction(grid,"遠征戦闘・攻撃予兆(DEV)",()=>OpenJourneyBattlePreview(1,true));
   scroll.Add(grid);
   developerPanelRoot.Add(scroll);
   var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());
@@ -70,6 +69,24 @@ public sealed partial class PackspireUiFoundation {
   var button=PackspireUiFactory.Button(label,action);
   button.AddToClassList("ps-dev-current-button");
   grid.Add(button);
+ }
+
+ void OpenJourneyAnimationPrototype(){
+  JourneyTravelGameplayPrototype.ClearDeveloperPreviewQueue();
+  game.UiDevCloseWithoutRestore();
+  SceneManager.LoadScene("JourneyAnimationPrototype");
+ }
+
+ void OpenJourneyBackgroundPreview(int biome,JourneySceneryComposition composition){
+  JourneyTravelGameplayPrototype.QueueDeveloperBackgroundPreview(biome,composition);
+  game.UiDevCloseWithoutRestore();
+  SceneManager.LoadScene("JourneyAnimationPrototype");
+ }
+
+ void OpenJourneyBattlePreview(int enemyCount,bool startDefense,int handSize=0,int playerBlock=0){
+  JourneyTravelGameplayPrototype.QueueDeveloperBattlePreview(enemyCount,startDefense,handSize,playerBlock);
+  game.UiDevCloseWithoutRestore();
+  SceneManager.LoadScene("JourneyAnimationPrototype");
  }
 
  void AddDeveloperDestination(VisualElement grid,string label,ScreenId target){

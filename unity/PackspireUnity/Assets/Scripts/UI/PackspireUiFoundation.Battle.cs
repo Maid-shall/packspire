@@ -147,7 +147,7 @@ public sealed partial class PackspireUiFoundation {
   string dungeonClass=dungeon?.id=="ash_forge"?"is-dungeon-ash-forge":
    dungeon?.id=="hollow_archive"?"is-dungeon-hollow-archive":"is-dungeon-old-spire";
   battleRoot.AddToClassList(dungeonClass);
-  battleRoundLabel.text=$"ROUND {battle.move+1:00}";
+  battleRoundLabel.text=$"{battle.move+1:00}";
 
   var character=CharacterCatalog.Get(PackspireGame.LockBattleShowcaseArt?"mio":run.characterId);
   if(PackspireGame.LockBattleShowcaseArt&&game.UiShowcaseHeroSprite!=null){
@@ -277,11 +277,6 @@ public sealed partial class PackspireUiFoundation {
   battleHandRoot.Clear();
   if(run.hand.Count==0)return;
   int count=run.hand.Count;
-  float center=(count-1)*0.5f;
-  float edgeAngle=count<=2?1.5f:count==3?3f:count==4?4.5f:count==5?6f:count==6?7.5f:count==7?9f:count==8?10f:11f;
-  float centerLift=count<=2?1f:count==3?4f:count==4?7f:count==5?10f:count==6?13f:count==7?16f:20f;
-  float horizontalStep=count<=3?126f:count<=5?110f:count==6?96f:count==7?86f:count==8?78f:count==9?70f:62f;
-  string densityClass=count<=3?"ps-battle-card-large":count<=6?"ps-battle-card-standard":count<=8?"ps-battle-card-compact":"ps-battle-card-dense";
   var handSlots=new List<(Button button,float depth)>(count);
   for(int i=0;i<count;i++){
    int index=i;
@@ -293,23 +288,11 @@ public sealed partial class PackspireUiFoundation {
     PlayBattleCardMotion(button,card,()=>game.UiPlayBattleCard(index));
    });
    button.AddToClassList("ps-battle-card");
-   button.AddToClassList(densityClass);
    if(!affordable)button.AddToClassList("ps-battle-card-disabled");
    PopulateBattleCard(button,card,run,affordable);
-   float spreadIndex=i-center;
-   float normalized=center>0f?spreadIndex/center:0f;
-   float angle=normalized*edgeAngle;
-   float arcLift=centerLift*(1f-normalized*normalized);
-   float horizontalOffset=spreadIndex*horizontalStep;
-   button.style.position=Position.Absolute;
-   button.style.left=new Length(50f,LengthUnit.Percent);
-   button.style.marginLeft=-78f+horizontalOffset;
-   button.style.bottom=arcLift;
-   button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
-   button.style.transformOrigin=new TransformOrigin(
-    new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
+   float depth=BattleHandFanLayout.Apply(button,i,count);
    button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
-   handSlots.Add((button,Mathf.Abs(spreadIndex)));
+   handSlots.Add((button,depth));
   }
   foreach(var slot in handSlots.OrderByDescending(x=>x.depth))battleHandRoot.Add(slot.button);
  }

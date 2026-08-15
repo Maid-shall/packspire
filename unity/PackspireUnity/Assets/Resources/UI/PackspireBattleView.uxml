@@ -9,15 +9,10 @@
         <ui:VisualElement class="ps-battle-bg-ground-veil" picking-mode="Ignore" />
     </ui:VisualElement>
 
-    <ui:VisualElement class="ps-battle-brand" picking-mode="Ignore">
-        <ui:Label text="VII" class="ps-battle-circle" picking-mode="Ignore" />
-        <ui:VisualElement class="ps-battle-brand__copy" picking-mode="Ignore">
-            <ui:Label text="戦闘記録" class="ps-battle-record-title" picking-mode="Ignore" />
-            <ui:Label text="INFERNAL DELIVERY / COMBAT LEDGER" class="ps-battle-brand__eyebrow" picking-mode="Ignore" />
-        </ui:VisualElement>
-    </ui:VisualElement>
+    <ui:VisualElement class="ps-battle-brand" picking-mode="Ignore" />
     <ui:VisualElement class="ps-battle-round-badge" picking-mode="Ignore">
-        <ui:Label name="battle-round" text="ROUND 01" class="ps-battle-round" picking-mode="Ignore" />
+        <ui:Label text="ROUND" class="ps-battle-round-caption" picking-mode="Ignore" />
+        <ui:Label name="battle-round" text="01" class="ps-battle-round" picking-mode="Ignore" />
     </ui:VisualElement>
 
     <ui:VisualElement name="battle-stage" class="ps-battle-stage" picking-mode="Ignore">
@@ -99,7 +94,7 @@
         <ui:VisualElement name="battle-hand" class="ps-battle-hand" picking-mode="Ignore" />
 
         <ui:VisualElement class="ps-battle-command-rail">
-            <ui:Button name="battle-end-turn" text="END TURN" class="ps-battle-btn ps-battle-btn-end" />
+            <ui:Button name="battle-end-turn" tooltip="ターン終了" class="ps-battle-btn ps-battle-btn-end" />
         </ui:VisualElement>
     </ui:VisualElement>
 

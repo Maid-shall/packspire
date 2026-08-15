@@ -41,5 +41,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Journey Background
+    uniqueID: 210701001
+    locked: 0
+  - name: Journey Roadside
+    uniqueID: 210701002
+    locked: 0
+  - name: Journey Actors
+    uniqueID: 210701003
+    locked: 0
+  - name: Journey Foreground
+    uniqueID: 210701004
+    locked: 0
+  - name: Journey Effects
+    uniqueID: 210701005
+    locked: 0
   m_RenderingLayers:
   - Default
