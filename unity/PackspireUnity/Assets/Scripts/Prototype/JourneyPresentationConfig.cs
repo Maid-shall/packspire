@@ -115,7 +115,7 @@ namespace Packspire
                 if (!catalogLoadAttempted)
                 {
                     catalogLoadAttempted = true;
-                    catalog = Resources.Load<JourneyPresentationCatalog>(CatalogResource);
+                    catalog = PackspireResources.Load<JourneyPresentationCatalog>(CatalogResource);
                 }
                 return catalog;
             }
@@ -272,7 +272,7 @@ namespace Packspire
 
         private static Sprite LoadSprite(string resourcePath)
         {
-            return string.IsNullOrEmpty(resourcePath) ? null : Resources.Load<Sprite>(resourcePath);
+            return string.IsNullOrEmpty(resourcePath) ? null : PackspireResources.Load<Sprite>(resourcePath);
         }
 
         /// <summary>

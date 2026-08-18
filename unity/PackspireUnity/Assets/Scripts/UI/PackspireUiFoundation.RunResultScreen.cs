@@ -266,12 +266,5 @@ public sealed partial class PackspireUiFoundation {
   return model;
  }
 
- void OpenGameOverPreviewFromDev(){
-  DevNavigate(ScreenId.GameOver,()=>resultPreviewMode=true);
- }
-
- void OpenGameClearPreviewFromDev(){
-  DevNavigate(ScreenId.GameClear,()=>resultPreviewMode=true);
- }
 }
 }

@@ -260,7 +260,7 @@ namespace Packspire
 
         private void LoadKainFrames()
         {
-            Sprite[] loadedFrames = Resources.LoadAll<Sprite>(KainWalkResource);
+            Sprite[] loadedFrames = PackspireResources.LoadAll<Sprite>(KainWalkResource);
             if (loadedFrames == null || loadedFrames.Length == 0)
             {
                 Debug.LogError($"Journey prototype walk sheet is missing: Resources/{KainWalkResource}");
@@ -273,7 +273,7 @@ namespace Packspire
 
         private void LoadMiniFrames()
         {
-            Sprite[] loadedFrames = Resources.LoadAll<Sprite>(MiniWalkResource);
+            Sprite[] loadedFrames = PackspireResources.LoadAll<Sprite>(MiniWalkResource);
             if (loadedFrames == null || loadedFrames.Length < MiniFrameCount)
             {
                 Debug.LogError($"Mini courier walk sheet must contain {MiniFrameCount} imported sprites: Resources/{MiniWalkResource}");
@@ -287,7 +287,7 @@ namespace Packspire
 
         private void LoadMiniBattleFrames()
         {
-            Sprite[] loadedFrames = Resources.LoadAll<Sprite>(MiniBattleResource);
+            Sprite[] loadedFrames = PackspireResources.LoadAll<Sprite>(MiniBattleResource);
             if (loadedFrames == null || loadedFrames.Length < MiniBattleFrameCount)
             {
                 Debug.LogWarning($"Mio battle sheet must contain {MiniBattleFrameCount} imported sprites: Resources/{MiniBattleResource}");
@@ -353,7 +353,7 @@ namespace Packspire
             BuildAtmosphereLayer();
             BuildScrollingLayer(
                 "Front Props",
-                Resources.Load<Sprite>(ParallaxFrontResource),
+                PackspireResources.Load<Sprite>(ParallaxFrontResource),
                 30,
                 1.35f);
             ApplyRoadProfileVisibility();

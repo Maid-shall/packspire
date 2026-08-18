@@ -162,53 +162,6 @@ void OnGridCellClicked(int x,int y){
     "最終目撃位置・現在位置不明");
  }
 
- void ShowGridCellDetailLegacy(int x,int y){
-  var run=game.UiGridBoard;
-  if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null||
-   !string.IsNullOrEmpty(run.selectedCardUid))return;
-  var cell=GridBoardSystem.Cell(run,x,y);
-  if(cell==null)return;
-  // Unseen cells expose neither their terrain nor their contents. Moving
-  // hostiles also disappear from remembered cells once they leave current sight.
-  if(!GridBoardSystem.IsDiscovered(run,cell)){
-   HideGridCellDetail();
-   return;
-  }
-  var enemy=GridBoardSystem.EnemyAt(run,x,y);
-  if(GridBoardSystem.IsCurrentlyVisible(run,cell)&&enemy!=null)
-   cell=new GridCellState{x=cell.x,y=cell.y,terrain=cell.terrain,place="enemy",discovered=true};
-  else if(!GridBoardSystem.IsCurrentlyVisible(run,cell)&&cell.place=="enemy")
-   cell=new GridCellState{x=cell.x,y=cell.y,terrain=cell.terrain,place="empty",discovered=true};
-  (string tag,string title,string body,string action)=cell.place=="calamity"
-   ?("CALAMITY",GridBoardSystem.DoomFacilityName(run.dungeonId),
-    $"時間経過とともに敵を強化する破壊不能施設。現在の圧力：{GridBoardSystem.DoomSummary(run)}",
-    "破壊不能・探索ターンごとに進行")
-   :cell.terrain switch{
-   "void"=>("VOID","奈落","足場のない裂け目。進入も術式の配置もできない。","盤面の外縁"),
-   "blocked"=>("TERRAIN","瓦礫","崩れた障害地形。通行できない。曲がるための壁として扱える。","通行不可"),
-   "start"=>("ORIGIN","侵入地点","この区画の探索開始地点。経路はここから伸びる。","現在地の基点"),
-   _=>GridCellDetailCopy(cell,run)
-  };
-  gridBoardCellDetail.Clear();
-  var eyebrow=new Label(tag){pickingMode=PickingMode.Ignore};
-  eyebrow.AddToClassList("ps-gboard-cell-detail-eyebrow");
-  gridBoardCellDetail.Add(eyebrow);
-  var head=new Label(title){pickingMode=PickingMode.Ignore};
-  head.AddToClassList("ps-gboard-cell-detail-title");
-  gridBoardCellDetail.Add(head);
-  var rule=new VisualElement{pickingMode=PickingMode.Ignore};
-  rule.AddToClassList("ps-gboard-cell-detail-rule");
-  gridBoardCellDetail.Add(rule);
-  var description=new Label(body){pickingMode=PickingMode.Ignore};
-  description.AddToClassList("ps-gboard-cell-detail-body");
-  gridBoardCellDetail.Add(description);
-  var footer=new Label(action){pickingMode=PickingMode.Ignore};
-  footer.AddToClassList("ps-gboard-cell-detail-footer");
-  gridBoardCellDetail.Add(footer);
-  gridBoardCellDetail.style.display=DisplayStyle.Flex;
-  gridBoardCellDetail.BringToFront();
- }
-
  (string tag,string title,string body,string action) GridCellDetailCopy(GridCellState cell,GridBoardRunState run){
   var installation=GridBoardSystem.InstallationAt(run,cell.x,cell.y);
   if(installation!=null&&GameCatalog.ExplorationCards.TryGetValue(installation.cardId,out var definition)){

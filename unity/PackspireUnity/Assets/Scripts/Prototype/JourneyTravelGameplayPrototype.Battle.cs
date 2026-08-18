@@ -68,6 +68,7 @@ namespace Packspire
                 36,
                 8, 7, 9, 10, 8, 7);
             battle = BattleSystem.Begin(run, enemy, 1f);
+            StartRealtimeBattle();
             SetBattlePreviewEnemyCount(1);
             enemyNames[0].text = enemy.name;
             battleLog.text = "番人が配達路を封鎖した。同じ旅画面のまま迎撃する。";
@@ -77,9 +78,11 @@ namespace Packspire
 
         private void PlayCard(int index)
         {
-            if (phase != Phase.Battle || defenseActive || battleInputLocked || pileOverlayOpen || battle == null || index >= run.hand.Count) return;
+            if (phase != Phase.Battle || battleInputLocked || pileOverlayOpen || battle == null || index >= run.hand.Count) return;
             BattleActionFx fx = BattleSystem.PlayCard(run, battle, index);
             if (!fx.ok) return;
+            realtimeBattle.SetEnergy(run.energy);
+            run.energy = realtimeBattle.Energy;
             battleLog.text = battle.log;
             if (fx.damageToEnemy > 0)
             {
@@ -95,34 +98,6 @@ namespace Packspire
                 return;
             }
             else RefreshBattleUi();
-        }
-
-        private void UseBattleSkill()
-        {
-            if (phase != Phase.Battle || defenseActive || battleInputLocked || pileOverlayOpen || battle == null || run.activeSkillUsed) return;
-            CharacterSkillResult result = CharacterSystem.UseActiveSkill(run, battle);
-            if (!result.success) return;
-            battleLog.text = result.logLine;
-            walker.SetBattleMotion(
-                result.fx.damageToEnemy > 0
-                    ? JourneyWalkCyclePrototype.BattleMotion.Attack
-                    : JourneyWalkCyclePrototype.BattleMotion.Brace,
-                .42f);
-            if (result.fx.damageToEnemy > 0)
-            {
-                battlePresentationRoutine = StartCoroutine(PlayerAttackPresentationRoutine(
-                    result.fx.damageToEnemy,
-                    result.enemyDefeated,
-                    battleRevision));
-                return;
-            }
-            RefreshBattleUi();
-        }
-
-        private void EndTurn()
-        {
-            if (phase != Phase.Battle || defenseActive || battleInputLocked || pileOverlayOpen || battle == null) return;
-            BeginEnemyTurn();
         }
 
         private void BeginEnemyTurn()
@@ -143,8 +118,6 @@ namespace Packspire
             screen.EnableInClassList("battle--reaction-brace", enemyActionKind == EnemyActionKind.BraceReaction);
             screen.RemoveFromClassList("battle--reaction-ready");
             screen.RemoveFromClassList("battle--reaction-committed");
-            endTurnButton.SetEnabled(false);
-            skillButton.SetEnabled(false);
             enemyTelegraphColor = enemyActionKind switch
             {
                 EnemyActionKind.JumpReaction => new Color(1f, .34f, .08f, 1f),
@@ -201,7 +174,7 @@ namespace Packspire
             enemyRenderer.transform.localScale = Vector3.one * EnemyBattleScale;
             SyncMainEnemyShadow();
             UpdateEnemyTelegraphPulse(pulse, anticipation);
-            if (defenseClock >= defenseDuration && defenseRoutine == null)
+            if (!realtimeBattleActive && defenseClock >= defenseDuration && defenseRoutine == null)
             {
                 bool correct = (enemyActionKind == EnemyActionKind.JumpReaction && defenseAction == DefenseAction.Jump) ||
                                (enemyActionKind == EnemyActionKind.BraceReaction && defenseAction == DefenseAction.Brace);
@@ -334,19 +307,21 @@ namespace Packspire
 
         private void RefreshBattleUi()
         {
+            using var performanceScope = PackspirePerformance.JourneyBattleRefresh.Auto();
             if (battle == null) return;
             RefreshHpMeter(enemyHpFills[0], enemyHpTexts[0], battle.enemyHp, battle.enemyMaxHp);
-            enemyIntentNames[0].text = NextEnemyActionName();
-            enemyIntents[0].text = NextEnemyDamage().ToString();
             RefreshBlockBadge(enemyBlockBadges[0], enemyBlocks[0], battle.enemyBlock);
             RefreshStatusHost(enemyStatusHosts[0], battle.enemyStatuses);
-            energyText.text = $"{run.energy} / {PackspireContent.Data.balance.baseEnergy}";
+            int maximumEnergy = realtimeBattleActive
+                ? realtimeBattle.MaximumEnergy
+                : PackspireContent.Data.balance.baseEnergy;
+            energyText.text = $"{run.energy} / {maximumEnergy}";
             RefreshHpMeter(battlePlayerHpFill, battlePlayerHp, run.hp, run.maxHp);
             RefreshBlockBadge(battlePlayerBlockBadge, battleBlock, run.block);
             RefreshStatusHost(playerStatusHost, run.statuses);
             drawPileText.text = run.draw.Count.ToString();
             discardPileText.text = run.discard.Count.ToString();
-            bool commandAvailable = !defenseActive && !battleInputLocked && !pileOverlayOpen;
+            bool commandAvailable = !battleInputLocked && !pileOverlayOpen;
             drawPileButton.SetEnabled(commandAvailable);
             discardPileButton.SetEnabled(commandAvailable);
             int visibleCardCount = Mathf.Min(run.hand.Count, cardButtons.Length);
@@ -371,13 +346,6 @@ namespace Packspire
                     battleHandRoot.Add(slot.button);
                 }
             }
-            CharacterDef character = CharacterSystem.OfRun(run);
-            skillName.text = character?.activeSkillName ?? "スキル";
-            skillState.text = run.activeSkillUsed ? "使用済み" : "使用可能";
-            skillButton.EnableInClassList("skill--spent", run.activeSkillUsed);
-            skillButton.tooltip = CharacterSystem.ActiveSkillTooltip(run);
-            endTurnButton.SetEnabled(commandAvailable);
-            skillButton.SetEnabled(commandAvailable && !run.activeSkillUsed);
             RefreshPersistentUi();
         }
 
@@ -430,7 +398,7 @@ namespace Packspire
 
         private void OpenPileOverlay(bool drawPile)
         {
-            if (phase != Phase.Battle || battle == null || defenseActive || battleInputLocked) return;
+            if (phase != Phase.Battle || battle == null || battleInputLocked) return;
             List<CardInstance> cards = drawPile ? run.draw : run.discard;
             pileOverlayOpen = true;
             pileOverlay?.AddToClassList("pile-overlay--open");
@@ -571,8 +539,6 @@ namespace Packspire
             if (visibleCount > 1)
             {
                 enemyNames[1].text = "灰路の追跡者";
-                enemyIntentNames[1].text = "斬撃";
-                enemyIntents[1].text = "6";
                 RefreshHpMeter(enemyHpFills[1], enemyHpTexts[1], 18, 24);
                 RefreshBlockBadge(enemyBlockBadges[1], enemyBlocks[1], 3);
                 RefreshStatusHost(enemyStatusHosts[1], new List<StatusState>
@@ -583,8 +549,6 @@ namespace Packspire
             if (visibleCount > 2)
             {
                 enemyNames[2].text = "鐘楼の射手";
-                enemyIntentNames[2].text = "射撃";
-                enemyIntents[2].text = "5";
                 RefreshHpMeter(enemyHpFills[2], enemyHpTexts[2], 14, 18);
                 RefreshBlockBadge(enemyBlockBadges[2], enemyBlocks[2], 0);
                 RefreshStatusHost(enemyStatusHosts[2], new List<StatusState>

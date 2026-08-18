@@ -22,6 +22,9 @@ public sealed partial class PackspireUiFoundation {
  Texture2D battleIconDamage,battleIconBlock,battleIconHeal,battleIconEnergy,battleIconClaw;
  int battleFloaterSerial;
  bool battleStartBannerShown;
+ readonly List<Button> battleHandButtons=new();
+ readonly List<BattleCardView> battleHandViews=new();
+ readonly List<(Button button,float depth)> battleHandOrder=new();
 
  void EnsureBattleAssets(){
   if(battleIconDamage!=null)return;
@@ -131,6 +134,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  public void RefreshBattleUi(){
+  using var performanceScope=PackspirePerformance.ProductBattleRefresh.Auto();
   if(gridBoardBuilt&&game.UiScreen==ScreenId.GridBoard){
    RefreshGridBoard();
    return;
@@ -273,28 +277,58 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshBattleHand(RunState run){
+  using var performanceScope=PackspirePerformance.ProductBattleHandRefresh.Auto();
   if(battleHandRoot==null)return;
   battleHandRoot.Clear();
   if(run.hand.Count==0)return;
   int count=run.hand.Count;
-  var handSlots=new List<(Button button,float depth)>(count);
+  battleHandOrder.Clear();
   for(int i=0;i<count;i++){
    int index=i;
    var card=run.hand[index];
    bool affordable=!card.unplayable&&card.cost<=run.energy;
-   Button button=null;
-   button=new Button(()=>{
-    if(!affordable||battleInputLocked||button==null)return;
-    PlayBattleCardMotion(button,card,()=>game.UiPlayBattleCard(index));
-   });
-   button.AddToClassList("ps-battle-card");
-   if(!affordable)button.AddToClassList("ps-battle-card-disabled");
-   PopulateBattleCard(button,card,run,affordable);
+   EnsureBattleHandCapacity(index+1);
+   Button button=battleHandButtons[index];
+   BattleCardView view=battleHandViews[index];
+   button.userData=index;
+   button.SetEnabled(affordable&&!battleInputLocked);
+   view.Bind(BattleCardModel(card,run,affordable));
    float depth=BattleHandFanLayout.Apply(button,i,count);
-   button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
-   handSlots.Add((button,depth));
+   battleHandOrder.Add((button,depth));
   }
-  foreach(var slot in handSlots.OrderByDescending(x=>x.depth))battleHandRoot.Add(slot.button);
+  battleHandOrder.Sort(static (left,right)=>right.depth.CompareTo(left.depth));
+  foreach(var slot in battleHandOrder)battleHandRoot.Add(slot.button);
+ }
+
+ void EnsureBattleHandCapacity(int count){
+  while(battleHandButtons.Count<count){
+   var button=new Button();
+   button.AddToClassList("ps-battle-card");
+   button.clicked+=()=>OnBattleHandCardClicked(button);
+   button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
+   battleHandButtons.Add(button);
+   battleHandViews.Add(new BattleCardView(button));
+  }
+ }
+
+ void OnBattleHandCardClicked(Button button){
+  if(battleInputLocked||button?.userData is not int index)return;
+  var run=game.UiRun;
+  if(run==null||index<0||index>=run.hand.Count)return;
+  var card=run.hand[index];
+  if(card.unplayable||card.cost>run.energy)return;
+  PlayBattleCardMotion(button,card,()=>game.UiPlayBattleCard(index));
+ }
+
+ BattleCardViewModel BattleCardModel(CardInstance card,RunState run,bool affordable){
+  return new BattleCardViewModel(
+   card.name,
+   card.cost.ToString(),
+   BattleCardDisplayTextWithKeywords(card),
+   BattleCardPresentationKind(card,run),
+   affordable?string.Empty:"LOW EN / 保留",
+   BattleCardArtwork(card.id),
+   affordable);
  }
 
  void PopulateBattleCard(VisualElement slot,CardInstance card,RunState run,bool affordable){

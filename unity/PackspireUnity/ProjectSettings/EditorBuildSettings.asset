@@ -8,5 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 878f050e26b1bb84caed0ea1b4721c37
+  - enabled: 1
+    path: Assets/Scenes/JourneyAnimationPrototype.unity
+    guid: 01af3cb00cb59d84ba45f86155854a3d
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

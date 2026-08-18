@@ -100,13 +100,6 @@
                                 <ui:Label name="journey-enemy-block-0" text="0" class="ps-journey__enemy-block" />
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement class="ps-journey__enemy-intent-docket" tooltip="次の行動">
-                            <ui:Label text="⚔" class="ps-journey__enemy-intent-icon" />
-                            <ui:VisualElement class="ps-journey__enemy-intent-copy">
-                                <ui:Label name="journey-enemy-intent-name-0" text="鐘撃" class="ps-journey__enemy-intent-name" />
-                                <ui:Label name="journey-enemy-intent-0" text="7" class="ps-journey__enemy-intent" />
-                            </ui:VisualElement>
-                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="journey-enemy-statuses-0" class="ps-journey__status-row status-row--enemy" />
@@ -133,13 +126,6 @@
                             <ui:VisualElement class="ps-journey__block-overlay" picking-mode="Ignore" />
                             <ui:VisualElement class="ps-journey__block-seal" picking-mode="Ignore">
                                 <ui:Label name="journey-enemy-block-1" text="0" class="ps-journey__enemy-block" />
-                            </ui:VisualElement>
-                        </ui:VisualElement>
-                        <ui:VisualElement class="ps-journey__enemy-intent-docket" tooltip="次の行動">
-                            <ui:Label text="⚔" class="ps-journey__enemy-intent-icon" />
-                            <ui:VisualElement class="ps-journey__enemy-intent-copy">
-                                <ui:Label name="journey-enemy-intent-name-1" text="斬撃" class="ps-journey__enemy-intent-name" />
-                                <ui:Label name="journey-enemy-intent-1" text="6" class="ps-journey__enemy-intent" />
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
@@ -170,16 +156,94 @@
                                 <ui:Label name="journey-enemy-block-2" text="0" class="ps-journey__enemy-block" />
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement class="ps-journey__enemy-intent-docket" tooltip="次の行動">
-                            <ui:Label text="⚔" class="ps-journey__enemy-intent-icon" />
-                            <ui:VisualElement class="ps-journey__enemy-intent-copy">
-                                <ui:Label name="journey-enemy-intent-name-2" text="射撃" class="ps-journey__enemy-intent-name" />
-                                <ui:Label name="journey-enemy-intent-2" text="5" class="ps-journey__enemy-intent" />
-                            </ui:VisualElement>
-                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="journey-enemy-statuses-2" class="ps-journey__status-row status-row--enemy" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-threat-reel" class="ps-journey__threat-reel">
+            <ui:VisualElement class="ps-journey__reel-backing" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__reel-shell">
+                <ui:VisualElement class="ps-journey__reel-pulley ps-journey__reel-pulley--top" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__reel-chain" picking-mode="Ignore">
+                    <ui:VisualElement name="journey-reel-chain-track" class="ps-journey__reel-chain-track">
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-reel-slots" class="ps-journey__reel-slots" picking-mode="Ignore">
+                    <ui:VisualElement name="journey-threat-slot-9" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-8" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-7" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-6" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-5" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-4" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-3" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-2" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-1" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-0" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-0" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-1" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-2" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-3" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reel-pulley ps-journey__reel-pulley--bottom" picking-mode="Ignore" />
+                <ui:VisualElement name="journey-reel-now" class="ps-journey__reel-now" picking-mode="Ignore">
+                    <ui:Label text="NOW" />
+                    <ui:VisualElement class="ps-journey__reel-now-arrow" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__battle-transport">
+                <ui:Button name="journey-battle-pause" text="Ⅱ" class="ps-journey__battle-pause" />
+                <ui:Button name="journey-battle-speed" text="×1" class="ps-journey__battle-speed" />
             </ui:VisualElement>
         </ui:VisualElement>
 
@@ -281,10 +345,7 @@
 
         <ui:VisualElement name="journey-battle" class="ps-journey__battle">
             <ui:VisualElement class="ps-journey__battle-divider" picking-mode="Ignore" />
-            <ui:VisualElement class="ps-journey__battle-head">
-                <ui:Label text="INTERCEPTION" class="ps-journey__battle-eyebrow" />
-                <ui:Label name="journey-battle-log" text="封鐘の番人が配達路を塞いだ。" class="ps-journey__battle-log" />
-            </ui:VisualElement>
+            <ui:Label name="journey-battle-log" text="封鐘の番人が配達路を塞いだ。" class="ps-journey__battle-log" />
 
             <ui:VisualElement class="ps-journey__battle-left-controls">
                 <ui:VisualElement class="ps-journey__energy-docket">
@@ -293,12 +354,18 @@
                 </ui:VisualElement>
                 <ui:VisualElement class="ps-journey__pile-panel">
                     <ui:Button name="journey-draw-pile-button" class="ps-journey__pile-button pile-button--draw" tooltip="山札を確認">
-                        <ui:Label text="山札" class="ps-journey__pile-label" picking-mode="Ignore" />
-                        <ui:Label name="journey-draw-pile" text="12" class="ps-journey__pile-count" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-icon" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-copy" picking-mode="Ignore">
+                            <ui:Label name="journey-draw-pile" text="12" class="ps-journey__pile-count" picking-mode="Ignore" />
+                            <ui:Label text="山札" class="ps-journey__pile-label" picking-mode="Ignore" />
+                        </ui:VisualElement>
                     </ui:Button>
                     <ui:Button name="journey-discard-pile-button" class="ps-journey__pile-button pile-button--discard" tooltip="捨札を確認">
-                        <ui:Label text="捨札" class="ps-journey__pile-label" picking-mode="Ignore" />
-                        <ui:Label name="journey-discard-pile" text="0" class="ps-journey__pile-count" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-icon" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-copy" picking-mode="Ignore">
+                            <ui:Label name="journey-discard-pile" text="0" class="ps-journey__pile-count" picking-mode="Ignore" />
+                            <ui:Label text="捨札" class="ps-journey__pile-label" picking-mode="Ignore" />
+                        </ui:VisualElement>
                     </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
@@ -316,14 +383,6 @@
                     <ui:Button name="journey-card-8" class="ps-journey__card" />
                     <ui:Button name="journey-card-9" class="ps-journey__card" />
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement class="ps-journey__battle-right-controls">
-                <ui:Button name="journey-skill" class="ps-journey__skill">
-                    <ui:Label text="ACTIVE SKILL" class="ps-journey__skill-key" picking-mode="Ignore" />
-                    <ui:Label name="journey-skill-name" text="見切り" class="ps-journey__skill-name" picking-mode="Ignore" />
-                    <ui:Label name="journey-skill-state" text="使用可能" class="ps-journey__skill-state" picking-mode="Ignore" />
-                </ui:Button>
-                <ui:Button name="journey-end-turn" text="ターン終了" class="ps-journey__end-turn" />
             </ui:VisualElement>
         </ui:VisualElement>
 

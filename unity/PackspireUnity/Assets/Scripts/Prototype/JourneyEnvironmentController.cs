@@ -95,13 +95,9 @@ namespace Packspire
             if (initialized) ApplyPaletteAndVisibility();
         }
 
-        public void DevSimulate(float seconds)
-        {
-            AdvanceEnvironment(Mathf.Max(0f, seconds));
-        }
-
         private void Update()
         {
+            using var performanceScope = PackspirePerformance.JourneyEnvironment.Auto();
             AdvanceEnvironment(Time.unscaledDeltaTime);
         }
 

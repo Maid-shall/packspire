@@ -26,16 +26,6 @@ namespace Packspire
             Result
         }
 
-        private enum MiniGameKind
-        {
-            StampTiming,
-            CargoBalance,
-            AddressLabel,
-            WaxMatch,
-            RoadDodge,
-            RainCover
-        }
-
         private const string ViewResource = "UI/PackspireJourneyCompleteView";
         private const string StyleResource = "UI/PackspireJourneyComplete";
         private const string WalkSheetResource = "Art/UI/CourierRoutePrototype/courier-route-walk-sheet-v1";
@@ -54,17 +44,13 @@ namespace Packspire
             "state--event", "state--battle", "state--result"
         };
 
-        private static bool hasQueuedBackgroundPreview;
-        private static int queuedBackgroundBiome;
-        private static JourneySceneryComposition queuedBackgroundComposition;
-        private static bool hasQueuedBattlePreview;
-        private static int queuedBattleEnemyCount = 1;
-        private static bool queuedBattleStartsDefense;
-        private static int queuedBattleHandSize;
-        private static int queuedBattlePlayerBlock;
-
         private readonly List<UnityEngine.Object> runtimeAssets = new List<UnityEngine.Object>();
         private readonly Button[] cardButtons = new Button[10];
+        private readonly JourneyMiniGameController miniGameController = new JourneyMiniGameController();
+        private static readonly string[] MiniGamePresentationClasses =
+        {
+            "mini--stamp", "mini--balance", "mini--choice", "mini--dodge", "mini--sequence"
+        };
 
         private JourneyWalkCyclePrototype walker;
         private JourneySceneryController scenery;
@@ -82,8 +68,6 @@ namespace Packspire
         private VisualElement battlePlayerBlockBadge;
         private readonly VisualElement[] enemyHudSlots = new VisualElement[3];
         private readonly Label[] enemyNames = new Label[3];
-        private readonly Label[] enemyIntentNames = new Label[3];
-        private readonly Label[] enemyIntents = new Label[3];
         private readonly VisualElement[] enemyHpFills = new VisualElement[3];
         private readonly Label[] enemyHpTexts = new Label[3];
         private readonly VisualElement[] enemyBlockBadges = new VisualElement[3];
@@ -161,10 +145,6 @@ namespace Packspire
         private Button drawPileButton;
         private Button discardPileButton;
         private VisualElement battleHandRoot;
-        private Button skillButton;
-        private Label skillName;
-        private Label skillState;
-        private Button endTurnButton;
         private VisualElement pileOverlay;
         private Label pileTitle;
         private Label pileSummary;
@@ -184,16 +164,12 @@ namespace Packspire
         private CourierRouteNodeDef[] choices = Array.Empty<CourierRouteNodeDef>();
         private CourierRouteNodeDef arrivalNode;
         private Phase phase;
-        private MiniGameKind miniGameKind;
         private float travelClock;
         private float travelDuration;
-        private float miniGameClock;
-        private float miniGameValue;
-        private float balanceVelocity;
-        private float balanceHold;
-        private int miniGameStage;
-        private int miniGameTarget;
-        private int miniGameLane;
+        private float miniGameVisualClock;
+        private int miniGameLastRevision = -1;
+        private int miniGameLastTimerTenth = -1;
+        private int miniGameLastNeedleBucket = -1;
         private float toastClock;
         private float speechClock;
         private float speechVisibleClock;
@@ -206,7 +182,7 @@ namespace Packspire
         private bool paused;
         private bool transitionActive;
         private bool miniGameOffered;
-        private bool miniGameResolved;
+        private bool miniGameResolved => miniGameController.IsResolved;
         private bool firstChoicePending = true;
         private bool choiceLocked;
         private bool ledgerOpen;
@@ -216,6 +192,7 @@ namespace Packspire
         private bool battleInputLocked;
         private bool pileOverlayOpen;
         private bool encounterIntroActive;
+        private bool foundationUiHidden;
         private DefenseAction defenseAction;
         private DefenseInputGrade defenseInputGrade;
         private EnemyActionKind enemyActionKind;
@@ -293,6 +270,7 @@ namespace Packspire
             {
                 document.enabled = true;
             }
+            if (uiBound) HideFoundationUi();
         }
 
         private void OnDisable()
@@ -301,6 +279,7 @@ namespace Packspire
             {
                 document.enabled = false;
             }
+            RestoreFoundationUi();
         }
 
         private IEnumerator Start()
@@ -319,80 +298,13 @@ namespace Packspire
             HideFoundationUi();
             if (phaseRevision == revisionAtStart)
             {
-                if (TryConsumeBackgroundPreview(out int previewBiome, out JourneySceneryComposition previewComposition))
-                {
-                    DevPreviewBackground(previewBiome, previewComposition);
-                }
-                else if (TryConsumeBattlePreview(out int enemyCount, out bool startDefense, out int handSize, out int playerBlock))
-                {
-                    DevBeginBattle();
-                    DevPreviewBattleEnemyCount(enemyCount);
-                    if (handSize > 0) DevPreviewBattleHandSize(handSize);
-                    if (playerBlock > 0) DevPreviewBattleBlock(playerBlock);
-                    if (startDefense) DevStartReactionPreview();
-                }
+                if (JourneyDeveloperPreviewController.TryApply(this)) { }
                 else
                 {
                     BeginTravel(OpeningTravelDuration, null);
                     ShowToast("第七圏の配達路へ進入。判断地点までは自動で進みます。");
                 }
             }
-        }
-
-        public static void QueueDeveloperBackgroundPreview(
-            int biome,
-            JourneySceneryComposition composition)
-        {
-            ClearDeveloperPreviewQueue();
-            queuedBackgroundBiome = Mathf.Clamp(biome, 0, 2);
-            queuedBackgroundComposition = composition;
-            hasQueuedBackgroundPreview = true;
-        }
-
-        public static void QueueDeveloperBattlePreview(int enemyCount, bool startDefense, int handSize = 0, int playerBlock = 0)
-        {
-            ClearDeveloperPreviewQueue();
-            queuedBattleEnemyCount = Mathf.Clamp(enemyCount, 1, 3);
-            queuedBattleStartsDefense = startDefense;
-            queuedBattleHandSize = Mathf.Clamp(handSize, 0, 10);
-            queuedBattlePlayerBlock = Mathf.Max(0, playerBlock);
-            hasQueuedBattlePreview = true;
-        }
-
-        public static void ClearDeveloperPreviewQueue()
-        {
-            hasQueuedBackgroundPreview = false;
-            hasQueuedBattlePreview = false;
-            queuedBattleEnemyCount = 1;
-            queuedBattleStartsDefense = false;
-            queuedBattleHandSize = 0;
-            queuedBattlePlayerBlock = 0;
-        }
-
-        private static bool TryConsumeBackgroundPreview(
-            out int biome,
-            out JourneySceneryComposition composition)
-        {
-            biome = queuedBackgroundBiome;
-            composition = queuedBackgroundComposition;
-            bool queued = hasQueuedBackgroundPreview;
-            hasQueuedBackgroundPreview = false;
-            return queued;
-        }
-
-        private static bool TryConsumeBattlePreview(out int enemyCount, out bool startDefense, out int handSize, out int playerBlock)
-        {
-            enemyCount = queuedBattleEnemyCount;
-            startDefense = queuedBattleStartsDefense;
-            handSize = queuedBattleHandSize;
-            playerBlock = queuedBattlePlayerBlock;
-            bool queued = hasQueuedBattlePreview;
-            hasQueuedBattlePreview = false;
-            queuedBattleEnemyCount = 1;
-            queuedBattleStartsDefense = false;
-            queuedBattleHandSize = 0;
-            queuedBattlePlayerBlock = 0;
-            return queued;
         }
 
         private void BuildSimulationRun()
@@ -434,6 +346,7 @@ namespace Packspire
             }
 
             VisualElement root = document.rootVisualElement;
+            JourneyViewContract.Validate(root);
             screen = root.Q<VisualElement>("journey-screen");
             if (screen == null)
             {
@@ -464,8 +377,6 @@ namespace Packspire
             {
                 enemyHudSlots[enemyIndex] = root.Q<VisualElement>($"journey-enemy-slot-{enemyIndex}");
                 enemyNames[enemyIndex] = root.Q<Label>($"journey-enemy-name-{enemyIndex}");
-                enemyIntentNames[enemyIndex] = root.Q<Label>($"journey-enemy-intent-name-{enemyIndex}");
-                enemyIntents[enemyIndex] = root.Q<Label>($"journey-enemy-intent-{enemyIndex}");
                 enemyHpFills[enemyIndex] = root.Q<VisualElement>($"journey-enemy-hp-fill-{enemyIndex}");
                 enemyHpTexts[enemyIndex] = root.Q<Label>($"journey-enemy-hp-text-{enemyIndex}");
                 enemyBlockBadges[enemyIndex] = root.Q<VisualElement>($"journey-enemy-block-badge-{enemyIndex}");
@@ -544,10 +455,7 @@ namespace Packspire
             drawPileButton = root.Q<Button>("journey-draw-pile-button");
             discardPileButton = root.Q<Button>("journey-discard-pile-button");
             battleHandRoot = battleHandTheme?.Q<VisualElement>(className: "ps-journey__hand");
-            skillButton = root.Q<Button>("journey-skill");
-            skillName = root.Q<Label>("journey-skill-name");
-            skillState = root.Q<Label>("journey-skill-state");
-            endTurnButton = root.Q<Button>("journey-end-turn");
+            BindRealtimeBattleUi(root);
             pileOverlay = root.Q<VisualElement>("journey-pile-overlay");
             pileTitle = root.Q<Label>("journey-pile-title");
             pileSummary = root.Q<Label>("journey-pile-summary");
@@ -585,8 +493,6 @@ namespace Packspire
             miniGameAction.clicked += MiniGameAction;
             miniGameLeft.clicked += () => NudgeBalance(-1f);
             miniGameRight.clicked += () => NudgeBalance(1f);
-            skillButton.clicked += UseBattleSkill;
-            endTurnButton.clicked += EndTurn;
             drawPileButton.clicked += () => OpenPileOverlay(true);
             discardPileButton.clicked += () => OpenPileOverlay(false);
             pileCloseButton.clicked += ClosePileOverlay;
@@ -609,14 +515,14 @@ namespace Packspire
 
         private void Update()
         {
-            HideFoundationUi();
+            using var performanceScope = PackspirePerformance.JourneyUpdate.Auto();
             if (screen == null)
             {
                 return;
             }
 
             HandleKeyboard();
-            float gameplayDelta = paused || ledgerOpen || transitionActive ? 0f : Time.deltaTime;
+            float gameplayDelta = paused || ledgerOpen || transitionActive || pileOverlayOpen ? 0f : Time.deltaTime;
             float travelDelta = gameplayDelta * speedScale;
             UpdateToast(gameplayDelta);
             UpdateSpeech(Time.deltaTime);
@@ -634,7 +540,14 @@ namespace Packspire
             else if (phase == Phase.Battle)
             {
                 battleActorClock += gameplayDelta;
-                if (defenseActive) UpdateDefense(gameplayDelta);
+                float realtimeTimelineDelta = UpdateRealtimeBattle(gameplayDelta);
+                if (defenseActive)
+                {
+                    float defenseDelta = realtimeBattleActive
+                        ? realtimeTimelineDelta
+                        : gameplayDelta;
+                    UpdateDefense(defenseDelta);
+                }
                 else UpdateBattleIdleMotion();
             }
         }
@@ -696,7 +609,7 @@ namespace Packspire
             scenery.BeginTravel(biomeIndex, !scenery.HasSeenLandmark(biomeIndex));
             SetPhase(Phase.Travel);
             parcelRenderer.enabled = false;
-            phaseText.text = destination == null ? "MOVING / 灰市外縁" : $"MOVING / {destination.title}へ";
+            phaseText.text = destination == null ? $"MOVING / {BiomeLabel(biomeIndex)}" : $"MOVING / {destination.title}へ";
             nextText.text = "景色を見ながら進行中";
         }
 
@@ -1134,6 +1047,19 @@ namespace Packspire
             BeginBattle();
         }
 
+        public void DevPreviewScenery(int previewBiome)
+        {
+            if (!uiBound) BindUi();
+            biomeIndex = Mathf.Clamp(previewBiome, 0, 2);
+            scenery?.ClearAll();
+            walker.SetJourneyBiome(biomeIndex);
+            walker.SetRoadProfile(JourneyWalkCyclePrototype.RoadProfile.Standard);
+            environment.SetBiome(biomeIndex);
+            weatherText.text = BiomeWeatherForIndex(biomeIndex);
+            BeginTravel(OpeningTravelDuration, null);
+            ShowToast($"DEV景色確認：{BiomeLabel(biomeIndex)}・標準路");
+        }
+
         public void DevStartDefense()
         {
             if (phase != Phase.Battle) DevBeginBattle();
@@ -1147,6 +1073,12 @@ namespace Packspire
             battle.move = 1;
             RefreshBattleUi();
             BeginEnemyTurn();
+        }
+
+        public void DevSetPaused(bool value)
+        {
+            if (!uiBound) BindUi();
+            SetPaused(value);
         }
 
         public void DevResolveJump()
@@ -1289,6 +1221,7 @@ namespace Packspire
             environment.SetBattleContext(next == Phase.Battle);
             if (next != Phase.Battle)
             {
+                StopRealtimeBattle();
                 ClosePileOverlay();
                 screen.RemoveFromClassList("battle--telegraph");
                 screen.RemoveFromClassList("battle--reaction-jump");
@@ -1339,13 +1272,20 @@ namespace Packspire
         {
             speedScale = speedScale < 1.5f ? 2f : 1f;
             speedButton.text = speedScale > 1f ? "×2" : "×1";
+            RefreshRealtimeTransport();
             ApplyWorldMotion();
         }
 
         private void TogglePause()
         {
-            paused = !paused;
+            SetPaused(!paused);
+        }
+
+        private void SetPaused(bool value)
+        {
+            paused = value;
             pauseButton.text = paused ? "再開" : "一時停止";
+            RefreshRealtimeTransport();
             ApplyWorldMotion();
         }
 
@@ -1393,6 +1333,20 @@ namespace Packspire
         {
             return routePhase >= 8 ? 2 : routePhase >= 5 ? 1 : 0;
         }
+
+        private static string BiomeLabel(int biome) => biome switch
+        {
+            1 => "水没書庫",
+            2 => "黒鐘区画",
+            _ => "灰市外縁"
+        };
+
+        private static string BiomeWeatherForIndex(int biome) => biome switch
+        {
+            1 => "水霧 / 無風",
+            2 => "黒鐘雨 / 強風",
+            _ => "煤霧 / 微風"
+        };
 
         private void ShowToast(string message)
         {
@@ -1463,98 +1417,6 @@ namespace Packspire
                 JourneyWalkCyclePrototype.RoadProfile.Narrow => "狭路",
                 _ => "通常路"
             };
-        }
-
-        /// <summary>
-        /// Developer-scene hook for reviewing a complete biome handoff without
-        /// changing route nodes or committing route rewards.
-        /// </summary>
-        public void DevPreviewBiomeTransition(int targetBiome)
-        {
-            int desired = Mathf.Clamp(targetBiome, 0, 2);
-            if (desired == biomeIndex) desired = (desired + 1) % 3;
-            biomeIndex = desired;
-            PlayTransition(desired, walker.CurrentRoadProfile, "背景転換プレビュー");
-        }
-
-        /// <summary>
-        /// Developer-scene hook for checking all three road layouts with the same
-        /// route transition used by gameplay.
-        /// </summary>
-        public void DevPreviewRoadProfile(int targetProfile)
-        {
-            JourneyWalkCyclePrototype.RoadProfile desired =
-                (JourneyWalkCyclePrototype.RoadProfile)Mathf.Clamp(targetProfile, 0, 2);
-            PlayTransition(biomeIndex, desired, "道幅プレビュー");
-        }
-
-        /// <summary>
-        /// Developer-scene hook for deterministic weather captures. Ambient rain and
-        /// mist are simulated even when the editor Game View is not advancing frames.
-        /// </summary>
-        public void DevPreviewEnvironment(int targetBiome, float motionScale, float simulationSeconds = 2f)
-        {
-            biomeIndex = Mathf.Clamp(targetBiome, 0, 2);
-            walker.SetJourneyBiome(biomeIndex);
-            environment.SetBiome(biomeIndex);
-            environment.SetWorldMotion(Mathf.Clamp(motionScale, 0f, 2f));
-            environment.DevSimulate(simulationSeconds);
-        }
-
-        /// <summary>
-        /// Long-running background review entered from the developer menu. It uses the
-        /// same world, speed and pause controls as a real journey but does not commit a
-        /// route node or interrupt the review with a roadside encounter.
-        /// </summary>
-        public void DevPreviewBackground(
-            int targetBiome,
-            JourneySceneryComposition composition)
-        {
-            if (!uiBound) BindUi();
-
-            biomeIndex = Mathf.Clamp(targetBiome, 0, 2);
-            firstChoicePending = true;
-            arrivalNode = null;
-            BeginTravel(3600f, null);
-
-            JourneyWalkCyclePrototype.RoadProfile road =
-                JourneyPresentationConfig.GetRoadProfile(composition);
-            walker.SetJourneyBiome(biomeIndex);
-            walker.SetRoadProfile(road);
-            walker.SetSceneryComposition(composition);
-            environment.SetBiome(biomeIndex);
-            scenery.BeginTravel(biomeIndex, false);
-            scenery.DevPreviewComposition(composition);
-
-            float previewProgress = biomeIndex switch
-            {
-                1 => .52f,
-                2 => .82f,
-                _ => .18f
-            };
-            travelClock = travelDuration * previewProgress;
-            routeProgress.value = previewProgress * 100f;
-            walker.SetJourneyProgress(previewProgress);
-            environment.SetJourneyProgress(previewProgress);
-            scenery.SetTravelProgress(previewProgress);
-
-            string area = biomeIndex switch
-            {
-                1 => "水没書庫",
-                2 => "黒鐘区画",
-                _ => "灰市外縁"
-            };
-            string weather = biomeIndex switch
-            {
-                1 => "水霧 / 弱雨",
-                2 => "黒鐘雨 / 強風",
-                _ => "煤霧 / 微風"
-            };
-            areaText.text = area;
-            weatherText.text = weather;
-            phaseText.text = $"BACKGROUND QA / {area}";
-            nextText.text = $"{JourneyPresentationConfig.GetCompositionLabel(composition)}を連続確認中";
-            ShowToast($"{area}・{JourneyPresentationConfig.GetCompositionLabel(composition)}。F10で開発者メニューへ戻ります。");
         }
 
         private IEnumerator EncounterRoutine(int revision)
@@ -1722,7 +1584,7 @@ namespace Packspire
 
         private void LoadEnemyBattleFrames()
         {
-            Sprite[] loaded = Resources.LoadAll<Sprite>(EnemyBattleResource);
+            Sprite[] loaded = PackspireResources.LoadAll<Sprite>(EnemyBattleResource);
             string[] orderedNames =
             {
                 "journey-warden-battle-idle",
@@ -1838,24 +1700,6 @@ namespace Packspire
             enemyShadowRenderer.transform.position = new Vector3(actorPosition.x, BattleGroundY + .025f, 0f);
         }
 
-        /// <summary>
-        /// Developer-scene visual QA hook. It previews the current biome landmark at
-        /// a normalized point in its dedicated passage without advancing route data.
-        /// </summary>
-        public void DevPreviewLandmarkPass(float normalizedProgress)
-        {
-            scenery.DevPreviewLandmarkPass(normalizedProgress);
-        }
-
-        /// <summary>
-        /// Developer-scene visual QA hook. Places one readable roadside object behind
-        /// the courier and one camera-side cover object at the requested world X.
-        /// </summary>
-        public void DevPreviewForeground(float closeForegroundWorldX)
-        {
-            scenery.DevPreviewForeground(closeForegroundWorldX);
-        }
-
         private Sprite CreateParcelSprite()
         {
             const int size = 64;
@@ -1883,10 +1727,7 @@ namespace Packspire
 
         private void OnDestroy()
         {
-            if (PackspireUiFoundation.Instance != null)
-            {
-                PackspireUiFoundation.Instance.SetJourneyPrototypeVisible(false);
-            }
+            RestoreFoundationUi();
             if (scenery != null) scenery.ClearAll();
             foreach (UnityEngine.Object asset in runtimeAssets)
                 if (asset != null) Destroy(asset);
@@ -1895,9 +1736,19 @@ namespace Packspire
 
         private void HideFoundationUi()
         {
+            if (foundationUiHidden) return;
             PackspireUiFoundation foundation = PackspireUiFoundation.Instance;
             if (foundation == null) return;
             foundation.SetJourneyPrototypeVisible(true);
+            foundationUiHidden = true;
+        }
+
+        private void RestoreFoundationUi()
+        {
+            if (!foundationUiHidden) return;
+            PackspireUiFoundation foundation = PackspireUiFoundation.Instance;
+            if (foundation != null) foundation.SetJourneyPrototypeVisible(false);
+            foundationUiHidden = false;
         }
 
         private static string RiskLabel(int risk) => risk <= 0 ? "安全" : risk == 1 ? "注意" : risk == 2 ? "危険" : "高危険";

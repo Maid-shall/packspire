@@ -216,6 +216,21 @@ public static class BattleSystem {
   ContentDatabase.EnemyPhase(battle.enemy.id,battle.enemyHp,battle.enemyMaxHp)?.name??string.Empty;
 
  public static bool EndTurn(RunState run,BattleState battle,int dungeonDamage=0)=>EndTurnFx(run,battle,dungeonDamage).playerDefeated;
+ public static BattleActionFx ResolveRealtimeEnemyHit(RunState run,BattleState battle,int baseDamage,string actionName,bool sequenceEnd){
+  if(run==null||battle==null)return BattleActionFx.Fail;
+  int raw=baseDamage>0?Damage(baseDamage,battle.enemyStatuses,run.statuses):0;
+  int absorbed=Mathf.Min(run.block,raw);
+  run.block=Mathf.Max(0,run.block-raw);
+  int damage=Mathf.Max(0,raw-absorbed);
+  run.hp=Mathf.Max(0,run.hp-damage);
+  if(sequenceEnd)battle.move++;
+  string label=string.IsNullOrEmpty(actionName)?"攻撃":actionName;
+  Record(battle,$"{battle.enemy.name}の{label}：{damage}ダメージ");
+  return new BattleActionFx{
+   ok=true,playerDefeated=run.hp<=0,enemyDefeated=battle.enemyHp<=0,
+   damageToPlayer=damage,rolledDamage=raw,cardName=label
+  };
+ }
  public static void Draw(RunState run,int n){while(n-->0){if(run.draw.Count==0){run.draw=Shuffle(run.discard);run.discard=new();}if(run.draw.Count==0)return;var c=run.draw[^1];run.draw.RemoveAt(run.draw.Count-1);run.hand.Add(c);}}
  public static int Status(List<StatusState> statuses,string type)=>statuses.FirstOrDefault(x=>x.type==type)?.amount??0;
  public static int RollDamage(int expected,out int dieOne,out int dieTwo,out int modifier){

@@ -125,27 +125,23 @@ namespace Packspire
         {
             roadProfile = profile;
             road = JourneyPresentationConfig.GetRoad(biomeIndex, profile);
-            SetComposition(JourneyPresentationConfig.GetComposition(profile), false);
+            SetComposition(JourneyPresentationConfig.GetComposition(profile));
             ReanchorActiveScenery();
         }
 
-        public void SetComposition(JourneySceneryComposition next, bool populatePreview)
+        private void SetComposition(JourneySceneryComposition next)
         {
             composition = next;
             walker?.SetSceneryComposition(next);
             ResetCompositionSpacing();
-            if (!populatePreview) return;
-
-            ClearOrdinaryProps();
-            PopulateCompositionPreview();
         }
 
         private void LoadSprites()
         {
-            propSprites = Resources.LoadAll<Sprite>(PropsResource)
+            propSprites = PackspireResources.LoadAll<Sprite>(PropsResource)
                 .OrderBy(sprite => sprite.name, StringComparer.Ordinal)
                 .ToArray();
-            landmarkSprites = Resources.LoadAll<Sprite>(LandmarksResource)
+            landmarkSprites = PackspireResources.LoadAll<Sprite>(LandmarksResource)
                 .OrderBy(sprite => sprite.name, StringComparer.Ordinal)
                 .ToArray();
 
@@ -408,69 +404,6 @@ namespace Packspire
                 position.y = road.LandmarkY;
                 landmarkRenderer.transform.position = position;
             }
-        }
-
-        public void DevPreviewLandmarkPass(float normalizedProgress)
-        {
-            if (!landmarkScheduled)
-            {
-                landmarkScheduled = true;
-                landmarkZoneActive = false;
-            }
-            SetActivity(true, false);
-            UpdateLandmarkZone(Mathf.Clamp01(normalizedProgress));
-        }
-
-        public void DevPreviewForeground(float closeForegroundWorldX)
-        {
-            ClearOrdinaryProps();
-            SpawnRoadsideProp(1.5f);
-            SpawnCloseForegroundProp(closeForegroundWorldX);
-            roadsideDistanceRemaining = 999f;
-            closeForegroundDistanceRemaining = 999f;
-        }
-
-        public void DevPreviewComposition(JourneySceneryComposition previewComposition)
-        {
-            SetActivity(true, true);
-            SetComposition(previewComposition, true);
-        }
-
-        private void PopulateCompositionPreview()
-        {
-            nextRoadsidePropIndex = 0;
-            nextCloseForegroundPropIndex = biomeIndex;
-            switch (composition)
-            {
-                case JourneySceneryComposition.Open:
-                    SpawnRoadsideProp(7.6f);
-                    break;
-                case JourneySceneryComposition.Dense:
-                    SpawnRoadsideProp(5.9f);
-                    SpawnCloseForegroundProp(10.8f, .9f);
-                    break;
-                default:
-                    SpawnRoadsideProp(4.6f);
-                    SpawnCloseForegroundProp(11f, .9f);
-                    break;
-            }
-            PopulateBiomeAccentPreview();
-            roadsideDistanceRemaining = RoadsideGapMax();
-            closeForegroundDistanceRemaining = ForegroundGapMax();
-            groundAccentDistanceRemaining = GroundAccentGapMax();
-        }
-
-        private void PopulateBiomeAccentPreview()
-        {
-            if (biomeIndex == 0) return;
-            if (composition == JourneySceneryComposition.Open)
-            {
-                SpawnGroundAccent(2.1f, biomeIndex == 1 ? 1.38f : 1.06f);
-                return;
-            }
-
-            SpawnGroundAccent(-.6f, biomeIndex == 1 ? 1.18f : .92f);
-            SpawnGroundAccent(6.2f, biomeIndex == 1 ? 1.52f : 1.12f);
         }
 
         private void ResetCompositionSpacing()

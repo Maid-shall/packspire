@@ -164,7 +164,6 @@ public sealed partial class PackspireUiFoundation {
   statusAppointmentAction.text="記録待ち";
  }
 
- void BuildStatusAgain(){RefreshStatusScreen();}
  void RefreshStatusScreen(){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Status){RebuildScreen(BuildStatus);return;}
   var meta=game.UiMeta;
@@ -523,7 +522,6 @@ public sealed partial class PackspireUiFoundation {
   return page;
  }
 
- void BuildVaultAgain(){RefreshVaultScreen(false);}
  void RefreshVaultScreen(bool rebuildList){
   if(mgmtListScroll==null||renderedScreen!=ScreenId.Vault){RebuildScreen(BuildVault);return;}
   CloseVaultSortMenu();
@@ -838,8 +836,6 @@ public sealed partial class PackspireUiFoundation {
    "古い遠征記録には異なる姿の目撃談もある。すべてが同種なのか、塔が生んだ変異なのかは判明していない。"
   );
 }
-
- void BuildCompendiumAgain(){RefreshCompendiumScreen(true);}
 
  #endregion
 }

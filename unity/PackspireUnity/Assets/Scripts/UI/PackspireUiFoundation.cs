@@ -47,6 +47,8 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  VisualElement developerPanelRoot;
  bool developerOverlayStateKnown;
  bool lastDeveloperOverlayOpen;
+ bool journeyPrototypeVisibilityKnown;
+ bool journeyPrototypeVisible;
  // battle fields live in PackspireUiFoundation.Battle.cs
 
  void Awake(){
@@ -88,6 +90,7 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
   if(uiReady)RefreshScreen(true);
  }
  void Update(){
+  using var performanceScope=PackspirePerformance.FoundationUpdate.Auto();
   if(root!=null&&(!hasRenderedScreen||renderedScreen!=game.UiScreen))RefreshScreen(false);
   HandleNavInput();
   RefreshDeveloperOverlay();
@@ -116,7 +119,11 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  }
 
  public void SetJourneyPrototypeVisible(bool prototypeVisible){
-  if(root!=null)root.style.display=prototypeVisible?DisplayStyle.None:DisplayStyle.Flex;
+  if(root==null){journeyPrototypeVisibilityKnown=false;return;}
+  if(journeyPrototypeVisibilityKnown&&journeyPrototypeVisible==prototypeVisible)return;
+  journeyPrototypeVisibilityKnown=true;
+  journeyPrototypeVisible=prototypeVisible;
+  root.style.display=prototypeVisible?DisplayStyle.None:DisplayStyle.Flex;
  }
 
 #if UNITY_EDITOR

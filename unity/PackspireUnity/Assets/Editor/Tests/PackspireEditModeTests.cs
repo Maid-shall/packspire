@@ -699,5 +699,151 @@ public sealed class PackspireEditModeTests {
   Assert.That(first,Is.Not.Null);
   Assert.That(second,Is.SameAs(first));
  }
+
+ [Test]
+ public void RealtimeBattle_RecoversEnergyAtTimelineBoundaries(){
+  var timeline=new RealtimeBattleController();
+  timeline.Start(initialEnergy:1,maximumEnergy:3,energyInterval:2d);
+  Assert.That(timeline.TrySpendEnergy(1),Is.True);
+  timeline.Tick(1.99d);
+  Assert.That(timeline.Energy,Is.EqualTo(0));
+  timeline.Tick(.01d);
+  Assert.That(timeline.Energy,Is.EqualTo(1));
+ Assert.That(timeline.NextEnergyIn,Is.EqualTo(2d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeBattle_SupplyPulseOccursEvenAtMaximumEnergy(){
+  var timeline=new RealtimeBattleController();
+  timeline.Start(initialEnergy:3,maximumEnergy:3,energyInterval:2d);
+  timeline.Tick(2d);
+  Assert.That(timeline.Energy,Is.EqualTo(3));
+ Assert.That(timeline.SupplyPulseCount,Is.EqualTo(1));
+ }
+
+ [Test]
+ public void RealtimeBattle_ExposesTypedSupplyCheckpointsWithinHorizon(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeSupplyPulsePreview>();
+  timeline.Start(
+   initialEnergy:1,
+   maximumEnergy:3,
+   energyInterval:2d,
+   energyPerSupplyPulse:1,
+   drawsPerSupplyPulse:2);
+  timeline.GetUpcomingSupplyPulses(previews,5d);
+  Assert.That(previews,Has.Count.EqualTo(2));
+  Assert.That(previews[0].TimeUntil,Is.EqualTo(2d).Within(.0001d));
+  Assert.That(previews[0].EnergyDelta,Is.EqualTo(1));
+  Assert.That(previews[0].DrawCount,Is.EqualTo(2));
+  Assert.That(previews[1].TimeUntil,Is.EqualTo(4d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeBattle_ExposesStableUpcomingActionPreviews(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeEnemyActionPreview>();
+  timeline.Start(initialEnergy:1,maximumEnergy:3,energyInterval:2d);
+  timeline.ScheduleEnemyAction("warden","combo:連鐘",delay:4d,damage:4,
+   telegraphLead:.8d,hitCount:3,hitSpacing:.2d);
+  timeline.GetUpcomingActions(previews);
+  Assert.That(previews,Has.Count.EqualTo(1));
+  Assert.That(previews[0].Damage,Is.EqualTo(4));
+  Assert.That(previews[0].HitCount,Is.EqualTo(3));
+  Assert.That(previews[0].TimeUntil,Is.EqualTo(4d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeBattle_MultiHitTelegraphsOnceAndResolvesEveryHit(){
+  var timeline=new RealtimeBattleController();
+  int telegraphs=0;
+  int hits=0;
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:5d);
+  timeline.EnemyTelegraphStarted+=(_,__)=>telegraphs++;
+  timeline.EnemyActionResolved+=action=>{
+   hits++;
+   Assert.That(action.SequenceCount,Is.EqualTo(3));
+  };
+  timeline.ScheduleEnemyAction("warden","bell-combo",delay:1d,damage:4,
+   telegraphLead:.4d,hitCount:3,hitSpacing:.2d);
+  timeline.Tick(.6d);
+  Assert.That(telegraphs,Is.EqualTo(1));
+  timeline.Tick(.8d);
+  Assert.That(hits,Is.EqualTo(3));
+ }
+
+ [Test]
+ public void RealtimeTimelinePlanner_PreservesAuthoredBurstsAndRests(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeEnemyActionPreview>();
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:20d);
+  var quietThenBurst=new RealtimeEnemyTimelinePattern(
+   "charge-burst",12d,
+   new RealtimeEnemyTimelineStep(2d,"charge:first",0,.2d),
+   new RealtimeEnemyTimelineStep(5d,"charge:second",0,.2d),
+   new RealtimeEnemyTimelineStep(6d,"attack:burst-a",4,.5d),
+   new RealtimeEnemyTimelineStep(6.8d,"attack:burst-b",4,.5d),
+   new RealtimeEnemyTimelineStep(7.6d,"attack:burst-c",4,.5d));
+  var planner=new RealtimeEnemyTimelinePlanner(timeline,"warden",quietThenBurst);
+  planner.Reset();
+  planner.EnsureScheduledThrough(12d);
+  timeline.GetUpcomingActions(previews);
+  Assert.That(previews,Has.Count.EqualTo(5));
+  Assert.That(previews[0].TimeUntil,Is.EqualTo(2d).Within(.0001d));
+  Assert.That(previews[1].TimeUntil,Is.EqualTo(5d).Within(.0001d));
+  Assert.That(previews[2].TimeUntil,Is.EqualTo(6d).Within(.0001d));
+  Assert.That(previews[3].TimeUntil,Is.EqualTo(6.8d).Within(.0001d));
+  Assert.That(previews[4].TimeUntil,Is.EqualTo(7.6d).Within(.0001d));
+  Assert.That(planner.PlannedThrough,Is.EqualTo(12d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeTimelinePlanner_ExtendsByPatternsInsteadOfVisibleActionCount(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeEnemyActionPreview>();
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:20d);
+  var sparse=new RealtimeEnemyTimelinePattern(
+   "sparse",10d,
+   new RealtimeEnemyTimelineStep(1d,"attack:first",5,.5d));
+  var dense=new RealtimeEnemyTimelinePattern(
+   "dense",8d,
+   new RealtimeEnemyTimelineStep(1d,"attack:a",3,.4d),
+   new RealtimeEnemyTimelineStep(2d,"attack:b",3,.4d),
+   new RealtimeEnemyTimelineStep(3d,"attack:c",3,.4d));
+  var planner=new RealtimeEnemyTimelinePlanner(timeline,"warden",sparse,dense);
+  planner.Reset();
+  planner.EnsureScheduledThrough(13d);
+  timeline.GetUpcomingActions(previews);
+  Assert.That(previews,Has.Count.EqualTo(4));
+  Assert.That(previews[0].TimeUntil,Is.EqualTo(1d).Within(.0001d));
+  Assert.That(previews[1].TimeUntil,Is.EqualTo(11d).Within(.0001d));
+  Assert.That(previews[2].TimeUntil,Is.EqualTo(12d).Within(.0001d));
+  Assert.That(previews[3].TimeUntil,Is.EqualTo(13d).Within(.0001d));
+  Assert.That(planner.ScheduledPatternCount,Is.EqualTo(2));
+ Assert.That(planner.PlannedThrough,Is.EqualTo(18d).Within(.0001d));
+ }
+
+ [Test]
+ public void WardenRealtimeTimeline_IsAuthoredDataAndBuildsValidPatterns(){
+  var profile=AssetDatabase.LoadAssetAtPath<RealtimeEnemyTimelineProfile>(
+   "Assets/Resources/Data/Journey/WardenRealtimeTimeline.asset");
+  Assert.That(profile,Is.Not.Null);
+  Assert.That(profile.actorId,Is.EqualTo("warden"));
+  var patterns=profile.BuildPatterns();
+  Assert.That(patterns,Has.Length.EqualTo(4));
+  Assert.That(patterns[0].Duration,Is.EqualTo(9.5d).Within(.0001d));
+  Assert.That(patterns[1].Steps[0].Kind,Is.EqualTo(RealtimeEnemyActionKind.ComboAttack));
+  Assert.That(patterns[3].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.JumpReaction));
+ }
+
+ [Test]
+ public void JourneyMiniGame_TimingFailureResolvesWithoutUi(){
+  var miniGame=new JourneyMiniGameController();
+  miniGame.Start(MiniGameKind.StampTiming);
+  miniGame.Tick(7.1f);
+  Assert.That(miniGame.IsResolved,Is.True);
+  Assert.That(miniGame.TryConsumeOutcome(out var outcome),Is.True);
+  Assert.That(outcome.Success,Is.False);
+ }
 }
 #endif
