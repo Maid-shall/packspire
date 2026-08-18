@@ -941,5 +941,114 @@ public sealed class PackspireEditModeTests {
   Assert.That(miniGame.TryConsumeOutcome(out var outcome),Is.True);
   Assert.That(outcome.Success,Is.False);
  }
+
+ [Test]
+ public void ExpeditionDefeat_KeepsStartingAndPackedNewItemsOnly(){
+  var starting=new ItemInstance("sword"){uid="starting"};
+  var packed=new ItemInstance("shield"){uid="packed-new"};
+  var loose=new ItemInstance("herb"){uid="loose-new"};
+  var unclaimed=new ItemInstance("ember"){uid="unclaimed-new"};
+  var meta=new MetaSave{baseGold=10,stash=new(){LoadoutSystem.CloneItem(starting)}};
+  var run=new RunState{
+   gold=25,
+   inventory=new(){starting,packed,loose},
+   lootBag=new(){unclaimed},
+   placements=new(){new Placement(packed.uid,0)},
+   startingItemUids=new(){starting.uid}
+  };
+
+  var summary=ExpeditionLootSystem.Finalize(meta,run,ExpeditionEndReason.Defeat,1234);
+
+  Assert.That(meta.stash.Select(item=>item.uid),Is.EquivalentTo(new[]{"starting","packed-new"}));
+  Assert.That(summary.retainedNewItemUids,Is.EquivalentTo(new[]{"packed-new"}));
+  Assert.That(summary.lostNewItemUids,Is.EquivalentTo(new[]{"loose-new","unclaimed-new"}));
+  Assert.That(meta.baseGold,Is.EqualTo(10));
+  Assert.That(meta.runs,Is.EqualTo(1));
+  Assert.That(meta.wins,Is.EqualTo(0));
+ }
+
+ [Test]
+ public void ExpeditionDefeat_RecordsAndPersistsHeirloomScar(){
+  var heirloom=new ItemInstance("sword"){uid="heirloom"};
+  var meta=new MetaSave{stash=new(){LoadoutSystem.CloneItem(heirloom)}};
+  var run=new RunState{
+   dungeon="old_spire",battlesWon=4,heirloomUid=heirloom.uid,
+   inventory=new(){heirloom},startingItemUids=new(){heirloom.uid}
+  };
+
+  ExpeditionLootSystem.Finalize(meta,run,ExpeditionEndReason.Defeat,5678);
+
+  var saved=meta.stash.Single(item=>item.uid==heirloom.uid);
+  Assert.That(saved.history.defeats,Is.EqualTo(1));
+  Assert.That(saved.scars,Has.Count.EqualTo(1));
+  Assert.That(saved.scars[0].timestamp,Is.EqualTo(5678));
+ }
+
+ [TestCase(ExpeditionEndReason.Return,0)]
+ [TestCase(ExpeditionEndReason.Clear,1)]
+ public void SuccessfulExpedition_SecuresAllLootAndGold(ExpeditionEndReason reason,int expectedWins){
+  var inventoryLoot=new ItemInstance("shield"){uid="inventory-new"};
+  var bagLoot=new ItemInstance("ember"){uid="bag-new"};
+  var meta=new MetaSave{baseGold=7,stash=new()};
+  var run=new RunState{gold=13,inventory=new(){inventoryLoot},lootBag=new(){bagLoot}};
+
+  var summary=ExpeditionLootSystem.Finalize(meta,run,reason);
+
+  Assert.That(meta.stash.Select(item=>item.uid),Is.EquivalentTo(new[]{"inventory-new","bag-new"}));
+  Assert.That(summary.retainedNewItemCount,Is.EqualTo(2));
+  Assert.That(summary.lostNewItemCount,Is.EqualTo(0));
+  Assert.That(meta.baseGold,Is.EqualTo(20));
+  Assert.That(meta.runs,Is.EqualTo(1));
+  Assert.That(meta.wins,Is.EqualTo(expectedWins));
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_GeneratesThreeFloorsAndReconvergingBosses(){
+  var rules=TestExpeditionRouteRules();
+
+  var plan=ExpeditionRoutePlanSystem.Generate(1708,rules);
+  var report=ExpeditionRoutePlanSystem.Validate(plan,rules);
+
+  Assert.That(report.errors,Is.Empty,string.Join("\n",report.errors));
+  Assert.That(plan.floors,Has.Count.EqualTo(3));
+  Assert.That(plan.startNodeIds,Has.Count.EqualTo(2));
+  foreach(var floor in plan.floors){
+   Assert.That(floor.paths.Select(path=>path.battleCount),Is.EquivalentTo(new[]{4,8}));
+   Assert.That(floor.nodes.Single(node=>node.id==floor.bossNodeId).kind,Is.EqualTo(ExpeditionNodeKind.Boss));
+   Assert.That(floor.paths.All(path=>
+    floor.nodes.Single(node=>node.id==path.nodeIds[^1]).nextNodeIds.SequenceEqual(new[]{floor.bossNodeId})),Is.True);
+  }
+  Assert.That(plan.floors[0].nodes.Single(node=>node.id==plan.floors[0].bossNodeId).nextNodeIds,
+   Is.EquivalentTo(plan.floors[1].paths.Select(path=>path.nodeIds[0])));
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_IsDeterministicAndUsesAuthoredDayThresholds(){
+  var rules=TestExpeditionRouteRules();
+  var first=ExpeditionRoutePlanSystem.Generate(42,rules);
+  var second=ExpeditionRoutePlanSystem.Generate(42,rules);
+
+  string FirstKinds(ExpeditionRoutePlan plan)=>string.Join(",",plan.floors
+   .SelectMany(floor=>floor.paths)
+   .SelectMany(path=>path.nodeIds.Select(id=>plan.floors
+    .SelectMany(floor=>floor.nodes).Single(node=>node.id==id).kind)));
+
+  Assert.That(FirstKinds(first),Is.EqualTo(FirstKinds(second)));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,4),Is.EqualTo(ExpeditionDayStage.Quiet));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,5),Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,10),Is.EqualTo(ExpeditionDayStage.Pursuit));
+ }
+
+ static ExpeditionRouteGenerationRules TestExpeditionRouteRules()=>new(){
+  floorCount=3,
+  minimumBattlesPerPath=4,
+  maximumBattlesPerPath=8,
+  alertStartsOnDay=5,
+  pursuitStartsOnDay=10,
+  paths=new(){
+   new ExpeditionPathRule("safe","Safe",4,1,2,1),
+   new ExpeditionPathRule("breakthrough","Breakthrough",8,3,3,2)
+  }
+ };
 }
 #endif

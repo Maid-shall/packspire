@@ -9,6 +9,7 @@ public partial class PackspireGame : MonoBehaviour {
 
  public static PackspireGame Instance { get; private set; }
  MetaSave meta; RunState run; GridBoardRunState gridBoard; BattleState battle; ScreenId screen; string message=""; bool packingAtBase,packingAtRelay,developerPanel; string courierBattleNodeId="",courierEventNodeId="",courierCargoNodeId=""; Texture2D factionArt,characterArt,equipmentArt,roleArt,enemyArt,dungeonArt,bookSpread;
+ ExpeditionFinalizationSummary lastExpeditionFinalization;
  Texture2D showcaseHeroArt,showcaseDragonArt;
  Sprite showcaseHeroSprite;
  ScreenId lastVisualScreen; bool visualScreenTracked;
@@ -17,6 +18,7 @@ public partial class PackspireGame : MonoBehaviour {
  public ScreenId UiScreen=>screen; public MetaSave UiMeta=>meta; public bool UiDeveloperPanelOpen=>developerPanel; public Texture2D UiCharacterArt=>characterArt; public Texture2D UiEquipmentArt=>equipmentArt; public Texture2D UiRoleArt=>roleArt; public Texture2D UiEnemyArt=>enemyArt; public Texture2D UiDungeonArt=>dungeonArt; public Texture2D UiFactionArt=>factionArt; public Texture2D UiBookArt=>bookSpread;
  public Texture2D UiShowcaseHeroArt=>showcaseHeroArt; public Sprite UiShowcaseHeroSprite=>showcaseHeroSprite; public Texture2D UiShowcaseDragonArt=>showcaseDragonArt;
  public RunState UiRun=>run; public string UiMessage=>message; public bool UiPackingAtBase=>packingAtBase; public bool UiPackingAtRelay=>packingAtRelay;
+ public ExpeditionFinalizationSummary UiLastExpeditionFinalization=>lastExpeditionFinalization;
  public CourierRouteState UiCourierRoute=>run?.courierRoute;
  public bool UiCourierCargoReward=>!string.IsNullOrEmpty(courierCargoNodeId);
  public CourierRouteNodeDef UiCourierCargoNode=>CourierRouteSystem.Node(courierCargoNodeId);
@@ -134,10 +136,11 @@ public partial class PackspireGame : MonoBehaviour {
   screen=ScreenId.GridBoard;
   message="封印格子をやり直した";
  }
- public void UiFinishExpedition(bool win=true)=>FinishRun(win);
+ public void UiFinishExpedition(bool win=true)=>FinishRun(win?ExpeditionEndReason.Clear:ExpeditionEndReason.Defeat);
+ public void UiReturnFromExpedition()=>FinishRun(ExpeditionEndReason.Return);
  public void UiRetreatFromGrid(){
   message="途中撤退した。戦利品は持ち帰れる";
-  FinishRun(true);
+  FinishRun(ExpeditionEndReason.Return);
  }
  public void UiAdvanceGridArea(){
   if(gridBoard==null)return;
@@ -152,7 +155,7 @@ public partial class PackspireGame : MonoBehaviour {
   GridBoardSystem.ResolveExplorationTurn(gridBoard);
   gridBoard.pendingGate="";
   message=$"区画 {gridBoard.areaIndex+1} の帰還点から持ち帰った";
-  FinishRun(true);
+  FinishRun(ExpeditionEndReason.Return);
  }
  public void UiDeclineGridGate(){
   if(gridBoard==null)return;
@@ -588,36 +591,20 @@ public partial class PackspireGame : MonoBehaviour {
   run.battlesWon++;run.gold+=12+run.battlesWon*3+goldBonus;run.hp=Mathf.Min(run.maxHp,run.hp+3);
   if(goldBonus>0)message=$"勝利　+{goldBonus}G（{CharacterSystem.OfRun(run).traitName}）";
  }
- void FinishRun(bool win){
-  if(run!=null){
-   if(win){
-    meta.wins++;meta.baseGold+=run.gold;
-    foreach(var item in run.inventory.Concat(run.lootBag)){
-     var saved=meta.stash.FirstOrDefault(x=>x.uid==item.uid);
-     if(saved==null)meta.stash.Add(CloneItem(item));
-     else{saved.durability=item.durability;saved.uses=item.uses;saved.temper=item.temper;saved.scars=item.scars;saved.history=item.history;}
-    }
-   } else {
-    var heir=run.inventory.FirstOrDefault(x=>x.uid==run.heirloomUid);
-    if(heir!=null){
-     heir.history.defeats++;
-     heir.scars.Add(new ScarRecord{type="defeat",dungeon=run.dungeon,floor=run.battlesWon,timestamp=DateTimeOffset.UtcNow.ToUnixTimeSeconds()});
-     var saved=meta.stash.FirstOrDefault(x=>x.uid==heir.uid);
-     if(saved!=null){saved.scars=heir.scars;saved.history=heir.history;}
-    }
-   }
-  }
-  meta.runs++;SaveSystem.Save(meta);
+ void FinishRun(bool win)=>FinishRun(win?ExpeditionEndReason.Clear:ExpeditionEndReason.Defeat);
+ void FinishRun(ExpeditionEndReason reason){
+  lastExpeditionFinalization=ExpeditionLootSystem.Finalize(meta,run,reason);
+  SaveSystem.Save(meta);
   battle=null;
   gridBoard=null;
   courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
-  message=win?"遠征成功。戦利品をすべて保管しました":"探索終了。戦利品と獲得ゴールドは持ち帰れません";
-  screen=win?ScreenId.GameClear:ScreenId.GameOver;
+  bool successful=reason!=ExpeditionEndReason.Defeat;
+  message=successful?"遠征成功。戦利品をすべて保管しました":"探索終了。バッグに収納した戦利品だけを保護しました";
+  screen=successful?ScreenId.GameClear:ScreenId.GameOver;
  }
  string RoleMilestoneText(string id,bool maximum){
   if(!GameCatalog.Roles.TryGetValue(id,out var role))return "";
   return maximum?role.maximumMilestoneText:role.milestoneText;
  }
- ItemInstance CloneItem(ItemInstance x)=>JsonUtility.FromJson<ItemInstance>(JsonUtility.ToJson(x));
 }
 }

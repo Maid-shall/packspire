@@ -17,6 +17,11 @@ public static class LoadoutSystem {
   StorageFormulaSystem.CopyFormulaToRun(loadout,run);
   run.inventory=meta.stash.Select(CloneItem).ToList();
   foreach(var item in run.inventory)StorageFormulaSystem.EnsureItemRolled(item);
+  run.startingItemUids=run.inventory
+   .Where(item=>item!=null&&!string.IsNullOrEmpty(item.uid))
+   .Select(item=>item.uid)
+   .Distinct()
+   .ToList();
   var ids=run.inventory.Select(x=>x.uid).ToHashSet();
   run.placements=loadout.slots.Where(x=>ids.Contains(x.itemUid)).Select(x=>new Placement(x.itemUid,x.anchor,x.rotation)).ToList();
   run.selectedCardSlots=loadout.deck.ToList();

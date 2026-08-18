@@ -222,10 +222,16 @@ public sealed partial class PackspireUiFoundation {
    model.locationName="";
    model.primaryStats.Add(new RunResultStat("遠征先",model.dungeonName));
    if(run.battlesWon>0)model.primaryStats.Add(new RunResultStat("戦闘勝利",$"{run.battlesWon}"));
+   var finalization=game.UiLastExpeditionFinalization;
    if(clear&&run.gold>0)model.primaryStats.Add(new RunResultStat("持ち帰るゴールド",$"{run.gold}G"));
-   if(clear&&run.lootBag!=null&&run.lootBag.Count>0)
+   if(finalization!=null&&finalization.retainedNewItemCount>0)
+    model.primaryStats.Add(new RunResultStat(
+     clear?"持ち帰る戦利品":"バッグで保護した戦利品",$"{finalization.retainedNewItemCount}個"));
+   else if(clear&&run.lootBag!=null&&run.lootBag.Count>0)
     model.primaryStats.Add(new RunResultStat("持ち帰る戦利品",$"{run.lootBag.Count}個"));
-   if(!clear&&run.lootBag!=null&&run.lootBag.Count>0)
+   if(finalization!=null&&finalization.lostNewItemCount>0)
+    model.records.Add(new RunResultStat("持ち帰れなかった戦利品",$"{finalization.lostNewItemCount}個"));
+   else if(!clear&&run.lootBag!=null&&run.lootBag.Count>0)
     model.records.Add(new RunResultStat("持ち帰れなかった戦利品",$"{run.lootBag.Count}個"));
    if(!clear&&run.gold>0)
     model.records.Add(new RunResultStat("持ち帰れなかったゴールド",$"{run.gold}G"));
