@@ -1039,6 +1039,23 @@ public sealed class PackspireEditModeTests {
   Assert.That(ExpeditionRoutePlanSystem.DayStage(first,10),Is.EqualTo(ExpeditionDayStage.Pursuit));
  }
 
+ [Test]
+ public void WardenRealtimeTimeline_AuditMeasuresPressureAndReactionLoad(){
+  var profile=AssetDatabase.LoadAssetAtPath<RealtimeEnemyTimelineProfile>(
+   "Assets/Resources/Data/Journey/WardenRealtimeTimeline.asset");
+
+  var report=RealtimeEnemyTimelineAudit.Analyze(profile.BuildPatterns(),10d);
+
+  Assert.That(report.cycleDuration,Is.EqualTo(41d).Within(.0001d));
+  Assert.That(report.actionCount,Is.EqualTo(9));
+  Assert.That(report.totalPotentialDamage,Is.EqualTo(79));
+  Assert.That(report.reactionActionCount,Is.EqualTo(2));
+  Assert.That(report.minimumTelegraphLead,Is.EqualTo(.58d).Within(.0001d));
+  Assert.That(report.maximumActionsInWindow,Is.GreaterThan(0));
+  Assert.That(report.maximumDamageInWindow,Is.GreaterThanOrEqualTo(12));
+  Assert.That(report.maximumQuietSeconds,Is.GreaterThan(0d));
+ }
+
  static ExpeditionRouteGenerationRules TestExpeditionRouteRules()=>new(){
   floorCount=3,
   minimumBattlesPerPath=4,
