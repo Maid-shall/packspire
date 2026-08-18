@@ -1,0 +1,125 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="project://database/Assets/Resources/UI/PackspireBattle.uss?fileID=7433441132597879392&amp;guid=10c8d53bdccfac945b2f47269ab17f67&amp;type=3#PackspireBattle" />
+    <Style src="project://database/Assets/Resources/UI/PackspireMisprintCommon.uss?fileID=7433441132597879392&amp;guid=63665a2f7f8a40ab81fb9802b6721373&amp;type=3#PackspireMisprintCommon" />
+    <ui:VisualElement name="battle-background" class="ps-battle-background-layer" picking-mode="Ignore">
+        <ui:VisualElement name="battle-dungeon-backdrop" class="ps-battle-dungeon-backdrop" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-battle-bg-dim" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-battle-bg-vignette-left" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-battle-bg-vignette-right" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-battle-bg-ground-veil" picking-mode="Ignore" />
+    </ui:VisualElement>
+
+    <ui:VisualElement class="ps-battle-brand" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-battle-round-badge" picking-mode="Ignore">
+        <ui:Label text="ROUND" class="ps-battle-round-caption" picking-mode="Ignore" />
+        <ui:Label name="battle-round" text="01" class="ps-battle-round" picking-mode="Ignore" />
+    </ui:VisualElement>
+
+    <ui:VisualElement name="battle-stage" class="ps-battle-stage" picking-mode="Ignore">
+        <ui:VisualElement name="battle-player-lane" class="ps-battle-lane ps-battle-lane-player" picking-mode="Ignore">
+            <ui:VisualElement name="battle-player-combatant" class="ps-battle-combatant ps-battle-combatant-player" picking-mode="Ignore">
+                <ui:VisualElement name="battle-player-hud" class="ps-battle-hud ps-battle-hud-player">
+                    <ui:VisualElement class="ps-battle-vitals-frame" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-battle-vitals-art" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-battle-vitals-track" picking-mode="Ignore">
+                            <ui:VisualElement name="battle-player-hp-fill" class="ps-battle-vitals-fill" picking-mode="Ignore" />
+                            <ui:Label name="battle-player-hp-label" class="ps-battle-vitals-value" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-battle-block-overlay" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-battle-block-badge" picking-mode="Ignore">
+                            <ui:Label name="battle-player-block-label" class="ps-battle-block-value" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="battle-player-statuses" class="ps-battle-status-row" />
+                </ui:VisualElement>
+                <ui:VisualElement name="battle-player-actor" class="ps-battle-actor ps-battle-actor-player" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-battle-actor-sigil" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-battle-actor-shadow" picking-mode="Ignore" />
+                    <ui:Image name="battle-player-portrait" class="ps-battle-actor-image" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="battle-enemy-lane" class="ps-battle-lane ps-battle-lane-enemy" picking-mode="Ignore">
+            <ui:VisualElement name="battle-enemy-line" class="ps-battle-enemy-line" picking-mode="Ignore">
+                <ui:VisualElement name="battle-enemy-combatant" class="ps-battle-combatant ps-battle-combatant-enemy" picking-mode="Ignore">
+                    <ui:VisualElement name="battle-enemy-hud" class="ps-battle-hud ps-battle-hud-enemy">
+                        <ui:VisualElement class="ps-battle-vitals-frame" picking-mode="Ignore">
+                            <ui:VisualElement class="ps-battle-vitals-art" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-battle-vitals-track" picking-mode="Ignore">
+                                <ui:VisualElement name="battle-enemy-hp-fill" class="ps-battle-vitals-fill" picking-mode="Ignore" />
+                                <ui:Label name="battle-enemy-hp-label" class="ps-battle-vitals-value" picking-mode="Ignore" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="ps-battle-block-overlay" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-battle-block-badge" picking-mode="Ignore">
+                                <ui:Label name="battle-enemy-block-label" class="ps-battle-block-value" picking-mode="Ignore" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="battle-enemy-statuses" class="ps-battle-status-row" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="battle-intent-list" class="ps-battle-intent-list" picking-mode="Ignore" />
+                    <ui:VisualElement name="battle-enemy-actor" class="ps-battle-actor ps-battle-actor-enemy" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-battle-actor-sigil" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-battle-actor-shadow" picking-mode="Ignore" />
+                        <ui:Image name="battle-enemy-portrait" class="ps-battle-actor-image" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-battle-foreground-shade" picking-mode="Ignore" />
+
+    <ui:VisualElement class="ps-battle-lower-dock">
+        <ui:VisualElement class="ps-battle-utility-stack">
+            <ui:VisualElement class="ps-battle-pile-dock">
+                <ui:Button name="battle-draw-button" class="ps-battle-pile-button ps-battle-pile-button--draw">
+                    <ui:Label text="山札" class="ps-battle-pile-button__label" picking-mode="Ignore" />
+                    <ui:Label name="battle-draw-count" text="0" class="ps-battle-pile-button__value" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="battle-discard-button" class="ps-battle-pile-button ps-battle-pile-button--discard">
+                    <ui:Label text="捨て札" class="ps-battle-pile-button__label" picking-mode="Ignore" />
+                    <ui:Label name="battle-discard-count" text="0" class="ps-battle-pile-button__value" picking-mode="Ignore" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:Button name="battle-skill-button" class="ps-battle-skill-dock">
+                <ui:Label text="ACTIVE SKILL" class="ps-battle-skill-dock__eyebrow" picking-mode="Ignore" />
+                <ui:Label name="battle-skill-label" text="見切り" class="ps-battle-utility-button ps-battle-utility-button--skill" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:VisualElement class="ps-battle-energy-dial" picking-mode="Ignore">
+                <ui:Label text="EN" class="ps-battle-energy-dial__caption" picking-mode="Ignore" />
+                <ui:Label name="battle-player-energy-label" class="ps-battle-energy-dial__value" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="battle-hand" class="ps-battle-hand" picking-mode="Ignore" />
+
+        <ui:VisualElement class="ps-battle-command-rail">
+            <ui:Button name="battle-end-turn" tooltip="ターン終了" class="ps-battle-btn ps-battle-btn-end" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <ui:VisualElement name="battle-fx" class="ps-battle-fx-layer" picking-mode="Ignore" />
+
+    <ui:VisualElement name="battle-hover-detail" class="ps-battle-hover-detail" picking-mode="Ignore">
+        <ui:Label name="battle-hover-eyebrow" class="ps-battle-hover-detail__eyebrow" picking-mode="Ignore" />
+        <ui:Label name="battle-hover-title" class="ps-battle-hover-detail__title" picking-mode="Ignore" />
+        <ui:Label name="battle-hover-body" class="ps-battle-hover-detail__body" picking-mode="Ignore" />
+    </ui:VisualElement>
+
+    <ui:VisualElement name="battle-deck-overlay" class="ps-battle-deck-overlay">
+        <ui:Button name="battle-deck-backdrop" class="ps-battle-deck-backdrop" />
+        <ui:VisualElement class="ps-battle-deck-panel">
+            <ui:VisualElement class="ps-battle-deck-header">
+                <ui:VisualElement class="ps-battle-deck-heading" picking-mode="Ignore">
+                    <ui:Label text="BATTLE REGISTRY" class="ps-battle-deck-eyebrow" picking-mode="Ignore" />
+                    <ui:Label name="battle-deck-title" text="山札" class="ps-battle-deck-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Button name="battle-deck-close" text="閉じる" class="ps-battle-deck-close" />
+            </ui:VisualElement>
+            <ui:Label name="battle-deck-summary" class="ps-battle-deck-summary" picking-mode="Ignore" />
+            <ui:ScrollView name="battle-deck-scroll" class="ps-battle-deck-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
+                <ui:VisualElement name="battle-deck-grid" class="ps-battle-deck-grid" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

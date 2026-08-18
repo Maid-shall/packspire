@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63193b85d3dacb34dac7edde4d0d6de2, type: 3}
+  m_Name: JourneyPresentationCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::Packspire.JourneyPresentationCatalog
+  schemaVersion: 1
+  biomes:
+  - id: ash
+    displayName: "\u7070\u5E02\u5916\u7E01"
+    skyDay: {fileID: 21300000, guid: c4988560dfa981e46a735c93e9a9f5d5, type: 3}
+    skyDusk: {fileID: 21300000, guid: be53e071b2b55024f81d7cf67c6a03d2, type: 3}
+    skyNight: {fileID: 21300000, guid: 5bba33d07de6c2843897ea8fb0bd2043, type: 3}
+    farA: {fileID: 21300000, guid: 3f441cf08cd644140bfa3ce5c21ab322, type: 3}
+    farB: {fileID: 21300000, guid: 7a4e00f1577e82543b569542f1c83f49, type: 3}
+    farTint: {r: 0.72, g: 0.68, b: 0.75, a: 0.52}
+    roads:
+    - profile: 1
+      midA: {fileID: 21300000, guid: 1b3ac2129b4c1a3459e86159a4012fe2, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 2b6741aa66686524897d0ca0aee6c519, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: a6982b72561bb3e4c8930860843e9e82, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0.15
+      streetBackY: 0.62
+      groundY: -1.95
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.15
+    - profile: 0
+      midA: {fileID: 21300000, guid: 10da390dc138be94e9681318d9370113, type: 3}
+      midB: {fileID: 21300000, guid: fb3907a14904aae4db508214a516f8dd, type: 3}
+      streetBackA: {fileID: 21300000, guid: cd5abe5270f4e7541943c8ef0ea1ad65, type: 3}
+      streetBackB: {fileID: 21300000, guid: 5a8b71f530247f446b46275763070dc2, type: 3}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.76, g: 0.76, b: 0.78, a: 1}
+      streetBackTint: {r: 0.86, g: 0.86, b: 0.88, a: 1}
+      groundTint: {r: 0.94, g: 0.93, b: 0.92, a: 1}
+      midY: 0
+      streetBackY: 0.48
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2
+    - profile: 2
+      midA: {fileID: 21300000, guid: 0611103350ee3da4f8e1a7d162e38b01, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 281655ef19fbd6041998c81b8c83a3e6, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0.2
+      streetBackY: 0.55
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2
+  - id: drowned
+    displayName: "\u6C34\u6CA1\u66F8\u5EAB"
+    skyDay: {fileID: 21300000, guid: c4988560dfa981e46a735c93e9a9f5d5, type: 3}
+    skyDusk: {fileID: 21300000, guid: be53e071b2b55024f81d7cf67c6a03d2, type: 3}
+    skyNight: {fileID: 21300000, guid: 5bba33d07de6c2843897ea8fb0bd2043, type: 3}
+    farA: {fileID: 21300000, guid: e0fec38610222cb48afb695cafba114b, type: 3}
+    farB: {fileID: 0}
+    farTint: {r: 0.72, g: 0.78, b: 0.82, a: 0.52}
+    roads:
+    - profile: 1
+      midA: {fileID: 21300000, guid: 824fba53bb6245ffbf027ce72e2f94bc, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 2b6741aa66686524897d0ca0aee6c519, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: a6982b72561bb3e4c8930860843e9e82, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0
+      streetBackY: 0.62
+      groundY: -1.95
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.15
+    - profile: 0
+      midA: {fileID: 21300000, guid: 824fba53bb6245ffbf027ce72e2f94bc, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: cd5abe5270f4e7541943c8ef0ea1ad65, type: 3}
+      streetBackB: {fileID: 21300000, guid: 5a8b71f530247f446b46275763070dc2, type: 3}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.76, g: 0.76, b: 0.78, a: 1}
+      streetBackTint: {r: 0.86, g: 0.86, b: 0.88, a: 1}
+      groundTint: {r: 0.94, g: 0.93, b: 0.92, a: 1}
+      midY: 0
+      streetBackY: 0.48
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2
+    - profile: 2
+      midA: {fileID: 21300000, guid: 824fba53bb6245ffbf027ce72e2f94bc, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 281655ef19fbd6041998c81b8c83a3e6, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0
+      streetBackY: 0.55
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2
+  - id: black-bell
+    displayName: "\u9ED2\u9418\u533A\u753B"
+    skyDay: {fileID: 21300000, guid: c4988560dfa981e46a735c93e9a9f5d5, type: 3}
+    skyDusk: {fileID: 21300000, guid: be53e071b2b55024f81d7cf67c6a03d2, type: 3}
+    skyNight: {fileID: 21300000, guid: 5bba33d07de6c2843897ea8fb0bd2043, type: 3}
+    farA: {fileID: 21300000, guid: baa8d4eca2063564bb53c3ed93637b42, type: 3}
+    farB: {fileID: 0}
+    farTint: {r: 0.74, g: 0.66, b: 0.68, a: 0.52}
+    roads:
+    - profile: 1
+      midA: {fileID: 21300000, guid: cf22308a96640ce448a25355ed64405b, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 2b6741aa66686524897d0ca0aee6c519, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: a6982b72561bb3e4c8930860843e9e82, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0
+      streetBackY: 0.62
+      groundY: -1.95
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.15
+    - profile: 0
+      midA: {fileID: 21300000, guid: cf22308a96640ce448a25355ed64405b, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: cd5abe5270f4e7541943c8ef0ea1ad65, type: 3}
+      streetBackB: {fileID: 21300000, guid: 5a8b71f530247f446b46275763070dc2, type: 3}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.76, g: 0.76, b: 0.78, a: 1}
+      streetBackTint: {r: 0.86, g: 0.86, b: 0.88, a: 1}
+      groundTint: {r: 0.94, g: 0.93, b: 0.92, a: 1}
+      midY: 0
+      streetBackY: 0.48
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2
+    - profile: 2
+      midA: {fileID: 21300000, guid: cf22308a96640ce448a25355ed64405b, type: 3}
+      midB: {fileID: 0}
+      streetBackA: {fileID: 21300000, guid: 281655ef19fbd6041998c81b8c83a3e6, type: 3}
+      streetBackB: {fileID: 0}
+      ground: {fileID: 21300000, guid: 7781ac0348050ec4f9607ef8360857b0, type: 3}
+      midTint: {r: 0.72, g: 0.72, b: 0.74, a: 0.84}
+      streetBackTint: {r: 0.82, g: 0.82, b: 0.84, a: 0.92}
+      groundTint: {r: 0.92, g: 0.91, b: 0.9, a: 1}
+      midY: 0
+      streetBackY: 0.55
+      groundY: -1.9
+      roadsideY: -2.98
+      closeForegroundY: -5
+      landmarkY: -3.2

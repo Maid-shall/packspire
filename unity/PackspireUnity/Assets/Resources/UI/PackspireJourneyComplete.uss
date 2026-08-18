@@ -1,0 +1,744 @@
+.ps-journey {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(234, 218, 184);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-journey__topbar {
+    position: absolute; left: 190px; right: 0; top: 0; height: 64px;
+    padding: 8px 24px 8px 28px;
+    flex-direction: row; align-items: center; justify-content: space-between;
+    background-color: rgba(7, 8, 9, .92);
+    border-bottom-width: 2px; border-bottom-color: rgba(161, 111, 51, .72);
+}
+.ps-journey__heading { width: 560px; }
+.ps-journey__eyebrow, .ps-journey__panel-eyebrow, .ps-journey__battle-eyebrow { font-size: 9px; letter-spacing: 2px; color: rgb(67, 196, 203); }
+.ps-journey__destination { margin-top: 2px; font-size: 23px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(243, 221, 176); }
+.ps-journey__top-status { height: 48px; flex-direction: row; align-items: center; }
+.ps-journey__area { font-size: 16px; margin-right: 24px; color: rgb(228, 201, 151); }
+.ps-journey__weather { font-size: 11px; margin-right: 24px; color: rgb(118, 184, 187); }
+.ps-journey__day { min-width: 120px; padding: 7px 10px; font-size: 13px; -unity-text-align: middle-center; color: rgb(246, 205, 119); background-color: rgba(66, 37, 25, .84); border-width: 1px; border-color: rgba(189, 131, 66, .7); }
+.ps-journey__dev-menu { width: 112px; height: 34px; margin-left: 10px; font-size: 10px; letter-spacing: 1px; color: rgb(112, 211, 211); background-color: rgba(15, 35, 37, .92); border-width: 1px; border-color: rgba(68, 192, 199, .72); }
+.ps-journey__ledger-open { width: 116px; height: 34px; margin-left: 10px; font-size: 10px; color: rgb(234, 207, 163); background-color: rgba(48, 34, 25, .94); border-width: 1px; border-color: rgba(181, 125, 63, .72); }
+
+.ps-journey__rail {
+    position: absolute; left: 0; top: 0; width: 190px; height: 720px;
+    padding: 20px 16px 18px 16px;
+    background-color: rgba(6, 7, 8, .96);
+    border-right-width: 2px; border-right-color: rgba(142, 91, 45, .72);
+}
+.ps-journey__rail-eyebrow, .ps-journey__metric-key { font-size: 8px; letter-spacing: 1px; color: rgb(68, 192, 199); }
+.ps-journey__portrait-frame { width: 128px; height: 150px; margin: 10px 15px 6px 15px; background-image: resource("Art/UI/HubDD/portrait-frame-vertical"); -unity-background-scale-mode: stretch-to-fill; padding: 10px; }
+.ps-journey__portrait-crop { width: 108px; height: 130px; overflow: hidden; }
+.ps-journey__portrait { width: 108px; height: 130px; }
+.ps-journey__courier-name { font-size: 22px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(242, 219, 174); }
+.ps-journey__role { font-size: 10px; -unity-text-align: middle-center; color: rgb(179, 128, 78); }
+.ps-journey__rule { height: 2px; margin: 13px 0; background-color: rgba(181, 124, 61, .54); }
+.ps-journey__hp, .ps-journey__enemy-hp, .ps-journey__progress, .ps-journey__minigame-meter { height: 16px; margin-top: 5px; }
+.ps-journey__hp .unity-progress-bar__background, .ps-journey__enemy-hp .unity-progress-bar__background, .ps-journey__progress .unity-progress-bar__background, .ps-journey__minigame-meter .unity-progress-bar__background { background-color: rgba(18, 16, 14, .86); border-width: 1px; border-color: rgba(176, 129, 68, .55); }
+.ps-journey__hp .unity-progress-bar__progress, .ps-journey__enemy-hp .unity-progress-bar__progress { background-color: rgb(151, 49, 39); }
+.ps-journey__progress .unity-progress-bar__progress { background-color: rgb(184, 125, 49); }
+.ps-journey__minigame-meter .unity-progress-bar__progress { background-color: rgb(63, 180, 189); }
+.ps-journey__hp .unity-progress-bar__title, .ps-journey__enemy-hp .unity-progress-bar__title, .ps-journey__progress .unity-progress-bar__title, .ps-journey__minigame-meter .unity-progress-bar__title { display: none; }
+.ps-journey__metric-value { font-size: 13px; -unity-text-align: upper-right; color: rgb(235, 210, 169); }
+.ps-journey__rail-row { margin-top: 17px; flex-direction: row; justify-content: space-between; }
+.ps-journey__rail-row > VisualElement { width: 72px; }
+.ps-journey__rail-number { margin-top: 2px; font-size: 25px; color: rgb(238, 202, 128); }
+.ps-journey__risk-block { margin-top: 20px; padding: 10px; background-color: rgba(42, 30, 23, .7); border-left-width: 3px; border-left-color: rgb(182, 113, 50); }
+.ps-journey__condition { margin-top: 3px; font-size: 17px; color: rgb(231, 190, 112); }
+.ps-journey__condition-note { font-size: 9px; color: rgb(169, 151, 127); }
+.ps-journey__dev-tag { position: absolute; left: 18px; bottom: 18px; font-size: 8px; letter-spacing: 1px; color: rgba(97, 194, 198, .76); }
+
+.ps-journey__bottom {
+    position: absolute; left: 190px; right: 0; bottom: 0; height: 92px;
+    padding: 12px 18px 12px 24px;
+    flex-direction: row; align-items: center;
+    background-color: rgba(6, 7, 8, .94);
+    border-top-width: 2px; border-top-color: rgba(160, 106, 48, .72);
+}
+.ps-journey__progress-copy { width: 230px; }
+.ps-journey__phase { font-size: 11px; letter-spacing: 1px; color: rgb(68, 197, 203); }
+.ps-journey__next { margin-top: 3px; font-size: 13px; color: rgb(229, 207, 168); }
+.ps-journey__progress { flex-grow: 1; min-width: 520px; height: 18px; margin: 0 22px; }
+.ps-journey__speed, .ps-journey__pause { height: 40px; margin-left: 8px; color: rgb(237, 211, 165); background-color: rgba(42, 28, 20, .9); border-width: 1px; border-color: rgba(186, 125, 59, .7); }
+.ps-journey__speed { width: 58px; font-size: 16px; }
+.ps-journey__pause { width: 88px; font-size: 11px; }
+
+.ps-journey__panel {
+    position: absolute; right: 42px; top: 108px; width: 410px;
+    padding: 20px 22px;
+    background-image: resource("Art/UI/HubDD/popup-frame-wide");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(10, 11, 12, .96);
+    border-width: 1px; border-color: rgba(191, 132, 65, .7);
+    display: none;
+}
+.ps-journey__panel-title { margin-top: 4px; font-size: 24px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(242, 218, 173); }
+.ps-journey__panel-note { margin-top: 5px; font-size: 10px; color: rgb(163, 151, 130); }
+.ps-journey__choice {
+    position: absolute;
+    left: 190px;
+    right: 0;
+    top: 64px;
+    bottom: 92px;
+    display: none;
+    align-items: center;
+    overflow: hidden;
+}
+.ps-journey__choice-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(3, 5, 6, .82);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(188, 129, 59, .48);
+    border-bottom-color: rgba(188, 129, 59, .48);
+}
+.ps-journey__choice-heading { position: absolute; left: 0; right: 0; top: 9px; align-items: center; }
+.ps-journey__choice-eyebrow { font-size: 9px; letter-spacing: 3px; color: rgb(67, 196, 203); }
+.ps-journey__choice-heading-title { margin-top: 0; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(244, 222, 181); }
+.ps-journey__choice-heading-note { margin-top: 0; font-size: 9px; color: rgb(171, 158, 135); }
+.ps-journey__choice-papers {
+    position: absolute;
+    left: 176px;
+    top: 68px;
+    width: 738px;
+    height: 478px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.ps-journey__route-paper { position: relative; width: 344px; height: 468px; padding: 0; background-image: resource("Art/JourneyPrototype/Complete/journey-major-route-docket-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: transparent; border-width: 0; color: rgb(47, 35, 27); opacity: .94; transition-property: translate, scale, opacity; transition-duration: .14s; }
+.ps-journey__route-paper:hover { translate: 0 -5px; scale: 1.012; opacity: 1; }
+.ps-journey__route-paper:disabled { opacity: .55; }
+.ps-journey__route-paper.is-rejected { opacity: .28; scale: 0.97; }
+.ps-journey__route-paper.is-stamped { translate: 0 -6px; scale: 1.02; opacity: 1; }
+.ps-journey__route-art { position: absolute; left: 40px; top: 42px; width: 264px; height: 126px; -unity-background-scale-mode: scale-and-crop; background-color: rgb(42, 35, 29); border-width: 2px; border-color: rgba(73, 55, 39, .8); }
+.route-art--ash { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-far-v1"); }
+.route-art--danger { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-v1"); }
+.route-art--drowned { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-drowned-v1"); }
+.route-art--blackbell { background-image: resource("Art/JourneyPrototype/journey-city-walktest-bg-v1"); }
+.ps-journey__route-index { position: absolute; left: 43px; top: 176px; width: 258px; font-size: 8px; letter-spacing: 2px; color: rgb(43, 108, 111); }
+.ps-journey__route-title { position: absolute; left: 42px; top: 190px; width: 260px; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(48, 34, 25); }
+.ps-journey__route-flavor { position: absolute; left: 46px; top: 226px; width: 252px; height: 46px; white-space: normal; font-size: 9px; -unity-text-align: upper-left; color: rgb(74, 57, 43); }
+.ps-journey__route-stats { position: absolute; left: 45px; top: 281px; width: 254px; height: 111px; flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.ps-journey__route-stat { width: 127px; height: 34px; padding: 2px 6px; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .3); }
+.ps-journey__route-stat-key { font-size: 7px; letter-spacing: 1px; color: rgb(115, 74, 48); }
+.ps-journey__route-stat-value { margin-top: 0; font-size: 11px; color: rgb(44, 36, 29); }
+.ps-journey__route-action { position: absolute; left: 64px; bottom: 29px; width: 216px; height: 29px; padding-top: 5px; font-size: 10px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(245, 226, 188); background-color: rgb(56, 45, 37); border-width: 1px; border-color: rgb(134, 94, 54); }
+.ps-journey__route-paper--danger .ps-journey__route-action { background-color: rgb(91, 45, 35); border-color: rgb(154, 68, 49); }
+.ps-journey__route-stamp { position: absolute; right: 44px; bottom: 57px; width: 68px; height: 68px; padding-top: 20px; border-width: 4px; border-color: rgb(139, 34, 27); border-radius: 34px; rotate: 0deg; font-size: 14px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(139, 34, 27); opacity: 0; scale: 1.65; transition-property: opacity, scale, rotate; transition-duration: .12s; }
+.ps-journey__route-paper.is-stamped .ps-journey__route-stamp { opacity: .82; scale: 1; rotate: -12deg; }
+.ps-journey__choice-divider { width: 34px; height: 468px; justify-content: center; align-items: center; }
+.ps-journey__choice-or { width: 34px; height: 34px; padding-top: 10px; border-width: 1px; border-color: rgba(177, 127, 68, .7); border-radius: 17px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(210, 172, 112); background-color: rgba(13, 12, 11, .96); }
+.ps-journey__choice-help { position: absolute; left: 0; right: 0; bottom: 4px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(126, 124, 117); }
+.ps-journey__event { width: 440px; }
+.ps-journey__event-body { margin-top: 12px; height: 145px; flex-direction: row; }
+.ps-journey__event-art { width: 148px; height: 132px; margin-right: 14px; background-image: resource("Art/UI/CourierRoutePrototype/courier-route-confirm-envelope-v1"); -unity-background-scale-mode: scale-to-fit; }
+.ps-journey__event-copy { flex-grow: 1; white-space: normal; font-size: 13px; color: rgb(207, 194, 170); }
+.ps-journey__event-button { height: 42px; margin-top: 8px; font-size: 13px; color: rgb(219, 201, 167); background-color: rgba(29, 28, 27, .96); border-width: 1px; border-color: rgba(140, 121, 89, .75); }
+.ps-journey__event-button--primary { background-color: rgba(66, 38, 23, .96); border-color: rgb(191, 127, 57); color: rgb(248, 218, 161); }
+.ps-journey__minigame { right: 118px; top: 322px; width: 610px; padding: 18px 22px 16px 22px; }
+.ps-journey__minigame-head, .ps-journey__minigame-stakes, .ps-journey__mini-scale { flex-direction: row; justify-content: space-between; align-items: center; }
+.ps-journey__minigame-objective-row { height: 31px; margin-top: 8px; padding: 5px 8px; flex-direction: row; justify-content: space-between; background-color: rgba(20, 44, 43, .86); border-left-width: 3px; border-left-color: rgb(63, 180, 189); }
+.ps-journey__minigame-objective { font-size: 10px; color: rgb(211, 226, 203); }
+.ps-journey__minigame-step { font-size: 9px; letter-spacing: 1px; color: rgb(241, 191, 91); }
+.ps-journey__minigame-timer { font-size: 13px; color: rgb(246, 198, 104); }
+.ps-journey__minigame-stakes { height: 26px; margin-top: 10px; padding: 4px 8px; background-color: rgba(5, 17, 18, .8); }
+.ps-journey__mini-reward, .ps-journey__mini-risk { font-size: 10px; }
+.ps-journey__mini-reward { color: rgb(91, 205, 192); }
+.ps-journey__mini-risk { color: rgb(174, 155, 129); }
+.ps-journey__mini-track { position: relative; height: 32px; margin-top: 11px; background-color: rgb(43, 27, 24); border-width: 2px; border-color: rgb(112, 74, 46); overflow: hidden; }
+.ps-journey__mini-zone { position: absolute; top: 0; bottom: 0; left: 32%; width: 36%; background-color: rgba(45, 164, 156, .45); }
+.ps-journey__mini-zone--perfect { left: 43%; width: 14%; background-color: rgb(207, 157, 62); }
+.ps-journey__mini-hazard { position: absolute; left: 0; top: 0; bottom: 0; width: 33%; background-color: rgba(171, 48, 36, .68); display: none; }
+.mini--dodge .ps-journey__mini-hazard { display: flex; }
+.mini--choice .ps-journey__mini-zone, .mini--dodge .ps-journey__mini-zone { display: none; }
+.mini--choice .ps-journey__mini-track { display: none; }
+.mini--sequence .ps-journey__mini-track { display: none; }
+.ps-journey__mini-needle { position: absolute; left: 50%; top: -1px; width: 5px; height: 34px; translate: -2px 0; background-color: rgb(250, 239, 204); border-width: 1px; border-color: rgb(45, 30, 24); }
+.ps-journey__mini-scale { height: 20px; }
+.ps-journey__mini-scale Label { font-size: 8px; color: rgb(146, 137, 120); }
+.ps-journey__mini-scale-center { color: rgb(222, 182, 92); }
+.ps-journey__minigame-actions { margin-top: 10px; flex-direction: row; justify-content: center; }
+.ps-journey__mini-action, .ps-journey__mini-side { height: 42px; color: rgb(245, 219, 171); background-color: rgba(55, 35, 23, .96); border-width: 1px; border-color: rgb(187, 124, 59); }
+.ps-journey__mini-action { width: 250px; margin: 0 8px; }
+.ps-journey__mini-side { width: 54px; }
+.ps-journey__minigame.mini--success { border-color: rgb(67, 196, 171); }
+.ps-journey__minigame.mini--success .ps-journey__panel-title { color: rgb(116, 225, 192); }
+.ps-journey__minigame.mini--failure { border-color: rgb(158, 72, 52); }
+.ps-journey__minigame.mini--failure .ps-journey__panel-title { color: rgb(222, 141, 108); }
+.ps-journey__result { right: 200px; top: 218px; width: 470px; }
+.ps-journey__result-text { margin: 14px 0 8px 0; white-space: normal; color: rgb(205, 192, 169); }
+
+.ps-journey__ledger { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: none; }
+.ps-journey__ledger.ledger--open { display: flex; }
+.ledger--active .ps-journey__bottom { display: none; }
+.ps-journey__ledger-scrim { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(2, 3, 4, .9); }
+.ps-journey__ledger-sheet { position: absolute; left: 24px; right: 24px; top: 20px; bottom: 20px; padding: 18px 20px; color: rgb(48, 36, 27); background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-route-v1"); -unity-background-scale-mode: scale-and-crop; background-color: rgb(217, 194, 151); border-width: 2px; border-color: rgb(116, 78, 46); }
+.ps-journey__ledger-header { height: 72px; padding: 4px 8px 9px 8px; flex-direction: row; justify-content: space-between; border-bottom-width: 2px; border-bottom-color: rgba(83, 57, 39, .65); }
+.ps-journey__ledger-eyebrow { font-size: 8px; letter-spacing: 2px; color: rgb(41, 116, 119); }
+.ps-journey__ledger-title { margin-top: 1px; font-size: 26px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(52, 37, 26); }
+.ps-journey__ledger-summary { font-size: 9px; color: rgb(98, 76, 58); }
+.ps-journey__ledger-close { width: 116px; height: 38px; margin-top: 8px; color: rgb(238, 216, 176); background-color: rgb(58, 43, 33); border-width: 1px; border-color: rgb(116, 79, 47); }
+.ps-journey__ledger-content { flex-grow: 1; margin-top: 12px; flex-direction: row; }
+.ps-journey__ledger-map { flex-grow: 1; margin-right: 14px; padding: 10px 12px; background-color: rgba(234, 215, 177, .78); border-width: 1px; border-color: rgba(98, 68, 43, .56); }
+.ps-journey__ledger-map-head { height: 30px; flex-direction: row; justify-content: space-between; align-items: center; }
+.ps-journey__ledger-section-title { font-size: 10px; letter-spacing: 2px; -unity-font-style: bold; color: rgb(42, 103, 106); }
+.ps-journey__ledger-map-note { font-size: 8px; color: rgb(109, 80, 55); }
+.ps-journey__ledger-phases { height: 384px; padding: 11px 6px 9px 6px; flex-direction: row; align-items: stretch; background-color: rgba(88, 65, 45, .1); border-top-width: 1px; border-bottom-width: 1px; border-top-color: rgba(83, 59, 40, .38); border-bottom-color: rgba(83, 59, 40, .38); }
+.ps-journey__ledger-phase { flex-grow: 1; min-width: 58px; align-items: center; }
+.ps-journey__ledger-phase-number { height: 22px; font-size: 8px; letter-spacing: 1px; color: rgb(115, 78, 48); }
+.ps-journey__ledger-phase-nodes { flex-grow: 1; width: 100%; justify-content: center; }
+.ps-journey__ledger-arrow { width: 10px; min-width: 10px; padding-top: 145px; font-size: 14px; color: rgba(100, 69, 45, .62); }
+.ps-journey__ledger-node { width: 100%; min-width: 54px; height: 82px; margin: 5px 0; padding: 5px 3px; white-space: normal; font-size: 8px; -unity-text-align: middle-center; color: rgb(68, 50, 36); background-color: rgba(217, 193, 149, .92); border-width: 1px; border-color: rgba(116, 82, 50, .72); }
+.ps-journey__ledger-node.node--unknown { opacity: .36; }
+.ps-journey__ledger-node.node--resolved { color: rgb(72, 70, 55); background-color: rgba(172, 175, 143, .76); }
+.ps-journey__ledger-node.node--available { border-width: 2px; border-color: rgb(41, 131, 134); background-color: rgb(219, 207, 169); }
+.ps-journey__ledger-node.node--current { border-width: 3px; border-color: rgb(156, 46, 35); background-color: rgb(237, 208, 152); }
+.ps-journey__ledger-node.node--destination { color: rgb(91, 37, 29); border-color: rgb(151, 48, 38); }
+.ps-journey__ledger-detail { height: 88px; padding: 10px 12px; flex-direction: row; background-color: rgba(61, 46, 34, .92); }
+.ps-journey__ledger-detail-main { width: 230px; padding-right: 12px; border-right-width: 1px; border-right-color: rgba(206, 165, 101, .48); }
+.ps-journey__ledger-node-title { font-size: 18px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(239, 214, 170); }
+.ps-journey__ledger-node-meta { margin-top: 4px; font-size: 8px; letter-spacing: 1px; color: rgb(74, 192, 196); }
+.ps-journey__ledger-node-body { flex-grow: 1; padding: 3px 0 0 14px; white-space: normal; font-size: 10px; color: rgb(206, 191, 162); }
+.ps-journey__seal-box { width: 286px; padding: 14px 14px 12px 14px; background-color: rgba(42, 32, 25, .96); border-width: 2px; border-color: rgba(151, 105, 61, .86); }
+.ps-journey__seal-box-title { margin-top: 2px; font-size: 22px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(238, 214, 173); }
+.ps-journey__seal-timing { height: 36px; margin-top: 5px; padding: 5px 7px; white-space: normal; font-size: 9px; color: rgb(100, 205, 207); background-color: rgba(13, 43, 44, .74); }
+.ps-journey__seal-scroll { height: 328px; margin-top: 9px; }
+.ps-journey__seal-host { padding-right: 4px; }
+.ps-journey__seal-entry { position: relative; height: 66px; margin-bottom: 7px; padding: 8px 10px 6px 54px; align-items: flex-start; color: rgb(232, 211, 174); background-color: rgba(67, 52, 39, .94); border-width: 1px; border-color: rgba(150, 108, 66, .64); }
+.ps-journey__seal-entry:hover, .ps-journey__seal-entry.seal--selected { border-color: rgb(67, 192, 195); background-color: rgb(55, 57, 47); }
+.ps-journey__seal-entry.seal--spent { opacity: .38; }
+.ps-journey__seal-mark { position: absolute; left: 9px; top: 10px; width: 39px; height: 39px; border-width: 3px; border-color: rgb(145, 45, 36); border-radius: 20px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1"); -unity-background-scale-mode: scale-to-fit; }
+.ps-journey__seal-entry-name { font-size: 13px; color: rgb(238, 214, 172); }
+.ps-journey__seal-entry-charge { margin-top: 4px; font-size: 8px; color: rgb(81, 193, 197); }
+.ps-journey__seal-detail { flex-grow: 1; min-height: 132px; margin-top: 9px; padding-top: 9px; border-top-width: 1px; border-top-color: rgba(167, 122, 73, .54); }
+.ps-journey__seal-detail-name { font-size: 15px; -unity-font-style: bold; color: rgb(238, 215, 175); }
+.ps-journey__seal-detail-effect { flex-grow: 1; margin-top: 6px; white-space: normal; font-size: 9px; color: rgb(195, 179, 151); }
+.ps-journey__seal-apply { height: 36px; color: rgb(248, 220, 168); background-color: rgb(116, 47, 35); border-width: 1px; border-color: rgb(183, 78, 55); }
+.ps-journey__seal-apply:disabled { opacity: .34; }
+
+.ps-journey__player-battle-hud {
+    position: absolute; left: 268px; top: 18px; width: 248px; height: 108px;
+    padding: 0; background-color: rgba(0, 0, 0, 0); display: none;
+}
+.ps-journey__vitals-shadow,
+.ps-journey__enemy-docket-shadow {
+    position: absolute; left: 4px; top: 5px; right: -4px; height: 82px;
+    background-color: rgba(0, 0, 0, .58); border-radius: 5px;
+}
+.ps-journey__vitals-paper {
+    position: relative; width: 244px; height: 82px; overflow: visible;
+    padding: 7px 28px 7px 44px; background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-vitals-parchment-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-journey__vitals-title-row,
+.ps-journey__enemy-title-row { height: 22px; flex-direction: row; align-items: center; }
+.ps-journey__player-battle-name {
+    flex-grow: 1; height: 22px; padding-left: 1px;
+    font-size: 15px; letter-spacing: 2px; color: rgb(42, 28, 18);
+    background-color: rgba(0, 0, 0, 0);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold;
+}
+.ps-journey__vitals-kind {
+    width: 46px; height: 16px; padding-top: 2px; font-size: 7px; letter-spacing: 1px;
+    -unity-text-align: middle-right; color: rgb(109, 73, 43);
+}
+.ps-journey__vitals-rule { height: 1px; margin: 0 1px 2px 1px; background-color: rgba(92, 58, 31, .56); }
+.ps-journey__vitals-row { height: 40px; flex-direction: row; align-items: center; }
+.ps-journey__vitals-meter { position: relative; width: 172px; height: 38px; }
+.ps-journey__player-battle-hp,
+.ps-journey__enemy-hp {
+    position: absolute; left: 0; right: 0; top: 4px; height: 15px; margin-top: 0;
+    overflow: hidden; background-color: rgb(25, 20, 18);
+    border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;
+    border-left-color: rgb(74, 48, 29); border-right-color: rgb(74, 48, 29);
+    border-top-color: rgb(56, 35, 23); border-bottom-color: rgb(128, 88, 48); border-radius: 2px;
+}
+.ps-journey__player-battle-hp-fill,
+.ps-journey__enemy-hp-fill {
+    position: relative; height: 100%; width: 100%; background-color: rgb(161, 43, 34);
+    border-bottom-width: 2px; border-bottom-color: rgb(88, 20, 18);
+}
+.ps-journey__hp-fill-sheen {
+    position: absolute; left: 0; right: 0; top: 0; height: 2px; background-color: rgba(240, 119, 81, .85);
+}
+.ps-journey__vitals-caption {
+    position: absolute; left: 1px; top: 21px; height: 14px; font-size: 7px; letter-spacing: 1px; color: rgb(106, 72, 45);
+}
+.ps-journey__player-battle-hp-text {
+    position: absolute; right: 1px; top: 20px; width: 86px; height: 16px;
+    font-size: 10px; -unity-font-style: bold; -unity-text-align: middle-right; color: rgb(43, 28, 19);
+}
+.ps-journey__block-effect { position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: visible; }
+.ps-journey__block-overlay {
+    display: none;
+}
+.ps-journey__block-seal {
+    position: absolute; right: -32px; top: 12px; width: 52px; height: 61px;
+    background-image: resource("Art/Battle/UI/battle-vitals-shield-v1"); -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__player-battle-block,
+.ps-journey__enemy-block {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0; padding-right: 6px;
+    font-size: 13px; -unity-font-style: bold; -unity-text-align: middle-center;
+    color: rgb(225, 252, 255); text-shadow: 0 1px 2px rgba(0, 0, 0, 1);
+}
+
+.ps-journey__enemy-huds {
+    position: absolute; left: 680px; right: 18px; top: 20px; height: 126px;
+    flex-direction: row; align-items: flex-start; justify-content: flex-start;
+    display: none;
+}
+.ps-journey__enemy-hud {
+    position: relative; width: 252px; height: 116px; margin-right: 10px; padding: 0; overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-journey__enemy-hud.enemy-slot--middle { margin-top: 28px; }
+.ps-journey__enemy-hud.enemy-slot--rear { margin-top: 8px; }
+.battle--enemy-count-2 .ps-journey__enemy-huds { left: 490px; right: 138px; }
+.battle--enemy-count-3 .ps-journey__enemy-huds { left: 438px; right: 134px; }
+.battle--enemy-count-3 .ps-journey__enemy-hud { width: 232px; margin-right: 4px; }
+.battle--enemy-count-3 .ps-journey__enemy-name { font-size: 11px; }
+.battle--layout-preview .ps-journey__battle { border-top-color: rgb(119, 89, 154); }
+.ps-journey__enemy-docket {
+    position: relative; width: 100%; height: 82px; padding: 7px 34px 7px 42px; overflow: visible;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-vitals-parchment-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-journey__enemy-name {
+    flex-grow: 1; height: 22px; padding-left: 1px; font-size: 14px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    color: rgb(46, 32, 22); white-space: nowrap; overflow: hidden; -unity-font-style: bold;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-journey__enemy-vitals-row { position: relative; height: 40px; flex-direction: row; align-items: center; }
+.ps-journey__enemy-meter { position: relative; width: 168px; height: 38px; }
+.ps-journey__enemy-hp-text {
+    position: absolute; right: 1px; top: 20px; width: 80px; height: 16px;
+    font-size: 9px; -unity-font-style: bold; -unity-text-align: middle-right; color: rgb(43, 28, 19);
+}
+.ps-journey__enemy-docket .ps-journey__block-effect { left: -42px; right: -42px; top: -32px; bottom: -10px; }
+.ps-journey__enemy-docket .ps-journey__block-seal { right: 14px; top: 15px; width: 44px; height: 52px; }
+.ps-journey__enemy-docket .ps-journey__enemy-block { padding-right: 5px; font-size: 11px; }
+.ps-journey__status-row { height: 25px; flex-direction: row; align-items: center; background-color: rgba(0, 0, 0, 0); }
+.status-row--player { width: 208px; margin-left: 31px; margin-top: -1px; }
+.status-row--enemy { width: 220px; margin-left: 38px; margin-top: -1px; }
+.ps-journey__status-chip {
+    min-width: 28px; height: 24px; margin-right: 5px; padding: 1px 4px;
+    flex-direction: row; align-items: center; justify-content: center;
+    color: rgb(235, 221, 189); background-color: rgba(10, 13, 14, .9);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-wax-smear-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    border-width: 1px; border-color: rgb(56, 165, 174); border-radius: 13px;
+}
+.ps-journey__status-chip.status--debuff { border-color: rgb(181, 61, 44); }
+.ps-journey__status-icon { font-size: 11px; color: rgb(246, 229, 196); }
+.ps-journey__status-count { margin-left: 2px; font-size: 9px; color: rgb(246, 229, 196); }
+.ps-journey__battle {
+    position: absolute; left: 248px; right: 0; bottom: 0; height: 238px;
+    padding: 0;
+    background-color: rgb(25, 20, 17);
+    background-image: resource("Art/UI/battle-table-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    -unity-background-image-tint-color: rgb(73, 57, 44);
+    border-top-width: 2px;
+    border-top-color: rgb(137, 96, 51);
+    display: none;
+}
+.ps-journey__battle-divider {
+    position: absolute; left: 0; right: 0; top: -3px; height: 5px;
+    background-color: rgb(93, 64, 34);
+    border-top-width: 1px; border-bottom-width: 1px;
+    border-top-color: rgb(189, 139, 73); border-bottom-color: rgb(45, 31, 19);
+}
+.ps-journey__battle-log { display: none; }
+
+.ps-journey__battle-left-controls {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: none;
+}
+.ps-journey__energy-docket {
+    position: absolute; left: 8px; bottom: 8px; width: 112px; height: 112px;
+    align-items: center; justify-content: center;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-energy-gauge-v2");
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__energy { margin-top: 8px; font-size: 27px; color: rgb(225, 246, 226); -unity-text-align: middle-center; text-shadow: 0 2px 3px rgba(0, 0, 0, 1); }
+.ps-journey__energy-key { margin-top: 1px; font-size: 8px; letter-spacing: 1px; color: rgb(113, 197, 133); }
+.ps-journey__pile-panel { position: absolute; right: 10px; bottom: 10px; width: 92px; height: 114px; flex-direction: column; justify-content: flex-end; }
+.ps-journey__pile-button {
+    position: relative; width: 92px; height: 53px; margin: 0; padding: 3px 6px;
+    flex-direction: row; align-items: center; justify-content: flex-start;
+    color: rgb(232, 216, 187); background-color: rgba(10, 10, 9, .9);
+    background-image: none;
+    border-width: 1px; border-color: rgba(145, 105, 58, .82); border-radius: 2px;
+    transition-property: translate, border-color, background-color; transition-duration: .1s;
+}
+.ps-journey__pile-button.pile-button--discard { margin-top: 6px; }
+.ps-journey__pile-button:hover { border-color: rgb(205, 159, 89); background-color: rgba(29, 25, 19, .94); translate: -2px 0; }
+.ps-journey__pile-button:active { translate: -3px 1px; }
+.ps-journey__pile-button:disabled { opacity: .42; }
+.ps-journey__pile-icon { width: 43px; height: 43px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.pile-button--draw .ps-journey__pile-icon { background-image: resource("Art/Battle/UI/JourneyApproved/journey-pile-draw-icon-v1"); }
+.pile-button--discard .ps-journey__pile-icon { background-image: resource("Art/Battle/UI/JourneyApproved/journey-pile-discard-icon-v1"); }
+.ps-journey__pile-copy { flex-grow: 1; height: 43px; align-items: center; justify-content: center; }
+.ps-journey__pile-label { margin-top: -2px; font-size: 8px; letter-spacing: 1px; color: rgb(188, 157, 111); -unity-text-align: middle-center; }
+.ps-journey__pile-count { height: 25px; font-size: 17px; color: rgb(244, 224, 188); -unity-text-align: middle-center; text-shadow: 0 1px 2px rgba(0, 0, 0, 1); }
+
+.ps-journey__hand-scroll.ps-battle-screen {
+    position: absolute; left: 116px; right: 104px; top: 0; bottom: 0;
+    flex-grow: 0; overflow: visible; background-color: rgba(0, 0, 0, 0);
+}
+.ps-journey__hand { position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: visible; }
+.ps-journey .ps-journey__card.ps-battle-card.ps-docket-card {
+    width: 156px; min-width: 156px; max-width: 156px;
+    height: 218px; min-height: 218px; max-height: 218px;
+    margin-right: 0; padding: 0; overflow: visible;
+    color: rgb(55, 42, 30); background-color: rgba(0, 0, 0, 0); background-image: none;
+    border-width: 0; transition-property: translate, scale; transition-duration: .09s;
+}
+.ps-journey__card .ps-docket {
+    transform-origin: 50% 100%;
+    scale: 1 1 1;
+}
+.ps-journey__card:hover, .ps-journey__card.card--selected { translate: 0 -16px; }
+.ps-journey__card:disabled { opacity: .38; }
+.ps-journey__threat-reel {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 248px;
+    display: none; align-items: stretch; overflow: hidden;
+    opacity: 0; translate: 0 78px;
+    transition-property: translate, opacity; transition-duration: .32s;
+}
+.ps-journey__reel-backing {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-backing-outer-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: .98;
+}
+.ps-journey__reel-shell {
+    position: relative; flex-grow: 1; margin-bottom: 52px; padding: 0; overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+.ps-journey__reel-pulley {
+    position: absolute; left: -3px; width: 47px; height: 47px;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-pulley-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__reel-pulley--top { top: -5px; }
+.ps-journey__reel-pulley--bottom { bottom: 67px; }
+.ps-journey__reel-chain {
+    position: absolute; left: 9px; top: 24px; bottom: 30px; width: 24px;
+    overflow: hidden;
+}
+.ps-journey__reel-chain-track {
+    position: absolute; left: 0; right: 0; top: -55px; height: 770px;
+    flex-direction: column;
+}
+.ps-journey__reel-chain-tile {
+    width: 24px; min-height: 55px; height: 55px; margin-top: -2px;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-chain-tile-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-journey__reel-slots {
+    position: absolute; left: 0; right: 0; top: 36px; bottom: 20px;
+    overflow: hidden;
+}
+.ps-journey__reel-slot {
+    position: absolute; left: 35px; right: 0; height: 68px; min-height: 68px; overflow: visible;
+    background-color: rgba(0, 0, 0, 0); background-image: none; border-width: 0;
+    opacity: 0;
+    transition-property: opacity; transition-duration: .08s;
+}
+.ps-journey__reel-slot.slot--occupied {
+    opacity: 1;
+}
+.ps-journey__reel-card-front {
+    position: absolute; left: 0; right: 12px; top: 0; height: 68px;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-ticket-asymmetric-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    overflow: hidden;
+}
+.ps-journey__reel-card-content {
+    position: absolute; left: 8px; right: 7px; top: 11px; bottom: 10px;
+    overflow: hidden;
+}
+.ps-journey__reel-card-back {
+    position: absolute; height: 68px;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-ticket-asymmetric-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    display: none; opacity: .92;
+}
+.ps-journey__reel-card-back--far { left: 12px; right: 0; top: 6px; opacity: .62; }
+.ps-journey__reel-card-back--near { left: 6px; right: 6px; top: 3px; opacity: .84; }
+.ps-journey__reel-slot.slot--bundle .ps-journey__reel-card-back { display: flex; }
+.ps-journey__reel-slot.slot--with-energy { border-bottom-width: 0; }
+.ps-journey__reel-card-art {
+    position: absolute; left: -8px; top: -11px; width: 94px; height: 68px;
+    -unity-background-scale-mode: scale-and-crop; opacity: .42;
+}
+.ps-journey__reel-card-icon {
+    position: absolute; left: 42px; top: -12px; width: 72px; height: 72px;
+    background-image: none;
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0; opacity: .94;
+}
+.ps-journey__reel-card-value {
+    position: absolute; right: 1px; top: -11px; bottom: -10px; width: 60px;
+    flex-direction: row; align-items: center; justify-content: flex-end;
+    overflow: hidden; opacity: 1;
+}
+.ps-journey__reel-value-glyph {
+    display: none; flex-shrink: 0; width: 29px; height: 66px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__reel-card-value.value--single .ps-journey__reel-value-glyph--0 {
+    width: 54px; height: 68px; margin-right: -2px;
+}
+.ps-journey__reel-card-value.value--double .ps-journey__reel-value-glyph {
+    width: 32px; height: 66px; margin-left: -4px;
+}
+.ps-journey__reel-card-value.value--triple .ps-journey__reel-value-glyph {
+    width: 23px; height: 63px; margin-left: -4px;
+}
+.ps-journey__reel-bundle-band {
+    position: absolute; left: 63px; top: 7px; width: 24px; height: 54px;
+    display: none; align-items: center; justify-content: center;
+    background-color: rgb(216, 191, 145);
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-reel-ticket-v2");
+    -unity-background-scale-mode: scale-and-crop;
+    border-left-width: 3px; border-right-width: 3px; border-top-width: 1px; border-bottom-width: 1px;
+    border-left-color: rgb(120, 42, 34); border-right-color: rgb(120, 42, 34);
+    border-top-color: rgb(96, 62, 36); border-bottom-color: rgb(96, 62, 36);
+    opacity: 1;
+}
+.ps-journey__reel-slot.slot--bundle .ps-journey__reel-bundle-band { display: flex; }
+.ps-journey__reel-bundle-count {
+    width: 17px; height: 36px; padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__reel-slot.slot--attack .ps-journey__reel-card-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-attack-v1");
+    -unity-background-image-tint-color: rgb(151, 48, 39);
+}
+.ps-journey__reel-slot.slot--reaction-attack .ps-journey__reel-card-icon {
+    -unity-background-image-tint-color: rgb(151, 48, 39);
+}
+.ps-journey__reel-slot.slot--defense .ps-journey__reel-card-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-defense-v1");
+    -unity-background-image-tint-color: rgb(32, 105, 151);
+}
+.ps-journey__reel-slot.slot--energy .ps-journey__reel-card-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-energy-v1");
+    -unity-background-image-tint-color: rgb(37, 119, 66);
+}
+.ps-journey__reel-slot.slot--energy .ps-journey__reel-card-value {
+    right: 1px; width: 64px; opacity: 1;
+}
+.ps-journey__reel-resource-slot {
+    position: absolute; left: 0; right: 0; height: 52px; min-height: 52px;
+    opacity: 0; overflow: visible;
+    transition-property: opacity; transition-duration: .08s;
+}
+.ps-journey__reel-resource-slot.slot--occupied { opacity: 1; }
+.ps-journey__reel-resource-lane {
+    position: absolute; left: 0; right: 0; top: 13px; height: 26px;
+    display: none; overflow: visible;
+}
+.ps-journey__reel-resource-slot.slot--energy .ps-journey__reel-resource-lane--energy,
+.ps-journey__reel-resource-slot.slot--draw .ps-journey__reel-resource-lane--draw {
+    display: flex;
+}
+.ps-journey__reel-resource-slot.slot--energy.slot--draw .ps-journey__reel-resource-lane--energy { top: 0; }
+.ps-journey__reel-resource-slot.slot--energy.slot--draw .ps-journey__reel-resource-lane--draw { top: 26px; }
+.ps-journey__reel-resource-rule {
+    position: absolute; left: 18px; right: 0; top: 1px; height: 24px;
+    background-color: rgb(117, 94, 57);
+    border-top-width: 1px; border-bottom-width: 1px;
+    border-top-color: rgba(244, 226, 174, .55);
+    border-bottom-color: rgba(16, 12, 9, .82);
+}
+.ps-journey__reel-resource-token {
+    position: absolute; left: 7px; right: 0; top: 0; height: 26px;
+    overflow: visible;
+}
+.ps-journey__reel-resource-mark {
+    position: absolute; left: 0; top: 0; width: 26px; height: 26px;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(16, 18, 15, .94);
+    border-width: 1px; border-radius: 13px;
+}
+.ps-journey__reel-resource-token--energy .ps-journey__reel-resource-mark {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-energy-v1");
+    -unity-background-image-tint-color: rgb(57, 145, 82);
+    border-color: rgb(73, 143, 86);
+}
+.ps-journey__reel-resource-token--draw .ps-journey__reel-resource-mark {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-pile-draw-icon-v1");
+    -unity-background-image-tint-color: rgb(72, 142, 173);
+    border-color: rgb(64, 126, 158);
+}
+.ps-journey__reel-resource-count {
+    position: absolute; left: 31px; right: 5px; top: 0; height: 26px; padding: 0 5px 1px 5px;
+    display: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    font-size: 14px; letter-spacing: 1px; -unity-font-style: bold;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-left;
+    color: rgb(24, 21, 16);
+    text-shadow: 0 1px 0 rgba(255, 244, 207, .35);
+}
+.ps-journey__reel-resource-slot.slot--energy .ps-journey__reel-resource-energy-count,
+.ps-journey__reel-resource-slot.slot--draw .ps-journey__reel-resource-draw-count { display: flex; }
+.ps-journey__reel-resource-lane--energy .ps-journey__reel-resource-rule {
+    background-color: rgb(111, 156, 113);
+}
+.ps-journey__reel-resource-lane--draw .ps-journey__reel-resource-rule {
+    background-color: rgb(105, 150, 168);
+}
+.ps-journey__reel-now {
+    position: absolute; left: -2px; right: auto; bottom: 172px; width: 68px; height: 30px; padding: 4px 8px 0 11px;
+    background-color: rgb(226, 203, 158); background-image: none;
+    border-width: 1px; border-color: rgb(105, 73, 39); overflow: visible;
+}
+.ps-journey__reel-now Label {
+    font-size: 13px; letter-spacing: 2px; -unity-font-style: bold;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-center; color: rgb(55, 36, 22);
+    text-shadow: 0 1px 0 rgba(255, 239, 197, .75);
+}
+.ps-journey__reel-now-arrow {
+    position: absolute; right: -8px; top: 6px; width: 16px; height: 16px;
+    rotate: 45deg; background-color: rgb(226, 203, 158);
+    border-top-width: 1px; border-right-width: 1px;
+    border-top-color: rgb(101, 70, 38); border-right-color: rgb(101, 70, 38);
+}
+.ps-journey__battle-transport {
+    position: absolute; left: 12px; right: auto; bottom: 5px; width: 102px; height: 42px;
+    flex-direction: row; align-items: stretch;
+}
+.ps-journey__battle-pause,
+.ps-journey__battle-speed {
+    margin: 0; padding: 0; color: rgb(236, 215, 179); background-color: rgb(24, 22, 19);
+    border-width: 1px; border-color: rgb(126, 88, 48); font-size: 13px;
+}
+.ps-journey__battle-pause { width: 48px; margin-right: 6px; }
+.ps-journey__battle-speed { width: 48px; }
+.battle--reaction-ready .ps-journey__enemy-docket {
+    -unity-background-image-tint-color: rgb(255, 222, 190);
+}
+.battle--reaction-committed .ps-journey__battle-log { color: rgb(238, 214, 166); }
+
+.ps-journey__pile-overlay { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: none; }
+.ps-journey__pile-overlay.pile-overlay--open { display: flex; }
+.ps-journey__pile-scrim { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(3, 4, 5, .76); border-width: 0; }
+.ps-journey__pile-sheet {
+    position: absolute; left: 128px; right: 128px; top: 76px; bottom: 70px;
+    padding: 42px 48px 34px 48px;
+    background-color: rgb(13, 14, 15);
+    background-image: none;
+    border-width: 2px; border-color: rgb(142, 100, 54);
+}
+.ps-journey__pile-sheet-head {
+    height: 55px; padding: 7px 22px; flex-direction: row; justify-content: space-between; align-items: flex-start;
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-command-strip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-journey__pile-title { font-size: 22px; color: rgb(56, 42, 28); -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); }
+.ps-journey__pile-summary { margin-top: 2px; font-size: 9px; color: rgb(105, 63, 43); }
+.ps-journey__pile-close { width: 92px; height: 34px; color: rgb(235, 213, 178); background-color: rgba(19, 18, 17, .95); border-width: 1px; border-color: rgb(155, 111, 64); }
+.ps-journey__pile-card-scroll { flex-grow: 1; margin-top: 8px; background-color: rgba(0, 0, 0, 0); }
+.ps-journey__pile-card-host { height: 250px; min-width: 100%; padding: 8px 12px; flex-direction: row; align-items: flex-end; }
+.ps-journey__pile-card { position: relative; width: 156px; min-width: 156px; height: 218px; min-height: 218px; margin-right: 10px; padding: 0; background-color: rgba(0, 0, 0, 0); border-width: 0; }
+.ps-journey__pile-empty { position: absolute; left: 48px; right: 48px; top: 170px; height: 60px; font-size: 16px; -unity-text-align: middle-center; color: rgb(197, 181, 153); }
+
+.ps-journey__speech { position: absolute; left: 288px; top: 260px; max-width: 250px; padding: 7px 12px; font-size: 11px; white-space: normal; color: rgb(39, 32, 27); background-color: rgba(240, 220, 181, .94); border-width: 1px; border-color: rgb(102, 73, 47); opacity: 0; transition-property: opacity, translate; transition-duration: .18s; translate: 0 6px; }
+.ps-journey__speech.speech--visible { opacity: 1; translate: 0 0; }
+.ps-journey__damage-popup { position: absolute; right: 190px; top: 226px; width: 100px; font-size: 34px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(255, 100, 70); opacity: 0; translate: 0 10px; transition-property: opacity, translate; transition-duration: .08s; }
+.ps-journey__damage-popup.fx--visible { opacity: 1; translate: 0 -14px; }
+.ps-journey__damage-popup.fx--player { left: 300px; right: auto; color: rgb(255, 136, 91); }
+.ps-journey__encounter-banner { position: absolute; left: 190px; right: 0; top: 278px; height: 58px; padding-top: 12px; font-size: 26px; letter-spacing: 5px; -unity-text-align: upper-center; color: rgb(243, 195, 123); background-color: rgba(55, 12, 10, .88); border-top-width: 1px; border-bottom-width: 1px; border-top-color: rgb(178, 58, 39); border-bottom-color: rgb(178, 58, 39); opacity: 0; scale: 0.96; transition-property: opacity, scale; transition-duration: .12s; }
+.ps-journey__encounter-banner.encounter--visible { opacity: 1; scale: 1; }
+.ps-journey.fx--impact { translate: -3px 0; }
+
+.ps-journey__toast { position: absolute; left: 420px; top: 85px; width: 540px; padding: 9px 18px; font-size: 13px; -unity-text-align: middle-center; color: rgb(246, 218, 165); background-color: rgba(8, 9, 10, .88); border-bottom-width: 1px; border-bottom-color: rgba(191, 126, 56, .72); opacity: 0; }
+.ps-journey__toast.toast--visible { opacity: 1; }
+.ps-journey__transition {
+    position: absolute;
+    left: 190px;
+    right: 0;
+    top: 64px;
+    bottom: 92px;
+    overflow: hidden;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: .24s;
+}
+.ps-journey__transition.transition--visible { opacity: 1; }
+.ps-journey__transition-wash {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(8, 17, 20, .84);
+}
+.ps-journey__transition-fog {
+    position: absolute;
+    background-image: resource("Art/JourneyPrototype/Complete/journey-transition-fog-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: 0;
+    transition-property: translate, opacity;
+    transition-duration: .62s;
+}
+.ps-journey__transition-fog--far {
+    left: -160px;
+    top: -18px;
+    width: 1220px;
+    height: 260px;
+    translate: -150px 0;
+}
+.ps-journey__transition-fog--mid {
+    right: -190px;
+    top: 128px;
+    width: 1160px;
+    height: 300px;
+    translate: 170px 0;
+}
+.ps-journey__transition-fog--near {
+    left: -240px;
+    bottom: -70px;
+    width: 1320px;
+    height: 330px;
+    translate: -210px 0;
+}
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--far { opacity: .38; }
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--mid { opacity: .5; }
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--near { opacity: .62; }
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--far { translate: 80px 0; }
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--mid { translate: -70px 0; }
+.ps-journey__transition.transition--visible .ps-journey__transition-fog--near { translate: 120px 0; }
+
+.state--choice .ps-journey__choice, .state--event .ps-journey__event, .state--minigame .ps-journey__minigame, .state--result .ps-journey__result { display: flex; }
+.state--battle .ps-journey__battle,
+.state--battle .ps-journey__player-battle-hud,
+.state--battle .ps-journey__enemy-huds,
+.state--battle .ps-journey__threat-reel { display: flex; }
+.state--battle .ps-journey__threat-reel { opacity: 1; translate: 0 0; }
+.state--battle .ps-journey__bottom, .state--battle .ps-journey__topbar, .state--battle .ps-journey__rail { display: none; }
+.state--battle .ps-journey__toast { opacity: 0; }
+.is-hidden { display: none; }

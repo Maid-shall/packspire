@@ -1,0 +1,492 @@
+/* PopDark product chrome — shared shapes and states (Phase 1).
+   Theme owns color tokens; Management/Hub/etc own layout ratios only.
+   Plate textures are applied in C# (Battle pattern). USS owns size / slices / hover. */
+
+.ps-pop-primary,
+.ps-pop-secondary,
+.ps-pop-danger {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: visible;
+    translate: 0 0;
+}
+
+.ps-pop-primary {
+    height: 78px;
+    min-height: 78px;
+    max-height: 78px;
+    /* No 9-slice: ornate ends are wider than the depart button column.
+       Slices >= half width collapse the center and leave only wing caps. */
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-pop-primary:hover {
+    -unity-background-image-tint-color: rgb(255, 236, 244);
+}
+
+.ps-pop-primary:active {
+    translate: 0 1px;
+    -unity-background-image-tint-color: rgb(210, 200, 220);
+}
+
+.ps-pop-primary:disabled {
+    -unity-background-image-tint-color: rgb(120, 118, 130);
+    opacity: 0.85;
+}
+
+.ps-pop-primary-label,
+.ps-pop-secondary-label,
+.ps-pop-danger-label {
+    position: relative;
+    font-size: 24px;
+    color: rgb(244, 234, 214);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding-left: 36px;
+    padding-right: 36px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(12, 8, 28, 0.85);
+}
+
+.ps-pop-primary:disabled .ps-pop-primary-label {
+    color: rgb(186, 178, 188);
+}
+
+.ps-pop-secondary {
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-pop-secondary:hover {
+    -unity-background-image-tint-color: rgb(255, 230, 236);
+}
+
+.ps-pop-secondary:active {
+    translate: 0 1px;
+}
+
+.ps-pop-secondary:disabled {
+    -unity-background-image-tint-color: rgb(130, 128, 140);
+    opacity: 0.8;
+}
+
+.ps-pop-secondary-label {
+    font-size: 17px;
+    color: rgb(244, 234, 214);
+    -unity-font-style: bold;
+}
+
+.ps-pop-danger {
+    height: 52px;
+    min-height: 52px;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-pop-danger-label {
+    font-size: 18px;
+    color: rgb(255, 210, 196);
+}
+
+.ps-pop-nav-card {
+    position: relative;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    width: 148px;
+    min-width: 148px;
+    height: 210px;
+    min-height: 210px;
+    max-height: 210px;
+    margin-right: 10px;
+    padding: 14px 12px 16px 12px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+    -unity-slice-left: 48;
+    -unity-slice-right: 48;
+    -unity-slice-top: 48;
+    -unity-slice-bottom: 48;
+}
+
+.ps-pop-nav-card:hover {
+    -unity-background-image-tint-color: rgb(255, 240, 246);
+}
+
+.ps-pop-nav-card.ps-selected {
+    -unity-background-image-tint-color: rgb(240, 255, 252);
+}
+
+.ps-pop-nav-card-accent-l,
+.ps-pop-nav-card-accent-r {
+    position: absolute;
+    top: 18%;
+    bottom: 18%;
+    width: 2px;
+    background-color: rgba(255, 120, 140, 0);
+}
+
+.ps-pop-nav-card-accent-l { left: 6px; }
+.ps-pop-nav-card-accent-r {
+    right: 6px;
+    background-color: rgba(88, 210, 196, 0);
+}
+
+.ps-pop-nav-card.ps-selected .ps-pop-nav-card-accent-l {
+    background-color: rgba(255, 120, 140, 0.95);
+}
+
+.ps-pop-nav-card.ps-selected .ps-pop-nav-card-accent-r {
+    background-color: rgba(88, 210, 196, 0.95);
+}
+
+.ps-pop-nav-card-copy {
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 0;
+}
+
+.ps-pop-nav-card-eyebrow {
+    font-size: 10px;
+    color: rgb(158, 148, 168);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.ps-pop-nav-card-title {
+    font-size: 22px;
+    color: rgb(244, 234, 214);
+    margin-bottom: 4px;
+}
+
+.ps-pop-nav-card-sub {
+    font-size: 12px;
+    color: rgb(168, 158, 178);
+    white-space: normal;
+}
+
+.ps-pop-list-row {
+    position: relative;
+    height: 72px;
+    min-height: 72px;
+    max-height: 72px;
+    margin-bottom: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 12px;
+    padding-right: 10px;
+    background-color: rgba(14, 12, 28, 0);
+    border-left-width: 2px;
+    border-left-color: rgba(88, 210, 196, 0);
+    overflow: hidden;
+}
+
+.ps-pop-list-row:hover {
+    background-color: rgba(28, 22, 48, 0.42);
+}
+
+.ps-pop-list-row.ps-selected {
+    background-color: rgba(24, 36, 52, 0.55);
+    border-left-color: rgba(88, 210, 196, 0.95);
+}
+
+.ps-pop-list-row-gem {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    margin-right: 8px;
+    flex-shrink: 0;
+    background-color: rgba(255, 120, 140, 0);
+    rotate: 45deg;
+}
+
+.ps-pop-list-row.ps-selected .ps-pop-list-row-gem {
+    background-color: rgba(88, 210, 196, 0.95);
+}
+
+.ps-pop-list-row-leading {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    max-width: 44px;
+    max-height: 44px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    overflow: hidden;
+}
+
+.ps-pop-list-row-copy {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ps-pop-list-row-name {
+    font-size: 16px;
+    color: rgb(236, 226, 208);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-pop-list-row-sub {
+    font-size: 13px;
+    color: rgb(168, 158, 178);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.ps-pop-list-row.ps-locked {
+    background-color: rgba(10, 10, 18, 0.35);
+}
+
+.ps-pop-list-row.ps-locked .ps-pop-list-row-name,
+.ps-pop-list-row.ps-locked .ps-pop-list-row-sub {
+    color: rgb(150, 142, 158);
+}
+
+.ps-pop-portrait-frame {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.ps-pop-portrait-plate {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* Texture applied in C#; keep transparent until then. */
+    background-color: rgba(255, 255, 255, 0);
+    -unity-slice-left: 64;
+    -unity-slice-right: 64;
+    -unity-slice-top: 72;
+    -unity-slice-bottom: 72;
+    opacity: 0.92;
+}
+
+.ps-pop-portrait-standard .ps-pop-portrait-plate {
+    opacity: 0.55;
+}
+
+.ps-pop-portrait-wide .ps-pop-portrait-plate {
+    opacity: 0.7;
+    -unity-slice-left: 48;
+    -unity-slice-right: 48;
+    -unity-slice-top: 40;
+    -unity-slice-bottom: 40;
+}
+
+.ps-pop-portrait-viewport {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 12%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.ps-pop-portrait-wide .ps-pop-portrait-viewport {
+    left: 6%;
+    right: 6%;
+    top: 12%;
+    bottom: 14%;
+}
+
+.ps-pop-portrait-corners,
+.ps-pop-corner-host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-pop-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-left-width: 2px;
+    border-top-width: 2px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(255, 120, 140, 0.85);
+    border-top-color: rgba(255, 120, 140, 0.85);
+}
+
+.ps-pop-corner-tl { left: 6px; top: 6px; }
+.ps-pop-corner-tr {
+    right: 6px;
+    top: 6px;
+    border-left-width: 0;
+    border-right-width: 2px;
+    border-right-color: rgba(88, 210, 196, 0.85);
+    border-top-color: rgba(88, 210, 196, 0.85);
+}
+.ps-pop-corner-bl {
+    left: 6px;
+    bottom: 6px;
+    border-top-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(255, 120, 140, 0.7);
+}
+.ps-pop-corner-br {
+    right: 6px;
+    bottom: 6px;
+    border-left-width: 0;
+    border-top-width: 0;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-right-color: rgba(88, 210, 196, 0.7);
+    border-bottom-color: rgba(88, 210, 196, 0.7);
+}
+
+.ps-pop-plaque {
+    position: relative;
+    flex-direction: column;
+    padding: 12px 14px;
+    min-width: 180px;
+    overflow: hidden;
+}
+
+.ps-pop-plaque-plate {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0);
+    -unity-slice-left: 48;
+    -unity-slice-right: 48;
+    -unity-slice-top: 40;
+    -unity-slice-bottom: 40;
+    opacity: 0.85;
+}
+
+.ps-pop-plaque-head,
+.ps-pop-plaque-eyebrow,
+.ps-pop-plaque-title,
+.ps-pop-plaque-line {
+    position: relative;
+}
+
+.ps-pop-plaque-eyebrow {
+    font-size: 10px;
+    color: rgb(158, 148, 168);
+    margin-bottom: 2px;
+}
+
+.ps-pop-plaque-title {
+    font-size: 16px;
+    color: rgb(244, 234, 214);
+    margin-bottom: 6px;
+}
+
+.ps-pop-plaque-line {
+    font-size: 13px;
+    color: rgb(200, 190, 178);
+    margin-bottom: 2px;
+    white-space: normal;
+}
+
+.ps-pop-badge {
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    min-width: 28px;
+    height: 20px;
+    margin-left: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: rgba(28, 20, 40, 0.85);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(255, 120, 140, 0.55);
+    border-right-color: rgba(88, 210, 196, 0.35);
+    border-top-color: rgba(255, 120, 140, 0.45);
+    border-bottom-color: rgba(88, 210, 196, 0.35);
+}
+
+.ps-pop-badge > Label {
+    font-size: 10px;
+    color: rgb(236, 226, 208);
+    margin: 0;
+    padding: 0;
+}
+
+.ps-pop-badge-new {
+    border-left-color: rgba(255, 140, 120, 0.95);
+    border-top-color: rgba(255, 140, 120, 0.8);
+}
+.ps-pop-badge-new > Label { color: rgb(255, 190, 170); }
+
+.ps-pop-badge-locked {
+    background-color: rgba(12, 12, 18, 0.9);
+    border-left-color: rgba(120, 110, 130, 0.55);
+    border-right-color: rgba(120, 110, 130, 0.55);
+    border-top-color: rgba(120, 110, 130, 0.55);
+    border-bottom-color: rgba(120, 110, 130, 0.55);
+}
+.ps-pop-badge-locked > Label { color: rgb(168, 160, 178); }
+
+.ps-pop-badge-inuse { border-left-color: rgba(255, 140, 120, 0.85); }
+
+.ps-pop-badge-heirloom {
+    border-left-color: rgba(255, 200, 120, 0.9);
+    border-top-color: rgba(255, 200, 120, 0.75);
+}
+.ps-pop-badge-heirloom > Label { color: rgb(255, 220, 160); }
+
+.ps-pop-badge-selected {
+    border-left-color: rgba(88, 210, 196, 0.95);
+    border-top-color: rgba(88, 210, 196, 0.75);
+}
+.ps-pop-badge-selected > Label { color: rgb(160, 236, 220); }
+
+.ps-pop-badge-danger { border-left-color: rgba(220, 80, 70, 0.95); }
+.ps-pop-badge-danger > Label { color: rgb(255, 170, 150); }
+
+.ps-pop-badge-rare { border-left-color: rgba(180, 120, 255, 0.85); }
+.ps-pop-badge-undiscovered > Label { color: rgb(150, 142, 158); }

@@ -1,0 +1,57 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="character-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--character" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--halftone" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="character-header" class="ps-mgmt-header">
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="COURIER ROSTER" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="配達人選択" class="ps-misprint-header-title" picking-mode="Ignore" />
+                <ui:Label text="登録済みの配達人から担当者を選択する。" class="ps-character-header-note" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-roster-body">
+            <ui:VisualElement name="character-reel-column" class="ps-roster-col-reel">
+                <ui:VisualElement class="ps-character-list-heading">
+                    <ui:Label name="character-list-heading" text="配達人一覧" class="ps-roster-reel-heading" picking-mode="Ignore" />
+                    <ui:Label name="character-list-eyebrow" text="COURIER LIST" class="ps-character-list-eyebrow" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:ScrollView name="character-reel-scroll" class="ps-roster-reel-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="character-reel" class="ps-roster-reel" />
+                </ui:ScrollView>
+                <ui:Label name="character-list-note" text="選択すると人物記録が更新されます" class="ps-character-list-note" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-roster-col-art">
+                <ui:VisualElement class="ps-character-study ps-character-study-front" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-character-study ps-character-study-back" picking-mode="Ignore" />
+                <ui:VisualElement name="character-art-host" class="ps-roster-art-host" />
+                <ui:VisualElement class="ps-character-art-caption">
+                    <ui:Label name="character-art-caption-name" text="—" class="ps-character-art-caption-name" picking-mode="Ignore" />
+                    <ui:Label name="character-art-caption-title" text="—" class="ps-character-art-caption-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="character-detail-column" class="ps-roster-col-detail">
+                <ui:VisualElement class="ps-character-dossier-heading">
+                    <ui:Label text="PERSONNEL DOSSIER" class="ps-character-dossier-eyebrow" picking-mode="Ignore" />
+                    <ui:Label text="人物記録" class="ps-character-dossier-title" picking-mode="Ignore" />
+                    <ui:VisualElement name="character-dossier-portrait-host" class="ps-character-dossier-portrait-host" />
+                </ui:VisualElement>
+                <ui:ScrollView name="character-detail-scroll" class="ps-roster-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="character-detail-body" class="ps-roster-detail-body" />
+                </ui:ScrollView>
+                <ui:VisualElement name="character-footer" class="ps-roster-footer">
+                    <ui:Button name="character-confirm" class="ps-button ps-roster-confirm">
+                        <ui:VisualElement class="ps-roster-confirm-copy" picking-mode="Ignore">
+                            <ui:Label text="PACK / SELECTION ORDER" class="ps-roster-confirm-eyebrow" picking-mode="Ignore" />
+                            <ui:Label name="character-confirm-label" text="このキャラで始める" class="ps-roster-confirm-label" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label text="›" class="ps-roster-confirm-arrow" picking-mode="Ignore" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

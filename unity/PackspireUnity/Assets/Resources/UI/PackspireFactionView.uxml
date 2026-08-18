@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="faction-background" class="ps-layer-background" picking-mode="Ignore">
+        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--faction" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--brush" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-layer-content">
+        <ui:VisualElement name="faction-header" class="ps-mgmt-header">
+            <ui:VisualElement class="ps-misprint-header-copy">
+                <ui:Label text="FACTION / ALLEGIANCE" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="配達組合契約" class="ps-misprint-header-title" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-faction-body">
+            <ui:VisualElement class="ps-faction-top-row">
+                <ui:VisualElement class="ps-faction-emissary-column">
+                    <ui:VisualElement name="faction-emissary-study-front" class="ps-faction-emissary-study ps-faction-emissary-study-front" picking-mode="Ignore" />
+                    <ui:VisualElement name="faction-emissary-study-back" class="ps-faction-emissary-study ps-faction-emissary-study-back" picking-mode="Ignore" />
+                    <ui:VisualElement name="faction-emissary-host" class="ps-faction-emissary-host" />
+                    <ui:VisualElement class="ps-faction-emissary-caption">
+                        <ui:Label text="EMISSARY" class="ps-faction-emissary-eyebrow" picking-mode="Ignore" />
+                        <ui:Label name="faction-emissary-name" class="ps-faction-emissary-name" picking-mode="Ignore" />
+                        <ui:Label name="faction-emissary-title" class="ps-faction-emissary-title" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="faction-graph-column" class="ps-faction-col-graph">
+                    <ui:VisualElement class="ps-faction-registry-heading">
+                        <ui:Label text="組合一覧" class="ps-faction-registry-title" picking-mode="Ignore" />
+                        <ui:Label text="FACTION REGISTRY" class="ps-faction-registry-eyebrow" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="faction-graph-host" class="ps-faction-graph-host">
+                        <ui:VisualElement name="faction-graph-nodes" class="ps-faction-graph-nodes" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-faction-col-detail">
+                <ui:VisualElement name="faction-detail-surface" class="ps-faction-detail-surface">
+                    <ui:VisualElement name="faction-detail-header" class="ps-faction-detail-header" />
+                    <ui:ScrollView name="faction-detail-scroll" class="ps-faction-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,930 @@
+.ps-hub-misprint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    background-color: rgb(8, 9, 9);
+    color: rgb(224, 199, 158);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-hub-misprint__background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-hub-misprint__edge-shade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(2, 4, 5, 0.16);
+}
+
+.ps-hub-misprint__nav {
+    position: absolute;
+    left: 8px;
+    top: 14px;
+    bottom: 14px;
+    width: 272px;
+    flex-direction: column;
+    padding-right: 4px;
+}
+
+.ps-hub-misprint__nav-diagonal-rule {
+    position: absolute;
+    left: 260px;
+    top: 0;
+    width: 721px;
+    height: 1px;
+    background-color: rgba(218, 179, 116, 0.62);
+    rotate: 93.2deg;
+    transform-origin: 0% 50%;
+}
+
+.ps-hub-misprint__masthead {
+    height: 58px;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(218, 179, 116, 0.42);
+}
+
+.ps-hub-misprint__brand {
+    margin: 0;
+    padding: 0;
+    color: rgb(232, 200, 151);
+    font-size: 18px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__brand-copy {
+    margin-top: 2px;
+    color: rgba(218, 192, 151, 0.74);
+    font-size: 10px;
+}
+
+.ps-hub-misprint__nav-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-hub-misprint__nav-list {
+    flex-direction: column;
+}
+
+.ps-hub-misprint__nav-row {
+    position: relative;
+    width: 252px;
+    height: 82px;
+    min-height: 82px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0;
+    padding: 7px 18px 6px 9px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(194, 157, 98, 0.28);
+    color: rgb(226, 204, 169);
+    overflow: visible;
+}
+
+.ps-hub-misprint__nav-row--1 { width: 248px; }
+.ps-hub-misprint__nav-row--2 { width: 244px; }
+.ps-hub-misprint__nav-row--3 { width: 240px; }
+.ps-hub-misprint__nav-row--4 { width: 236px; }
+
+.ps-hub-misprint__nav-row.is-reel-current {
+    height: 116px;
+    min-height: 116px;
+    padding: 10px 22px 8px 9px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-bottom-width: 0;
+    color: rgb(17, 16, 14);
+}
+
+.ps-hub-misprint__nav-row:hover {
+    background-color: rgba(201, 166, 105, 0.07);
+}
+
+.ps-hub-misprint__nav-row.is-reel-current:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-hub-misprint__nav-row.is-locked {
+    opacity: 0.36;
+}
+
+.ps-hub-misprint__nav-icon {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    margin-right: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.88;
+}
+
+.ps-hub-misprint__nav-icon--gate { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-expedition-v1"); }
+.ps-hub-misprint__nav-icon--forge { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-loadout-v1"); }
+.ps-hub-misprint__nav-icon--vault { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-vault-v1"); }
+.ps-hub-misprint__nav-icon--heirloom { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-heirloom-v1"); }
+.ps-hub-misprint__nav-icon--guild { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-role-v1"); }
+.ps-hub-misprint__nav-icon--codex { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-compendium-v1"); }
+
+.ps-hub-misprint__nav-copy {
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.ps-hub-misprint__nav-subline {
+    height: 15px;
+    min-height: 15px;
+    flex-direction: row;
+    align-items: center;
+    margin-top: -1px;
+}
+
+.ps-hub-misprint__nav-title {
+    margin: 0;
+    padding: 0;
+    height: 42px;
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(232, 208, 171);
+    white-space: nowrap;
+}
+
+.ps-hub-misprint__nav-title--forge {
+    width: 112px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-wordmark-forge-v1");
+}
+
+.ps-hub-misprint__nav-title--vault {
+    width: 119px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-wordmark-vault-v1");
+}
+
+.ps-hub-misprint__nav-title--heirloom {
+    width: 80px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-wordmark-heirloom-v1");
+}
+
+.ps-hub-misprint__nav-title--guild {
+    width: 81px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-wordmark-guild-v1");
+}
+
+.ps-hub-misprint__nav-title--codex {
+    width: 79px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-wordmark-codex-v1");
+}
+
+.ps-hub-misprint__nav-meta {
+    margin: 0;
+    padding: 0;
+    color: rgba(209, 177, 123, 0.76);
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title,
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-meta {
+    color: rgb(18, 16, 13);
+}
+
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title {
+    height: 58px;
+    -unity-background-image-tint-color: rgb(18, 16, 13);
+}
+
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title--forge { width: 154px; }
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title--vault { width: 165px; }
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title--heirloom { width: 111px; }
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title--guild { width: 112px; }
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-title--codex { width: 110px; }
+
+.ps-hub-misprint__nav-registration {
+    display: none;
+    position: absolute;
+    right: -12px;
+    top: 41px;
+    width: 34px;
+    height: 34px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-registration-arrow-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__nav-row.is-reel-current .ps-hub-misprint__nav-registration {
+    display: flex;
+}
+
+.ps-hub-misprint__guide {
+    width: 216px;
+    height: 60px;
+    min-height: 60px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
+    padding: 6px 10px;
+    background-color: rgba(8, 10, 10, 0.86);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(204, 165, 105, 0.48);
+    border-bottom-color: rgba(204, 165, 105, 0.48);
+}
+
+.ps-hub-misprint__guide:hover {
+    background-color: rgba(62, 48, 32, 0.52);
+    border-top-color: rgb(220, 180, 112);
+    border-bottom-color: rgb(220, 180, 112);
+}
+
+.ps-hub-misprint__guide-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-guide-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__guide-copy { min-width: 0; flex-direction: column; overflow: hidden; }
+.ps-hub-misprint__guide-title { color: rgb(226, 204, 169); font-size: 18px; }
+.ps-hub-misprint__guide-meta { color: rgba(201, 166, 110, 0.76); font-size: 9px; }
+
+.ps-hub-misprint__heading-wordmark {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    overflow: hidden;
+}
+
+.ps-hub-misprint__heading-wordmark--guide {
+    width: 82px;
+    height: 22px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-heading-guide-v1");
+    -unity-background-image-tint-color: rgb(226, 204, 169);
+}
+
+.ps-hub-misprint__heading-wordmark--equipment {
+    width: 60px;
+    height: 16px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-heading-equipment-record-v1");
+    -unity-background-image-tint-color: rgb(217, 184, 133);
+}
+
+.ps-hub-misprint__heading-wordmark--record {
+    width: 84px;
+    height: 18px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-heading-current-record-v1");
+    -unity-background-image-tint-color: rgb(217, 184, 133);
+}
+
+.ps-hub-misprint__heading-wordmark--mission {
+    width: 112px;
+    height: 24px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-heading-mission-v1");
+    -unity-background-image-tint-color: rgb(36, 29, 22);
+}
+
+.ps-hub-misprint__heading-wordmark--action {
+    width: 162px;
+    height: 26px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-heading-expedition-open-v1");
+    -unity-background-image-tint-color: rgb(139, 37, 29);
+}
+
+.ps-hub-misprint__character-stage {
+    position: absolute;
+    left: 232px;
+    top: 0;
+    bottom: 0;
+    width: 472px;
+    overflow: visible;
+}
+
+.ps-hub-misprint__destination-block {
+    position: absolute;
+    left: 62px;
+    top: 16px;
+    width: 150px;
+    height: 198px;
+}
+
+.ps-hub-misprint__destination-meta {
+    color: rgb(194, 54, 42);
+    font-size: 12px;
+}
+
+.ps-hub-misprint__destination-number {
+    margin-top: -8px;
+    color: rgb(180, 43, 34);
+    font-size: 92px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__destination-name {
+    margin-top: -16px;
+    color: rgb(222, 194, 150);
+    font-size: 21px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-font-style: bold;
+}
+
+.ps-hub-misprint__destination-code {
+    color: rgb(193, 55, 39);
+    font-size: 10px;
+}
+
+.ps-hub-misprint__route {
+    position: absolute;
+    left: 18px;
+    top: 205px;
+    width: 128px;
+    height: 388px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-decor-route-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.72;
+}
+
+.ps-hub-misprint__brush {
+    position: absolute;
+    left: 88px;
+    right: 8px;
+    top: 270px;
+    height: 310px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-decor-brush-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.28;
+}
+
+.ps-hub-misprint__cyan-offset {
+    position: absolute;
+    left: 116px;
+    right: 24px;
+    top: 112px;
+    bottom: 80px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-decor-cyan-offset-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.58;
+}
+
+.ps-hub-misprint__character-host {
+    position: absolute;
+    left: 34px;
+    right: -34px;
+    top: -26px;
+    bottom: -54px;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+}
+
+.ps-hub-misprint__character-portrait,
+.ps-hub-misprint__character-portrait.ps-portrait-display-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__identity {
+    position: absolute;
+    left: 82px;
+    bottom: 24px;
+    width: 180px;
+    padding: 5px 8px;
+    background-color: rgba(5, 7, 8, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgb(190, 52, 41);
+}
+
+.ps-hub-misprint__identity-name {
+    color: rgb(229, 202, 161);
+    font-size: 18px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__identity-code { color: rgb(70, 190, 194); font-size: 9px; }
+
+.ps-hub-misprint__dossier {
+    position: absolute;
+    left: 704px;
+    right: 16px;
+    top: 16px;
+    height: 450px;
+    flex-direction: column;
+}
+
+.ps-hub-misprint__dossier-top {
+    height: 36px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(211, 172, 108, 0.52);
+}
+
+.ps-hub-misprint__section-title,
+.ps-hub-misprint__module-title {
+    color: rgb(217, 184, 133);
+    font-size: 12px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__currency {
+    flex-direction: row;
+    align-items: center;
+    height: 34px;
+    margin-right: 66px;
+}
+
+.ps-hub-misprint__currency-seal {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-wax-seal-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__currency-value {
+    color: rgb(229, 194, 140);
+    font-size: 24px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__upper-grid {
+    height: 192px;
+    flex-shrink: 0;
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.ps-hub-misprint__studies {
+    width: 30%;
+    flex-shrink: 0;
+    flex-direction: row;
+    border-right-width: 1px;
+    border-right-color: rgba(211, 172, 108, 0.34);
+    padding-right: 6px;
+}
+
+.ps-hub-misprint__study {
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+    opacity: 0.72;
+}
+
+.ps-hub-misprint__study .ps-hub-misprint__study-image,
+.ps-hub-misprint__study .ps-hub-misprint__study-image.ps-portrait-display-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__equipment-record {
+    flex-grow: 1;
+    min-width: 0;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.ps-hub-misprint__equipment-row {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.ps-hub-misprint__equipment-cell {
+    width: 33.333%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 3px 5px 2px 5px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 1px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-right-color: rgba(211, 172, 108, 0.28);
+}
+
+.ps-hub-misprint__equipment-cell--last { border-right-width: 0; }
+
+.ps-hub-misprint__equipment-art {
+    flex-grow: 1;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    overflow: hidden;
+}
+
+.ps-hub-misprint__equipment-art--loadout { background-image: resource("Art/UI/ObsidianMisprint/hub-parcel-v1"); }
+.ps-hub-misprint__equipment-art--heirloom { background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1"); }
+.ps-hub-misprint__equipment-art--heirloom.has-art { background-image: none; }
+
+.ps-hub-misprint__equipment-image,
+.ps-hub-misprint__equipment-image.ps-portrait-display-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__equipment-copy {
+    height: 45px;
+    flex-shrink: 0;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.ps-hub-misprint__equipment-meta {
+    color: rgb(75, 190, 194);
+    font-size: 7px;
+}
+
+.ps-hub-misprint__equipment-name {
+    color: rgb(221, 194, 151);
+    font-size: 10px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-hub-misprint__equipment-detail {
+    color: rgba(219, 194, 156, 0.64);
+    font-size: 7px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-hub-misprint__lower-grid {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+    margin-top: 8px;
+    border-top-width: 1px;
+    border-top-color: rgba(211, 172, 108, 0.46);
+    padding-top: 6px;
+}
+
+.ps-hub-misprint__briefing-module { flex-grow: 1; min-width: 0; flex-direction: column; }
+
+.ps-hub-misprint__briefing-heading {
+    height: 24px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+}
+
+.ps-hub-misprint__briefing-heading-meta { color: rgba(67, 191, 196, 0.78); font-size: 8px; }
+
+.ps-hub-misprint__briefing-host {
+    height: 136px;
+    min-height: 136px;
+    flex-shrink: 0;
+    flex-direction: column;
+    margin-top: 2px;
+    padding: 4px 18px 4px 8px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-objective-lines-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-hub-misprint__briefing-item {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 3px 8px 3px 5px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-hub-misprint__briefing-item:hover {
+    translate: 2px 0;
+    background-color: rgba(170, 48, 37, 0.12);
+}
+
+.ps-hub-misprint__briefing-index {
+    width: 24px;
+    min-width: 24px;
+    margin-right: 5px;
+    color: rgba(198, 55, 43, 0.9);
+    font-size: 15px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__briefing-mark {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin-right: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-hub-misprint__briefing-mark--objective { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-expedition-v1"); }
+.ps-hub-misprint__briefing-mark--recommend { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-role-v1"); }
+.ps-hub-misprint__briefing-mark--notice { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-guide-v1"); }
+.ps-hub-misprint__briefing-mark--progress { background-image: resource("Art/UI/ObsidianMisprint/hub-icon-compendium-v1"); }
+
+.ps-hub-misprint__briefing-copy { flex-grow: 1; min-width: 0; flex-direction: column; }
+.ps-hub-misprint__briefing-title { color: rgb(231, 204, 163); font-size: 12px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; }
+.ps-hub-misprint__briefing-body { color: rgba(219, 194, 156, 0.7); font-size: 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ps-hub-misprint__briefing-tail {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    margin-left: 8px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-registration-arrow-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.72;
+}
+
+.ps-hub-misprint__mission {
+    position: absolute;
+    left: 620px;
+    right: 18px;
+    bottom: 58px;
+    height: 190px;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 22px 22px 19px 29px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-mission-briefing-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-hub-misprint__mission-copy {
+    width: 52%;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2px 18px 3px 0;
+    overflow: hidden;
+}
+
+.ps-hub-misprint__mission-heading-row {
+    height: 34px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-hub-misprint__mission-heading {
+    color: rgb(27, 24, 20);
+    font-size: 28px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-hub-misprint__mission-folio {
+    color: rgba(134, 43, 33, 0.8);
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-hub-misprint__mission-title {
+    margin-top: 3px;
+    color: rgb(26, 23, 19);
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-hub-misprint__mission-meta-row {
+    height: 38px;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 9px;
+}
+
+.ps-hub-misprint__mission-meta-item {
+    flex-grow: 1;
+    min-width: 0;
+    flex-direction: column;
+    padding: 0 9px 0 0;
+    margin-right: 9px;
+    border-right-width: 1px;
+    border-right-color: rgba(141, 44, 34, 0.32);
+}
+
+.ps-hub-misprint__mission-meta-item--last {
+    margin-right: 0;
+    border-right-width: 0;
+}
+
+.ps-hub-misprint__mission-meta-key {
+    color: rgba(137, 39, 31, 0.78);
+    font-size: 8px;
+}
+
+.ps-hub-misprint__mission-meta-value {
+    color: rgba(41, 33, 25, 0.86);
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-hub-misprint__mission-action {
+    flex-grow: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 0 6px 0;
+    padding: 10px 10px 10px 68px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/ObsidianMisprint/hub-expedition-command-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-hub-misprint__mission-action:hover {
+    translate: 2px 0;
+}
+
+.ps-hub-misprint__mission-action-label {
+    color: rgb(139, 37, 29);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    white-space: nowrap;
+}
+
+.ps-hub-misprint__heading-wordmark {
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
+}
+
+.ps-hub-misprint__indexes {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    width: 290px;
+    height: 44px;
+    flex-direction: row;
+}
+
+.ps-hub-misprint__index {
+    width: 50%;
+    height: 44px;
+    min-height: 44px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 5px;
+    padding: 6px 28px 6px 10px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-decor-index-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-misprint__index:hover { translate: 0 -1px; }
+.ps-hub-misprint__index-title { color: rgb(38, 31, 24); font-size: 13px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); }
+.ps-hub-misprint__index-value { color: rgb(137, 40, 31); font-size: 16px; }
+
+.ps-hub-misprint__modal {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-hub-misprint__modal.is-open { display: flex; }
+
+.ps-hub-misprint__modal-backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.78);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-misprint__modal-panel {
+    width: 920px;
+    height: 560px;
+    flex-direction: column;
+    padding: 18px;
+    background-color: rgb(11, 12, 12);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(199, 158, 97);
+    border-right-color: rgb(199, 158, 97);
+    border-top-color: rgb(199, 158, 97);
+    border-bottom-color: rgb(199, 158, 97);
+}
+
+.ps-hub-misprint__modal-header {
+    height: 52px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(205, 166, 103, 0.52);
+}
+
+.ps-hub-misprint__modal-title { color: rgb(229, 201, 157); font-size: 25px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); }
+.ps-hub-misprint__modal-close { width: 100px; height: 34px; background-color: rgba(0, 0, 0, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(190, 149, 91); border-right-color: rgb(190, 149, 91); border-top-color: rgb(190, 149, 91); border-bottom-color: rgb(190, 149, 91); color: rgb(223, 195, 151); }
+
+.ps-hub-misprint__modal-body { flex-grow: 1; min-height: 0; flex-direction: row; margin-top: 12px; }
+.ps-hub-misprint__modal-categories { width: 150px; flex-shrink: 0; flex-direction: column; padding-right: 10px; }
+.ps-hub-street-guide-cat { height: 42px; margin-bottom: 4px; background-color: rgba(0, 0, 0, 0); border-left-width: 3px; border-right-width: 0; border-top-width: 0; border-bottom-width: 1px; border-left-color: rgba(194, 151, 91, 0.24); border-bottom-color: rgba(194, 151, 91, 0.26); color: rgb(211, 184, 143); }
+.ps-hub-street-guide-cat.ps-selected { border-left-color: rgb(196, 50, 38); background-color: rgba(164, 44, 34, 0.18); color: rgb(239, 208, 163); }
+.ps-hub-misprint__modal-list { width: 370px; flex-shrink: 0; margin-right: 12px; background-color: rgba(0, 0, 0, 0); }
+.ps-hub-misprint__modal-detail { flex-grow: 1; min-width: 0; padding: 16px; border-left-width: 1px; border-left-color: rgba(201, 160, 98, 0.44); }
+
+.ps-hub-chrome {
+    width: 100%;
+    min-height: 66px;
+    margin-bottom: 5px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(196, 153, 91, 0.22);
+    border-bottom-color: rgba(196, 153, 91, 0.26);
+}
+
+.ps-hub-chrome:hover,
+.ps-hub-chrome.ps-selected { background-color: rgba(156, 42, 32, 0.16); border-left-color: rgb(194, 52, 40); }
+.ps-hub-chrome-frame,
+.ps-hub-chrome-face { flex-grow: 1; min-width: 0; flex-direction: row; align-items: center; }
+.ps-hub-chrome-glow { display: none; }
+.ps-hub-chrome-emblem { width: 44px; height: 44px; min-width: 44px; align-items: center; justify-content: center; margin-right: 8px; }
+.ps-hub-chrome-emblem-text { color: rgb(64, 186, 191); font-size: 11px; }
+.ps-hub-chrome-copy { flex-grow: 1; min-width: 0; flex-direction: column; }
+.ps-hub-chrome-title { color: rgb(228, 201, 158); font-size: 16px; }
+.ps-hub-chrome-sub { color: rgba(211, 184, 143, 0.66); font-size: 10px; }
+.ps-hub-chrome-primary,
+.ps-hub-chrome-secondary { min-height: 42px; margin-top: 12px; border-left-color: rgb(190, 49, 38); }

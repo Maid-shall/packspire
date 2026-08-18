@@ -13,16 +13,26 @@ public static class PackspireBuild {
  public static void BatchSetup(){CreateScene();}
  public static void ValidateCore(){
   var run=new RunState{role="warrior"};
-  var sword=new ItemInstance("sword");run.inventory.Add(sword);
+  StorageFormulaSystem.SyncCoreFromBackpack(run);
+  var formula=StorageFormulaSystem.Resolve(run);
+  if(formula.core.id!="standard")throw new System.Exception("Default storage core must resolve to standard");
+  if(!StorageFormulaSystem.IsRotationAllowed(RotationCapability.FlipOnly,0)||StorageFormulaSystem.IsRotationAllowed(RotationCapability.FlipOnly,1))
+   throw new System.Exception("FlipOnly must allow 0/180 only");
+  if(StorageFormulaSystem.NextRotation(RotationCapability.FlipOnly,0)!=2)throw new System.Exception("FlipOnly next rotation must be 180");
+  var sword=new ItemInstance("sword");StorageFormulaSystem.EnsureItemRolled(sword);run.inventory.Add(sword);
+  if(string.IsNullOrEmpty(sword.traitId))throw new System.Exception("Equipment must roll a color trait");
   if(BackpackSystem.BuildDeck(run).Count!=4)throw new System.Exception("Role base deck must contain four cards");
   run.placements.Add(new Placement(sword.uid,0));
-  if(!BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Placed equipment must be active");
+  if(!BackpackSystem.Analyze(sword,run.placements[0],run).active)throw new System.Exception("Placed equipment must be active");
   if(BackpackSystem.BuildDeck(run).Count!=6)throw new System.Exception("Sword must add its two card candidates");
   run.placements[0].anchor=8;
-  if(!BackpackSystem.Analyze(sword,run.placements[0]).active)throw new System.Exception("Interior equipment must remain active");
+  if(!BackpackSystem.Analyze(sword,run.placements[0],run).active)throw new System.Exception("Interior equipment must remain active");
   if(BackpackSystem.BuildDeck(run).Count!=6)throw new System.Exception("Card generation must not depend on an outer edge");
   run.placements[0].anchor=4;run.placements[0].rotation=1;
   if(!BackpackSystem.CanPlace(run,sword,4,1,sword.uid))throw new System.Exception("Rotated item should fit at tested edge");
+  run.backpack="living";run.coreId="living";
+  if(BackpackSystem.CanPlace(run,sword,4,1,sword.uid))throw new System.Exception("Living core must reject 90° rotation");
+  if(!BackpackSystem.CanPlace(run,sword,4,2,sword.uid))throw new System.Exception("Living core must allow 180° rotation");
   Debug.Log("PACKSPIRE_CORE_VALIDATION_OK");
  }
 }

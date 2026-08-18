@@ -1,0 +1,113 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="ps-courier-route ps-dark-surface">
+        <ui:VisualElement class="ps-route-ledger-background" picking-mode="Ignore" />
+
+        <ui:VisualElement name="route-map-viewport" class="ps-route-map-viewport">
+            <ui:VisualElement name="route-map-content" class="ps-route-map-content">
+                <ui:VisualElement class="ps-route-map-ink" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-route-map-watermark" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-route-map-registration ps-route-map-registration--a" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-route-map-registration ps-route-map-registration--b" picking-mode="Ignore" />
+                <ui:VisualElement name="route-link-host" class="ps-route-links" picking-mode="Ignore" />
+                <ui:VisualElement name="route-node-host" class="ps-route-node-host" />
+
+                <ui:VisualElement name="route-courier-position" class="ps-route-courier-position" picking-mode="Ignore">
+                    <ui:VisualElement name="route-courier-marker" class="ps-route-courier-marker" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-route-courier-marker__ground" picking-mode="Ignore" />
+                        <ui:Image name="route-courier-sprite" class="ps-route-courier-marker__sprite" scale-mode="ScaleToFit" picking-mode="Ignore" />
+                        <ui:VisualElement name="route-courier-fallback" class="ps-route-courier-marker__fallback" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-route-courier-marker__tag" picking-mode="Ignore">
+                            <ui:Label name="route-travel-label" class="ps-route-courier-marker__label" picking-mode="Ignore" />
+                            <ui:VisualElement name="route-travel-days" class="ps-route-courier-marker__days" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="route-node-detail" class="ps-route-node-detail" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-route-node-detail__wax" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-route-node-detail__content">
+                        <ui:Label name="route-detail-eyebrow" text="ROUTE DOSSIER" class="ps-route-detail-eyebrow" picking-mode="Ignore" />
+                        <ui:Label name="route-detail-title" class="ps-route-dossier-title" picking-mode="Ignore" />
+                        <ui:Label name="route-detail-subtitle" class="ps-route-dossier-subtitle" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-route-dossier-rule" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-route-detail-row">
+                            <ui:Label name="route-detail-key-a" class="ps-route-detail-key" picking-mode="Ignore" />
+                            <ui:Label name="route-detail-value-a" class="ps-route-detail-value" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-route-detail-row">
+                            <ui:Label name="route-detail-key-b" class="ps-route-detail-key" picking-mode="Ignore" />
+                            <ui:Label name="route-detail-value-b" class="ps-route-detail-value" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label name="route-detail-section" class="ps-route-detail-section" picking-mode="Ignore" />
+                        <ui:Label name="route-detail-body" class="ps-route-detail-body" picking-mode="Ignore" />
+                        <ui:Label text="再選択で移動" class="ps-route-detail-confirm" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="ps-route-map-heading" picking-mode="Ignore">
+                <ui:Label text="航路図" class="ps-route-map-heading__title" />
+                <ui:Label text="ROUTE CHART / CIRCLE VII" class="ps-route-map-heading__meta" />
+                <ui:VisualElement class="ps-route-map-heading__underline" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-route-map-controls">
+                <ui:Button name="route-focus-current" class="ps-route-map-control ps-route-map-control--focus" tooltip="現在地へ移動">
+                    <ui:VisualElement class="ps-route-map-control__icon" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Button name="route-fit-all" class="ps-route-map-control ps-route-map-control--fit" tooltip="航路全体を表示">
+                    <ui:VisualElement class="ps-route-map-control__icon" picking-mode="Ignore" />
+                </ui:Button>
+                <ui:Label name="route-zoom" text="100%" class="ps-route-map-zoom" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="ps-route-title-block">
+            <ui:Label text="VII" class="ps-route-title-index" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-route-title-copy">
+                <ui:Label text="INFERNAL DELIVERY LEDGER" class="ps-route-title-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="第七圏　配達航路" class="ps-route-title" picking-mode="Ignore" />
+                <ui:Label name="route-destination" class="ps-route-destination" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="ps-route-status-strip">
+            <ui:VisualElement name="route-portrait-host" class="ps-route-status-portrait" />
+            <ui:VisualElement class="ps-route-status ps-route-status--hp">
+                <ui:Label name="route-hp" class="ps-route-status-value" picking-mode="Ignore" />
+                <ui:ProgressBar name="route-hp-bar" class="ps-route-hp-bar" low-value="0" high-value="100" />
+            </ui:VisualElement>
+            <ui:VisualElement name="route-recovered-group" class="ps-route-status ps-route-status--recovered">
+                <ui:Label text="回収" class="ps-route-status-key" picking-mode="Ignore" />
+                <ui:Label name="route-recovered" class="ps-route-status-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-route-status ps-route-status--deadline">
+                <ui:Label name="route-days" class="ps-route-status-value ps-route-status-value--days" picking-mode="Ignore" />
+                <ui:VisualElement name="route-deadline-meter" class="ps-route-deadline-meter" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="route-seal-drawer" class="ps-route-seal-drawer">
+            <ui:Button name="route-seal-drawer-toggle" class="ps-route-seal-drawer__toggle" tooltip="配達印を開閉">
+                <ui:VisualElement class="ps-route-seal-drawer__toggle-mark" picking-mode="Ignore" />
+                <ui:Label text="配達印" class="ps-route-seal-drawer__toggle-label" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:VisualElement class="ps-route-seal-ledger__heading">
+                <ui:Label text="配達印" class="ps-route-seal-ledger__title" picking-mode="Ignore" />
+                <ui:Label text="DELIVERY SEALS" class="ps-route-seal-ledger__english" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Button name="route-seal-left" text="⌃" class="ps-route-seal-arrow" tooltip="前の配達印" />
+            <ui:ScrollView name="route-seal-scroll" class="ps-route-seal-scroll" mode="Vertical" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="route-seal-host" class="ps-route-seal-host" />
+            </ui:ScrollView>
+            <ui:Button name="route-seal-right" text="⌄" class="ps-route-seal-arrow" tooltip="次の配達印" />
+            <ui:VisualElement class="ps-route-seal-detail">
+                <ui:Label name="route-seal-detail-name" text="印章を選択" class="ps-route-seal-detail__name" picking-mode="Ignore" />
+                <ui:Label name="route-seal-detail-effect" text="使用する配達印を選択してください。" class="ps-route-seal-detail__effect" picking-mode="Ignore" />
+                <ui:Button name="route-seal-apply" text="この印を押す" class="ps-route-seal-apply" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Button name="route-relay-pack" text="中継所で荷物を整理" class="ps-route-relay-pack" />
+        <ui:Button name="route-finish" text="配達結果を確認" class="ps-route-finish" />
+    </ui:VisualElement>
+</ui:UXML>

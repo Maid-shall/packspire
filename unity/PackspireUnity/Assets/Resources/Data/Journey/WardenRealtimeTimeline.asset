@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b35bce1c514a2cb08be67b928f401a, type: 3}
+  m_Name: WardenRealtimeTimeline
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.RealtimeEnemyTimelineProfile
+  actorId: warden
+  patterns:
+  - id: measured-opening
+    duration: 9.5
+    steps:
+    - executeOffset: 1.8
+      actionId: "normal:\u9418\u6483"
+      kind: 0
+      damage: 8
+      telegraphLead: 0.72
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.9
+      actionId: "guard:\u9418\u58C1"
+      kind: 2
+      damage: 7
+      telegraphLead: 0.58
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: bell-pressure
+    duration: 10.5
+    steps:
+    - executeOffset: 1
+      actionId: "combo:\u9023\u9418"
+      kind: 1
+      damage: 4
+      telegraphLead: 0.82
+      hitCount: 3
+      hitSpacing: 0.18
+    - executeOffset: 3.8
+      actionId: "normal:\u9418\u6483"
+      kind: 0
+      damage: 8
+      telegraphLead: 0.72
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 6
+      actionId: "normal:\u9418\u6483"
+      kind: 0
+      damage: 8
+      telegraphLead: 0.72
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: heavy-read
+    duration: 10.8
+    steps:
+    - executeOffset: 2.5
+      actionId: "guard:\u9418\u58C1"
+      kind: 2
+      damage: 7
+      telegraphLead: 0.58
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId: "brace:\u5927\u9418\u6483"
+      kind: 4
+      damage: 12
+      telegraphLead: 1.12
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: low-sweep
+    duration: 10.2
+    steps:
+    - executeOffset: 1.2
+      actionId: "normal:\u9418\u6483"
+      kind: 0
+      damage: 8
+      telegraphLead: 0.72
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.7
+      actionId: "jump:\u8DB3\u6255\u3044"
+      kind: 3
+      damage: 9
+      telegraphLead: 1.02
+      hitCount: 1
+      hitSpacing: 0.15

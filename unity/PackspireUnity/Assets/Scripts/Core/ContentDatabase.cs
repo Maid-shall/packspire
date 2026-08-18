@@ -4,18 +4,63 @@ using System.Linq;
 using UnityEngine;
 
 namespace Packspire {
-[Serializable] public class StatusDefinition { public string id,name,icon,description,kind; public bool stack; }
-[Serializable] public class CardEffectEntry { public string cardId; public List<EffectSpec> effects=new(); }
-[Serializable] public class EnemyMoveEffectEntry { public string enemyName; public int moveIndex; public List<EffectSpec> effects=new(); }
-[Serializable] public class SharedContent { public int schemaVersion=1; public List<StatusDefinition> statuses=new(); public List<CardEffectEntry> cardEffects=new(); public List<EnemyMoveEffectEntry> enemyMoveEffects=new(); }
+[Serializable]
+public class StatusDefinition {
+ public string id,name,icon,description,kind;
+ public bool stack;
+ public Sprite artwork;
+}
 
+/// <summary>Runtime status/effect view backed by the master ScriptableObject.</summary>
 public static class ContentDatabase {
- static SharedContent data;
- public static SharedContent Data=>data??=Load();
- static SharedContent Load(){var asset=Resources.Load<TextAsset>("Packspire/content");if(asset==null){Debug.LogWarning("Packspire shared content was not found; using empty content.");return new SharedContent();}try{return JsonUtility.FromJson<SharedContent>(asset.text)??new SharedContent();}catch(Exception error){Debug.LogError($"Packspire content load failed: {error.Message}");return new SharedContent();}}
- public static List<EffectSpec> CardEffects(string cardId)=>Data.cardEffects.FirstOrDefault(x=>x.cardId==cardId)?.effects.ConvertAll(Clone)??new();
- public static List<EffectSpec> EnemyEffects(string enemyName,int moveIndex)=>Data.enemyMoveEffects.FirstOrDefault(x=>x.enemyName==enemyName&&x.moveIndex==moveIndex)?.effects.ConvertAll(Clone)??new();
- public static StatusDefinition Status(string id)=>Data.statuses.FirstOrDefault(x=>x.id==id);
- static EffectSpec Clone(EffectSpec value)=>new(){type=value.type,target=value.target,amount=value.amount,duration=value.duration};
+ static Dictionary<string,StatusDefinition> statuses;
+
+ static Dictionary<string,StatusDefinition> Statuses=>statuses??=PackspireContent.Data.statuses
+  .Select(x=>new StatusDefinition{
+   id=x.id,name=x.name,icon=x.icon,description=x.description,kind=x.kind,stack=x.stack,artwork=x.artwork
+  })
+  .ToDictionary(x=>x.id);
+
+ public static List<EffectSpec> CardEffects(string cardId){
+  var card=PackspireContent.Data.cards.FirstOrDefault(x=>x.id==cardId);
+  return Convert(card?.effects);
+ }
+
+ public static List<EffectSpec> EnemyEffects(string enemyId,int moveIndex){
+  return Convert(EnemyMove(enemyId,moveIndex)?.effects);
+ }
+
+ public static EnemyMoveContent EnemyMove(string enemyId,int moveIndex){
+  var enemy=PackspireContent.Data.enemies.FirstOrDefault(x=>x.id==enemyId);
+  if(enemy?.moves==null||enemy.moves.Length==0)return null;
+  int index=((moveIndex%enemy.moves.Length)+enemy.moves.Length)%enemy.moves.Length;
+  return enemy.moves[index];
+ }
+
+ public static EnemyPhaseContent EnemyPhase(string enemyId,int hp,int maxHp){
+  var enemy=PackspireContent.Data.enemies.FirstOrDefault(x=>x.id==enemyId);
+  if(enemy?.phases==null||enemy.phases.Length==0)return null;
+  int percent=maxHp>0?Mathf.CeilToInt(Mathf.Max(0,hp)*100f/maxHp):0;
+  return enemy.phases
+   .Where(x=>x!=null&&x.minimumHpPercent<=percent)
+   .OrderByDescending(x=>x.minimumHpPercent)
+   .FirstOrDefault()
+   ??enemy.phases.Where(x=>x!=null).OrderBy(x=>x.minimumHpPercent).FirstOrDefault();
+ }
+
+ public static StatusDefinition Status(string id)=>
+  !string.IsNullOrEmpty(id)&&Statuses.TryGetValue(id,out var value)?value:null;
+
+ static List<EffectSpec> Convert(IEnumerable<EffectContent> values)=>
+  (values??Enumerable.Empty<EffectContent>()).Select(x=>new EffectSpec{
+   type=x.statusId,
+   target=x.target switch{
+    EffectTarget.Self=>"self",
+    EffectTarget.Player=>"player",
+    _=>"enemy"
+   },
+   amount=x.amount,
+   duration=x.duration
+  }).ToList();
 }
 }

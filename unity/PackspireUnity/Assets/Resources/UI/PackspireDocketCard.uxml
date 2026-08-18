@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="project://database/Assets/Resources/UI/PackspireDocketCard.uss?fileID=7433441132597879392&amp;guid=cc7fa849a3eadf2489862aeace6f24ea&amp;type=3#PackspireDocketCard" />
+    <ui:VisualElement name="docket-visual" class="ps-docket">
+        <ui:VisualElement name="docket-art" class="ps-docket__art" picking-mode="Ignore">
+            <ui:VisualElement class="ps-docket__art-shade" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-docket__frame" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-docket__main" picking-mode="Ignore">
+            <ui:VisualElement class="ps-docket__title-row" picking-mode="Ignore">
+                <ui:Label name="docket-main-name" class="ps-docket__main-name" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-docket__rule" picking-mode="Ignore" />
+            <ui:VisualElement name="docket-main-text" class="ps-docket__main-text" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="docket-receipt-cost" class="ps-docket__cost" picking-mode="Ignore" />
+        <ui:Label name="docket-lock" class="ps-docket__lock" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,6076 @@
+/* PACKSPIRE Vault + Codex canonical presentation.
+   Consolidated in cascade order after the Vault V17 and Codex V8 layouts were approved.
+   Edit this file only; the numbered compatibility sheets are no longer loaded. */
+
+/* ===== Consolidated from PackspireVaultCodexV2.uss ===== */
+/* PACKSPIRE Vault / Codex V2
+ * The two approved compact navy mockups are the sole visual reference.
+ * This sheet intentionally loads last and neutralizes the older ornate pass.
+ */
+
+.ps-vault-final {
+    background-color: rgba(3, 6, 20, 0.98);
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-mgmt-bg {
+    opacity: 0.13;
+}
+
+.ps-vault-final .ps-mgmt-shade {
+    background-color: rgba(2, 5, 17, 0.82);
+}
+
+.ps-vault-final .ps-layer-content {
+    padding: 12px 16px 12px 16px;
+}
+
+.ps-vault-final .ps-mgmt-header {
+    height: 54px;
+    min-height: 54px;
+    padding: 0;
+    margin: 0 0 5px 0;
+    background-color: rgba(3, 6, 20, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(128, 55, 71, 0.34);
+}
+
+.ps-vault-final .ps-management-brand {
+    height: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+.ps-vault-final .ps-management-brand-crest {
+    width: 42px;
+    height: 42px;
+    margin-right: 8px;
+}
+
+.ps-vault-final .ps-mgmt-body {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* --------------------------------------------------------------------- */
+/* Vault                                                                 */
+/* --------------------------------------------------------------------- */
+
+.ps-vault-final .ps-vault-v9-main-row {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ps-vault-final .ps-vault-inventory-column {
+    width: 48%;
+    min-width: 48%;
+    max-width: 48%;
+    height: 100%;
+    padding: 0 13px 0 0;
+    margin: 0;
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(115, 78, 69, 0.66);
+    background-color: rgba(3, 5, 18, 0.55);
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 111px;
+    min-height: 111px;
+    padding: 5px 0 0 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-bar {
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+    margin: 2px 0 0 0;
+    flex-direction: row;
+    align-items: stretch;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(126, 85, 74, 0.48);
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 46px;
+    min-width: 0;
+    padding: 3px 5px;
+    margin: 0 2px 0 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: rgb(207, 190, 165);
+    background-color: rgba(8, 10, 27, 0.94);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/category-tab-normal-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 58;
+    -unity-slice-right: 58;
+    -unity-slice-top: 38;
+    -unity-slice-bottom: 38;
+    border-width: 0;
+    border-radius: 7px;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    color: rgb(255, 224, 183);
+    background-color: rgba(74, 17, 48, 0.96);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/category-tab-selected-v2");
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 21px;
+    height: 21px;
+    margin: 0 5px 0 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #ead9b6;
+    white-space: nowrap;
+}
+
+.ps-vault-final .ps-vault-v7-category-glow,
+.ps-vault-final .ps-vault-v7-context {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-inventory-surface {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 6px 0 0 0;
+    margin: 0;
+    background-color: rgba(2, 4, 15, 0.3);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-grid-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-grid-scroll > .unity-scroll-view__content-viewport {
+    padding: 0;
+    margin: 0;
+}
+
+.ps-vault-final .ps-vault-grid {
+    width: 100%;
+    padding: 0 3px 5px 3px;
+    margin: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    position: relative;
+    width: 23.2%;
+    height: 136px;
+    min-width: 0;
+    min-height: 136px;
+    max-height: 136px;
+    padding: 8px 7px 7px 7px;
+    margin: 0 1.8% 7px 0;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: rgba(6, 8, 23, 0.96);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/item-cell-normal-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 48;
+    -unity-slice-right: 48;
+    -unity-slice-top: 48;
+    -unity-slice-bottom: 48;
+    border-width: 0;
+    border-radius: 9px;
+    overflow: visible;
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    background-color: rgba(37, 8, 37, 0.98);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/item-cell-selected-v2");
+    -unity-slice-left: 70;
+    -unity-slice-right: 48;
+    -unity-slice-top: 48;
+    -unity-slice-bottom: 48;
+}
+
+.ps-vault-final .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    top: 11px;
+    height: 91px;
+    background-color: rgba(4, 5, 14, 0.86);
+    border-width: 0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-vault-grid-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 24px;
+    max-height: 24px;
+    margin: 0;
+    padding: 2px 2px 0 2px;
+    font-size: 10px;
+    color: rgb(225, 207, 176);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-grid-badges {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 20px;
+    flex-direction: row;
+}
+
+.ps-vault-final .ps-vault-grid-badge {
+    width: 17px;
+    height: 17px;
+    margin: 0 2px 0 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    background-color: rgb(218, 78, 100);
+}
+
+.ps-vault-final .ps-vault-badge-heirloom {
+    background-color: rgb(242, 205, 114);
+}
+
+.ps-vault-final .ps-vault-grid-badge Label {
+    font-size: 8px;
+    color: rgb(23, 13, 23);
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-grid-lock {
+    display: none;
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: rgba(11, 10, 24, 0.94);
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+    display: flex;
+}
+
+.ps-vault-final .ps-vault-grid-lock-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.ps-vault-final .ps-vault-v7-footer {
+    height: 37px;
+    min-height: 37px;
+    padding: 4px 3px 0 3px;
+    margin: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(2, 4, 14, 0.94);
+    border-width: 0;
+    border-top-width: 1px;
+    border-top-color: rgba(121, 75, 65, 0.72);
+}
+
+.ps-vault-final .ps-vault-v7-rarity-filter {
+    width: 210px;
+    height: 29px;
+    min-height: 29px;
+    padding: 0 5px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(3, 6, 17, 0.98);
+    border-width: 1px;
+    border-color: rgba(126, 87, 74, 0.72);
+    border-radius: 6px;
+}
+
+.ps-vault-final .ps-vault-v8-sort-label {
+    width: 47px;
+    font-size: 9px;
+    color: rgba(197, 181, 158, 0.75);
+}
+
+.ps-vault-final .ps-vault-v8-sort {
+    flex-grow: 1;
+    height: 27px;
+    min-height: 27px;
+    padding: 0 5px;
+    color: rgb(230, 211, 181);
+    background-color: rgba(2, 4, 14, 0.98);
+    border-width: 0;
+    font-size: 10px;
+}
+
+.ps-vault-final .ps-vault-v8-sort .unity-base-popup-field__input {
+    height: 27px;
+    min-height: 27px;
+    padding: 0 4px;
+    background-color: rgba(2, 4, 14, 0.98);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v7-count {
+    font-size: 9px;
+    color: rgba(208, 194, 169, 0.78);
+}
+
+.ps-vault-final .ps-vault-v9-record-column {
+    width: 52%;
+    min-width: 52%;
+    max-width: 52%;
+    height: 100%;
+    padding: 0 0 0 14px;
+    margin: 0;
+    background-color: rgba(3, 6, 20, 0.34);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v9-divider {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v9-hero {
+    display: flex;
+    height: 54%;
+    min-height: 54%;
+    max-height: 54%;
+    padding: 0;
+    margin: 0;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v9-hero-art {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v9-identity {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v11-equipment-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 13px 15px 7px 15px;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v11-showcase {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 61%;
+    height: 100%;
+    padding: 3px 9px 5px 3px;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v11-art-column {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 100%;
+    height: 88%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 50%;
+}
+
+.ps-vault-final .ps-vault-v11-item-art {
+    width: 92%;
+    height: 92%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    position: absolute;
+    left: 9px;
+    bottom: 3px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    color: rgb(116, 205, 210);
+}
+
+.ps-vault-final .ps-vault-v11-meta,
+.ps-vault-final .ps-vault-v9-name-row,
+.ps-vault-final .ps-vault-v9-description,
+.ps-vault-final .ps-vault-v9-shape {
+    position: absolute;
+    left: 62%;
+    right: 5px;
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    top: 16px;
+    height: 18px;
+    margin: 0;
+    font-size: 9px;
+    color: rgba(201, 180, 161, 0.72);
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    top: 36px;
+    height: 42px;
+    margin: 0;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.ps-vault-final .ps-vault-v9-item-name {
+    font-size: 25px;
+    color: rgb(255, 221, 161);
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v9-inuse {
+    height: 18px;
+    margin: 6px 0 0 7px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background-color: rgba(98, 55, 25, 0.78);
+}
+
+.ps-vault-final .ps-vault-v9-description {
+    top: 82px;
+    height: 46px;
+    margin: 0;
+    padding: 0 0 6px 0;
+    font-size: 10px;
+    color: rgb(205, 190, 174);
+    white-space: normal;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(129, 78, 70, 0.56);
+}
+
+.ps-vault-final .ps-vault-v9-shape {
+    top: 137px;
+    height: 112px;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v9-shape-title {
+    height: 20px;
+    margin: 0 0 5px 0;
+    padding: 0;
+    font-size: 11px;
+    color: rgb(213, 190, 158);
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-shape-grid {
+    width: 70px;
+    height: 70px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v9-shape-row {
+    height: 23px;
+    flex-direction: row;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell {
+    width: 22px;
+    height: 22px;
+    margin: 0 2px 2px 0;
+    background-color: rgba(18, 20, 35, 0.92);
+    border-width: 1px;
+    border-color: rgba(116, 100, 100, 0.76);
+    border-radius: 2px;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell.ps-filled {
+    background-color: rgb(216, 159, 145);
+    border-color: rgb(246, 197, 165);
+}
+
+.ps-vault-final .ps-vault-v9-detail {
+    height: 46%;
+    min-height: 46%;
+    max-height: 46%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-top-width: 1px;
+    border-top-color: rgba(127, 83, 69, 0.72);
+}
+
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport,
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container {
+    height: 100%;
+    min-height: 100%;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 7px 0 0 0;
+    margin: 0;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 39%;
+    height: 100%;
+    min-height: 0;
+    padding: 0 8px 0 3px;
+    margin: 0;
+    align-items: center;
+    background-color: rgba(4, 6, 19, 0.72);
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(103, 76, 68, 0.62);
+}
+
+.ps-vault-final .ps-vault-v9-lower-header {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+    padding: 0 2px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-vault-final .ps-vault-v9-lower-title {
+    font-size: 10px;
+    color: rgb(219, 198, 167);
+}
+
+.ps-vault-final .ps-vault-v9-flip {
+    width: 83px;
+    height: 24px;
+    min-height: 24px;
+    padding: 0 8px;
+    font-size: 9px;
+    color: rgb(243, 205, 185);
+    background-color: rgba(48, 11, 37, 0.98);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/category-tab-selected-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 58;
+    -unity-slice-right: 58;
+    -unity-slice-top: 38;
+    -unity-slice-bottom: 38;
+    border-width: 0;
+    border-radius: 12px;
+}
+
+.ps-vault-final .ps-vault-v9-card-open {
+    width: 130px;
+    height: 183px;
+    min-height: 183px;
+    max-height: 183px;
+    margin: 0;
+    transform-origin: center;
+}
+
+.ps-vault-final .ps-vault-v9-effect-panel {
+    position: relative;
+    width: 61%;
+    height: 100%;
+    min-height: 0;
+    padding: 0 4px 38px 10px;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-effect {
+    height: 47%;
+    min-height: 0;
+    padding: 8px 13px 6px 13px;
+    margin: 0 0 5px 0;
+    background-color: rgba(7, 8, 24, 0.92);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/effect-panel-v2");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 64;
+    -unity-slice-right: 64;
+    -unity-slice-top: 64;
+    -unity-slice-bottom: 64;
+    border-width: 0;
+    border-radius: 8px;
+}
+
+.ps-vault-final .ps-vault-v9-effect-eyebrow {
+    height: 15px;
+    font-size: 8px;
+    color: rgb(231, 93, 117);
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    height: 21px;
+    font-size: 14px;
+    color: rgb(244, 210, 167);
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    flex-grow: 1;
+    min-height: 0;
+    font-size: 9px;
+    color: rgb(207, 195, 179);
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v9-actions {
+    position: absolute;
+    right: 6px;
+    bottom: 1px;
+    width: 45px;
+    height: 45px;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/round-lock-v2");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    border-radius: 23px;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action.ps-locked {
+    -unity-background-image-tint-color: rgb(255, 111, 138);
+}
+
+.ps-vault-final .ps-vault-v11-page-arrow {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV2/round-next-v2");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    border-radius: 23px;
+}
+
+/* Keep all detail pages inside the product shell; page content owns paging. */
+.ps-vault-final .unity-scroller,
+.ps-vault-final .ps-vault-v9-detail .unity-scroller {
+    display: none;
+}
+
+
+/* ===== Consolidated from PackspireVaultCodexV3.uss ===== */
+/*
+ * PACKSPIRE Vault / Codex V3
+ * Approved compact mockups are the layout and component reference.
+ * Every visible control below is skinned with a dedicated bitmap component.
+ */
+
+.ps-vault-final {
+    background-color: rgb(2, 5, 18);
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-mgmt-bg {
+    opacity: 0.08;
+}
+
+.ps-vault-final .ps-mgmt-shade {
+    background-color: rgba(1, 3, 14, 0.88);
+}
+
+.ps-vault-final .ps-layer-content {
+    padding: 12px 18px 13px 18px;
+}
+
+.ps-vault-final .ps-mgmt-header {
+    height: 54px;
+    min-height: 54px;
+    margin: 0 0 6px 0;
+    padding: 0 0 4px 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final .ps-management-brand {
+    height: 49px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-management-brand-crest {
+    width: 42px;
+    height: 42px;
+    margin-right: 7px;
+}
+
+.ps-vault-final .ps-mgmt-body {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-mgmt-column-boundary,
+.ps-vault-final .ps-vault-v9-divider {
+    display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Shared illustrated controls                                        */
+/* ------------------------------------------------------------------ */
+
+.ps-vault-final Button {
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 20;
+    -unity-slice-bottom: 20;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+}
+
+.ps-vault-final .ps-vault-v7-category:hover {
+    -unity-background-image-tint-color: rgb(255, 230, 238);
+}
+
+.ps-vault-final .ps-vault-v9-flip {
+    min-width: 112px;
+    height: 30px;
+    padding: 0 16px;
+    color: rgb(246, 217, 170);
+    font-size: 11px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 34;
+    -unity-slice-right: 34;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+}
+
+/* ------------------------------------------------------------------ */
+/* Vault                                                              */
+/* ------------------------------------------------------------------ */
+
+.ps-vault-final .ps-vault-v9-main-row {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ps-vault-final .ps-vault-inventory-column {
+    width: 47%;
+    min-width: 47%;
+    max-width: 47%;
+    height: 100%;
+    margin: 0;
+    padding: 0 14px 0 0;
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(133, 85, 67, 0.58);
+    background-color: rgba(2, 4, 17, 0.64);
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 112px;
+    min-height: 112px;
+    margin: 0;
+    padding: 5px 0 0 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v7-context {
+    height: 18px;
+    min-height: 18px;
+    margin: 0 3px;
+    color: rgba(222, 202, 191, 0.58);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v7-category-bar {
+    height: 58px;
+    min-height: 58px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    width: 19%;
+    min-width: 19%;
+    height: 52px;
+    min-height: 52px;
+    margin: 0;
+    padding: 5px 4px 3px 4px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 23px;
+    height: 23px;
+    margin: 0 0 1px 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    color: rgb(225, 204, 176);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
+    color: rgb(255, 226, 184);
+}
+
+.ps-vault-final .ps-vault-v7-category-glow {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-inventory-surface {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(1, 3, 13, 0.34);
+}
+
+.ps-vault-final .ps-vault-grid-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-grid-scroll > .unity-scroll-view__content-viewport {
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 4px 3px 2px 3px;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    height: 122px;
+    min-height: 122px;
+    margin: 0 0.5% 5px 0.5%;
+    padding: 10px 8px 7px 8px;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-selected");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-grid-card:hover {
+    -unity-background-image-tint-color: rgb(255, 230, 238);
+}
+
+.ps-vault-final .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    top: 13px;
+    height: 75px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-grid-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 22px;
+    margin: 0;
+    padding: 2px 2px 0 2px;
+    color: rgb(232, 213, 186);
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-grid-badges {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    height: 18px;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.ps-vault-final .ps-vault-grid-badge {
+    min-width: 18px;
+    height: 17px;
+    margin: 0 2px 0 0;
+    font-size: 8px;
+}
+
+.ps-vault-final .ps-vault-grid-lock {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+    width: 18px;
+    height: 18px;
+    border-width: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/lock-badge");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-grid-lock-icon {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v7-footer {
+    height: 43px;
+    min-height: 43px;
+    margin: 0;
+    padding: 3px 2px;
+    flex-direction: row;
+    align-items: center;
+    border-width: 0;
+    background-color: rgba(1, 3, 13, 0.92);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-compact");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+}
+
+.ps-vault-final .ps-vault-v7-rarity-filter {
+    width: 176px;
+    min-width: 176px;
+    height: 34px;
+    margin: 0 5px 0 0;
+    padding: 0 12px;
+    color: rgb(245, 221, 181);
+    font-size: 11px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-control");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 25;
+    -unity-slice-bottom: 25;
+}
+
+.ps-vault-final .ps-vault-v8-sort-label {
+    color: rgba(223, 197, 175, 0.8);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v8-sort {
+    color: rgb(255, 226, 181);
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v7-count {
+    margin-left: auto;
+    color: rgba(218, 202, 186, 0.76);
+    font-size: 10px;
+}
+
+.ps-vault-final .ps-vault-v9-record-column {
+    width: 53%;
+    min-width: 53%;
+    max-width: 53%;
+    height: 100%;
+    margin: 0;
+    padding: 0 0 0 13px;
+    border-width: 0;
+    background-color: rgba(2, 5, 18, 0.42);
+}
+
+.ps-vault-final .ps-vault-v9-hero {
+    display: flex;
+    height: 46%;
+    min-height: 46%;
+    max-height: 46%;
+    flex-direction: row;
+    margin: 0;
+    padding: 0 0 7px 0;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(174, 105, 76, 0.7);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-hero-art {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v9-identity {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v11-equipment-hero {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    position: absolute;
+    left: 53%;
+    top: 13px;
+    width: 45%;
+    height: 18px;
+    color: rgb(85, 212, 224);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    position: absolute;
+    left: 53%;
+    top: 35px;
+    width: 45%;
+    height: 43px;
+    margin: 0;
+    padding: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final .ps-vault-v9-item-name {
+    color: rgb(250, 220, 166);
+    font-size: 24px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-description {
+    position: absolute;
+    left: 53%;
+    top: 79px;
+    width: 45%;
+    height: 36px;
+    color: rgba(230, 211, 192, 0.86);
+    font-size: 10px;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v11-showcase {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v11-art-column {
+    width: 51%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 92%;
+    height: 86%;
+    margin: 0;
+    padding: 9px;
+    border-width: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-item-art {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 21px;
+    margin: 0;
+    padding: 0;
+    color: rgb(99, 213, 225);
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/durability-divider");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final .ps-vault-v9-shape {
+    position: absolute;
+    left: 53%;
+    top: 120px;
+    width: 45%;
+    height: 122px;
+    margin: 0;
+    padding: 5px 8px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-shape-title {
+    height: 20px;
+    color: rgb(245, 216, 167);
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-shape-grid {
+    width: 77px;
+    height: 77px;
+    margin: 1px auto 0 auto;
+}
+
+.ps-vault-final .ps-vault-v9-shape-row {
+    width: 100%;
+    height: 33.33%;
+    flex-direction: row;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell {
+    width: 33.33%;
+    height: 100%;
+    margin: 0;
+    border-width: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-empty");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell.ps-filled {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-filled");
+}
+
+.ps-vault-final .ps-vault-v9-detail {
+    flex-grow: 1;
+    min-height: 0;
+    height: 54%;
+    max-height: 54%;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport,
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container {
+    height: 100%;
+    min-height: 100%;
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    margin: 0;
+    padding: 8px 0 0 0;
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 43%;
+    height: 100%;
+    margin: 0 10px 0 0;
+    padding: 3px 8px 6px 8px;
+    align-items: center;
+    border-width: 0;
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-v9-lower-header {
+    width: 100%;
+    height: 34px;
+    min-height: 34px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 2px;
+}
+
+.ps-vault-final .ps-vault-v9-lower-title {
+    color: rgb(244, 216, 173);
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-card-open {
+    width: 137px;
+    height: 204px;
+    min-height: 204px;
+    margin: 0;
+    padding: 0;
+    transition-duration: 0s;
+}
+
+.ps-vault-final .ps-vault-v9-card-open:hover {
+    rotate: 0deg;
+    translate: 0 0;
+    scale: 1 1;
+}
+
+.ps-vault-final .ps-vault-v9-effect-panel {
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 2px 0 0 0;
+    justify-content: space-between;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-effect {
+    width: 100%;
+    height: 42%;
+    min-height: 82px;
+    margin: 0 0 5px 0;
+    padding: 12px 24px 10px 22px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 34;
+    -unity-slice-right: 34;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+}
+
+.ps-vault-final .ps-vault-v9-color-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/effect-panel-red");
+}
+
+.ps-vault-final .ps-vault-v9-link-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/effect-panel-cyan");
+}
+
+.ps-vault-final .ps-vault-v9-effect-eyebrow {
+    color: rgba(207, 139, 149, 0.78);
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.ps-vault-final .ps-vault-v9-link-effect .ps-vault-v9-effect-eyebrow {
+    color: rgb(79, 211, 224);
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    margin: 2px 0 1px 0;
+    color: rgb(249, 218, 165);
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    color: rgba(232, 216, 197, 0.9);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v9-actions {
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    width: 62px;
+    height: 62px;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    min-height: 58px;
+    padding: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-lock");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action.ps-locked {
+    -unity-background-image-tint-color: rgb(255, 216, 154);
+}
+
+.ps-vault-final .ps-vault-v11-page-arrow {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+
+/* ===== Consolidated from PackspireVaultCodexV4.uss ===== */
+/*
+ * PACKSPIRE Vault / Codex V4
+ * Restrained component pass based on the approved compact references.
+ * Ornament is reserved for selection and primary round actions.
+ */
+
+.ps-vault-final,
+.ps-codex-v8 {
+    background-color: rgb(2, 4, 15);
+    border-radius: 26px;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-mgmt-bg,
+.ps-codex-v8 .ps-mgmt-bg {
+    opacity: 0.055;
+}
+
+.ps-vault-final .ps-mgmt-shade,
+.ps-codex-v8 .ps-mgmt-shade {
+    background-color: rgba(1, 3, 13, 0.91);
+}
+
+.ps-vault-final .ps-layer-content,
+.ps-codex-v8 .ps-layer-content {
+    padding: 11px 17px 13px 17px;
+}
+
+.ps-vault-final .ps-mgmt-header,
+.ps-codex-v8 .ps-mgmt-header {
+    height: 52px;
+    min-height: 52px;
+    margin: 0 0 7px 0;
+    padding: 0 0 4px 0;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(132, 74, 61, 0.48);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final .ps-management-brand,
+.ps-codex-v8 .ps-management-brand {
+    height: 47px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-management-brand-crest,
+.ps-codex-v8 .ps-management-brand-crest {
+    width: 40px;
+    height: 40px;
+    margin-right: 7px;
+}
+
+.ps-vault-final .ps-mgmt-body,
+.ps-codex-v8 .ps-mgmt-body {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-mgmt-column-boundary,
+.ps-codex-v8 .ps-mgmt-column-boundary,
+.ps-vault-final .ps-vault-v9-divider,
+.ps-codex-v8 .ps-management-detail-corner,
+.ps-vault-final .ps-management-selection-corners,
+.ps-codex-v8 .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final Button,
+.ps-codex-v8 Button {
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Shared compact tabs */
+
+.ps-vault-final .ps-vault-v7-category {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 34;
+    -unity-slice-right: 34;
+    -unity-slice-top: 19;
+    -unity-slice-bottom: 19;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+}
+
+.ps-vault-final .ps-vault-v7-category:hover {
+    -unity-background-image-tint-color: rgb(255, 246, 246);
+}
+
+.ps-vault-final .ps-vault-v9-flip {
+    min-width: 92px;
+    height: 25px;
+    padding: 0 12px;
+    color: rgb(236, 206, 170);
+    font-size: 9px;
+    border-width: 1px;
+    border-color: rgba(177, 73, 105, 0.72);
+    border-radius: 13px;
+    background-image: none;
+    background-color: rgba(34, 8, 28, 0.92);
+}
+
+/* ------------------------------------------------------------------ */
+/* Vault                                                              */
+/* ------------------------------------------------------------------ */
+
+.ps-vault-final .ps-vault-inventory-column {
+    width: 47%;
+    min-width: 47%;
+    max-width: 47%;
+    padding: 0 13px 0 0;
+    border-right-width: 1px;
+    border-right-color: rgba(122, 77, 61, 0.46);
+    background-color: rgba(1, 3, 13, 0.6);
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 105px;
+    min-height: 105px;
+    padding: 3px 0 0 0;
+}
+
+.ps-vault-final .ps-vault-v7-context {
+    height: 16px;
+    min-height: 16px;
+    margin: 0 3px;
+    color: rgba(205, 188, 182, 0.5);
+    font-size: 8px;
+}
+
+.ps-vault-final .ps-vault-v7-category-bar {
+    height: 55px;
+    min-height: 55px;
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    width: 19%;
+    min-width: 19%;
+    height: 48px;
+    min-height: 48px;
+    padding: 4px 4px 3px 4px;
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 21px;
+    height: 21px;
+    margin-bottom: 1px;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    color: rgb(214, 197, 177);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
+    color: rgb(249, 219, 181);
+}
+
+.ps-vault-final .ps-vault-inventory-surface {
+    background-color: rgba(1, 3, 12, 0.22);
+}
+
+.ps-vault-final .ps-vault-grid {
+    padding: 4px 3px 2px 3px;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    height: 119px;
+    min-height: 119px;
+    margin: 0 0.5% 4px 0.5%;
+    padding: 9px 7px 7px 7px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 24;
+    -unity-slice-right: 24;
+    -unity-slice-top: 24;
+    -unity-slice-bottom: 24;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-selected");
+}
+
+.ps-vault-final .ps-vault-grid-card:hover {
+    -unity-background-image-tint-color: rgb(255, 246, 246);
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    left: 15px;
+    right: 15px;
+    top: 12px;
+    height: 73px;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 22px;
+    padding: 2px 2px 0 2px;
+    color: rgb(222, 205, 183);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-grid-lock {
+    right: 7px;
+    bottom: 7px;
+    width: 17px;
+    height: 17px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-lock");
+}
+
+.ps-vault-final .ps-vault-v7-footer {
+    height: 39px;
+    min-height: 39px;
+    padding: 3px 2px;
+    border-width: 0;
+    border-top-width: 1px;
+    border-top-color: rgba(146, 91, 65, 0.58);
+    background-image: none;
+    background-color: rgba(1, 3, 12, 0.94);
+}
+
+.ps-vault-final .ps-vault-v7-rarity-filter {
+    width: 166px;
+    min-width: 166px;
+    height: 31px;
+    padding: 0 11px;
+    border-width: 1px;
+    border-color: rgba(143, 92, 62, 0.72);
+    border-radius: 3px;
+    color: rgb(238, 215, 181);
+    background-image: none;
+    background-color: rgb(7, 7, 19);
+}
+
+.ps-vault-final .ps-vault-v9-record-column {
+    width: 53%;
+    min-width: 53%;
+    max-width: 53%;
+    padding: 0 0 0 13px;
+    background-color: rgba(1, 4, 15, 0.4);
+}
+
+.ps-vault-final .ps-vault-v9-hero {
+    height: 46%;
+    min-height: 46%;
+    max-height: 46%;
+    padding: 0 0 6px 0;
+    border-bottom-color: rgba(146, 87, 60, 0.58);
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    color: rgba(103, 208, 217, 0.82);
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    height: 39px;
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-v9-item-name {
+    color: rgb(246, 218, 171);
+    font-size: 23px;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 90%;
+    height: 84%;
+    padding: 8px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/magic-circle");
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.26);
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    color: rgba(116, 207, 214, 0.9);
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-shape {
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell,
+.ps-vault-final .ps-vault-v9-shape-cell.ps-filled {
+    background-image: none;
+    border-width: 1px;
+    border-color: rgba(116, 108, 118, 0.66);
+    background-color: rgba(9, 10, 22, 0.92);
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell.ps-filled {
+    border-color: rgb(219, 181, 147);
+    background-color: rgb(107, 79, 67);
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    padding: 7px 0 0 0;
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 41%;
+    margin-right: 9px;
+    padding: 3px 7px 5px 7px;
+    background-image: none;
+    background-color: rgba(4, 5, 18, 0.68);
+}
+
+.ps-vault-final .ps-vault-v9-effect {
+    min-height: 78px;
+    padding: 11px 22px 9px 21px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-slice-left: 36;
+    -unity-slice-right: 36;
+    -unity-slice-top: 30;
+    -unity-slice-bottom: 30;
+}
+
+.ps-vault-final .ps-vault-v9-color-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/effect-panel-red");
+}
+
+.ps-vault-final .ps-vault-v9-link-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/effect-panel-cyan");
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    color: rgb(246, 216, 170);
+    font-size: 15px;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    color: rgba(224, 210, 194, 0.88);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    min-height: 54px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-lock");
+}
+
+.ps-vault-final .ps-vault-v11-page-arrow {
+    width: 53px;
+    height: 53px;
+    min-width: 53px;
+    min-height: 53px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-next");
+}
+
+/* ------------------------------------------------------------------ */
+/* Codex V8 - authored whole-image components, shared with Vault       */
+/* ------------------------------------------------------------------ */
+
+.ps-codex-v8 .ps-codex-main-row {
+    padding: 7px 14px 13px 14px;
+    background-color: rgba(1, 3, 14, 0.78);
+}
+
+.ps-codex-v8 .ps-codex-index-column {
+    width: 29%;
+    min-width: 29%;
+    max-width: 29%;
+    padding: 0 14px 0 0;
+    border-right-width: 0;
+    background-color: rgba(1, 3, 15, 0.72);
+}
+
+.ps-codex-v8 .ps-codex-index-column .ps-mgmt-column-boundary {
+    right: -9px;
+    -unity-background-image-tint-color: rgba(255, 240, 224, 0.92);
+}
+
+.ps-codex-v8 .ps-codex-index-header,
+.ps-codex-v8 .ps-codex-v3-tabs {
+    height: 58px;
+    min-height: 58px;
+    margin: 0 0 7px 0;
+}
+
+.ps-codex-v8 .ps-codex-v3-tabs {
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-v3-tab {
+    width: 32.4%;
+    min-width: 32.4%;
+    height: 51px;
+    min-height: 51px;
+    margin: 0;
+    padding: 0 12px 2px 12px;
+    color: rgb(220, 205, 184);
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-v3-tab.ps-selected {
+    color: rgb(255, 232, 194);
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+}
+
+.ps-codex-v8 .ps-codex-v3-tab:hover {
+    color: rgb(255, 237, 207);
+    -unity-background-image-tint-color: rgb(255, 246, 246);
+}
+
+.ps-codex-v8 .ps-codex-index-surface {
+    padding: 3px 0 0 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-index-mark {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    min-height: 46px;
+    margin: 0 11px 0 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-codex-v8 .ps-codex-record-column {
+    width: 71%;
+    min-width: 71%;
+    max-width: 71%;
+    padding: 0 0 0 21px;
+    background-color: rgba(1, 3, 14, 0.35);
+}
+
+.ps-codex-v8 .ps-codex-v3-record {
+    position: relative;
+    padding: 0;
+    color: rgb(226, 210, 190);
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-hero {
+    width: 100%;
+    height: 49%;
+    min-height: 286px;
+    max-height: 362px;
+    margin: 0 0 6px 0;
+    padding: 5px 18px 8px 7px;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-hero .ps-mgmt-detail-art-host {
+    width: 49%;
+    min-width: 49%;
+    height: 100%;
+    margin: 0 18px 0 0;
+    padding: 10px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/magic-circle");
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.82);
+    background-color: rgba(2, 3, 17, 0.2);
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-hero .ps-mgmt-detail-art-frame,
+.ps-codex-v8 .ps-codex-item-v5-hero .ps-codex-item-v5-art {
+    width: 94%;
+    min-width: 94%;
+    height: 94%;
+    min-height: 94%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-hero .ps-mgmt-detail-summary-host {
+    width: 51%;
+    min-width: 0;
+    padding: 4px 0 0 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-identity {
+    padding: 4px 0 0 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-meta {
+    height: 18px;
+    min-height: 18px;
+    margin: 0 0 2px 0;
+    color: rgb(74, 211, 225);
+    font-size: 9px;
+    letter-spacing: 1.4px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-name {
+    height: 37px;
+    min-height: 37px;
+    margin: 0 0 1px 0;
+    color: rgb(255, 220, 165);
+    font-size: 27px;
+    background-image: none;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-description {
+    height: 36px;
+    min-height: 36px;
+    margin: 0 0 6px 0;
+    color: rgba(232, 217, 197, 0.85);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shapes {
+    padding: 7px 12px 7px 12px;
+    background-color: rgba(3, 4, 18, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgb(241, 71, 142);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(64, 212, 228, 0.65);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shapes-title {
+    font-size: 13px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape {
+    width: 67px;
+    min-width: 67px;
+    height: 67px;
+    min-height: 67px;
+    padding: 2px;
+    border-width: 0;
+    border-radius: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.86);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-row {
+    width: 60px;
+    height: 15px;
+    min-height: 15px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell {
+    width: 13px;
+    min-width: 13px;
+    height: 13px;
+    min-height: 13px;
+    margin: 1px;
+    border-width: 1px;
+    border-color: rgba(103, 98, 116, 0.5);
+    background-color: rgba(7, 8, 21, 0.92);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell.ps-filled {
+    border-color: rgb(235, 213, 187);
+    background-color: rgb(198, 180, 154);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-lower {
+    position: relative;
+    width: 100%;
+    height: 51%;
+    min-height: 275px;
+    padding: 8px 64px 10px 7px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-panel {
+    width: 39%;
+    min-width: 39%;
+    height: 100%;
+    margin: 0 15px 0 0;
+    padding: 10px 15px 12px 15px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-header {
+    height: 31px;
+    min-height: 31px;
+    margin: 0 0 4px 0;
+    align-items: center;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-header .ps-codex-item-v5-panel-title {
+    height: 25px;
+    min-height: 25px;
+    color: rgb(247, 217, 174);
+    font-size: 14px;
+    border-bottom-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-flip {
+    width: 104px;
+    min-width: 104px;
+    height: 27px;
+    min-height: 27px;
+    margin: 0;
+    padding: 0 11px;
+    color: rgb(248, 219, 177);
+    font-size: 9px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-panel.ps-combat .ps-codex-item-v5-card-flip {
+    -unity-text-align: middle-left;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-panel.ps-exploration .ps-codex-item-v5-card-flip {
+    color: rgb(164, 239, 246);
+    -unity-text-align: middle-right;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card-stage {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card {
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 176px;
+    min-height: 176px;
+    max-height: 176px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 175px;
+    min-height: 175px;
+    max-height: 175px;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card:hover,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card.ps-docket-card:hover {
+    translate: 0 0;
+    scale: 1 1 1;
+    rotate: 0deg;
+}
+
+
+
+
+
+
+
+
+
+.ps-codex-v8 .ps-codex-item-v5-note {
+    margin-top: auto;
+    padding: 8px 10px 5px 10px;
+    color: rgba(204, 190, 178, 0.66);
+    font-size: 9px;
+    border-top-width: 1px;
+    border-top-color: rgba(195, 127, 65, 0.38);
+}
+
+.ps-codex-v8 .ps-codex-v4-page-arrow {
+    position: absolute;
+    right: 4px;
+    bottom: 12px;
+    width: 54px;
+    min-width: 54px;
+    height: 54px;
+    min-height: 54px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-next");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-codex-v8 .ps-codex-v4-page-arrow.ps-back {
+    scale: -1 1 1;
+}
+
+.ps-codex-v8 .ps-codex-v4-page-mark {
+    position: absolute;
+    right: 68px;
+    bottom: 22px;
+    color: rgba(213, 196, 180, 0.76);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-v4-facts-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 24px 74px 26px 28px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.94);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+}
+
+.ps-codex-v8 .ps-codex-v4-facts-heading {
+    padding: 0 0 10px 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(194, 125, 65, 0.5);
+}
+
+.ps-codex-v8 .ps-codex-v4-facts-grid {
+    padding: 13px 0 0 0;
+}
+
+.ps-codex-v8 .ps-codex-v4-fact {
+    margin: 0 8px 8px 0;
+    padding: 11px 15px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/effect-panel-cyan");
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.78);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-v4-fact.ps-undiscovered,
+.ps-codex-v8 .ps-codex-v4-fact.ps-empty {
+    -unity-background-image-tint-color: rgba(106, 99, 119, 0.58);
+}
+
+/* Codex rows do not inherit the old management reel plates.  Selection is a
+   quiet surface/edge change so the index stays readable beside the record. */
+
+
+/* Archive II is a separate, full-height reading surface.  None of the old
+   illustrated flavor-page dimensions or ornamental panel assets apply here. */
+
+
+/* V8 owns the complete record viewport.  Older archive compatibility sheets
+   constrain this ScrollView to 48/52%, so these selectors deliberately come
+   last and restore a single full-height record surface. */
+.ps-management-v3.ps-codex-v8 .ps-codex-record-column,
+.ps-management-v3.ps-codex-v8 .ps-codex-record-surface {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-record-surface,
+.ps-management-v3.ps-codex-v8 .ps-codex-record-scroll {
+    background-image: none;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-record-column .ps-codex-record-scroll {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-record-scroll .unity-scroll-view__content-and-vertical-scroll-container,
+.ps-management-v3.ps-codex-v8 .ps-codex-record-scroll .unity-scroll-view__content-viewport,
+.ps-management-v3.ps-codex-v8 .ps-codex-record-scroll .unity-scroll-view__content-container {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-record-scroll.ps-codex-page-two {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: none;
+    background-color: rgba(3, 4, 18, 0.84);
+}
+
+.ps-codex-v8 .ps-management-detail-corner {
+    display: none;
+}
+
+/* A domain reload can retain previously constructed rows for one repaint.
+   Hide the old ornamental reel children as a fail-safe; new codex rows no
+   longer create them at all. */
+
+
+/* Equipment archive page I reserves the upper half for the specimen hero. */
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-lower {
+    position: absolute;
+    left: 0;
+    top: 49%;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 10px 64px 12px 7px;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-card-panel {
+    width: 39%;
+    min-width: 39%;
+    height: 100%;
+    min-height: 0;
+    margin: 0 16px 0 0;
+    padding: 8px 13px 10px 13px;
+    flex-shrink: 0;
+    background-image: none;
+    background-color: rgba(4, 3, 20, 0.72);
+    border-left-width: 1px;
+    border-left-color: rgba(241, 71, 142, 0.42);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(64, 212, 228, 0.38);
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-card-stage {
+    min-height: 0;
+    flex-grow: 1;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v6-side {
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+
+
+
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v6-note-panel {
+    min-width: 0;
+    min-height: 74px;
+    margin-top: 10px;
+    padding: 10px 16px 10px 18px;
+    flex-grow: 1;
+    background-color: rgba(7, 4, 24, 0.82);
+    border-left-width: 2px;
+    border-left-color: rgba(203, 132, 67, 0.92);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(65, 211, 228, 0.42);
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v6-note-title {
+    height: 22px;
+    min-height: 22px;
+    color: rgb(255, 219, 161);
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v6-note-panel .ps-codex-item-v5-note {
+    margin: 0;
+    padding: 4px 0 0 0;
+    white-space: normal;
+    border-top-width: 0;
+}
+
+
+/* ===== Consolidated from PackspireVaultV5.uss ===== */
+/*
+ * PACKSPIRE Vault V5
+ * Final vault-only composition based on the approved flat-canvas mock-up.
+ * V3 supplies the illustrated controls; these rules deliberately load after
+ * the generic V4 treatment so the dedicated parts remain visible.
+ */
+
+.ps-vault-final {
+    overflow: hidden;
+    border-radius: 28px;
+    background-color: rgb(2, 5, 18);
+}
+
+.ps-vault-final .ps-mgmt-bg {
+    opacity: 0.025;
+}
+
+.ps-vault-final .ps-mgmt-shade {
+    background-color: rgba(1, 3, 15, 0.94);
+}
+
+.ps-vault-final .ps-layer-content {
+    padding: 10px 17px 13px 17px;
+}
+
+.ps-vault-final .ps-mgmt-header {
+    height: 55px;
+    min-height: 55px;
+    max-height: 55px;
+    margin: 0 0 7px 0;
+    padding: 0 0 5px 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/header-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.78);
+}
+
+.ps-vault-final .ps-management-brand {
+    height: 49px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-management-brand-crest {
+    width: 42px;
+    height: 42px;
+    margin-right: 8px;
+}
+
+.ps-vault-final .ps-mgmt-body,
+.ps-vault-final .ps-vault-v9-main-row {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final Button {
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-mgmt-column-boundary,
+.ps-vault-final .ps-management-detail-corner {
+    display: none;
+}
+
+/* Inventory --------------------------------------------------------- */
+
+.ps-vault-final .ps-vault-inventory-column {
+    width: 45.5%;
+    min-width: 45.5%;
+    max-width: 45.5%;
+    flex-basis: 45.5%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0 14px 0 0;
+    overflow: hidden;
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(151, 91, 68, 0.64);
+    background-color: rgba(1, 3, 14, 0.64);
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 103px;
+    min-height: 103px;
+    max-height: 103px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0 2px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v7-category-bar {
+    width: 100%;
+    height: 56px;
+    min-height: 56px;
+    max-height: 56px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    width: 19.2%;
+    min-width: 19.2%;
+    max-width: 19.2%;
+    height: 49px;
+    min-height: 49px;
+    max-height: 49px;
+    margin: 0;
+    padding: 4px 3px 3px 3px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgb(226, 204, 176);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 20;
+    -unity-slice-bottom: 20;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+}
+
+.ps-vault-final .ps-vault-v7-category:hover {
+    -unity-background-image-tint-color: rgb(255, 234, 242);
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 22px;
+    height: 22px;
+    margin: 0 0 1px 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    color: rgb(222, 201, 175);
+    font-size: 9px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected .ps-vault-v7-category-label {
+    color: rgb(255, 225, 182);
+}
+
+.ps-vault-final .ps-vault-v7-category-glow {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v7-context {
+    height: 16px;
+    min-height: 16px;
+    max-height: 16px;
+    margin: 0 3px;
+    padding: 0;
+    color: rgba(212, 195, 186, 0.53);
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.ps-vault-final .ps-vault-inventory-surface {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(1, 3, 13, 0.3);
+}
+
+.ps-vault-final .ps-vault-grid-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-grid-scroll > .unity-scroll-view__content-viewport {
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 5px 2px 3px 2px;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    height: 121px;
+    min-height: 121px;
+    max-height: 121px;
+    margin: 0 0.5% 5px 0.5%;
+    padding: 9px 7px 7px 7px;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-selected");
+}
+
+.ps-vault-final .ps-vault-grid-card:hover {
+    -unity-background-image-tint-color: rgb(255, 237, 243);
+}
+
+.ps-vault-final .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: 12px;
+    height: 74px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-grid-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 22px;
+    margin: 0;
+    padding: 2px 2px 0 2px;
+    color: rgb(231, 211, 184);
+    font-size: 9px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-grid-badges {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    height: 18px;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.ps-vault-final .ps-vault-grid-badge {
+    min-width: 17px;
+    height: 17px;
+    margin: 0 2px 0 0;
+    font-size: 8px;
+}
+
+.ps-vault-final .ps-vault-grid-lock {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+    display: flex;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 18px;
+    height: 18px;
+    border-width: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/lock-badge");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-grid-lock-icon {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v7-footer {
+    height: 43px;
+    min-height: 43px;
+    max-height: 43px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 4px 5px;
+    overflow: visible;
+    border-width: 0;
+    background-color: rgba(1, 3, 13, 0.96);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-compact");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+}
+
+.ps-vault-final .ps-vault-v7-rarity-filter {
+    width: 184px;
+    min-width: 184px;
+    max-width: 184px;
+    height: 34px;
+    min-height: 34px;
+    margin: 0 5px 0 0;
+    padding: 0 12px;
+    flex-direction: row;
+    align-items: center;
+    overflow: visible;
+    color: rgb(245, 221, 181);
+    background-color: rgb(5, 5, 17);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-control");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 25;
+    -unity-slice-bottom: 25;
+}
+
+.ps-vault-final .ps-vault-v8-sort-label {
+    margin-right: 7px;
+    color: rgba(224, 199, 176, 0.82);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v8-sort {
+    flex-grow: 1;
+    min-width: 0;
+    height: 30px;
+    padding: 0 5px;
+    color: rgb(255, 227, 183);
+    font-size: 10px;
+    -unity-font-style: bold;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v7-count {
+    margin-left: auto;
+    color: rgba(221, 203, 185, 0.76);
+    font-size: 10px;
+}
+
+/* Record ------------------------------------------------------------ */
+
+.ps-vault-final .ps-vault-v9-record-column {
+    width: 54.5%;
+    min-width: 54.5%;
+    max-width: 54.5%;
+    flex-basis: 54.5%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0 0 0 15px;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(1, 4, 16, 0.38);
+}
+
+.ps-vault-final .ps-vault-v9-divider {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 18px;
+    opacity: 0.7;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.72);
+}
+
+.ps-vault-final .ps-vault-v9-hero {
+    display: flex;
+    width: 100%;
+    height: 47%;
+    min-height: 47%;
+    max-height: 47%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    margin: 0;
+    padding: 0 0 6px 0;
+    overflow: hidden;
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(171, 103, 72, 0.65);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-hero-art {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-v9-identity {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v11-equipment-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    position: absolute;
+    left: 58%;
+    right: 2%;
+    top: 15px;
+    height: 17px;
+    color: rgba(87, 214, 224, 0.92);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    position: absolute;
+    left: 58%;
+    right: 2%;
+    top: 35px;
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.78);
+}
+
+.ps-vault-final .ps-vault-v9-item-name {
+    color: rgb(251, 221, 169);
+    font-size: 23px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-description {
+    position: absolute;
+    left: 58%;
+    right: 3%;
+    top: 80px;
+    height: 39px;
+    color: rgba(231, 213, 194, 0.86);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v11-showcase {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v11-art-column {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 55%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 93%;
+    height: 88%;
+    margin: 0 0 7px 0;
+    padding: 10px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.72);
+}
+
+.ps-vault-final .ps-vault-v11-item-art {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 0;
+    height: 21px;
+    margin: 0;
+    padding: 0;
+    color: rgb(104, 216, 226);
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/durability-divider");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final .ps-vault-v9-shape {
+    position: absolute;
+    left: 59%;
+    right: 5%;
+    top: 122px;
+    height: 111px;
+    margin: 0;
+    padding: 5px 8px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.82);
+}
+
+.ps-vault-final .ps-vault-v9-shape-title {
+    height: 19px;
+    color: rgb(245, 216, 168);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-shape-grid {
+    width: 72px;
+    height: 72px;
+    margin: 1px auto 0 auto;
+}
+
+.ps-vault-final .ps-vault-v9-shape-row {
+    width: 100%;
+    height: 33.33%;
+    flex-direction: row;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell {
+    width: 33.33%;
+    height: 100%;
+    margin: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-empty");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell.ps-filled {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-cell-filled");
+}
+
+.ps-vault-final .ps-vault-v9-detail {
+    width: 100%;
+    height: 53%;
+    min-height: 53%;
+    max-height: 53%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport,
+.ps-vault-final .ps-vault-v9-detail > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    margin: 0;
+    padding: 8px 0 0 0;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 39%;
+    min-width: 39%;
+    max-width: 39%;
+    height: 100%;
+    margin: 0 10px 0 0;
+    padding: 2px 7px 5px 7px;
+    align-items: center;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(4, 5, 18, 0.7);
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-v9-lower-header {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 2px;
+}
+
+.ps-vault-final .ps-vault-v9-lower-title {
+    color: rgb(244, 216, 173);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-flip {
+    min-width: 101px;
+    height: 27px;
+    min-height: 27px;
+    padding: 0 14px;
+    color: rgb(246, 217, 170);
+    font-size: 9px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 34;
+    -unity-slice-right: 34;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+}
+
+.ps-vault-final .ps-vault-v9-card-open {
+    width: 132px;
+    height: 197px;
+    min-width: 132px;
+    min-height: 197px;
+    max-width: 132px;
+    max-height: 197px;
+    margin: 0;
+    padding: 0;
+    rotate: 0deg;
+    translate: 0 0;
+    scale: 1 1 1;
+    transition-duration: 0s;
+}
+
+.ps-vault-final .ps-vault-v9-card-open:hover,
+.ps-vault-final .ps-vault-v9-card-open:active {
+    rotate: 0deg;
+    translate: 0 0;
+    scale: 1 1 1;
+}
+
+.ps-vault-final .ps-vault-v9-effect-panel {
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 1px 0 0 0;
+    justify-content: space-between;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-vault-v9-effect {
+    width: 100%;
+    height: 41%;
+    min-height: 77px;
+    margin: 0 0 5px 0;
+    padding: 11px 23px 9px 21px;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 34;
+    -unity-slice-right: 34;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+}
+
+.ps-vault-final .ps-vault-v9-color-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/effect-panel-red");
+}
+
+.ps-vault-final .ps-vault-v9-link-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/effect-panel-cyan");
+}
+
+.ps-vault-final .ps-vault-v9-effect-eyebrow {
+    color: rgba(214, 139, 151, 0.83);
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.ps-vault-final .ps-vault-v9-link-effect .ps-vault-v9-effect-eyebrow {
+    color: rgb(80, 213, 225);
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    margin: 2px 0 1px 0;
+    color: rgb(249, 219, 166);
+    font-size: 15px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    color: rgba(233, 216, 198, 0.91);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v9-actions {
+    position: absolute;
+    right: 4px;
+    bottom: 1px;
+    width: 55px;
+    height: 55px;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-lock");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action.ps-locked {
+    -unity-background-image-tint-color: rgb(255, 218, 159);
+}
+
+.ps-vault-final .ps-vault-v11-page-arrow {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 53px;
+    height: 53px;
+    min-width: 53px;
+    min-height: 53px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* The card remains clickable for the central enlarged view; only movement is
+ * suppressed so browsing the record does not make the card jitter. */
+.ps-vault-final .ps-vault-card-modal-face:hover {
+    rotate: 0deg;
+    translate: 0 0;
+    scale: 1 1 1;
+}
+
+
+/* ===== Consolidated from PackspireVaultV6.uss ===== */
+/*
+ * PACKSPIRE Vault V6
+ * Exact presentation pass for the approved vault reference.
+ * This sheet intentionally overrides V5 without changing the underlying
+ * data flow or interaction model.
+ */
+
+.ps-vault-final {
+    overflow: hidden;
+    border-radius: 28px;
+    background-color: rgb(2, 5, 18);
+}
+
+/* The approved layout has a compact title block, not a full-width flourish. */
+.ps-vault-final .ps-mgmt-header {
+    height: 54px;
+    min-height: 54px;
+    max-height: 54px;
+    margin: 0 0 6px 0;
+    padding: 0 0 4px 0;
+    border-width: 0;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-management-brand {
+    width: 290px;
+    height: 50px;
+    padding-left: 2px;
+}
+
+.ps-vault-final .ps-management-brand-crest {
+    width: 44px;
+    height: 44px;
+    margin-right: 8px;
+}
+
+/* Inventory tabs: one compact illustrated family, with no loose ornaments. */
+.ps-vault-final .ps-vault-v7-category-bar {
+    height: 49px;
+    min-height: 49px;
+    max-height: 49px;
+    padding: 0 2px;
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    width: 19.2%;
+    min-width: 19.2%;
+    max-width: 19.2%;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    padding: 3px 5px 2px 5px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 20;
+    -unity-slice-bottom: 20;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 21px;
+    height: 21px;
+    margin: 0 5px 0 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 96px;
+    min-height: 96px;
+    max-height: 96px;
+}
+
+/* Every item owns a complete illustrated cell. Selection swaps the cell art;
+ * it never adds a floating marker behind the equipment. */
+.ps-vault-final .ps-vault-grid {
+    padding: 4px 3px 2px 3px;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    height: 123px;
+    min-height: 123px;
+    max-height: 123px;
+    margin: 0 0.5% 5px 0.5%;
+    padding: 8px 7px 7px 7px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/item-cell-selected");
+}
+
+.ps-vault-final .ps-vault-grid-card.ps-selected .ps-management-selection-corners,
+.ps-vault-final .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    left: 14px;
+    right: 14px;
+    top: 12px;
+    height: 75px;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 23px;
+    padding-top: 2px;
+    font-size: 9px;
+}
+
+/* Item identity and art -------------------------------------------------- */
+
+.ps-vault-final .ps-vault-v9-hero {
+    height: 48%;
+    min-height: 48%;
+    max-height: 48%;
+    border-bottom-width: 0;
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    left: 61%;
+    right: 2%;
+    top: 12px;
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    left: 61%;
+    right: 2%;
+    top: 33px;
+    height: 40px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final .ps-vault-v9-description {
+    left: 61%;
+    right: 3%;
+    top: 78px;
+    height: 38px;
+}
+
+.ps-vault-final .ps-vault-v11-art-column {
+    left: 1%;
+    top: 0;
+    width: 57%;
+    height: 100%;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 94%;
+    height: 92%;
+    margin: 0 0 4px 0;
+    padding: 38px;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-v11-item-art {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    left: 8%;
+    right: 8%;
+    bottom: 0;
+}
+
+/* The 3x3 matrix occupies a stable square to the right of the main art. */
+.ps-vault-final .ps-vault-v9-shape {
+    left: 65%;
+    right: 4%;
+    top: 122px;
+    height: 118px;
+    padding: 8px 10px 8px 10px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-shape-title {
+    height: 20px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final .ps-vault-v9-shape-grid {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto;
+}
+
+/* Lower record: card at left, color/LINK as the two primary records. */
+.ps-vault-final .ps-vault-v9-detail {
+    height: 52%;
+    min-height: 52%;
+    max-height: 52%;
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    padding-top: 5px;
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 38%;
+    min-width: 38%;
+    max-width: 38%;
+    margin-right: 10px;
+    padding: 1px 7px 4px 7px;
+    background-color: rgba(2, 4, 16, 0.55);
+}
+
+.ps-vault-final .ps-vault-v9-effect-panel {
+    position: relative;
+    padding: 0 0 58px 0;
+    justify-content: flex-start;
+}
+
+/* These are authored as complete pieces. No CSS border, detached icon, or
+ * rectangular substitute is layered over them. */
+.ps-vault-final .ps-vault-v9-effect {
+    width: 100%;
+    height: 98px;
+    min-height: 98px;
+    max-height: 98px;
+    margin: 0 0 7px 0;
+    padding: 13px 128px 11px 24px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 72;
+    -unity-slice-right: 360;
+    -unity-slice-top: 82;
+    -unity-slice-bottom: 76;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final .ps-vault-v9-color-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-color-v5");
+}
+
+.ps-vault-final .ps-vault-v9-link-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+}
+
+.ps-vault-final .ps-vault-v9-effect-eyebrow {
+    height: 14px;
+    color: rgb(222, 127, 119);
+    font-size: 8px;
+    -unity-font-style: bold;
+}
+
+.ps-vault-final .ps-vault-v9-link-effect .ps-vault-v9-effect-eyebrow {
+    color: rgb(94, 219, 235);
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    height: 24px;
+    margin: 0;
+    font-size: 16px;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    margin-top: 1px;
+    font-size: 9px;
+    white-space: normal;
+}
+
+/* Round lock and next controls are a paired footer action group. */
+.ps-vault-final .ps-vault-v9-actions {
+    right: 4px;
+    bottom: 0;
+    width: 114px;
+    height: 54px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action,
+.ps-vault-final .ps-vault-v16-next-item {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    margin: 0 3px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-vault-v16-next-item {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+
+/* ===== Consolidated from PackspireVaultV7.uss ===== */
+/*
+ * PACKSPIRE Vault V7
+ * Whole-image composition pass.
+ *
+ * Nothing in this sheet uses 9-slicing. Authored UI parts retain their
+ * original proportions and text is placed only inside their safe areas.
+ */
+
+.ps-vault-final {
+    overflow: hidden;
+    border-radius: 28px;
+    background-color: rgb(2, 5, 18);
+}
+
+.ps-vault-final .ps-layer-content {
+    padding: 9px 17px 13px 17px;
+}
+
+.ps-vault-final .ps-mgmt-header {
+    height: 55px;
+    min-height: 55px;
+    max-height: 55px;
+    margin: 0 0 7px 0;
+    padding: 0;
+    border-width: 0;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-vault-final .ps-management-brand {
+    width: 290px;
+    height: 51px;
+    padding: 0;
+}
+
+.ps-vault-final .ps-management-brand-crest {
+    width: 43px;
+    height: 43px;
+    margin-right: 8px;
+}
+
+.ps-vault-final .ps-mgmt-body,
+.ps-vault-final .ps-vault-v9-main-row {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+}
+
+/* Inventory ----------------------------------------------------------- */
+
+.ps-vault-final .ps-vault-inventory-column {
+    width: 42%;
+    min-width: 42%;
+    max-width: 42%;
+    flex-basis: 42%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
+    padding: 0 13px 0 0;
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgba(159, 91, 64, 0.7);
+    background-color: rgba(1, 3, 14, 0.7);
+}
+
+.ps-vault-final .ps-vault-inventory-header {
+    height: 96px;
+    min-height: 96px;
+    max-height: 96px;
+}
+
+.ps-vault-final .ps-vault-v7-category-bar {
+    height: 49px;
+    min-height: 49px;
+    max-height: 49px;
+    padding: 0;
+    align-items: center;
+}
+
+.ps-vault-final .ps-vault-v7-category {
+    width: 19.2%;
+    min-width: 19.2%;
+    max-width: 19.2%;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    margin: 0 0.4%;
+    padding: 2px 5px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-normal");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-vault-final .ps-vault-v7-category.ps-selected {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/category-tab-selected");
+}
+
+.ps-vault-final .ps-vault-v7-category-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0 4px 0 0;
+}
+
+.ps-vault-final .ps-vault-v7-category-label {
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.ps-vault-final .ps-vault-grid {
+    padding: 5px 3px 2px 3px;
+}
+
+.ps-vault-final .ps-vault-grid-card {
+    width: 24%;
+    min-width: 24%;
+    max-width: 24%;
+    height: 122px;
+    min-height: 122px;
+    max-height: 122px;
+    margin: 0 0.5% 5px 0.5%;
+    padding: 8px 7px 7px 7px;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+/* Neutralise the older generic selection/interaction chrome.  V17 uses the
+   complete normal/selected frame images below, not a rectangular cell fill. */
+.ps-vault-final .ps-vault-grid-card.ps-selected {
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-grid-card:hover {
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-grid-card:active {
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-grid-card:focus {
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final .ps-management-selection-corners {
+    display: none;
+}
+
+.ps-vault-final .ps-vault-grid-art {
+    left: 14px;
+    right: 14px;
+    top: 12px;
+    height: 75px;
+}
+
+.ps-vault-final .ps-vault-grid-name {
+    height: 23px;
+    padding-top: 2px;
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v7-footer {
+    height: 43px;
+    min-height: 43px;
+    max-height: 43px;
+    padding: 4px 5px;
+    background-image: none;
+    background-color: rgb(3, 5, 17);
+}
+
+.ps-vault-final .ps-vault-v7-rarity-filter {
+    width: 205px;
+    min-width: 205px;
+    max-width: 205px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 12px;
+    background-color: rgb(3, 5, 15);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/sort-control");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+/* Record -------------------------------------------------------------- */
+
+.ps-vault-final .ps-vault-v9-record-column {
+    width: 58%;
+    min-width: 58%;
+    max-width: 58%;
+    flex-basis: 58%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
+    padding: 0 0 0 16px;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-vault-v9-divider {
+    left: 0;
+    width: 17px;
+    opacity: 0.68;
+}
+
+.ps-vault-final .ps-vault-v9-hero {
+    height: 46%;
+    min-height: 46%;
+    max-height: 46%;
+    padding: 0 0 5px 0;
+    overflow: hidden;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(174, 103, 72, 0.64);
+}
+
+.ps-vault-final .ps-vault-v11-meta {
+    left: 59%;
+    right: 2%;
+    top: 10px;
+    height: 17px;
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v9-name-row {
+    left: 59%;
+    right: 2%;
+    top: 29px;
+    height: 43px;
+    padding: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/identity-flourish");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-vault-final .ps-vault-v9-item-name {
+    color: rgb(251, 221, 169);
+    font-size: 23px;
+}
+
+.ps-vault-final .ps-vault-v9-description {
+    left: 59%;
+    right: 3%;
+    top: 74px;
+    height: 39px;
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v11-art-column {
+    left: 0;
+    top: 0;
+    width: 56%;
+    height: 100%;
+}
+
+.ps-vault-final .ps-vault-v11-art-frame {
+    width: 96%;
+    height: 93%;
+    margin: 0 0 3px 0;
+    padding: 41px;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-item-art {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v11-durability {
+    left: 9%;
+    right: 9%;
+    bottom: 0;
+    height: 19px;
+    background-image: none;
+}
+
+.ps-vault-final .ps-vault-v9-shape {
+    left: 63%;
+    right: 5%;
+    top: 116px;
+    height: 116px;
+    padding: 7px 9px;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final .ps-vault-v9-shape-title {
+    height: 19px;
+    font-size: 10px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final .ps-vault-v9-shape-grid {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto;
+}
+
+.ps-vault-final .ps-vault-v9-shape-cell {
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Card and effect records -------------------------------------------- */
+
+.ps-vault-final .ps-vault-v9-detail {
+    height: 54%;
+    min-height: 54%;
+    max-height: 54%;
+}
+
+.ps-vault-final .ps-vault-v9-lower {
+    padding: 7px 0 0 0;
+}
+
+.ps-vault-final .ps-vault-v9-card-panel {
+    width: 37%;
+    min-width: 37%;
+    max-width: 37%;
+    margin: 0 10px 0 0;
+    padding: 1px 7px 4px 7px;
+    background-color: rgba(2, 4, 16, 0.62);
+}
+
+.ps-vault-final .ps-vault-v9-lower-header {
+    height: 30px;
+    min-height: 30px;
+    max-height: 30px;
+}
+
+.ps-vault-final .ps-vault-v9-flip {
+    width: 96px;
+    min-width: 96px;
+    height: 26px;
+    min-height: 26px;
+    padding: 0 11px;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-vault-final .ps-vault-v9-card-open {
+    width: 128px;
+    height: 191px;
+    min-width: 128px;
+    min-height: 191px;
+    max-width: 128px;
+    max-height: 191px;
+}
+
+.ps-vault-final .ps-vault-v9-effect-panel {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    padding: 0 0 51px 0;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.ps-vault-final .ps-vault-v9-effect {
+    width: 100%;
+    height: 126px;
+    min-height: 126px;
+    max-height: 126px;
+    margin: 0 0 5px 0;
+    padding: 20px 130px 16px 24px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-vault-final .ps-vault-v9-color-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-color-v5");
+}
+
+.ps-vault-final .ps-vault-v9-link-effect {
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+}
+
+.ps-vault-final .ps-vault-v9-effect-eyebrow {
+    height: 14px;
+    margin: 0;
+    color: rgb(226, 122, 117);
+    font-size: 9px;
+}
+
+.ps-vault-final .ps-vault-v9-link-effect .ps-vault-v9-effect-eyebrow {
+    color: rgb(83, 216, 233);
+}
+
+.ps-vault-final .ps-vault-v9-effect-name {
+    height: 25px;
+    margin: 0;
+    color: rgb(250, 220, 172);
+    font-size: 17px;
+}
+
+.ps-vault-final .ps-vault-v9-effect-body {
+    margin: 0;
+    color: rgb(229, 213, 194);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-vault-final .ps-vault-v9-actions {
+    right: 2px;
+    bottom: 0;
+    width: 110px;
+    height: 51px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action,
+.ps-vault-final .ps-vault-v16-next-item {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin: 0 3px;
+    padding: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+}
+
+.ps-vault-final .ps-vault-v9-lock-action {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-lock");
+}
+
+.ps-vault-final .ps-vault-v16-next-item {
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/round-next");
+}
+
+/*
+ * Inventory tile final guard
+ * --------------------------
+ * ManagementV3 still contains the pre-V17 square-thumbnail layout with a
+ * stronger two-class selector.  Keep this at EOF and match that specificity
+ * so a vault item is always one complete authored cell: frame, contained art,
+ * title and rarity marker.
+ */
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid {
+    width: 100%;
+    min-height: 100%;
+    padding: 7px 7px 10px 7px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card:hover,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card:active,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card:focus,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected {
+    position: relative;
+    width: 23%;
+    min-width: 23%;
+    max-width: 23%;
+    height: 146px;
+    min-height: 146px;
+    max-height: 146px;
+    flex-basis: 23%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 0 1% 9px 1%;
+    padding: 0;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: visible;
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected:hover,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected:active,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-selected:focus {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/item-cell-selected");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card:hover {
+    -unity-background-image-tint-color: rgb(255, 233, 240);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-art {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    top: 13px;
+    width: auto;
+    height: 98px;
+    min-width: 0;
+    min-height: 98px;
+    max-width: none;
+    max-height: 98px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-image {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-name {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 17px;
+    width: auto;
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    margin: 0;
+    padding: 0;
+    color: rgb(238, 219, 187);
+    font-size: 11px;
+    white-space: nowrap;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-rarity {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+    width: 12px;
+    height: 10px;
+    margin-left: -6px;
+    padding: 0;
+    color: rgb(101, 216, 243);
+    font-size: 6px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-rarity-heirloom {
+    color: rgb(251, 210, 93);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-badges {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-lock {
+    position: absolute;
+    display: none;
+    right: 2px;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-grid-card.ps-vault-protected .ps-vault-grid-lock {
+    display: flex;
+}
+
+/*
+ * Equipment hero final guard
+ * --------------------------
+ * The hero is a real two-column composition.  Keeping the identity copy and
+ * occupancy grid in their own column prevents the old absolute offsets from
+ * colliding at narrow panel widths.
+ */
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v11-equipment-hero {
+    padding: 5px 10px 4px 8px;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v11-showcase {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v11-art-column {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 58%;
+    min-width: 58%;
+    max-width: 58%;
+    height: 100%;
+    margin: 0 12px 0 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v11-art-frame {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    flex-grow: 1;
+    margin: 0;
+    padding: 25px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v11-item-art {
+    border-radius: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column {
+    position: relative;
+    width: auto;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    flex-grow: 1;
+    padding: 8px 2px 3px 0;
+    overflow: hidden;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v11-meta,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v9-name-row,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v9-description,
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v9-shape {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v11-meta {
+    width: 100%;
+    height: 17px;
+    min-height: 17px;
+    margin: 0;
+    font-size: 9px;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v9-name-row {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v17-info-column .ps-vault-v9-description {
+    width: 100%;
+    height: 34px;
+    min-height: 34px;
+    margin: 0 0 3px 0;
+    font-size: 9px;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-shape {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    flex-grow: 1;
+    margin: 0;
+    padding: 1px 0 0 0;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 1px;
+    border-bottom-width: 0;
+    border-top-color: rgba(204, 124, 72, 0.52);
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-title {
+    width: 100%;
+    height: 19px;
+    min-height: 19px;
+    margin: 0;
+    font-size: 10px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-grid {
+    width: 82px;
+    min-width: 82px;
+    max-width: 82px;
+    height: 82px;
+    min-height: 82px;
+    max-height: 82px;
+    margin: 0 auto;
+    padding: 2px;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-row {
+    width: 76px;
+    height: 25px;
+    min-height: 25px;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-shape-cell {
+    width: 23px;
+    min-width: 23px;
+    height: 23px;
+    min-height: 23px;
+    margin: 1px;
+}
+
+/* The face selector has its own mirrored background layer, so only the pink
+ * selected half changes sides; labels stay readable. */
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-flip {
+    position: relative;
+    width: 112px;
+    min-width: 112px;
+    height: 26px;
+    min-height: 26px;
+    padding: 0;
+    flex-direction: row;
+    overflow: hidden;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-flip-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-flip-label {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    color: rgb(177, 158, 160);
+    font-size: 9px;
+    -unity-text-align: middle-center;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-flip-label.ps-selected {
+    color: rgb(255, 228, 195);
+    -unity-font-style: bold;
+}
+
+/* Lock and page navigation are separate controls.  They share the footer but
+ * never occupy the same absolute slot. */
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-actions {
+    position: absolute;
+    left: auto;
+    right: 58px;
+    top: auto;
+    bottom: 1px;
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    min-height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v9-actions .ps-vault-v9-lock-action {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+}
+
+.ps-vault-final.ps-vault-final.ps-management-v3 .ps-vault-v16-next-item {
+    position: absolute;
+    left: auto;
+    right: 2px;
+    top: auto;
+    bottom: 1px;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Final Vault / Codex corrections -------------------------------------- */
+
+.ps-management-v3.ps-vault-final,
+.ps-management-v3.ps-codex-v8 {
+    border-radius: 0;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-shapes-heading {
+    width: 100%;
+    height: 23px;
+    min-height: 23px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-shapes-row {
+    width: 100%;
+    height: 70px;
+    min-height: 70px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-shape {
+    width: 67px;
+    min-width: 67px;
+    max-width: 67px;
+    height: 67px;
+    min-height: 67px;
+    max-height: 67px;
+    margin: 0 6px 0 0;
+    padding: 3px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-shape-row {
+    width: 60px;
+    height: 20px;
+    min-height: 20px;
+    flex-direction: row;
+    flex-shrink: 0;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-shape-cell {
+    width: 18px;
+    min-width: 18px;
+    max-width: 18px;
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    margin: 1px;
+    flex-shrink: 0;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-card-stage {
+    min-height: 0;
+    padding: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-card {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 176px;
+    min-height: 176px;
+    max-height: 176px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 176px;
+    min-height: 176px;
+    max-height: 176px;
+    margin: 0;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-v8-link-effect {
+    width: 100%;
+    height: 126px;
+    min-height: 126px;
+    max-height: 126px;
+    margin: 0;
+    padding: 20px 130px 16px 24px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-v8-link-effect .ps-vault-v9-effect-eyebrow {
+    height: 14px;
+    margin: 0;
+    color: rgb(83, 216, 233);
+    font-size: 9px;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-v8-link-effect .ps-vault-v9-effect-name {
+    height: 25px;
+    margin: 0;
+    color: rgb(250, 220, 172);
+    font-size: 17px;
+}
+
+.ps-management-v3.ps-codex-v8 .ps-codex-v8-link-effect .ps-vault-v9-effect-body {
+    margin: 0;
+    color: rgb(229, 213, 194);
+    font-size: 9px;
+    white-space: normal;
+}
+
+/* Compendium: approved archive layout -------------------------------- */
+
+.ps-codex-v8 {
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-index-column {
+    width: 36%;
+    min-width: 36%;
+    max-width: 36%;
+    padding-right: 13px;
+}
+
+.ps-codex-v8 .ps-codex-record-column {
+    position: relative;
+    width: 64%;
+    min-width: 64%;
+    max-width: 64%;
+    padding-left: 15px;
+}
+
+.ps-codex-v8 .ps-codex-index-header {
+    height: 58px;
+    min-height: 58px;
+    margin-bottom: 6px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ps-codex-v8 .ps-codex-category-tab {
+    position: relative;
+    width: 32.5%;
+    min-width: 32.5%;
+    height: 52px;
+    min-height: 52px;
+    margin: 0;
+    padding: 0 8px 0 31px;
+    color: rgb(218, 197, 174);
+    font-size: 12px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgb(232, 220, 207);
+}
+
+.ps-codex-v8 .ps-codex-category-tab.ps-selected {
+    color: rgb(255, 226, 184);
+    -unity-font-style: normal;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-category-tab:hover {
+    -unity-background-image-tint-color: rgb(255, 245, 244);
+}
+
+.ps-codex-v8 .ps-codex-category-icon {
+    position: absolute;
+    left: 10px;
+    top: 13px;
+    width: 25px;
+    height: 25px;
+}
+
+.ps-codex-v8 .ps-codex-category-icon .ps-management-art,
+.ps-codex-v8 .ps-codex-category-icon .ps-system-icon {
+    width: 27px;
+    height: 27px;
+    -unity-background-image-tint-color: rgb(244, 198, 174);
+}
+
+.ps-codex-v8 .ps-codex-category-tab.ps-selected .ps-management-art,
+.ps-codex-v8 .ps-codex-category-tab.ps-selected .ps-system-icon {
+    -unity-background-image-tint-color: rgb(255, 99, 153);
+}
+
+.ps-codex-v8 .ps-codex-index-surface {
+    min-height: 0;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-index-scroll {
+    min-height: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    position: relative;
+    width: 100%;
+    height: 68px;
+    min-height: 68px;
+    max-height: 68px;
+    margin: 0 0 6px 0;
+    padding: 7px 20px 7px 11px;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-normal");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(198, 184, 169, 0.72);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry:hover {
+    -unity-background-image-tint-color: rgba(242, 224, 208, 0.88);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry.ps-codex-v9-current {
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/category-tab-selected");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-accent {
+    position: absolute;
+    left: 7px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-v9-current .ps-codex-v9-index-accent {
+    background-color: rgb(74, 232, 241);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-leading {
+    width: 49px;
+    min-width: 49px;
+    max-width: 49px;
+    height: 49px;
+    min-height: 49px;
+    max-height: 49px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-copy {
+    min-width: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: center;
+}
+
+.ps-codex-v8 .ps-codex-v9-index-name {
+    color: rgb(226, 207, 184);
+    font-size: 16px;
+}
+
+.ps-codex-v8 .ps-codex-v9-current .ps-codex-v9-index-name {
+    color: rgb(255, 226, 184);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-subtitle {
+    color: rgba(169, 161, 168, 0.72);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-index-footer {
+    height: 36px;
+    min-height: 36px;
+    margin-top: 4px;
+    padding: 0 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(225, 205, 183, 0.75);
+}
+
+.ps-codex-v8 .ps-codex-sort-label {
+    color: rgb(229, 207, 180);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-discovery-count {
+    color: rgb(83, 216, 233);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-item-record,
+.ps-codex-v8 .ps-codex-record-surface {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ps-codex-v8.ps-codex-show-item .ps-codex-item-record {
+    display: flex;
+}
+
+.ps-codex-v8.ps-codex-show-item .ps-codex-record-surface {
+    display: none;
+}
+
+.ps-codex-v8.ps-codex-show-generic .ps-codex-item-record {
+    display: none;
+}
+
+.ps-codex-v8.ps-codex-show-generic .ps-codex-record-surface {
+    display: flex;
+}
+
+.ps-codex-v8 .ps-codex-item-record {
+    flex-direction: column;
+    background-color: rgba(1, 3, 14, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 47%;
+    min-height: 47%;
+    max-height: 47%;
+    padding: 0 0 8px 0;
+    flex-direction: row;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(173, 91, 63, 0.58);
+}
+
+.ps-codex-v8 .ps-codex-item-art {
+    width: 45%;
+    min-width: 45%;
+    height: 100%;
+    padding: 8px 12px;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/magic-circle");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.23);
+}
+
+.ps-codex-v8 .ps-codex-item-art-image {
+    width: 95%;
+    height: 95%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-codex-v8 .ps-codex-item-summary {
+    width: 55%;
+    min-width: 0;
+    height: 100%;
+    padding: 10px 4px 0 16px;
+}
+
+.ps-codex-v8 .ps-codex-item-meta {
+    height: 17px;
+    min-height: 17px;
+    color: rgb(79, 213, 225);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-item-name {
+    height: 37px;
+    min-height: 37px;
+    color: rgb(255, 222, 170);
+    font-size: 27px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-item-description {
+    height: 35px;
+    min-height: 35px;
+    margin-bottom: 4px;
+    color: rgba(230, 215, 196, 0.82);
+    font-size: 10px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-shape-gallery {
+    min-height: 0;
+    padding: 7px 6px 7px 11px;
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-top-color: rgba(166, 94, 61, 0.5);
+}
+
+.ps-codex-v8 .ps-codex-shape-heading {
+    height: 22px;
+    min-height: 22px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-codex-v8 .ps-codex-shape-title {
+    color: rgb(244, 216, 177);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-shape-count {
+    color: rgb(79, 213, 225);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-shape-list {
+    height: 68px;
+    min-height: 68px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape {
+    width: 61px;
+    min-width: 61px;
+    max-width: 61px;
+    height: 61px;
+    min-height: 61px;
+    max-height: 61px;
+    margin: 0 0 0 5px;
+    padding: 2px;
+    flex-shrink: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/occupancy-grid");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.84);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-row {
+    width: 57px;
+    height: 19px;
+    min-height: 19px;
+    flex-direction: row;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell {
+    width: 17px;
+    min-width: 17px;
+    max-width: 17px;
+    height: 17px;
+    min-height: 17px;
+    max-height: 17px;
+    margin: 1px;
+    border-width: 1px;
+    border-color: rgba(104, 99, 112, 0.62);
+    background-color: rgba(8, 9, 20, 0.94);
+}
+
+.ps-codex-v8 .ps-codex-item-v5-shape-cell.ps-filled {
+    border-color: rgb(235, 215, 188);
+    background-color: rgb(221, 201, 171);
+}
+
+.ps-codex-v8 .ps-codex-item-lower {
+    height: 44%;
+    min-height: 44%;
+    max-height: 44%;
+    padding: 8px 2px 5px 0;
+    flex-direction: row;
+}
+
+.ps-codex-v8 .ps-codex-card-panel {
+    width: 35%;
+    min-width: 35%;
+    max-width: 35%;
+    height: 100%;
+    margin-right: 12px;
+    padding: 2px 8px 4px 8px;
+    flex-shrink: 0;
+    border-left-width: 1px;
+    border-left-color: rgba(240, 74, 140, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-card-heading {
+    position: absolute;
+    left: 8px;
+    top: 3px;
+    height: 24px;
+    color: rgb(244, 214, 176);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-card-toggle {
+    position: absolute;
+    right: 8px;
+    top: 1px;
+    width: 101px;
+    height: 25px;
+    flex-direction: row;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/battle-explore-toggle");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button {
+    position: relative;
+    width: 50%;
+    min-width: 50%;
+    height: 25px;
+    min-height: 25px;
+    padding: 0;
+    color: rgba(177, 158, 160, 0.9);
+    font-size: 9px;
+    -unity-font-style: normal;
+    background-image: none;
+    background-color: rgba(5, 6, 16, 0.82);
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button.ps-selected {
+    color: rgb(255, 227, 191);
+    -unity-font-style: bold;
+    background-image: none;
+    background-color: rgba(171, 24, 71, 0.88);
+}
+
+.ps-codex-v8 .ps-codex-card-stage {
+    min-height: 0;
+    padding-top: 28px;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 176px;
+    min-height: 176px;
+    max-height: 176px;
+    margin: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-vault-v9-card-face-label {
+    display: none;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    height: 175px;
+    min-height: 175px;
+    max-height: 175px;
+    margin: 0;
+}
+
+.ps-codex-v8 .ps-codex-item-v5-card:hover,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview:hover {
+    translate: 0 0;
+    scale: 1 1 1;
+    rotate: 0deg;
+}
+
+.ps-codex-v8 .ps-codex-item-side {
+    min-width: 0;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-link-host {
+    width: 100%;
+    height: 51%;
+    min-height: 51%;
+    max-height: 51%;
+}
+
+.ps-codex-v8 .ps-codex-link-effect {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 18px 116px 12px 23px;
+    flex-grow: 0;
+    overflow: hidden;
+    background-image: resource("Art/UI/PopDark/VaultCodexV5/effect-panel-link-v5");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-eyebrow {
+    height: 13px;
+    margin: 0;
+    color: rgb(83, 216, 233);
+    font-size: 8px;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-name {
+    height: 23px;
+    margin: 0;
+    color: rgb(250, 220, 172);
+    font-size: 16px;
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-body {
+    margin: 0;
+    color: rgb(229, 213, 194);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    width: 100%;
+    min-height: 0;
+    margin-top: 6px;
+    padding: 9px 16px 8px 16px;
+    flex-grow: 1;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(212, 174, 115, 0.72);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-heading {
+    height: 20px;
+    min-height: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(184, 124, 58, 0.58);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-title {
+    color: rgb(247, 215, 169);
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-eyebrow {
+    color: rgba(215, 166, 91, 0.8);
+    font-size: 8px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-row {
+    height: 25px;
+    min-height: 25px;
+    padding: 2px 3px;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(136, 91, 51, 0.34);
+}
+
+.ps-codex-v8 .ps-codex-acquisition-icon {
+    width: 21px;
+    min-width: 21px;
+    color: rgb(211, 161, 84);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-key {
+    width: 92px;
+    min-width: 92px;
+    color: rgb(226, 198, 161);
+    font-size: 9px;
+}
+
+.ps-codex-v8 .ps-codex-acquisition-value {
+    min-width: 0;
+    color: rgb(242, 218, 184);
+    font-size: 10px;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-archive-footer {
+    position: relative;
+    height: 9%;
+    min-height: 9%;
+    max-height: 9%;
+    padding: 5px 105px 4px 37px;
+    justify-content: center;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(199, 155, 102, 0.62);
+}
+
+.ps-codex-v8 .ps-codex-archive-note-title {
+    height: 18px;
+    color: rgb(242, 210, 167);
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-archive-note-body {
+    color: rgba(207, 192, 178, 0.72);
+    font-size: 8px;
+    white-space: normal;
+}
+
+.ps-codex-v8 .ps-codex-archive-page-count {
+    position: absolute;
+    right: 67px;
+    bottom: 17px;
+    color: rgb(224, 205, 180);
+    font-size: 10px;
+}
+
+.ps-codex-v8 .ps-codex-item-next-page {
+    position: absolute;
+    right: 8px;
+    bottom: 2px;
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    min-height: 50px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0);
+    font-size: 0;
+    background-image: resource("Art/UI/PopDark/VaultCodexV4/round-next");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ps-codex-v8 .ps-codex-record-surface.ps-codex-lore-mode .ps-codex-record-hero,
+.ps-codex-v8 .ps-codex-record-surface.ps-codex-lore-mode .ps-codex-record-scroll {
+    display: none;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: 22px 64px 22px 28px;
+    flex-direction: column;
+    background-image: resource("Art/UI/PopDark/VaultCodexV3/flavor-panel");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(179, 151, 123, 0.42);
+    background-color: rgb(5, 6, 17);
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-heading {
+    height: 104px;
+    min-height: 104px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-eyebrow {
+    color: rgb(56, 209, 230);
+    font-size: 12px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-title {
+    color: rgb(255, 214, 148);
+    font-size: 30px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-subtitle {
+    color: rgb(255, 71, 148);
+    font-size: 13px;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-body {
+    position: relative;
+    width: 100%;
+    height: 0;
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-copy {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section {
+    position: relative;
+    width: 100%;
+    height: 0;
+    min-height: 112px;
+    margin-bottom: 14px;
+    padding: 14px 22px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-color: rgba(23, 6, 19, 0.88);
+    border-left-width: 3px;
+    border-left-color: rgb(255, 56, 143);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(163, 102, 51, 0.75);
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section.ps-last {
+    margin-bottom: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section-title {
+    color: rgb(255, 214, 148);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section-body {
+    margin-top: 8px;
+    color: rgb(224, 214, 209);
+    font-size: 14px;
+    white-space: normal;
+    flex-grow: 1;
+}
+
+/* ===== Obsidian misprint compendium ===== */
+.ps-codex-v8 .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+.ps-codex-v8 .ps-mgmt-bg { display: none; }
+.ps-codex-v8 .ps-mgmt-shade { background-color: rgba(2, 3, 3, 0.12); }
+.ps-codex-v8 .ps-mgmt-header {
+    height: 64px;
+    min-height: 64px;
+    padding-right: 64px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-codex-v8 .ps-codex-category-tab {
+    height: 48px;
+    min-height: 48px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgb(226, 202, 163);
+}
+.ps-codex-v8 .ps-codex-category-tab.ps-selected { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selection-v1"); color: rgb(25, 21, 17); }
+#compendium-tab-items-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-packing-v1"); }
+#compendium-tab-roles-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-status-v1"); }
+#compendium-tab-enemies-icon { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-battle-v1"); }
+
+.ps-codex-v8 .ps-codex-index-surface,
+.ps-codex-v8 .ps-codex-record-surface { background-color: rgba(1, 3, 3, 0.64); }
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    min-height: 62px;
+    margin-bottom: 6px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+.ps-codex-v8 .ps-codex-v9-index-entry.ps-codex-v9-current { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
+.ps-codex-v8 .ps-codex-v9-index-accent { display: none; }
+.ps-codex-v8 .ps-codex-v9-index-name { color: rgb(229, 204, 165); font-size: 17px; }
+
+.ps-codex-v8 .ps-codex-record-header,
+.ps-codex-v8 .ps-codex-card-heading,
+.ps-codex-v8 .ps-codex-shape-heading {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-b-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-item-name { color: rgb(235, 207, 165); font-size: 30px; }
+.ps-codex-v8 .ps-codex-item-description { color: rgba(226, 205, 174, 0.80); font-size: 12px; }
+.ps-codex-v8 .ps-codex-item-hero { border-bottom-width: 1px; border-bottom-color: rgb(55, 180, 186); }
+
+.ps-codex-v8 .ps-codex-link-host {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-acquisition-heading,
+.ps-codex-v8 .ps-codex-acquisition-key { color: rgb(126, 36, 29); }
+.ps-codex-v8 .ps-codex-acquisition-value { color: rgb(41, 34, 27); }
+.ps-codex-v8 .ps-codex-archive-footer {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-item-next-page {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-map-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Final archive fit: the specimen print is mounted on a matching dark plate,
+   and the complete docket remains inside the right-hand paper leaf. */
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 432px;
+    min-height: 432px;
+    background-color: rgb(5, 4, 31);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    background-color: rgba(3, 4, 5, 0.90);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    left: 50px;
+    top: 92px;
+    width: 372px;
+    height: 332px;
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 292px;
+    height: 292px;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    height: 177px;
+    min-height: 177px;
+}
+.ps-codex-v8 .ps-codex-dossier-column {
+    padding: 16px 24px 14px 24px;
+}
+.ps-codex-v8 .ps-codex-link-host {
+    height: 92px;
+    min-height: 92px;
+    max-height: 92px;
+}
+.ps-codex-v8 .ps-codex-link-effect { padding: 8px 12px; }
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    height: 96px;
+    min-height: 96px;
+    padding: 7px 10px;
+}
+.ps-codex-v8 .ps-codex-card-panel {
+    height: 349px;
+    min-height: 349px;
+    margin-top: 4px;
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    position: relative;
+    width: 100%;
+    height: 312px;
+    min-height: 312px;
+    padding: 4px 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    width: 146px;
+    min-width: 146px;
+    max-width: 146px;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    margin-left: 0;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    height: 48px;
+    min-height: 48px;
+    margin-top: 2px;
+    padding: 6px 52px 5px 12px;
+}
+/* End Obsidian misprint compendium overrides. */
+
+/* ===== Compendium archive: specimen / dossier composition ===== */
+.ps-codex-v8 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: visible;
+    border-radius: 0;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+.ps-codex-v8 > .ps-layer-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+.ps-codex-v8 .ps-mgmt-header {
+    position: absolute;
+    left: 170px;
+    top: 12px;
+    width: 1088px;
+    height: 58px;
+    min-height: 58px;
+    padding: 0 70px 0 20px;
+}
+.ps-codex-v8 .ps-codex-main-row {
+    position: absolute;
+    left: 18px;
+    top: 78px;
+    width: 1244px;
+    height: 624px;
+    min-height: 624px;
+    padding: 0;
+    flex-direction: row;
+}
+.ps-codex-v8 .ps-codex-index-column {
+    width: 342px;
+    min-width: 342px;
+    max-width: 342px;
+    height: 624px;
+    padding: 0 12px 0 0;
+    border-right-width: 1px;
+    border-right-color: rgba(173, 136, 80, 0.45);
+}
+.ps-codex-v8 .ps-codex-index-header {
+    height: 48px;
+    min-height: 48px;
+    margin: 0 0 10px 0;
+}
+.ps-codex-v8 .ps-codex-category-tab {
+    height: 44px;
+    min-height: 44px;
+    margin-right: 3px;
+    padding: 0 8px;
+    font-size: 13px;
+}
+.ps-codex-v8 .ps-codex-index-surface {
+    height: 518px;
+    min-height: 518px;
+    padding: 4px 5px;
+    background-color: rgba(1, 2, 2, 0.36);
+}
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    min-height: 68px;
+    margin-bottom: 5px;
+    padding: 7px 14px;
+}
+.ps-codex-v8 .ps-codex-v9-index-name { font-size: 16px; }
+.ps-codex-v8 .ps-codex-index-footer {
+    height: 44px;
+    min-height: 44px;
+    padding: 4px 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-record-column {
+    width: 902px;
+    height: 624px;
+    min-height: 624px;
+    padding: 0 0 0 14px;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-record {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-specimen-column {
+    width: 55%;
+    min-width: 0;
+    height: 100%;
+    padding: 4px 16px 0 8px;
+    border-right-width: 1px;
+    border-right-color: rgba(174, 138, 84, 0.48);
+}
+.ps-codex-v8 .ps-codex-item-hero {
+    width: 100%;
+    height: 445px;
+    min-height: 445px;
+    flex-direction: column;
+    position: relative;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    right: 8px;
+    height: 94px;
+    padding: 8px 10px;
+    background-image: none;
+    background-color: rgba(3, 4, 3, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgb(57, 181, 186);
+}
+.ps-codex-v8 .ps-codex-item-meta {
+    font-size: 10px;
+    color: rgb(56, 188, 193);
+}
+.ps-codex-v8 .ps-codex-item-name {
+    margin-top: 2px;
+    font-size: 28px;
+    color: rgb(235, 210, 171);
+}
+.ps-codex-v8 .ps-codex-item-description {
+    font-size: 10px;
+    color: rgba(221, 202, 173, 0.78);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    position: absolute;
+    left: 68px;
+    top: 100px;
+    width: 345px;
+    height: 330px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 310px;
+    height: 310px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    width: 100%;
+    height: 164px;
+    min-height: 164px;
+    margin: 0;
+    padding: 10px 15px 12px 15px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-shape-heading {
+    height: 30px;
+    min-height: 30px;
+    padding: 0 8px;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(124, 76, 52, 0.38);
+}
+.ps-codex-v8 .ps-codex-shape-title,
+.ps-codex-v8 .ps-codex-shape-count { color: rgb(87, 57, 40); }
+.ps-codex-v8 .ps-codex-shape-list {
+    min-height: 0;
+    padding: 7px 8px 0 8px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.ps-codex-v8 .ps-codex-dossier-column {
+    width: 45%;
+    min-width: 0;
+    height: 100%;
+    padding: 18px 22px 16px 22px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-link-host {
+    width: 100%;
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+    margin: 0 0 6px 0;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(126, 70, 48, 0.35);
+}
+.ps-codex-v8 .ps-codex-link-effect {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    padding: 12px 14px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-eyebrow { color: rgb(34, 121, 123); }
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-name { color: rgb(57, 39, 28); }
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-body { color: rgb(91, 65, 49); }
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    width: 100%;
+    height: 124px;
+    min-height: 124px;
+    margin: 0;
+    padding: 9px 12px;
+    flex-grow: 0;
+    background-image: none;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(126, 70, 48, 0.35);
+}
+.ps-codex-v8 .ps-codex-acquisition-title { color: rgb(65, 43, 31); }
+.ps-codex-v8 .ps-codex-acquisition-eyebrow,
+.ps-codex-v8 .ps-codex-acquisition-icon,
+.ps-codex-v8 .ps-codex-acquisition-key { color: rgb(124, 45, 34); }
+.ps-codex-v8 .ps-codex-acquisition-value { color: rgb(67, 48, 36); }
+.ps-codex-v8 .ps-codex-card-panel {
+    width: 100%;
+    height: 282px;
+    min-height: 282px;
+    margin: 6px 0 0 0;
+    padding: 0;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-docket-heading {
+    height: 34px;
+    min-height: 34px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.ps-codex-v8 .ps-codex-card-heading {
+    width: 48%;
+    height: 28px;
+    padding: 0 4px;
+    font-size: 11px;
+    color: rgb(76, 52, 38);
+    background-image: none;
+}
+.ps-codex-v8 .ps-codex-card-toggle {
+    width: 50%;
+    height: 28px;
+    min-height: 28px;
+    flex-direction: row;
+}
+.ps-codex-v8 .ps-codex-card-toggle-button {
+    width: 50%;
+    height: 28px;
+    min-height: 28px;
+    color: rgb(86, 63, 49);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-index-tab-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-card-toggle-button.ps-selected {
+    color: rgb(236, 207, 166);
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    height: 245px;
+    min-height: 245px;
+    padding: 2px 0 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face,
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    width: 138px;
+    min-width: 138px;
+    max-width: 138px;
+    height: 195px;
+    min-height: 195px;
+    max-height: 195px;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    height: 60px;
+    min-height: 60px;
+    margin-top: 3px;
+    padding: 8px 56px 7px 15px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+.ps-codex-v8 .ps-codex-archive-note-title { color: rgb(65, 43, 31); }
+.ps-codex-v8 .ps-codex-archive-note-body { color: rgb(99, 70, 52); }
+.ps-codex-v8 .ps-codex-archive-page-count { right: 40px; bottom: 22px; color: rgb(126, 45, 34); }
+.ps-codex-v8 .ps-codex-item-next-page {
+    right: 5px;
+    bottom: 8px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+}
+
+/* Authoritative archive leaf fit. Keep the shipped docket at its native
+   portrait size; the paper is partitioned around it instead of scaling it. */
+.ps-codex-v8 .ps-codex-item-hero {
+    height: 432px;
+    min-height: 432px;
+    background-color: rgb(5, 4, 31);
+}
+.ps-codex-v8 .ps-codex-item-summary {
+    background-color: rgba(3, 4, 5, 0.90);
+}
+.ps-codex-v8 .ps-codex-item-art {
+    left: 72px;
+    top: 108px;
+    width: 330px;
+    height: 310px;
+}
+.ps-codex-v8 .ps-codex-item-art > Image,
+.ps-codex-v8 .ps-codex-item-art > .unity-image {
+    width: 286px;
+    height: 286px;
+}
+.ps-codex-v8 .ps-codex-shape-gallery {
+    height: 177px;
+    min-height: 177px;
+}
+.ps-codex-v8 .ps-codex-dossier-column {
+    position: relative;
+    padding: 16px 24px 14px 24px;
+}
+.ps-codex-v8 .ps-codex-link-host {
+    height: 92px;
+    min-height: 92px;
+    max-height: 92px;
+}
+.ps-codex-v8 .ps-codex-acquisition-panel {
+    height: 96px;
+    min-height: 96px;
+    padding: 7px 10px;
+}
+.ps-codex-v8 .ps-codex-card-panel {
+    position: absolute;
+    left: 24px;
+    right: auto;
+    top: 214px;
+    bottom: 62px;
+    width: 299px;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+}
+.ps-codex-v8 .ps-codex-docket-heading {
+    width: 100%;
+    align-self: stretch;
+}
+.ps-codex-v8 .ps-codex-card-stage {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex-grow: 1;
+    padding: 4px 0 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.ps-codex-v8 .ps-codex-item-v5-card.ps-vault-v9-card-face {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0 0 0 65px;
+    translate: 0 0;
+    align-self: flex-start;
+    overflow: hidden;
+}
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-panel,
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-stage {
+    width: 299px;
+    min-width: 299px;
+    max-width: 299px;
+    overflow: visible;
+}
+.ps-codex-v8.ps-codex-v8 .ps-codex-card-stage {
+    align-items: flex-start;
+}
+.ps-codex-v8 .ps-codex-item-v5-card .ps-equipment-card-preview.ps-vault-v9-card {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 168px;
+    min-width: 168px;
+    max-width: 168px;
+    height: 252px;
+    min-height: 252px;
+    max-height: 252px;
+    margin: 0;
+}
+.ps-codex-v8 .ps-codex-archive-footer {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 12px;
+    width: auto;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 6px 52px 5px 12px;
+}
+
+/* ===== Home-derived editorial material profile =====
+   The archive composition stays fixed; only the material hierarchy changes. */
+.ps-codex-v8 .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(9, 10, 9);
+}
+
+.ps-codex-v8 .ps-mgmt-shade {
+    background-color: rgba(2, 3, 3, 0.07);
+}
+
+.ps-codex-v8 .ps-misprint-mark,
+.ps-codex-v8 .ps-misprint-register,
+.ps-codex-v8 .ps-misprint-decor {
+    opacity: 0.04;
+}
+
+.ps-codex-v8 .ps-mgmt-header {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.16);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.62);
+}
+
+.ps-codex-v8 .ps-management-brand .ps-title,
+.ps-codex-v8 .ps-misprint-header-title,
+.ps-codex-v8 .ps-codex-item-name,
+.ps-codex-v8 .ps-codex-v10-lore-title {
+    color: rgb(238, 216, 178);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
+}
+
+.ps-codex-v8 .ps-codex-category-tab {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.36);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(185, 146, 84, 0.44);
+    color: rgb(220, 199, 165);
+}
+
+.ps-codex-v8 .ps-codex-category-tab.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgb(56, 196, 202);
+    color: rgb(29, 23, 18);
+}
+
+.ps-codex-v8 .ps-codex-index-surface,
+.ps-codex-v8 .ps-codex-record-surface,
+.ps-codex-v8 .ps-codex-item-record,
+.ps-codex-v8 .ps-codex-dossier-column {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.20);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.24);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.44);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-entry.ps-codex-v9-current {
+    background-image: none;
+    background-color: rgba(13, 42, 43, 0.48);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(55, 197, 203);
+    border-right-color: rgb(55, 197, 203);
+    border-top-color: rgb(55, 197, 203);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-name {
+    color: rgb(235, 213, 177);
+}
+
+.ps-codex-v8 .ps-codex-v9-index-subtitle,
+.ps-codex-v8 .ps-codex-item-description {
+    color: rgb(180, 164, 138);
+}
+
+.ps-codex-v8 .ps-codex-item-summary {
+    background-image: none;
+    background-color: rgba(4, 7, 7, 0.72);
+    border-left-color: rgb(55, 197, 203);
+}
+
+.ps-codex-v8 .ps-codex-item-hero,
+.ps-codex-v8 .ps-codex-item-art {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-shape-gallery {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-shape-title,
+.ps-codex-v8 .ps-codex-shape-count {
+    color: rgb(61, 44, 32);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.ps-codex-v8 .ps-codex-record-header,
+.ps-codex-v8 .ps-codex-card-heading,
+.ps-codex-v8 .ps-codex-shape-heading {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 151, 88, 0.46);
+}
+
+.ps-codex-v8 .ps-codex-link-host,
+.ps-codex-v8 .ps-codex-acquisition-panel,
+.ps-codex-v8 .ps-codex-archive-footer {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.48);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.44);
+}
+
+.ps-codex-v8 .ps-codex-link-host {
+    border-left-width: 2px;
+    border-left-color: rgb(55, 197, 203);
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-eyebrow,
+.ps-codex-v8 .ps-codex-acquisition-eyebrow,
+.ps-codex-v8 .ps-codex-acquisition-icon,
+.ps-codex-v8 .ps-codex-acquisition-key {
+    color: rgb(55, 187, 193);
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-name,
+.ps-codex-v8 .ps-codex-acquisition-title,
+.ps-codex-v8 .ps-codex-archive-note-title {
+    color: rgb(235, 213, 177);
+}
+
+.ps-codex-v8 .ps-codex-link-effect .ps-vault-v9-effect-body,
+.ps-codex-v8 .ps-codex-acquisition-value,
+.ps-codex-v8 .ps-codex-archive-note-body {
+    color: rgb(183, 167, 141);
+}
+
+.ps-codex-v8 .ps-codex-archive-page-count {
+    color: rgb(194, 57, 42);
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button {
+    background-image: none;
+    background-color: rgba(5, 7, 7, 0.62);
+    color: rgb(194, 176, 149);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-card-toggle-button.ps-selected {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(29, 23, 18);
+    border-bottom-color: rgb(55, 197, 203);
+}
+
+.ps-codex-v8 .ps-codex-index-footer {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-page {
+    background-image: none;
+    background-color: rgba(3, 5, 5, 0.30);
+}
+
+.ps-codex-v8 .ps-codex-v10-lore-section {
+    background-color: rgba(5, 7, 7, 0.54);
+    border-left-color: rgb(194, 57, 42);
+    border-bottom-color: rgba(183, 145, 83, 0.42);
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute {
+    position: absolute;
+    right: 8px;
+    top: 1px;
+    width: 168px;
+    height: 28px;
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute .ps-equipment-seal-attribute {
+    width: 100%;
+    height: 28px;
+    padding: 2px 7px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(5, 7, 7, 0.78);
+    border-left-width: 2px;
+    border-left-color: rgb(194, 57, 42);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(183, 145, 83, 0.48);
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute .ps-equipment-seal-attribute__mark {
+    width: 24px;
+    color: rgb(194, 57, 42);
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute .ps-equipment-seal-attribute__copy {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute .ps-equipment-seal-attribute__name {
+    color: rgb(235, 213, 177);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.ps-codex-v8 .ps-codex-seal-attribute .ps-equipment-seal-attribute__effect {
+    color: rgb(55, 187, 193);
+    font-size: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+}

@@ -1,0 +1,206 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="hub-layout" class="ps-hub-misprint">
+        <ui:VisualElement name="hub-background" class="ps-hub-misprint__background" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-hub-misprint__edge-shade" picking-mode="Ignore" />
+
+        <ui:VisualElement name="hub-nav-column" class="ps-hub-misprint__nav">
+            <ui:VisualElement class="ps-hub-misprint__masthead" picking-mode="Ignore">
+                <ui:Label text="PACKSPIRE" class="ps-hub-misprint__brand" />
+                <ui:Label text="配送は、地獄への道を照らす。" class="ps-hub-misprint__brand-copy" />
+            </ui:VisualElement>
+            <ui:ScrollView name="hub-nav-scroll" class="ps-hub-misprint__nav-scroll" mode="Vertical" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="hub-nav-list" class="ps-hub-misprint__nav-list">
+                    <ui:Button name="hub-nav-forge" class="ps-hub-misprint__nav-row ps-hub-misprint__nav-row--0">
+                        <ui:VisualElement class="ps-hub-misprint__nav-copy" picking-mode="Ignore">
+                            <ui:Label text="荷造り" class="ps-hub-misprint__nav-title ps-hub-misprint__nav-title--forge" />
+                            <ui:VisualElement class="ps-hub-misprint__nav-subline">
+                                <ui:VisualElement class="ps-hub-misprint__nav-icon ps-hub-misprint__nav-icon--forge" />
+                                <ui:Label text="LOADOUT" class="ps-hub-misprint__nav-meta" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-hub-misprint__nav-registration" picking-mode="Ignore" />
+                    </ui:Button>
+                    <ui:Button name="hub-nav-vault" class="ps-hub-misprint__nav-row ps-hub-misprint__nav-row--1">
+                        <ui:VisualElement class="ps-hub-misprint__nav-copy" picking-mode="Ignore">
+                            <ui:Label text="保管庫" class="ps-hub-misprint__nav-title ps-hub-misprint__nav-title--vault" />
+                            <ui:VisualElement class="ps-hub-misprint__nav-subline">
+                                <ui:VisualElement class="ps-hub-misprint__nav-icon ps-hub-misprint__nav-icon--vault" />
+                                <ui:Label text="VAULT" class="ps-hub-misprint__nav-meta" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-hub-misprint__nav-registration" picking-mode="Ignore" />
+                    </ui:Button>
+                    <ui:Button name="hub-nav-heirloom" class="ps-hub-misprint__nav-row ps-hub-misprint__nav-row--2">
+                        <ui:VisualElement class="ps-hub-misprint__nav-copy" picking-mode="Ignore">
+                            <ui:Label text="家宝" class="ps-hub-misprint__nav-title ps-hub-misprint__nav-title--heirloom" />
+                            <ui:VisualElement class="ps-hub-misprint__nav-subline">
+                                <ui:VisualElement class="ps-hub-misprint__nav-icon ps-hub-misprint__nav-icon--heirloom" />
+                                <ui:Label text="HEIRLOOM" class="ps-hub-misprint__nav-meta" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-hub-misprint__nav-registration" picking-mode="Ignore" />
+                    </ui:Button>
+                    <ui:Button name="hub-nav-guild" class="ps-hub-misprint__nav-row ps-hub-misprint__nav-row--3">
+                        <ui:VisualElement class="ps-hub-misprint__nav-copy" picking-mode="Ignore">
+                            <ui:Label text="役職" class="ps-hub-misprint__nav-title ps-hub-misprint__nav-title--guild" />
+                            <ui:VisualElement class="ps-hub-misprint__nav-subline">
+                                <ui:VisualElement class="ps-hub-misprint__nav-icon ps-hub-misprint__nav-icon--guild" />
+                                <ui:Label text="ROLE" class="ps-hub-misprint__nav-meta" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-hub-misprint__nav-registration" picking-mode="Ignore" />
+                    </ui:Button>
+                    <ui:Button name="hub-nav-codex" class="ps-hub-misprint__nav-row ps-hub-misprint__nav-row--4">
+                        <ui:VisualElement class="ps-hub-misprint__nav-copy" picking-mode="Ignore">
+                            <ui:Label text="図鑑" class="ps-hub-misprint__nav-title ps-hub-misprint__nav-title--codex" />
+                            <ui:VisualElement class="ps-hub-misprint__nav-subline">
+                                <ui:VisualElement class="ps-hub-misprint__nav-icon ps-hub-misprint__nav-icon--codex" />
+                                <ui:Label text="COMPENDIUM" class="ps-hub-misprint__nav-meta" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-hub-misprint__nav-registration" picking-mode="Ignore" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:Button name="hub-street-entry" class="ps-hub-misprint__guide">
+                <ui:VisualElement class="ps-hub-misprint__guide-icon" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-hub-misprint__guide-copy" picking-mode="Ignore">
+                    <ui:Label text="街路案内" class="ps-hub-misprint__guide-title ps-hub-misprint__heading-wordmark ps-hub-misprint__heading-wordmark--guide" />
+                    <ui:Label text="GUIDE" class="ps-hub-misprint__guide-meta" />
+                </ui:VisualElement>
+            </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-hub-misprint__nav-diagonal-rule" picking-mode="Ignore" />
+
+        <ui:VisualElement name="hub-character-column" class="ps-hub-misprint__character-stage" picking-mode="Ignore">
+            <ui:VisualElement class="ps-hub-misprint__destination-block">
+                <ui:Label text="DESTINATION" class="ps-hub-misprint__destination-meta" />
+                <ui:Label text="03" class="ps-hub-misprint__destination-number" />
+                <ui:Label name="hub-destination-name" text="黒曜峠" class="ps-hub-misprint__destination-name" />
+                <ui:Label name="hub-destination-code" text="KOKUYOU PASS" class="ps-hub-misprint__destination-code" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-hub-misprint__route" />
+            <ui:VisualElement class="ps-hub-misprint__brush" />
+            <ui:VisualElement class="ps-hub-misprint__cyan-offset" />
+            <ui:VisualElement name="hub-character-host" class="ps-hub-misprint__character-host" />
+            <ui:VisualElement class="ps-hub-misprint__identity">
+                <ui:Label name="hub-character-name" class="ps-hub-misprint__identity-name" />
+                <ui:Label text="COURIER 03" class="ps-hub-misprint__identity-code" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="hub-dossier-column" class="ps-hub-misprint__dossier">
+            <ui:VisualElement class="ps-hub-misprint__dossier-top">
+                <ui:Label text="COURIER SPEC." class="ps-hub-misprint__section-title" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-hub-misprint__currency">
+                    <ui:VisualElement class="ps-hub-misprint__currency-seal" picking-mode="Ignore" />
+                    <ui:Label name="hub-gold" class="ps-hub-misprint__currency-value" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="ps-hub-misprint__upper-grid">
+                <ui:VisualElement class="ps-hub-misprint__studies">
+                    <ui:VisualElement name="hub-character-study-front" class="ps-hub-misprint__study" picking-mode="Ignore" />
+                    <ui:VisualElement name="hub-character-study-back" class="ps-hub-misprint__study" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-hub-misprint__equipment-record">
+                    <ui:Label text="装備記録" class="ps-hub-misprint__module-title ps-hub-misprint__heading-wordmark ps-hub-misprint__heading-wordmark--equipment" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-hub-misprint__equipment-row">
+                        <ui:VisualElement name="hub-equipment-loadout" class="ps-hub-misprint__equipment-cell" picking-mode="Ignore">
+                            <ui:VisualElement name="hub-equipment-loadout-art" class="ps-hub-misprint__equipment-art ps-hub-misprint__equipment-art--loadout" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-hub-misprint__equipment-copy" picking-mode="Ignore">
+                                <ui:Label text="STORAGE RITE" class="ps-hub-misprint__equipment-meta" />
+                                <ui:Label name="hub-equipment-loadout-name" class="ps-hub-misprint__equipment-name" />
+                                <ui:Label name="hub-equipment-loadout-detail" class="ps-hub-misprint__equipment-detail" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="hub-equipment-role" class="ps-hub-misprint__equipment-cell" picking-mode="Ignore">
+                            <ui:VisualElement name="hub-equipment-role-art" class="ps-hub-misprint__equipment-art" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-hub-misprint__equipment-copy" picking-mode="Ignore">
+                                <ui:Label text="CURRENT ROLE" class="ps-hub-misprint__equipment-meta" />
+                                <ui:Label name="hub-equipment-role-name" class="ps-hub-misprint__equipment-name" />
+                                <ui:Label name="hub-equipment-role-detail" class="ps-hub-misprint__equipment-detail" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="hub-equipment-heirloom" class="ps-hub-misprint__equipment-cell ps-hub-misprint__equipment-cell--last" picking-mode="Ignore">
+                            <ui:VisualElement name="hub-equipment-heirloom-art" class="ps-hub-misprint__equipment-art ps-hub-misprint__equipment-art--heirloom" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-hub-misprint__equipment-copy" picking-mode="Ignore">
+                                <ui:Label text="HEIRLOOM" class="ps-hub-misprint__equipment-meta" />
+                                <ui:Label name="hub-equipment-heirloom-name" class="ps-hub-misprint__equipment-name" />
+                                <ui:Label name="hub-equipment-heirloom-detail" class="ps-hub-misprint__equipment-detail" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="ps-hub-misprint__lower-grid">
+                <ui:VisualElement class="ps-hub-misprint__briefing-module">
+                    <ui:VisualElement class="ps-hub-misprint__briefing-heading">
+                        <ui:Label text="本日の記録" class="ps-hub-misprint__module-title ps-hub-misprint__heading-wordmark ps-hub-misprint__heading-wordmark--record" picking-mode="Ignore" />
+                        <ui:Label text="CURRENT RECORD" class="ps-hub-misprint__briefing-heading-meta" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="hub-briefing-host" class="ps-hub-misprint__briefing-host" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="hub-mission-paper" class="ps-hub-misprint__mission">
+            <ui:VisualElement class="ps-hub-misprint__mission-copy">
+                <ui:VisualElement class="ps-hub-misprint__mission-heading-row" picking-mode="Ignore">
+                    <ui:Label text="本日の指令" class="ps-hub-misprint__mission-heading ps-hub-misprint__heading-wordmark ps-hub-misprint__heading-wordmark--mission" />
+                    <ui:Label text="PACK 03 / DELIVERY ORDER" class="ps-hub-misprint__mission-folio" />
+                </ui:VisualElement>
+                <ui:Label name="hub-mission-title" class="ps-hub-misprint__mission-title" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-hub-misprint__mission-meta-row" picking-mode="Ignore">
+                    <ui:VisualElement class="ps-hub-misprint__mission-meta-item">
+                        <ui:Label text="行先" class="ps-hub-misprint__mission-meta-key" />
+                        <ui:Label name="hub-mission-destination" class="ps-hub-misprint__mission-meta-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-hub-misprint__mission-meta-item">
+                        <ui:Label text="荷造り" class="ps-hub-misprint__mission-meta-key" />
+                        <ui:Label name="hub-mission-loadout" class="ps-hub-misprint__mission-meta-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-hub-misprint__mission-meta-item ps-hub-misprint__mission-meta-item--last">
+                        <ui:Label text="配置装備" class="ps-hub-misprint__mission-meta-key" />
+                        <ui:Label name="hub-mission-cargo" class="ps-hub-misprint__mission-meta-value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button name="hub-mission-action" class="ps-hub-misprint__mission-action">
+                <ui:Label text="遠征準備を開く" class="ps-hub-misprint__mission-action-label ps-hub-misprint__heading-wordmark ps-hub-misprint__heading-wordmark--action" picking-mode="Ignore" />
+            </ui:Button>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="ps-hub-misprint__indexes">
+            <ui:Button name="hub-vault-index" class="ps-hub-misprint__index">
+                <ui:Label text="保管庫" class="ps-hub-misprint__index-title" picking-mode="Ignore" />
+                <ui:Label name="hub-vault-index-count" class="ps-hub-misprint__index-value" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="hub-codex-index" class="ps-hub-misprint__index">
+                <ui:Label text="図鑑" class="ps-hub-misprint__index-title" picking-mode="Ignore" />
+                <ui:Label name="hub-codex-index-count" class="ps-hub-misprint__index-value" picking-mode="Ignore" />
+            </ui:Button>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="hub-street-modal" class="ps-hub-misprint__modal">
+            <ui:Button name="hub-street-backdrop" class="ps-hub-misprint__modal-backdrop" />
+            <ui:VisualElement class="ps-hub-misprint__modal-panel">
+                <ui:VisualElement class="ps-hub-misprint__modal-header">
+                    <ui:Label text="街路案内" class="ps-hub-misprint__modal-title" />
+                    <ui:Button name="hub-street-close" text="閉じる" class="ps-hub-misprint__modal-close" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-hub-misprint__modal-body">
+                    <ui:VisualElement name="hub-street-categories" class="ps-hub-misprint__modal-categories">
+                        <ui:Button name="hub-cat-all" text="すべて" class="ps-hub-street-guide-cat ps-selected" />
+                        <ui:Button name="hub-cat-scene" text="行動" class="ps-hub-street-guide-cat" />
+                        <ui:Button name="hub-cat-workbench" text="工房" class="ps-hub-street-guide-cat" />
+                        <ui:Button name="hub-cat-archive" text="記録" class="ps-hub-street-guide-cat" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="hub-street-list" class="ps-hub-misprint__modal-list" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                    <ui:VisualElement name="hub-street-detail" class="ps-hub-misprint__modal-detail" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

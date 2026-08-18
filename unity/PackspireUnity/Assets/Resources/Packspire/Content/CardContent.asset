@@ -1,0 +1,369 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95bf4aaf95b70a54b88cf2c44c3a4913, type: 3}
+  m_Name: CardContent
+  m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireCardContentSet
+  cards:
+  - id: basicStrike
+    name: "\u57FA\u672C\u653B\u6483"
+    text: "\u6575\u306B2D6-2\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 1
+    damage: 5
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 21300000, guid: fcd3ac1796dc4f489e6168d593f0b058, type: 3}
+  - id: basicGuard
+    name: "\u57FA\u672C\u9632\u5FA1"
+    text: "5\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 1
+    cost: 1
+    damage: 0
+    block: 5
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 21300000, guid: 17b84acf55df447989575c853a4d8aeb, type: 3}
+  - id: basicTactic
+    name: "\u57FA\u672C\u6226\u8853"
+    text: "2\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 1
+    cost: 0
+    damage: 0
+    block: 2
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: slash
+    name: "\u88C1\u6C7A\u62BC\u5370"
+    text: "\u6575\u306B2D6\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 1
+    damage: 7
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: guard
+    name: "\u6B7B\u4FE1\u7167\u5408"
+    text: "6\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 1
+    cost: 1
+    damage: 0
+    block: 6
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: spark
+    name: "\u5B9B\u5148\u6307\u5B9A"
+    text: "2D6-3\u30C0\u30E1\u30FC\u30B8\u3002\u6B21\u306E\u653B\u6483+3\u3002\u706B\u50B72\u30922\u30BF\u30FC\u30F3\u4E0E\u3048\u308B\u3002"
+    type: 2
+    cost: 1
+    damage: 4
+    block: 0
+    heal: 0
+    buff: 3
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects:
+    - statusId: burn
+      target: 1
+      amount: 2
+      duration: 2
+    artwork: {fileID: 0}
+  - id: mend
+    name: "\u5FDC\u6025\u624B\u5F53"
+    text: "HP\u30924\u56DE\u5FA9\u3002"
+    type: 1
+    cost: 1
+    damage: 0
+    block: 0
+    heal: 4
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: stab
+    name: "\u62B9\u6D88\u7DDA"
+    text: "\u6575\u306B2D6-4\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 0
+    damage: 3
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: brace
+    name: "\u5805\u5B88"
+    text: "13\u30D6\u30ED\u30C3\u30AF\u3002\u518D\u751F2\u30922\u30BF\u30FC\u30F3\u5F97\u308B\u3002"
+    type: 1
+    cost: 2
+    damage: 0
+    block: 13
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects:
+    - statusId: regen
+      target: 0
+      amount: 2
+      duration: 2
+    artwork: {fileID: 0}
+  - id: focus
+    name: "\u6574\u6D41"
+    text: "\u30A8\u30CD\u30EB\u30AE\u30FC+1\u3002"
+    type: 2
+    cost: 0
+    damage: 0
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 1
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: bomb
+    name: "\u7206\u85AC"
+    text: "\u6575\u306B2D6+8\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
+    type: 0
+    cost: 2
+    damage: 15
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 1
+    effects: []
+    artwork: {fileID: 0}
+  - id: pierce
+    name: "\u7D4C\u8DEF\u7A7F\u5B54"
+    text: "\u6575\u306B2D6+4\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 2
+    damage: 11
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: parry
+    name: "\u8AA4\u914D\u8FD4\u9001"
+    text: "3\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 1
+    cost: 0
+    damage: 0
+    block: 3
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: acid
+    name: "\u9178\u6DB2"
+    text: "\u6575\u306B2D6-1\u30C0\u30E1\u30FC\u30B8\u3002\u6BD23\u3092\u4E0E\u3048\u308B\u3002"
+    type: 0
+    cost: 1
+    damage: 6
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects:
+    - statusId: poison
+      target: 1
+      amount: 3
+      duration: 0
+    artwork: {fileID: 21300000, guid: 340303e676ed41efadab50b2cf61e60f, type: 3}
+  - id: tailwind
+    name: "\u8FFD\u3044\u98A8"
+    text: "\u30A8\u30CD\u30EB\u30AE\u30FC+1\u30014\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 2
+    cost: 1
+    damage: 0
+    block: 4
+    heal: 0
+    buff: 0
+    energy: 1
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 21300000, guid: dd7f7b3fa5c142bf947d5a59fe45391a, type: 3}
+  - id: devour
+    name: "\u8CAA\u98DF\u65AC\u308A"
+    text: "\u6575\u306B2D6+6\u30C0\u30E1\u30FC\u30B8\u3002\u81EA\u8EAB\u306B2\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 1
+    damage: 13
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 2
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: inferno
+    name: "\u7114\u65AD\u3061"
+    text: "\u6575\u306B2D6+11\u30C0\u30E1\u30FC\u30B8\u3002"
+    type: 0
+    cost: 2
+    damage: 18
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: echoWall
+    name: "\u53CD\u97FF\u969C\u58C1"
+    text: "12\u30D6\u30ED\u30C3\u30AF\u3002"
+    type: 1
+    cost: 1
+    damage: 0
+    block: 12
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 0
+    effects: []
+    artwork: {fileID: 0}
+  - id: starBomb
+    name: "\u661F\u55B0\u3044\u7206\u85AC"
+    text: "\u6575\u306B2D6+17\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
+    type: 0
+    cost: 2
+    damage: 24
+    block: 0
+    heal: 0
+    buff: 0
+    energy: 0
+    selfDamage: 0
+    exhaust: 1
+    effects: []
+    artwork: {fileID: 0}
+  explorationCards: []
+  consumables:
+  - id: heal
+    name: "\u6CBB\u7642\u85AC"
+    description: "HP\u309212\u56DE\u5FA9\u3059\u308B\u3002"
+    effect: 0
+    amount: 12
+    artwork: {fileID: 0}
+  - id: guard
+    name: "\u786C\u5316\u85AC"
+    description: "10\u30D6\u30ED\u30C3\u30AF\u3092\u5F97\u308B\u3002"
+    effect: 1
+    amount: 10
+    artwork: {fileID: 0}
+  - id: fire
+    name: "\u706B\u70B9\u74F6"
+    description: "\u6575\u306B2D6+5\u30C0\u30E1\u30FC\u30B8\u3002"
+    effect: 2
+    amount: 12
+    artwork: {fileID: 0}
+  - id: energy
+    name: "\u6D3B\u529B\u85AC"
+    description: "\u30A8\u30CD\u30EB\u30AE\u30FC\u30922\u5F97\u308B\u3002"
+    effect: 3
+    amount: 2
+    artwork: {fileID: 0}
+  statuses:
+  - id: strength
+    name: "\u5F37\u5316"
+    icon: "\u25B2"
+    description: "\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C\u84C4\u7A4D\u6570\u3060\u3051\u5897\u52A0\u3059\u308B\u3002"
+    kind: buff
+    stack: 0
+    artwork: {fileID: 0}
+  - id: weak
+    name: "\u5F31\u4F53"
+    icon: "\u25BD"
+    description: "\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C25%\u4F4E\u4E0B\u3059\u308B\u3002"
+    kind: debuff
+    stack: 0
+    artwork: {fileID: 0}
+  - id: vulnerable
+    name: "\u8106\u5F31"
+    icon: "\u25C7"
+    description: "\u53D7\u3051\u308B\u30C0\u30E1\u30FC\u30B8\u304C50%\u5897\u52A0\u3059\u308B\u3002"
+    kind: debuff
+    stack: 0
+    artwork: {fileID: 0}
+  - id: poison
+    name: "\u6BD2"
+    icon: "\u25CF"
+    description: "\u30BF\u30FC\u30F3\u7D42\u4E86\u6642\u306B\u84C4\u7A4D\u6570\u306E\u30C0\u30E1\u30FC\u30B8\u3092\u53D7\u3051\u3001\u84C4\u7A4D\u304C1\u6E1B\u308B\u3002"
+    kind: debuff
+    stack: 1
+    artwork: {fileID: 0}
+  - id: burn
+    name: "\u706B\u50B7"
+    icon: "\u2668"
+    description: "\u30BF\u30FC\u30F3\u7D42\u4E86\u6642\u306B\u84C4\u7A4D\u6570\u306E\u30C0\u30E1\u30FC\u30B8\u3092\u53D7\u3051\u308B\u3002"
+    kind: debuff
+    stack: 0
+    artwork: {fileID: 0}
+  - id: regen
+    name: "\u518D\u751F"
+    icon: "\u271A"
+    description: "\u30BF\u30FC\u30F3\u7D42\u4E86\u6642\u306BHP\u3092\u56DE\u5FA9\u3059\u308B\u3002"
+    kind: buff
+    stack: 0
+    artwork: {fileID: 0}
+  - id: armorBreak
+    name: "\u9632\u5177\u7834\u58CA"
+    icon: "\u25C6"
+    description: "\u5F97\u308B\u30D6\u30ED\u30C3\u30AF\u304C\u84C4\u7A4D\u6570\u3060\u3051\u6E1B\u5C11\u3059\u308B\u3002"
+    kind: debuff
+    stack: 0
+    artwork: {fileID: 0}

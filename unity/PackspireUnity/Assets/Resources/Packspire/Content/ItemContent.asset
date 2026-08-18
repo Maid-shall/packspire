@@ -1,0 +1,698 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a4cbacd88660ee48a9490c5c03ca4b4, type: 3}
+  m_Name: ItemContent
+  m_EditorClassIdentifier: Assembly-CSharp::Packspire.PackspireItemContentSet
+  board: 000000000200000001000000030000000000000001000000030000000000000002000000010000000300000002000000010000000300000000000000020000000100000000000000020000000100000003000000000000000200000003000000
+  items:
+  - id: sword
+    name: "\u88C1\u6C7A\u306E\u624B\u5370"
+    description: "\u7E262\u30DE\u30B9\u306E\u57F7\u884C\u8853\u5177\u3002\u706B\u8272\u4E00\u81F4\u3067\u62BC\u5370\u5A01\u529B\u3092\u5F37\u5316\u3059\u308B\u3002"
+    linkRule: "\u9632\u5177\u3068\u96A3\u63A5: \u30C0\u30E1\u30FC\u30B8+1\u3001\u30D6\u30ED\u30C3\u30AF+2\u3002\u8853\u5F0F\u5370\u3068\u96A3\u63A5:
+      \u653B\u6483+2\u3002"
+    sealAttribute: 0
+    type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: slash
+      count: 2
+    cardIds:
+    - slash
+    - slash
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 0
+    - x: 0
+      y: 1
+      value: 1
+      element: 0
+    artwork: {fileID: 0}
+  - id: shield
+    name: "\u6B7B\u4FE1\u7DB4\u308A"
+    description: "\u6A2A2\u30DE\u30B9\u306E\u9632\u8B77\u53F0\u5E33\u3002\u571F\u8272\u4E00\u81F4\u3067\u9632\u5FA1\u3092\u5F37\u5316\u3059\u308B\u3002"
+    linkRule: "\u6B66\u5668\u3068\u96A3\u63A5: \u30D6\u30ED\u30C3\u30AF+2\u3002\u7D50\u6676\u3068\u96A3\u63A5:
+      \u30B3\u30B9\u30C8-1\u3002"
+    sealAttribute: 3
+    type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: guard
+      count: 2
+    cardIds:
+    - guard
+    - guard
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 3
+    - x: 1
+      y: 0
+      value: 1
+      element: 3
+    artwork: {fileID: 0}
+  - id: ember
+    name: "\u5B9B\u5148\u676D\u7BB1"
+    description: "\u6575\u306E\u884C\u5148\u3092\u6307\u5B9A\u3059\u308B1\u30DE\u30B9\u8853\u5177\u3002"
+    linkRule: "\u6B66\u5668\u3068\u96A3\u63A5: \u305D\u306E\u653B\u6483+2\u3002"
+    sealAttribute: 0
+    type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: siege
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: spark
+      count: 1
+    cardIds:
+    - spark
+    cells:
+    - x: 0
+      y: 0
+      value: 2
+      element: 0
+    artwork: {fileID: 0}
+  - id: herb
+    name: "\u85AC\u8349\u888B"
+    description: "\u6C34\u5C5E\u6027\u306E\u56DE\u5FA9\u9053\u5177\u3002"
+    linkRule: 
+    sealAttribute: 1
+    type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions: []
+    grantedCards:
+    - battleCardId: mend
+      count: 1
+    cardIds:
+    - mend
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 1
+    artwork: {fileID: 0}
+  - id: dagger
+    name: "\u62B9\u6D88\u30EA\u30DC\u30F3"
+    description: "\u98A8\u5C5E\u6027\u3067\u8EFD\u304F\u6271\u3048\u308B\u62B9\u6D88\u7968\u5E2F\u3002"
+    linkRule: 
+    sealAttribute: 2
+    type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: speed
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: stab
+      count: 2
+    cardIds:
+    - stab
+    - stab
+    cells:
+    - x: 0
+      y: 0
+      value: 2
+      element: 2
+    artwork: {fileID: 0}
+  - id: plate
+    name: "\u53E4\u3044\u80F8\u5F53\u3066"
+    description: "L\u5B573\u30DE\u30B9\u306E\u91CD\u9632\u5177\u3002"
+    linkRule: 
+    sealAttribute: 3
+    type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: immovable
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: brace
+      count: 1
+    cardIds:
+    - brace
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 3
+    - x: 1
+      y: 0
+      value: 1
+      element: 3
+    - x: 0
+      y: 1
+      value: 1
+      element: 1
+    artwork: {fileID: 0}
+  - id: crystal
+    name: "\u5171\u9CF4\u7D50\u6676"
+    description: "\u6C34\u3068\u98A8\u306E\u7E262\u30DE\u30B9\u7D50\u6676\u3002"
+    linkRule: "\u96A3\u63A5\u88C5\u5099\u306E\u30AB\u30FC\u30C9\u30B3\u30B9\u30C8-1\u3002"
+    sealAttribute: 1
+    type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: focus
+      count: 1
+    cardIds:
+    - focus
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 1
+    - x: 0
+      y: 1
+      value: 1
+      element: 2
+    artwork: {fileID: 0}
+  - id: bomb
+    name: "\u7164\u3051\u305F\u7206\u5F3E"
+    description: "\u706B2\u70B9\u3092\u6301\u3064\u4F7F\u3044\u5207\u308A\u7206\u85AC\u3002"
+    linkRule: 
+    sealAttribute: 0
+    type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions: []
+    grantedCards:
+    - battleCardId: bomb
+      count: 1
+    cardIds:
+    - bomb
+    cells:
+    - x: 0
+      y: 0
+      value: 2
+      element: 0
+    artwork: {fileID: 0}
+  - id: spear
+    name: "\u8DEF\u7DDA\u7B26\u7089"
+    description: "\u7D4C\u8DEF\u3092\u523B\u3080\u7E263\u30DE\u30B9\u306E\u6E2C\u8DEF\u8853\u5177\u3002"
+    linkRule: 
+    sealAttribute: 2
+    type: 0
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: hunt
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: martial
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: pierce
+      count: 1
+    cardIds:
+    - pierce
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 2
+    - x: 0
+      y: 1
+      value: 1
+      element: 0
+    - x: 0
+      y: 2
+      value: 1
+      element: 2
+    artwork: {fileID: 0}
+  - id: buckler
+    name: "\u8FF7\u8377\u306E\u68FA\u7B25"
+    description: "\u653B\u6483\u3092\u4E00\u6642\u56DE\u53CE\u3059\u308B\u571F\u5C5E\u6027\u306E\u5C01\u7DD8\u7BB1\u3002"
+    linkRule: 
+    sealAttribute: 3
+    type: 1
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: guard
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: speed
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: parry
+      count: 1
+    cardIds:
+    - parry
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 3
+    artwork: {fileID: 0}
+  - id: flask
+    name: "\u932C\u91D1\u30D5\u30E9\u30B9\u30B3"
+    description: "\u6C34\u3068\u706B\u306E\u6A2A2\u30DE\u30B9\u9053\u5177\u3002"
+    linkRule: 
+    sealAttribute: 1
+    type: 3
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: artifice
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: spore
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: acid
+      count: 1
+    cardIds:
+    - acid
+    cells:
+    - x: 0
+      y: 0
+      value: 1
+      element: 1
+    - x: 1
+      y: 0
+      value: 1
+      element: 0
+    artwork: {fileID: 0}
+  - id: charm
+    name: "\u98A8\u8AAD\u307F\u306E\u8B77\u7B26"
+    description: "\u98A82\u70B9\u3092\u6301\u3064\u8B77\u7B26\u3002"
+    linkRule: 
+    sealAttribute: 2
+    type: 2
+    rarity: 0
+    acquisitionTier: 1
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: speed
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: observation
+      amount: 1
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: tailwind
+      count: 1
+    cardIds:
+    - tailwind
+    cells:
+    - x: 0
+      y: 0
+      value: 2
+      element: 2
+    artwork: {fileID: 0}
+  - id: cursed_blade
+    name: "\u98E2\u3048\u305F\u546A\u5263"
+    description: "\u5F37\u529B\u3060\u304C\u4EE3\u511F\u3092\u8981\u6C42\u3059\u308B\u7E262\u30DE\u30B9\u6B66\u5668\u3002"
+    linkRule: 
+    sealAttribute: 0
+    type: 0
+    rarity: 4
+    acquisitionTier: 2
+    baseDurability: 6
+    resonanceTags: []
+    reactionContributions:
+    - reactionId: blade_extreme
+      amount: 3
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    - reactionId: sacrifice
+      amount: 2
+      scope: 1
+      stackRule: 0
+      perLevel: 0
+    grantedCards:
+    - battleCardId: devour
+      count: 1
+    cardIds:
+    - devour
+    cells:
+    - x: 0
+      y: 0
+      value: 2
+      element: 0
+    - x: 0
+      y: 1
+      value: 1
+      element: 3
+    artwork: {fileID: 0}
+  backpacks:
+  - id: standard
+    name: "\u63A2\u7D22\u8005\u306E\u9784"
+    description: "\u6A19\u6E96\u7684\u306A6\xD74\u306E\u53CE\u7D0D\u8853\u5F0F\u3002"
+    safeCells: 
+    artwork: {fileID: 0}
+  - id: merchant
+    name: "\u884C\u5546\u4EBA\u306E\u9784"
+    description: "\u4EA4\u6613\u5411\u3051\u306E\u5C5E\u6027\u914D\u5217\u3092\u6301\u3064\u9784\u3002"
+    safeCells: 
+    artwork: {fileID: 0}
+  - id: arcane
+    name: "\u9B54\u5C0E\u9784"
+    description: "\u30EB\u30FC\u30F3\u5411\u3051\u306E\u5C5E\u6027\u914D\u5217\u3092\u6301\u3064\u9784\u3002"
+    safeCells: 
+    artwork: {fileID: 0}
+  - id: coffin
+    name: "\u68FA\u578B\u30B1\u30FC\u30B9"
+    description: "\u7E26\u9577\u88C5\u5099\u3092\u307E\u3068\u3081\u3084\u3059\u3044\u68FA\u578B\u30B1\u30FC\u30B9\u3002"
+    safeCells: 
+    artwork: {fileID: 0}
+  - id: living
+    name: "\u751F\u304D\u3066\u3044\u308B\u9784"
+    description: "\u7279\u6B8A\u306A\u5909\u5316\u3092\u8D77\u3053\u3059\u751F\u4F53\u9784\u3002"
+    safeCells: 
+    artwork: {fileID: 0}
+  storageCores:
+  - id: standard
+    name: "\u6A19\u6E96\u8853\u6838"
+    description: "6\xD74\u306E\u57FA\u672C\u8853\u5F0F\u3002\u88C5\u5099\u3092\u81EA\u7531\u306B\u56DE\u8EE2\u3067\u304D\u308B\u3002"
+    width: 6
+    height: 4
+    board: 000000000200000001000000030000000000000001000000030000000000000002000000010000000300000002000000010000000300000000000000020000000100000000000000020000000100000003000000000000000200000003000000
+    rotation: 2
+    artwork: {fileID: 0}
+  - id: merchant
+    name: "\u4EA4\u6613\u8853\u6838"
+    description: "\u4EA4\u6613\u5411\u3051\u306E\u5C5E\u6027\u914D\u7F6E\u3002\u56DE\u8EE2\u306F\u81EA\u7531\u3002"
+    width: 6
+    height: 4
+    board: 020000000100000003000000000000000100000003000000000000000200000001000000030000000200000001000000030000000000000002000000010000000000000002000000010000000300000000000000020000000300000000000000
+    rotation: 2
+    artwork: {fileID: 0}
+  - id: arcane
+    name: "\u9B54\u5C0E\u8853\u6838"
+    description: "\u30EB\u30FC\u30F3\u5411\u3051\u306E\u5C5E\u6027\u914D\u7F6E\u3002\u56DE\u8EE2\u306F\u81EA\u7531\u3002"
+    width: 6
+    height: 4
+    board: 010000000300000000000000010000000300000000000000020000000100000003000000020000000100000003000000000000000200000001000000000000000200000001000000030000000000000002000000030000000000000002000000
+    rotation: 2
+    artwork: {fileID: 0}
+  - id: coffin
+    name: "\u68FA\u578B\u8853\u6838"
+    description: "\u7E26\u9577\u914D\u7F6E\u5411\u3051\u300290\u5EA6\u5358\u4F4D\u3067\u56DE\u8EE2\u3067\u304D\u308B\u3002"
+    width: 6
+    height: 4
+    board: 030000000000000001000000030000000000000002000000010000000300000002000000010000000300000000000000020000000100000000000000020000000100000003000000000000000200000003000000000000000200000001000000
+    rotation: 1
+    artwork: {fileID: 0}
+  - id: living
+    name: "\u751F\u4F53\u8853\u6838"
+    description: "\u53CD\u8EE2\u3057\u305F\u5C5E\u6027\u914D\u7F6E\u30020\u5EA6\u3068180\u5EA6\u306E\u307F\u3002"
+    width: 6
+    height: 4
+    board: 030000000200000000000000030000000100000002000000000000000100000002000000000000000300000001000000020000000300000001000000020000000000000003000000010000000000000003000000010000000200000000000000
+    rotation: 0
+    artwork: {fileID: 0}
+  conduits:
+  - id: classic
+    name: "\u53E4\u5178\u5C0E\u7DDA"
+    description: "\u4E00\u81F4\u8272\u3092\u30AB\u30FC\u30C9\u6570\u5024\u3078\u5909\u63DB\u3059\u308B\u6A19\u6E96\u5C0E\u7DDA\u3002"
+    bonuses:
+    - element: 0
+      target: 0
+      threshold: 0
+      amountPerMatch: 1
+      matchDivisor: 1
+      useHalfWaterHeal: 0
+    - element: 1
+      target: 1
+      threshold: 0
+      amountPerMatch: 1
+      matchDivisor: 1
+      useHalfWaterHeal: 0
+    - element: 1
+      target: 2
+      threshold: 0
+      amountPerMatch: 1
+      matchDivisor: 1
+      useHalfWaterHeal: 1
+    - element: 2
+      target: 3
+      threshold: 3
+      amountPerMatch: 1
+      matchDivisor: 1
+      useHalfWaterHeal: 0
+    - element: 3
+      target: 1
+      threshold: 2
+      amountPerMatch: 1
+      matchDivisor: 2
+      useHalfWaterHeal: 0
+    artwork: {fileID: 0}
+  - id: mute
+    name: "\u6C88\u9ED9\u5C0E\u7DDA"
+    description: "\u8272\u4E00\u81F4\u30DC\u30FC\u30CA\u30B9\u3092\u767A\u751F\u3055\u305B\u306A\u3044\u691C\u8A3C\u7528\u5C0E\u7DDA\u3002"
+    bonuses: []
+    artwork: {fileID: 0}
+  resonances:
+  - id: classic
+    name: "\u53E4\u5178\u5171\u9CF4"
+    description: "\u96A3\u63A5\u88C5\u5099\u306ELINK\u3068\u4E0A\u4F4D\u30AB\u30FC\u30C9\u7F6E\u63DB\u3092\u884C\u3046\u3002"
+    links:
+    - label: "\u5263\xD7\u76FE"
+      templateA: sword
+      templateB: shield
+      useTypeA: 0
+      useTypeB: 0
+      typeA: 0
+      typeB: 0
+      damageBonus: 1
+      blockBonus: 2
+      costReduce: 0
+    - label: "\u71BE\u706B\xD7\u6B66\u5668"
+      templateA: ember
+      templateB: 
+      useTypeA: 0
+      useTypeB: 1
+      typeA: 0
+      typeB: 0
+      damageBonus: 2
+      blockBonus: 0
+      costReduce: 0
+    - label: "\u7D50\u6676\xD7\u88C5\u5099"
+      templateA: crystal
+      templateB: 
+      useTypeA: 0
+      useTypeB: 0
+      typeA: 0
+      typeB: 0
+      damageBonus: 0
+      blockBonus: 0
+      costReduce: 1
+    upgrades:
+    - hostTemplate: sword
+      neighborTemplate: ember
+      fromCardId: slash
+      toCardId: inferno
+      replaceAllCards: 0
+    - hostTemplate: shield
+      neighborTemplate: crystal
+      fromCardId: guard
+      toCardId: echoWall
+      replaceAllCards: 0
+    - hostTemplate: bomb
+      neighborTemplate: flask
+      fromCardId: 
+      toCardId: starBomb
+      replaceAllCards: 1
+    artwork: {fileID: 0}
+  - id: silent
+    name: "\u6C88\u9ED9\u5171\u9CF4"
+    description: "LINK\u3082\u30AB\u30FC\u30C9\u7F6E\u63DB\u3082\u767A\u751F\u3055\u305B\u306A\u3044\u691C\u8A3C\u7528\u5171\u9CF4\u3002"
+    links: []
+    upgrades: []
+    artwork: {fileID: 0}
+  stabilities:
+  - id: stable
+    name: "\u5B89\u5B9A\u5F0F"
+    description: "\u8010\u4E45\u6D88\u8CBB\u306F\u901A\u5E38\u3002\u904E\u8CA0\u8377\u306F\u307B\u307C\u767A\u751F\u3057\u306A\u3044\u3002"
+    durabilityDrainScale: 1
+    runawayCardPenalty: 0.5
+    runawayThreshold: 99
+    artwork: {fileID: 0}
+  - id: volatile
+    name: "\u904E\u8CA0\u8377\u5F0F"
+    description: "\u8010\u4E45\u6D88\u8CBB\u304C\u901F\u304F\u3001\u9AD8\u8CA0\u8377\u3067\u30AB\u30FC\u30C9\u51FA\u529B\u304C\u4F4E\u4E0B\u3059\u308B\u3002"
+    durabilityDrainScale: 1.5
+    runawayCardPenalty: 0.65
+    runawayThreshold: 8
+    artwork: {fileID: 0}
+  colorTraits:
+  - id: fire_dmg_5
+    name: "\u7114\u529B\u30FB\u5C0F"
+    element: 0
+    requiredMatches: 5
+    amount: 1
+    effect: 0
+  - id: fire_dmg_7
+    name: "\u7114\u529B\u30FB\u5927"
+    element: 0
+    requiredMatches: 7
+    amount: 2
+    effect: 0
+  - id: water_block_5
+    name: "\u6C34\u9632\u30FB\u5C0F"
+    element: 1
+    requiredMatches: 5
+    amount: 1
+    effect: 1
+  - id: water_block_7
+    name: "\u6C34\u9632\u30FB\u5927"
+    element: 1
+    requiredMatches: 7
+    amount: 2
+    effect: 1
+  - id: wind_cost_5
+    name: "\u98A8\u8EFD\u30FB\u5C0F"
+    element: 2
+    requiredMatches: 5
+    amount: 1
+    effect: 3
+  - id: wind_cost_7
+    name: "\u98A8\u8EFD\u30FB\u5927"
+    element: 2
+    requiredMatches: 7
+    amount: 1
+    effect: 3
+  - id: earth_block_5
+    name: "\u571F\u5B88\u30FB\u5C0F"
+    element: 3
+    requiredMatches: 5
+    amount: 1
+    effect: 1
+  - id: earth_block_7
+    name: "\u571F\u5B88\u30FB\u5927"
+    element: 3
+    requiredMatches: 7
+    amount: 2
+    effect: 1
+  - id: water_heal_5
+    name: "\u6C34\u7652\u30FB\u5C0F"
+    element: 1
+    requiredMatches: 5
+    amount: 1
+    effect: 2
+  - id: water_heal_7
+    name: "\u6C34\u7652\u30FB\u5927"
+    element: 1
+    requiredMatches: 7
+    amount: 2
+    effect: 2
+  - id: wind_draw_7
+    name: "\u98A8\u8AAD"
+    element: 2
+    requiredMatches: 7
+    amount: 1
+    effect: 4
+  - id: earth_recycle_7
+    name: "\u571F\u9084"
+    element: 3
+    requiredMatches: 7
+    amount: 1
+    effect: 5
+  - id: fire_free_7
+    name: "\u4E0D\u6EC5"
+    element: 0
+    requiredMatches: 7
+    amount: 1
+    effect: 6
