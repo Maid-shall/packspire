@@ -17,7 +17,6 @@ namespace Packspire
         private const float RealtimePlanningScaleTransition = .1f;
         private const float RealtimeNowHoldDuration = .24f;
         private const int RealtimeHandLimit = 8;
-        private const string WardenTimelineResource = "Data/Journey/WardenRealtimeTimeline";
         private const string ReelNumeralAtlasResource =
             "Art/Battle/UI/JourneyApproved/journey-reel-numeral-atlas-v1";
 
@@ -66,11 +65,10 @@ namespace Packspire
             realtimeTimelineHoldRemaining = 0f;
             realtimePlanningScale = RealtimePlanningNormalScale;
 
-            RealtimeEnemyTimelineProfile timelineProfile =
-                PackspireResources.Load<RealtimeEnemyTimelineProfile>(WardenTimelineResource);
+            RealtimeEnemyTimelineProfile timelineProfile = encounterProfile.timeline;
             if (timelineProfile == null)
             {
-                Debug.LogError($"Required realtime timeline profile is missing: {WardenTimelineResource}");
+                Debug.LogError($"Journey encounter '{encounterProfile.name}' has no realtime timeline profile.");
                 realtimeBattleActive = false;
                 realtimeBattle.Finish();
                 return;
@@ -295,7 +293,9 @@ namespace Packspire
             ShowResult(
                 "EXPEDITION FAILED",
                 "配達続行不能",
-                "DEV SIMULATIONを最初からやり直せます。",
+                usesLiveRun
+                    ? "荷を守り切れなかった。遠征結果へ進みます。"
+                    : "DEV SIMULATIONを最初からやり直せます。",
                 false);
         }
 
@@ -330,7 +330,7 @@ namespace Packspire
             realtimeBattleActive = true;
             BeginRealtimeTelegraph(
                 new RealtimeEnemyAction(
-                    "warden",
+                    encounterProfile.timeline.actorId,
                     "preview:足払い",
                     RealtimeEnemyActionKind.JumpReaction,
                     8,

@@ -230,7 +230,7 @@ MonoBehaviour:
     block: 4
     heal: 0
     buff: 0
-    energy: 1
+    energy: 2
     selfDamage: 0
     exhaust: 0
     effects: []

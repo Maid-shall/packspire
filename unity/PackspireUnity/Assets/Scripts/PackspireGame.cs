@@ -91,6 +91,8 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public void UiDevCloseWithoutRestore(){developerPanel=false;developerHasReturn=false;}
  public void UiDevOpenBattle(){
+  // LEGACY: retained as a reference asset and QA fallback. New expeditions use
+  // the seamless journey scene and its realtime battle controller.
   if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
   gridBoard=null;
   packingAtBase=false;
@@ -429,6 +431,7 @@ public partial class PackspireGame : MonoBehaviour {
   var loot=new ItemInstance(itemId){identified=false};
   StorageFormulaSystem.EnsureItemRolled(loot);
   run.lootBag.Add(loot);
+  if(TryResumeSeamlessJourneyAfterReward())return;
   if(!string.IsNullOrEmpty(courierCargoNodeId)){
    ResolveCourierLocation(new CourierLocationOutcome{cargoRecovered=true,message=$"{GameCatalog.Items[itemId].name}を回収しました。"});
    return;
@@ -437,6 +440,7 @@ public partial class PackspireGame : MonoBehaviour {
  }
  public bool UiBuy(string itemId){if(run==null||!GameCatalog.Items.TryGetValue(itemId,out var item))return false;int price=14+item.cells.Length*4;if(run.gold<price)return false;run.gold-=price;var loot=new ItemInstance(itemId){identified=false};StorageFormulaSystem.EnsureItemRolled(loot);run.lootBag.Add(loot);message=$"購入完了：{item.name}　残金 {run.gold}G";return true;}
  public void UiReturnToMap(){
+  if(TryResumeSeamlessJourneyAfterReward())return;
   if(!string.IsNullOrEmpty(courierCargoNodeId)){
    ResolveCourierLocation(new CourierLocationOutcome{cargoRecovered=false});
    return;
@@ -512,6 +516,7 @@ public partial class PackspireGame : MonoBehaviour {
    run.courierRoute=CourierRouteSystem.Create(run,meta);
    message="配達経路台帳を開きました。次の区間を選択してください。";
    screen=ScreenId.Route;
+   LaunchSeamlessJourney();
   }catch(Exception ex){
    run=null;gridBoard=null;screen=ScreenId.Expedition;
    message="遠征開始エラー："+ex.Message;
@@ -519,6 +524,8 @@ public partial class PackspireGame : MonoBehaviour {
   }
  }
  void StartBattle(bool boss){
+  // LEGACY full-screen / grid combat entry. It remains available to old content,
+  // but normal expedition startup is routed through LaunchSeamlessJourney().
   if(run==null)return;
   CharacterSystem.SyncRunCharacter(meta,run);
   var dungeon=ResolveRunDungeon();
@@ -565,9 +572,7 @@ public partial class PackspireGame : MonoBehaviour {
   return dungeon;
  }
  void WinBattle(){
-  int goldBonus=CharacterSystem.WinGoldBonus(run);
-  run.battlesWon++;run.gold+=12+run.battlesWon*3+goldBonus;run.hp=Mathf.Min(run.maxHp,run.hp+3);
-  if(goldBonus>0)message=$"勝利　+{goldBonus}G（{CharacterSystem.OfRun(run).traitName}）";
+  ApplyBattleVictoryRewards();
   if(!string.IsNullOrEmpty(courierBattleNodeId)){
    string battleResult=string.IsNullOrEmpty(message)?"追跡者を退けました。":message;
    ResolveCourierLocation(new CourierLocationOutcome{message=battleResult});
@@ -577,6 +582,11 @@ public partial class PackspireGame : MonoBehaviour {
   battle=null;
   if(boss){FinishRun(true);return;}
   screen=ScreenId.Reward;
+ }
+ void ApplyBattleVictoryRewards(){
+  int goldBonus=CharacterSystem.WinGoldBonus(run);
+  run.battlesWon++;run.gold+=12+run.battlesWon*3+goldBonus;run.hp=Mathf.Min(run.maxHp,run.hp+3);
+  if(goldBonus>0)message=$"勝利　+{goldBonus}G（{CharacterSystem.OfRun(run).traitName}）";
  }
  void FinishRun(bool win){
   if(run!=null){

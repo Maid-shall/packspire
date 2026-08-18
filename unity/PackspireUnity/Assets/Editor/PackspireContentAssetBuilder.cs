@@ -176,7 +176,8 @@ public static class PackspireContentAssetBuilder {
   Card("parry","誤配返送",CardType.Skill,0,"3ブロック。",block:3),
   Card("acid","酸液",CardType.Attack,1,"敵に2D6-1ダメージ。毒3を与える。",damage:6,
    effects:new[]{Effect("poison",EffectTarget.Enemy,3)}),
-  Card("tailwind","追い風",CardType.Power,1,"エネルギー+1、4ブロック。",energy:1,block:4),
+  // Cost 1 + energy 2 produces the authored net recovery of +1.
+  Card("tailwind","追い風",CardType.Power,1,"エネルギー+1、4ブロック。",energy:2,block:4),
   Card("devour","貪食斬り",CardType.Attack,1,"敵に2D6+6ダメージ。自身に2ダメージ。",damage:13,selfDamage:2),
   Card("inferno","焔断ち",CardType.Attack,2,"敵に2D6+11ダメージ。",damage:18),
   Card("echoWall","反響障壁",CardType.Skill,1,"12ブロック。",block:12),

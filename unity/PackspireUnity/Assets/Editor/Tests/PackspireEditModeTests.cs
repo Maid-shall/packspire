@@ -286,6 +286,24 @@ public sealed class PackspireEditModeTests {
   Assert.That(run.hand.Count,Is.EqualTo(PackspireContent.Data.balance.initialHand));
  }
 
+ [TestCase("focus")]
+ [TestCase("tailwind")]
+ public void EnergySupplyCard_IncreasesEnergyAfterPayingItsCost(string cardId){
+  var definition=GameCatalog.Cards[cardId];
+  var run=new RunState{hp=42,maxHp=42,energy=2};
+  run.hand.Add(BackpackSystem.FromDef(definition,"test","test-"+cardId));
+  var enemy=new EnemyDef("test","Test",1,99,1);
+  var battle=new BattleState{
+   enemy=enemy,enemyHp=enemy.hp,enemyMaxHp=enemy.hp,enemyStatuses=new()
+  };
+
+  var result=BattleSystem.PlayCard(run,battle,0);
+
+  Assert.That(result.ok,Is.True);
+  Assert.That(run.energy,Is.EqualTo(3),
+   $"{cardId} must visibly recover one energy after its play cost is paid.");
+ }
+
  [Test]
  public void CombatStatus_UntimedStrengthPersistsAcrossTurns(){
   var run=new RunState{hp=42,maxHp=42};
@@ -834,6 +852,17 @@ public sealed class PackspireEditModeTests {
   Assert.That(patterns[0].Duration,Is.EqualTo(9.5d).Within(.0001d));
   Assert.That(patterns[1].Steps[0].Kind,Is.EqualTo(RealtimeEnemyActionKind.ComboAttack));
   Assert.That(patterns[3].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.JumpReaction));
+ }
+
+ [Test]
+ public void JourneyEncounterProfile_BuildsEnemyAndReferencesAuthoredTimeline(){
+  var profile=AssetDatabase.LoadAssetAtPath<JourneyBattleEncounterProfile>(
+   "Assets/Resources/Data/Journey/WardenEncounter.asset");
+  Assert.That(profile,Is.Not.Null);
+  var enemy=profile.BuildEnemy();
+  Assert.That(enemy.id,Is.EqualTo("journey_postal_warden"));
+  Assert.That(enemy.hp,Is.EqualTo(36));
+  Assert.That(profile.timeline.BuildPatterns(),Has.Length.EqualTo(4));
  }
 
  [Test]

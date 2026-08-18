@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Packspire {
@@ -49,7 +48,7 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"キャラ選択",ScreenId.Character);
   AddDevAction(grid,"商店(DEV)",OpenShopPreviewFromDev);
   AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
-  AddDevAction(grid,"配達経路台帳(DEV)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
+  AddDevAction(grid,"旧・配達経路台帳(LEGACY)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
   AddDevAction(grid,"シームレス遠征 完成版(DEV)",OpenJourneyAnimationPrototype);
   AddDevAction(grid,"遠征景色・灰市外縁(DEV)",()=>OpenJourneySceneryPreview(0));
   AddDevAction(grid,"遠征景色・水没書庫(DEV)",()=>OpenJourneySceneryPreview(1));
@@ -75,21 +74,18 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void OpenJourneyAnimationPrototype(){
-  JourneyDeveloperPreviewController.Clear();
-  game.UiDevCloseWithoutRestore();
-  SceneManager.LoadScene("JourneyAnimationPrototype");
+   JourneyDeveloperPreviewController.Clear();
+   game.UiLaunchSeamlessJourneyDeveloperSession();
  }
 
  void OpenJourneyBattlePreview(int enemyCount,bool startDefense,int handSize=0,int playerBlock=0){
-  JourneyDeveloperPreviewController.QueueBattle(enemyCount,startDefense,handSize,playerBlock);
-  game.UiDevCloseWithoutRestore();
-  SceneManager.LoadScene("JourneyAnimationPrototype");
+   JourneyDeveloperPreviewController.QueueBattle(enemyCount,startDefense,handSize,playerBlock);
+   game.UiLaunchSeamlessJourneyDeveloperSession();
  }
 
  void OpenJourneySceneryPreview(int biomeIndex){
-  JourneyDeveloperPreviewController.QueueScenery(biomeIndex);
-  game.UiDevCloseWithoutRestore();
-  SceneManager.LoadScene("JourneyAnimationPrototype");
+   JourneyDeveloperPreviewController.QueueScenery(biomeIndex);
+   game.UiLaunchSeamlessJourneyDeveloperSession();
  }
 
  void AddDeveloperDestination(VisualElement grid,string label,ScreenId target){

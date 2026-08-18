@@ -1,3 +1,4 @@
+#if PACKSPIRE_LEGACY_BATTLE_UI
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -581,6 +582,7 @@ public sealed partial class PackspireUiFoundation {
     if(actor!=null)actor.RemoveFromClassList(pulseClass);
    }).StartingIn(220);
   }).StartingIn(16);
- }
 }
 }
+}
+#endif

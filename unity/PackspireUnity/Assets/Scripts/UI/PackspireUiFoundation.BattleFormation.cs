@@ -1,3 +1,4 @@
+#if PACKSPIRE_LEGACY_BATTLE_UI
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -173,6 +174,7 @@ public sealed partial class PackspireUiFoundation {
   foreach(var copy in battleEnemyPreviewCopies)copy.root?.RemoveFromHierarchy();
   battleEnemyPreviewCopies.Clear();
   battleFormationPreview=BattleFormationPreview.Auto;
- }
 }
 }
+}
+#endif

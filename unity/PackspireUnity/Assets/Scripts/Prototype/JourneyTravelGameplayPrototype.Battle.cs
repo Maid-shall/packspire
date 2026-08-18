@@ -46,12 +46,7 @@ namespace Packspire
             enemyRenderer.color = Color.white;
             SetMainEnemyVisible(true);
             SyncMainEnemyShadow();
-            EnemyDef enemy = new EnemyDef(
-                "journey_postal_warden",
-                "封鐘の番人",
-                1,
-                36,
-                8, 7, 9, 10, 8, 7);
+            EnemyDef enemy = encounterProfile.BuildEnemy();
             battle = BattleSystem.Begin(run, enemy, 1f);
             StartRealtimeBattle();
             SetBattlePreviewEnemyCount(1);
@@ -79,7 +74,7 @@ namespace Packspire
             else if (fx.enemyDefeated)
             {
                 SetMainEnemyVisible(false);
-                ResolveRoute(new CourierLocationOutcome { success = true, performance = 2, message = "番人を退けた。" });
+                CompleteJourneyBattleVictory();
                 return;
             }
             else RefreshBattleUi();
@@ -118,6 +113,21 @@ namespace Packspire
             enemyRenderer.transform.localScale = Vector3.one * EnemyBattleScale;
             SyncMainEnemyShadow();
             UpdateEnemyTelegraphPulse(pulse, anticipation);
+        }
+
+        private void CompleteJourneyBattleVictory()
+        {
+            if (usesLiveRun && PackspireGame.Instance != null)
+            {
+                PackspireGame.Instance.UiOpenSeamlessJourneyBattleReward();
+                return;
+            }
+            ResolveRoute(new CourierLocationOutcome
+            {
+                success = true,
+                performance = 2,
+                message = "番人を退けた。"
+            });
         }
 
         private void ResolveDefenseInput(DefenseAction action)
