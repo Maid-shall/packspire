@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Packspire {
 public static class ConsumableSystem {
- static ConsumableContent Definition(string id)=>
+ public static ConsumableContent Definition(string id)=>
   PackspireContent.Data.consumables.FirstOrDefault(x=>x.id==id);
 
  public static string Name(string id)=>Definition(id)?.name??id;
@@ -28,11 +28,10 @@ public static class ConsumableSystem {
     fx.blockGained=consumable.amount;
     break;
    case ConsumableEffectType.Damage:{
-    int dieOne,dieTwo,modifier;
-    int rolled=BattleSystem.RollDamage(consumable.amount,out dieOne,out dieTwo,out modifier);
-    battle.enemyHp-=rolled;
-    fx.damageToEnemy=rolled;
-    fx.dieOne=dieOne;fx.dieTwo=dieTwo;fx.damageModifier=modifier;fx.rolledDamage=rolled;
+    int damage=Mathf.Max(0,consumable.amount);
+    battle.enemyHp-=damage;
+    fx.damageToEnemy=damage;
+    fx.rolledDamage=damage;
     fx.cardType=CardType.Attack;
     break;
    }

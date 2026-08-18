@@ -357,7 +357,7 @@ public sealed partial class PackspireUiFoundation {
  }
 
  static string BattleCardDisplayText(CardInstance card){
-  if(card==null||card.damage<=0)return card?.text??"";
+  if(card==null||card.damage<=0||card.damageMode==DamageResolutionMode.Fixed)return card?.text??"";
   int modifier=card.damage-7;
   string formula=$"2D6 {(modifier>=0?"+ ":"− ")}{Mathf.Abs(modifier)} ダメージ";
   return card.text.Replace($"{card.damage}ダメージ",formula);

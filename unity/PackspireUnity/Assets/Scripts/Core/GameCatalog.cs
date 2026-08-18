@@ -56,6 +56,7 @@ public static class GameCatalog {
  }
 
  static CardDef ToCard(CardContent value)=>new(value.id,value.name,value.type,value.cost,value.text){
+  damageMode=value.damageMode,
   damage=value.damage,
   block=value.block,
   heal=value.heal,

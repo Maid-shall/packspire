@@ -91,6 +91,10 @@ namespace Packspire
                 .Require<Label>("journey-discard-pile")
                 .Require<Button>("journey-draw-pile-button")
                 .Require<Button>("journey-discard-pile-button")
+                .Require<VisualElement>("journey-consumables")
+                .Require<VisualElement>("journey-consumable-detail")
+                .Require<Label>("journey-consumable-detail-name")
+                .Require<Label>("journey-consumable-detail-effect")
                 .Require<VisualElement>("journey-threat-reel")
                 .Require<VisualElement>("journey-reel-chain-track")
                 .Require<VisualElement>("journey-reel-slots")
@@ -130,6 +134,14 @@ namespace Packspire
 
             for (int index = 0; index < 10; index++)
                 contract.Require<Button>($"journey-card-{index}");
+
+            for (int index = 0; index < JourneyConsumablePresenter.SlotCount; index++)
+            {
+                contract
+                    .Require<Button>($"journey-consumable-{index}")
+                    .Require<VisualElement>($"journey-consumable-icon-{index}")
+                    .Require<Label>($"journey-consumable-count-{index}");
+            }
 
             for (int index = 0; index < JourneyBattleReelPresenter.ThreatSlotCount; index++)
                 contract.Require<VisualElement>($"journey-threat-slot-{index}");

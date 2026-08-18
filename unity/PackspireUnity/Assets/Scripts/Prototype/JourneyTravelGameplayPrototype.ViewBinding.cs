@@ -115,6 +115,10 @@ namespace Packspire
             drawPileButton = root.Q<Button>("journey-draw-pile-button");
             discardPileButton = root.Q<Button>("journey-discard-pile-button");
             battleHandRoot = battleHandTheme?.Q<VisualElement>(className: "ps-journey__hand");
+            consumablePresenter = new JourneyConsumablePresenter(
+                root,
+                UseJourneyConsumable,
+                CanUseJourneyConsumable);
             BindRealtimeBattleUi(root);
             pileOverlay = root.Q<VisualElement>("journey-pile-overlay");
             pileTitle = root.Q<Label>("journey-pile-title");

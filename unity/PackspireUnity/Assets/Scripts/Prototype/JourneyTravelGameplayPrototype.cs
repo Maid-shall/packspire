@@ -149,6 +149,7 @@ namespace Packspire
         private Button drawPileButton;
         private Button discardPileButton;
         private VisualElement battleHandRoot;
+        private JourneyConsumablePresenter consumablePresenter;
         private VisualElement pileOverlay;
         private Label pileTitle;
         private Label pileSummary;
@@ -334,6 +335,7 @@ namespace Packspire
             arrivalNode = null;
             firstChoicePending = false;
             CourierRouteState route = run.courierRoute;
+            ApplyWorldForRouteImmediately(CourierRouteSystem.Node(route.currentNodeId));
             if (route.failed || route.complete)
             {
                 ShowResult(
@@ -361,6 +363,10 @@ namespace Packspire
                 backpack = PackspireContent.Data.balance.defaultBackpackId
             };
             run.courierRoute = CourierRouteSystem.Create(run, null);
+            run.consumables.AddRange(new[]
+            {
+                "heal", "assault_incense", "ward_seal", "delay_seal"
+            });
         }
 
         private void BuildUiDocument()
@@ -595,7 +601,7 @@ namespace Packspire
             if (choices.Length > 1) rejected.AddToClassList("is-rejected");
             choiceA.SetEnabled(false);
             choiceB.SetEnabled(false);
-            yield return new WaitForSecondsRealtime(.44f);
+            yield return WaitForJourneySeconds(.44f);
 
             if (!CourierRouteSystem.Select(run.courierRoute, node.id) ||
                 !CourierRouteSystem.Commit(run, out string message))
@@ -892,6 +898,17 @@ namespace Packspire
             PlayTransition(desiredBiome, desiredRoad, node?.title);
         }
 
+        private void ApplyWorldForRouteImmediately(CourierRouteNodeDef node)
+        {
+            int desiredBiome = BiomeForPhase(node?.phase ?? 0);
+            JourneyWalkCyclePrototype.RoadProfile desiredRoad = JourneyPresentationConfig.GetRoadProfile(node);
+            biomeIndex = desiredBiome;
+            scenery?.ClearAll();
+            walker.SetJourneyBiome(desiredBiome);
+            environment.SetBiome(desiredBiome);
+            walker.SetRoadProfile(desiredRoad);
+        }
+
         private static int BiomeForPhase(int routePhase)
         {
             return routePhase >= 8 ? 2 : routePhase >= 5 ? 1 : 0;
@@ -957,14 +974,14 @@ namespace Packspire
             transition.AddToClassList("transition--visible");
             // Swap the complete world stack only after the fog has covered it. This
             // prevents the sky, architecture and road from flashing independently.
-            yield return new WaitForSecondsRealtime(.28f);
+            yield return WaitForJourneySeconds(.28f);
             scenery?.ClearAll();
             walker.SetJourneyBiome(targetBiome);
             environment.SetBiome(targetBiome);
             walker.SetRoadProfile(targetRoad);
-            yield return new WaitForSecondsRealtime(.12f);
+            yield return WaitForJourneySeconds(.12f);
             transition.RemoveFromClassList("transition--visible");
-            yield return new WaitForSecondsRealtime(.36f);
+            yield return WaitForJourneySeconds(.36f);
             transitionActive = false;
             ApplyWorldMotion();
             string destination = string.IsNullOrWhiteSpace(routeTitle) ? "次の区画" : routeTitle;
@@ -1060,6 +1077,17 @@ namespace Packspire
             {
                 if (revision != battleRevision || phase != Phase.Battle) yield break;
                 if (!paused && !ledgerOpen && !transitionActive)
+                    elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+        }
+
+        private IEnumerator WaitForJourneySeconds(float duration)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                if (!paused && !ledgerOpen && !pileOverlayOpen)
                     elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }

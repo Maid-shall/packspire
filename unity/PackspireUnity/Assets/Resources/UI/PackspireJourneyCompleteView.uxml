@@ -368,6 +368,27 @@
                         </ui:VisualElement>
                     </ui:Button>
                 </ui:VisualElement>
+                <ui:VisualElement name="journey-consumables" class="ps-journey__consumables">
+                    <ui:Label text="補給具" class="ps-journey__consumable-heading" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__consumable-grid">
+                        <ui:Button name="journey-consumable-0" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-0" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-0" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-1" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-1" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-1" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-2" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-2" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-2" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-3" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-3" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-3" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
 
             <ui:VisualElement name="journey-hand-scroll" class="ps-journey__hand-scroll ps-battle-screen">
@@ -383,6 +404,11 @@
                     <ui:Button name="journey-card-8" class="ps-journey__card" />
                     <ui:Button name="journey-card-9" class="ps-journey__card" />
                 </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="journey-consumable-detail" class="ps-journey__consumable-detail" picking-mode="Ignore">
+                <ui:Label name="journey-consumable-detail-name" text="補給具" class="ps-journey__consumable-detail-name" picking-mode="Ignore" />
+                <ui:Label name="journey-consumable-detail-effect" text="効果" class="ps-journey__consumable-detail-effect" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
 

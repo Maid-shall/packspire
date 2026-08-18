@@ -310,6 +310,7 @@ public sealed partial class PackspireUiFoundation {
 
  static string DocketDiceFormula(CardInstance card){
   if(card==null||card.damage<=0)return "";
+  if(card.damageMode==DamageResolutionMode.Fixed)return card.damage.ToString();
   int modifier=card.damage-7;
   return $"2D6 {(modifier>=0?"+":"−")} {Mathf.Abs(modifier)}";
  }

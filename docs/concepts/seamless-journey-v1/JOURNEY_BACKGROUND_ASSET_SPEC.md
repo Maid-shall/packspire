@@ -1,5 +1,8 @@
 # シームレス遠征・背景素材規格
 
+役割: 背景素材の書き出し・命名・Unity登録・Catalog設定の正本。美術構図と接地線の
+制作契約は[`JOURNEY_BACKGROUND_ART_SPEC.md`](JOURNEY_BACKGROUND_ART_SPEC.md)を参照する。
+
 最終更新: 2026-08-14
 
 ## 目的

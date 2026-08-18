@@ -1,5 +1,9 @@
 # シームレス遠征戦闘 5〜8実装・監査記録
 
+> 実装履歴。現行戦闘UI仕様は
+> [`../../ui/specs/journey-battle-command.md`](../../ui/specs/journey-battle-command.md)、
+> 遠征全体の残作業は [`JOURNEY_PRODUCT_PLAN.md`](JOURNEY_PRODUCT_PLAN.md) を参照します。
+
 更新日: 2026-08-15
 
 ## 今回完了した範囲

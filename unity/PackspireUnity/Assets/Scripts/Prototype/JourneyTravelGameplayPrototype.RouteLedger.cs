@@ -32,6 +32,9 @@ namespace Packspire
         {
             ledgerPhaseHost.Clear();
             CourierRouteState route = run.courierRoute;
+            HashSet<string> availableNodeIds = CourierRouteSystem.Available(route)
+                .Select(node => node.id)
+                .ToHashSet();
             ILookup<int, CourierRouteNodeDef> byPhase = CourierRouteSystem.Nodes.ToLookup(node => node.phase);
             for (int phaseIndex = 0; phaseIndex <= CourierRouteSystem.TotalSegments; phaseIndex++)
             {
@@ -53,7 +56,7 @@ namespace Packspire
                     button.EnableInClassList("node--unknown", !revealed);
                     button.EnableInClassList("node--resolved", route.resolvedNodeIds.Contains(node.id));
                     button.EnableInClassList("node--current", route.currentNodeId == node.id);
-                    button.EnableInClassList("node--available", choices.Any(choice => choice.id == node.id));
+                    button.EnableInClassList("node--available", availableNodeIds.Contains(node.id));
                     button.EnableInClassList("node--destination", node.resolution == CourierResolutionKind.Delivery);
                     nodes.Add(button);
                 }

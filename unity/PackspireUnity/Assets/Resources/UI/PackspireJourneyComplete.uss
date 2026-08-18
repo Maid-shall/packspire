@@ -396,6 +396,86 @@
 .ps-journey__pile-label { margin-top: -2px; font-size: 8px; letter-spacing: 1px; color: rgb(188, 157, 111); -unity-text-align: middle-center; }
 .ps-journey__pile-count { height: 25px; font-size: 17px; color: rgb(244, 224, 188); -unity-text-align: middle-center; text-shadow: 0 1px 2px rgba(0, 0, 0, 1); }
 
+.ps-journey__consumables {
+    position: absolute; right: 10px; bottom: 129px; width: 92px; height: 98px;
+    padding: 13px 5px 5px 5px;
+    background-color: rgba(9, 9, 8, .88);
+    border-width: 1px; border-color: rgba(140, 101, 57, .76); border-radius: 2px;
+}
+.ps-journey__consumable-heading {
+    position: absolute; left: 5px; right: 5px; top: 1px; height: 12px; padding: 0;
+    font-size: 8px; letter-spacing: 1px; color: rgb(190, 160, 113);
+    -unity-text-align: middle-center; -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+.ps-journey__consumable-grid {
+    width: 80px; height: 78px; flex-direction: row; flex-wrap: wrap;
+    align-content: center; justify-content: center;
+}
+.ps-journey__consumable-slot {
+    position: relative; width: 37px; height: 37px; margin: 1px; padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("Art/Battle/UI/battle-consumable-slot-v1");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    transition-property: scale, -unity-background-image-tint-color; transition-duration: .08s;
+}
+.ps-journey__consumable-slot:hover { scale: 1.08 1.08; -unity-background-image-tint-color: rgb(255, 231, 183); }
+.ps-journey__consumable-slot:active { scale: .98 .98; }
+.ps-journey__consumable-slot:disabled { opacity: .42; }
+.ps-journey__consumable-slot.is-unusable { opacity: .42; }
+.ps-journey__consumable-slot.is-empty { opacity: .16; }
+.ps-journey__consumable-icon {
+    position: absolute; left: 7px; top: 7px; width: 23px; height: 23px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__consumable-count {
+    position: absolute; right: 1px; bottom: 1px; min-width: 15px; height: 13px; padding: 0 2px;
+    color: rgb(250, 230, 191); background-color: rgba(8, 7, 6, .92);
+    border-width: 1px; border-color: rgb(128, 91, 49); border-radius: 6px;
+    font-size: 8px; -unity-font-style: bold; -unity-text-align: middle-center;
+}
+.ps-journey__consumable-slot.consumable--heal .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/Icons/icon-heal");
+}
+.ps-journey__consumable-slot.consumable--guard .ps-journey__consumable-icon,
+.ps-journey__consumable-slot.consumable--guard-boost .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-defense-v1");
+    -unity-background-image-tint-color: rgb(73, 150, 194);
+}
+.ps-journey__consumable-slot.consumable--damage .ps-journey__consumable-icon,
+.ps-journey__consumable-slot.consumable--attack-boost .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-attack-v1");
+    -unity-background-image-tint-color: rgb(187, 69, 48);
+}
+.ps-journey__consumable-slot.consumable--energy .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-energy-v1");
+    -unity-background-image-tint-color: rgb(68, 161, 91);
+}
+.ps-journey__consumable-slot.consumable--delay .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-energy-v1");
+    -unity-background-image-tint-color: rgb(139, 94, 178);
+}
+.ps-journey__consumable-slot.consumable--route .ps-journey__consumable-icon {
+    background-image: resource("Art/Battle/UI/JourneyApproved/journey-action-mark-energy-v1");
+    -unity-background-image-tint-color: rgb(72, 151, 164);
+}
+.ps-journey__consumable-detail {
+    position: absolute; right: 106px; bottom: 129px; width: 214px; min-height: 60px;
+    padding: 8px 10px; display: none;
+    background-color: rgba(18, 14, 11, .97);
+    border-width: 1px; border-color: rgb(150, 108, 61); border-radius: 2px;
+}
+.ps-journey__consumable-detail.is-visible { display: flex; }
+.ps-journey__consumable-detail-name {
+    height: 20px; padding: 0; color: rgb(240, 215, 175); font-size: 13px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+.ps-journey__consumable-detail-effect {
+    white-space: normal; color: rgb(191, 176, 151); font-size: 10px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+.ps-journey__status-chip.status--consumable { border-color: rgb(164, 124, 67); }
+
 .ps-journey__hand-scroll.ps-battle-screen {
     position: absolute; left: 116px; right: 104px; top: 0; bottom: 0;
     flex-grow: 0; overflow: visible; background-color: rgba(0, 0, 0, 0);

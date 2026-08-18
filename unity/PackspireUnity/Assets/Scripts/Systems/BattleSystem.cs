@@ -70,7 +70,7 @@ public static class BattleSystem {
   if(c.unplayable||c.cost>run.energy)return BattleActionFx.Fail;
   run.energy-=c.cost;
   int dieOne=0,dieTwo=0,modifier=0;
-  int rolled=c.damage>0?RollDamage(c.damage,out dieOne,out dieTwo,out modifier):0;
+  int rolled=ResolveCardDamage(c,out dieOne,out dieTwo,out modifier);
   int raw=Damage(rolled+run.attackBuff,run.statuses,battle.enemyStatuses);
   int dealt=Mathf.Max(0,raw-battle.enemyBlock);
   battle.enemyBlock=Mathf.Max(0,battle.enemyBlock-raw);
@@ -153,8 +153,7 @@ public static class BattleSystem {
   }
   var move=ContentDatabase.EnemyMove(battle.enemy.id,moveIndex);
   int baseDamage=move?.damage??battle.enemy.damages[moveIndex];
-  int dieOne=0,dieTwo=0,modifier=0;
-  int rolled=baseDamage>0?RollDamage(baseDamage+dungeonDamage,out dieOne,out dieTwo,out modifier):0;
+  int rolled=baseDamage>0?Mathf.Max(0,baseDamage+dungeonDamage):0;
   int raw=baseDamage>0?Damage(rolled,battle.enemyStatuses,run.statuses):0;
   int damage=Mathf.Max(0,raw-run.block);
   run.hp-=damage;
@@ -190,9 +189,6 @@ public static class BattleSystem {
    enemyBlockGained=enemyBlock,
    enemyHealGained=enemyHeal,
    enemyMoveKind=move?.kind??EnemyMoveKind.Attack,
-   dieOne=dieOne,
-   dieTwo=dieTwo,
-   damageModifier=modifier,
    rolledDamage=raw,
    cardName=moveName
   };
@@ -233,6 +229,15 @@ public static class BattleSystem {
  }
  public static void Draw(RunState run,int n){while(n-->0){if(run.draw.Count==0){run.draw=Shuffle(run.discard);run.discard=new();}if(run.draw.Count==0)return;var c=run.draw[^1];run.draw.RemoveAt(run.draw.Count-1);run.hand.Add(c);}}
  public static int Status(List<StatusState> statuses,string type)=>statuses.FirstOrDefault(x=>x.type==type)?.amount??0;
+ public static int ResolveCardDamage(CardInstance card,out int dieOne,out int dieTwo,out int modifier){
+  dieOne=0;
+  dieTwo=0;
+  modifier=0;
+  if(card==null||card.damage<=0)return 0;
+  return card.damageMode==DamageResolutionMode.TwoD6
+   ?RollDamage(card.damage,out dieOne,out dieTwo,out modifier)
+   :card.damage;
+ }
  public static int RollDamage(int expected,out int dieOne,out int dieTwo,out int modifier){
   dieOne=Rng.Next(1,7);
   dieTwo=Rng.Next(1,7);

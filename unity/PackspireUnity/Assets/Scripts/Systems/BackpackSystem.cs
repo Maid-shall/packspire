@@ -153,7 +153,7 @@ public static class BackpackSystem {
 
  public static CardInstance FromDef(CardDef d,string source,string uid){
   var card=new CardInstance{
-   id=d.id,name=d.name,text=d.text,type=d.type,cost=d.cost,damage=d.damage,block=d.block,heal=d.heal,
+   id=d.id,name=d.name,text=d.text,type=d.type,damageMode=d.damageMode,cost=d.cost,damage=d.damage,block=d.block,heal=d.heal,
    buff=d.buff,energy=d.energy,selfDamage=d.selfDamage,exhaust=d.exhaust,
    innate=d.innate,retain=d.retain,ethereal=d.ethereal,unplayable=d.unplayable,afterUse=d.afterUse,
    source=source,sourceItemUid=uid

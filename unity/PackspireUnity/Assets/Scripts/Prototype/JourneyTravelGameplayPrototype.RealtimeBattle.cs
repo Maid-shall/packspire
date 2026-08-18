@@ -30,6 +30,8 @@ namespace Packspire
         private float realtimePlanningScale = RealtimePlanningNormalScale;
         private RealtimeEnemyTimelinePlanner realtimeEnemyTimelinePlanner;
         private JourneyBattleReelPresenter realtimeReelPresenter;
+        private int lastAttackBoostDisplaySecond = -1;
+        private int lastGuardBoostDisplaySecond = -1;
 
         private void BindRealtimeBattleUi(VisualElement root)
         {
@@ -64,6 +66,8 @@ namespace Packspire
             run.energy = realtimeBattle.Energy;
             realtimeTimelineHoldRemaining = 0f;
             realtimePlanningScale = RealtimePlanningNormalScale;
+            lastAttackBoostDisplaySecond = -1;
+            lastGuardBoostDisplaySecond = -1;
 
             RealtimeEnemyTimelineProfile timelineProfile = encounterProfile.timeline;
             if (timelineProfile == null)
@@ -101,6 +105,7 @@ namespace Packspire
             realtimeTimelineHoldRemaining = 0f;
             realtimePlanningScale = RealtimePlanningNormalScale;
             realtimeEnemyTimelinePlanner = null;
+            consumablePresenter?.ClearHover();
             realtimeReelPresenter?.Clear();
         }
 
@@ -118,7 +123,9 @@ namespace Packspire
                 return 0f;
             }
 
-            bool shouldPause = delta <= 0f || battleInputLocked;
+            // The pile sheet is a reading mode, not a planning slow-down. Keep this
+            // explicit even though the journey update also supplies a zero delta.
+            bool shouldPause = delta <= 0f || battleInputLocked || pileOverlayOpen;
             realtimeBattle.SetPaused(shouldPause);
             float timelineDelta = 0f;
             if (!shouldPause)
@@ -130,8 +137,21 @@ namespace Packspire
             }
 
             RefillFromSupplyPulses();
+            RefreshRealtimeBoostCountdowns();
             realtimeReelPresenter?.Refresh(realtimeBattle);
             return timelineDelta;
+        }
+
+        private void RefreshRealtimeBoostCountdowns()
+        {
+            int attackSecond = Mathf.CeilToInt((float)realtimeBattle.AttackBonusRemaining);
+            int guardSecond = Mathf.CeilToInt((float)realtimeBattle.GuardBonusRemaining);
+            if (attackSecond == lastAttackBoostDisplaySecond &&
+                guardSecond == lastGuardBoostDisplaySecond) return;
+            lastAttackBoostDisplaySecond = attackSecond;
+            lastGuardBoostDisplaySecond = guardSecond;
+            RefreshStatusHost(playerStatusHost, run.statuses);
+            AppendRealtimeConsumableStatuses();
         }
 
         private void RefillFromSupplyPulses()
@@ -150,7 +170,8 @@ namespace Packspire
 
         private float UpdateRealtimePlanningScale(float delta)
         {
-            float target = PointerIsOverRealtimeHandCard()
+            float target = PointerIsOverRealtimeHandCard() ||
+                           (consumablePresenter?.IsPointerOverSlot ?? false)
                 ? RealtimePlanningSlowScale
                 : RealtimePlanningNormalScale;
             if (delta <= 0f) return realtimePlanningScale;

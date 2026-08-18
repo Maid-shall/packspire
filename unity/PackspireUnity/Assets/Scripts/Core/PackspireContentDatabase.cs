@@ -5,13 +5,17 @@ using UnityEngine;
 
 namespace Packspire {
 public enum EffectTarget { Self, Enemy, Player }
-public enum ConsumableEffectType { Heal, Block, Damage, Energy }
+public enum ConsumableEffectType {
+ Heal, Block, Damage, Energy,
+ AttackBoost, GuardBoost, EnemyDelay, DayReduction
+}
 public enum CharacterSkillKind { None, Damage, Block, BlockAndDraw, Heal }
 public enum EventEffectType { None, Hp, Gold, RepairAll }
 public enum ItemRarity { Common, Uncommon, Rare, Legendary, Cursed }
 public enum BattleFormationScale { Normal, Small, Large, Boss }
 public enum DeliverySealAttribute { Incineration, Cooling, Silence, Mending }
 public enum BattleCardAfterUse { Discard, ExhaustBattle, RemoveExpedition }
+public enum DamageResolutionMode { Fixed, TwoD6 }
 public enum ExplorationCardKind { Support, Use, Installation, Drawback }
 public enum ExplorationTargetKind { None, Cell, Route, Installation, Enemy }
 public enum ExplorationConsumeRule { Discard, ExhaustArea, RemoveExpedition, Persistent }
@@ -118,6 +122,7 @@ public enum ExplorationEffectType {
 [Serializable] public class CardContent {
  public string id,name,text;
  public CardType type;
+ public DamageResolutionMode damageMode=DamageResolutionMode.Fixed;
  public int cost,damage,block,heal,buff,energy,selfDamage;
  public bool exhaust;
  public bool innate,retain,ethereal,unplayable;
@@ -253,6 +258,7 @@ public enum EnemyBoardBehavior {
  public string id,name,description;
  public ConsumableEffectType effect;
  public int amount;
+ public float durationSeconds;
  public Sprite artwork;
 }
 
@@ -648,6 +654,10 @@ public static class PackspireContent {
   Require(value.consumables.Any(x=>x.id=="guard"),"Default consumable 'guard' is missing.",result);
   Require(value.consumables.Any(x=>x.id=="fire"),"Default consumable 'fire' is missing.",result);
   Require(value.consumables.Any(x=>x.id=="energy"),"Default consumable 'energy' is missing.",result);
+  Require(value.consumables.Any(x=>x.id=="assault_incense"),"Journey consumable 'assault_incense' is missing.",result);
+  Require(value.consumables.Any(x=>x.id=="ward_seal"),"Journey consumable 'ward_seal' is missing.",result);
+  Require(value.consumables.Any(x=>x.id=="delay_seal"),"Journey consumable 'delay_seal' is missing.",result);
+  Require(value.consumables.Any(x=>x.id=="route_stamp"),"Journey consumable 'route_stamp' is missing.",result);
   Require(value.roles.Any(x=>x.id=="warrior"),"Default role 'warrior' is missing.",result);
   Require(value.dungeons.Any(x=>x.id=="old_spire"),"Default dungeon 'old_spire' is missing.",result);
   Require(value.characters.Any(x=>x.id=="ren"),"Default character 'ren' is missing.",result);

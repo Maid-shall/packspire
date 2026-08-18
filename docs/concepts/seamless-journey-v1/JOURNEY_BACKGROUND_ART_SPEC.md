@@ -1,5 +1,8 @@
 # シームレス遠征 背景素材共通仕様
 
+役割: 背景制作時の美術・構図契約。Unityへの登録、命名、Catalog設定は
+[`JOURNEY_BACKGROUND_ASSET_SPEC.md`](JOURNEY_BACKGROUND_ASSET_SPEC.md)を正本とする。
+
 更新: 2026-08-14  
 対象: `JourneyAnimationPrototype` の通常移動画面  
 状態: 灰市外縁の本番背景を作る前の制作契約
@@ -229,4 +232,3 @@ URP/2D Lightを前提にせず、現在のSpriteRenderer構成で実装する。
 - 30秒間見ても同じ塔・街灯の機械的反復が目立たない。
 - 停止中は全移動レイヤーと小物が停止する。
 - 1920x1080 Game Viewでキャラ、背景、HUDが競合しない。
-

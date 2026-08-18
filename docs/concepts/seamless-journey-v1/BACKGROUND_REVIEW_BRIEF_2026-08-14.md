@@ -1,5 +1,9 @@
 # シームレス遠征・背景実装レビュー依頼
 
+> 履歴資料。Unity AIへのレビュー依頼文です。現行の背景規格は
+> [`JOURNEY_BACKGROUND_ART_SPEC.md`](JOURNEY_BACKGROUND_ART_SPEC.md) と
+> [`JOURNEY_BACKGROUND_ASSET_SPEC.md`](JOURNEY_BACKGROUND_ASSET_SPEC.md) を参照します。
+
 ## 今回レビューしてほしい範囲
 
 横スクロール遠征画面の背景構造、反復制御、時間帯・天候連動、

@@ -305,6 +305,41 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
+ public void BattleCard_FixedDamageUsesAuthoredValueWithoutDice(){
+  var run=new RunState{hp=42,maxHp=42,energy=3};
+  run.hand.Add(new CardInstance{
+   id="fixed",name="Fixed",type=CardType.Attack,cost=1,damage=5,
+   damageMode=DamageResolutionMode.Fixed
+  });
+  var enemy=new EnemyDef("test","Test",1,30,1);
+  var battle=new BattleState{
+   enemy=enemy,enemyHp=enemy.hp,enemyMaxHp=enemy.hp,enemyStatuses=new()
+  };
+
+  var result=BattleSystem.PlayCard(run,battle,0);
+
+  Assert.That(result.damageToEnemy,Is.EqualTo(5));
+  Assert.That(result.dieOne,Is.Zero);
+  Assert.That(result.dieTwo,Is.Zero);
+  Assert.That(battle.enemyHp,Is.EqualTo(25));
+ }
+
+ [Test]
+ public void BattleCard_TwoD6RemainsAvailableAsAnExplicitSpecialMode(){
+  var card=new CardInstance{
+   id="special-die",name="Special Die",type=CardType.Attack,damage=7,
+   damageMode=DamageResolutionMode.TwoD6
+  };
+
+  int damage=BattleSystem.ResolveCardDamage(card,out int dieOne,out int dieTwo,out int modifier);
+
+  Assert.That(dieOne,Is.InRange(1,6));
+  Assert.That(dieTwo,Is.InRange(1,6));
+  Assert.That(modifier,Is.Zero);
+  Assert.That(damage,Is.EqualTo(dieOne+dieTwo));
+ }
+
+ [Test]
  public void CombatStatus_UntimedStrengthPersistsAcrossTurns(){
   var run=new RunState{hp=42,maxHp=42};
   var enemy=GameCatalog.Enemies.First();
@@ -788,6 +823,38 @@ public sealed class PackspireEditModeTests {
   Assert.That(telegraphs,Is.EqualTo(1));
   timeline.Tick(.8d);
   Assert.That(hits,Is.EqualTo(3));
+ }
+
+ [Test]
+ public void RealtimeBattle_DelayMovesOnlyUncommittedActions(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeEnemyActionPreview>();
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:20d);
+  timeline.ScheduleEnemyAction("warden","soon",delay:2d,damage:4,telegraphLead:1d);
+  timeline.ScheduleEnemyAction("warden","later",delay:5d,damage:7,telegraphLead:1d);
+  timeline.Tick(1.1d);
+  Assert.That(timeline.DelayUpcomingActions(2d),Is.EqualTo(1));
+  timeline.GetUpcomingActions(previews);
+  Assert.That(previews[0].ActionId,Is.EqualTo("soon"));
+  Assert.That(previews[0].TimeUntil,Is.EqualTo(.9d).Within(.0001d));
+  Assert.That(previews[1].ActionId,Is.EqualTo("later"));
+  Assert.That(previews[1].TimeUntil,Is.EqualTo(5.9d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeBattle_TimedBoostsExpireOnTimelineTime(){
+  var timeline=new RealtimeBattleController();
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:20d);
+  timeline.ApplyAttackBoost(2,5d);
+  timeline.ApplyGuardBoost(3,4d);
+  timeline.Tick(3d);
+  Assert.That(timeline.AttackBonus,Is.EqualTo(2));
+  Assert.That(timeline.GuardBonus,Is.EqualTo(3));
+  timeline.Tick(1.1d);
+  Assert.That(timeline.AttackBonus,Is.EqualTo(2));
+  Assert.That(timeline.GuardBonus,Is.Zero);
+  timeline.Tick(1d);
+  Assert.That(timeline.AttackBonus,Is.Zero);
  }
 
  [Test]

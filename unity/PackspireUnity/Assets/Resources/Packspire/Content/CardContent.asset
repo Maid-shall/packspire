@@ -15,7 +15,7 @@ MonoBehaviour:
   cards:
   - id: basicStrike
     name: "\u57FA\u672C\u653B\u6483"
-    text: "\u6575\u306B2D6-2\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B5\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 1
     damage: 5
@@ -57,7 +57,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: slash
     name: "\u88C1\u6C7A\u62BC\u5370"
-    text: "\u6575\u306B2D6\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B7\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 1
     damage: 7
@@ -85,7 +85,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: spark
     name: "\u5B9B\u5148\u6307\u5B9A"
-    text: "2D6-3\u30C0\u30E1\u30FC\u30B8\u3002\u6B21\u306E\u653B\u6483+3\u3002\u706B\u50B72\u30922\u30BF\u30FC\u30F3\u4E0E\u3048\u308B\u3002"
+    text: "4\u30C0\u30E1\u30FC\u30B8\u3002\u6B21\u306E\u653B\u6483+3\u3002\u706B\u50B72\u30922\u30BF\u30FC\u30F3\u4E0E\u3048\u308B\u3002"
     type: 2
     cost: 1
     damage: 4
@@ -117,7 +117,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: stab
     name: "\u62B9\u6D88\u7DDA"
-    text: "\u6575\u306B2D6-4\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B3\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 0
     damage: 3
@@ -163,7 +163,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: bomb
     name: "\u7206\u85AC"
-    text: "\u6575\u306B2D6+8\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
+    text: "\u6575\u306B15\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
     type: 0
     cost: 2
     damage: 15
@@ -177,7 +177,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: pierce
     name: "\u7D4C\u8DEF\u7A7F\u5B54"
-    text: "\u6575\u306B2D6+4\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B11\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 2
     damage: 11
@@ -205,7 +205,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: acid
     name: "\u9178\u6DB2"
-    text: "\u6575\u306B2D6-1\u30C0\u30E1\u30FC\u30B8\u3002\u6BD23\u3092\u4E0E\u3048\u308B\u3002"
+    text: "\u6575\u306B6\u30C0\u30E1\u30FC\u30B8\u3002\u6BD23\u3092\u4E0E\u3048\u308B\u3002"
     type: 0
     cost: 1
     damage: 6
@@ -237,7 +237,7 @@ MonoBehaviour:
     artwork: {fileID: 21300000, guid: dd7f7b3fa5c142bf947d5a59fe45391a, type: 3}
   - id: devour
     name: "\u8CAA\u98DF\u65AC\u308A"
-    text: "\u6575\u306B2D6+6\u30C0\u30E1\u30FC\u30B8\u3002\u81EA\u8EAB\u306B2\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B13\u30C0\u30E1\u30FC\u30B8\u3002\u81EA\u8EAB\u306B2\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 1
     damage: 13
@@ -251,7 +251,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: inferno
     name: "\u7114\u65AD\u3061"
-    text: "\u6575\u306B2D6+11\u30C0\u30E1\u30FC\u30B8\u3002"
+    text: "\u6575\u306B18\u30C0\u30E1\u30FC\u30B8\u3002"
     type: 0
     cost: 2
     damage: 18
@@ -279,7 +279,7 @@ MonoBehaviour:
     artwork: {fileID: 0}
   - id: starBomb
     name: "\u661F\u55B0\u3044\u7206\u85AC"
-    text: "\u6575\u306B2D6+17\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
+    text: "\u6575\u306B24\u30C0\u30E1\u30FC\u30B8\u3002\u5EC3\u68C4\u3002"
     type: 0
     cost: 2
     damage: 24
@@ -298,24 +298,56 @@ MonoBehaviour:
     description: "HP\u309212\u56DE\u5FA9\u3059\u308B\u3002"
     effect: 0
     amount: 12
+    durationSeconds: 0
     artwork: {fileID: 0}
   - id: guard
     name: "\u786C\u5316\u85AC"
     description: "10\u30D6\u30ED\u30C3\u30AF\u3092\u5F97\u308B\u3002"
     effect: 1
     amount: 10
+    durationSeconds: 0
     artwork: {fileID: 0}
   - id: fire
     name: "\u706B\u70B9\u74F6"
-    description: "\u6575\u306B2D6+5\u30C0\u30E1\u30FC\u30B8\u3002"
+    description: "\u6575\u306B12\u30C0\u30E1\u30FC\u30B8\u3002"
     effect: 2
     amount: 12
+    durationSeconds: 0
     artwork: {fileID: 0}
   - id: energy
     name: "\u6D3B\u529B\u85AC"
     description: "\u30A8\u30CD\u30EB\u30AE\u30FC\u30922\u5F97\u308B\u3002"
     effect: 3
     amount: 2
+    durationSeconds: 0
+    artwork: {fileID: 0}
+  - id: assault_incense
+    name: "\u653B\u52E2\u9999"
+    description: "12\u79D2\u9593\u3001\u653B\u6483\u30AB\u30FC\u30C9\u306E\u30C0\u30E1\u30FC\u30B8+2\u3002"
+    effect: 4
+    amount: 2
+    durationSeconds: 12
+    artwork: {fileID: 0}
+  - id: ward_seal
+    name: "\u9632\u8B77\u5370"
+    description: "12\u79D2\u9593\u3001\u9632\u5FA1\u30AB\u30FC\u30C9\u306E\u30D6\u30ED\u30C3\u30AF+3\u3002"
+    effect: 5
+    amount: 3
+    durationSeconds: 12
+    artwork: {fileID: 0}
+  - id: delay_seal
+    name: "\u9045\u6EDE\u5370"
+    description: "\u4E88\u5146\u958B\u59CB\u524D\u306E\u6575\u884C\u52D5\u30922\u79D2\u9045\u3089\u305B\u308B\u3002"
+    effect: 6
+    amount: 2
+    durationSeconds: 0
+    artwork: {fileID: 0}
+  - id: route_stamp
+    name: "\u77ED\u7E2E\u5370"
+    description: "\u63A2\u7D22\u4E2D\u306B\u4F7F\u3044\u3001\u7D4C\u904E\u65E5\u6570\u30921\u65E5\u623B\u3059\u3002"
+    effect: 7
+    amount: 1
+    durationSeconds: 0
     artwork: {fileID: 0}
   statuses:
   - id: strength

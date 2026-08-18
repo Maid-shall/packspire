@@ -31,6 +31,7 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 [Serializable] public class CardDef {
  public string id,name,text;
  public CardType type;
+ public DamageResolutionMode damageMode=DamageResolutionMode.Fixed;
  public int cost,damage,block,heal,buff,energy,selfDamage;
  public bool exhaust,innate,retain,ethereal,unplayable;
  public BattleCardAfterUse afterUse;
@@ -60,13 +61,14 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 [Serializable] public class CardInstance {
  public string id,name,text,source,sourceItemUid,slotKey;
  public CardType type;
+ public DamageResolutionMode damageMode=DamageResolutionMode.Fixed;
  public int cost,damage,block,heal,buff,energy,selfDamage,draw;
  public bool exhaust,innate,retain,ethereal,unplayable,recycle,durabilityFree,roleCard;
  public BattleCardAfterUse afterUse;
  public List<EffectSpec> effects=new();
  public CardInstance Clone()=>new(){
   id=id,name=name,text=text,source=source,sourceItemUid=sourceItemUid,slotKey=slotKey,
-  type=type,cost=cost,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,draw=draw,
+  type=type,damageMode=damageMode,cost=cost,damage=damage,block=block,heal=heal,buff=buff,energy=energy,selfDamage=selfDamage,draw=draw,
   exhaust=exhaust,innate=innate,retain=retain,ethereal=ethereal,unplayable=unplayable,afterUse=afterUse,
   recycle=recycle,durabilityFree=durabilityFree,roleCard=roleCard,
   effects=effects.ConvertAll(x=>new EffectSpec{type=x.type,target=x.target,amount=x.amount,duration=x.duration})

@@ -235,7 +235,7 @@ namespace Packspire
             miniGameTitle.text = success ? "回収成功" : "回収を見送った";
             miniGameNote.text = message;
             miniGameTimer.text = success ? "RESULT / SECURED" : "RESULT / MISSED";
-            yield return new WaitForSecondsRealtime(.85f);
+            yield return WaitForJourneySeconds(.85f);
             ShowToast(message);
             SetPhase(Phase.Travel);
         }

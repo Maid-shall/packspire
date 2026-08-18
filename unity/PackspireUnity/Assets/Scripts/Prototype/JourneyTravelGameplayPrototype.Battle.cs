@@ -59,8 +59,21 @@ namespace Packspire
         private void PlayCard(int index)
         {
             if (phase != Phase.Battle || battleInputLocked || pileOverlayOpen || battle == null || index >= run.hand.Count) return;
+            CardInstance playedCard = run.hand[index];
+            int attackBuffBeforePlay = run.attackBuff;
+            if (playedCard.damage > 0 && realtimeBattle.AttackBonus > 0)
+                run.attackBuff += realtimeBattle.AttackBonus;
             BattleActionFx fx = BattleSystem.PlayCard(run, battle, index);
-            if (!fx.ok) return;
+            if (!fx.ok)
+            {
+                run.attackBuff = attackBuffBeforePlay;
+                return;
+            }
+            if (playedCard.block > 0 && fx.blockGained > 0 && realtimeBattle.GuardBonus > 0)
+            {
+                run.block += realtimeBattle.GuardBonus;
+                fx.blockGained += realtimeBattle.GuardBonus;
+            }
             realtimeBattle.SetEnergy(run.energy);
             run.energy = realtimeBattle.Energy;
             battleLog.text = battle.log;
@@ -177,11 +190,13 @@ namespace Packspire
             RefreshHpMeter(battlePlayerHpFill, battlePlayerHp, run.hp, run.maxHp);
             RefreshBlockBadge(battlePlayerBlockBadge, battleBlock, run.block);
             RefreshStatusHost(playerStatusHost, run.statuses);
+            AppendRealtimeConsumableStatuses();
             drawPileText.text = run.draw.Count.ToString();
             discardPileText.text = run.discard.Count.ToString();
             bool commandAvailable = !battleInputLocked && !pileOverlayOpen;
             drawPileButton.SetEnabled(commandAvailable);
             discardPileButton.SetEnabled(commandAvailable);
+            consumablePresenter?.Refresh(run, commandAvailable);
             int visibleCardCount = Mathf.Min(run.hand.Count, cardButtons.Length);
             battleHandOrder.Clear();
             for (int index = 0; index < cardButtons.Length; index++)
@@ -280,6 +295,7 @@ namespace Packspire
         {
             if (phase != Phase.Battle || battle == null || battleInputLocked) return;
             List<CardInstance> cards = drawPile ? run.draw : run.discard;
+            consumablePresenter?.ClearHover();
             pileOverlayOpen = true;
             pileOverlay?.AddToClassList("pile-overlay--open");
             screen?.AddToClassList("battle--pile-open");

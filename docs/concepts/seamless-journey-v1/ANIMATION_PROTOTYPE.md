@@ -1,5 +1,8 @@
 # Journey animation prototype
 
+> Historical prototype note. Current journey priorities and acceptance criteria live in
+> [`JOURNEY_PRODUCT_PLAN.md`](JOURNEY_PRODUCT_PLAN.md).
+
 This is an isolated feasibility test for a fixed courier travelling through a
 multi-layer scrolling world, plus limited-pose couriers with optional programmatic
 motion support.

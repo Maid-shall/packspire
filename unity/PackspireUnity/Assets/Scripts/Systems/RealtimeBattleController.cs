@@ -131,6 +131,21 @@ namespace Packspire
         public int EnergyPerSupplyPulse { get; private set; }
         public int DrawsPerSupplyPulse { get; private set; }
         public int SupplyPulseCount { get; private set; }
+        public int AttackBonus { get; private set; }
+        public int GuardBonus { get; private set; }
+        public double AttackBonusRemaining { get; private set; }
+        public double GuardBonusRemaining { get; private set; }
+        public bool HasDelayableActions
+        {
+            get
+            {
+                foreach (ScheduledAction action in actions)
+                {
+                    if (action.RemainingHits > 0 && !action.TelegraphSent) return true;
+                }
+                return false;
+            }
+        }
         public double NextEnergyIn => Phase == RealtimeBattlePhase.Running || Phase == RealtimeBattlePhase.Paused
             ? Math.Max(0d, nextEnergyAt - Time)
             : 0d;
@@ -154,6 +169,10 @@ namespace Packspire
             Time = 0d;
             nextEnergyAt = EnergyInterval;
             SupplyPulseCount = 0;
+            AttackBonus = 0;
+            GuardBonus = 0;
+            AttackBonusRemaining = 0d;
+            GuardBonusRemaining = 0d;
             nextSerial = 0;
             actions.Clear();
             Phase = RealtimeBattlePhase.Running;
@@ -170,6 +189,10 @@ namespace Packspire
         {
             Phase = RealtimeBattlePhase.Finished;
             actions.Clear();
+            AttackBonus = 0;
+            GuardBonus = 0;
+            AttackBonusRemaining = 0d;
+            GuardBonusRemaining = 0d;
         }
 
         public bool TrySpendEnergy(int amount)
@@ -187,6 +210,45 @@ namespace Packspire
             if (Energy == clamped) return;
             Energy = clamped;
             EnergyChanged?.Invoke(Energy, MaximumEnergy);
+        }
+
+        public void AddEnergy(int amount)
+        {
+            if (amount <= 0) return;
+            SetEnergy(Energy + amount);
+        }
+
+        public void ApplyAttackBoost(int amount, double duration)
+        {
+            if (amount <= 0 || duration <= 0d) return;
+            AttackBonus = Math.Max(AttackBonus, amount);
+            AttackBonusRemaining = Math.Max(AttackBonusRemaining, duration);
+        }
+
+        public void ApplyGuardBoost(int amount, double duration)
+        {
+            if (amount <= 0 || duration <= 0d) return;
+            GuardBonus = Math.Max(GuardBonus, amount);
+            GuardBonusRemaining = Math.Max(GuardBonusRemaining, duration);
+        }
+
+        /// <summary>
+        /// Delays actions which have not begun telegraphing. An already committed
+        /// attack keeps its visual timing so the reel and enemy animation cannot disagree.
+        /// </summary>
+        public int DelayUpcomingActions(double seconds)
+        {
+            if (seconds <= 0d) return 0;
+            int delayed = 0;
+            foreach (ScheduledAction action in actions)
+            {
+                if (action.RemainingHits <= 0 || action.TelegraphSent) continue;
+                action.ExecuteAt += seconds;
+                action.TelegraphAt += seconds;
+                delayed++;
+            }
+            if (delayed > 0) actions.Sort(CompareActions);
+            return delayed;
         }
 
         public void GetUpcomingActions(List<RealtimeEnemyActionPreview> buffer)
@@ -284,6 +346,7 @@ namespace Packspire
         {
             if (Phase != RealtimeBattlePhase.Running || deltaTime <= 0d) return;
             Time += deltaTime;
+            AdvanceTimedBoosts(deltaTime);
 
             while (Time >= nextEnergyAt)
             {
@@ -314,6 +377,20 @@ namespace Packspire
 
             actions.RemoveAll(static action => action.RemainingHits <= 0);
             actions.Sort(CompareActions);
+        }
+
+        private void AdvanceTimedBoosts(double deltaTime)
+        {
+            if (AttackBonusRemaining > 0d)
+            {
+                AttackBonusRemaining = Math.Max(0d, AttackBonusRemaining - deltaTime);
+                if (AttackBonusRemaining <= 0d) AttackBonus = 0;
+            }
+            if (GuardBonusRemaining > 0d)
+            {
+                GuardBonusRemaining = Math.Max(0d, GuardBonusRemaining - deltaTime);
+                if (GuardBonusRemaining <= 0d) GuardBonus = 0;
+            }
         }
 
         private static RealtimeEnemyAction ToEvent(ScheduledAction action)
