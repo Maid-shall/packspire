@@ -129,10 +129,13 @@ namespace Packspire
             }
 
             for (int index = 0; index < 10; index++)
-            {
                 contract.Require<Button>($"journey-card-{index}");
+
+            for (int index = 0; index < JourneyBattleReelPresenter.ThreatSlotCount; index++)
                 contract.Require<VisualElement>($"journey-threat-slot-{index}");
-            }
+
+            for (int index = 0; index < JourneyBattleReelPresenter.SupplySlotCount; index++)
+                contract.Require<VisualElement>($"journey-supply-slot-{index}");
 
             return contract;
         }

@@ -46,6 +46,9 @@ namespace Packspire
 
         private readonly List<UnityEngine.Object> runtimeAssets = new List<UnityEngine.Object>();
         private readonly Button[] cardButtons = new Button[10];
+        private readonly BattleCardView[] battleCardViews = new BattleCardView[10];
+        private readonly List<(Button button, float depth)> battleHandOrder =
+            new List<(Button button, float depth)>(10);
         private readonly JourneyMiniGameController miniGameController = new JourneyMiniGameController();
         private static readonly string[] MiniGamePresentationClasses =
         {
@@ -211,7 +214,6 @@ namespace Packspire
         private SpriteRenderer parcelRenderer;
         private Coroutine transitionRoutine;
         private Coroutine choiceCommitRoutine;
-        private Coroutine defenseRoutine;
         private Coroutine encounterRoutine;
         private Coroutine battlePresentationRoutine;
         private bool uiBound;
@@ -483,6 +485,14 @@ namespace Packspire
             {
                 int captured = index;
                 cardButtons[index] = root.Q<Button>($"journey-card-{index}");
+                // BattleCardView owns only the retained card contents. The host
+                // classes remain the contract that gives journey cards their size,
+                // frame and shared product-card skin.
+                cardButtons[index].text = string.Empty;
+                cardButtons[index].AddToClassList("ps-battle-card");
+                cardButtons[index].AddToClassList("ps-docket-card");
+                cardButtons[index].AddToClassList("ps-docket-combat");
+                battleCardViews[index] = new BattleCardView(cardButtons[index]);
                 cardButtons[index].clicked += () => PlayCard(captured);
             }
 
@@ -1060,35 +1070,10 @@ namespace Packspire
             ShowToast($"DEV景色確認：{BiomeLabel(biomeIndex)}・標準路");
         }
 
-        public void DevStartDefense()
-        {
-            if (phase != Phase.Battle) DevBeginBattle();
-            if (!defenseActive) BeginEnemyTurn();
-        }
-
-        public void DevStartReactionPreview()
-        {
-            if (phase != Phase.Battle) DevBeginBattle();
-            if (defenseActive || battle == null) return;
-            battle.move = 1;
-            RefreshBattleUi();
-            BeginEnemyTurn();
-        }
-
         public void DevSetPaused(bool value)
         {
             if (!uiBound) BindUi();
             SetPaused(value);
-        }
-
-        public void DevResolveJump()
-        {
-            ResolveDefenseInput(DefenseAction.Jump);
-        }
-
-        public void DevResolveBrace()
-        {
-            ResolveDefenseInput(DefenseAction.Brace);
         }
 
         public void DevSkipEncounterIntro()

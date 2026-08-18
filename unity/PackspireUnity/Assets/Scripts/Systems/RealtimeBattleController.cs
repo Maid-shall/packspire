@@ -154,6 +154,7 @@ namespace Packspire
             Time = 0d;
             nextEnergyAt = EnergyInterval;
             SupplyPulseCount = 0;
+            nextSerial = 0;
             actions.Clear();
             Phase = RealtimeBattlePhase.Running;
             EnergyChanged?.Invoke(Energy, MaximumEnergy);
