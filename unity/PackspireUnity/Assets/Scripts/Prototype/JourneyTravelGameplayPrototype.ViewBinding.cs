@@ -106,6 +106,7 @@ namespace Packspire
             speech = root.Q<Label>("journey-speech");
             damagePopup = root.Q<Label>("journey-damage-popup");
             encounterBanner = root.Q<Label>("journey-encounter-banner");
+            battleStartBanner = root.Q<Label>("journey-battle-start");
             miniGameLeft = root.Q<Button>("journey-minigame-left");
             miniGameAction = root.Q<Button>("journey-minigame-action");
             miniGameRight = root.Q<Button>("journey-minigame-right");
@@ -125,6 +126,7 @@ namespace Packspire
                 CanUseJourneyConsumable);
             BindRealtimeBattleUi(root);
             BindCombatLabUi(root);
+            BindJourneyRewardUi(root);
             pileOverlay = root.Q<VisualElement>("journey-pile-overlay");
             pileTitle = root.Q<Label>("journey-pile-title");
             pileSummary = root.Q<Label>("journey-pile-summary");

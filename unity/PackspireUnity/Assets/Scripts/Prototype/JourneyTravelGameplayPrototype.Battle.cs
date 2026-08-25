@@ -9,7 +9,7 @@ namespace Packspire
         private const float DefenseWindowStart01 = .66f;
         private const float DefenseWindowEnd01 = .96f;
 
-        private void BeginBattle()
+        private void BeginBattle(bool playEncounterIntro = true)
         {
             ClosePileOverlay();
             battleRevision++;
@@ -17,8 +17,20 @@ namespace Packspire
             if (battlePresentationRoutine != null) StopCoroutine(battlePresentationRoutine);
             encounterRoutine = null;
             battlePresentationRoutine = null;
+            encounterIntroActive = playEncounterIntro;
+            battleEntryStartingMotionScale = Mathf.Max(.5f, speedScale);
+            battleEntryMotionScale = playEncounterIntro
+                ? battleEntryStartingMotionScale
+                : 0f;
+            ClearBattleEntryClasses();
+            ClearBattleExitPresentation();
+            if (playEncounterIntro)
+                screen.AddToClassList("battle-entry--active");
             SetPhase(Phase.Battle);
-            scenery.ClearAll();
+            if (playEncounterIntro)
+                scenery.SetActivity(true, false);
+            else
+                scenery.ClearAll();
             defenseActive = false;
             enemyImpactHoldRemaining = 0f;
             defenseResolved = false;
@@ -27,7 +39,6 @@ namespace Packspire
             defenseAction = DefenseAction.None;
             defenseInputGrade = DefenseInputGrade.None;
             defenseInputTime = -1f;
-            encounterIntroActive = true;
             screen.RemoveFromClassList("battle--telegraph");
             screen.RemoveFromClassList("battle--reaction-ready");
             screen.RemoveFromClassList("battle--reaction-committed");
@@ -45,7 +56,7 @@ namespace Packspire
             enemyRenderer.transform.rotation = Quaternion.identity;
             enemyRenderer.transform.localScale = Vector3.one * enemyBattleBaseScale;
             enemyRenderer.color = Color.white;
-            SetMainEnemyVisible(true);
+            SetMainEnemyVisible(!playEncounterIntro);
             SyncMainEnemyShadow();
             EnemyDef enemy = encounterProfile.BuildEnemy();
             battle = BattleSystem.Begin(run, enemy, 1f);
@@ -53,17 +64,34 @@ namespace Packspire
             SetBattlePreviewEnemyCount(1);
             enemyNames[0].text = enemy.name;
             battleLog.text = $"{enemy.name}が進路を塞いだ。";
+            encounterBanner.text = $"ROUTE INTERCEPT  /  {enemy.name}";
             RefreshBattleUi();
-            encounterRoutine = StartCoroutine(EncounterRoutine(battleRevision));
+            if (playEncounterIntro)
+            {
+                PrepareBattleEntryEnemy();
+                encounterRoutine = StartCoroutine(EncounterRoutine(battleRevision));
+            }
+            else
+            {
+                CompleteBattleEntry(true);
+            }
         }
 
         private void PlayCard(int index)
         {
             if (phase != Phase.Battle || battleInputLocked || pileOverlayOpen || battle == null || index >= run.hand.Count) return;
             CardInstance playedCard = run.hand[index];
+            if (playedCard.unplayable || playedCard.cost > run.energy) return;
             int attackBuffBeforePlay = run.attackBuff;
-            if (playedCard.damage > 0 && realtimeBattle.AttackBonus > 0)
-                run.attackBuff += realtimeBattle.AttackBonus;
+            int counterBonus = 0;
+            if (playedCard.damage > 0)
+            {
+                if (realtimeBattle.AttackBonus > 0)
+                    run.attackBuff += realtimeBattle.AttackBonus;
+                counterBonus = realtimeCombatTiming.ConsumeCounterBonus(
+                    playedCard.damage);
+                run.attackBuff += counterBonus;
+            }
             BattleActionFx fx = BattleSystem.PlayCard(run, battle, index);
             if (!fx.ok)
             {
@@ -75,8 +103,12 @@ namespace Packspire
                 run.block += realtimeBattle.GuardBonus;
                 fx.blockGained += realtimeBattle.GuardBonus;
             }
+            if (fx.blockGained > 0)
+                realtimeCombatTiming.NotifyPlayerGuardChanged(run.block);
             realtimeBattle.SetEnergy(run.energy);
             run.energy = realtimeBattle.Energy;
+            if (counterBonus > 0)
+                battle.log += $" / 反撃+{counterBonus}";
             battleLog.text = battle.log;
             if (fx.damageToEnemy > 0)
             {
@@ -87,8 +119,8 @@ namespace Packspire
             }
             else if (fx.enemyDefeated)
             {
-                SetMainEnemyVisible(false);
-                CompleteJourneyBattleVictory();
+                battlePresentationRoutine = StartCoroutine(
+                    JourneyBattleVictoryPresentationRoutine(battleRevision));
                 return;
             }
             else RefreshBattleUi();
@@ -142,17 +174,8 @@ namespace Packspire
 
         private void CompleteJourneyBattleVictory()
         {
-            if (usesLiveRun && PackspireGame.Instance != null)
-            {
-                PackspireGame.Instance.UiOpenSeamlessJourneyBattleReward();
-                return;
-            }
-            ResolveRoute(new CourierLocationOutcome
-            {
-                success = true,
-                performance = 2,
-                message = $"{encounterProfile.ResolvedDisplayName}を退けた。"
-            });
+            if (TryCompleteCombatLabMeasurement(true)) return;
+            ShowJourneyBattleReward();
         }
 
         private void ResolveDefenseInput(DefenseAction action)
@@ -240,11 +263,30 @@ namespace Packspire
             return new BattleCardViewModel(
                 card.name,
                 card.cost.ToString(),
-                card.text,
+                JourneyRealtimeCardText(card),
                 JourneyBattleCardKind(card),
                 affordable ? string.Empty : "LOW EN",
                 PackspireUiFoundation.BattleCardArtwork(card.id),
                 affordable);
+        }
+
+        private static string JourneyRealtimeCardText(CardInstance card)
+        {
+            if (card == null || string.IsNullOrEmpty(card.text) ||
+                card.effects == null || card.effects.Count == 0)
+                return card?.text ?? string.Empty;
+
+            string text = card.text;
+            foreach (EffectSpec effect in card.effects)
+            {
+                if (effect == null || effect.duration <= 0) continue;
+                double seconds =
+                    effect.duration * RealtimeCombatRules.StatusSecondsPerDurationUnit;
+                text = text.Replace(
+                    $"{effect.duration}ターン",
+                    $"{seconds:0.#}秒");
+            }
+            return text;
         }
 
         private static string JourneyBattleCardKind(CardInstance card)
@@ -288,15 +330,26 @@ namespace Packspire
                 var chip = new VisualElement { pickingMode = PickingMode.Position };
                 chip.AddToClassList("ps-journey__status-chip");
                 chip.EnableInClassList("status--debuff", definition != null && definition.kind == "debuff");
-                chip.tooltip = definition != null
-                    ? $"{definition.name}\n{definition.description}"
+                string description = definition != null
+                    ? definition.description.Replace(
+                        "ターン終了時",
+                        $"{RealtimeCombatRules.StatusPulseSeconds:0.#}秒ごと")
                     : status.type;
+                string remaining = status.remainingSeconds > 0d
+                    ? $"\n残り {status.remainingSeconds:0.0}秒"
+                    : string.Empty;
+                chip.tooltip = definition != null
+                    ? $"{definition.name}\n{description}{remaining}"
+                    : $"{status.type}{remaining}";
 
                 var icon = new Label(definition?.icon ?? "◆") { pickingMode = PickingMode.Ignore };
                 icon.AddToClassList("ps-journey__status-icon");
                 chip.Add(icon);
 
-                var count = new Label(status.amount.ToString()) { pickingMode = PickingMode.Ignore };
+                string countText = status.remainingSeconds > 0d
+                    ? $"{status.amount} / {System.Math.Ceiling(status.remainingSeconds):0}s"
+                    : status.amount.ToString();
+                var count = new Label(countText) { pickingMode = PickingMode.Ignore };
                 count.AddToClassList("ps-journey__status-count");
                 chip.Add(count);
                 host.Add(chip);

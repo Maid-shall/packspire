@@ -495,7 +495,7 @@
             <ui:VisualElement class="ps-journey__combat-lab-head">
                 <ui:VisualElement>
                     <ui:Label text="COMBAT LAB / 戦闘確認所" class="ps-journey__combat-lab-title" />
-                    <ui:Label text="本番ルールを止めて、表示だけを比較します" class="ps-journey__combat-lab-note" />
+                    <ui:Label text="表示比較と、同条件5戦の実戦計測を行います" class="ps-journey__combat-lab-note" />
                 </ui:VisualElement>
                 <ui:Button name="journey-combat-lab-close" text="開発者メニューへ  [F10]" class="ps-journey__combat-lab-close" />
             </ui:VisualElement>
@@ -506,8 +506,49 @@
                 <ui:Button name="journey-combat-lab-play" text="予兆を再生" class="ps-journey__combat-lab-play" />
             </ui:VisualElement>
             <ui:Label name="journey-combat-lab-status" text="背景・敵・攻撃を選んで再生" class="ps-journey__combat-lab-status" />
+            <ui:VisualElement class="ps-journey__combat-lab-measurement">
+                <ui:Button name="journey-combat-lab-measure" text="実戦計測を開始" class="ps-journey__combat-lab-measure" />
+                <ui:Button name="journey-combat-lab-clear" text="記録を消去" class="ps-journey__combat-lab-clear" />
+                <ui:Label name="journey-combat-lab-summary" text="計測記録なし" class="ps-journey__combat-lab-summary" />
+            </ui:VisualElement>
         </ui:VisualElement>
 
+
+        <ui:VisualElement name="journey-reward-overlay" class="ps-journey__reward-overlay">
+            <ui:VisualElement class="ps-journey__reward-scrim" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__reward-popup">
+                <ui:VisualElement class="ps-journey__reward-header">
+                    <ui:Label name="journey-reward-tier" text="BATTLE REWARD" class="ps-journey__reward-tier" />
+                    <ui:Label text="戦果を選択" class="ps-journey__reward-title" />
+                    <ui:Label text="持ち帰るものをひとつ選んでください" class="ps-journey__reward-subtitle" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reward-candidates">
+                    <ui:Button name="journey-reward-candidate-0" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-0" text="CONSUMABLE" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-0" text="候補A" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-0" text="消耗品" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                    <ui:Button name="journey-reward-candidate-1" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-1" text="EXPEDITION" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-1" text="候補B" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-1" text="遠征資源" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                    <ui:Button name="journey-reward-candidate-2" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-2" text="EQUIPMENT" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-2" text="候補C" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-2" text="装備" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reward-detail">
+                    <ui:VisualElement class="ps-journey__reward-detail-copy">
+                        <ui:Label name="journey-reward-detail-name" text="戦果をひとつ選ぶ" class="ps-journey__reward-detail-name" />
+                        <ui:Label name="journey-reward-detail-text" text="候補を選ぶと、ここに効果が表示されます。" class="ps-journey__reward-detail-text" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-reward-selection-note" text="未選択" class="ps-journey__reward-selection-note" />
+                    <ui:Button name="journey-reward-confirm" text="これを受領する" class="ps-journey__reward-confirm" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:Label name="journey-toast" text="" picking-mode="Ignore" class="ps-journey__toast" />
         <ui:VisualElement name="journey-transition" class="ps-journey__transition" picking-mode="Ignore">
             <ui:VisualElement class="ps-journey__transition-wash" picking-mode="Ignore" />
@@ -515,5 +556,6 @@
             <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--mid" picking-mode="Ignore" />
             <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--near" picking-mode="Ignore" />
         </ui:VisualElement>
+        <ui:Label name="journey-battle-start" text="BATTLE START" class="ps-journey__battle-start" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

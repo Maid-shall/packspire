@@ -246,7 +246,14 @@ public static class BattleSystem {
  }
  public static int Damage(int value,List<StatusState> attacker,List<StatusState> defender){value+=Status(attacker,"strength");if(Status(attacker,"weak")>0)value=Mathf.FloorToInt(value*.75f);if(Status(defender,"vulnerable")>0)value=Mathf.CeilToInt(value*1.5f);return Mathf.Max(0,value);}
  public static int Block(int value,List<StatusState> statuses)=>Mathf.Max(0,value-Status(statuses,"armorBreak"));
- public static void Apply(List<StatusState> statuses,EffectSpec effect){if(ContentDatabase.Status(effect.type)==null)return;var current=statuses.FirstOrDefault(x=>x.type==effect.type);if(current==null){current=new StatusState{type=effect.type};statuses.Add(current);}current.amount+=Mathf.Max(1,effect.amount);current.duration=Mathf.Max(current.duration,effect.duration);}
+ public static void Apply(List<StatusState> statuses,EffectSpec effect){
+  if(ContentDatabase.Status(effect.type)==null)return;
+  var current=statuses.FirstOrDefault(x=>x.type==effect.type);
+  if(current==null){current=new StatusState{type=effect.type};statuses.Add(current);}
+  current.amount+=Mathf.Max(1,effect.amount);
+  current.duration=Mathf.Max(current.duration,effect.duration);
+  RealtimeCombatRules.ArmStatus(current,effect.duration);
+ }
  static void ApplyEffects(RunState run,BattleState battle,List<EffectSpec> effects,bool enemySource){foreach(var effect in effects){var target=effect.target=="enemy"?battle.enemyStatuses:effect.target=="player"?run.statuses:effect.target=="self"?(enemySource?battle.enemyStatuses:run.statuses):battle.enemyStatuses;Apply(target,effect);}}
  static int Tick(List<StatusState> statuses,ref int hp,int maxHp){
   int before=hp;

@@ -751,8 +751,33 @@
 .ps-journey__damage-popup { position: absolute; right: 190px; top: 226px; width: 100px; font-size: 34px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(255, 100, 70); opacity: 0; translate: 0 10px; transition-property: opacity, translate; transition-duration: .08s; }
 .ps-journey__damage-popup.fx--visible { opacity: 1; translate: 0 -14px; }
 .ps-journey__damage-popup.fx--player { left: 300px; right: auto; color: rgb(255, 136, 91); }
-.ps-journey__encounter-banner { position: absolute; left: 190px; right: 0; top: 278px; height: 58px; padding-top: 12px; font-size: 26px; letter-spacing: 5px; -unity-text-align: upper-center; color: rgb(243, 195, 123); background-color: rgba(55, 12, 10, .88); border-top-width: 1px; border-bottom-width: 1px; border-top-color: rgb(178, 58, 39); border-bottom-color: rgb(178, 58, 39); opacity: 0; scale: 0.96; transition-property: opacity, scale; transition-duration: .12s; }
-.ps-journey__encounter-banner.encounter--visible { opacity: 1; scale: 1; }
+.ps-journey__encounter-banner {
+    position: absolute; left: 970px; right: auto; top: 154px; width: 282px; height: 42px;
+    padding: 11px 10px 0 14px; font-size: 12px; letter-spacing: 1px;
+    -unity-font-style: bold; -unity-text-align: upper-left;
+    color: rgb(247, 211, 151); background-color: rgba(12, 12, 13, .94);
+    border-left-width: 4px; border-top-width: 1px; border-bottom-width: 1px;
+    border-left-color: rgb(190, 55, 37); border-top-color: rgb(154, 104, 51);
+    border-bottom-color: rgb(79, 47, 28);
+    opacity: 0; translate: 32px 0; scale: 0.98;
+    transition-property: opacity, translate, scale; transition-duration: .16s;
+}
+.ps-journey__encounter-banner.encounter--visible { opacity: 1; translate: 0 0; scale: 1; }
+.ps-journey__battle-start {
+    position: absolute; left: 430px; top: 306px; width: 620px; height: 66px;
+    padding-top: 13px; font-size: 30px; letter-spacing: 8px;
+    -unity-font-style: bold; -unity-text-align: upper-center;
+    color: rgb(255, 225, 159); background-color: rgba(10, 11, 12, .82);
+    border-top-width: 1px; border-bottom-width: 1px;
+    border-top-color: rgba(225, 170, 83, .88);
+    border-bottom-color: rgba(135, 65, 35, .92);
+    opacity: 0; translate: 38px 0; scale: 0.96;
+    transition-property: opacity, translate, scale;
+    transition-duration: .18s;
+}
+.battle-entry--active.battle-entry--start .ps-journey__battle-start {
+    opacity: 1; translate: 0 0; scale: 1;
+}
 .ps-journey.fx--impact { translate: -3px 0; }
 
 .ps-journey__toast { position: absolute; left: 420px; top: 85px; width: 540px; padding: 9px 18px; font-size: 13px; -unity-text-align: middle-center; color: rgb(246, 218, 165); background-color: rgba(8, 9, 10, .88); border-bottom-width: 1px; border-bottom-color: rgba(191, 126, 56, .72); opacity: 0; }
@@ -821,6 +846,37 @@
 .state--battle .ps-journey__threat-reel { opacity: 1; translate: 0 0; }
 .state--battle .ps-journey__bottom, .state--battle .ps-journey__topbar, .state--battle .ps-journey__rail { display: none; }
 .state--battle .ps-journey__toast { opacity: 0; }
+
+/* Seamless journey-to-battle handoff. C# only supplies semantic phase classes. */
+.ps-journey__battle,
+.ps-journey__player-battle-hud,
+.ps-journey__enemy-huds,
+.ps-journey__threat-reel {
+    transition-property: opacity, translate;
+    transition-duration: .2s;
+}
+.battle-entry--active .ps-journey__battle { opacity: 0; translate: 0 56px; }
+.battle-entry--active .ps-journey__player-battle-hud { opacity: 0; translate: -38px 0; }
+.battle-entry--active .ps-journey__enemy-huds { opacity: 0; translate: 42px -8px; }
+.battle-entry--active .ps-journey__threat-reel { opacity: 0; translate: -36px 0; }
+.battle-entry--active.battle-entry--enemy-hud .ps-journey__enemy-huds { opacity: 1; translate: 0 0; }
+.battle-entry--active.battle-entry--player-hud .ps-journey__player-battle-hud { opacity: 1; translate: 0 0; }
+.battle-entry--active.battle-entry--reel .ps-journey__threat-reel { opacity: 1; translate: 0 0; }
+.battle-entry--active.battle-entry--commands .ps-journey__battle { opacity: 1; translate: 0 0; }
+
+
+/* Battle-to-reward handoff. Enemy motion remains in C#; UI only receives state classes. */
+.battle-exit--active .ps-journey__battle { opacity: 0; translate: 0 44px; }
+.battle-exit--active .ps-journey__player-battle-hud { opacity: 0; translate: -28px 0; }
+.battle-exit--active .ps-journey__enemy-huds { opacity: 0; translate: 28px -6px; }
+.battle-exit--active .ps-journey__threat-reel { opacity: 0; translate: -24px 0; }
+.battle-exit--active .ps-journey__encounter-banner { opacity: 0; translate: 24px 0; }
+.battle-exit--active.battle-exit--clear .ps-journey__battle-start {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+}
+
 .is-hidden { display: none; }
 
 
@@ -830,7 +886,7 @@
     left: 266px;
     right: 20px;
     top: 14px;
-    min-height: 126px;
+    min-height: 174px;
     padding: 12px 14px 10px 14px;
     display: none;
     background-color: rgba(12, 13, 14, .94);
@@ -914,4 +970,226 @@
     margin-top: 5px;
     color: rgb(191, 175, 147);
     font-size: 10px;
+}
+.ps-journey__combat-lab-measurement {
+    height: 36px;
+    margin-top: 6px;
+    padding-top: 5px;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+    border-top-color: rgba(116, 84, 49, .7);
+}
+.ps-journey__combat-lab-measure,
+.ps-journey__combat-lab-clear {
+    height: 27px;
+    margin: 0 8px 0 0;
+    padding: 0 10px;
+    font-size: 10px;
+}
+.ps-journey__combat-lab-measure {
+    width: 132px;
+    color: rgb(43, 28, 17);
+    background-color: rgb(214, 167, 95);
+    border-width: 1px;
+    border-color: rgb(241, 207, 149);
+    -unity-font-style: bold;
+}
+.ps-journey__combat-lab-measure.measurement--active {
+    color: rgb(242, 211, 174);
+    background-color: rgb(112, 43, 34);
+    border-color: rgb(190, 79, 58);
+}
+.ps-journey__combat-lab-clear {
+    width: 86px;
+    color: rgb(198, 181, 153);
+    background-color: rgb(30, 28, 25);
+    border-width: 1px;
+    border-color: rgb(100, 76, 48);
+}
+.ps-journey__combat-lab-summary {
+    flex-grow: 1;
+    color: rgb(218, 199, 165);
+    font-size: 10px;
+    white-space: normal;
+}
+
+
+/* In-journey battle reward: a quiet comparison popup, intentionally without item art. */
+.ps-journey__reward-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    visibility: hidden;
+    opacity: 0;
+    align-items: center;
+    justify-content: center;
+    transition-property: opacity;
+    transition-duration: .16s;
+}
+.reward--open .ps-journey__reward-overlay {
+    visibility: visible;
+    opacity: 1;
+}
+.ps-journey__reward-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(5, 8, 10, .78);
+}
+.ps-journey__reward-popup {
+    width: 820px;
+    min-height: 430px;
+    padding: 24px;
+    background-color: rgb(20, 23, 25);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(107, 114, 115);
+    border-right-color: rgb(107, 114, 115);
+    border-top-color: rgb(107, 114, 115);
+    border-bottom-color: rgb(107, 114, 115);
+    translate: 0 14px;
+    transition-property: translate;
+    transition-duration: .2s;
+}
+.reward--open .ps-journey__reward-popup { translate: 0 0; }
+.ps-journey__reward-header {
+    height: 92px;
+    align-items: center;
+}
+.ps-journey__reward-tier {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgb(189, 139, 77);
+}
+.ps-journey__reward-title {
+    margin-top: 5px;
+    font-size: 28px;
+    color: rgb(244, 237, 218);
+    -unity-font-style: bold;
+}
+.ps-journey__reward-subtitle {
+    margin-top: 5px;
+    font-size: 13px;
+    color: rgb(154, 159, 157);
+}
+.ps-journey__reward-candidates {
+    height: 164px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.ps-journey__reward-candidate {
+    width: 244px;
+    height: 148px;
+    padding: 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background-color: rgb(29, 33, 35);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(69, 75, 76);
+    border-right-color: rgb(69, 75, 76);
+    border-top-color: rgb(69, 75, 76);
+    border-bottom-color: rgb(69, 75, 76);
+    color: rgb(236, 230, 214);
+    transition-property: background-color, border-color, translate;
+    transition-duration: .1s;
+}
+.ps-journey__reward-candidate:hover {
+    background-color: rgb(36, 41, 43);
+    border-left-color: rgb(139, 113, 75);
+    border-right-color: rgb(139, 113, 75);
+    border-top-color: rgb(139, 113, 75);
+    border-bottom-color: rgb(139, 113, 75);
+    translate: 0 -2px;
+}
+.ps-journey__reward-candidate.is-selected {
+    background-color: rgb(45, 39, 30);
+    border-left-width: 2px;
+    border-left-color: rgb(213, 154, 78);
+    border-right-color: rgb(171, 124, 65);
+    border-top-color: rgb(171, 124, 65);
+    border-bottom-color: rgb(171, 124, 65);
+}
+.ps-journey__reward-kind {
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    color: rgb(183, 139, 82);
+}
+.ps-journey__reward-name {
+    margin-top: 18px;
+    white-space: normal;
+    font-size: 19px;
+    color: rgb(244, 237, 218);
+    -unity-font-style: bold;
+}
+.ps-journey__reward-meta {
+    margin-top: 13px;
+    font-size: 12px;
+    color: rgb(164, 170, 166);
+}
+.ps-journey__reward-detail {
+    min-height: 108px;
+    padding-top: 16px;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+    border-top-color: rgb(57, 63, 64);
+}
+.ps-journey__reward-detail-copy {
+    flex-grow: 1;
+    padding-right: 18px;
+}
+.ps-journey__reward-detail-name {
+    font-size: 16px;
+    color: rgb(235, 228, 211);
+    -unity-font-style: bold;
+}
+.ps-journey__reward-detail-text {
+    margin-top: 7px;
+    max-width: 420px;
+    white-space: normal;
+    font-size: 12px;
+    color: rgb(158, 164, 162);
+}
+.ps-journey__reward-selection-note {
+    width: 112px;
+    font-size: 11px;
+    color: rgb(179, 145, 95);
+    -unity-text-align: middle-center;
+}
+.ps-journey__reward-confirm {
+    width: 164px;
+    height: 44px;
+    background-color: rgb(132, 86, 40);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(213, 154, 78);
+    border-right-color: rgb(213, 154, 78);
+    border-top-color: rgb(213, 154, 78);
+    border-bottom-color: rgb(213, 154, 78);
+    color: rgb(255, 244, 219);
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+.ps-journey__reward-confirm:disabled {
+    opacity: .35;
+}
+.reward--open .ps-journey__battle,
+.reward--open .ps-journey__player-battle-hud,
+.reward--open .ps-journey__enemy-huds,
+.reward--open .ps-journey__threat-reel,
+.reward--open .ps-journey__encounter-banner,
+.reward--open .ps-journey__battle-start {
+    opacity: 0;
 }

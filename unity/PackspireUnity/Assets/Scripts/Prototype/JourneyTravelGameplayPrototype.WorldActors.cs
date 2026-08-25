@@ -394,14 +394,20 @@ namespace Packspire
             SyncBattleActorShadow(enemyShadowRenderer, enemyRenderer);
         }
 
+        private void SyncMainEnemyShadow(float groundY)
+        {
+            SyncBattleActorShadow(enemyShadowRenderer, enemyRenderer, groundY);
+        }
+
         private static void SyncBattleActorShadow(
             SpriteRenderer shadow,
-            SpriteRenderer actor)
+            SpriteRenderer actor,
+            float groundY = BattleGroundY)
         {
             if (shadow == null || actor == null) return;
             Vector3 actorPosition = actor.transform.position;
             shadow.transform.position =
-                new Vector3(actorPosition.x, BattleGroundY + .025f, 0f);
+                new Vector3(actorPosition.x, groundY + .025f, 0f);
             float actorWidth = actor.sprite != null
                 ? actor.sprite.bounds.size.x * Mathf.Abs(actor.transform.localScale.x)
                 : 1.5f;

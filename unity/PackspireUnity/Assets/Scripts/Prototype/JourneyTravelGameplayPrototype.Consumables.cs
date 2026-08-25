@@ -105,8 +105,8 @@ namespace Packspire
             }
             if (fx.enemyDefeated)
             {
-                SetMainEnemyVisible(false);
-                CompleteJourneyBattleVictory();
+                battlePresentationRoutine = StartCoroutine(
+                    JourneyBattleVictoryPresentationRoutine(battleRevision));
                 return;
             }
             RefreshBattleUi();
@@ -126,6 +126,36 @@ namespace Packspire
                 realtimeBattle.GuardBonus,
                 realtimeBattle.GuardBonusRemaining,
                 "防護印：防御カードのブロック上昇");
+            AppendRealtimeCounterStatus();
+        }
+
+        private void AppendRealtimeCounterStatus()
+        {
+            if (!realtimeCombatTiming.CounterActive) return;
+            double remaining = realtimeCombatTiming.CounterRemaining;
+            var chip = new VisualElement
+            {
+                pickingMode = PickingMode.Position,
+                tooltip =
+                    $"完全防御による反撃機会\n次の攻撃カード+{RealtimeCombatRules.CounterDamagePercent}%" +
+                    $"\n残り {remaining:0.0}秒"
+            };
+            chip.AddToClassList("ps-journey__status-chip");
+            chip.AddToClassList("status--consumable");
+
+            var icon = new Label("↩") { pickingMode = PickingMode.Ignore };
+            icon.AddToClassList("ps-journey__status-icon");
+            chip.Add(icon);
+
+            var count = new Label(
+                $"+{RealtimeCombatRules.CounterDamagePercent}% / " +
+                $"{Math.Ceiling(remaining):0}s")
+            {
+                pickingMode = PickingMode.Ignore
+            };
+            count.AddToClassList("ps-journey__status-count");
+            chip.Add(count);
+            playerStatusHost.Add(chip);
         }
 
         private void AppendRealtimeConsumableStatus(

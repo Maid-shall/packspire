@@ -136,6 +136,7 @@ namespace Packspire
         private Label speech;
         private Label damagePopup;
         private Label encounterBanner;
+        private Label battleStartBanner;
         private Button miniGameLeft;
         private Button miniGameAction;
         private Button miniGameRight;
@@ -199,6 +200,8 @@ namespace Packspire
         private bool battleInputLocked;
         private bool pileOverlayOpen;
         private bool encounterIntroActive;
+        private float battleEntryMotionScale;
+        private float battleEntryStartingMotionScale = 1f;
         private bool foundationUiHidden;
         private DefenseAction defenseAction;
         private DefenseInputGrade defenseInputGrade;
@@ -358,8 +361,7 @@ namespace Packspire
                 return;
             }
 
-            ShowChoice();
-            ShowToast("戦利品を収め、旅程へ復帰しました。");
+            StartCoroutine(ResumeLiveJourneyAfterRewardRoutine());
         }
 
         private void BuildSimulationRun()
@@ -422,6 +424,7 @@ namespace Packspire
             {
                 battleActorClock += gameplayDelta;
                 float realtimeTimelineDelta = UpdateRealtimeBattle(gameplayDelta);
+                if (UpdateRealtimeCombatTiming(realtimeTimelineDelta)) return;
                 if (enemyImpactHoldRemaining > 0f)
                 {
                     float impactDelta = realtimeBattleActive
@@ -436,7 +439,7 @@ namespace Packspire
                         : gameplayDelta;
                     UpdateDefense(defenseDelta);
                 }
-                else UpdateBattleIdleMotion();
+                else if (!encounterIntroActive) UpdateBattleIdleMotion();
                 UpdateEnemyPoseRecovery(gameplayDelta);
             }
         }
@@ -509,6 +512,11 @@ namespace Packspire
 
         private void UpdateTravel(float delta)
         {
+            if (postBattleRecoveryActive)
+            {
+                UpdatePostBattleRecovery(delta);
+                return;
+            }
             if (delta <= 0f) return;
             travelClock += delta;
             float progress = Mathf.Clamp01(travelClock / travelDuration);
@@ -860,8 +868,9 @@ namespace Packspire
                 Phase.Result => "state--result",
                 _ => "state--travel"
             });
-            walker.SetBattleStage(next == Phase.Battle);
-            environment.SetBattleContext(next == Phase.Battle);
+            bool enterBattleStage = next == Phase.Battle && !encounterIntroActive;
+            walker.SetBattleStage(enterBattleStage);
+            environment.SetBattleContext(enterBattleStage);
             if (next != Phase.Battle)
             {
                 StopRealtimeBattle();
@@ -874,6 +883,7 @@ namespace Packspire
                 screen.RemoveFromClassList("battle--enemy-count-2");
                 screen.RemoveFromClassList("battle--enemy-count-3");
                 screen.RemoveFromClassList("battle--layout-preview");
+                ClearBattleEntryClasses();
                 SetEnemyTelegraphVisible(false);
                 SetMainEnemyVisible(false);
                 for (int previewIndex = 0; previewIndex < battlePreviewEnemyRenderers.Length; previewIndex++)
@@ -899,6 +909,7 @@ namespace Packspire
             {
                 Phase.Travel => speedScale,
                 Phase.MiniGame when !miniGameResolved => .5f,
+                Phase.Battle when encounterIntroActive => battleEntryMotionScale,
                 _ => 0f
             };
         }
@@ -1073,22 +1084,6 @@ namespace Packspire
             };
         }
 
-        private IEnumerator EncounterRoutine(int revision)
-        {
-            encounterIntroActive = true;
-            encounterBanner.AddToClassList("encounter--visible");
-            yield return WaitForBattleSeconds(.72f, revision);
-            if (revision != battleRevision || phase != Phase.Battle) yield break;
-            encounterBanner.RemoveFromClassList("encounter--visible");
-            encounterIntroActive = false;
-            if (phase == Phase.Battle && !screen.ClassListContains("battle--layout-preview"))
-            {
-                battleInputLocked = false;
-                RefreshBattleUi();
-            }
-            encounterRoutine = null;
-        }
-
         private void PlayBattleImpact(int amount, bool playerHit)
         {
             if (amount <= 0) return;
@@ -1134,8 +1129,7 @@ namespace Packspire
             battleInputLocked = false;
             if (enemyDefeated)
             {
-                SetMainEnemyVisible(false);
-                CompleteJourneyBattleVictory();
+                yield return JourneyBattleVictoryPresentationRoutine(revision);
             }
             else
             {

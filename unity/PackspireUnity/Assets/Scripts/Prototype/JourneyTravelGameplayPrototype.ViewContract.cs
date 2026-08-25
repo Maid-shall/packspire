@@ -12,6 +12,12 @@ namespace Packspire
                 .Require<VisualElement>("journey-screen")
                 .Require<VisualElement>("journey-hand-scroll")
                 .Require<VisualElement>("journey-transition")
+                .Require<VisualElement>("journey-reward-overlay")
+                .Require<Label>("journey-reward-tier")
+                .Require<Label>("journey-reward-detail-name")
+                .Require<Label>("journey-reward-detail-text")
+                .Require<Label>("journey-reward-selection-note")
+                .Require<Button>("journey-reward-confirm")
                 .Require<VisualElement>("journey-ledger")
                 .Require<VisualElement>("journey-ledger-phases")
                 .Require<VisualElement>("journey-seal-host")
@@ -82,6 +88,7 @@ namespace Packspire
                 .Require<Label>("journey-speech")
                 .Require<Label>("journey-damage-popup")
                 .Require<Label>("journey-encounter-banner")
+                .Require<Label>("journey-battle-start")
                 .Require<Label>("journey-battle-log")
                 .Require<Label>("journey-energy")
                 .Require<Label>("journey-battle-player-hp")
@@ -129,6 +136,13 @@ namespace Packspire
 
             for (int index = 0; index < 3; index++)
             {
+                contract
+                    .Require<Button>($"journey-reward-candidate-{index}")
+                    .Require<Label>($"journey-reward-kind-{index}")
+                    .Require<Label>($"journey-reward-name-{index}")
+                    .Require<Label>($"journey-reward-meta-{index}");
+
+
                 contract
                     .Require<VisualElement>($"journey-enemy-slot-{index}")
                     .Require<Label>($"journey-enemy-name-{index}")

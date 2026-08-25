@@ -55,47 +55,37 @@ namespace Packspire
         }
 
         /// <summary>
-        /// Resolves the defeated route encounter, then opens the existing product reward
-        /// screen without detaching the live run. Reward confirmation returns to the same
-        /// route session.
+        /// Compatibility entry point for older callers. The journey now resolves the
+        /// encounter in place and owns its compact reward popup without a scene hop.
         /// </summary>
         public void UiOpenSeamlessJourneyBattleReward()
         {
-            if (!seamlessJourneySessionActive || run == null) return;
+            UiResolveSeamlessJourneyBattleVictory();
+        }
+
+        public bool UiResolveSeamlessJourneyBattleVictory()
+        {
+            if (!seamlessJourneySessionActive || run == null) return false;
+
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run, meta);
+            bool expeditionPending = plan.awaitingResolution;
+            bool courierPending = run.courierRoute?.awaitingResolution == true;
+            if (!expeditionPending && !courierPending) return false;
 
             ApplyBattleVictoryRewards();
             battle = null;
-
-            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run, meta);
-            if (plan.awaitingResolution)
+            var outcome = new CourierLocationOutcome
             {
-                ExpeditionJourneySystem.ResolveCurrent(
-                    run,
-                    new CourierLocationOutcome
-                    {
-                        success = true,
-                        performance = 2,
-                        message = "敵を退けた。"
-                    },
-                    out message);
-            }
-            else if (run.courierRoute?.awaitingResolution == true)
-            {
-                CourierRouteSystem.ResolveCurrent(
-                    run,
-                    new CourierLocationOutcome
-                    {
-                        success = true,
-                        performance = 2,
-                        message = "敵を退けた。"
-                    },
-                    out message);
-            }
-
-            seamlessJourneyBattleRewardPending = true;
+                success = true,
+                performance = 2,
+                message = "敵を退けた。"
+            };
+            bool resolved = expeditionPending
+                ? ExpeditionJourneySystem.ResolveCurrent(run, outcome, out message)
+                : CourierRouteSystem.ResolveCurrent(run, outcome, out message);
+            seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
-            screen = ScreenId.Reward;
-            SceneManager.LoadScene("Main");
+            return resolved;
         }
 
         public bool UiConsumeSeamlessJourneyResumeAfterReward()

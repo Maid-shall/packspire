@@ -108,7 +108,7 @@ namespace Packspire
         {
             if (!uiBound) BindUi();
             if (!uiBound) return false;
-            if (phase != Phase.Battle) BeginBattle();
+            if (phase != Phase.Battle) BeginBattle(false);
             return true;
         }
     }

@@ -293,6 +293,17 @@ namespace Packspire
             }
         }
 
+        public float BattleStageLift => battleStageLift;
+
+        public void SetBattleStageBlend(float normalizedBlend)
+        {
+            if (!battleActive) return;
+            stageLift = battleStageLift * Mathf.Clamp01(normalizedBlend);
+            targetStageLift = stageLift;
+            ApplyBattleStageComposition();
+            ApplyTravelTransform();
+        }
+
         public void SetBattleStage(bool battle)
         {
             battleActive = battle;
@@ -515,8 +526,11 @@ namespace Packspire
 
         private void ApplyTravelTransform()
         {
+            float battleBlend = battleStageLift > .001f
+                ? Mathf.Clamp01(stageLift / battleStageLift)
+                : battleActive ? 1f : 0f;
             float displayedX = travelPresentation == TravelPresentation.FixedCourierParallax
-                ? battleActive ? battleCourierX : fixedCourierX
+                ? Mathf.Lerp(fixedCourierX, battleCourierX, battleBlend)
                 : travelPositionX;
             transform.position = new Vector3(displayedX, groundPositionY + stageLift, depthPositionZ);
         }

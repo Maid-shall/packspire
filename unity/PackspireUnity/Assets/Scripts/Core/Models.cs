@@ -57,7 +57,11 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
  public Sprite artwork;
 }
 [Serializable] public class EffectSpec { public string type,target="enemy"; public int amount=1,duration; }
-[Serializable] public class StatusState { public string type; public int amount,duration; }
+[Serializable] public class StatusState {
+ public string type;
+ public int amount,duration;
+ public double remainingSeconds,nextPulseSeconds;
+}
 [Serializable] public class CardInstance {
  public string id,name,text,source,sourceItemUid,slotKey;
  public CardType type;
@@ -136,5 +140,5 @@ public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedit
 /// Expedition run. Persistent: hp/gold/inventory/lootBag/axes/battlesWon/consumables/ids.
 /// Battle-ephemeral (reset in BattleSystem.ResetBattleEphemeral): energy, block, attackBuff, statuses, hand/draw/discard.
 /// </summary>
-[Serializable] public class RunState { public int hp=42,maxHp=42,gold=24,energy=3,block,attackBuff,battlesWon,mapPosition; public string characterId="ren",role,dungeon="old_spire",faction,backpack="standard",loadoutId="loadout-1",heirloomUid="",coreId="",conduitId="",resonanceId="",stabilityId=""; public bool activeSkillUsed; public CourierRouteState courierRoute; public ExpeditionRoutePlan expeditionPlan; public List<ItemInstance> inventory=new(),lootBag=new(); public List<Placement> placements=new(); public List<string> startingItemUids=new(),selectedCardSlots=new(),consumables=new(),removedBattleCardSlots=new(); public List<StatusState> statuses=new(); public DungeonAxes axes=new(); public List<CardInstance> deck=new(),draw=new(),discard=new(),hand=new(); public List<ReactionValueState> reactionValues=new(); }
+[Serializable] public class RunState { public int hp=42,maxHp=42,gold=24,energy=3,block,attackBuff,battlesWon,mapPosition,journeyBattlesWithoutEquipmentOffer; public string characterId="ren",role,dungeon="old_spire",faction,backpack="standard",loadoutId="loadout-1",heirloomUid="",coreId="",conduitId="",resonanceId="",stabilityId=""; public bool activeSkillUsed; public CourierRouteState courierRoute; public ExpeditionRoutePlan expeditionPlan; public List<ItemInstance> inventory=new(),lootBag=new(); public List<Placement> placements=new(); public List<string> startingItemUids=new(),selectedCardSlots=new(),consumables=new(),removedBattleCardSlots=new(); public List<StatusState> statuses=new(); public DungeonAxes axes=new(); public List<CardInstance> deck=new(),draw=new(),discard=new(),hand=new(); public List<ReactionValueState> reactionValues=new(); }
 }

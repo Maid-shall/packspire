@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,7 +12,10 @@ namespace Packspire
         private const int RealtimeEnergyPerSupplyPulse = 2;
         private const int RealtimeDrawsPerSupplyPulse = 2;
         private const double RealtimeEnergyInterval = 6.4d;
+        private const double RealtimeFirstSupplyAt = 12.8d;
         private const double RealtimeReelDisplayHorizon = 10d;
+        private const double RealtimeOpeningEnemyActionDelay =
+            RealtimeReelDisplayHorizon + .001d;
         private const double RealtimeActionCommitMargin = 3d;
         private const float RealtimePlanningSlowScale = .55f;
         private const float RealtimePlanningNormalScale = 1f;
@@ -22,6 +27,7 @@ namespace Packspire
             "Art/Battle/UI/JourneyApproved/journey-reel-numeral-atlas-v1";
 
         private readonly RealtimeBattleController realtimeBattle = new();
+        private readonly RealtimeCombatTimingState realtimeCombatTiming = new();
         private Button battlePauseButton;
         private Button battleSpeedButton;
         private bool realtimeEventsBound;
@@ -69,6 +75,7 @@ namespace Packspire
             realtimePlanningScale = RealtimePlanningNormalScale;
             lastAttackBoostDisplaySecond = -1;
             lastGuardBoostDisplaySecond = -1;
+            realtimeCombatTiming.Reset(run?.block ?? 0, battle?.enemyBlock ?? 0);
 
             RealtimeEnemyTimelineProfile timelineProfile = encounterProfile.ResolvedTimeline;
             if (timelineProfile == null)
@@ -90,9 +97,15 @@ namespace Packspire
                 () => battle == null
                     ? new RealtimeEnemyTimelineVitals(1, 1)
                     : new RealtimeEnemyTimelineVitals(battle.enemyHp, battle.enemyMaxHp));
-            realtimeEnemyTimelinePlanner.Reset();
+            // The first enemy action resolves no earlier than the ten-second
+            // horizon. Opening energy and hand supply is fixed to the second
+            // regular 6.4-second checkpoint, independent of enemy timing.
+            realtimeEnemyTimelinePlanner.Reset(RealtimeOpeningEnemyActionDelay);
             realtimeEnemyTimelinePlanner.EnsureScheduledThrough(
-                RealtimeReelDisplayHorizon + RealtimeActionCommitMargin);
+                RealtimeOpeningEnemyActionDelay +
+                RealtimeReelDisplayHorizon +
+                RealtimeActionCommitMargin);
+            realtimeBattle.DelayFirstSupplyUntil(RealtimeFirstSupplyAt);
             lastSupplyPulseCount = realtimeBattle.SupplyPulseCount;
             realtimeReelPresenter?.Refresh(realtimeBattle);
         }
@@ -149,6 +162,70 @@ namespace Packspire
             RefreshRealtimeBoostCountdowns();
             realtimeReelPresenter?.Refresh(realtimeBattle);
             return timelineDelta;
+        }
+
+        private bool UpdateRealtimeCombatTiming(float delta)
+        {
+            if (!realtimeBattleActive || battle == null || run == null || delta <= 0f)
+                return false;
+
+            bool displayChanged = realtimeCombatTiming.TickGuards(
+                delta,
+                ref run.block,
+                ref battle.enemyBlock);
+            displayChanged |= realtimeCombatTiming.TickCounter(delta);
+            RealtimeStatusTickResult statusTick = realtimeCombatTiming.TickStatuses(
+                delta,
+                run.statuses,
+                battle.enemyStatuses,
+                ref run.hp,
+                run.maxHp,
+                ref battle.enemyHp,
+                battle.enemyMaxHp);
+            displayChanged |= statusTick.DisplayChanged;
+
+            if (statusTick.PlayerDamage > 0)
+            {
+                RecordCombatLabEnemyResolution(
+                    statusTick.PlayerDamage,
+                    false,
+                    false,
+                    true);
+                PlayBattleImpact(statusTick.PlayerDamage, true);
+            }
+            if (statusTick.EnemyDamage > 0)
+                PlayBattleImpact(statusTick.EnemyDamage, false);
+
+            if (run.hp <= 0)
+            {
+                RefreshBattleUi();
+                if (TryCompleteCombatLabMeasurement(false)) return true;
+                realtimeBattleActive = false;
+                realtimeBattle.Finish();
+                SetMainEnemyVisible(false);
+                ShowResult(
+                    "EXPEDITION FAILED",
+                    "配送続行不能",
+                    usesLiveRun
+                        ? "荷を守り切れなかった。遠征結果へ進みます。"
+                        : "DEV SIMULATIONを最初からやり直せます。",
+                    false);
+                return true;
+            }
+
+            if (battle.enemyHp <= 0)
+            {
+                RefreshBattleUi();
+                SetMainEnemyVisible(false);
+                CompleteJourneyBattleVictory();
+                return true;
+            }
+
+            if (displayChanged ||
+                statusTick.PlayerHealing > 0 ||
+                statusTick.EnemyHealing > 0)
+                RefreshBattleUi();
+            return false;
         }
 
         private void RefreshRealtimeBoostCountdowns()
@@ -239,6 +316,7 @@ namespace Packspire
         private void BeginRealtimeTelegraph(RealtimeEnemyAction action, double remaining)
         {
             if (!realtimeBattleActive || battle == null) return;
+            realtimeCombatTiming.BeginEnemyAttackSequence();
             enemyImpactHoldRemaining = 0f;
             CancelEnemyPoseRecovery();
             ResetEnemyTimingCue();
@@ -301,7 +379,9 @@ namespace Packspire
             {
                 int gainedBlock = Mathf.Max(0, action.Damage);
                 battle.enemyBlock += gainedBlock;
+                realtimeCombatTiming.NotifyEnemyGuardChanged(battle.enemyBlock);
                 battle.log = $"{ThreatName(action.ActionId)}：{gainedBlock}ブロック";
+                RecordCombatLabEnemyResolution(0, sequenceEnd, false, true);
                 battleLog.text = battle.log;
                 RefreshBattleUi();
                 if (sequenceEnd) FinishRealtimeTelegraph();
@@ -324,15 +404,27 @@ namespace Packspire
                 effectiveDamage,
                 actionName,
                 sequenceEnd);
+            realtimeCombatTiming.NotifyPlayerGuardChanged(run.block);
+            realtimeCombatTiming.RecordEnemyHit(fx.damageToPlayer, action.Damage);
+            bool completeDefense = sequenceEnd &&
+                                   realtimeCombatTiming.CompleteEnemyAttackSequence();
+            RecordCombatLabEnemyResolution(
+                fx.damageToPlayer,
+                sequenceEnd,
+                sequenceEnd && EnemyActionRequiresReaction(),
+                correctReaction);
             if (fx.damageToPlayer > 0) PlayBattleImpact(fx.damageToPlayer, true);
             battleLog.text = correctReaction
                 ? $"{DefenseActionLabel(defenseAction)}成功。{actionName}をしのいだ。"
                 : battle.log;
             RefreshBattleUi();
 
+            if (completeDefense)
+                battleLog.text += "\n完全防御。反撃機会を得た。";
             if (sequenceEnd) FinishRealtimeTelegraph();
             BeginRealtimeEnemyImpact();
             if (!sequenceEnd || !fx.playerDefeated) return;
+            if (TryCompleteCombatLabMeasurement(false)) return;
 
             realtimeBattleActive = false;
             realtimeBattle.Finish();

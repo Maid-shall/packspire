@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Packspire;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 public sealed class PackspireEditModeTests {
  [Test]
@@ -809,6 +810,25 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
+ public void RealtimeBattle_FirstSupplyCanWaitUntilSecondRegularCheckpoint(){
+  var timeline=new RealtimeBattleController();
+  timeline.Start(
+   initialEnergy:0,
+   maximumEnergy:3,
+   energyInterval:2d,
+   energyPerSupplyPulse:1,
+   drawsPerSupplyPulse:2);
+  timeline.DelayFirstSupplyUntil(12.8d);
+
+  timeline.Tick(12.799d);
+  Assert.That(timeline.SupplyPulseCount,Is.Zero);
+  Assert.That(timeline.Energy,Is.Zero);
+  timeline.Tick(.002d);
+  Assert.That(timeline.SupplyPulseCount,Is.EqualTo(1));
+  Assert.That(timeline.Energy,Is.EqualTo(1));
+ }
+
+ [Test]
  public void RealtimeBattle_ExposesTypedSupplyCheckpointsWithinHorizon(){
   var timeline=new RealtimeBattleController();
   var previews=new List<RealtimeSupplyPulsePreview>();
@@ -919,6 +939,27 @@ public sealed class PackspireEditModeTests {
   Assert.That(previews[3].TimeUntil,Is.EqualTo(6.8d).Within(.0001d));
   Assert.That(previews[4].TimeUntil,Is.EqualTo(7.6d).Within(.0001d));
   Assert.That(planner.PlannedThrough,Is.EqualTo(12d).Within(.0001d));
+ }
+
+ [Test]
+ public void RealtimeTimelinePlanner_OpeningDelayLeavesFirstReelEmpty(){
+  var timeline=new RealtimeBattleController();
+  var previews=new List<RealtimeEnemyActionPreview>();
+  timeline.Start(initialEnergy:0,maximumEnergy:3,energyInterval:20d);
+  var immediate=new RealtimeEnemyTimelinePattern(
+   "immediate",8d,
+   new RealtimeEnemyTimelineStep(0d,"attack:first",5,.5d));
+  var planner=new RealtimeEnemyTimelinePlanner(timeline,"warden",immediate);
+
+  planner.Reset(10.001d);
+  planner.EnsureScheduledThrough(23.001d);
+  timeline.GetUpcomingActions(previews);
+
+  Assert.That(previews,Is.Not.Empty);
+  Assert.That(previews[0].TimeUntil,Is.GreaterThan(10d));
+  timeline.Tick(.02d);
+  timeline.GetUpcomingActions(previews);
+  Assert.That(previews[0].TimeUntil,Is.LessThan(10d));
  }
 
  [Test]
@@ -1617,6 +1658,182 @@ public sealed class PackspireEditModeTests {
   profile.allowBossBattle=allowBoss;
   profile.selectionWeight=weight;
   return profile;
+ }
+
+ [Test]
+ public void JourneyCombatMeasurement_RecordsDamageReactionAndAggregate(){
+  var session=new JourneyCombatMeasurementSession();
+  session.Begin("ash-test","灰の試験敵",1,0,42,0d);
+  session.RecordEnemyResolution(3,false,false,false);
+  session.RecordEnemyResolution(4,true,true,false);
+  JourneyCombatMeasurementRecord first=session.Complete(true,35,12.5d);
+  Assert.That(first.NetHpLoss,Is.EqualTo(7));
+  Assert.That(first.DamageTaken,Is.EqualTo(7));
+  Assert.That(first.EnemySequences,Is.EqualTo(1));
+  Assert.That(first.ReactionFailures,Is.EqualTo(1));
+
+  session.Begin("ash-test","灰の試験敵",2,1,42,0d);
+  session.RecordEnemyResolution(0,true,true,true);
+  session.Complete(true,42,9.5d);
+  JourneyCombatMeasurementSummary summary=session.Summarize("ash-test");
+  Assert.That(summary.BattleCount,Is.EqualTo(2));
+  Assert.That(summary.Victories,Is.EqualTo(2));
+  Assert.That(summary.AverageHpLoss,Is.EqualTo(3.5d));
+  Assert.That(summary.ReactionFailureRate,Is.EqualTo(.5d));
+  Assert.That(summary.AverageDurationSeconds,Is.EqualTo(11d));
+ }
+
+ [Test]
+ public void JourneyBattleEntrySequence_StagesEveryCombatLayerBeforeStart(){
+  var start=JourneyBattleEntrySequence.Sample(0f,2f);
+  var reveal=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.EnemyRevealDelay+
+   JourneyBattleEntrySequence.EnemyRevealDuration,2f);
+  var observe=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.EnemyArrivalDelay-.01f,2f);
+  var enemy=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.EnemyArrivalDelay,2f);
+  var arrivalEnd=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.EnemyArrivalDelay+
+   JourneyBattleEntrySequence.EnemyArrivalDuration,2f);
+  var enemyHud=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.EnemyHudDelay,2f);
+  var playerHud=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.PlayerHudDelay,2f);
+  var reel=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.ReelDelay,2f);
+  var commands=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.CommandsDelay,2f);
+  var battleStart=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.BattleStartDelay,2f);
+  var complete=JourneyBattleEntrySequence.Sample(
+   JourneyBattleEntrySequence.Duration,2f);
+
+  Assert.That(start.WorldMotionScale,Is.EqualTo(2f).Within(.001f));
+  Assert.That(start.EnemyVisible,Is.False);
+  Assert.That(reveal.EnemyVisible,Is.True);
+  Assert.That(reveal.EnemyAlpha,Is.EqualTo(1f).Within(.001f));
+  Assert.That(observe.EnemyOffset,Is.EqualTo(
+   JourneyBattleEntrySequence.EnemyStartOffset).Within(.001f));
+  Assert.That(observe.WorldMotionScale,Is.GreaterThan(0f));
+  Assert.That(observe.BattleStageActive,Is.False);
+  Assert.That(enemy.EnemyVisible,Is.True);
+  Assert.That(enemy.WorldMotionScale,Is.Zero.Within(.001f));
+  Assert.That(enemy.BattleStageActive,Is.True);
+  Assert.That(enemy.EnemyHudVisible,Is.False);
+  Assert.That(arrivalEnd.EnemyOffset,Is.Zero.Within(.001f));
+  Assert.That(arrivalEnd.EnemyAlpha,Is.EqualTo(1f).Within(.001f));
+  Assert.That(enemyHud.EnemyHudVisible,Is.True);
+  Assert.That(enemyHud.PlayerHudVisible,Is.False);
+  Assert.That(playerHud.PlayerHudVisible,Is.True);
+  Assert.That(playerHud.ReelVisible,Is.False);
+  Assert.That(reel.ReelVisible,Is.True);
+  Assert.That(reel.CommandsVisible,Is.False);
+  Assert.That(commands.CommandsVisible,Is.True);
+  Assert.That(commands.BattleStartVisible,Is.False);
+  Assert.That(battleStart.BattleStartVisible,Is.True);
+  Assert.That(complete.BattleStartVisible,Is.False);
+  Assert.That(complete.Complete,Is.True);
+ }
+
+ [Test]
+ public void JourneyBattleExitSequence_DefeatsEnemyBeforeRewardFog(){
+  var start=JourneyBattleExitSequence.Sample(0f);
+  var clear=JourneyBattleExitSequence.Sample(
+   JourneyBattleExitSequence.RouteClearDelay);
+  var defeated=JourneyBattleExitSequence.Sample(
+   JourneyBattleExitSequence.EnemyDefeatDuration);
+  var fog=JourneyBattleExitSequence.Sample(
+   JourneyBattleExitSequence.FogDelay);
+  var complete=JourneyBattleExitSequence.Sample(
+   JourneyBattleExitSequence.Duration);
+
+  Assert.That(start.EnemyAlpha,Is.EqualTo(1f).Within(.001f));
+  Assert.That(start.RouteClearVisible,Is.False);
+  Assert.That(clear.RouteClearVisible,Is.True);
+  Assert.That(clear.FogVisible,Is.False);
+  Assert.That(defeated.EnemyOffsetX,Is.GreaterThan(0f));
+  Assert.That(defeated.EnemyAlpha,Is.Zero.Within(.001f));
+  Assert.That(fog.FogVisible,Is.True);
+  Assert.That(fog.Complete,Is.False);
+  Assert.That(complete.Complete,Is.True);
+ }
+
+ [Test]
+ public void JourneyCombatLab_ViewContainsMeasurementControls(){
+  var view=AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.VisualTreeAsset>(
+   "Assets/Resources/UI/PackspireJourneyCompleteView.uxml");
+  Assert.That(view,Is.Not.Null);
+  UnityEngine.UIElements.TemplateContainer root=view.CloneTree();
+  Assert.That(root.Q<UnityEngine.UIElements.Button>("journey-combat-lab-measure"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Button>("journey-combat-lab-clear"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-combat-lab-summary"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-battle-start"),Is.Not.Null);
+ }
+
+ [Test]
+ public void RealtimeCombatTiming_GuardsShareGraceAndDecayRules(){
+  var timing=new RealtimeCombatTimingState();
+  int playerBlock=6;
+  int enemyBlock=6;
+  timing.Reset(0,0);
+  timing.NotifyPlayerGuardChanged(playerBlock);
+  timing.NotifyEnemyGuardChanged(enemyBlock);
+
+  Assert.That(timing.TickGuards(1d,ref playerBlock,ref enemyBlock),Is.False);
+  Assert.That(playerBlock,Is.EqualTo(6));
+  Assert.That(enemyBlock,Is.EqualTo(6));
+  Assert.That(timing.TickGuards(1d,ref playerBlock,ref enemyBlock),Is.True);
+  Assert.That(playerBlock,Is.EqualTo(3));
+  Assert.That(enemyBlock,Is.EqualTo(3));
+ }
+
+ [Test]
+ public void RealtimeCombatTiming_CompleteDefenseGrantsOnePlayerCounter(){
+  var timing=new RealtimeCombatTimingState();
+  timing.Reset(0,0);
+  timing.BeginEnemyAttackSequence();
+  timing.RecordEnemyHit(0,8);
+
+  Assert.That(timing.CompleteEnemyAttackSequence(),Is.True);
+  Assert.That(timing.CounterActive,Is.True);
+  Assert.That(timing.ConsumeCounterBonus(5),Is.EqualTo(2));
+  Assert.That(timing.CounterActive,Is.False);
+
+  timing.BeginEnemyAttackSequence();
+  timing.RecordEnemyHit(1,8);
+  Assert.That(timing.CompleteEnemyAttackSequence(),Is.False);
+  Assert.That(timing.ConsumeCounterBonus(5),Is.Zero);
+ }
+
+ [Test]
+ public void RealtimeCombatTiming_StatusesUseCombatSecondsAndPulse(){
+  var timing=new RealtimeCombatTimingState();
+  var playerStatuses=new List<StatusState>();
+  var enemyStatuses=new List<StatusState>();
+  var burn=new StatusState{type="burn",amount=2,duration=1};
+  var poison=new StatusState{type="poison",amount=3,duration=0};
+  RealtimeCombatRules.ArmStatus(burn,burn.duration);
+  RealtimeCombatRules.ArmStatus(poison,poison.duration);
+  enemyStatuses.Add(burn);
+  enemyStatuses.Add(poison);
+  int playerHp=42;
+  int enemyHp=20;
+
+  RealtimeStatusTickResult tick=timing.TickStatuses(
+   RealtimeCombatRules.StatusPulseSeconds,
+   playerStatuses,
+   enemyStatuses,
+   ref playerHp,
+   42,
+   ref enemyHp,
+   20);
+
+  Assert.That(tick.EnemyDamage,Is.EqualTo(5));
+  Assert.That(enemyHp,Is.EqualTo(15));
+  Assert.That(enemyStatuses.Contains(burn),Is.False);
+  Assert.That(poison.amount,Is.EqualTo(2));
+  Assert.That(enemyStatuses.Contains(poison),Is.True);
  }
 
  static ExpeditionRouteGenerationRules TestExpeditionRouteRules()=>new(){

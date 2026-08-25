@@ -193,6 +193,17 @@ namespace Packspire
             EnergyChanged?.Invoke(Energy, MaximumEnergy);
         }
 
+        public void DelayFirstSupplyUntil(double absoluteTime)
+        {
+            if (SupplyPulseCount > 0 ||
+                (Phase != RealtimeBattlePhase.Running &&
+                 Phase != RealtimeBattlePhase.Paused))
+                return;
+            nextEnergyAt = Math.Max(
+                nextEnergyAt,
+                Math.Max(Time, absoluteTime));
+        }
+
         public void SetPaused(bool paused)
         {
             if (Phase == RealtimeBattlePhase.Finished || Phase == RealtimeBattlePhase.Stopped) return;

@@ -48,11 +48,35 @@ namespace Packspire
 
         public void DevSkipEncounterIntro()
         {
-            encounterBanner?.RemoveFromClassList("encounter--visible");
-            encounterIntroActive = false;
-            if (phase != Phase.Battle || screen.ClassListContains("battle--layout-preview")) return;
-            battleInputLocked = false;
-            RefreshBattleUi();
+            if (encounterRoutine != null)
+            {
+                StopCoroutine(encounterRoutine);
+                encounterRoutine = null;
+            }
+            if (phase != Phase.Battle) return;
+            CompleteBattleEntry(!screen.ClassListContains("battle--layout-preview"));
+        }
+
+        public void DevPreviewBattleEntry(float elapsed)
+        {
+            if (!uiBound) BindUi();
+            if (phase != Phase.Battle || !encounterIntroActive)
+                BeginBattle();
+            SetPaused(true);
+            ApplyBattleEntryFrame(
+                JourneyBattleEntrySequence.Sample(
+                    elapsed,
+                    battleEntryStartingMotionScale));
+        }
+
+        public void DevPreviewBattleExit(float elapsed)
+        {
+            if (!uiBound) BindUi();
+            if (phase != Phase.Battle) BeginBattle();
+            if (encounterIntroActive) CompleteBattleEntry(false);
+            SetPaused(true);
+            PrepareBattleExitPresentation();
+            ApplyBattleExitFrame(JourneyBattleExitSequence.Sample(elapsed));
         }
 
         public void DevBeginMiniGame()
