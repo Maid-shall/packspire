@@ -20,11 +20,19 @@ namespace Packspire
         BraceReaction
     }
 
+    public enum RealtimeEnemyMotionLane
+    {
+        Default,
+        High,
+        Low
+    }
+
     public readonly struct RealtimeEnemyAction
     {
         public readonly string ActorId;
         public readonly string ActionId;
         public readonly RealtimeEnemyActionKind Kind;
+        public readonly RealtimeEnemyMotionLane MotionLane;
         public readonly int Damage;
         public readonly int SequenceIndex;
         public readonly int SequenceCount;
@@ -35,11 +43,13 @@ namespace Packspire
             RealtimeEnemyActionKind kind,
             int damage,
             int sequenceIndex,
-            int sequenceCount)
+            int sequenceCount,
+            RealtimeEnemyMotionLane motionLane = RealtimeEnemyMotionLane.Default)
         {
             ActorId = actorId ?? string.Empty;
             ActionId = actionId ?? string.Empty;
             Kind = kind;
+            MotionLane = motionLane;
             Damage = Math.Max(0, damage);
             SequenceIndex = sequenceIndex;
             SequenceCount = sequenceCount;
@@ -52,6 +62,7 @@ namespace Packspire
         public readonly string ActorId;
         public readonly string ActionId;
         public readonly RealtimeEnemyActionKind Kind;
+        public readonly RealtimeEnemyMotionLane MotionLane;
         public readonly int Damage;
         public readonly int HitCount;
         public readonly double TimeUntil;
@@ -67,12 +78,14 @@ namespace Packspire
             int hitCount,
             double timeUntil,
             double timeUntilStart,
-            bool telegraphing)
+            bool telegraphing,
+            RealtimeEnemyMotionLane motionLane = RealtimeEnemyMotionLane.Default)
         {
             Serial = serial;
             ActorId = actorId ?? string.Empty;
             ActionId = actionId ?? string.Empty;
             Kind = kind;
+            MotionLane = motionLane;
             Damage = Math.Max(0, damage);
             HitCount = Math.Max(1, hitCount);
             TimeUntil = Math.Max(0d, timeUntil);
@@ -107,6 +120,7 @@ namespace Packspire
             public string ActorId;
             public string ActionId;
             public RealtimeEnemyActionKind Kind;
+            public RealtimeEnemyMotionLane MotionLane;
             public int Damage;
             public int RemainingHits;
             public int TotalHits;
@@ -267,7 +281,8 @@ namespace Packspire
                     action.RemainingHits,
                     action.ExecuteAt - Time,
                     action.TelegraphAt - Time,
-                    action.TelegraphSent));
+                    action.TelegraphSent,
+                    action.MotionLane));
             }
         }
 
@@ -300,7 +315,8 @@ namespace Packspire
             double telegraphLead,
             int hitCount = 1,
             double hitSpacing = 0.15d,
-            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack)
+            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack,
+            RealtimeEnemyMotionLane motionLane = RealtimeEnemyMotionLane.Default)
         {
             ScheduleEnemyActionAt(
                 actorId,
@@ -310,7 +326,8 @@ namespace Packspire
                 telegraphLead,
                 hitCount,
                 hitSpacing,
-                kind);
+                kind,
+                motionLane);
         }
 
         public void ScheduleEnemyActionAt(
@@ -321,7 +338,8 @@ namespace Packspire
             double telegraphLead,
             int hitCount = 1,
             double hitSpacing = 0.15d,
-            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack)
+            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack,
+            RealtimeEnemyMotionLane motionLane = RealtimeEnemyMotionLane.Default)
         {
             if (Phase == RealtimeBattlePhase.Finished) return;
             var action = new ScheduledAction
@@ -329,6 +347,7 @@ namespace Packspire
                 ActorId = actorId ?? string.Empty,
                 ActionId = actionId ?? string.Empty,
                 Kind = kind,
+                MotionLane = motionLane,
                 Damage = Math.Max(0, damage),
                 RemainingHits = Math.Max(1, hitCount),
                 TotalHits = Math.Max(1, hitCount),
@@ -401,7 +420,8 @@ namespace Packspire
                 action.Kind,
                 action.Damage,
                 action.ResolvedHits,
-                action.TotalHits);
+                action.TotalHits,
+                action.MotionLane);
         }
 
         private static int CompareActions(ScheduledAction left, ScheduledAction right)

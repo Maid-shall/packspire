@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: WardenEnemy
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: journey_postal_warden
+  displayName: "\u5C01\u9418\u306E\u756A\u4EBA"
+  tier: 1
+  maximumHealth: 36
+  legacyTurnDamages: 0800000007000000090000000a0000000800000007000000
+  origin: 2
+  regionId: 
+  lineage: {fileID: 0}
+  regionalBehaviorProfile: {fileID: 0}
+  regionalDamageMultiplier: 1
+  fallbackSpriteResource: Art/JourneyPrototype/Complete/journey-chibi-postal-warden-v1
+  battleSheetResource: Art/JourneyPrototype/Complete/journey-postal-warden-battle-sheet-v1
+  battlePresentation: {fileID: 11400000, guid: b26a021d4ec34a7984a7ed02c22bb734, type: 2}
+  orderedBattlePoseNames:
+  - journey-warden-battle-idle
+  - journey-warden-battle-high-anticipation
+  - journey-warden-battle-high-impact
+  - journey-warden-battle-low-anticipation
+  - journey-warden-battle-low-impact
+  - journey-warden-battle-hit
+  battleFormation: 0
+  battleTargetHeight: 0
+  battleScale: 0.66

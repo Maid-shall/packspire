@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -52,6 +53,8 @@ public sealed class PackspireEditModeTests {
   Assert.That(available.Select(x=>x.kind),Is.EquivalentTo(new[]{"RELAY","EVENT"}));
   Assert.That(Enumerable.Range(1,9).All(phase=>CourierRouteSystem.Nodes.Count(node=>node.phase==phase)==2),Is.True);
   Assert.That(CourierRouteSystem.Node("destination").phase,Is.EqualTo(CourierRouteSystem.TotalSegments));
+  Assert.That(run.expeditionPlan,Is.Not.Null);
+  Assert.That(run.expeditionPlan.floors,Has.Count.EqualTo(3));
   Assert.That(run.courierRoute.seals.Any(x=>x.roleSignature&&x.name=="先読印"),Is.True);
  }
 
@@ -68,6 +71,7 @@ public sealed class PackspireEditModeTests {
 
   Assert.That(run.courierRoute.currentNodeId,Is.EqualTo("broken_stair"));
   Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(0));
+  Assert.That(run.expeditionPlan.elapsedDays,Is.EqualTo(0));
   Assert.That(run.courierRoute.travelPending,Is.True);
   Assert.That(run.courierRoute.travelFromNodeId,Is.EqualTo("dispatch"));
   Assert.That(run.courierRoute.travelToNodeId,Is.EqualTo("broken_stair"));
@@ -130,6 +134,36 @@ public sealed class PackspireEditModeTests {
   CourierRouteSystem.ResolveCurrent(run,new CourierLocationOutcome{dayDelta=2},out _);
 
   Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(4));
+  Assert.That(run.expeditionPlan.elapsedDays,Is.EqualTo(4));
+ }
+
+ [Test]
+ public void CourierRoute_DaysOverLegacyDeadlineChangeStageWithoutFailingRun(){
+  var run=new RunState{role="scout",hp=42,maxHp=42,dungeon="old_spire"};
+  run.courierRoute=CourierRouteSystem.Create(run,new MetaSave{currentRole="scout"});
+
+  ExpeditionProgressSystem.AdvanceDays(run,21);
+
+  Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(21));
+  Assert.That(run.expeditionPlan.elapsedDays,Is.EqualTo(21));
+  Assert.That(run.courierRoute.failed,Is.False);
+  Assert.That(ExpeditionProgressSystem.CurrentDayStage(run),Is.EqualTo(ExpeditionDayStage.Pursuit));
+ }
+
+ [Test]
+ public void ExpeditionProgress_AdoptsHigherLegacySaveDayWithoutDoubleCounting(){
+  var run=new RunState{
+   dungeon="old_spire",
+   courierRoute=new CourierRouteState{daysElapsed=13},
+   expeditionPlan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire")
+  };
+  run.expeditionPlan.elapsedDays=8;
+
+  ExpeditionProgressSystem.Ensure(run);
+  ExpeditionProgressSystem.AdvanceDays(run,2);
+
+  Assert.That(run.expeditionPlan.elapsedDays,Is.EqualTo(15));
+  Assert.That(run.courierRoute.daysElapsed,Is.EqualTo(15));
  }
 
  [Test]
@@ -798,11 +832,14 @@ public sealed class PackspireEditModeTests {
   var previews=new List<RealtimeEnemyActionPreview>();
   timeline.Start(initialEnergy:1,maximumEnergy:3,energyInterval:2d);
   timeline.ScheduleEnemyAction("warden","combo:連鐘",delay:4d,damage:4,
-   telegraphLead:.8d,hitCount:3,hitSpacing:.2d);
+   telegraphLead:.8d,hitCount:3,hitSpacing:.2d,
+   kind:RealtimeEnemyActionKind.ComboAttack,
+   motionLane:RealtimeEnemyMotionLane.Low);
   timeline.GetUpcomingActions(previews);
   Assert.That(previews,Has.Count.EqualTo(1));
   Assert.That(previews[0].Damage,Is.EqualTo(4));
   Assert.That(previews[0].HitCount,Is.EqualTo(3));
+  Assert.That(previews[0].MotionLane,Is.EqualTo(RealtimeEnemyMotionLane.Low));
   Assert.That(previews[0].TimeUntil,Is.EqualTo(4d).Within(.0001d));
  }
 
@@ -816,9 +853,11 @@ public sealed class PackspireEditModeTests {
   timeline.EnemyActionResolved+=action=>{
    hits++;
    Assert.That(action.SequenceCount,Is.EqualTo(3));
+   Assert.That(action.MotionLane,Is.EqualTo(RealtimeEnemyMotionLane.High));
   };
   timeline.ScheduleEnemyAction("warden","bell-combo",delay:1d,damage:4,
-   telegraphLead:.4d,hitCount:3,hitSpacing:.2d);
+   telegraphLead:.4d,hitCount:3,hitSpacing:.2d,
+   motionLane:RealtimeEnemyMotionLane.High);
   timeline.Tick(.6d);
   Assert.That(telegraphs,Is.EqualTo(1));
   timeline.Tick(.8d);
@@ -914,11 +953,157 @@ public sealed class PackspireEditModeTests {
    "Assets/Resources/Data/Journey/WardenRealtimeTimeline.asset");
   Assert.That(profile,Is.Not.Null);
   Assert.That(profile.actorId,Is.EqualTo("warden"));
-  var patterns=profile.BuildPatterns();
-  Assert.That(patterns,Has.Length.EqualTo(4));
-  Assert.That(patterns[0].Duration,Is.EqualTo(9.5d).Within(.0001d));
-  Assert.That(patterns[1].Steps[0].Kind,Is.EqualTo(RealtimeEnemyActionKind.ComboAttack));
-  Assert.That(patterns[3].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.JumpReaction));
+  var patterns=profile.BuildPatterns(battleSeed:17);
+  Assert.That(patterns,Has.Length.EqualTo(6));
+  Assert.That(patterns[0].Duration,Is.EqualTo(8d).Within(.0001d));
+  Assert.That(patterns[0].Steps[0].ActionId,Is.EqualTo("warden-normal"));
+  Assert.That(patterns[2].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.JumpReaction));
+  Assert.That(patterns[3].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.BraceReaction));
+ }
+
+ [Test]
+ public void RealtimeEnemyBehaviorPilot_UsesFortyGenericTimingsAndEnemyCommandSets(){
+  var catalog=AssetDatabase.LoadAssetAtPath<RealtimeEnemyBehaviorCatalog>(
+   "Assets/Resources/Data/Journey/Timelines/SharedEnemyBehaviorCatalog.asset");
+  Assert.That(catalog,Is.Not.Null);
+  Assert.That(catalog.patterns,Has.Length.EqualTo(40));
+  Assert.That(catalog.actions,Is.Empty);
+  string root="Assets/Resources/Data/Journey/Timelines/";
+  string[] paths={
+   "Assets/Resources/Data/Journey/WardenRealtimeTimeline.asset",
+   root+"AshScavengerTimeline.asset",root+"AshBailiffTimeline.asset",
+   root+"DrownedIndexerTimeline.asset",root+"DrownedCustodianTimeline.asset",
+   root+"AshBellWatchmanTimeline.asset",root+"DrownedBellWatchmanTimeline.asset"
+  };
+  foreach(string path in paths){
+   var profile=AssetDatabase.LoadAssetAtPath<RealtimeEnemyTimelineProfile>(path);
+   Assert.That(profile,Is.Not.Null,path);
+   Assert.That(profile.catalog,Is.SameAs(catalog),path);
+   Assert.That(profile.patternIds,Has.Length.EqualTo(6),path);
+   Assert.That(profile.commands,Has.Length.EqualTo(5),path);
+   Assert.That(profile.timingScale,Is.EqualTo(1f),path);
+   Assert.That(profile.selectionMode,Is.EqualTo(RealtimeEnemySelectionMode.RuleBased),path);
+   var report=RealtimeEnemyBehaviorAudit.Analyze(profile);
+   Assert.That(report.errors,Is.Empty,$"{path}\n{string.Join("\n",report.errors)}");
+   Assert.That(report.commandCount,Is.EqualTo(5),path);
+  }
+ }
+
+ [Test]
+ public void RealtimeEnemyBehaviorCatalog_StoresOnlyGenericTimingSlots(){
+  var catalog=AssetDatabase.LoadAssetAtPath<RealtimeEnemyBehaviorCatalog>(
+   "Assets/Resources/Data/Journey/Timelines/SharedEnemyBehaviorCatalog.asset");
+  foreach(var pattern in catalog.patterns)
+   foreach(var step in pattern.steps){
+    Assert.That(step.actionId,Is.Empty,pattern.id);
+    Assert.That(step.damage,Is.Zero,pattern.id);
+   }
+ }
+
+ [Test]
+ public void RealtimeEnemyTimelineProfile_BindsCommandsAndScalesTheWholeTiming(){
+  var catalog=UnityEngine.ScriptableObject.CreateInstance<RealtimeEnemyBehaviorCatalog>();
+  catalog.patterns=new[]{
+   new RealtimeEnemyTimelinePatternContent{
+    id="timing-test",duration=10f,
+    steps=new[]{new RealtimeEnemyTimelineStepContent{
+     executeOffset=2f,kind=RealtimeEnemyActionKind.JumpReaction,
+     telegraphLead=1f,hitCount=1,hitSpacing=.2f
+    }}
+   }
+  };
+  var profile=UnityEngine.ScriptableObject.CreateInstance<RealtimeEnemyTimelineProfile>();
+  profile.catalog=catalog;
+  profile.patternIds=new[]{"timing-test"};
+  profile.timingScale=1.25f;
+  profile.commands=new[]{new RealtimeEnemyActionContent{
+   id="enemy-jump",kind=RealtimeEnemyActionKind.JumpReaction,
+   motionLane=RealtimeEnemyMotionLane.High,value=7
+  }};
+
+  var pattern=profile.BuildPatterns(battleSeed:3)[0];
+
+  Assert.That(pattern.Duration,Is.EqualTo(12.5d).Within(.0001d));
+  Assert.That(pattern.Steps[0].ExecuteOffset,Is.EqualTo(2.5d).Within(.0001d));
+  Assert.That(pattern.Steps[0].TelegraphLead,Is.EqualTo(1.25d).Within(.0001d));
+  Assert.That(pattern.Steps[0].HitSpacing,Is.EqualTo(.25d).Within(.0001d));
+ Assert.That(pattern.Steps[0].ActionId,Is.EqualTo("enemy-jump"));
+ Assert.That(pattern.Steps[0].Damage,Is.EqualTo(7));
+ Assert.That(pattern.Steps[0].MotionLane,Is.EqualTo(RealtimeEnemyMotionLane.High));
+ }
+
+ [Test]
+ public void RealtimeEnemyBehaviorAudit_RejectsMissingCommandKinds(){
+  var catalog=UnityEngine.ScriptableObject.CreateInstance<RealtimeEnemyBehaviorCatalog>();
+  catalog.patterns=new[]{
+   new RealtimeEnemyTimelinePatternContent{
+    id="needs-brace",duration=4f,
+    steps=new[]{new RealtimeEnemyTimelineStepContent{
+     executeOffset=2f,kind=RealtimeEnemyActionKind.BraceReaction
+    }}
+   }
+  };
+  var profile=UnityEngine.ScriptableObject.CreateInstance<RealtimeEnemyTimelineProfile>();
+  profile.catalog=catalog;
+  profile.patternIds=new[]{"needs-brace"};
+  profile.commands=new[]{new RealtimeEnemyActionContent{
+   id="normal-only",kind=RealtimeEnemyActionKind.NormalAttack,value=1
+  }};
+
+  var report=RealtimeEnemyBehaviorAudit.Analyze(profile);
+
+  Assert.That(report.errors.Any(error=>error.Contains("no command for BraceReaction")),Is.True);
+ }
+
+ [Test]
+ public void RuleBasedRealtimeEnemyStrategy_AdvancesHpPhaseWithoutReturningAfterHealing(){
+  var calm=RulePattern("calm",1);
+  var rage=RulePattern("rage",1);
+  var phases=new[]{
+   new RealtimeEnemyPhaseContent{id="steady",enterAtOrBelowHealthRatio=1f,
+    patternWeights=new[]{Weight("calm",100),Weight("rage",0)}},
+   new RealtimeEnemyPhaseContent{id="rage",enterAtOrBelowHealthRatio=.5f,
+    patternWeights=new[]{Weight("calm",0),Weight("rage",100)}}
+  };
+  var strategy=new RuleBasedRealtimeEnemyTimelineStrategy(17,"","calm",phases,calm,rage);
+
+  Assert.That(strategy.SelectNext(new RealtimeEnemyTimelineDecisionContext(0,0,0,"",100,100)).Id,
+   Is.EqualTo("calm"));
+  Assert.That(strategy.SelectNext(new RealtimeEnemyTimelineDecisionContext(1,2,1,"calm",40,100)).Id,
+   Is.EqualTo("rage"));
+  Assert.That(strategy.SelectNext(new RealtimeEnemyTimelineDecisionContext(2,4,2,"rage",90,100)).Id,
+   Is.EqualTo("rage"));
+  Assert.That(strategy.CurrentPhaseId,Is.EqualTo("rage"));
+ }
+
+ [Test]
+ public void RuleBasedRealtimeEnemyStrategy_SharedCooldownBlocksDifferentReactionPatterns(){
+  var reactionA=RulePattern("reaction-a",100,"reaction",8d);
+  var reactionB=RulePattern("reaction-b",100,"reaction",8d);
+  var normal=RulePattern("normal",1);
+  var strategy=new RuleBasedRealtimeEnemyTimelineStrategy(
+   9,"reaction-a","normal",Array.Empty<RealtimeEnemyPhaseContent>(),
+   reactionA,reactionB,normal);
+
+  Assert.That(strategy.SelectNext(new RealtimeEnemyTimelineDecisionContext(0,0,0,"",10,10)).Id,
+   Is.EqualTo("reaction-a"));
+  Assert.That(strategy.SelectNext(new RealtimeEnemyTimelineDecisionContext(0,2,1,"reaction-a",10,10)).Id,
+   Is.EqualTo("normal"));
+ }
+
+ [Test]
+ public void RuleBasedRealtimeEnemyStrategy_IsStableWhenLoadoutOrderChanges(){
+  var alpha=RulePattern("alpha",1);
+  var beta=RulePattern("beta",3);
+  var first=new RuleBasedRealtimeEnemyTimelineStrategy(
+   42,"","alpha",Array.Empty<RealtimeEnemyPhaseContent>(),alpha,beta);
+  var second=new RuleBasedRealtimeEnemyTimelineStrategy(
+   42,"","alpha",Array.Empty<RealtimeEnemyPhaseContent>(),beta,alpha);
+
+  for(int index=0;index<20;index++){
+   var context=new RealtimeEnemyTimelineDecisionContext(index,index*2,index,"",10,10);
+   Assert.That(first.SelectNext(context).Id,Is.EqualTo(second.SelectNext(context).Id));
+  }
  }
 
  [Test]
@@ -929,7 +1114,222 @@ public sealed class PackspireEditModeTests {
   var enemy=profile.BuildEnemy();
   Assert.That(enemy.id,Is.EqualTo("journey_postal_warden"));
   Assert.That(enemy.hp,Is.EqualTo(36));
-  Assert.That(profile.timeline.BuildPatterns(),Has.Length.EqualTo(4));
+  Assert.That(profile.enemyDefinition,Is.Not.Null);
+  Assert.That(profile.enemyVariant,Is.Not.Null);
+  Assert.That(profile.ResolvedTimeline,Is.Not.Null);
+  Assert.That(profile.BuildTimelinePatterns(),Has.Length.EqualTo(6));
+  Assert.That(profile.StableEncounterId,Is.EqualTo("warden"));
+  Assert.That(profile.allowNormalBattle,Is.False);
+  Assert.That(profile.allowBossBattle,Is.True);
+ }
+
+ [Test]
+ public void WardenBattlePresentation_ResolvesSixPosesAndAuthoredEffectAnchors(){
+  var encounter=AssetDatabase.LoadAssetAtPath<JourneyBattleEncounterProfile>(
+   "Assets/Resources/Data/Journey/WardenEncounter.asset");
+  Assert.That(encounter,Is.Not.Null);
+  var presentation=encounter.ResolvedBattlePresentation;
+  Assert.That(presentation,Is.Not.Null);
+  Assert.That(presentation.HasCompletePoseSet,Is.True);
+  Assert.That(presentation.AnchorsAreNormalized,Is.True);
+  Assert.That(presentation.TimingCueAnchor(true),Is.EqualTo(new UnityEngine.Vector2(.42f,.79f)));
+  Assert.That(presentation.TimingCueAnchor(false),Is.EqualTo(new UnityEngine.Vector2(.83f,.48f)));
+  Assert.That(presentation.ImpactContactAnchor(true),Is.EqualTo(new UnityEngine.Vector2(.1f,.145f)));
+  Assert.That(presentation.ImpactContactAnchor(false),Is.EqualTo(new UnityEngine.Vector2(.52f,.14f)));
+  var sprites=PackspireResources.LoadAll<UnityEngine.Sprite>(encounter.ResolvedBattleSheetResource);
+  Assert.That(sprites,Is.Not.Null);
+  foreach(string poseName in presentation.OrderedPoseNames)
+   Assert.That(sprites.Any(sprite=>sprite.name==poseName),Is.True,poseName);
+ }
+
+ [Test]
+ public void JourneyEnemyComposition_ReusesIdentityAndTimelineAcrossPopulationClasses(){
+  var source=AssetDatabase.LoadAssetAtPath<JourneyBattleEncounterProfile>(
+   "Assets/Resources/Data/Journey/WardenEncounter.asset");
+  string root="Assets/Resources/Data/Journey/EnemyVariants/";
+  var variants=new[]{
+   AssetDatabase.LoadAssetAtPath<JourneyEnemyVariantDefinition>(root+"CommonEnemy.asset"),
+   AssetDatabase.LoadAssetAtPath<JourneyEnemyVariantDefinition>(root+"EnhancedEnemy.asset"),
+   AssetDatabase.LoadAssetAtPath<JourneyEnemyVariantDefinition>(root+"EliteEnemy.asset"),
+   AssetDatabase.LoadAssetAtPath<JourneyEnemyVariantDefinition>(root+"BossEnemy.asset")
+  };
+  int[] expectedHealth={36,43,54,72};
+  int[] expectedFirstDamage={8,9,10,11};
+  for(int index=0;index<variants.Length;index++){
+   Assert.That(variants[index],Is.Not.Null);
+   var composed=UnityEngine.Object.Instantiate(source);
+   try{
+    composed.enemyVariant=variants[index];
+    var enemy=composed.BuildEnemy();
+    var patterns=composed.BuildTimelinePatterns();
+    Assert.That(composed.PopulationClass,Is.EqualTo((JourneyEnemyPopulationClass)index));
+    Assert.That(enemy.id,Is.EqualTo("journey_postal_warden"));
+    Assert.That(enemy.hp,Is.EqualTo(expectedHealth[index]));
+    Assert.That(patterns[0].Steps[0].Damage,Is.EqualTo(expectedFirstDamage[index]));
+   }
+   finally{
+    UnityEngine.Object.DestroyImmediate(composed);
+   }
+  }
+ }
+
+ [Test]
+ public void JourneyEnemyPopulationTargets_UseApprovedTwoHundredEnemyRatio(){
+  Assert.That(JourneyEnemyPopulationTargets.Common,Is.EqualTo(100));
+  Assert.That(JourneyEnemyPopulationTargets.Enhanced,Is.EqualTo(50));
+  Assert.That(JourneyEnemyPopulationTargets.Elite,Is.EqualTo(30));
+  Assert.That(JourneyEnemyPopulationTargets.Boss,Is.EqualTo(20));
+  Assert.That(JourneyEnemyPopulationTargets.Total,Is.EqualTo(200));
+ }
+
+ [Test]
+ public void JourneyEncounterProfile_LegacyInlineDataStillBuildsDuringMigration(){
+  var source=AssetDatabase.LoadAssetAtPath<JourneyBattleEncounterProfile>(
+   "Assets/Resources/Data/Journey/WardenEncounter.asset");
+  var legacy=UnityEngine.Object.Instantiate(source);
+  try{
+   legacy.enemyDefinition=null;
+   legacy.enemyVariant=null;
+   legacy.behaviorProfile=null;
+   var enemy=legacy.BuildEnemy();
+   Assert.That(enemy.id,Is.EqualTo("journey_postal_warden"));
+   Assert.That(enemy.hp,Is.EqualTo(36));
+   Assert.That(legacy.BuildTimelinePatterns(),Has.Length.EqualTo(6));
+  }
+  finally{
+   UnityEngine.Object.DestroyImmediate(legacy);
+  }
+ }
+
+ [Test]
+ public void JourneyEncounterSelection_FiltersByNodeRoleAndPersistsTheChoice(){
+  var normal=CreateEncounterSelectionProfile("normal",allowNormal:true,allowBoss:false);
+  var boss=CreateEncounterSelectionProfile("boss",allowNormal:false,allowBoss:true);
+  try{
+   var plan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire");
+   var battleNode=plan.floors[0].nodes.First(node=>node.kind==ExpeditionNodeKind.Battle);
+   var selected=JourneyEncounterSelectionSystem.SelectAndAssign(
+    plan,battleNode,"old_spire",0,new[]{normal,boss});
+
+   Assert.That(selected,Is.SameAs(normal));
+   Assert.That(battleNode.encounterId,Is.EqualTo("normal"));
+   Assert.That(JourneyEncounterSelectionSystem.SelectAndAssign(
+    plan,battleNode,"old_spire",25,new[]{normal,boss}),Is.SameAs(normal));
+
+   var bossNode=plan.floors[0].nodes.Single(node=>node.kind==ExpeditionNodeKind.Boss);
+   Assert.That(JourneyEncounterSelectionSystem.SelectAndAssign(
+    plan,bossNode,"old_spire",10,new[]{normal,boss}),Is.SameAs(boss));
+  }
+  finally{
+   UnityEngine.Object.DestroyImmediate(normal);
+   UnityEngine.Object.DestroyImmediate(boss);
+  }
+ }
+
+ [Test]
+ public void JourneyEncounterSelection_IsDeterministicAcrossEquivalentPlans(){
+  var firstProfile=CreateEncounterSelectionProfile("alpha",true,false,1);
+  var secondProfile=CreateEncounterSelectionProfile("beta",true,false,3);
+  try{
+   var firstPlan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire",4);
+   var secondPlan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire",4);
+   var firstNode=firstPlan.floors[0].nodes.First(node=>node.kind==ExpeditionNodeKind.Battle);
+   var secondNode=secondPlan.floors[0].nodes.Single(node=>node.id==firstNode.id);
+
+   var first=JourneyEncounterSelectionSystem.SelectAndAssign(
+    firstPlan,firstNode,"old_spire",12,new[]{secondProfile,firstProfile});
+   var second=JourneyEncounterSelectionSystem.SelectAndAssign(
+    secondPlan,secondNode,"old_spire",12,new[]{firstProfile,secondProfile});
+
+   Assert.That(first.StableEncounterId,Is.EqualTo(second.StableEncounterId));
+   Assert.That(firstNode.encounterId,Is.EqualTo(secondNode.encounterId));
+  }
+  finally{
+   UnityEngine.Object.DestroyImmediate(firstProfile);
+   UnityEngine.Object.DestroyImmediate(secondProfile);
+  }
+ }
+
+ [Test]
+ public void JourneyEncounterSelection_AuthoredRosterCoversEveryCurrentBattleNode(){
+  var plan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire");
+  var profiles=PackspireResources.LoadAll<JourneyBattleEncounterProfile>("Data/Journey");
+
+  var report=JourneyEncounterSelectionSystem.AuditCoverage(
+   plan,"old_spire",profiles);
+
+  Assert.That(report.errors,Is.Empty,string.Join("\n",report.errors));
+  Assert.That(report.warnings,Is.Empty,string.Join("\n",report.warnings));
+ }
+
+ [Test]
+ public void JourneyEnemyProductionPilot_HasRecurringLineageAndRegionalOriginals(){
+  var profiles=PackspireResources.LoadAll<JourneyBattleEncounterProfile>("Data/Journey");
+
+  var report=JourneyEnemyProductionAuditSystem.Audit(
+   profiles,new[]{"ash_outskirts","drowned_archive"});
+
+  Assert.That(report.errors,Is.Empty,string.Join("\n",report.errors));
+  Assert.That(report.warnings,Is.Empty,string.Join("\n",report.warnings));
+  var authored=profiles.Where(profile=>profile!=null&&profile.enemyDefinition!=null).ToArray();
+  Assert.That(authored.Count(profile=>profile.enemyDefinition.origin==JourneyEnemyOrigin.RecurringLineage),
+   Is.EqualTo(2));
+  Assert.That(authored.Any(profile=>profile.StableEncounterId=="ash_furnace_bailiff_elite"&&
+   profile.PopulationClass==JourneyEnemyPopulationClass.Elite),Is.True);
+  Assert.That(authored.Any(profile=>profile.StableEncounterId=="drowned_archive_custodian_elite"&&
+   profile.PopulationClass==JourneyEnemyPopulationClass.Elite),Is.True);
+  var ashWatchman=authored.Single(profile=>profile.StableEncounterId=="ash_bell_watchman");
+  var drownedWatchman=authored.Single(profile=>profile.StableEncounterId=="drowned_bell_watchman");
+  Assert.That(ashWatchman.ResolvedTimeline,Is.Not.SameAs(drownedWatchman.ResolvedTimeline));
+  Assert.That(ashWatchman.ResolvedTimeline.catalog,
+   Is.SameAs(drownedWatchman.ResolvedTimeline.catalog));
+  Assert.That(ashWatchman.ResolvedTimeline.patternIds.Intersect(
+   drownedWatchman.ResolvedTimeline.patternIds).Count(),Is.EqualTo(5));
+  Assert.That(ashWatchman.ResolvedTimeline.patternIds,Does.Contain("timing-p31"));
+  Assert.That(drownedWatchman.ResolvedTimeline.patternIds,Does.Contain("timing-p32"));
+ Assert.That(drownedWatchman.BuildTimelinePatterns()[0].Steps[0].Damage,
+   Is.GreaterThan(ashWatchman.BuildTimelinePatterns()[0].Steps[0].Damage));
+ }
+
+ [Test]
+ public void JourneyBattleFormationLayout_PreservesLegacyActorHeightRatios(){
+  var normal=JourneyBattleFormationLayout.Resolve(BattleFormationScale.Normal,1);
+  var small=JourneyBattleFormationLayout.Resolve(BattleFormationScale.Small,1);
+  var large=JourneyBattleFormationLayout.Resolve(BattleFormationScale.Large,1);
+  var boss=JourneyBattleFormationLayout.Resolve(BattleFormationScale.Boss,1);
+  var multiple=JourneyBattleFormationLayout.Resolve(BattleFormationScale.Boss,3);
+
+  Assert.That(normal.PlayerScale,Is.EqualTo(1f).Within(.001f));
+  Assert.That(normal.EnemyScale,Is.EqualTo(1f).Within(.001f));
+  Assert.That(small.PlayerScale,Is.EqualTo(360f/350f).Within(.001f));
+  Assert.That(small.EnemyScale,Is.EqualTo(250f/390f).Within(.001f));
+  Assert.That(large.PlayerScale,Is.EqualTo(315f/350f).Within(.001f));
+  Assert.That(large.EnemyScale,Is.EqualTo(420f/390f).Within(.001f));
+  Assert.That(boss.PlayerScale,Is.EqualTo(280f/350f).Within(.001f));
+  Assert.That(boss.EnemyScale,Is.EqualTo(440f/390f).Within(.001f));
+  Assert.That(multiple.PlayerScale,Is.EqualTo(286f/350f).Within(.001f));
+  Assert.That(multiple.EnemyScale,Is.EqualTo(238f/390f).Within(.001f));
+ }
+
+ [TestCase("AshBellWatchman","ash-bell-watchman-v1")]
+ [TestCase("DrownedBellWatchman","drowned-bell-watchman-v1")]
+ [TestCase("AshChimneyScavenger","ash-chimney-scavenger-v1")]
+ [TestCase("AshFurnaceBailiff","ash-furnace-bailiff-v1")]
+ [TestCase("DrownedArchiveIndexer","drowned-archive-indexer-v1")]
+ [TestCase("DrownedArchiveCustodian","drowned-archive-custodian-v1")]
+ public void JourneyEnemyProductionPilot_ArtImportsAsGroundedSprite(
+  string definitionName,string spriteName){
+  var enemy=AssetDatabase.LoadAssetAtPath<JourneyEnemyDefinition>(
+   $"Assets/Resources/Data/Journey/EnemyDefinitions/{definitionName}.asset");
+  var sprite=AssetDatabase.LoadAssetAtPath<UnityEngine.Sprite>(
+   $"Assets/Resources/Art/JourneyPrototype/Enemies/{spriteName}.png");
+
+  Assert.That(enemy,Is.Not.Null);
+  Assert.That(sprite,Is.Not.Null);
+  Assert.That(sprite.pivot.y/sprite.rect.height,Is.EqualTo(.08f).Within(.01f));
+   Assert.That(enemy.battleTargetHeight,Is.InRange(4f,5.5f));
+   Assert.That(enemy.battleScale*sprite.bounds.size.y,
+    Is.EqualTo(enemy.battleTargetHeight).Within(.03f));
  }
 
  [Test]
@@ -1013,30 +1413,163 @@ public sealed class PackspireEditModeTests {
   Assert.That(plan.floors,Has.Count.EqualTo(3));
   Assert.That(plan.startNodeIds,Has.Count.EqualTo(2));
   foreach(var floor in plan.floors){
-   Assert.That(floor.paths.Select(path=>path.battleCount),Is.EquivalentTo(new[]{4,8}));
+   Assert.That(floor.paths,Has.Count.EqualTo(3));
+   Assert.That(floor.startNodeIds,Has.Count.EqualTo(2));
+   Assert.That(floor.nodes.Count(node=>node.order==0),Is.EqualTo(2));
+   Assert.That(floor.nodes.Count(node=>node.order>0&&node.kind!=ExpeditionNodeKind.Boss),
+    Is.EqualTo(21));
    Assert.That(floor.nodes.Single(node=>node.id==floor.bossNodeId).kind,Is.EqualTo(ExpeditionNodeKind.Boss));
-   Assert.That(floor.paths.All(path=>
-    floor.nodes.Single(node=>node.id==path.nodeIds[^1]).nextNodeIds.SequenceEqual(new[]{floor.bossNodeId})),Is.True);
+   Assert.That(floor.nodes.Where(node=>node.kind!=ExpeditionNodeKind.Boss)
+    .All(node=>node.nextNodeIds.Count>=1&&node.nextNodeIds.Count<=2),Is.True);
+   Assert.That(floor.nodes.Where(node=>node.order==7)
+    .All(node=>node.nextNodeIds.SequenceEqual(new[]{floor.bossNodeId})),Is.True);
   }
   Assert.That(plan.floors[0].nodes.Single(node=>node.id==plan.floors[0].bossNodeId).nextNodeIds,
-   Is.EquivalentTo(plan.floors[1].paths.Select(path=>path.nodeIds[0])));
+   Is.EquivalentTo(plan.floors[1].startNodeIds));
  }
 
  [Test]
- public void ExpeditionRoutePlan_IsDeterministicAndUsesAuthoredDayThresholds(){
+ public void ExpeditionRoutePlan_RuntimeTraversalCanChangeTendencyAtEveryBranch(){
+  var run=new RunState{dungeon="old_spire"};
+  run.expeditionPlan=ExpeditionRoutePlanSystem.GenerateDefault(run.dungeon);
+
+  while(!run.expeditionPlan.complete){
+   var choices=ExpeditionRoutePlanSystem.Available(run.expeditionPlan);
+   Assert.That(choices.Count,Is.InRange(1,2));
+   var next=choices.OrderByDescending(node=>node.lane).First();
+   Assert.That(ExpeditionRoutePlanSystem.Select(run.expeditionPlan,next.id),Is.True);
+   Assert.That(ExpeditionRoutePlanSystem.CommitSelection(run,out _),Is.True);
+   Assert.That(ExpeditionRoutePlanSystem.ResolveCurrent(run.expeditionPlan),Is.True);
+  }
+
+  Assert.That(run.expeditionPlan.elapsedDays,Is.EqualTo(18));
+  Assert.That(run.expeditionPlan.committedNodeIds,Has.Count.EqualTo(27));
+  Assert.That(run.expeditionPlan.complete,Is.True);
+  Assert.That(run.expeditionPlan.currentFloorIndex,Is.EqualTo(2));
+  Assert.That(ExpeditionRoutePlanSystem.Available(run.expeditionPlan),Is.Empty);
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_DoesNotAdvanceOrResolveFromInvalidSelection(){
+  var run=new RunState{dungeon="old_spire"};
+  run.expeditionPlan=ExpeditionRoutePlanSystem.GenerateDefault(run.dungeon);
+
+  Assert.That(ExpeditionRoutePlanSystem.Select(run.expeditionPlan,"not-a-node"),Is.False);
+  Assert.That(ExpeditionRoutePlanSystem.CommitSelection(run,out _),Is.False);
+  Assert.That(ExpeditionRoutePlanSystem.ResolveCurrent(run.expeditionPlan),Is.False);
+  Assert.That(run.expeditionPlan.elapsedDays,Is.Zero);
+ }
+
+ [Test]
+ public void ExpeditionJourney_CommitsGeneratedPathAndKeepsLegacyStateAsCompatibilityOnly(){
+  var run=new RunState{dungeon="old_spire",hp=20,maxHp=20};
+  run.expeditionPlan=ExpeditionRoutePlanSystem.GenerateDefault(run.dungeon);
+  run.courierRoute=new CourierRouteState{nextSegmentDiscount=1};
+  var first=ExpeditionJourneySystem.Available(run)
+   .Single(node=>node.lane==0);
+
+  Assert.That(ExpeditionJourneySystem.Select(run,first.id),Is.True);
+  Assert.That(ExpeditionJourneySystem.Commit(run,out var committed,out string message),Is.True);
+
+  Assert.That(committed.id,Is.EqualTo(first.id));
+  Assert.That(run.expeditionPlan.elapsedDays,Is.Zero);
+  Assert.That(run.courierRoute.daysElapsed,Is.Zero);
+  Assert.That(run.courierRoute.currentNodeId,Is.EqualTo("dispatch"));
+  Assert.That(run.courierRoute.awaitingResolution,Is.True);
+  Assert.That(run.courierRoute.nextSegmentDiscount,Is.Zero);
+  Assert.That(message,Does.Contain("到着"));
+
+  Assert.That(ExpeditionJourneySystem.ResolveCurrent(
+   run,new CourierLocationOutcome{message="地点を突破した。"},out _),Is.True);
+  Assert.That(run.expeditionPlan.awaitingResolution,Is.False);
+  Assert.That(run.courierRoute.awaitingResolution,Is.False);
+  Assert.That(ExpeditionJourneySystem.Available(run),Has.Count.EqualTo(2));
+ }
+
+ [Test]
+ public void ExpeditionJourney_PresentationMapsFloorsAndNodeKindsWithoutChangingGraph(){
+  var plan=ExpeditionRoutePlanSystem.GenerateDefault("old_spire");
+  var rest=plan.floors[1].nodes.First(node=>node.kind==ExpeditionNodeKind.Rest);
+  var other=plan.floors[2].nodes.First(node=>node.kind==ExpeditionNodeKind.Other);
+  var boss=plan.floors[2].nodes.Single(node=>node.kind==ExpeditionNodeKind.Boss);
+
+  var restView=ExpeditionJourneySystem.PresentationNode(plan,rest);
+  var otherView=ExpeditionJourneySystem.PresentationNode(plan,other);
+  var bossView=ExpeditionJourneySystem.PresentationNode(plan,boss);
+
+  Assert.That(restView.resolution,Is.EqualTo(CourierResolutionKind.Relay));
+  Assert.That(restView.phase,Is.InRange(5,6));
+  Assert.That(otherView.resolution,Is.EqualTo(CourierResolutionKind.Event));
+  Assert.That(otherView.phase,Is.InRange(8,9));
+  Assert.That(bossView.resolution,Is.EqualTo(CourierResolutionKind.Battle));
+  Assert.That(bossView.phase,Is.EqualTo(10));
+  Assert.That(plan.currentNodeId,Is.Empty);
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_PacingSpansSecondStageBoundaryWithoutForcingThirdStageMaximum(){
+  var rules=TestExpeditionRouteRules();
+  var plan=ExpeditionRoutePlanSystem.Generate(1708,rules);
+
+  var pacing=ExpeditionRoutePlanSystem.AnalyzePacing(plan);
+
+  Assert.That(pacing.errors,Is.Empty,string.Join("\n",pacing.errors));
+  Assert.That(pacing.warnings,Is.Empty,string.Join("\n",pacing.warnings));
+  Assert.That(pacing.routeCombinationCount,Is.EqualTo(32768));
+  Assert.That(pacing.fastestDays,Is.EqualTo(18));
+  Assert.That(pacing.standardLowDays,Is.EqualTo(21));
+  Assert.That(pacing.standardHighDays,Is.EqualTo(21));
+  Assert.That(pacing.slowestDays,Is.EqualTo(24));
+  Assert.That(pacing.fastestStage,Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(pacing.standardLowStage,Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(pacing.standardHighStage,Is.EqualTo(ExpeditionDayStage.Pursuit));
+  Assert.That(pacing.slowestStage,Is.EqualTo(ExpeditionDayStage.Pursuit));
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_ValidationRejectsARequestedDayRangeTheGraphCannotMeet(){
+  var rules=TestExpeditionRouteRules();
+  rules.minimumDaysPerFloor=7;
+
+  var report=ExpeditionRoutePlanSystem.Validate(
+   ExpeditionRoutePlanSystem.Generate(1708,rules),rules);
+
+  Assert.That(report.errors.Any(error=>error.Contains("costs 6 days")),Is.True);
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_IsDeterministicAndUsesSharedDayThresholds(){
   var rules=TestExpeditionRouteRules();
   var first=ExpeditionRoutePlanSystem.Generate(42,rules);
   var second=ExpeditionRoutePlanSystem.Generate(42,rules);
 
   string FirstKinds(ExpeditionRoutePlan plan)=>string.Join(",",plan.floors
-   .SelectMany(floor=>floor.paths)
-   .SelectMany(path=>path.nodeIds.Select(id=>plan.floors
-    .SelectMany(floor=>floor.nodes).Single(node=>node.id==id).kind)));
+   .SelectMany(floor=>floor.nodes.OrderBy(node=>node.id))
+   .Select(node=>$"{node.id}:{node.kind}:{node.dayCost}:{string.Join("|",node.nextNodeIds)}"));
 
   Assert.That(FirstKinds(first),Is.EqualTo(FirstKinds(second)));
-  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,4),Is.EqualTo(ExpeditionDayStage.Quiet));
-  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,5),Is.EqualTo(ExpeditionDayStage.Alert));
-  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,10),Is.EqualTo(ExpeditionDayStage.Pursuit));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,0),Is.EqualTo(ExpeditionDayStage.Quiet));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,10),Is.EqualTo(ExpeditionDayStage.Quiet));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,11),Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,20),Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,21),Is.EqualTo(ExpeditionDayStage.Pursuit));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,35),Is.EqualTo(ExpeditionDayStage.Pursuit));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(first,36),Is.EqualTo(ExpeditionDayStage.Pursuit));
+ }
+
+ [Test]
+ public void ExpeditionRoutePlan_FourthStageRequiresDungeonOrEventEnablement(){
+  var standard=ExpeditionRoutePlanSystem.Generate(42,TestExpeditionRouteRules());
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(standard,99),Is.EqualTo(ExpeditionDayStage.Pursuit));
+
+  ExpeditionRoutePlanSystem.EnableFourthDayStage(standard);
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(standard,35),Is.EqualTo(ExpeditionDayStage.Pursuit));
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(standard,36),Is.EqualTo(ExpeditionDayStage.Anomaly));
+
+  var specialRules=TestExpeditionRouteRules();
+  specialRules.enableFourthDayStage=true;
+  var specialDungeon=ExpeditionRoutePlanSystem.Generate(42,specialRules);
+  Assert.That(ExpeditionRoutePlanSystem.DayStage(specialDungeon,36),Is.EqualTo(ExpeditionDayStage.Anomaly));
  }
 
  [Test]
@@ -1046,26 +1579,56 @@ public sealed class PackspireEditModeTests {
 
   var report=RealtimeEnemyTimelineAudit.Analyze(profile.BuildPatterns(),10d);
 
-  Assert.That(report.cycleDuration,Is.EqualTo(41d).Within(.0001d));
-  Assert.That(report.actionCount,Is.EqualTo(9));
-  Assert.That(report.totalPotentialDamage,Is.EqualTo(79));
-  Assert.That(report.reactionActionCount,Is.EqualTo(2));
-  Assert.That(report.minimumTelegraphLead,Is.EqualTo(.58d).Within(.0001d));
+  Assert.That(report.cycleDuration,Is.EqualTo(69d).Within(.0001d));
+  Assert.That(report.actionCount,Is.EqualTo(17));
+  Assert.That(report.totalPotentialDamage,Is.EqualTo(151));
+  Assert.That(report.reactionActionCount,Is.EqualTo(6));
+  Assert.That(report.minimumTelegraphLead,Is.EqualTo(.7d).Within(.0001d));
   Assert.That(report.maximumActionsInWindow,Is.GreaterThan(0));
   Assert.That(report.maximumDamageInWindow,Is.GreaterThanOrEqualTo(12));
-  Assert.That(report.maximumQuietSeconds,Is.GreaterThan(0d));
+ Assert.That(report.maximumQuietSeconds,Is.GreaterThan(0d));
+ }
+
+ static RealtimeEnemyTimelinePattern RulePattern(
+  string id,int weight,string cooldownGroup="",double cooldownSeconds=0d)=>
+  new RealtimeEnemyTimelinePattern(
+   id,2d,RealtimeEnemyPatternRole.Standard,weight,cooldownGroup,cooldownSeconds,
+   0,0,Array.Empty<RealtimeEnemyPreviousPatternWeightContent>(),
+   new RealtimeEnemyTimelineStep(1d,id+":action",1,.5d));
+
+ static RealtimeEnemyPatternWeightContent Weight(string patternId,int percent)=>new(){
+  patternId=patternId,
+  weightPercent=percent
+ };
+
+ static JourneyBattleEncounterProfile CreateEncounterSelectionProfile(
+  string encounterId,bool allowNormal,bool allowBoss,int weight=1){
+  var profile=UnityEngine.ScriptableObject.CreateInstance<JourneyBattleEncounterProfile>();
+  profile.encounterId=encounterId;
+  profile.enemyId=encounterId+"-enemy";
+  profile.displayName=encounterId;
+  profile.minimumFloor=1;
+  profile.maximumFloor=3;
+  profile.minimumDayStage=ExpeditionDayStage.Quiet;
+  profile.maximumDayStage=ExpeditionDayStage.Anomaly;
+  profile.minimumLane=0;
+  profile.maximumLane=2;
+  profile.allowNormalBattle=allowNormal;
+  profile.allowBossBattle=allowBoss;
+  profile.selectionWeight=weight;
+  return profile;
  }
 
  static ExpeditionRouteGenerationRules TestExpeditionRouteRules()=>new(){
   floorCount=3,
-  minimumBattlesPerPath=4,
-  maximumBattlesPerPath=8,
-  alertStartsOnDay=5,
-  pursuitStartsOnDay=10,
-  paths=new(){
-   new ExpeditionPathRule("safe","Safe",4,1,2,1),
-   new ExpeditionPathRule("breakthrough","Breakthrough",8,3,3,2)
-  }
+  columnsPerFloor=8,
+  laneCount=3,
+  minimumBattlesPerRoute=4,
+  maximumBattlesPerRoute=8,
+  minimumDaysPerFloor=6,
+  maximumDaysPerFloor=8,
+  minimumRouteCombinationsPerFloor=16
  };
 }
+
 #endif

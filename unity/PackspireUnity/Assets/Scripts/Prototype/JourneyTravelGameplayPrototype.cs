@@ -31,9 +31,9 @@ namespace Packspire
         private const string StyleResource = "UI/PackspireJourneyComplete";
         private const string WalkSheetResource = "Art/UI/CourierRoutePrototype/courier-route-walk-sheet-v1";
         private const string DefaultEncounterProfileResource = "Data/Journey/WardenEncounter";
-        private const float EnemyBattleScale = .66f;
+        private const float DefaultEnemyBattleScale = .66f;
         private const float BattleGroundY = -1.23f;
-        private static readonly Vector3 EnemyBattleStartPosition = new Vector3(2.25f, BattleGroundY, 0f);
+        private static readonly Vector3 EnemyBattleStartPosition = new Vector3(4.2f, BattleGroundY, 0f);
         private const float OpeningTravelDuration = 6.5f;
         private const float RouteTravelDuration = 7.5f;
         private const float MiniGameStart = 0.42f;
@@ -167,7 +167,8 @@ namespace Packspire
         private RunState run;
         private bool usesLiveRun;
         private BattleState battle;
-        private CourierRouteNodeDef[] choices = Array.Empty<CourierRouteNodeDef>();
+        private ExpeditionRouteNodePlan[] choices = Array.Empty<ExpeditionRouteNodePlan>();
+        private ExpeditionRouteNodePlan arrivalExpeditionNode;
         private CourierRouteNodeDef arrivalNode;
         private Phase phase;
         private float travelClock;
@@ -202,6 +203,8 @@ namespace Packspire
         private DefenseAction defenseAction;
         private DefenseInputGrade defenseInputGrade;
         private EnemyActionKind enemyActionKind;
+        private bool enemyActionOverhead = true;
+        private float enemyImpactHoldRemaining;
         private Color enemyTelegraphColor = Color.white;
         private string selectedSealKey = "";
         private int completedRoadTasks;
@@ -212,7 +215,13 @@ namespace Packspire
         private Sprite[] enemyBattleFrames = Array.Empty<Sprite>();
         private readonly SpriteRenderer[] battlePreviewEnemyRenderers = new SpriteRenderer[2];
         private readonly SpriteRenderer[] battlePreviewEnemyShadowRenderers = new SpriteRenderer[2];
+        private readonly Vector3[] battleEnemySlotPositions = new Vector3[3];
+        private readonly float[] battleEnemySlotScales = new float[3];
         private Vector3 enemyBattleBasePosition;
+        private float enemyBattleBaseScale = DefaultEnemyBattleScale;
+        private float enemyBattleCompositionScale = 1f;
+        private float enemyBattleFormationScaleFactor = 1f;
+        private int battleLayoutEnemyCount = 1;
         private float battleActorClock;
         private SpriteRenderer parcelRenderer;
         private Coroutine transitionRoutine;
@@ -332,15 +341,18 @@ namespace Packspire
         private void ResumeLiveJourneyAfterReward()
         {
             RefreshPersistentUi();
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            ExpeditionRouteNodePlan currentNode = ExpeditionRoutePlanSystem.Node(plan, plan.currentNodeId);
+            arrivalExpeditionNode = null;
             arrivalNode = null;
             firstChoicePending = false;
             CourierRouteState route = run.courierRoute;
-            ApplyWorldForRouteImmediately(CourierRouteSystem.Node(route.currentNodeId));
-            if (route.failed || route.complete)
+            ApplyWorldForRouteImmediately(ExpeditionJourneySystem.PresentationNode(plan, currentNode));
+            if (route.failed || plan.complete)
             {
                 ShowResult(
-                    route.failed ? "EXPEDITION FAILED" : "DELIVERY COMPLETE",
-                    route.failed ? "配達続行不能" : "最終配達完了",
+                    route.failed ? "EXPEDITION FAILED" : "EXPEDITION COMPLETE",
+                    route.failed ? "遠征続行不能" : "最深部踏破",
                     PackspireGame.Instance?.UiMessage ?? string.Empty,
                     false);
                 return;
@@ -410,7 +422,14 @@ namespace Packspire
             {
                 battleActorClock += gameplayDelta;
                 float realtimeTimelineDelta = UpdateRealtimeBattle(gameplayDelta);
-                if (defenseActive)
+                if (enemyImpactHoldRemaining > 0f)
+                {
+                    float impactDelta = realtimeBattleActive
+                        ? realtimeTimelineDelta
+                        : gameplayDelta;
+                    UpdateRealtimeEnemyImpact(impactDelta);
+                }
+                else if (defenseActive)
                 {
                     float defenseDelta = realtimeBattleActive
                         ? realtimeTimelineDelta
@@ -418,6 +437,7 @@ namespace Packspire
                     UpdateDefense(defenseDelta);
                 }
                 else UpdateBattleIdleMotion();
+                UpdateEnemyPoseRecovery(gameplayDelta);
             }
         }
 
@@ -520,10 +540,16 @@ namespace Packspire
 
         private void ShowChoice()
         {
-            choices = CourierRouteSystem.Available(run.courierRoute).ToArray();
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            choices = ExpeditionJourneySystem.Available(run).ToArray();
             if (choices.Length == 0)
             {
-                ShowResult("ROUTE COMPLETE", "配達完了", "紫晶の封鐘塔へ荷を届けた。", false);
+                bool complete = plan.complete;
+                ShowResult(
+                    complete ? "EXPEDITION COMPLETE" : "ROUTE INTERRUPTED",
+                    complete ? "最深部踏破" : "進行不能",
+                    complete ? "三つの階層を踏破した。" : "次の遠征地点を取得できませんでした。",
+                    false);
                 return;
             }
             if (choices.Length == 1)
@@ -535,8 +561,9 @@ namespace Packspire
             SetPhase(Phase.Choice);
             walker.SetJourneyWalking(false);
             ResetChoiceVisuals();
-            choiceTitle.text = run.courierRoute.currentNodeId == "dispatch" ? "最初の配達路を選ぶ" : "次の主要経路を選ぶ";
-            choiceNote.text = "どちらを選んでも目的地へ到着します。変わるのは旅の内容と成果です。";
+            int choiceFloor = choices[0].floorIndex + 1;
+            choiceTitle.text = string.IsNullOrEmpty(plan.currentNodeId) ? "最初の進路を選ぶ" : $"第{choiceFloor}層・次の分岐";
+            choiceNote.text = "選択するのは次の区間です。後の分岐で探索側・突破側を選び直せます。";
             BindChoice(0, choices[0]);
             choiceB.EnableInClassList("is-hidden", choices.Length < 2);
             if (choices.Length > 1) BindChoice(1, choices[1]);
@@ -544,20 +571,22 @@ namespace Packspire
             nextText.text = "旅の内容と成果を見比べる";
         }
 
-        private void ContinueAlongSingleRoute(CourierRouteNodeDef node)
+        private void ContinueAlongSingleRoute(ExpeditionRouteNodePlan node)
         {
-            if (!CourierRouteSystem.Select(run.courierRoute, node.id) ||
-                !CourierRouteSystem.Commit(run, out string message))
+            if (!ExpeditionJourneySystem.Select(run, node.id) ||
+                !ExpeditionJourneySystem.Commit(run, out ExpeditionRouteNodePlan committed, out string message))
             {
                 ShowResult("ROUTE INTERRUPTED", "旅程を継続できない", "航路データを確認してください。", false);
                 return;
             }
 
-            ContinueAfterRouteCommit(node, message);
+            ContinueAfterRouteCommit(committed, message);
         }
 
-        private void BindChoice(int index, CourierRouteNodeDef node)
+        private void BindChoice(int index, ExpeditionRouteNodePlan expeditionNode)
         {
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            CourierRouteNodeDef node = ExpeditionJourneySystem.PresentationNode(plan, expeditionNode);
             bool first = index == 0;
             Button button = first ? choiceA : choiceB;
             Label routeIndex = first ? choiceAIndex : choiceBIndex;
@@ -570,9 +599,9 @@ namespace Packspire
             Label seal = first ? choiceASeal : choiceBSeal;
             VisualElement art = first ? choiceAArt : choiceBArt;
             button.SetEnabled(node != null);
-            title.text = node?.title ?? "---";
+            title.text = expeditionNode == null ? "---" : ExpeditionJourneySystem.PathTitle(plan, expeditionNode);
             if (node == null) return;
-            routeIndex.text = $"ROUTE {(first ? "A" : "B")} / {node.kind} / {JourneyPresentationConfig.GetRoadWidthLabel(node)}";
+            routeIndex.text = $"BRANCH {(first ? "A" : "B")} / {node.kind} / {JourneyPresentationConfig.GetRoadWidthLabel(node)}";
             flavor.text = RouteFlavor(node);
             int effectiveDays = Mathf.Max(0, node.dayCost - run.courierRoute.nextSegmentDiscount);
             days.text = effectiveDays == node.dayCost
@@ -594,7 +623,7 @@ namespace Packspire
 
         private IEnumerator CommitChoiceRoutine(int index)
         {
-            CourierRouteNodeDef node = choices[index];
+            ExpeditionRouteNodePlan node = choices[index];
             Button selected = index == 0 ? choiceA : choiceB;
             Button rejected = index == 0 ? choiceB : choiceA;
             selected.AddToClassList("is-stamped");
@@ -603,8 +632,8 @@ namespace Packspire
             choiceB.SetEnabled(false);
             yield return WaitForJourneySeconds(.44f);
 
-            if (!CourierRouteSystem.Select(run.courierRoute, node.id) ||
-                !CourierRouteSystem.Commit(run, out string message))
+            if (!ExpeditionJourneySystem.Select(run, node.id) ||
+                !ExpeditionJourneySystem.Commit(run, out ExpeditionRouteNodePlan committed, out string message))
             {
                 ResetChoiceVisuals();
                 ShowToast("この経路は現在選べません。");
@@ -612,11 +641,11 @@ namespace Packspire
                 yield break;
             }
 
-            ContinueAfterRouteCommit(node, message);
+            ContinueAfterRouteCommit(committed, message);
             choiceCommitRoutine = null;
         }
 
-        private void ContinueAfterRouteCommit(CourierRouteNodeDef node, string message)
+        private void ContinueAfterRouteCommit(ExpeditionRouteNodePlan expeditionNode, string message)
         {
             RefreshPersistentUi();
             if (run.courierRoute.failed)
@@ -626,6 +655,9 @@ namespace Packspire
             }
 
             ShowToast(message);
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            CourierRouteNodeDef node = ExpeditionJourneySystem.PresentationNode(plan, expeditionNode);
+            arrivalExpeditionNode = expeditionNode;
             SetWorldForRoute(node);
             BeginTravel(RouteTravelDuration + node.dayCost * .65f, node);
         }
@@ -656,6 +688,7 @@ namespace Packspire
             switch (arrivalNode.resolution)
             {
                 case CourierResolutionKind.Battle:
+                    PrepareEncounterForArrival();
                     BeginBattle();
                     break;
                 case CourierResolutionKind.Event:
@@ -669,6 +702,18 @@ namespace Packspire
                     ResolveRoute(new CourierLocationOutcome { success = true, message = arrivalNode.resolutionTitle });
                     break;
             }
+        }
+
+        private void PrepareEncounterForArrival()
+        {
+            if (arrivalExpeditionNode == null) return;
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            JourneyBattleEncounterProfile selected = JourneyEncounterSelectionSystem.SelectAndAssign(
+                plan,
+                arrivalExpeditionNode,
+                run.dungeon,
+                plan.elapsedDays);
+            ApplyEncounterProfile(selected);
         }
 
         private void ShowEvent(CourierRouteNodeDef node)
@@ -707,17 +752,23 @@ namespace Packspire
 
         private void ResolveRoute(CourierLocationOutcome outcome)
         {
-            if (!CourierRouteSystem.ResolveCurrent(run, outcome, out string message))
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            bool generatedNodePending = arrivalExpeditionNode != null && plan.awaitingResolution;
+            string message;
+            bool resolved = generatedNodePending
+                ? ExpeditionJourneySystem.ResolveCurrent(run, outcome, out message)
+                : CourierRouteSystem.ResolveCurrent(run, outcome, out message);
+            if (!resolved)
             {
                 ShowToast(message);
                 return;
             }
             RefreshPersistentUi();
-            bool complete = run.courierRoute.complete;
+            bool complete = generatedNodePending ? plan.complete : run.courierRoute.complete;
             bool failed = run.courierRoute.failed;
             ShowResult(
-                failed ? "EXPEDITION FAILED" : complete ? "DELIVERY COMPLETE" : "ROUTE CLEARED",
-                failed ? "配達続行不能" : complete ? "最終配達完了" : arrivalNode?.resolutionTitle ?? "地点を突破",
+                failed ? "EXPEDITION FAILED" : complete ? "EXPEDITION COMPLETE" : "ROUTE CLEARED",
+                failed ? "遠征続行不能" : complete ? "最深部踏破" : arrivalNode?.resolutionTitle ?? "地点を突破",
                 message,
                 !complete && !failed);
         }
@@ -743,13 +794,14 @@ namespace Packspire
             {
                 if (usesLiveRun && PackspireGame.Instance != null)
                 {
-                    bool win = run?.courierRoute?.complete == true && run.courierRoute.failed == false;
+                    bool win = run?.expeditionPlan?.complete == true && run.courierRoute.failed == false;
                     PackspireGame.Instance.UiFinishSeamlessJourney(win);
                     return;
                 }
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 return;
             }
+            arrivalExpeditionNode = null;
             arrivalNode = null;
             ShowChoice();
         }
@@ -763,10 +815,32 @@ namespace Packspire
             hpText.text = $"{run.hp} / {run.maxHp}";
             cargoText.text = route.recoveredCargoCount.ToString("00");
             sealsText.text = Mathf.Max(0, route.seals?.Sum(seal => seal.charges) ?? 0).ToString("00");
-            dayText.text = $"DAY {route.daysElapsed} / {route.deadlineDays}";
-            int remaining = Mathf.Max(0, route.deadlineDays - route.daysElapsed);
-            conditionText.text = remaining >= 7 ? "安定" : remaining >= 3 ? "逼迫" : "危険";
-            conditionNoteText.text = $"期限まで {remaining}日";
+            ExpeditionDayStage dayStage = ExpeditionProgressSystem.CurrentDayStage(run);
+            dayText.text = $"DAY {route.daysElapsed} / {JourneyDayStageLabel(dayStage)}";
+            conditionText.text = JourneyDayStageLabel(dayStage);
+            conditionNoteText.text = JourneyDayStageNote(run, dayStage);
+        }
+
+        private static string JourneyDayStageLabel(ExpeditionDayStage stage) => stage switch
+        {
+            ExpeditionDayStage.Alert => "警戒",
+            ExpeditionDayStage.Pursuit => "追跡",
+            ExpeditionDayStage.Anomaly => "異常",
+            _ => "静穏"
+        };
+
+        private static string JourneyDayStageNote(RunState activeRun, ExpeditionDayStage stage)
+        {
+            int elapsed = activeRun?.expeditionPlan?.elapsedDays ?? 0;
+            return stage switch
+            {
+                ExpeditionDayStage.Quiet => $"警戒まで {Mathf.Max(0, ExpeditionRoutePlanSystem.AlertStartDay - elapsed)}日",
+                ExpeditionDayStage.Alert => $"追跡まで {Mathf.Max(0, ExpeditionRoutePlanSystem.PursuitStartDay - elapsed)}日",
+                ExpeditionDayStage.Pursuit when activeRun?.expeditionPlan?.fourthDayStageEnabled == true =>
+                    $"異常兆候まで {Mathf.Max(0, ExpeditionRoutePlanSystem.AnomalyStartDay - elapsed)}日",
+                ExpeditionDayStage.Anomaly => "特殊危険域",
+                _ => "高危険・高報酬"
+            };
         }
 
         private void SetPhase(Phase next)

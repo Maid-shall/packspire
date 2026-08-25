@@ -12,6 +12,7 @@ namespace Packspire
         public readonly double ExecuteOffset;
         public readonly string ActionId;
         public readonly RealtimeEnemyActionKind Kind;
+        public readonly RealtimeEnemyMotionLane MotionLane;
         public readonly int Damage;
         public readonly double TelegraphLead;
         public readonly int HitCount;
@@ -24,11 +25,13 @@ namespace Packspire
             double telegraphLead,
             int hitCount = 1,
             double hitSpacing = 0.15d,
-            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack)
+            RealtimeEnemyActionKind kind = RealtimeEnemyActionKind.NormalAttack,
+            RealtimeEnemyMotionLane motionLane = RealtimeEnemyMotionLane.Default)
         {
             ExecuteOffset = Math.Max(0d, executeOffset);
             ActionId = actionId ?? string.Empty;
             Kind = kind;
+            MotionLane = motionLane;
             Damage = Math.Max(0, damage);
             TelegraphLead = Math.Max(0d, telegraphLead);
             HitCount = Math.Max(1, hitCount);
@@ -43,14 +46,46 @@ namespace Packspire
     public sealed class RealtimeEnemyTimelinePattern
     {
         private readonly RealtimeEnemyTimelineStep[] steps;
+        private readonly RealtimeEnemyPreviousPatternWeightContent[] previousPatternWeights;
 
         public string Id { get; }
         public double Duration { get; }
+        public RealtimeEnemyPatternRole Role { get; }
+        public int BaseWeight { get; }
+        public string CooldownGroupId { get; }
+        public double CooldownSeconds { get; }
+        public int MaxConsecutive { get; }
+        public int MaximumUsesPerBattle { get; }
         public IReadOnlyList<RealtimeEnemyTimelineStep> Steps => steps;
 
         public RealtimeEnemyTimelinePattern(
             string id,
             double duration,
+            params RealtimeEnemyTimelineStep[] steps)
+            : this(
+                id,
+                duration,
+                RealtimeEnemyPatternRole.Standard,
+                1,
+                string.Empty,
+                0d,
+                0,
+                0,
+                Array.Empty<RealtimeEnemyPreviousPatternWeightContent>(),
+                steps)
+        {
+        }
+
+        public RealtimeEnemyTimelinePattern(
+            string id,
+            double duration,
+            RealtimeEnemyPatternRole role,
+            int baseWeight,
+            string cooldownGroupId,
+            double cooldownSeconds,
+            int maxConsecutive,
+            int maximumUsesPerBattle,
+            RealtimeEnemyPreviousPatternWeightContent[] previousPatternWeights,
             params RealtimeEnemyTimelineStep[] steps)
         {
             if (duration <= 0d)
@@ -58,6 +93,15 @@ namespace Packspire
 
             Id = id ?? string.Empty;
             Duration = duration;
+            Role = role;
+            BaseWeight = Math.Max(0, baseWeight);
+            CooldownGroupId = cooldownGroupId ?? string.Empty;
+            CooldownSeconds = Math.Max(0d, cooldownSeconds);
+            MaxConsecutive = Math.Max(0, maxConsecutive);
+            MaximumUsesPerBattle = Math.Max(0, maximumUsesPerBattle);
+            this.previousPatternWeights = previousPatternWeights == null
+                ? Array.Empty<RealtimeEnemyPreviousPatternWeightContent>()
+                : (RealtimeEnemyPreviousPatternWeightContent[])previousPatternWeights.Clone();
             this.steps = steps == null
                 ? Array.Empty<RealtimeEnemyTimelineStep>()
                 : (RealtimeEnemyTimelineStep[])steps.Clone();
@@ -71,6 +115,31 @@ namespace Packspire
         {
             return left.ExecuteOffset.CompareTo(right.ExecuteOffset);
         }
+
+        public int PreviousPatternWeightPercent(string previousPatternId)
+        {
+            for (int index = 0; index < previousPatternWeights.Length; index++)
+            {
+                RealtimeEnemyPreviousPatternWeightContent entry = previousPatternWeights[index];
+                if (entry != null && string.Equals(
+                    entry.previousPatternId,
+                    previousPatternId,
+                    StringComparison.Ordinal)) return Math.Max(0, entry.weightPercent);
+            }
+            return 100;
+        }
+    }
+
+    public readonly struct RealtimeEnemyTimelineVitals
+    {
+        public readonly int Health;
+        public readonly int MaximumHealth;
+
+        public RealtimeEnemyTimelineVitals(int health, int maximumHealth)
+        {
+            MaximumHealth = Math.Max(1, maximumHealth);
+            Health = Math.Clamp(health, 0, MaximumHealth);
+        }
     }
 
     public readonly struct RealtimeEnemyTimelineDecisionContext
@@ -79,17 +148,41 @@ namespace Packspire
         public readonly double PatternStartsAt;
         public readonly int ScheduledPatternCount;
         public readonly string PreviousPatternId;
+        public readonly int EnemyHealth;
+        public readonly int EnemyMaximumHealth;
+        public double EnemyHealthRatio => EnemyMaximumHealth <= 0
+            ? 1d
+            : (double)EnemyHealth / EnemyMaximumHealth;
 
         public RealtimeEnemyTimelineDecisionContext(
             double currentTime,
             double patternStartsAt,
             int scheduledPatternCount,
             string previousPatternId)
+            : this(
+                currentTime,
+                patternStartsAt,
+                scheduledPatternCount,
+                previousPatternId,
+                1,
+                1)
+        {
+        }
+
+        public RealtimeEnemyTimelineDecisionContext(
+            double currentTime,
+            double patternStartsAt,
+            int scheduledPatternCount,
+            string previousPatternId,
+            int enemyHealth,
+            int enemyMaximumHealth)
         {
             CurrentTime = currentTime;
             PatternStartsAt = patternStartsAt;
             ScheduledPatternCount = Math.Max(0, scheduledPatternCount);
             PreviousPatternId = previousPatternId ?? string.Empty;
+            EnemyMaximumHealth = Math.Max(1, enemyMaximumHealth);
+            EnemyHealth = Math.Clamp(enemyHealth, 0, EnemyMaximumHealth);
         }
     }
 
@@ -145,6 +238,7 @@ namespace Packspire
         private readonly RealtimeBattleController timeline;
         private readonly string actorId;
         private readonly IRealtimeEnemyTimelineStrategy strategy;
+        private readonly Func<RealtimeEnemyTimelineVitals> vitalsProvider;
         private string previousPatternId = string.Empty;
 
         public double PlannedThrough { get; private set; }
@@ -162,10 +256,20 @@ namespace Packspire
             RealtimeBattleController timeline,
             string actorId,
             IRealtimeEnemyTimelineStrategy strategy)
+            : this(timeline, actorId, strategy, null)
+        {
+        }
+
+        public RealtimeEnemyTimelinePlanner(
+            RealtimeBattleController timeline,
+            string actorId,
+            IRealtimeEnemyTimelineStrategy strategy,
+            Func<RealtimeEnemyTimelineVitals> vitalsProvider)
         {
             this.timeline = timeline ?? throw new ArgumentNullException(nameof(timeline));
             this.actorId = actorId ?? string.Empty;
             this.strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+            this.vitalsProvider = vitalsProvider;
         }
 
         public void Reset(double startsAt = 0d)
@@ -181,11 +285,16 @@ namespace Packspire
             double target = Math.Max(timeline.Time, absoluteTime);
             while (PlannedThrough < target)
             {
+                RealtimeEnemyTimelineVitals vitals = vitalsProvider != null
+                    ? vitalsProvider()
+                    : new RealtimeEnemyTimelineVitals(1, 1);
                 var context = new RealtimeEnemyTimelineDecisionContext(
                     timeline.Time,
                     PlannedThrough,
                     ScheduledPatternCount,
-                    previousPatternId);
+                    previousPatternId,
+                    vitals.Health,
+                    vitals.MaximumHealth);
                 RealtimeEnemyTimelinePattern pattern = strategy.SelectNext(in context);
                 if (pattern == null)
                     throw new InvalidOperationException("Timeline strategy returned no pattern.");
@@ -202,7 +311,8 @@ namespace Packspire
                         step.TelegraphLead,
                         step.HitCount,
                         step.HitSpacing,
-                        step.Kind);
+                        step.Kind,
+                        step.MotionLane);
                 }
 
                 PlannedThrough += pattern.Duration;

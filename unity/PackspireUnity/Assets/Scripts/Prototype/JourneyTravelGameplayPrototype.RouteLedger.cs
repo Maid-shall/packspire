@@ -22,48 +22,62 @@ namespace Packspire
             PopulateLedgerMap();
             PopulateSealBox();
             CourierRouteState route = run.courierRoute;
-            CourierRouteNodeDef current = CourierRouteSystem.Node(route.currentNodeId);
-            int remaining = Mathf.Max(0, route.deadlineDays - route.daysElapsed);
-            ledgerSummary.text = $"現在地：{current?.title ?? "出発局"}　経過 {route.daysElapsed}日　期限まで {remaining}日　回収 {route.recoveredCargoCount}件";
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            ExpeditionRouteNodePlan currentNode = ExpeditionRoutePlanSystem.Node(plan, plan.currentNodeId);
+            CourierRouteNodeDef current = ExpeditionJourneySystem.PresentationNode(plan, currentNode);
+            ExpeditionDayStage dayStage = ExpeditionProgressSystem.CurrentDayStage(run);
+            ledgerSummary.text = $"第{plan.currentFloorIndex + 1}層　現在地：{current?.title ?? "探索開始地点"}　経過 {route.daysElapsed}日　危険段階 {JourneyDayStageLabel(dayStage)}";
             ShowLedgerNode(current);
         }
 
         private void PopulateLedgerMap()
         {
             ledgerPhaseHost.Clear();
-            CourierRouteState route = run.courierRoute;
-            HashSet<string> availableNodeIds = CourierRouteSystem.Available(route)
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            ExpeditionFloorPlan floor = plan.floors[Mathf.Clamp(plan.currentFloorIndex, 0, plan.floors.Count - 1)];
+            HashSet<string> availableNodeIds = ExpeditionJourneySystem.Available(run)
                 .Select(node => node.id)
                 .ToHashSet();
-            ILookup<int, CourierRouteNodeDef> byPhase = CourierRouteSystem.Nodes.ToLookup(node => node.phase);
-            for (int phaseIndex = 0; phaseIndex <= CourierRouteSystem.TotalSegments; phaseIndex++)
+            int lastOrder = floor.nodes
+                .Where(node => node.kind != ExpeditionNodeKind.Boss)
+                .Select(node => node.order)
+                .DefaultIfEmpty(0)
+                .Max();
+            int bossPosition = lastOrder + 1;
+            for (int phaseIndex = 0; phaseIndex <= bossPosition; phaseIndex++)
             {
                 VisualElement column = new VisualElement();
                 column.AddToClassList("ps-journey__ledger-phase");
-                Label phaseLabel = new Label(phaseIndex == 0 ? "START" : phaseIndex == CourierRouteSystem.TotalSegments ? "GOAL" : phaseIndex.ToString("00"));
+                Label phaseLabel = new Label(phaseIndex == 0 ? $"FLOOR {floor.floorIndex + 1}" : phaseIndex == bossPosition ? "BOSS" : phaseIndex.ToString("00"));
                 phaseLabel.AddToClassList("ps-journey__ledger-phase-number");
                 column.Add(phaseLabel);
 
                 VisualElement nodes = new VisualElement();
                 nodes.AddToClassList("ps-journey__ledger-phase-nodes");
-                foreach (CourierRouteNodeDef node in byPhase[phaseIndex])
+                IEnumerable<ExpeditionRouteNodePlan> nodesAtPosition = phaseIndex == bossPosition
+                    ? floor.nodes.Where(node => node.id == floor.bossNodeId)
+                    : floor.nodes.Where(node => node.kind != ExpeditionNodeKind.Boss && node.order == phaseIndex)
+                        .OrderBy(node => node.lane);
+                foreach (ExpeditionRouteNodePlan expeditionNode in nodesAtPosition)
                 {
-                    CourierRouteNodeDef captured = node;
-                    Button button = new Button(() => ShowLedgerNode(captured));
+                    ExpeditionRouteNodePlan captured = expeditionNode;
+                    CourierRouteNodeDef node = ExpeditionJourneySystem.PresentationNode(plan, expeditionNode);
+                    Button button = new Button(() => ShowLedgerNode(
+                        IsExpeditionNodeRevealed(plan, captured) ? ExpeditionJourneySystem.PresentationNode(plan, captured) : null));
                     button.AddToClassList("ps-journey__ledger-node");
-                    bool revealed = CourierRouteSystem.IsRevealed(route, node);
-                    button.text = revealed ? node.title : "未確認";
+                    bool revealed = IsExpeditionNodeRevealed(plan, expeditionNode);
+                    button.text = revealed ? LedgerNodeLabel(plan, expeditionNode) : "未確認";
                     button.EnableInClassList("node--unknown", !revealed);
-                    button.EnableInClassList("node--resolved", route.resolvedNodeIds.Contains(node.id));
-                    button.EnableInClassList("node--current", route.currentNodeId == node.id);
+                    button.EnableInClassList("node--resolved", plan.resolvedNodeIds.Contains(node.id));
+                    button.EnableInClassList("node--current", plan.currentNodeId == node.id);
                     button.EnableInClassList("node--available", availableNodeIds.Contains(node.id));
-                    button.EnableInClassList("node--destination", node.resolution == CourierResolutionKind.Delivery);
+                    button.EnableInClassList("node--destination", expeditionNode.kind == ExpeditionNodeKind.Boss);
                     nodes.Add(button);
                 }
                 column.Add(nodes);
                 ledgerPhaseHost.Add(column);
 
-                if (phaseIndex < CourierRouteSystem.TotalSegments)
+                if (phaseIndex < bossPosition)
                 {
                     Label arrow = new Label("›");
                     arrow.AddToClassList("ps-journey__ledger-arrow");
@@ -74,10 +88,10 @@ namespace Packspire
 
         private void ShowLedgerNode(CourierRouteNodeDef node)
         {
-            if (node == null || !CourierRouteSystem.IsRevealed(run.courierRoute, node))
+            if (node == null)
             {
                 ledgerNodeTitle.text = "未確認地点";
-                ledgerNodeMeta.text = node == null ? "ROUTE DATA UNAVAILABLE" : $"PHASE {node.phase:00}";
+                ledgerNodeMeta.text = "ROUTE DATA UNAVAILABLE";
                 ledgerNodeBody.text = "この先へ進むと遭遇傾向と所要日数が明らかになります。";
                 return;
             }
@@ -87,6 +101,35 @@ namespace Packspire
             ledgerNodeBody.text = string.IsNullOrWhiteSpace(node.condition)
                 ? node.resolutionText
                 : $"{node.condition}\n{node.resolutionText}";
+        }
+
+        private static bool IsExpeditionNodeRevealed(
+            ExpeditionRoutePlan plan,
+            ExpeditionRouteNodePlan node)
+        {
+            if (plan == null || node == null) return false;
+            if (plan.resolvedNodeIds.Contains(node.id) || plan.currentNodeId == node.id ||
+                plan.selectedNodeId == node.id) return true;
+            if (ExpeditionRoutePlanSystem.Available(plan).Any(candidate => candidate.id == node.id)) return true;
+            ExpeditionRouteNodePlan current = ExpeditionRoutePlanSystem.Node(plan, plan.currentNodeId);
+            if (current == null) return node.order == 0;
+            return node.floorIndex == current.floorIndex && node.order <= current.order + 1;
+        }
+
+        private static string LedgerNodeLabel(
+            ExpeditionRoutePlan plan,
+            ExpeditionRouteNodePlan node)
+        {
+            if (node.kind == ExpeditionNodeKind.Boss) return "階層封鎖";
+            string path = ExpeditionJourneySystem.PathTitle(plan, node);
+            string kind = node.kind switch
+            {
+                ExpeditionNodeKind.Battle => "戦闘",
+                ExpeditionNodeKind.Event => "異変",
+                ExpeditionNodeKind.Rest => "中継",
+                _ => "探索"
+            };
+            return $"{path}\n{kind}";
         }
 
         private void PopulateSealBox()

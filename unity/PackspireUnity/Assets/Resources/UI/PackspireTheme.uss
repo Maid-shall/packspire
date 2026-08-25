@@ -1620,3 +1620,52 @@
     margin-top: 12px;
     flex-shrink: 0;
 }
+
+
+/* Foundation popup surface. DropdownField menus are created at UIDocument root. */
+.unity-base-dropdown__container-outer,
+.unity-generic-dropdown-menu__container-outer {
+    min-width: 190px;
+    padding: 4px;
+    background-color: rgb(12, 13, 14);
+    border-width: 2px;
+    border-color: rgb(184, 126, 61);
+}
+
+.unity-base-dropdown__container-inner,
+.unity-generic-dropdown-menu__container-inner {
+    padding: 3px;
+    background-color: rgb(18, 18, 17);
+}
+
+.unity-base-dropdown__item,
+.unity-generic-dropdown-menu__item {
+    height: 32px;
+    min-height: 32px;
+    padding: 5px 11px;
+    color: rgb(239, 220, 188);
+    background-color: rgb(24, 23, 21);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(65, 53, 37);
+    font-size: 12px;
+}
+
+.unity-base-dropdown__item:hover,
+.unity-generic-dropdown-menu__item:hover {
+    color: rgb(255, 239, 204);
+    background-color: rgb(69, 47, 27);
+    border-left-width: 2px;
+    border-left-color: rgb(225, 181, 111);
+}
+
+.unity-base-dropdown__label,
+.unity-generic-dropdown-menu__label {
+    color: rgb(239, 220, 188);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.unity-base-dropdown__checkmark,
+.unity-generic-dropdown-menu__checkmark {
+    color: rgb(225, 181, 111);
+}

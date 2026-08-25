@@ -12,6 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c1cd70e65b4f5b9a51cf2e98c31191, type: 3}
   m_Name: WardenEncounter
   m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyBattleEncounterProfile
+  encounterId: warden
+  dungeonIds: []
+  minimumFloor: 1
+  maximumFloor: 3
+  minimumDayStage: 0
+  maximumDayStage: 3
+  minimumLane: 0
+  maximumLane: 2
+  allowNormalBattle: 0
+  allowBossBattle: 1
+  selectionWeight: 1
+  enemyDefinition: {fileID: 11400000, guid: 640ec18b5be44036bc803049192988c7, type: 2}
+  enemyVariant: {fileID: 11400000, guid: 09705673650249b9a8dc22bd0b357275, type: 2}
+  behaviorProfile: {fileID: 11400000, guid: 10d5f606ea7744ebbc900f5090ae5612, type: 2}
   enemyId: journey_postal_warden
   displayName: "\u5C01\u9418\u306E\u756A\u4EBA"
   tier: 1

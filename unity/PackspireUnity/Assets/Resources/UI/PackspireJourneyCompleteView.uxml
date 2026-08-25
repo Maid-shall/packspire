@@ -491,7 +491,24 @@
             <ui:Button name="journey-pause" text="一時停止" class="ps-journey__pause" />
         </ui:VisualElement>
 
-        <ui:Label name="journey-toast" text="" class="ps-journey__toast" />
+        <ui:VisualElement name="journey-combat-lab" class="ps-journey__combat-lab">
+            <ui:VisualElement class="ps-journey__combat-lab-head">
+                <ui:VisualElement>
+                    <ui:Label text="COMBAT LAB / 戦闘確認所" class="ps-journey__combat-lab-title" />
+                    <ui:Label text="本番ルールを止めて、表示だけを比較します" class="ps-journey__combat-lab-note" />
+                </ui:VisualElement>
+                <ui:Button name="journey-combat-lab-close" text="開発者メニューへ  [F10]" class="ps-journey__combat-lab-close" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__combat-lab-controls">
+                <ui:DropdownField name="journey-combat-lab-background" label="背景" class="ps-journey__combat-lab-field" />
+                <ui:DropdownField name="journey-combat-lab-enemy" label="敵" class="ps-journey__combat-lab-field ps-journey__combat-lab-field--enemy" />
+                <ui:DropdownField name="journey-combat-lab-attack" label="攻撃 / タイミング" class="ps-journey__combat-lab-field ps-journey__combat-lab-field--attack" />
+                <ui:Button name="journey-combat-lab-play" text="予兆を再生" class="ps-journey__combat-lab-play" />
+            </ui:VisualElement>
+            <ui:Label name="journey-combat-lab-status" text="背景・敵・攻撃を選んで再生" class="ps-journey__combat-lab-status" />
+        </ui:VisualElement>
+
+        <ui:Label name="journey-toast" text="" picking-mode="Ignore" class="ps-journey__toast" />
         <ui:VisualElement name="journey-transition" class="ps-journey__transition" picking-mode="Ignore">
             <ui:VisualElement class="ps-journey__transition-wash" picking-mode="Ignore" />
             <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--far" picking-mode="Ignore" />

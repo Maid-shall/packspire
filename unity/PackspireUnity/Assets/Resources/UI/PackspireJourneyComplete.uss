@@ -419,8 +419,8 @@
     border-width: 0;
     transition-property: scale, -unity-background-image-tint-color; transition-duration: .08s;
 }
-.ps-journey__consumable-slot:hover { scale: 1.08 1.08; -unity-background-image-tint-color: rgb(255, 231, 183); }
-.ps-journey__consumable-slot:active { scale: .98 .98; }
+.ps-journey__consumable-slot:hover { scale: 1.08; -unity-background-image-tint-color: rgb(255, 231, 183); }
+.ps-journey__consumable-slot:active { scale: 0.98; }
 .ps-journey__consumable-slot:disabled { opacity: .42; }
 .ps-journey__consumable-slot.is-unusable { opacity: .42; }
 .ps-journey__consumable-slot.is-empty { opacity: .16; }
@@ -822,3 +822,96 @@
 .state--battle .ps-journey__bottom, .state--battle .ps-journey__topbar, .state--battle .ps-journey__rail { display: none; }
 .state--battle .ps-journey__toast { opacity: 0; }
 .is-hidden { display: none; }
+
+
+/* Developer combat lab: fixed structure lives in PackspireJourneyCompleteView.uxml. */
+.ps-journey__combat-lab {
+    position: absolute;
+    left: 266px;
+    right: 20px;
+    top: 14px;
+    min-height: 126px;
+    padding: 12px 14px 10px 14px;
+    display: none;
+    background-color: rgba(12, 13, 14, .94);
+    border-left-width: 3px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(184, 126, 61);
+    border-right-color: rgb(91, 69, 43);
+    border-top-color: rgb(91, 69, 43);
+    border-bottom-color: rgb(91, 69, 43);
+}
+.ps-journey__combat-lab.combat-lab--visible { display: flex; }
+.ps-journey__combat-lab-head {
+    height: 38px;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.ps-journey__combat-lab-title {
+    color: rgb(239, 208, 155);
+    font-size: 17px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+.ps-journey__combat-lab-note {
+    margin-top: 1px;
+    color: rgb(166, 151, 128);
+    font-size: 10px;
+}
+.ps-journey__combat-lab-close {
+    width: 150px;
+    height: 28px;
+    margin: 0;
+    padding: 0 8px;
+    color: rgb(211, 190, 155);
+    background-color: rgb(27, 25, 22);
+    border-width: 1px;
+    border-color: rgb(112, 82, 49);
+    font-size: 10px;
+}
+.ps-journey__combat-lab-controls {
+    height: 42px;
+    margin-top: 4px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+.ps-journey__combat-lab-field {
+    width: 184px;
+    height: 42px;
+    margin-right: 10px;
+}
+.ps-journey__combat-lab-field--enemy { width: 214px; }
+.ps-journey__combat-lab-field--attack { flex-grow: 1; width: auto; }
+.ps-journey__combat-lab-field .unity-base-field__label {
+    color: rgb(171, 144, 103);
+    font-size: 9px;
+}
+.ps-journey__combat-lab-field .unity-base-popup-field__input {
+    height: 28px;
+    min-height: 28px;
+    padding-left: 8px;
+    color: rgb(236, 220, 191);
+    background-color: rgb(29, 29, 27);
+    border-width: 1px;
+    border-color: rgb(103, 77, 45);
+    font-size: 11px;
+}
+.ps-journey__combat-lab-play {
+    width: 108px;
+    height: 28px;
+    margin: 0 0 1px 2px;
+    color: rgb(45, 29, 17);
+    background-color: rgb(225, 181, 111);
+    border-width: 1px;
+    border-color: rgb(248, 216, 158);
+    -unity-font-style: bold;
+    font-size: 11px;
+}
+.ps-journey__combat-lab-status {
+    margin-top: 5px;
+    color: rgb(191, 175, 147);
+    font-size: 10px;
+}

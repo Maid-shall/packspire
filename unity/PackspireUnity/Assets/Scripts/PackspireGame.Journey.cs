@@ -19,7 +19,9 @@ namespace Packspire
         public bool UiTryGetSeamlessJourneyRun(out RunState journeyRun)
         {
             journeyRun = seamlessJourneySessionActive ? run : null;
-            return journeyRun != null && journeyRun.courierRoute != null;
+            if (journeyRun == null || journeyRun.courierRoute == null) return false;
+            ExpeditionProgressSystem.Ensure(journeyRun, meta);
+            return true;
         }
 
         private void LaunchSeamlessJourney()
@@ -29,6 +31,8 @@ namespace Packspire
                 seamlessJourneySessionActive = false;
                 return;
             }
+
+            ExpeditionProgressSystem.Ensure(run, meta);
 
             seamlessJourneySessionActive = true;
             seamlessJourneyBattleRewardPending = false;
@@ -62,7 +66,20 @@ namespace Packspire
             ApplyBattleVictoryRewards();
             battle = null;
 
-            if (run.courierRoute?.awaitingResolution == true)
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run, meta);
+            if (plan.awaitingResolution)
+            {
+                ExpeditionJourneySystem.ResolveCurrent(
+                    run,
+                    new CourierLocationOutcome
+                    {
+                        success = true,
+                        performance = 2,
+                        message = "敵を退けた。"
+                    },
+                    out message);
+            }
+            else if (run.courierRoute?.awaitingResolution == true)
             {
                 CourierRouteSystem.ResolveCurrent(
                     run,
@@ -70,7 +87,7 @@ namespace Packspire
                     {
                         success = true,
                         performance = 2,
-                        message = "番人を退けた。"
+                        message = "敵を退けた。"
                     },
                     out message);
             }

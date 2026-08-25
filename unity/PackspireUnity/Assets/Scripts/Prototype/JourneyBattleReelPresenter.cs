@@ -63,7 +63,7 @@ namespace Packspire
         }
 
         private readonly double displayHorizon;
-        private readonly Func<RealtimeEnemyActionKind, Sprite> actorSprite;
+        private readonly Func<RealtimeEnemyActionPreview, Sprite> actorSprite;
         private readonly Texture2D numeralAtlas;
         private readonly List<RealtimeEnemyActionPreview> actionPreviews = new(8);
         private readonly List<RealtimeSupplyPulsePreview> supplyPreviews = new(4);
@@ -77,7 +77,7 @@ namespace Packspire
             VisualElement root,
             double displayHorizon,
             Texture2D numeralAtlas,
-            Func<RealtimeEnemyActionKind, Sprite> actorSprite)
+            Func<RealtimeEnemyActionPreview, Sprite> actorSprite)
         {
             if (root == null) throw new ArgumentNullException(nameof(root));
             this.displayHorizon = Math.Max(.1d, displayHorizon);
@@ -203,7 +203,7 @@ namespace Packspire
                 "slot--imminent",
                 preview.Telegraphing || preview.TimeUntil <= 1.1d);
             slot.Art.scaleMode = ScaleMode.ScaleAndCrop;
-            slot.Art.sprite = actorSprite(preview.Kind);
+            slot.Art.sprite = actorSprite(preview);
             SetValue(slot, preview.Damage.ToString());
 
             if (preview.HitCount <= 1) return;

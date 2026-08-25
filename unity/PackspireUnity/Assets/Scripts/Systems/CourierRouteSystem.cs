@@ -52,8 +52,8 @@ public sealed class CourierRouteNodeDef {
 }
 
 /// <summary>
-/// One delivery contract crosses ten route segments. The deadline is the only
-/// route-wide pressure; battles and events resolve through their own screens.
+/// Legacy ten-segment presentation bridge. Cumulative time is owned by
+/// ExpeditionProgressSystem; battles and events resolve through their own screens.
 /// Future minigames plug into the same outcome contract without changing the map.
 /// </summary>
 public static class CourierRouteSystem {
@@ -141,8 +141,12 @@ public static class CourierRouteSystem {
    roleBranch=RoleFrameworkSystem.Branch(meta,roleId),
    qualificationSealId=meta?.qualificationSealId??""
   };
-  var colors=run==null?null:BackpackSystem.Build(run).colors;
-  state.seals=DeliverySealSystem.Build(run,meta,colors);
+ var colors=run==null?null:BackpackSystem.Build(run).colors;
+ state.seals=DeliverySealSystem.Build(run,meta,colors);
+  if(run!=null){
+   ExpeditionProgressSystem.Ensure(run,meta);
+   state.daysElapsed=run.expeditionPlan.elapsedDays;
+  }
   return state;
  }
 
@@ -205,17 +209,14 @@ public static class CourierRouteSystem {
   state.travelToNodeId=node.id;
   state.travelDayCost=days;
   state.travelPending=true;
-  state.daysElapsed+=days;
+  ExpeditionProgressSystem.AdvanceDays(run,days);
   state.currentNodeId=node.id;
   state.selectedNodeId="";
   state.pendingResolution=node.resolution;
   state.nextSegmentDiscount=0;
   state.relayPackingAvailable=false;
-  state.failed=FailureReached(state);
-  state.awaitingResolution=!state.failed;
-  message=state.failed
-   ?"配達期限を超過しました。今回の遠征は失敗です。"
-   :$"{node.title}へ到着。{node.resolutionTitle}を解決します。";
+  state.awaitingResolution=true;
+  message=$"{node.title}へ到着。{node.resolutionTitle}を解決します。";
   return true;
  }
 
@@ -248,7 +249,7 @@ public static class CourierRouteSystem {
    extraDays=Mathf.Max(0,extraDays-state.delayShield);
    state.delayShield=0;
   }
-  state.daysElapsed+=extraDays;
+  ExpeditionProgressSystem.AdvanceDays(run,extraDays);
   if(!state.resolvedNodeIds.Contains(node.id))state.resolvedNodeIds.Add(node.id);
   state.awaitingResolution=false;
   state.pendingResolution="";
@@ -268,7 +269,7 @@ public static class CourierRouteSystem {
     if(outcome.cargoRecovered){
      state.recoveredCargoCount++;
      reward=$"回収物を未整理荷物へ追加しました。回収 {state.recoveredCargoCount}件。";
-    } else reward="回収を断念し、期限を優先しました。";
+    } else reward="回収を断念し、先を急ぎました。";
     break;
    case CourierResolutionKind.Delivery:
     state.complete=true;
@@ -281,11 +282,8 @@ public static class CourierRouteSystem {
     break;
   }
 
-  state.failed=FailureReached(state);
   string suffix=string.Join(" ",new[]{outcome.message,reward}.Where(value=>!string.IsNullOrWhiteSpace(value)));
-  message=state.failed
-   ?"配達期限を超過しました。今回の遠征は失敗です。"
-   :string.IsNullOrEmpty(suffix)?$"{node.title}を解決。次の区間を選択できます。":suffix;
+  message=string.IsNullOrEmpty(suffix)?$"{node.title}を解決。次の区間を選択できます。":suffix;
   return true;
  }
 
@@ -316,8 +314,6 @@ public static class CourierRouteSystem {
   var build=BackpackSystem.Build(run);
   state.seals=DeliverySealSystem.Refresh(state.seals,run,meta,build.colors);
  }
-
- static bool FailureReached(CourierRouteState state)=>state.daysElapsed>state.deadlineDays;
 
  static CourierRouteNodeDef Node(string id,string title,string kind,int phase,int lane,int days,int risk,
   string resolution,string resolutionTitle,string resolutionText,string[] next,string condition="",

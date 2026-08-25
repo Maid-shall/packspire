@@ -13,79 +13,83 @@ MonoBehaviour:
   m_Name: WardenRealtimeTimeline
   m_EditorClassIdentifier: Packspire.Runtime::Packspire.RealtimeEnemyTimelineProfile
   actorId: warden
-  patterns:
-  - id: measured-opening
-    duration: 9.5
-    steps:
-    - executeOffset: 1.8
-      actionId: "normal:\u9418\u6483"
-      kind: 0
-      damage: 8
-      telegraphLead: 0.72
-      hitCount: 1
-      hitSpacing: 0.15
-    - executeOffset: 4.9
-      actionId: "guard:\u9418\u58C1"
-      kind: 2
-      damage: 7
-      telegraphLead: 0.58
-      hitCount: 1
-      hitSpacing: 0.15
-  - id: bell-pressure
-    duration: 10.5
-    steps:
-    - executeOffset: 1
-      actionId: "combo:\u9023\u9418"
-      kind: 1
-      damage: 4
-      telegraphLead: 0.82
-      hitCount: 3
-      hitSpacing: 0.18
-    - executeOffset: 3.8
-      actionId: "normal:\u9418\u6483"
-      kind: 0
-      damage: 8
-      telegraphLead: 0.72
-      hitCount: 1
-      hitSpacing: 0.15
-    - executeOffset: 6
-      actionId: "normal:\u9418\u6483"
-      kind: 0
-      damage: 8
-      telegraphLead: 0.72
-      hitCount: 1
-      hitSpacing: 0.15
-  - id: heavy-read
-    duration: 10.8
-    steps:
-    - executeOffset: 2.5
-      actionId: "guard:\u9418\u58C1"
-      kind: 2
-      damage: 7
-      telegraphLead: 0.58
-      hitCount: 1
-      hitSpacing: 0.15
-    - executeOffset: 5.8
-      actionId: "brace:\u5927\u9418\u6483"
-      kind: 4
-      damage: 12
-      telegraphLead: 1.12
-      hitCount: 1
-      hitSpacing: 0.15
-  - id: low-sweep
-    duration: 10.2
-    steps:
-    - executeOffset: 1.2
-      actionId: "normal:\u9418\u6483"
-      kind: 0
-      damage: 8
-      telegraphLead: 0.72
-      hitCount: 1
-      hitSpacing: 0.15
-    - executeOffset: 4.7
-      actionId: "jump:\u8DB3\u6255\u3044"
-      kind: 3
-      damage: 9
-      telegraphLead: 1.02
-      hitCount: 1
-      hitSpacing: 0.15
+  selectionMode: 1
+  catalog: {fileID: 11400000, guid: 33df246eb09f75f45aed742e36bcf72d, type: 2}
+  patternIds:
+  - timing-p01
+  - timing-p08
+  - timing-p14
+  - timing-p22
+  - timing-p27
+  - timing-p39
+  timingScale: 1
+  commands:
+  - id: warden-normal
+    displayName:
+    kind: 0
+    value: 8
+    telegraphLead: 0.7
+    hitCount: 1
+    hitSpacing: 0.15
+  - id: warden-combo
+    displayName:
+    kind: 1
+    value: 4
+    telegraphLead: 0.7
+    hitCount: 1
+    hitSpacing: 0.15
+  - id: warden-guard
+    displayName:
+    kind: 2
+    value: 7
+    telegraphLead: 0.7
+    hitCount: 1
+    hitSpacing: 0.15
+  - id: warden-jump
+    displayName:
+    kind: 3
+    value: 9
+    telegraphLead: 0.7
+    hitCount: 1
+    hitSpacing: 0.15
+  - id: warden-brace
+    displayName:
+    kind: 4
+    value: 12
+    telegraphLead: 0.7
+    hitCount: 1
+    hitSpacing: 0.15
+  openingPatternId: timing-p01
+  fallbackPatternId: timing-p01
+  phases:
+  - id: steady
+    enterAtOrBelowHealthRatio: 1
+    transitionPatternId:
+    patternWeights: []
+  - id: pressure
+    enterAtOrBelowHealthRatio: 0.6
+    transitionPatternId:
+    patternWeights:
+    - patternId: timing-p08
+      weightPercent: 140
+    - patternId: timing-p14
+      weightPercent: 130
+    - patternId: timing-p22
+      weightPercent: 130
+    - patternId: timing-p27
+      weightPercent: 150
+    - patternId: timing-p39
+      weightPercent: 170
+  - id: last-stand
+    enterAtOrBelowHealthRatio: 0.3
+    transitionPatternId:
+    patternWeights:
+    - patternId: timing-p01
+      weightPercent: 50
+    - patternId: timing-p08
+      weightPercent: 150
+    - patternId: timing-p27
+      weightPercent: 170
+    - patternId: timing-p39
+      weightPercent: 200
+  patterns: []

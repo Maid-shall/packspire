@@ -63,6 +63,7 @@ namespace Packspire
         [SerializeField] private float leftBoundary = -7.2f;
         [SerializeField] private float rightBoundary = 7.2f;
         [SerializeField] private float fixedCourierX = -3.6f;
+        [SerializeField] private float battleCourierX = -2.4f;
         [SerializeField] private float battleStageLift = 1.72f;
         [SerializeField] private TravelPresentation travelPresentation = TravelPresentation.FixedCourierParallax;
 
@@ -96,6 +97,7 @@ namespace Packspire
         private float battleDefenseLift;
         private float battleDefenseSquash;
         private float battleDefenseTilt;
+        private float battleCompositionScale = 1f;
         private float battleMotionClock;
         private float battleMotionDuration;
         private bool battleActive;
@@ -293,6 +295,7 @@ namespace Packspire
 
         public void SetBattleStage(bool battle)
         {
+            battleActive = battle;
             targetStageLift = battle ? battleStageLift : 0f;
             // Phase changes can rebuild or cover the lower portion of the world in the
             // same frame. Snap the shared stage baseline before that UI becomes visible;
@@ -300,7 +303,6 @@ namespace Packspire
             stageLift = targetStageLift;
             ApplyBattleStageComposition();
             ApplyTravelTransform();
-            battleActive = battle;
             battleMotion = battle ? BattleMotion.Idle : BattleMotion.None;
             battleMotionClock = 0f;
             battleMotionDuration = 0f;
@@ -310,6 +312,18 @@ namespace Packspire
             currentFrame = -1;
             ShowCurrentPose();
             ApplyProgrammaticMotion();
+        }
+
+        public void SetBattleHorizontalAnchor(float worldX)
+        {
+            battleCourierX = worldX;
+            if (battleActive) ApplyTravelTransform();
+        }
+
+        public void SetBattleCompositionScale(float scale)
+        {
+            battleCompositionScale = Mathf.Clamp(scale, .65f, 1.15f);
+            if (battleActive) ApplyProgrammaticMotion();
         }
 
         public void SetBattleMotion(BattleMotion motion, float duration = 0f)
@@ -502,7 +516,7 @@ namespace Packspire
         private void ApplyTravelTransform()
         {
             float displayedX = travelPresentation == TravelPresentation.FixedCourierParallax
-                ? fixedCourierX
+                ? battleActive ? battleCourierX : fixedCourierX
                 : travelPositionX;
             transform.position = new Vector3(displayedX, groundPositionY + stageLift, depthPositionZ);
         }
@@ -518,7 +532,8 @@ namespace Packspire
             float lift = lift01 * bounceHeight * assisted;
             float scaleX = 1f + contact01 * squashAmount * assisted - peak01 * stretchAmount * assisted;
             float scaleY = 1f - contact01 * squashAmount * assisted + peak01 * stretchAmount * assisted;
-            float baseScale = UsesMiniCourier ? 1.06f : 1f;
+            float baseScale = (UsesMiniCourier ? 1.06f : 1f) *
+                              (battleActive ? battleCompositionScale : 1f);
             float tilt = -forwardTiltDegrees * assisted;
 
             if (battleActive)
@@ -567,7 +582,8 @@ namespace Packspire
                 baseScale * (scaleY - battleDefenseSquash),
                 1f);
 
-            float shadowWidth = UsesMiniCourier ? 1.35f : 1.65f;
+            float shadowWidth = (UsesMiniCourier ? 1.35f : 1.65f) *
+                                (battleActive ? battleCompositionScale : 1f);
             float shadowCompression = Mathf.Lerp(1f, 0.78f, lift01 * assisted);
             shadowRenderer.transform.localScale = new Vector3(
                 shadowWidth * shadowCompression,

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: DrownedArchiveCustodian
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: drowned_archive_custodian
+  displayName: 封庫の鍵守
+  tier: 3
+  maximumHealth: 54
+  legacyTurnDamages: 0a0000000c00000009000000
+  origin: 0
+  regionId: drowned_archive
+  lineage: {fileID: 0}
+  regionalBehaviorProfile: {fileID: 11400000, guid: 545059bdc2fb49edb0c0c611740e9976, type: 2}
+  regionalDamageMultiplier: 1
+  fallbackSpriteResource: Art/JourneyPrototype/Enemies/drowned-archive-custodian-v1
+  battleSheetResource:
+  orderedBattlePoseNames: []
+  battleTargetHeight: 5.2
+  battleScale: 0.33854

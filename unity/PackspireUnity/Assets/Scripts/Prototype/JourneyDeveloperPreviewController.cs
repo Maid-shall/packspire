@@ -14,13 +14,20 @@ namespace Packspire
             public readonly bool StartDefense;
             public readonly int HandSize;
             public readonly int PlayerBlock;
+            public readonly string EncounterId;
 
-            public BattleRequest(int enemyCount, bool startDefense, int handSize, int playerBlock)
+            public BattleRequest(
+                int enemyCount,
+                bool startDefense,
+                int handSize,
+                int playerBlock,
+                string encounterId)
             {
                 EnemyCount = Mathf.Clamp(enemyCount, 1, 3);
                 StartDefense = startDefense;
                 HandSize = Mathf.Clamp(handSize, 0, 10);
                 PlayerBlock = Mathf.Max(0, playerBlock);
+                EncounterId = encounterId ?? string.Empty;
             }
         }
 
@@ -28,12 +35,35 @@ namespace Packspire
         private static bool hasQueuedBattle;
         private static int queuedScenery;
         private static bool hasQueuedScenery;
+        private static bool hasQueuedCombatLab;
 
-        public static void QueueBattle(int enemyCount, bool startDefense, int handSize = 0, int playerBlock = 0)
+        public static void QueueCombatLab()
+        {
+            hasQueuedBattle = false;
+            hasQueuedScenery = false;
+            hasQueuedCombatLab = true;
+        }
+
+        public static void QueueBattle(
+            int enemyCount,
+            bool startDefense,
+            int handSize = 0,
+            int playerBlock = 0,
+            string encounterId = null)
         {
             hasQueuedScenery = false;
-            queuedBattle = new BattleRequest(enemyCount, startDefense, handSize, playerBlock);
+            queuedBattle = new BattleRequest(
+                enemyCount,
+                startDefense,
+                handSize,
+                playerBlock,
+                encounterId);
             hasQueuedBattle = true;
+        }
+
+        public static void QueueEncounter(string encounterId)
+        {
+            QueueBattle(1, false, encounterId: encounterId);
         }
 
         public static void QueueScenery(int biomeIndex)
@@ -49,11 +79,19 @@ namespace Packspire
             hasQueuedBattle = false;
             queuedScenery = 0;
             hasQueuedScenery = false;
+            hasQueuedCombatLab = false;
         }
 
         public static bool TryApply(JourneyTravelGameplayPrototype target)
         {
             if (target == null) return false;
+            if (hasQueuedCombatLab)
+            {
+                Clear();
+                Time.timeScale = 1f;
+                target.DevBeginCombatLab();
+                return true;
+            }
             if (hasQueuedScenery)
             {
                 int scenery = queuedScenery;
@@ -68,7 +106,7 @@ namespace Packspire
             // earlier QA session. The preview itself is paused through gameplay state
             // below so the transport button always reports the truth.
             Time.timeScale = 1f;
-            target.DevBeginBattle();
+            target.DevBeginBattle(request.EncounterId);
             target.DevPreviewBattleEnemyCount(request.EnemyCount);
             if (request.HandSize > 0) target.DevPreviewBattleHandSize(request.HandSize);
             if (request.PlayerBlock > 0) target.DevPreviewBattleBlock(request.PlayerBlock);

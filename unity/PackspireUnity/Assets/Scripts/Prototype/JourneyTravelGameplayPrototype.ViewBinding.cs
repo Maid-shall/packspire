@@ -13,6 +13,10 @@ namespace Packspire
                 return;
 
             VisualElement root = document.rootVisualElement;
+            VisualElement panelRoot = root.panel.visualTree;
+            StyleSheet foundationStyle = PackspireResources.Load<StyleSheet>("UI/PackspireTheme");
+            if (foundationStyle != null && !panelRoot.styleSheets.Contains(foundationStyle))
+                panelRoot.styleSheets.Add(foundationStyle);
             JourneyViewContract.Validate(root);
             screen = root.Q<VisualElement>("journey-screen");
             if (screen == null) return;
@@ -120,6 +124,7 @@ namespace Packspire
                 UseJourneyConsumable,
                 CanUseJourneyConsumable);
             BindRealtimeBattleUi(root);
+            BindCombatLabUi(root);
             pileOverlay = root.Q<VisualElement>("journey-pile-overlay");
             pileTitle = root.Q<Label>("journey-pile-title");
             pileSummary = root.Q<Label>("journey-pile-summary");

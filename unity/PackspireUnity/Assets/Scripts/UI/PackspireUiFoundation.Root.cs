@@ -50,14 +50,7 @@ public sealed partial class PackspireUiFoundation {
   AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
   AddDevAction(grid,"旧・配達経路台帳(LEGACY)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
   AddDevAction(grid,"シームレス遠征 完成版(DEV)",OpenJourneyAnimationPrototype);
-  AddDevAction(grid,"遠征景色・灰市外縁(DEV)",()=>OpenJourneySceneryPreview(0));
-  AddDevAction(grid,"遠征景色・水没書庫(DEV)",()=>OpenJourneySceneryPreview(1));
-  AddDevAction(grid,"遠征景色・黒鐘区画(DEV)",()=>OpenJourneySceneryPreview(2));
-  AddDevAction(grid,"遠征戦闘・1体(DEV)",()=>OpenJourneyBattlePreview(1,false));
-  AddDevAction(grid,"遠征戦闘・防御表示(DEV)",()=>OpenJourneyBattlePreview(1,false,0,5));
-  AddDevAction(grid,"遠征戦闘・3体レイアウト(DEV)",()=>OpenJourneyBattlePreview(3,false));
-  AddDevAction(grid,"遠征戦闘・手札10枚レイアウト(DEV)",()=>OpenJourneyBattlePreview(1,false,10));
-  AddDevAction(grid,"遠征戦闘・攻撃予兆(DEV)",()=>OpenJourneyBattlePreview(1,true));
+  AddDevAction(grid,"戦闘確認所 (DEV)",OpenJourneyCombatLab);
   scroll.Add(grid);
   developerPanelRoot.Add(scroll);
   var close=PackspireUiFactory.Button("閉じる（直前へ戻る）",()=>game.UiToggleDeveloperPanel());
@@ -78,13 +71,8 @@ public sealed partial class PackspireUiFoundation {
    game.UiLaunchSeamlessJourneyDeveloperSession();
  }
 
- void OpenJourneyBattlePreview(int enemyCount,bool startDefense,int handSize=0,int playerBlock=0){
-   JourneyDeveloperPreviewController.QueueBattle(enemyCount,startDefense,handSize,playerBlock);
-   game.UiLaunchSeamlessJourneyDeveloperSession();
- }
-
- void OpenJourneySceneryPreview(int biomeIndex){
-   JourneyDeveloperPreviewController.QueueScenery(biomeIndex);
+ void OpenJourneyCombatLab(){
+   JourneyDeveloperPreviewController.QueueCombatLab();
    game.UiLaunchSeamlessJourneyDeveloperSession();
  }
 

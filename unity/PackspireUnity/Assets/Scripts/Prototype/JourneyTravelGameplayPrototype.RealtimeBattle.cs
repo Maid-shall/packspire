@@ -16,6 +16,7 @@ namespace Packspire
         private const float RealtimePlanningNormalScale = 1f;
         private const float RealtimePlanningScaleTransition = .1f;
         private const float RealtimeNowHoldDuration = .24f;
+        private const float RealtimeEnemyImpactHoldDuration = .12f;
         private const int RealtimeHandLimit = 8;
         private const string ReelNumeralAtlasResource =
             "Art/Battle/UI/JourneyApproved/journey-reel-numeral-atlas-v1";
@@ -69,7 +70,7 @@ namespace Packspire
             lastAttackBoostDisplaySecond = -1;
             lastGuardBoostDisplaySecond = -1;
 
-            RealtimeEnemyTimelineProfile timelineProfile = encounterProfile.timeline;
+            RealtimeEnemyTimelineProfile timelineProfile = encounterProfile.ResolvedTimeline;
             if (timelineProfile == null)
             {
                 Debug.LogError($"Journey encounter '{encounterProfile.name}' has no realtime timeline profile.");
@@ -78,10 +79,17 @@ namespace Packspire
                 return;
             }
 
+            int behaviorSeed = RuleBasedRealtimeEnemyTimelineStrategy.CombineSeed(
+                run?.expeditionPlan?.seed ?? 0,
+                encounterProfile.StableEncounterId,
+                run?.battlesWon ?? 0);
             realtimeEnemyTimelinePlanner = new RealtimeEnemyTimelinePlanner(
                 realtimeBattle,
-                timelineProfile.actorId,
-                timelineProfile.BuildPatterns());
+                encounterProfile.ResolvedEnemyId,
+                encounterProfile.BuildTimelineStrategy(behaviorSeed),
+                () => battle == null
+                    ? new RealtimeEnemyTimelineVitals(1, 1)
+                    : new RealtimeEnemyTimelineVitals(battle.enemyHp, battle.enemyMaxHp));
             realtimeEnemyTimelinePlanner.Reset();
             realtimeEnemyTimelinePlanner.EnsureScheduledThrough(
                 RealtimeReelDisplayHorizon + RealtimeActionCommitMargin);
@@ -105,6 +113,7 @@ namespace Packspire
             realtimeTimelineHoldRemaining = 0f;
             realtimePlanningScale = RealtimePlanningNormalScale;
             realtimeEnemyTimelinePlanner = null;
+            ResetEnemyImpactContactCue();
             consumablePresenter?.ClearHover();
             realtimeReelPresenter?.Clear();
         }
@@ -204,17 +213,22 @@ namespace Packspire
             return false;
         }
 
-        private Sprite RealtimeActionActorSprite(RealtimeEnemyActionKind kind)
+        private Sprite RealtimeActionActorSprite(RealtimeEnemyActionPreview action)
         {
             if (enemyBattleFrames.Length != 6)
                 return enemyRenderer != null ? enemyRenderer.sprite : null;
 
-            EnemyBattlePose pose = kind switch
+            EnemyBattlePose pose = action.MotionLane switch
             {
-                RealtimeEnemyActionKind.JumpReaction => EnemyBattlePose.LowAnticipation,
-                RealtimeEnemyActionKind.BraceReaction => EnemyBattlePose.HighAnticipation,
-                RealtimeEnemyActionKind.ComboAttack => EnemyBattlePose.HighAnticipation,
-                _ => EnemyBattlePose.Idle
+                RealtimeEnemyMotionLane.Low => EnemyBattlePose.LowAnticipation,
+                RealtimeEnemyMotionLane.High => EnemyBattlePose.HighAnticipation,
+                _ => action.Kind switch
+                {
+                    RealtimeEnemyActionKind.JumpReaction => EnemyBattlePose.LowAnticipation,
+                    RealtimeEnemyActionKind.BraceReaction => EnemyBattlePose.HighAnticipation,
+                    RealtimeEnemyActionKind.ComboAttack => EnemyBattlePose.HighAnticipation,
+                    _ => EnemyBattlePose.Idle
+                }
             };
             return enemyBattleFrames[(int)pose];
         }
@@ -225,6 +239,10 @@ namespace Packspire
         private void BeginRealtimeTelegraph(RealtimeEnemyAction action, double remaining)
         {
             if (!realtimeBattleActive || battle == null) return;
+            enemyImpactHoldRemaining = 0f;
+            CancelEnemyPoseRecovery();
+            ResetEnemyTimingCue();
+            ResetEnemyImpactContactCue();
             enemyActionKind = action.Kind switch
             {
                 RealtimeEnemyActionKind.JumpReaction => EnemyActionKind.JumpReaction,
@@ -239,7 +257,13 @@ namespace Packspire
             defenseInputTime = -1f;
             defenseClock = 0f;
             defenseDuration = Mathf.Max(.2f, (float)remaining);
-            bool overhead = enemyActionKind != EnemyActionKind.JumpReaction;
+            enemyActionOverhead = action.MotionLane switch
+            {
+                RealtimeEnemyMotionLane.Low => false,
+                RealtimeEnemyMotionLane.High => true,
+                _ => enemyActionKind != EnemyActionKind.JumpReaction
+            };
+            bool overhead = enemyActionOverhead;
             screen.EnableInClassList("battle--telegraph", EnemyActionRequiresReaction());
             screen.EnableInClassList("battle--reaction-jump", enemyActionKind == EnemyActionKind.JumpReaction);
             screen.EnableInClassList("battle--reaction-brace", enemyActionKind == EnemyActionKind.BraceReaction);
@@ -251,7 +275,8 @@ namespace Packspire
                 EnemyActionKind.BraceReaction => new Color(.12f, .82f, 1f, 1f),
                 _ => new Color(1f, .84f, .58f, 1f)
             };
-            SetEnemyTelegraphVisible(EnemyActionRequiresReaction());
+            SetEnemyTimingGlintAllowed(action.Kind != RealtimeEnemyActionKind.Guard);
+            SetEnemyTelegraphVisible(true);
             SetEnemyBattlePose(overhead
                 ? EnemyBattlePose.HighAnticipation
                 : EnemyBattlePose.LowAnticipation);
@@ -280,6 +305,7 @@ namespace Packspire
                 battleLog.text = battle.log;
                 RefreshBattleUi();
                 if (sequenceEnd) FinishRealtimeTelegraph();
+                BeginRealtimeEnemyImpact();
                 return;
             }
 
@@ -304,9 +330,9 @@ namespace Packspire
                 : battle.log;
             RefreshBattleUi();
 
-            if (!sequenceEnd) return;
-            FinishRealtimeTelegraph();
-            if (!fx.playerDefeated) return;
+            if (sequenceEnd) FinishRealtimeTelegraph();
+            BeginRealtimeEnemyImpact();
+            if (!sequenceEnd || !fx.playerDefeated) return;
 
             realtimeBattleActive = false;
             realtimeBattle.Finish();
@@ -320,6 +346,54 @@ namespace Packspire
                 false);
         }
 
+        private void BeginRealtimeEnemyImpact()
+        {
+            CancelEnemyPoseRecovery();
+            enemyImpactHoldRemaining = RealtimeEnemyImpactHoldDuration;
+            SetEnemyBattlePose(enemyActionOverhead
+                ? EnemyBattlePose.HighImpact
+                : EnemyBattlePose.LowImpact);
+            BeginEnemyImpactContactCue();
+            UpdateRealtimeEnemyImpact(0f);
+        }
+
+        private void UpdateRealtimeEnemyImpact(float delta)
+        {
+            if (enemyRenderer == null)
+            {
+                enemyImpactHoldRemaining = 0f;
+                return;
+            }
+
+            enemyImpactHoldRemaining = Mathf.Max(
+                0f,
+                enemyImpactHoldRemaining - Mathf.Max(0f, delta));
+            float progress = 1f - enemyImpactHoldRemaining /
+                RealtimeEnemyImpactHoldDuration;
+            float strike = Mathf.Sin(progress * Mathf.PI);
+            enemyRenderer.transform.position = enemyBattleBasePosition + new Vector3(
+                Mathf.Lerp(-.14f, 0f, progress) - strike * .14f,
+                enemyActionOverhead
+                    ? strike * .025f
+                    : -.055f + strike * .012f,
+                0f);
+            enemyRenderer.transform.rotation = Quaternion.Euler(
+                0f,
+                0f,
+                (enemyActionOverhead ? -1.4f : 1.4f) * strike);
+            enemyRenderer.transform.localScale = Vector3.one * enemyBattleBaseScale;
+            enemyRenderer.color = Color.white;
+            SyncMainEnemyShadow();
+            UpdateEnemyImpactContactCue(delta);
+
+            if (enemyImpactHoldRemaining > 0f) return;
+            BeginEnemyPoseRecovery(defenseActive
+                ? enemyActionOverhead
+                    ? EnemyBattlePose.HighAnticipation
+                    : EnemyBattlePose.LowAnticipation
+                : EnemyBattlePose.Idle);
+        }
+
         private void FinishRealtimeTelegraph()
         {
             defenseActive = false;
@@ -331,10 +405,13 @@ namespace Packspire
             screen.RemoveFromClassList("battle--reaction-ready");
             screen.RemoveFromClassList("battle--reaction-committed");
             SetEnemyTelegraphVisible(false);
+            CancelEnemyPoseRecovery();
+            ResetEnemyTimingCue();
+            ResetEnemyImpactContactCue();
             walker.SetBattleMotion(JourneyWalkCyclePrototype.BattleMotion.Idle);
             enemyRenderer.transform.position = enemyBattleBasePosition;
             enemyRenderer.transform.rotation = Quaternion.identity;
-            enemyRenderer.transform.localScale = Vector3.one * EnemyBattleScale;
+            enemyRenderer.transform.localScale = Vector3.one * enemyBattleBaseScale;
             enemyRenderer.color = Color.white;
             SetEnemyBattlePose(EnemyBattlePose.Idle);
             SyncMainEnemyShadow();
@@ -351,7 +428,7 @@ namespace Packspire
             realtimeBattleActive = true;
             BeginRealtimeTelegraph(
                 new RealtimeEnemyAction(
-                    encounterProfile.timeline.actorId,
+                    encounterProfile.ResolvedEnemyId,
                     "preview:足払い",
                     RealtimeEnemyActionKind.JumpReaction,
                     8,

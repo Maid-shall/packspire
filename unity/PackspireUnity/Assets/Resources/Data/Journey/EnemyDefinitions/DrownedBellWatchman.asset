@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: DrownedBellWatchman
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: drowned_bell_watchman
+  displayName: "\u6C34\u5C01\u3058\u306E\u5DE1\u8996\u5175"
+  tier: 2
+  maximumHealth: 38
+  legacyTurnDamages: 0800000007000000090000000a000000
+  origin: 1
+  regionId: drowned_archive
+  lineage: {fileID: 11400000, guid: da28a0a3ac7b4fada4aac87af9441362, type: 2}
+  regionalBehaviorProfile: {fileID: 11400000, guid: b0c8390d6c772084fa27114875ce7b89, type: 2}
+  regionalDamageMultiplier: 1.15
+  fallbackSpriteResource: Art/JourneyPrototype/Enemies/drowned-bell-watchman-v1
+  battleSheetResource: 
+  orderedBattlePoseNames: []
+  battleFormation: 0
+  battleTargetHeight: 4.7
+  battleScale: 0.30599

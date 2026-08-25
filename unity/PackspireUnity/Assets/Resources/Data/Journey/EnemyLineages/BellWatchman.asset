@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b593e3e66f244220a11f7b7b8d31bd81, type: 3}
+  m_Name: BellWatchman
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyLineageDefinition
+  lineageId: bell_watchman
+  displayLabel: 鐘番系統
+  sharedSilhouette: 円筒兜、片手鐘、斜め掛け鞄
+  sharedEquipment: 警鐘と地域仕様の巡視装具
+  sharedTelegraph: 鐘を掲げてから打撃へ移る
+  baseBehaviorProfile: {fileID: 11400000, guid: 10d5f606ea7744ebbc900f5090ae5612, type: 2}
+

@@ -14,6 +14,7 @@ namespace Packspire
             screen.EnableInClassList("battle--enemy-count-3", visibleCount == 3);
             screen.EnableInClassList("battle--layout-preview", layoutPreview);
             battleInputLocked = encounterIntroActive || layoutPreview;
+            ApplyBattleActorLayout(visibleCount);
 
             for (int enemyIndex = 0; enemyIndex < enemyHudSlots.Length; enemyIndex++)
             {

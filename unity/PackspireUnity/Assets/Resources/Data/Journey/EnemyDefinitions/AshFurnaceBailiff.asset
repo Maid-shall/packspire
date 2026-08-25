@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: AshFurnaceBailiff
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: ash_furnace_bailiff
+  displayName: 炉灰の執行官
+  tier: 2
+  maximumHealth: 48
+  legacyTurnDamages: 090000000c0000000a000000
+  origin: 0
+  regionId: ash_outskirts
+  lineage: {fileID: 0}
+  regionalBehaviorProfile: {fileID: 11400000, guid: 009107f0865b43978fc0dfeda88f9903, type: 2}
+  regionalDamageMultiplier: 1
+  fallbackSpriteResource: Art/JourneyPrototype/Enemies/ash-furnace-bailiff-v1
+  battleSheetResource:
+  orderedBattlePoseNames: []
+  battleTargetHeight: 5.2
+  battleScale: 0.39394

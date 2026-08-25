@@ -20,6 +20,7 @@ namespace Packspire
             SetPhase(Phase.Battle);
             scenery.ClearAll();
             defenseActive = false;
+            enemyImpactHoldRemaining = 0f;
             defenseResolved = false;
             defenseWindowOpen = false;
             battleInputLocked = true;
@@ -38,11 +39,11 @@ namespace Packspire
             encounterBanner?.RemoveFromClassList("encounter--visible");
             SetEnemyTelegraphVisible(false);
             walker.SetBattleMotion(JourneyWalkCyclePrototype.BattleMotion.Idle);
+            CancelEnemyPoseRecovery();
             SetEnemyBattlePose(EnemyBattlePose.Idle);
-            enemyBattleBasePosition = EnemyBattleStartPosition;
-            enemyRenderer.transform.position = enemyBattleBasePosition;
+            ApplyBattleActorLayout(1);
             enemyRenderer.transform.rotation = Quaternion.identity;
-            enemyRenderer.transform.localScale = Vector3.one * EnemyBattleScale;
+            enemyRenderer.transform.localScale = Vector3.one * enemyBattleBaseScale;
             enemyRenderer.color = Color.white;
             SetMainEnemyVisible(true);
             SyncMainEnemyShadow();
@@ -51,7 +52,7 @@ namespace Packspire
             StartRealtimeBattle();
             SetBattlePreviewEnemyCount(1);
             enemyNames[0].text = enemy.name;
-            battleLog.text = "番人が配達路を封鎖した。同じ旅画面のまま迎撃する。";
+            battleLog.text = $"{enemy.name}が進路を塞いだ。";
             RefreshBattleUi();
             encounterRoutine = StartCoroutine(EncounterRoutine(battleRevision));
         }
@@ -98,34 +99,45 @@ namespace Packspire
             if (!defenseActive || delta <= 0f) return;
             defenseClock = Mathf.Min(defenseDuration, defenseClock + delta);
             float anticipation = defenseDuration <= 0f ? 1f : defenseClock / defenseDuration;
-            float urgency = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.42f, .95f, anticipation));
-            float pulse = .5f + .5f * Mathf.Sin(
-                anticipation * Mathf.PI * Mathf.Lerp(5f, 11f, urgency));
+            float urgency = Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.InverseLerp(.42f, .95f, anticipation));
             bool reactionRequired = EnemyActionRequiresReaction();
-            bool overhead = enemyActionKind != EnemyActionKind.JumpReaction;
+            bool overhead = enemyActionOverhead;
+            bool timingCueReached = anticipation >= DefenseWindowStart01;
+            if (!enemyTimingCueFired && timingCueReached)
+                BeginEnemyTimingCue();
             bool windowOpen = reactionRequired &&
                               anticipation >= DefenseWindowStart01 &&
                               anticipation <= DefenseWindowEnd01;
             if (windowOpen != defenseWindowOpen)
             {
                 defenseWindowOpen = windowOpen;
-                screen.EnableInClassList("battle--reaction-ready", windowOpen && !defenseResolved);
+                screen.EnableInClassList(
+                    "battle--reaction-ready",
+                    windowOpen && !defenseResolved);
             }
+
+            UpdateEnemyTimingCue(delta, anticipation);
+            float flash = EnemyTimingFlashStrength;
             enemyRenderer.color = Color.Lerp(
                 Color.white,
                 enemyTelegraphColor,
-                urgency * (reactionRequired ? .12f + pulse * .3f : .06f + pulse * .12f));
+                Mathf.Clamp01(.025f + urgency * .055f + flash * .10f));
             enemyRenderer.transform.position = enemyBattleBasePosition + new Vector3(
                 Mathf.Lerp(.18f, -.14f, anticipation),
-                overhead ? Mathf.Lerp(.035f, -.015f, anticipation) : Mathf.Lerp(-.035f, -.07f, anticipation),
+                overhead
+                    ? Mathf.Lerp(.035f, -.015f, anticipation)
+                    : Mathf.Lerp(-.035f, -.07f, anticipation),
                 0f);
             enemyRenderer.transform.rotation = Quaternion.Euler(
                 0f,
                 0f,
                 Mathf.Lerp(overhead ? -1.5f : 1.5f, 0f, anticipation));
-            enemyRenderer.transform.localScale = Vector3.one * EnemyBattleScale;
+            enemyRenderer.transform.localScale =
+                Vector3.one * enemyBattleBaseScale;
             SyncMainEnemyShadow();
-            UpdateEnemyTelegraphPulse(pulse, anticipation);
         }
 
         private void CompleteJourneyBattleVictory()
@@ -139,7 +151,7 @@ namespace Packspire
             {
                 success = true,
                 performance = 2,
-                message = "番人を退けた。"
+                message = $"{encounterProfile.ResolvedDisplayName}を退けた。"
             });
         }
 
@@ -354,6 +366,7 @@ namespace Packspire
                 float phase = battleActorClock * (1.9f + previewIndex * .17f) + previewIndex * 1.4f;
                 renderer.transform.position = basePosition + new Vector3(0f, Mathf.Sin(phase) * .02f, 0f);
                 renderer.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Sin(phase) * .35f);
+                SyncBattleActorShadow(battlePreviewEnemyShadowRenderers[previewIndex], renderer);
             }
         }
 
@@ -362,17 +375,7 @@ namespace Packspire
             if (enemyTelegraphRenderer == null) return;
             enemyTelegraphRenderer.enabled = visible;
             if (visible) SyncEnemyTelegraphTransform(0f, 0f);
-        }
-
-        private void UpdateEnemyTelegraphPulse(float pulse, float anticipation)
-        {
-            if (enemyTelegraphRenderer == null || !enemyTelegraphRenderer.enabled) return;
-            SyncEnemyTelegraphTransform(pulse, anticipation);
-            enemyTelegraphRenderer.color = new Color(
-                enemyTelegraphColor.r,
-                enemyTelegraphColor.g,
-                enemyTelegraphColor.b,
-                Mathf.Lerp(.1f, .48f, pulse));
+            else SetEnemyTimingGlintVisible(false);
         }
 
         private void SyncEnemyTelegraphTransform(float pulse, float anticipation)

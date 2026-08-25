@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: AshChimneyScavenger
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: ash_chimney_scavenger
+  displayName: 煤管さらい
+  tier: 1
+  maximumHealth: 29
+  legacyTurnDamages: 060000000800000007000000
+  origin: 0
+  regionId: ash_outskirts
+  lineage: {fileID: 0}
+  regionalBehaviorProfile: {fileID: 11400000, guid: def80c6f3fd14fbfb08a722a802e72cf, type: 2}
+  regionalDamageMultiplier: 1
+  fallbackSpriteResource: Art/JourneyPrototype/Enemies/ash-chimney-scavenger-v1
+  battleSheetResource:
+  orderedBattlePoseNames: []
+  battleTargetHeight: 4.6
+  battleScale: 0.29948

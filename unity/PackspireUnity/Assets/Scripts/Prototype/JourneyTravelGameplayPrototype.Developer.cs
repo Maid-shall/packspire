@@ -7,9 +7,22 @@ namespace Packspire
     {
         public void DevBeginBattle()
         {
+            DevBeginBattle(null);
+        }
+
+        public void DevBeginBattle(string encounterId)
+        {
             if (!uiBound)
             {
                 BindUi();
+            }
+            if (!string.IsNullOrWhiteSpace(encounterId))
+            {
+                JourneyBattleEncounterProfile profile =
+                    JourneyEncounterSelectionSystem.ResolveByEncounterId(encounterId);
+                if (profile == null)
+                    throw new System.ArgumentException(nameof(encounterId));
+                ApplyEncounterProfile(profile);
             }
             BeginBattle();
         }
