@@ -1771,6 +1771,22 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
+ public void JourneyTravelHud_SeparatesExpeditionAndSegmentContext(){
+  var view=AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.VisualTreeAsset>(
+   "Assets/Resources/UI/PackspireJourneyCompleteView.uxml");
+  Assert.That(view,Is.Not.Null);
+  UnityEngine.UIElements.TemplateContainer root=view.CloneTree();
+
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-floor-progress"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-0"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-1"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-2"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-origin"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-target"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("journey-progress"),Is.Not.Null);
+ }
+
+ [Test]
  public void RealtimeCombatTiming_GuardsShareGraceAndDecayRules(){
   var timing=new RealtimeCombatTimingState();
   int playerBlock=6;

@@ -43,6 +43,26 @@
                 <ui:Label name="journey-condition" text="安定" class="ps-journey__condition" />
                 <ui:Label name="journey-condition-note" text="期限まで余裕あり" class="ps-journey__condition-note" />
             </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__floor-progress">
+                <ui:Label text="EXPEDITION ROUTE" class="ps-journey__metric-key" />
+                <ui:Label name="journey-floor-progress" text="第1層　区間 00 / 09" class="ps-journey__floor-progress-copy" />
+                <ui:VisualElement class="ps-journey__floor-track">
+                    <ui:VisualElement name="journey-floor-mark-0" class="ps-journey__floor-mark mark--current">
+                        <ui:Label text="I" class="ps-journey__floor-seal" />
+                        <ui:Label text="灰市" class="ps-journey__floor-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-journey__floor-connector" picking-mode="Ignore" />
+                    <ui:VisualElement name="journey-floor-mark-1" class="ps-journey__floor-mark mark--locked">
+                        <ui:Label text="II" class="ps-journey__floor-seal" />
+                        <ui:Label text="書庫" class="ps-journey__floor-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-journey__floor-connector" picking-mode="Ignore" />
+                    <ui:VisualElement name="journey-floor-mark-2" class="ps-journey__floor-mark mark--locked">
+                        <ui:Label text="III" class="ps-journey__floor-seal" />
+                        <ui:Label text="黒鐘" class="ps-journey__floor-label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:Label text="DEV SIMULATION" class="ps-journey__dev-tag" />
         </ui:VisualElement>
 
@@ -490,9 +510,18 @@
                 <ui:Label name="journey-phase" text="MOVING / 灰市外縁" class="ps-journey__phase" />
                 <ui:Label name="journey-next" text="次の判断まで もう少し" class="ps-journey__next" />
             </ui:VisualElement>
-            <ui:ProgressBar name="journey-progress" low-value="0" high-value="100" value="0" class="ps-journey__progress" />
-            <ui:Button name="journey-speed" text="×1" class="ps-journey__speed" />
-            <ui:Button name="journey-pause" text="一時停止" class="ps-journey__pause" />
+            <ui:VisualElement class="ps-journey__segment-progress">
+                <ui:VisualElement class="ps-journey__segment-caption">
+                    <ui:Label name="journey-segment-origin" text="配達局" class="ps-journey__segment-end segment-end--origin" />
+                    <ui:Label text="CURRENT SEGMENT" class="ps-journey__segment-key" />
+                    <ui:Label name="journey-segment-target" text="最初の分岐" class="ps-journey__segment-end segment-end--target" />
+                </ui:VisualElement>
+                <ui:ProgressBar name="journey-progress" low-value="0" high-value="100" value="0" class="ps-journey__progress" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__transport">
+                <ui:Button name="journey-speed" text="×1" class="ps-journey__speed" />
+                <ui:Button name="journey-pause" text="一時停止" class="ps-journey__pause" />
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="journey-combat-lab" class="ps-journey__combat-lab">

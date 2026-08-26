@@ -28,17 +28,17 @@
 
 .ps-journey__rail {
     position: absolute; left: 0; top: 0; width: 190px; height: 720px;
-    padding: 20px 16px 18px 16px;
+    padding: 18px 14px 18px 14px;
     background-color: rgba(6, 7, 8, .96);
     border-right-width: 2px; border-right-color: rgba(142, 91, 45, .72);
 }
 .ps-journey__rail-eyebrow, .ps-journey__metric-key { font-size: 8px; letter-spacing: 1px; color: rgb(68, 192, 199); }
-.ps-journey__portrait-frame { width: 128px; height: 150px; margin: 10px 15px 6px 15px; background-image: resource("Art/UI/HubDD/portrait-frame-vertical"); -unity-background-scale-mode: stretch-to-fill; padding: 10px; }
-.ps-journey__portrait-crop { width: 108px; height: 130px; overflow: hidden; }
-.ps-journey__portrait { width: 108px; height: 130px; }
-.ps-journey__courier-name { font-size: 22px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(242, 219, 174); }
+.ps-journey__portrait-frame { width: 116px; height: 136px; margin: 8px 23px 5px 23px; background-image: resource("Art/UI/HubDD/portrait-frame-vertical"); -unity-background-scale-mode: stretch-to-fill; padding: 9px; }
+.ps-journey__portrait-crop { width: 98px; height: 118px; overflow: hidden; }
+.ps-journey__portrait { width: 98px; height: 118px; }
+.ps-journey__courier-name { font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(242, 219, 174); }
 .ps-journey__role { font-size: 10px; -unity-text-align: middle-center; color: rgb(179, 128, 78); }
-.ps-journey__rule { height: 2px; margin: 13px 0; background-color: rgba(181, 124, 61, .54); }
+.ps-journey__rule { height: 2px; margin: 9px 0; background-color: rgba(181, 124, 61, .54); }
 .ps-journey__hp, .ps-journey__enemy-hp, .ps-journey__progress, .ps-journey__minigame-meter { height: 16px; margin-top: 5px; }
 .ps-journey__hp .unity-progress-bar__background, .ps-journey__enemy-hp .unity-progress-bar__background, .ps-journey__progress .unity-progress-bar__background, .ps-journey__minigame-meter .unity-progress-bar__background { background-color: rgba(18, 16, 14, .86); border-width: 1px; border-color: rgba(176, 129, 68, .55); }
 .ps-journey__hp .unity-progress-bar__progress, .ps-journey__enemy-hp .unity-progress-bar__progress { background-color: rgb(151, 49, 39); }
@@ -46,25 +46,54 @@
 .ps-journey__minigame-meter .unity-progress-bar__progress { background-color: rgb(63, 180, 189); }
 .ps-journey__hp .unity-progress-bar__title, .ps-journey__enemy-hp .unity-progress-bar__title, .ps-journey__progress .unity-progress-bar__title, .ps-journey__minigame-meter .unity-progress-bar__title { display: none; }
 .ps-journey__metric-value { font-size: 13px; -unity-text-align: upper-right; color: rgb(235, 210, 169); }
-.ps-journey__rail-row { margin-top: 17px; flex-direction: row; justify-content: space-between; }
+.ps-journey__rail-row { margin-top: 12px; flex-direction: row; justify-content: space-between; }
 .ps-journey__rail-row > VisualElement { width: 72px; }
 .ps-journey__rail-number { margin-top: 2px; font-size: 25px; color: rgb(238, 202, 128); }
-.ps-journey__risk-block { margin-top: 20px; padding: 10px; background-color: rgba(42, 30, 23, .7); border-left-width: 3px; border-left-color: rgb(182, 113, 50); }
+.ps-journey__risk-block { margin-top: 13px; padding: 8px 9px; background-color: rgba(42, 30, 23, .7); border-left-width: 3px; border-left-color: rgb(182, 113, 50); }
 .ps-journey__condition { margin-top: 3px; font-size: 17px; color: rgb(231, 190, 112); }
 .ps-journey__condition-note { font-size: 9px; color: rgb(169, 151, 127); }
+.ps-journey__floor-progress { margin-top: 14px; padding-top: 10px; border-top-width: 1px; border-top-color: rgba(181, 124, 61, .42); }
+.ps-journey__floor-progress-copy { margin-top: 3px; font-size: 10px; color: rgb(226, 202, 158); }
+.ps-journey__floor-track { height: 51px; margin-top: 7px; flex-direction: row; align-items: flex-start; justify-content: center; }
+.ps-journey__floor-mark { width: 40px; align-items: center; opacity: .38; }
+.ps-journey__floor-seal {
+    width: 29px; height: 29px;
+    padding-top: 5px;
+    -unity-text-align: upper-center;
+    font-size: 10px; -unity-font-style: bold;
+    color: rgb(143, 131, 111);
+    background-color: rgba(27, 25, 22, .88);
+    border-width: 1px; border-color: rgba(143, 131, 111, .52);
+    border-radius: 15px;
+}
+.ps-journey__floor-label { margin-top: 3px; font-size: 8px; -unity-text-align: middle-center; color: rgb(143, 131, 111); }
+.ps-journey__floor-connector { width: 10px; height: 1px; margin-top: 14px; background-color: rgba(143, 131, 111, .42); }
+.ps-journey__floor-mark.mark--current { opacity: 1; }
+.ps-journey__floor-mark.mark--current .ps-journey__floor-seal { color: rgb(249, 216, 141); background-color: rgba(76, 46, 27, .94); border-width: 2px; border-color: rgb(196, 132, 61); }
+.ps-journey__floor-mark.mark--current .ps-journey__floor-label { color: rgb(238, 203, 137); }
+.ps-journey__floor-mark.mark--cleared { opacity: .78; }
+.ps-journey__floor-mark.mark--cleared .ps-journey__floor-seal { color: rgb(99, 210, 212); background-color: rgba(13, 45, 47, .9); border-color: rgba(71, 192, 198, .9); }
+.ps-journey__floor-mark.mark--cleared .ps-journey__floor-label { color: rgb(113, 191, 191); }
 .ps-journey__dev-tag { position: absolute; left: 18px; bottom: 18px; font-size: 8px; letter-spacing: 1px; color: rgba(97, 194, 198, .76); }
 
 .ps-journey__bottom {
     position: absolute; left: 190px; right: 0; bottom: 0; height: 92px;
-    padding: 12px 18px 12px 24px;
+    padding: 10px 18px 10px 24px;
     flex-direction: row; align-items: center;
     background-color: rgba(6, 7, 8, .94);
     border-top-width: 2px; border-top-color: rgba(160, 106, 48, .72);
 }
-.ps-journey__progress-copy { width: 230px; }
-.ps-journey__phase { font-size: 11px; letter-spacing: 1px; color: rgb(68, 197, 203); }
-.ps-journey__next { margin-top: 3px; font-size: 13px; color: rgb(229, 207, 168); }
-.ps-journey__progress { flex-grow: 1; min-width: 520px; height: 18px; margin: 0 22px; }
+.ps-journey__progress-copy { width: 246px; flex-shrink: 0; padding-left: 3px; }
+.ps-journey__phase { font-size: 10px; letter-spacing: 1px; color: rgb(68, 197, 203); }
+.ps-journey__next { margin-top: 3px; font-size: 12px; color: rgb(229, 207, 168); }
+.ps-journey__segment-progress { flex-grow: 1; min-width: 430px; margin: 0 22px; }
+.ps-journey__segment-caption { height: 17px; flex-direction: row; align-items: center; justify-content: space-between; }
+.ps-journey__segment-key { font-size: 7px; letter-spacing: 1px; color: rgba(71, 194, 199, .72); }
+.ps-journey__segment-end { width: 195px; font-size: 9px; color: rgb(188, 169, 138); white-space: nowrap; overflow: hidden; }
+.segment-end--origin { -unity-text-align: middle-left; }
+.segment-end--target { -unity-text-align: middle-right; color: rgb(235, 199, 128); }
+.ps-journey__progress { width: 100%; min-width: 0; height: 14px; margin: 4px 0 0 0; }
+.ps-journey__transport { width: 154px; flex-direction: row; align-items: center; justify-content: flex-end; }
 .ps-journey__speed, .ps-journey__pause { height: 40px; margin-left: 8px; color: rgb(237, 211, 165); background-color: rgba(42, 28, 20, .9); border-width: 1px; border-color: rgba(186, 125, 59, .7); }
 .ps-journey__speed { width: 58px; font-size: 16px; }
 .ps-journey__pause { width: 88px; font-size: 11px; }

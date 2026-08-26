@@ -90,6 +90,10 @@ namespace Packspire
         private Label conditionNoteText;
         private Label phaseText;
         private Label nextText;
+        private Label floorProgressText;
+        private Label segmentOriginText;
+        private Label segmentTargetText;
+        private readonly VisualElement[] floorMarks = new VisualElement[3];
         private Label ledgerSummary;
         private Label ledgerNodeTitle;
         private Label ledgerNodeMeta;
@@ -854,6 +858,7 @@ namespace Packspire
             dayText.text = $"DAY {route.daysElapsed} / {JourneyDayStageLabel(dayStage)}";
             conditionText.text = JourneyDayStageLabel(dayStage);
             conditionNoteText.text = JourneyDayStageNote(run, dayStage);
+            RefreshJourneyContextUi();
         }
 
         private static string JourneyDayStageLabel(ExpeditionDayStage stage) => stage switch
@@ -876,6 +881,102 @@ namespace Packspire
                 ExpeditionDayStage.Anomaly => "特殊危険域",
                 _ => "高危険・高報酬"
             };
+        }
+
+        private void RefreshJourneyContextUi()
+        {
+            if (run == null || floorProgressText == null ||
+                segmentOriginText == null || segmentTargetText == null)
+                return;
+
+            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            int floorCount = Mathf.Max(1, plan.floors?.Count ?? 0);
+            int floorIndex = Mathf.Clamp(plan.currentFloorIndex, 0, floorCount - 1);
+            ExpeditionFloorPlan floor = plan.floors?
+                .FirstOrDefault(candidate => candidate?.floorIndex == floorIndex);
+            ExpeditionRouteNodePlan currentNode =
+                ExpeditionRoutePlanSystem.Node(plan, plan.currentNodeId);
+            int routeColumns = Mathf.Max(
+                1,
+                floor?.nodes?
+                    .Where(node => node != null &&
+                                   node.kind != ExpeditionNodeKind.Boss)
+                    .Select(node => node.order + 1)
+                    .DefaultIfEmpty(1)
+                    .Max() ?? 1);
+            int segmentCount = routeColumns + 1;
+            int currentSegment = currentNode == null
+                ? 0
+                : currentNode.kind == ExpeditionNodeKind.Boss
+                    ? segmentCount
+                    : Mathf.Clamp(currentNode.order + 1, 1, routeColumns);
+            floorProgressText.text = plan.complete
+                ? $"全{floorCount}層　踏破完了"
+                : $"第{floorIndex + 1}層　区間 {currentSegment:00} / {segmentCount:00}";
+
+            for (int index = 0; index < floorMarks.Length; index++)
+            {
+                VisualElement mark = floorMarks[index];
+                if (mark == null) continue;
+                ExpeditionFloorPlan markFloor = plan.floors?
+                    .FirstOrDefault(candidate => candidate?.floorIndex == index);
+                bool cleared = markFloor != null &&
+                               !string.IsNullOrEmpty(markFloor.bossNodeId) &&
+                               plan.resolvedNodeIds?.Contains(markFloor.bossNodeId) == true;
+                bool current = index == floorIndex && !plan.complete;
+                mark.EnableInClassList("mark--cleared", cleared);
+                mark.EnableInClassList("mark--current", current);
+                mark.EnableInClassList(
+                    "mark--locked",
+                    !cleared && !current);
+            }
+
+            CourierRouteState route = run.courierRoute;
+            string currentLocation = JourneyLocationLabel(
+                plan,
+                plan.currentNodeId,
+                "配達局");
+            switch (phase)
+            {
+                case Phase.Travel:
+                case Phase.MiniGame:
+                case Phase.Event:
+                    segmentOriginText.text = JourneyLocationLabel(
+                        plan,
+                        route?.travelFromNodeId,
+                        "配達局");
+                    segmentTargetText.text = arrivalNode?.title ?? "最初の分岐";
+                    break;
+                case Phase.Choice:
+                    segmentOriginText.text = currentLocation;
+                    segmentTargetText.text = "次の区間";
+                    break;
+                case Phase.Result:
+                    segmentOriginText.text = currentLocation;
+                    segmentTargetText.text = plan.complete
+                        ? "遠征完了"
+                        : route?.failed == true
+                            ? "遠征終了"
+                            : "次の分岐";
+                    break;
+                default:
+                    segmentOriginText.text = currentLocation;
+                    segmentTargetText.text = "交戦地点";
+                    break;
+            }
+        }
+
+        private static string JourneyLocationLabel(
+            ExpeditionRoutePlan plan,
+            string nodeId,
+            string fallback)
+        {
+            if (string.IsNullOrEmpty(nodeId) || nodeId == "dispatch")
+                return fallback;
+            ExpeditionRouteNodePlan node =
+                ExpeditionRoutePlanSystem.Node(plan, nodeId);
+            return ExpeditionJourneySystem.PresentationNode(plan, node)?.title ??
+                   fallback;
         }
 
         private void SetPhase(Phase next)
@@ -927,6 +1028,7 @@ namespace Packspire
                 speechVisibleClock = 0f;
                 speech.RemoveFromClassList("speech--visible");
             }
+            RefreshJourneyContextUi();
         }
 
         private float WorldMotionScale()

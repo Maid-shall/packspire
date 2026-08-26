@@ -60,6 +60,12 @@ namespace Packspire
             conditionNoteText = root.Q<Label>("journey-condition-note");
             phaseText = root.Q<Label>("journey-phase");
             nextText = root.Q<Label>("journey-next");
+            floorProgressText = root.Q<Label>("journey-floor-progress");
+            segmentOriginText = root.Q<Label>("journey-segment-origin");
+            segmentTargetText = root.Q<Label>("journey-segment-target");
+            for (int floorIndex = 0; floorIndex < floorMarks.Length; floorIndex++)
+                floorMarks[floorIndex] =
+                    root.Q<VisualElement>($"journey-floor-mark-{floorIndex}");
             ledgerSummary = root.Q<Label>("journey-ledger-summary");
             ledgerNodeTitle = root.Q<Label>("journey-ledger-node-title");
             ledgerNodeMeta = root.Q<Label>("journey-ledger-node-meta");
