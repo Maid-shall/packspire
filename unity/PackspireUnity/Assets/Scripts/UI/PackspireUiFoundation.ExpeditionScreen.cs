@@ -47,7 +47,7 @@ public sealed partial class PackspireUiFoundation {
   var meta=game.UiMeta;
   EnsureExpeditionDungeonSelection(meta);
 
-  expeditionShell=CloneView("UI/PackspireExpeditionView","ps-expedition-screen ps-dark-surface");
+  expeditionShell=CloneView("UI/PackspireExpeditionView","ps-expedition-screen");
   if(expeditionShell==null){
    Debug.LogError("Expedition view could not be created.");
    return;

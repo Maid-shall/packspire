@@ -1,15 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="expedition-background" class="ps-layer-background" picking-mode="Ignore">
-        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-expedition-shade" picking-mode="Ignore" />
     </ui:VisualElement>
-    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--expedition" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--route-arrow" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-expedition-mark" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-expedition-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-expedition-route-decor" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="expedition-header" class="ps-mgmt-header ps-exp-header">
-            <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="EXPEDITION / DESTINATION" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="遠征先選択" class="ps-misprint-header-title" picking-mode="Ignore" />
+        <ui:VisualElement name="expedition-header" class="ps-exp-header">
+            <ui:VisualElement class="ps-expedition-header-copy">
+                <ui:Label text="EXPEDITION / DESTINATION" class="ps-expedition-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="遠征先選択" class="ps-expedition-header-title" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement class="ps-expedition-body">

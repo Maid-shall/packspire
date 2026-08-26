@@ -20,7 +20,7 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 | キャラクター | Character | PackspireCharacterView.uxml | PackspireCharacter.uss | 現行 | 既存の配達人一覧・人物画・人物記録の構図を維持し、旧Roster／MisprintCommon依存を外した。 |
 | 荷造り | Pack | PackspirePackingView.uxml | PackspirePacking.uss | 現行 | 6×4配置盤・所持品・3編成の完成構図を維持し、旧ManagementV3／MisprintCommon依存を外した。 |
 | 商店 | Shop | PackspireShopView.uxml | PackspireShop.uss | 現行 | 商人・6商品の在庫・商品記録・購入伝票を専用化し、Reward／ResultとのUSS共有を解消した。 |
-| 遠征準備 | Expedition | PackspireExpeditionView.uxml | Route＋ManagementV3等 | 移行途中 | 専用USSがなく、複数世代の共通表現を組み合わせている。 |
+| 遠征準備 | Expedition | PackspireExpeditionView.uxml | PackspireExpedition.uss | 現行 | 行先・配達人・荷造りの出発許可画面として専用化し、Route／Management／Meta／ManagementV3依存を外した。 |
 | 役職記録 | Status | PackspireStatusView.uxml | PackspireStatus.uss | 現行 | 人物・役職一覧・詳細・任命状態を1280×720内へ再配置し、旧ManagementV3／status-v2依存を外した。 |
 | 家宝 | Heirloom | PackspireHeirloomView.uxml | PackspireHeirloom.uss | 現行 | 選択家宝を主役に、来歴・成長記録・継承系統を1280×720へ再配置し、旧ManagementV3依存を外した。 |
 | 勢力 | Faction | PackspireFactionView.uxml | PackspireFaction.uss | 現行 | 使節・4勢力の台帳一覧・選択勢力の詳細を1280×720へ再配置し、旧ManagementV3依存を外した。 |
@@ -33,9 +33,9 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 4. **キャラクター（完了）**: 既存の完成構図を保ったまま旧Roster／MisprintCommon依存を外し、実画面比較済み。
 5. **荷造り（完了）**: 6×4配置盤・所持品・3編成の構図を保ったまま旧ManagementV3／MisprintCommon依存を外し、実画面比較済み。
 6. **商店（完了）**: 商人・6商品の在庫・商品記録・購入伝票を専用USSへ分離し、Reward画面も実画面回帰確認済み。
-7. **遠征準備**: シームレス遠征開始画面との役割重複を整理してから現行化する。
+7. **遠征準備（完了）**: 出発前の行先・配達人・荷造り確定と再開導線に役割を限定し、専用USSへ分離して実画面比較済み。
 
-次の実装対象は**遠征準備**とする。
+ホームから到達する9ページの現行化監査は完了。次は遠征中HUDの左欄・下欄を情報設計から現行化する。
 
 ## 一画面ごとの完了条件
 

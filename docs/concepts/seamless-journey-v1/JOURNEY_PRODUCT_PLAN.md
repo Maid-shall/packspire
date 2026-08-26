@@ -407,7 +407,8 @@
     - 勢力を`PackspireFactionView.uxml`＋`PackspireFaction.uss`の専用画面へ移行した。使節、4勢力の台帳一覧、選択勢力の詳細記録を1280×720内へ収め、旧`ManagementV3`依存を外した。別勢力の選択に詳細が連動し、所属変更を確定しないことを実画面確認した。
     - キャラクター画面は既存の配達人一覧・人物画・人物記録の完成構図を維持し、正本`PackspireCharacter.uss`へ必要な基礎規則を集約して旧`PackspireRoster`／`PackspireMisprintCommon`依存を外した。5人の一覧と詳細6項目を1280×720の実画面で比較確認した。
     - 荷造り画面は既存の所持品一覧・6×4配置盤・3編成の完成構図を維持し、正本`PackspirePacking.uss`へ書体と画面装飾を集約して旧`PackspireManagementV3`／`PackspireMisprintCommon`依存を外した。装備19件、24セル、配置済み2枠を1280×720の実画面で変更前後比較した。
-    - 商店画面を`PackspireShopView.uxml`＋`PackspireShop.uss`へ分離した。商人・6商品の在庫・商品記録・購入伝票の4列構図を維持し、共通ナビとヘッダーの衝突を解消して所持金表示を正常位置へ戻した。旧Commerceから商店セレクタを除去し、Rewardの候補3件・詳細5項目・受領フッターが維持されることを1280×720の実画面で回帰確認した。次は遠征準備を現行化する。
+    - 商店画面を`PackspireShopView.uxml`＋`PackspireShop.uss`へ分離した。商人・6商品の在庫・商品記録・購入伝票の4列構図を維持し、共通ナビとヘッダーの衝突を解消して所持金表示を正常位置へ戻した。旧Commerceから商店セレクタを除去し、Rewardの候補3件・詳細5項目・受領フッターが維持されることを1280×720の実画面で回帰確認した。
+    - 遠征準備画面を`PackspireExpeditionView.uxml`＋`PackspireExpedition.uss`へ分離した。行先3件、選択先の5詳細区分、出発許可票の構図と座標を維持し、Route／Management／Meta／ManagementV3依存を外した。役割は出発前の行先・配達人・荷造り確定と進行中遠征への復帰に限定され、出発後の経路選択とは重複しない。ホームから到達する9ページの現行化監査は完了し、次は遠征中HUDの左欄・下欄を情報設計から現行化する。
 12. 背景・地点・敵の内容量を増やす。
 
 ## 11. 完成判定
