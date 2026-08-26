@@ -11,6 +11,7 @@ namespace Packspire
         public const double JourneyUpdateBudgetMs = 0.50;
         public const double JourneyEnvironmentBudgetMs = 0.30;
         public const double JourneyMiniGameBudgetMs = 0.20;
+        public const double BattleReelRefreshBudgetMs = 0.25;
         public const double BattleRefreshBudgetMs = 1.00;
         public const long UiGcBudgetBytesPerFrame = 0;
 
@@ -24,6 +25,8 @@ namespace Packspire
             new ProfilerMarker(ProfilerCategory.Scripts, "Packspire.Journey.MiniGame");
         public static readonly ProfilerMarker JourneyBattleRefresh =
             new ProfilerMarker(ProfilerCategory.Scripts, "Packspire.Journey.Battle.Refresh");
+        public static readonly ProfilerMarker JourneyBattleReelRefresh =
+            new ProfilerMarker(ProfilerCategory.Scripts, "Packspire.Journey.Battle.ReelRefresh");
         public static readonly ProfilerMarker ProductBattleRefresh =
             new ProfilerMarker(ProfilerCategory.Scripts, "Packspire.Battle.Refresh");
         public static readonly ProfilerMarker ProductBattleHandRefresh =

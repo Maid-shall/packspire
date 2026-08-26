@@ -71,26 +71,33 @@ namespace Packspire
         private readonly double displayHorizon;
         private readonly Func<RealtimeEnemyActionPreview, Sprite> actorSprite;
         private readonly Texture2D numeralAtlas;
-        private readonly List<RealtimeEnemyActionPreview> actionPreviews = new(8);
+        private readonly List<RealtimeEnemyActionPreview> actionPreviews =
+            new(ThreatSlotCount + 4);
         private readonly List<RealtimeSupplyPulsePreview> supplyPreviews = new(4);
         private readonly ThreatSlot[] threatSlots = new ThreatSlot[ThreatSlotCount];
         private readonly SupplySlot[] supplySlots = new SupplySlot[SupplySlotCount];
         private readonly VisualElement chainTrack;
         private readonly VisualElement slotsViewport;
         private readonly VisualElement nowMarker;
+        private readonly Action<string> reportCapacityViolation;
+        private int reportedThreatOverflow;
         internal int ThreatContentBindCount { get; private set; }
         internal int SupplyContentBindCount { get; private set; }
+        internal int ThreatOverflowCount { get; private set; }
 
         public JourneyBattleReelPresenter(
             VisualElement root,
             double displayHorizon,
             Texture2D numeralAtlas,
-            Func<RealtimeEnemyActionPreview, Sprite> actorSprite)
+            Func<RealtimeEnemyActionPreview, Sprite> actorSprite,
+            Action<string> reportCapacityViolation = null)
         {
             if (root == null) throw new ArgumentNullException(nameof(root));
             this.displayHorizon = Math.Max(.1d, displayHorizon);
             this.numeralAtlas = numeralAtlas;
             this.actorSprite = actorSprite ?? throw new ArgumentNullException(nameof(actorSprite));
+            this.reportCapacityViolation =
+                reportCapacityViolation ?? Debug.LogError;
 
             chainTrack = RequireName<VisualElement>(root, "journey-reel-chain-track");
             slotsViewport = RequireName<VisualElement>(root, "journey-reel-slots");
@@ -111,6 +118,8 @@ namespace Packspire
 
         public void Refresh(RealtimeBattleController battle)
         {
+            using var performanceScope =
+                PackspirePerformance.JourneyBattleReelRefresh.Auto();
             if (battle == null) throw new ArgumentNullException(nameof(battle));
 
             float travel = MeasureTravel();
@@ -121,19 +130,24 @@ namespace Packspire
                 new Length(chainOffset, LengthUnit.Pixel));
 
             battle.GetUpcomingActions(actionPreviews);
-            int threatIndex = 0;
+            int visibleThreatCount = 0;
             foreach (RealtimeEnemyActionPreview preview in actionPreviews)
             {
-                if (threatIndex >= threatSlots.Length) break;
                 if (preview.TimeUntilStart > displayHorizon) continue;
-                ThreatSlot slot = threatSlots[threatIndex++];
-                PlaceThreat(slot, preview.TimeUntilStart, travel);
-                if (!slot.Occupied || slot.Serial != preview.Serial)
-                    BindThreat(slot, preview);
-                UpdateThreatImminence(slot, preview);
+                if (visibleThreatCount < threatSlots.Length)
+                {
+                    ThreatSlot slot = threatSlots[visibleThreatCount];
+                    PlaceThreat(slot, preview.TimeUntilStart, travel);
+                    if (!slot.Occupied || slot.Serial != preview.Serial)
+                        BindThreat(slot, preview);
+                    UpdateThreatImminence(slot, preview);
+                }
+                visibleThreatCount++;
             }
+            int threatIndex = Math.Min(visibleThreatCount, threatSlots.Length);
             for (int index = threatIndex; index < threatSlots.Length; index++)
                 ClearThreat(threatSlots[index]);
+            UpdateThreatOverflow(visibleThreatCount);
 
             battle.GetUpcomingSupplyPulses(supplyPreviews, displayHorizon);
             int supplyIndex = 0;
@@ -158,6 +172,25 @@ namespace Packspire
 
             foreach (SupplySlot slot in supplySlots)
                 ClearSupply(slot);
+
+            UpdateThreatOverflow(0);
+        }
+
+        private void UpdateThreatOverflow(int visibleThreatCount)
+        {
+            int overflow = Math.Max(0, visibleThreatCount - threatSlots.Length);
+            ThreatOverflowCount = overflow;
+            if (overflow <= 0)
+            {
+                reportedThreatOverflow = 0;
+                return;
+            }
+            if (reportedThreatOverflow == overflow) return;
+            reportedThreatOverflow = overflow;
+            reportCapacityViolation(
+                $"Journey battle reel capacity exceeded: {visibleThreatCount} actions " +
+                $"inside {displayHorizon:0.#}s for {threatSlots.Length} slots. " +
+                $"{overflow} action(s) would be hidden.");
         }
 
         private float MeasureTravel()
