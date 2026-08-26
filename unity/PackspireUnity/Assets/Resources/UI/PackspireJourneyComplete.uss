@@ -206,12 +206,34 @@
 .ps-journey__minigame.mini--success .ps-journey__panel-title { color: rgb(116, 225, 192); }
 .ps-journey__minigame.mini--failure { border-color: rgb(158, 72, 52); }
 .ps-journey__minigame.mini--failure .ps-journey__panel-title { color: rgb(222, 141, 108); }
-.ps-journey__result { right: 180px; top: 184px; width: 520px; }
+.ps-journey__result-scrim {
+    position: absolute;
+    left: 190px; right: 0; top: 64px; bottom: 92px;
+    display: none;
+    background-color: rgba(2, 4, 5, .7);
+}
+.ps-journey__result {
+    left: 455px; right: auto; top: 158px; width: 560px;
+    padding: 26px 28px 24px 28px;
+    border-left-width: 5px;
+    border-left-color: rgb(63, 180, 189);
+}
+.ps-journey__result-rule { height: 1px; margin-top: 9px; background-color: rgba(185, 128, 62, .58); }
 .ps-journey__result-text { margin: 14px 0 8px 0; white-space: normal; color: rgb(205, 192, 169); }
 .ps-journey__result-summary { min-height: 46px; margin-top: 4px; padding: 9px 11px; white-space: normal; font-size: 12px; color: rgb(225, 207, 171); background-color: rgba(7, 20, 21, .76); border-left-width: 3px; border-left-color: rgb(62, 178, 185); }
 .ps-journey__result-actions { margin-top: 8px; flex-direction: row; justify-content: flex-end; }
 .ps-journey__result-return { width: 170px; margin-right: 10px; }
 .ps-journey__result-continue { width: 210px; }
+.result--checkpoint .ps-journey__result { left: 415px; top: 126px; width: 640px; }
+.result--checkpoint .ps-journey__result-summary { min-height: 72px; }
+.result--defeat .ps-journey__result-scrim, .result--complete .ps-journey__result-scrim, .result--terminal .ps-journey__result-scrim { left: 0; top: 0; bottom: 0; background-color: rgba(2, 3, 4, .86); }
+.result--defeat .ps-journey__result, .result--complete .ps-journey__result, .result--terminal .ps-journey__result { left: 350px; top: 156px; width: 580px; }
+.result--defeat .ps-journey__result { border-left-color: rgb(163, 55, 44); }
+.result--defeat .ps-journey__panel-eyebrow { color: rgb(213, 91, 73); }
+.result--defeat .ps-journey__result-rule { background-color: rgba(163, 55, 44, .66); }
+.result--complete .ps-journey__result { border-left-color: rgb(203, 151, 66); }
+.result--complete .ps-journey__panel-eyebrow { color: rgb(238, 196, 105); }
+.result--complete .ps-journey__result-rule { background-color: rgba(203, 151, 66, .72); }
 
 .ps-journey__ledger { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: none; }
 .ps-journey__ledger.ledger--open { display: flex; }
@@ -872,7 +894,7 @@
 .ps-journey__transition.transition--visible .ps-journey__transition-fog--mid { translate: -70px 0; }
 .ps-journey__transition.transition--visible .ps-journey__transition-fog--near { translate: 120px 0; }
 
-.state--choice .ps-journey__choice, .state--event .ps-journey__event, .state--minigame .ps-journey__minigame, .state--result .ps-journey__result { display: flex; }
+.state--choice .ps-journey__choice, .state--event .ps-journey__event, .state--minigame .ps-journey__minigame, .state--result .ps-journey__result, .state--result .ps-journey__result-scrim { display: flex; }
 .state--battle .ps-journey__battle,
 .state--battle .ps-journey__player-battle-hud,
 .state--battle .ps-journey__enemy-huds,

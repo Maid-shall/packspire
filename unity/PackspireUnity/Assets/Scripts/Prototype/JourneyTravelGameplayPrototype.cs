@@ -43,6 +43,11 @@ namespace Packspire
             "state--travel", "state--choice", "state--minigame",
             "state--event", "state--battle", "state--result"
         };
+        private static readonly string[] ResultPresentationClasses =
+        {
+            "result--route", "result--checkpoint", "result--defeat",
+            "result--complete", "result--terminal"
+        };
 
         private readonly List<UnityEngine.Object> runtimeAssets = new List<UnityEngine.Object>();
         private readonly Button[] cardButtons = new Button[10];
@@ -165,6 +170,8 @@ namespace Packspire
         private Label resultEyebrow;
         private Label resultTitle;
         private Label resultText;
+        private VisualElement resultPanel;
+        private VisualElement resultScrim;
         private Button resultContinue;
         private Button speedButton;
         private Button pauseButton;
@@ -810,6 +817,16 @@ namespace Packspire
         {
             ClearExpeditionCheckpointResult();
             SetPhase(Phase.Result);
+            SetResultPresentation(
+                run?.hp <= 0 || run?.courierRoute?.failed == true
+                    ? "result--defeat"
+                    : run?.expeditionPlan?.complete == true
+                        ? "result--complete"
+                        : canContinue
+                            ? "result--route"
+                            : "result--terminal");
+            resultScrim?.BringToFront();
+            resultPanel?.BringToFront();
             walker.SetJourneyWalking(false);
             SetMainEnemyVisible(false);
             resultEyebrow.text = eyebrow;
@@ -983,6 +1000,8 @@ namespace Packspire
         {
             phase = next;
             phaseRevision++;
+            if (next != Phase.Result)
+                ClearResultPresentation();
             scenery.SetActivity(
                 next == Phase.Travel || next == Phase.MiniGame,
                 next == Phase.Travel);
@@ -1029,6 +1048,20 @@ namespace Packspire
                 speech.RemoveFromClassList("speech--visible");
             }
             RefreshJourneyContextUi();
+        }
+
+        private void SetResultPresentation(string className)
+        {
+            ClearResultPresentation();
+            if (screen != null && !string.IsNullOrEmpty(className))
+                screen.AddToClassList(className);
+        }
+
+        private void ClearResultPresentation()
+        {
+            if (screen == null) return;
+            foreach (string className in ResultPresentationClasses)
+                screen.RemoveFromClassList(className);
         }
 
         private float WorldMotionScale()

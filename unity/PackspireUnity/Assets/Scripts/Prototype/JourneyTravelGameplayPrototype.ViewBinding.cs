@@ -147,6 +147,8 @@ namespace Packspire
             resultEyebrow = root.Q<Label>("journey-result-eyebrow");
             resultTitle = root.Q<Label>("journey-result-title");
             resultText = root.Q<Label>("journey-result-text");
+            resultPanel = root.Q<VisualElement>("journey-result");
+            resultScrim = root.Q<VisualElement>("journey-result-scrim");
             resultContinue = root.Q<Button>("journey-result-continue");
             speedButton = root.Q<Button>("journey-speed");
             pauseButton = root.Q<Button>("journey-pause");

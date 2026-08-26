@@ -35,6 +35,10 @@ namespace Packspire
                 canContinue);
 
             activeCheckpoint = summary;
+            SetResultPresentation(
+                canContinue
+                    ? "result--checkpoint"
+                    : "result--complete");
             resultSummary.text =
                 $"経過 {summary.elapsedDays}日　経路 {summary.resolvedRouteNodeCount}地点　" +
                 $"戦闘 {summary.battlesWon}回\n" +

@@ -449,9 +449,11 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <ui:VisualElement name="journey-result-scrim" class="ps-journey__result-scrim" picking-mode="Ignore" />
         <ui:VisualElement name="journey-result" class="ps-journey__panel ps-journey__result">
             <ui:Label name="journey-result-eyebrow" text="ROUTE CLEARED" class="ps-journey__panel-eyebrow" />
             <ui:Label name="journey-result-title" text="配達路を確保" class="ps-journey__panel-title" />
+            <ui:VisualElement class="ps-journey__result-rule" picking-mode="Ignore" />
             <ui:Label name="journey-result-text" text="番人を退け、次の区画へ進める。" class="ps-journey__result-text" />
             <ui:Label name="journey-result-summary" text="" class="ps-journey__result-summary" />
             <ui:VisualElement class="ps-journey__result-actions">

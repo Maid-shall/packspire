@@ -12,6 +12,7 @@ namespace Packspire
                 .Require<VisualElement>("journey-screen")
                 .Require<VisualElement>("journey-hand-scroll")
                 .Require<VisualElement>("journey-transition")
+                .Require<VisualElement>("journey-result-scrim")
                 .Require<VisualElement>("journey-reward-overlay")
                 .Require<Label>("journey-reward-tier")
                 .Require<Label>("journey-reward-detail-name")

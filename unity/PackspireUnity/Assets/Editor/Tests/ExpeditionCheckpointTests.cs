@@ -69,6 +69,7 @@ namespace Packspire.Tests
             Assert.That(asset, Is.Not.Null);
             VisualElement root = asset.CloneTree();
 
+            Assert.That(root.Q<VisualElement>("journey-result-scrim"), Is.Not.Null);
             Assert.That(root.Q<Label>("journey-result-summary"), Is.Not.Null);
             Assert.That(root.Q<Button>("journey-result-return"), Is.Not.Null);
             Assert.That(root.Q<Button>("journey-result-continue"), Is.Not.Null);
