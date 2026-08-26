@@ -17,7 +17,7 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 | ホーム | Hub | PackspireHubView.uxml | PackspireHub.uss | 現行・基準 | 現行プロダクト表現の基準。 |
 | 保管庫 | Vault | PackspireVaultView.uxml | PackspireVaultView.uss | 現行 | UXMLが画面固有USSを直接所有する正本。 |
 | 図鑑 | Compendium | PackspireCompendiumView.uxml | PackspireVaultCodexFinal.uss | 現行 | リポジトリ規則で正本が固定され、一覧・詳細の専用表現がある。 |
-| キャラクター | Character | PackspireCharacterView.uxml | PackspireCharacter.uss＋旧共通6層 | 移行途中 | 専用構造はあるが旧管理系・装飾系の積層が残る。 |
+| キャラクター | Character | PackspireCharacterView.uxml | PackspireCharacter.uss | 現行 | 既存の配達人一覧・人物画・人物記録の構図を維持し、旧Roster／MisprintCommon依存を外した。 |
 | 荷造り | Pack | PackspirePackingView.uxml | PackspirePacking.uss＋旧共通4層 | 移行途中 | 専用画面はあるが共通旧層への依存が大きい。 |
 | 商店 | Shop | PackspireShopView.uxml | PackspireCommerce.uss | 移行途中 | Reward／GameOver／GameClearと見た目を共有し、拠点固有の主役が弱い。 |
 | 遠征準備 | Expedition | PackspireExpeditionView.uxml | Route＋ManagementV3等 | 移行途中 | 専用USSがなく、複数世代の共通表現を組み合わせている。 |
@@ -30,12 +30,12 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 1. **役職記録（完了）**: 専用UXML／USS、一覧→詳細の選択連動、現役職／任命候補の状態を実画面確認済み。
 2. **家宝（完了）**: 選択家宝、成長記録、選択モーダルを実画面確認済み。
 3. **勢力（完了）**: 使節、4勢力の一覧、選択連動する詳細記録を実画面確認済み。
-4. **キャラクター**: 専用構造を保ち、旧共通USS依存を外す。
+4. **キャラクター（完了）**: 既存の完成構図を保ったまま旧Roster／MisprintCommon依存を外し、実画面比較済み。
 5. **荷造り**: 現行遠征導線との連続性を確認しながら専用USSへ寄せる。
 6. **商店**: ラン中Reward／Resultへ影響しない拠点固有セレクタへ分離する。
 7. **遠征準備**: シームレス遠征開始画面との役割重複を整理してから現行化する。
 
-次の実装対象は**キャラクター**とする。
+次の実装対象は**荷造り**とする。
 
 ## 一画面ごとの完了条件
 

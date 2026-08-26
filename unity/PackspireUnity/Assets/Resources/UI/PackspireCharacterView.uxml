@@ -1,15 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="character-background" class="ps-layer-background" picking-mode="Ignore">
-        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-character-shade" picking-mode="Ignore" />
     </ui:VisualElement>
-    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--character" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--halftone" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="character-header" class="ps-mgmt-header">
-            <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="COURIER ROSTER" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="配達人選択" class="ps-misprint-header-title" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-character-register-mark" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-character-halftone" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-layer-content ps-character-layout">
+        <ui:VisualElement name="character-header" class="ps-character-header">
+            <ui:VisualElement class="ps-character-header-copy">
+                <ui:Label text="COURIER ROSTER" class="ps-character-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="配達人選択" class="ps-character-header-title" picking-mode="Ignore" />
                 <ui:Label text="登録済みの配達人から担当者を選択する。" class="ps-character-header-note" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>

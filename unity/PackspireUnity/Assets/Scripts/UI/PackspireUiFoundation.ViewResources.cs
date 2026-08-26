@@ -7,8 +7,7 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
  static readonly string[] CharacterStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireRoster",
-  "UI/PackspireMisprintCommon","UI/PackspireCharacter"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireCharacter"
  };
  static readonly string[] HubStyleSheets={
   "UI/PackspireRoster","UI/PackspirePolish","UI/PackspirePopDark",
