@@ -9,7 +9,6 @@ public sealed partial class PackspireUiFoundation {
   ClearRosterReferences();
   ClearHubReferences();
   ClearPackingReferences();
-  ClearCourierRouteReferences();
   ClearShopReferences();
   ClearRewardReferences();
   ClearResultReferences();

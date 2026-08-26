@@ -112,7 +112,7 @@ public static class ExpeditionJourneySystem {
   string area=FloorName(node.floorIndex);
   string title=NodeTitle(area,node.kind,node.order);
   string resolutionTitle=ResolutionTitle(node.kind);
-  return new CourierRouteNodeDef{
+  var presentation=new CourierRouteNodeDef{
    id=node.id,
    title=title,
    kind=node.kind.ToString().ToUpperInvariant(),
@@ -129,6 +129,9 @@ public static class ExpeditionJourneySystem {
    risk=risk,
    next=node.nextNodeIds?.ToArray()??Array.Empty<string>()
  };
+  ExpeditionLocationContentSystem.ApplyPresentation(
+   presentation,ExpeditionLocationContentSystem.Resolve(node.locationContentId));
+  return presentation;
  }
 
  public static string PathTitle(ExpeditionRoutePlan plan,ExpeditionRouteNodePlan node){

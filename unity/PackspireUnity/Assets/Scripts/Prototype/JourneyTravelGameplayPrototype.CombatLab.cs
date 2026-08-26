@@ -367,6 +367,22 @@ namespace Packspire
             RefreshCombatLabStatus();
         }
 
+        public string DevCombatLabAutomationStatus()
+        {
+            int playableCards = run?.hand?.Count(card => card != null &&
+                !card.unplayable && card.cost <= run.energy) ?? 0;
+            int damagingCards = run?.hand?.Count(card => card != null &&
+                !card.unplayable && card.cost <= run.energy && card.damage > 0) ?? 0;
+            return
+                $"lab={combatLabActive} automation={combatLabAutomationActive} " +
+                $"measuring={combatLabMeasurements.Active} records={combatLabMeasurements.Records.Count} " +
+                $"phase={phase} paused={paused} inputLocked={battleInputLocked} " +
+                $"realtime={realtimeBattleActive} clock={realtimeBattle.Time:0.0} " +
+                $"playerHp={run?.hp ?? 0} enemyHp={battle?.enemyHp ?? 0} " +
+                $"energy={run?.energy ?? 0} hand={run?.hand?.Count ?? 0} " +
+                $"playable={playableCards} damaging={damagingCards}";
+        }
+
         public void DevRunCombatLabBatchMeasurement()
         {
             if (!combatLabActive || combatLabAutomationRoutine != null) return;

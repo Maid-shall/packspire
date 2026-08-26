@@ -711,13 +711,6 @@ public static class GridBoardSystem {
   cell.grow=0;
  }
 
- /// <summary>The optional grid minigame no longer owns an exploration-card hand.</summary>
- public static void SyncExplorePool(GridBoardRunState board,RunState gameRun){
-  if(board==null)return;
-  board.explorePool.Clear();
-  SeedHand(board);
- }
-
  static void SeedHand(GridBoardRunState run){
   run.hand.Clear();
   run.selectedCardUid="";
@@ -758,96 +751,6 @@ public static class GridBoardSystem {
 
  public static bool OnPath(GridBoardRunState run,int x,int y)=>
   run?.path!=null&&run.path.Any(p=>p.x==x&&p.y==y);
-
- public static CardInstance SelectedCard(GridBoardRunState run){
-  if(run==null||string.IsNullOrEmpty(run.selectedCardUid))return null;
-  return run.hand.FirstOrDefault(c=>c.slotKey==run.selectedCardUid);
- }
-
- public static void SelectCard(GridBoardRunState run,string slotKey){
-  if(run==null)return;
-  EnsureCanPlace(run);
-  if(run.phase!=GridBoardPhase.Place){run.message="いまはカードを選べない";return;}
-  run.selectedCardUid=run.selectedCardUid==slotKey?"":slotKey??"";
- }
-
- public static bool TryPlace(GridBoardRunState run,int x,int y,out string msg){
-  msg="";
-  if(run==null){msg="盤がない";return false;}
-  EnsureCanPlace(run);
-  if(run.phase!=GridBoardPhase.Place){msg="いまは配置できない";return false;}
-  var card=SelectedCard(run);
-  if(card==null){msg="カードを選んでからマスをタップ";return false;}
-  if(run.energy<card.cost){msg=$"ENが足りない（{run.energy}/{run.energyMax}）";return false;}
-  if(!GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration)){msg="未知のカード";return false;}
-  var cell=Cell(run,x,y);
-  if(cell==null){msg="範囲外";return false;}
-  if(exploration.kind==ExplorationCardKind.Installation){
-   if(cell.terrain is "start" or "goal" or "blocked" or "void"){msg="ここには置けない";return false;}
-   if(cell.place!="empty"||EnemyAt(run,x,y)!=null){msg="すでに何かある";return false;}
-   if(string.IsNullOrEmpty(exploration.place)){msg="設置種別がない";return false;}
-   cell.place=exploration.place;
-   cell.grow=0;
-   run.installations??=new();
-   var installation=new GridInstallationState{
-    uid=Guid.NewGuid().ToString("N"),
-    cardId=exploration.id,
-    sourceItemUid=card.sourceItemUid,
-    x=x,y=y,
-    placedTurn=run.explorationTurn,
-    remainingDuration=exploration.duration,
-    stageIndex=ResolveInstallationStageIndex(exploration,0)
-   };
-   run.installations.Add(installation);
-   cell.installationUid=installation.uid;
-   ApplyExplorationEffects(run,InstallationStage(run,cell)?.onEnterEffects,cell);
-  } else {
-   if(exploration.target==ExplorationTargetKind.Installation&&InstallationAt(run,x,y)==null){
-    msg="対象となる設置術式がない";return false;
-   }
-   if(exploration.target==ExplorationTargetKind.Enemy&&EnemyAt(run,x,y)==null){
-    msg="対象となる敵がいない";return false;
-   }
-   ApplyExplorationEffects(run,exploration.effects,cell);
-  }
-  run.energy=Mathf.Max(0,run.energy-card.cost);
-  ConsumeExplorationCard(run,card,exploration.consumeRule);
-  run.selectedCardUid="";
-  msg=exploration.kind==ExplorationCardKind.Installation
-   ?exploration.place=="seal"?$"{card.name}を置いた（曲がる壁） EN{run.energy}":$"{card.name}を置いた EN{run.energy}"
-   :$"{card.name}を使用した EN{run.energy}";
-  run.message=msg;
-  return true;
- }
-
- public static bool TryUseSelectedCard(GridBoardRunState run,out string msg){
-  msg="";
-  var card=SelectedCard(run);
-  if(card==null||!GameCatalog.ExplorationCards.TryGetValue(card.id,out var definition)){
-   msg="カードが選ばれていない";return false;
-  }
-  if(definition.target!=ExplorationTargetKind.None){
-   msg="対象を選ぶ必要がある";return false;
-  }
-  return TryPlace(run,run.piece.x,run.piece.y,out msg);
- }
-
- static void ConsumeExplorationCard(GridBoardRunState run,CardInstance card,ExplorationConsumeRule rule){
-  if(rule==ExplorationConsumeRule.Persistent)return;
-  run.hand.RemoveAll(value=>value.slotKey==card.slotKey);
-  if(rule==ExplorationConsumeRule.ExhaustArea){
-   run.areaExhaustedExploreCards??=new();
-   var source=run.explorePool.FirstOrDefault(value=>value.slotKey==card.slotKey);
-   if(source!=null)run.areaExhaustedExploreCards.Add(source.Clone());
-  }
-  if(rule is ExplorationConsumeRule.ExhaustArea or ExplorationConsumeRule.RemoveExpedition)
-   run.explorePool.RemoveAll(value=>value.slotKey==card.slotKey);
-  if(rule==ExplorationConsumeRule.RemoveExpedition){
-   run.removedExplorationSlotKeys??=new();
-   if(!run.removedExplorationSlotKeys.Contains(card.slotKey))
-    run.removedExplorationSlotKeys.Add(card.slotKey);
-  }
- }
 
  static void ApplyExplorationEffects(
   GridBoardRunState run,IEnumerable<ExplorationEffectContent> effects,GridCellState target){
@@ -988,24 +891,12 @@ public static class GridBoardSystem {
   return true;
  }
 
- /// <summary>Exploration cards were retired; idle boards remain in route-drawing mode.</summary>
- public static void EnsureCanPlace(GridBoardRunState run){
-  if(run==null||run.phase==GridBoardPhase.Run||run.phase==GridBoardPhase.Done)return;
-  run.phase=GridBoardPhase.Path;
-  if(run.path==null||run.path.Count==0)ResetPath(run);
- }
-
  public static void BeginPathPhase(GridBoardRunState run){
   if(run==null)return;
   run.phase=GridBoardPhase.Path;
   ResetPath(run);
   run.selectedCardUid="";
   run.message="方向へ滑る。壁／封鎖の手前で止まり、そこでだけ曲がれる";
- }
-
- public static void BeginPlacePhase(GridBoardRunState run){
-  if(run==null||run.phase==GridBoardPhase.Run||run.phase==GridBoardPhase.Done)return;
-  BeginPathPhase(run);
  }
 
  public static void ClearPath(GridBoardRunState run){

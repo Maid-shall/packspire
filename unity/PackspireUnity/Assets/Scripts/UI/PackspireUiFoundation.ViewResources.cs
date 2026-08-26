@@ -53,10 +53,6 @@ public sealed partial class PackspireUiFoundation {
   "UI/PackspireRoute","UI/PackspireBattle","UI/PackspirePolish",
   "UI/PackspireGridBoard","UI/PackspireMisprintCommon"
  };
- static readonly string[] CourierRouteStyleSheets={
-  "UI/PackspirePolish","UI/PackspireMisprintCommon",
-  "UI/PackspireDocketCard","UI/PackspireCourierRoute"
- };
  static readonly string[] BattleStyleSheets={
   "UI/PackspireBattle","UI/PackspireMisprintCommon"
  };
@@ -87,7 +83,7 @@ public sealed partial class PackspireUiFoundation {
   ScreenId.Faction=>FactionStyleSheets,
   ScreenId.Expedition=>ExpeditionStyleSheets,
   ScreenId.Pack=>PackingStyleSheets,
-  ScreenId.Route=>CourierRouteStyleSheets,
+  ScreenId.Route=>Array.Empty<string>(),
   ScreenId.GridBoard=>GridBoardStyleSheets,
   ScreenId.Battle=>BattleStyleSheets,
   ScreenId.Reward=>CommerceStyleSheets,

@@ -8,9 +8,8 @@ using UnityEngine.SceneManagement;
 namespace Packspire
 {
     /// <summary>
-    /// Isolated comparison of full-proportion frame animation and a small courier whose
-    /// limited poses are supported by subtle procedural motion. Travel, body motion and
-    /// the ground shadow intentionally live on separate transforms.
+    /// Owns the courier frame animation used by the journey presentation. Travel, body
+    /// motion and the ground shadow intentionally live on separate transforms.
     /// </summary>
     [DefaultExecutionOrder(-100)]
     [RequireComponent(typeof(SpriteRenderer))]

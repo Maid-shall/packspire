@@ -188,8 +188,11 @@ namespace Packspire
             if (progress < 1f) return;
 
             postBattleRecoveryActive = false;
-            ShowChoice();
-            ShowToast("戦果を携え、旅程へ復帰しました。");
+            if (!TryShowExpeditionCheckpoint())
+            {
+                ShowChoice();
+                ShowToast("戦果を携え、旅程へ復帰しました。");
+            }
         }
     }
 }

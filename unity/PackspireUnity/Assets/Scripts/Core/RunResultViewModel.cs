@@ -1,7 +1,19 @@
 using System.Collections.Generic;
 
 namespace Packspire {
-public enum RunResultType { Defeat, Clear }
+public enum RunResultType { Defeat, Return, Clear }
+
+public static class RunResultPresentationSystem {
+ public static RunResultType ResolveType(
+  bool clearFallback,ExpeditionFinalizationSummary finalization){
+  if(finalization==null)return clearFallback?RunResultType.Clear:RunResultType.Defeat;
+  return finalization.reason switch {
+   ExpeditionEndReason.Return=>RunResultType.Return,
+   ExpeditionEndReason.Clear=>RunResultType.Clear,
+   _=>RunResultType.Defeat,
+  };
+ }
+}
 
 public sealed class RunResultStat {
  public string label;
@@ -9,7 +21,7 @@ public sealed class RunResultStat {
  public RunResultStat(string label,string value){this.label=label;this.value=value;}
 }
 
-/// <summary>UI adapter model for GameOver / GameClear. Built from live run or DEV preview only.</summary>
+/// <summary>UI adapter model for defeat, voluntary return, or full clear.</summary>
 public sealed class RunResultViewModel {
  public RunResultType resultType;
  public string title;

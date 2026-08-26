@@ -5,39 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
-// Exploration/combat hands, previews, card population, and battle feedback.
- void SetGridHandOpen(bool open){
-  if(!gridBoardBuilt||gridBoardHandRoot==null)return;
-  if(gridBoardCombatMode)open=true;
-  if(gridBoardHandOpen==open)return;
-  gridBoardHandOpen=open;
-  SyncGridHandChrome();
-  var run=game.UiGridBoard;
-  if(run!=null)RebuildGridHand(run);
- }
-
- void FocusGridHandCard(Button card){
-  if(gridBoardHoverCard==card)return;
-  if(gridBoardHoverCard!=null)gridBoardHoverCard.RemoveFromClassList("ps-gboard-fan-focus");
-  if(gridBoardHoverPreview!=null){
-   gridBoardHoverPreview.RemoveFromHierarchy();
-   gridBoardHoverPreview=null;
-  }
-  gridBoardHoverCard=card;
-  gridBoardHoverCard.AddToClassList("ps-gboard-fan-focus");
-  if(card.userData is not CardInstance data)return;
-  ShowGridExplorationCardPreview(data,false);
- }
-
+// Same-screen battle hand, preview, and battle feedback.
  void ClearGridHandFocus(){
-  if(gridBoardHoverCard!=null)gridBoardHoverCard.RemoveFromClassList("ps-gboard-fan-focus");
-  gridBoardHoverCard=null;
-  if(gridBoardHoverPreview!=null){
-   gridBoardHoverPreview.RemoveFromHierarchy();
-   gridBoardHoverPreview=null;
-  }
   if(gridBoardCombatMode)ShowGridCombatCardPreview(null);
-  else RefreshGridSelectedCard(game.UiGridBoard);
  }
 
  void ShowGridCombatCardPreview(CardInstance card,bool affordable=true){
@@ -56,125 +26,18 @@ public sealed partial class PackspireUiFoundation {
   gridBoardCombatCardPreview.Add(preview);
  }
 
- void RefreshGridSelectedCard(GridBoardRunState run){
-  if(gridBoardSelectedHost==null)return;
-  bool showPreview=run!=null&&run.phase==GridBoardPhase.Place&&!string.IsNullOrEmpty(run.selectedCardUid);
-  if(!showPreview||gridBoardCombatMode||game.UiBattle!=null){
-   ShowGridExplorationCardPreview(null,false);
-   return;
-  }
-  var card=run!=null&&run.phase==GridBoardPhase.Place?GridBoardSystem.SelectedCard(run):null;
-  if(card==null){
-   ShowGridExplorationCardPreview(null,false);
-   return;
-  }
-  ShowGridExplorationCardPreview(card,true);
- }
-
-void ShowGridExplorationCardPreview(CardInstance card,bool committed){
-  if(gridBoardSelectedHost==null)return;
-  if(card!=null)HideGridCellDetail();
-  gridBoardSelectedHost.Clear();
-  if(card==null){
-   gridBoardSelectedHost.style.display=DisplayStyle.None;
-   return;
-  }
-  gridBoardSelectedHost.style.display=DisplayStyle.Flex;
-  VisualElement preview;
-  if(committed){
-   preview=new Button(()=>{
-    if(game.UiGridBoard!=null)game.UiGridBoard.selectedCardUid="";
-    RefreshGridBoard();
-   });
-  } else {
-   preview=new VisualElement{pickingMode=PickingMode.Ignore};
-  }
-  preview.AddToClassList("ps-battle-card");
-  preview.AddToClassList("ps-gboard-selected-card");
-  preview.AddToClassList("ps-gboard-side-preview");
-  preview.AddToClassList("ps-docket-expanded");
-  PopulateGridPlaceCard(preview,card);
-  gridBoardSelectedHost.Add(preview);
- }
-
  void RebuildGridHand(GridBoardRunState run){
   if(gridBoardHandRoot==null)return;
   ClearGridHandFocus();
   gridBoardHandRoot.Clear();
-  EnsureBattleAssets();
-
   if(gridBoardCombatMode){
+   EnsureBattleAssets();
    RebuildGridCombatHand();
    return;
   }
-
-  bool show=run.phase==GridBoardPhase.Place&&run.hand!=null&&run.hand.Count>0;
-  gridBoardHandRoot.style.display=show?DisplayStyle.Flex:DisplayStyle.None;
-  if(!show){
-   gridBoardHandOpen=false;
-   SyncGridHandChrome();
-   return;
-  }
+  gridBoardHandOpen=false;
+  gridBoardHandRoot.style.display=DisplayStyle.None;
   SyncGridHandChrome();
-
-  var cards=run.hand;
-  if(cards==null||cards.Count==0){
-   var empty=new Label("手札なし — マスを押して導線へ"){pickingMode=PickingMode.Ignore};
-   empty.AddToClassList("ps-gboard-hand-empty");
-   gridBoardHandRoot.Add(empty);
-   return;
-  }
-
-  int count=cards.Count;
-  float center=(count-1)*0.5f;
-  float spreadDeg=count<=5?6.2f:count==6?7.4f:5.0f;
-  float radius=count<=5?110f:count==6?205f:155f;
-  float horizontalStep=count<=5?112f:count==6?92f:72f;
-  bool open=gridBoardHandOpen;
-  float sink=open?0f:GridHandPeekSink;
-  var handSlots=new List<(Button button,float depth)>(count);
-  for(int i=0;i<count;i++){
-   var capture=cards[i];
-   bool selected=run.selectedCardUid==capture.slotKey;
-   Button button=null;
-   button=new Button(()=>{
-    if(run.phase==GridBoardPhase.Place){
-     run.selectedCardUid=capture.slotKey;
-     if(GameCatalog.ExplorationCards.TryGetValue(capture.id,out var definition)&&
-      definition.target==ExplorationTargetKind.None&&definition.kind!=ExplorationCardKind.Installation){
-      if(!GridBoardSystem.TryUseSelectedCard(run,out var message))ShowToast(message);
-     } else run.message=$"{capture.name} を選択";
-    }
-    gridBoardHandOpen=false;
-    SyncGridHandChrome();
-    RefreshGridBoard();
-   });
-   button.AddToClassList("ps-battle-card");
-   button.AddToClassList("ps-gboard-fan-card");
-   button.userData=capture;
-   if(!open)button.AddToClassList("ps-gboard-fan-peek");
-   if(selected)button.AddToClassList("ps-gboard-fan-selected");
-   PopulateGridPlaceCard(button,capture);
-   float spreadIndex=i-center;
-   float angle=open?spreadIndex*spreadDeg:spreadIndex*2.2f;
-   float rad=angle*Mathf.Deg2Rad;
-   float arcLift=open?radius*(1f-Mathf.Cos(rad)):0f;
-   float span=GridHandCardWidth+(count-1)*horizontalStep;
-   float outerInset=Mathf.Max(8f,(GridHandWidth-span)*0.5f);
-   float baseRight=(count-1-i)*horizontalStep+outerInset;
-   float arcShift=open?radius*Mathf.Sin(rad):spreadIndex*6f;
-   button.style.position=Position.Absolute;
-   button.style.right=baseRight-arcShift;
-   button.style.bottom=arcLift-sink;
-   button.style.rotate=new Rotate(new Angle(angle,AngleUnit.Degree));
-   button.style.transformOrigin=new TransformOrigin(new Length(50,LengthUnit.Percent),new Length(100,LengthUnit.Percent));
-   if(!gridBoardCombatMode){
-    button.RegisterCallback<PointerEnterEvent>(_=>FocusGridHandCard(button));
-   } else if(open)button.RegisterCallback<PointerEnterEvent>(_=>button.BringToFront());
-   handSlots.Add((button,Mathf.Abs(spreadIndex)-(selected?10f:0f)));
-  }
-  foreach(var slot in handSlots.OrderByDescending(x=>x.depth))
-   gridBoardHandRoot.Add(slot.button);
  }
 
  void RebuildGridCombatHand(){
@@ -303,15 +166,6 @@ void ShowGridExplorationCardPreview(CardInstance card,bool committed){
    if(fx.cardType==CardType.Power)Spawn("強化",battleIconEnergy,"ps-battle-floater-power");
    else if(fx.cardType==CardType.Skill)Spawn("発動",battleIconBlock,"ps-battle-floater-skill");
   }
- }
-
- void PopulateGridPlaceCard(VisualElement slot,CardInstance card){
-  ApplyExplorationCardPresentation(slot,card);
-  GameCatalog.ExplorationCards.TryGetValue(card.id,out var exploration);
-  int stages=exploration?.stages?.Length??0;
-  PopulateDocketCard(
-   slot,card,card.text,"配置 / 経路局","GRID / 携行",true,true,stages
-  );
  }
 
 }

@@ -216,7 +216,6 @@ public sealed partial class PackspireUiFoundation {
   ApplyGridZoomVisual();
   LayoutGridBoardMap();
   RebuildGridHand(run);
-  RefreshGridSelectedCard(run);
   RefreshGridResolveTray(inBattle);
  }
 

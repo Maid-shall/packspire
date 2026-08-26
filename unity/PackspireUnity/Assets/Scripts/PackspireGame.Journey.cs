@@ -45,12 +45,18 @@ namespace Packspire
 
         public void UiFinishSeamlessJourney(bool win)
         {
+            UiFinishSeamlessJourney(
+                win ? ExpeditionEndReason.Clear : ExpeditionEndReason.Defeat);
+        }
+
+        public void UiFinishSeamlessJourney(ExpeditionEndReason reason)
+        {
             if (!seamlessJourneySessionActive || run == null) return;
 
             seamlessJourneySessionActive = false;
             seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
-            FinishRun(win);
+            FinishRun(reason);
             SceneManager.LoadScene("Main");
         }
 

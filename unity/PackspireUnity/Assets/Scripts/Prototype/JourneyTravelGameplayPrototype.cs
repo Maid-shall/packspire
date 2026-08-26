@@ -664,6 +664,11 @@ namespace Packspire
 
             ShowToast(message);
             ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            if (expeditionNode.kind == ExpeditionNodeKind.Event ||
+                expeditionNode.kind == ExpeditionNodeKind.Rest ||
+                expeditionNode.kind == ExpeditionNodeKind.Other)
+                ExpeditionLocationContentSystem.SelectAndAssign(
+                    plan, expeditionNode, run.dungeon);
             CourierRouteNodeDef node = ExpeditionJourneySystem.PresentationNode(plan, expeditionNode);
             arrivalExpeditionNode = expeditionNode;
             SetWorldForRoute(node);
@@ -724,40 +729,6 @@ namespace Packspire
             ApplyEncounterProfile(selected);
         }
 
-        private void ShowEvent(CourierRouteNodeDef node)
-        {
-            SetPhase(Phase.Event);
-            walker.SetJourneyWalking(false);
-            eventEyebrow.text = node.resolution == CourierResolutionKind.Cargo ? "RECOVERY NOTICE" : "ROADSIDE EVENT";
-            eventTitle.text = node.resolutionTitle;
-            eventText.text = node.resolutionText + "\n\n" + (string.IsNullOrWhiteSpace(node.condition) ? "" : node.condition);
-            if (node.resolution == CourierResolutionKind.Cargo)
-            {
-                eventA.text = "荷札を照合して回収する";
-                eventB.text = "期限を優先して進む";
-            }
-            else
-            {
-                eventA.text = "慎重に手続きを進める";
-                eventB.text = "急いで突破する";
-            }
-        }
-
-        private void ResolveEvent(bool primary)
-        {
-            if (phase != Phase.Event || arrivalNode == null) return;
-            bool cargo = arrivalNode.resolution == CourierResolutionKind.Cargo;
-            CourierLocationOutcome outcome = new CourierLocationOutcome
-            {
-                success = true,
-                cargoRecovered = cargo && primary,
-                performance = primary ? 2 : 1,
-                dayDelta = !cargo && !primary ? 1 : 0,
-                message = primary ? "照合に成功した。" : "期限を優先した。"
-            };
-            ResolveRoute(outcome);
-        }
-
         private void ResolveRoute(CourierLocationOutcome outcome)
         {
             ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
@@ -783,6 +754,7 @@ namespace Packspire
 
         private void ShowResult(string eyebrow, string title, string body, bool canContinue)
         {
+            ClearExpeditionCheckpointResult();
             SetPhase(Phase.Result);
             walker.SetJourneyWalking(false);
             SetMainEnemyVisible(false);
@@ -809,6 +781,7 @@ namespace Packspire
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 return;
             }
+            ClearExpeditionCheckpointResult();
             arrivalExpeditionNode = null;
             arrivalNode = null;
             ShowChoice();

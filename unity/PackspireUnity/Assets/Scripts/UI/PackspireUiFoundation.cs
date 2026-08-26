@@ -114,7 +114,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  public void ForceRefreshScreen(){
   hasRenderedScreen=false;
   gridBoardBuilt=false;
-  battleUiBuilt=false;
   if(uiReady)RefreshScreen(true);
  }
 

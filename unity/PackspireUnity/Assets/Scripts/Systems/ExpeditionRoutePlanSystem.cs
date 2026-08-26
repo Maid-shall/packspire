@@ -38,7 +38,7 @@ public sealed class ExpeditionPathPlan {
 
 [Serializable]
 public sealed class ExpeditionRouteNodePlan {
- public string id="",pathId="",encounterId="";
+ public string id="",pathId="",encounterId="",locationContentId="";
  public int floorIndex,order,lane,dayCost;
  public ExpeditionNodeKind kind;
  public List<string> nextNodeIds=new();

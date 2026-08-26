@@ -47,6 +47,7 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   resultShell.EnableInClassList("ps-result-clear",false);
+  resultShell.EnableInClassList("ps-result-return",false);
   resultShell.EnableInClassList("ps-result-defeat",false);
 
   RequireViewElement<VisualElement>(resultShell,"result-background");
@@ -74,8 +75,10 @@ public sealed partial class PackspireUiFoundation {
  void ApplyResultViewModel(RunResultViewModel model){
   if(resultShell==null||model==null)return;
   bool clear=model.resultType==RunResultType.Clear;
+  bool returned=model.resultType==RunResultType.Return;
   resultShell.EnableInClassList("ps-result-clear",clear);
-  resultShell.EnableInClassList("ps-result-defeat",!clear);
+  resultShell.EnableInClassList("ps-result-return",returned);
+  resultShell.EnableInClassList("ps-result-defeat",!clear&&!returned);
 
   if(resultTitleLabel!=null)resultTitleLabel.text=model.title??"";
   if(resultSubtitleLabel!=null)resultSubtitleLabel.text=model.subtitle??"";
@@ -207,12 +210,17 @@ public sealed partial class PackspireUiFoundation {
 
  RunResultViewModel BuildLiveResultViewModel(bool clear){
   var run=game.UiRun;
+  var finalization=game.UiLastExpeditionFinalization;
+  var resultType=RunResultPresentationSystem.ResolveType(clear,finalization);
+  bool fullClear=resultType==RunResultType.Clear;
+  bool returned=resultType==RunResultType.Return;
+  bool defeated=resultType==RunResultType.Defeat;
   var model=new RunResultViewModel{
-   resultType=clear?RunResultType.Clear:RunResultType.Defeat,
+   resultType=resultType,
    preview=false,
-   title=clear?"旅の完遂":"旅の断章",
-   subtitle=clear?"遠征の記録を閉じる":"今回の旅の記録",
-   causeText=clear?"":(string.IsNullOrEmpty(game.UiMessage)?"":game.UiMessage),
+   title=fullClear?"旅の完遂":returned?"帰還完了":"旅の断章",
+   subtitle=fullClear?"遠征の記録を閉じる":returned?"確保した戦果を持ち帰る":"今回の旅の記録",
+   causeText=defeated&&!string.IsNullOrEmpty(game.UiMessage)?game.UiMessage:"",
    messageText=game.UiMessage??"",
   };
   if(run!=null){
@@ -222,18 +230,19 @@ public sealed partial class PackspireUiFoundation {
    model.locationName="";
    model.primaryStats.Add(new RunResultStat("遠征先",model.dungeonName));
    if(run.battlesWon>0)model.primaryStats.Add(new RunResultStat("戦闘勝利",$"{run.battlesWon}"));
-   var finalization=game.UiLastExpeditionFinalization;
-   if(clear&&run.gold>0)model.primaryStats.Add(new RunResultStat("持ち帰るゴールド",$"{run.gold}G"));
+   int retainedGold=finalization?.retainedGold??(defeated?0:run.gold);
+   if(!defeated&&retainedGold>0)
+    model.primaryStats.Add(new RunResultStat("持ち帰るゴールド",$"{retainedGold}G"));
    if(finalization!=null&&finalization.retainedNewItemCount>0)
     model.primaryStats.Add(new RunResultStat(
-     clear?"持ち帰る戦利品":"バッグで保護した戦利品",$"{finalization.retainedNewItemCount}個"));
-   else if(clear&&run.lootBag!=null&&run.lootBag.Count>0)
+     defeated?"バッグで保護した戦利品":"持ち帰る戦利品",$"{finalization.retainedNewItemCount}個"));
+   else if(!defeated&&run.lootBag!=null&&run.lootBag.Count>0)
     model.primaryStats.Add(new RunResultStat("持ち帰る戦利品",$"{run.lootBag.Count}個"));
    if(finalization!=null&&finalization.lostNewItemCount>0)
     model.records.Add(new RunResultStat("持ち帰れなかった戦利品",$"{finalization.lostNewItemCount}個"));
-   else if(!clear&&run.lootBag!=null&&run.lootBag.Count>0)
+   else if(defeated&&run.lootBag!=null&&run.lootBag.Count>0)
     model.records.Add(new RunResultStat("持ち帰れなかった戦利品",$"{run.lootBag.Count}個"));
-   if(!clear&&run.gold>0)
+   if(defeated&&run.gold>0)
     model.records.Add(new RunResultStat("持ち帰れなかったゴールド",$"{run.gold}G"));
 
    if(!string.IsNullOrEmpty(run.heirloomUid)){
@@ -241,7 +250,7 @@ public sealed partial class PackspireUiFoundation {
      ??game.UiMeta.stash.FirstOrDefault(x=>x.uid==run.heirloomUid);
     if(heir!=null&&GameCatalog.Items.TryGetValue(heir.templateId,out var heirDef)){
      if(heir.uses>0)model.heirloomChanges.Add(new RunResultStat("家宝の使用",$"{heirDef.name}　{heir.uses}回"));
-     if(!clear&&heir.scars!=null&&heir.scars.Count>0){
+     if(defeated&&heir.scars!=null&&heir.scars.Count>0){
       var latest=heir.scars[^1];
       model.heirloomChanges.Add(new RunResultStat("新しい傷跡",$"{latest.type}　{latest.dungeon} L{latest.floor}"));
      }

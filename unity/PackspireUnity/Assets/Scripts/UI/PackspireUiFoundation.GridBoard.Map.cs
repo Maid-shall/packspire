@@ -63,17 +63,8 @@ void OnGridCellClicked(int x,int y){
   HideGridCellDetail();
   var run=game.UiGridBoard;
   if(run==null)return;
-  if(run.phase==GridBoardPhase.Place){
-   if(!string.IsNullOrEmpty(run.selectedCardUid)){
-    if(GridBoardSystem.TryPlace(run,x,y,out var msg))ShowToast(msg);
-    else if(!string.IsNullOrEmpty(msg))ShowToast(msg);
-   } else {
-    if(GridBoardSystem.EnsurePathMode(run)
-     &&GridBoardSystem.TrySlideToward(run,x,y,out var pathMsg)
-     &&!string.IsNullOrEmpty(pathMsg))ShowToast(pathMsg);
-    else if(!string.IsNullOrEmpty(run.message))ShowToast(run.message);
-   }
-  } else if(run.phase==GridBoardPhase.Path){
+  if((run.phase==GridBoardPhase.Place||run.phase==GridBoardPhase.Path)
+   &&GridBoardSystem.EnsurePathMode(run)){
    if(GridBoardSystem.TrySlideToward(run,x,y,out var msg)&&!string.IsNullOrEmpty(msg))
     ShowToast(msg);
    else if(!string.IsNullOrEmpty(msg))ShowToast(msg);
@@ -83,8 +74,7 @@ void OnGridCellClicked(int x,int y){
 
  void ShowGridCellDetail(int x,int y){
   var run=game.UiGridBoard;
-  if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null||
-   !string.IsNullOrEmpty(run.selectedCardUid))return;
+  if(gridBoardCellDetail==null||run==null||gridBoardCombatMode||game.UiBattle!=null)return;
   var cell=GridBoardSystem.Cell(run,x,y);
   if(cell==null||cell.terrain=="void"){HideGridCellDetail();return;}
   bool inspected=GridBoardSystem.IsDiscovered(run,cell);

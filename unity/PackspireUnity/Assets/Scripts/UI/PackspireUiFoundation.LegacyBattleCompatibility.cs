@@ -6,13 +6,11 @@ using UnityEngine.UIElements;
 namespace Packspire
 {
     /// <summary>
-    /// Compile-time boundary for the retired standalone battle screen. Shared combat
-    /// simulation remains available, while the former product UI is excluded unless
-    /// PACKSPIRE_LEGACY_BATTLE_UI is explicitly enabled for archival QA.
+    /// Shared card presentation for same-screen combat, plus minimal fallbacks for
+    /// retired screen ids that can still appear while old saves or transitions migrate.
     /// </summary>
     public sealed partial class PackspireUiFoundation
     {
-        private bool battleUiBuilt;
         private bool battleInputLocked;
         private Texture2D battleIconDamage;
         private Texture2D battleIconBlock;
@@ -55,8 +53,7 @@ namespace Packspire
                 BattleCardDisplayTextWithKeywords(card),
                 sourceName,
                 durability,
-                affordable,
-                false);
+                affordable);
         }
 
         private static string BattleCardDisplayTextWithKeywords(CardInstance card)
@@ -84,13 +81,22 @@ namespace Packspire
 
         private void BuildBattle()
         {
-            battleUiBuilt = true;
             battleInputLocked = true;
             Debug.LogWarning(
                 "Standalone battle UI is retired. Battles run inside the seamless journey scene.");
 
             VisualElement notice = Container("ps-retired-battle");
             notice.Add(new Label("戦闘はシームレス遠征へ統合されました。"));
+            screenRoot?.Add(notice);
+        }
+
+        private void BuildCourierRoute()
+        {
+            Debug.LogWarning(
+                "Standalone courier route UI is retired. Expeditions run in the seamless journey scene.");
+
+            VisualElement notice = Container("ps-retired-route");
+            notice.Add(new Label("配達経路はシームレス遠征へ統合されました。"));
             screenRoot?.Add(notice);
         }
 

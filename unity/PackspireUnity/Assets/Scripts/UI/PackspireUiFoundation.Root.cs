@@ -48,7 +48,6 @@ public sealed partial class PackspireUiFoundation {
   AddDeveloperDestination(grid,"キャラ選択",ScreenId.Character);
   AddDevAction(grid,"商店(DEV)",OpenShopPreviewFromDev);
   AddDevAction(grid,"報酬(DEV)",OpenRewardPreviewFromDev);
-  AddDevAction(grid,"旧・配達経路台帳(LEGACY)",()=>DevNavigate(ScreenId.Route,()=>game.UiDevOpenCourierRoute()));
   AddDevAction(grid,"シームレス遠征 完成版(DEV)",OpenJourneyAnimationPrototype);
   AddDevAction(grid,"戦闘確認所 (DEV)",OpenJourneyCombatLab);
   scroll.Add(grid);

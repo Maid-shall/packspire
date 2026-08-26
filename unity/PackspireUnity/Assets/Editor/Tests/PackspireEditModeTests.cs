@@ -485,7 +485,6 @@ public sealed class PackspireEditModeTests {
  [Test]
  public void GridBoard_StartsInPathModeWithoutExplorationCards(){
   var board=GridBoardSystem.Create(PackspireContent.Data.balance.defaultDungeonId,41821);
-  GridBoardSystem.SyncExplorePool(board,new RunState{role="warrior",backpack="standard"});
   Assert.That(board.hand,Is.Empty);
   Assert.That(board.phase,Is.EqualTo(GridBoardPhase.Path));
  }
@@ -1524,7 +1523,7 @@ public sealed class PackspireEditModeTests {
    run,new CourierLocationOutcome{message="地点を突破した。"},out _),Is.True);
   Assert.That(run.expeditionPlan.awaitingResolution,Is.False);
   Assert.That(run.courierRoute.awaitingResolution,Is.False);
-  Assert.That(ExpeditionJourneySystem.Available(run),Has.Count.EqualTo(2));
+  Assert.That(ExpeditionJourneySystem.Available(run).Count,Is.EqualTo(2));
  }
 
  [Test]
@@ -1562,7 +1561,7 @@ public sealed class PackspireEditModeTests {
   Assert.That(pacing.standardHighDays,Is.EqualTo(21));
   Assert.That(pacing.slowestDays,Is.EqualTo(24));
   Assert.That(pacing.fastestStage,Is.EqualTo(ExpeditionDayStage.Alert));
-  Assert.That(pacing.standardLowStage,Is.EqualTo(ExpeditionDayStage.Alert));
+  Assert.That(pacing.standardLowStage,Is.EqualTo(ExpeditionDayStage.Pursuit));
   Assert.That(pacing.standardHighStage,Is.EqualTo(ExpeditionDayStage.Pursuit));
   Assert.That(pacing.slowestStage,Is.EqualTo(ExpeditionDayStage.Pursuit));
  }

@@ -9,13 +9,13 @@ public sealed partial class PackspireUiFoundation {
  // Map = board/input/camera, Presentation = shared HUD, Combat = enemy data,
  // Cards = hand/previews, Events = modal encounters and the screen tick.
  VisualElement gridBoardRoot,gridBoardGrid,gridBoardActorLayer,gridBoardHeroActor,gridBoardHandRoot,gridBoardDirRow,gridBoardHpFill,gridBoardShieldFill,gridBoardPortraitHost;
- VisualElement gridBoardViewport,gridBoardStage,gridBoardSelectedHost,gridBoardCombatStage,gridBoardCombatHpTrack,gridBoardCombatHpFill,gridBoardCombatShieldTrack,gridBoardCombatShieldFill;
+ VisualElement gridBoardViewport,gridBoardStage,gridBoardCombatStage,gridBoardCombatHpTrack,gridBoardCombatHpFill,gridBoardCombatShieldTrack,gridBoardCombatShieldFill;
  VisualElement gridBoardCombatEnemyFocus,gridBoardCombatVitals,gridBoardCombatIntentPanel,gridBoardCombatEnemyStatuses;
  VisualElement gridBoardCombatActionView,gridBoardCombatCardPreview;
  VisualElement gridBoardContextActions,gridBoardRoutePalette,gridBoardEnergyRail,gridBoardCombatRail,gridBoardConsumablesRoot,gridBoardFxLayer;
  VisualElement gridBoardPlayerHud,gridBoardMapStats;
  VisualElement gridBoardGateActions,gridBoardResolveTray,gridBoardResolveDice;
- VisualElement gridBoardHoverPreview,gridBoardCellDetail,gridBoardEventOverlay;
+ VisualElement gridBoardCellDetail,gridBoardEventOverlay;
  Label gridBoardPhaseLabel,gridBoardInkLabel,gridBoardHintLabel;
  Label gridBoardDoomLabel,gridBoardAreaChipLabel,gridBoardCurveChipLabel,gridBoardShieldLabel,gridBoardModeToast;
  Label gridBoardTypeLabel,gridBoardTitleLabel,gridBoardStatusLabel,gridBoardBodyLabel;
@@ -23,7 +23,6 @@ public sealed partial class PackspireUiFoundation {
  Label gridBoardCombatHpLabel,gridBoardCombatShieldLabel,gridBoardCombatIntentLabel,gridBoardCombatIntentHintLabel,gridBoardResolveFormula,gridBoardResolveResult;
  Image gridBoardCombatPortrait;
  Button gridBoardSkillButton,gridBoardEndTurnButton;
- Button gridBoardHoverCard;
  readonly Dictionary<long,VisualElement> gridBoardCells=new();
  bool gridBoardBuilt;
  bool gridBoardHandOpen;
@@ -47,11 +46,6 @@ public sealed partial class PackspireUiFoundation {
  const float GridZoomMin=0.55f;
  const float GridZoomMax=1.9f;
  const float GridCellBasePx=64f;
- // A closed hand should still show enough of every card to read the identity.
- // It is a deliberate composition element at the bottom of the expedition,
- // not a hidden drawer.
- // The hand now shows detachable receipt stubs instead of hiding full cards.
- const float GridHandPeekSink=18f;
  const float GridHandWidth=760f;
  const float GridHandCardWidth=168f;
  // Board y=0 is top of screen, so "up" on UI decreases y.
@@ -66,20 +60,19 @@ public sealed partial class PackspireUiFoundation {
   gridBoardCombatMode=false;
   gridBoardRoot=null;gridBoardGrid=null;gridBoardActorLayer=null;gridBoardHandRoot=null;gridBoardDirRow=null;
   gridBoardHpFill=null;gridBoardShieldFill=null;gridBoardPortraitHost=null;
-  gridBoardViewport=null;gridBoardStage=null;gridBoardSelectedHost=null;gridBoardCombatStage=null;gridBoardCombatHpTrack=null;gridBoardCombatHpFill=null;gridBoardCombatShieldTrack=null;gridBoardCombatShieldFill=null;
+  gridBoardViewport=null;gridBoardStage=null;gridBoardCombatStage=null;gridBoardCombatHpTrack=null;gridBoardCombatHpFill=null;gridBoardCombatShieldTrack=null;gridBoardCombatShieldFill=null;
   gridBoardCombatEnemyFocus=null;gridBoardCombatVitals=null;gridBoardCombatIntentPanel=null;gridBoardCombatEnemyStatuses=null;
   gridBoardCombatActionView=null;gridBoardCombatCardPreview=null;
   gridBoardContextActions=null;gridBoardRoutePalette=null;gridBoardEnergyRail=null;gridBoardCombatRail=null;
   gridBoardPlayerHud=null;gridBoardMapStats=null;
   gridBoardConsumablesRoot=null;gridBoardFxLayer=null;gridBoardGateActions=null;gridBoardResolveTray=null;gridBoardResolveDice=null;
-  gridBoardHoverPreview=null;gridBoardCellDetail=null;gridBoardEventOverlay=null;
+  gridBoardCellDetail=null;gridBoardEventOverlay=null;
   gridBoardPhaseLabel=null;gridBoardInkLabel=null;gridBoardHintLabel=null;gridBoardDoomLabel=null;
   gridBoardAreaChipLabel=null;gridBoardCurveChipLabel=null;gridBoardShieldLabel=null;gridBoardModeToast=null;
   gridBoardTypeLabel=null;gridBoardTitleLabel=null;gridBoardStatusLabel=null;gridBoardBodyLabel=null;
   gridBoardHeroNameLabel=null;gridBoardHpLabel=null;gridBoardEnergyLabel=null;gridBoardCombatTitle=null;
   gridBoardCombatHpLabel=null;gridBoardCombatShieldLabel=null;gridBoardCombatIntentLabel=null;gridBoardCombatIntentHintLabel=null;gridBoardResolveFormula=null;gridBoardResolveResult=null;gridBoardCombatPortrait=null;
   gridBoardSkillButton=null;gridBoardEndTurnButton=null;
-  gridBoardHoverCard=null;
   gridBoardPanning=false;gridBoardDidPan=false;
   gridBoardMapHover=false;gridBoardDockHover=false;gridBoardHeaderHover=false;
   gridBoardLayoutBusy=false;
@@ -373,8 +366,6 @@ public sealed partial class PackspireUiFoundation {
   clearRoute.AddToClassList("ps-gboard-route-icon");
   clearRoute.AddToClassList("ps-gboard-route-cancel");
   gridBoardRoutePalette.Add(clearRoute);
-  // The exploration hand is deliberately quiet: cards individually rise on
-  // hover, rather than opening a full wall across the dungeon.
   gridBoardHandOpen=false;
   gridBoardHandRoot=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-hand");
   gridBoardHandRoot.RegisterCallback<PointerLeaveEvent>(_=>ClearGridHandFocus());
@@ -421,8 +412,6 @@ public sealed partial class PackspireUiFoundation {
   gridBoardResolveTray.Add(gridBoardResolveDice);
   if(gridBoardCombatActionView!=null)gridBoardCombatActionView.Add(gridBoardResolveTray);
 
-  gridBoardSelectedHost=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-selected");
-  gridBoardSelectedHost.style.display=DisplayStyle.None;
   gridBoardCellDetail=RequireViewElement<VisualElement>(gridBoardRoot,"gridboard-cell-detail");
   gridBoardCellDetail.pickingMode=PickingMode.Ignore;
   gridBoardCellDetail.style.display=DisplayStyle.None;

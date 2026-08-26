@@ -109,22 +109,8 @@ public partial class PackspireGame : MonoBehaviour {
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
   GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
-  GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="DEV: 封印格子盤（配置→一筆→進行）";
-  UiDevCloseWithoutRestore();
- }
- public void UiDevOpenCourierRoute(){
-  if(run==null)run=LoadoutSystem.CreateRun(meta,"old_spire");
-  RoleFrameworkSystem.Normalize(meta);
-  run.role=meta.currentRole;
-  run.courierRoute=CourierRouteSystem.Create(run,meta);
-  packingAtBase=false;
-  battle=null;
-  gridBoard=null;
-  courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
-  screen=ScreenId.Route;
-  message="DEV: 配達経路台帳を開きました。";
   UiDevCloseWithoutRestore();
  }
  public void UiResetGridBoard(){
@@ -132,7 +118,6 @@ public partial class PackspireGame : MonoBehaviour {
   battle=null;
   gridBoard=GridBoardSystem.Create(run.dungeon);
   GridBoardSystem.ConfigureSight(gridBoard,CharacterSystem.OfRun(run)?.explorationSightBonus??0);
-  GridBoardSystem.SyncExplorePool(gridBoard,run);
   screen=ScreenId.GridBoard;
   message="封印格子をやり直した";
  }
@@ -506,6 +491,7 @@ public partial class PackspireGame : MonoBehaviour {
  void StartRun(string dungeon){
   try{
    message="ダンジョンを生成中…";
+   lastExpeditionFinalization=null;
    run=LoadoutSystem.CreateRun(meta,dungeon);
    RoleFrameworkSystem.Normalize(meta);
    run.role=meta.currentRole;
@@ -599,7 +585,11 @@ public partial class PackspireGame : MonoBehaviour {
   gridBoard=null;
   courierBattleNodeId=courierEventNodeId=courierCargoNodeId="";
   bool successful=reason!=ExpeditionEndReason.Defeat;
-  message=successful?"遠征成功。戦利品をすべて保管しました":"探索終了。バッグに収納した戦利品だけを保護しました";
+  message=reason switch {
+   ExpeditionEndReason.Clear=>"遠征完遂。戦利品と獲得ゴールドをすべて保管しました",
+   ExpeditionEndReason.Return=>"遠征から帰還。戦利品と獲得ゴールドを保管しました",
+   _=>"探索終了。バッグに収納した戦利品だけを保護しました",
+  };
   screen=successful?ScreenId.GameClear:ScreenId.GameOver;
  }
  string RoleMilestoneText(string id,bool maximum){

@@ -127,6 +127,7 @@ namespace Packspire
             BindRealtimeBattleUi(root);
             BindCombatLabUi(root);
             BindJourneyRewardUi(root);
+            BindExpeditionCheckpointUi(root);
             pileOverlay = root.Q<VisualElement>("journey-pile-overlay");
             pileTitle = root.Q<Label>("journey-pile-title");
             pileSummary = root.Q<Label>("journey-pile-summary");

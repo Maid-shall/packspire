@@ -19,34 +19,23 @@ public sealed partial class PackspireUiFoundation {
   card.AddToClassList("ps-docket-"+kind);
  }
 
- void ApplyExplorationCardPresentation(VisualElement card,CardInstance definition){
-  card.AddToClassList("ps-docket-card");
-  card.AddToClassList("ps-docket-explore");
-  ExplorationCardDef exploration=null;
-  GameCatalog.ExplorationCards.TryGetValue(definition?.id??"",out exploration);
-  string kind=ExplorationCardPresentationKind(exploration);
-  card.AddToClassList("ps-docket-"+kind);
- }
-
  void PopulateDocketCard(
   VisualElement slot,CardInstance card,string body,string source,string status,
-  bool affordable,bool exploration,int growthStages=0
+  bool affordable
  ){
   var template=DocketCardTemplate();
   if(slot==null||card==null||template==null)return;
   template.CloneTree(slot);
-  ExplorationCardDef route=null;
-  if(exploration)GameCatalog.ExplorationCards.TryGetValue(card.id,out route);
   string kind=slot.ClassListContains("ps-docket-attack")?"attack":
    slot.ClassListContains("ps-docket-defense")?"defense":
    slot.ClassListContains("ps-docket-consumable")?"consumable":
    slot.ClassListContains("ps-docket-immediate")?"immediate":
    slot.ClassListContains("ps-docket-installation")?"installation":
    slot.ClassListContains("ps-docket-curse")?"curse":
-   exploration?ExplorationCardPresentationKind(route):"technique";
-  string code=DocketTrackingCode(card,exploration);
-  string glyph=exploration?ExplorationCardPresentationGlyph(kind):BattleCardPresentationGlyph(kind);
-  SetDocketLabel(slot,"docket-receipt-kind",exploration?"ROUTE":"BATTLE");
+   "technique";
+  string code=DocketTrackingCode(card);
+  string glyph=BattleCardPresentationGlyph(kind);
+  SetDocketLabel(slot,"docket-receipt-kind","BATTLE");
   SetDocketLabel(slot,"docket-receipt-cost",card.cost.ToString());
   SetDocketLabel(slot,"docket-seal-glyph",glyph);
   SetDocketLabel(slot,"docket-main-code",code);
@@ -61,7 +50,7 @@ public sealed partial class PackspireUiFoundation {
   slot.EnableInClassList("ps-docket-authorized",affordable);
   slot.EnableInClassList("ps-docket-held",!affordable);
   var artwork=slot.Q<VisualElement>("docket-art");
-  var sprite=exploration?null:BattleCardArtwork(card.id);
+  var sprite=BattleCardArtwork(card.id);
   if(artwork!=null&&sprite!=null)artwork.style.backgroundImage=new StyleBackground(sprite);
  }
 
@@ -134,11 +123,11 @@ public sealed partial class PackspireUiFoundation {
   row.Add(run);
  }
 
- static string DocketTrackingCode(CardInstance card,bool exploration){
+ static string DocketTrackingCode(CardInstance card){
   string value=card?.id??card?.name??"UNREGISTERED";
   int checksum=17;
   foreach(char character in value)checksum=(checksum*31+character)%1000;
-  return $"INF-{(exploration?"R":"E")}{Mathf.Abs(card?.cost??0):00}-{checksum:000}";
+  return $"INF-E{Mathf.Abs(card?.cost??0):00}-{checksum:000}";
  }
 
  static string DocketActionSentence(CardInstance card){
@@ -159,20 +148,6 @@ public sealed partial class PackspireUiFoundation {
   return card.type==CardType.Power?"常在効果":"補助";
  }
 
- static void PopulateDocketGrowth(VisualElement host,int stageCount){
-  if(host==null)return;
-  host.Clear();
-  host.EnableInClassList("ps-empty",stageCount<2);
-  if(stageCount<2)return;
-  int count=Mathf.Clamp(stageCount,2,4);
-  for(int index=0;index<count;index++){
-   var stage=new Label((index+1).ToString()){pickingMode=PickingMode.Ignore};
-   stage.AddToClassList("ps-docket__growth-stage");
-   if(index==0)stage.AddToClassList("ps-selected");
-   host.Add(stage);
-  }
- }
-
  static string BattleCardPresentationKind(CardInstance card,RunState run){
   if(card==null)return "technique";
   var sourceItem=run?.inventory?.FirstOrDefault(value=>value.uid==card.sourceItemUid);
@@ -184,28 +159,11 @@ public sealed partial class PackspireUiFoundation {
   return "technique";
  }
 
- static string ExplorationCardPresentationKind(ExplorationCardDef card){
-  if(card==null)return "support";
-  return card.kind switch {
-   ExplorationCardKind.Use=>"immediate",
-   ExplorationCardKind.Installation=>"installation",
-   ExplorationCardKind.Drawback=>"curse",
-   _=>"support"
-  };
- }
-
  static string BattleCardPresentationGlyph(string kind)=>kind switch {
   "attack"=>"爪",
   "defense"=>"翼",
   "consumable"=>"牙",
   _=>"眼"
- };
-
- static string ExplorationCardPresentationGlyph(string kind)=>kind switch {
-  "immediate"=>"迅",
-  "installation"=>"育",
-  "curse"=>"呪",
-  _=>"導"
  };
 
  VisualElement BuildEquipmentCardPairPreview(ItemInstance item,ItemDef definition,RunState run){
