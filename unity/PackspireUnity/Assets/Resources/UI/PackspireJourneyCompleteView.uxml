@@ -63,7 +63,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Label text="DEV SIMULATION" class="ps-journey__dev-tag" />
+            <ui:Label name="journey-dev-tag" text="DEV SIMULATION" class="ps-journey__dev-tag" />
         </ui:VisualElement>
 
         <ui:VisualElement name="journey-player-battle-hud" class="ps-journey__player-battle-hud">

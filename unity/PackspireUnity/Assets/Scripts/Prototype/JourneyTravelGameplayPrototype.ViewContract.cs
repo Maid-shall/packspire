@@ -137,6 +137,7 @@ namespace Packspire
                 .Require<Button>("journey-speed")
                 .Require<Button>("journey-pause")
                 .Require<Button>("journey-dev-menu")
+                .Require<Label>("journey-dev-tag")
                 .Require<Button>("journey-ledger-open")
                 .Require<Button>("journey-ledger-close")
                 .Require<Image>("journey-portrait");

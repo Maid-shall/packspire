@@ -6,6 +6,11 @@ namespace Packspire
     /// <summary>UI Toolkit binding and event wiring for the journey view contract.</summary>
     public sealed partial class JourneyTravelGameplayPrototype
     {
+        internal static bool ShouldShowDeveloperControls(
+            bool sessionActive,
+            bool developerSession) =>
+            !sessionActive || developerSession;
+
         private void BindUi()
         {
             if (uiBound) return;
@@ -152,7 +157,15 @@ namespace Packspire
             resultContinue = root.Q<Button>("journey-result-continue");
             speedButton = root.Q<Button>("journey-speed");
             pauseButton = root.Q<Button>("journey-pause");
-            root.Q<Button>("journey-dev-menu").clicked += ReturnToDeveloperMenu;
+            Button developerMenuButton = root.Q<Button>("journey-dev-menu");
+            PackspireGame activeGame = PackspireGame.Instance;
+            bool showDeveloperControls = ShouldShowDeveloperControls(
+                activeGame?.UiSeamlessJourneySessionActive == true,
+                activeGame?.UiSeamlessJourneyDeveloperSession == true);
+            developerMenuButton.EnableInClassList("is-hidden", !showDeveloperControls);
+            root.Q<Label>("journey-dev-tag")
+                .EnableInClassList("is-hidden", !showDeveloperControls);
+            developerMenuButton.clicked += ReturnToDeveloperMenu;
             root.Q<Button>("journey-ledger-open").clicked += ToggleLedger;
             root.Q<Button>("journey-ledger-close").clicked += ToggleLedger;
             sealApply.clicked += ApplySelectedSeal;

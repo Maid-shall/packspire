@@ -1851,6 +1851,19 @@ public sealed class PackspireEditModeTests {
   Assert.That(enemyStatuses.Contains(poison),Is.True);
  }
 
+ [Test]
+ public void JourneyDeveloperControls_AppearOnlyOutsideNormalJourney(){
+  Assert.That(
+   JourneyTravelGameplayPrototype.ShouldShowDeveloperControls(false,false),
+   Is.True);
+  Assert.That(
+   JourneyTravelGameplayPrototype.ShouldShowDeveloperControls(true,true),
+   Is.True);
+  Assert.That(
+   JourneyTravelGameplayPrototype.ShouldShowDeveloperControls(true,false),
+   Is.False);
+ }
+
  static ExpeditionRouteGenerationRules TestExpeditionRouteRules()=>new(){
   floorCount=3,
   columnsPerFloor=8,
