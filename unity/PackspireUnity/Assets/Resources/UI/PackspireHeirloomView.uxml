@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="heirloom-background" class="ps-layer-background" picking-mode="Ignore">
-        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-heirloom-shade" picking-mode="Ignore" />
     </ui:VisualElement>
     <ui:VisualElement class="ps-heirloom-register-mark" picking-mode="Ignore" />
     <ui:VisualElement class="ps-heirloom-ledger-spine" picking-mode="Ignore" />
     <ui:VisualElement class="ps-layer-content ps-heirloom-layout">
         <ui:VisualElement name="heirloom-header" class="ps-mgmt-header ps-heirloom-header">
-            <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="THE HEIRLOOM / LEGACY" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="家宝 / 継承" class="ps-misprint-header-title" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-heirloom-header-copy">
+                <ui:Label text="THE HEIRLOOM / LEGACY" class="ps-heirloom-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="家宝 / 継承" class="ps-heirloom-header-title" picking-mode="Ignore" />
                 <ui:Label text="受け継がれた遺物は、配達人の痕跡と共に強化される。" class="ps-heirloom-header-note" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:VisualElement name="heirloom-slot-host" class="ps-heirloom-slot-host" />

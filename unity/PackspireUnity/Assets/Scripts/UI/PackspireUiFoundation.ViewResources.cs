@@ -30,8 +30,7 @@ public sealed partial class PackspireUiFoundation {
  };
  static readonly string[] HeirloomStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
-  "UI/PackspireMisprintCommon"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireHeirloom"
  };
  static readonly string[] FactionStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
