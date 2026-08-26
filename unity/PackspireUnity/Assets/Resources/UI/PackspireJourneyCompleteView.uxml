@@ -16,7 +16,7 @@
         </ui:VisualElement>
 
         <ui:VisualElement class="ps-journey__rail">
-            <ui:Label text="COURIER" class="ps-journey__rail-eyebrow" />
+            <ui:Label text="COURIER / 配達人" class="ps-journey__rail-eyebrow" />
             <ui:VisualElement class="ps-journey__portrait-frame">
                 <ui:VisualElement class="ps-journey__portrait-crop">
                     <ui:Image name="journey-portrait" class="ps-journey__portrait" scale-mode="ScaleToFit" />
@@ -25,26 +25,26 @@
             <ui:Label name="journey-courier-name" text="ミオ" class="ps-journey__courier-name" />
             <ui:Label name="journey-role" text="灰印の配達人" class="ps-journey__role" />
             <ui:VisualElement class="ps-journey__rule" />
-            <ui:Label text="VITAL" class="ps-journey__metric-key" />
+            <ui:Label text="VITAL / 耐久" class="ps-journey__metric-key" />
             <ui:ProgressBar name="journey-hp" low-value="0" high-value="42" value="42" class="ps-journey__hp" />
             <ui:Label name="journey-hp-text" text="42 / 42" class="ps-journey__metric-value" />
             <ui:VisualElement class="ps-journey__rail-row">
                 <ui:VisualElement>
-                    <ui:Label text="RECOVERED" class="ps-journey__metric-key" />
+                    <ui:Label text="回収品" class="ps-journey__metric-key" />
                     <ui:Label name="journey-cargo" text="0" class="ps-journey__rail-number" />
                 </ui:VisualElement>
                 <ui:VisualElement>
-                    <ui:Label text="SEALS" class="ps-journey__metric-key" />
+                    <ui:Label text="遠征印" class="ps-journey__metric-key" />
                     <ui:Label name="journey-seals" text="3" class="ps-journey__rail-number" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement class="ps-journey__risk-block">
-                <ui:Label text="ROUTE CONDITION" class="ps-journey__metric-key" />
+                <ui:Label text="ROUTE STATUS / 旅程" class="ps-journey__metric-key" />
                 <ui:Label name="journey-condition" text="安定" class="ps-journey__condition" />
                 <ui:Label name="journey-condition-note" text="期限まで余裕あり" class="ps-journey__condition-note" />
             </ui:VisualElement>
             <ui:VisualElement class="ps-journey__floor-progress">
-                <ui:Label text="EXPEDITION ROUTE" class="ps-journey__metric-key" />
+                <ui:Label text="FLOOR STAMPS / 踏破印" class="ps-journey__metric-key" />
                 <ui:Label name="journey-floor-progress" text="第1層　区間 00 / 09" class="ps-journey__floor-progress-copy" />
                 <ui:VisualElement class="ps-journey__floor-track">
                     <ui:VisualElement name="journey-floor-mark-0" class="ps-journey__floor-mark mark--current">
@@ -515,7 +515,7 @@
             <ui:VisualElement class="ps-journey__segment-progress">
                 <ui:VisualElement class="ps-journey__segment-caption">
                     <ui:Label name="journey-segment-origin" text="配達局" class="ps-journey__segment-end segment-end--origin" />
-                    <ui:Label text="CURRENT SEGMENT" class="ps-journey__segment-key" />
+                    <ui:Label text="CURRENT SEGMENT / 現区間" class="ps-journey__segment-key" />
                     <ui:Label name="journey-segment-target" text="最初の分岐" class="ps-journey__segment-end segment-end--target" />
                 </ui:VisualElement>
                 <ui:ProgressBar name="journey-progress" low-value="0" high-value="100" value="0" class="ps-journey__progress" />

@@ -1249,3 +1249,174 @@
 .reward--open .ps-journey__battle-start {
     opacity: 0;
 }
++/* Travel record rail and current-segment docket.
+   These restyle existing information only; travel rules remain unchanged. */
+.state--travel .ps-journey__rail {
+    padding: 14px 12px 14px 12px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgba(4, 7, 7, 0.93);
+    border-right-width: 1px;
+    border-right-color: rgba(190, 151, 88, 0.72);
+}
+
+.state--travel .ps-journey__rail-eyebrow {
+    height: 19px;
+    padding-left: 7px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: rgb(62, 192, 198);
+    border-left-width: 2px;
+    border-left-color: rgb(191, 51, 38);
+}
+
+.state--travel .ps-journey__portrait-frame {
+    width: 112px;
+    height: 130px;
+    margin: 6px 27px 4px 27px;
+    padding: 8px;
+}
+
+.state--travel .ps-journey__portrait-crop,
+.state--travel .ps-journey__portrait {
+    width: 96px;
+    height: 114px;
+}
+
+.state--travel .ps-journey__courier-name {
+    font-size: 19px;
+}
+
+.state--travel .ps-journey__rule {
+    height: 1px;
+    margin: 7px 0;
+    background-color: rgba(190, 151, 88, 0.58);
+}
+
+.state--travel .ps-journey__metric-key {
+    color: rgb(79, 188, 192);
+}
+
+.state--travel .ps-journey__hp {
+    height: 14px;
+    margin-top: 4px;
+}
+
+.state--travel .ps-journey__rail-row {
+    margin-top: 9px;
+    padding: 7px 8px 5px 8px;
+    background-color: rgba(3, 5, 5, 0.42);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(190, 151, 88, 0.35);
+    border-bottom-color: rgba(190, 151, 88, 0.35);
+}
+
+.state--travel .ps-journey__rail-row > VisualElement {
+    width: 68px;
+}
+
+.state--travel .ps-journey__rail-number {
+    margin-top: 0;
+    font-size: 23px;
+}
+
+.state--travel .ps-journey__risk-block {
+    margin-top: 9px;
+    padding: 7px 8px;
+    background-color: rgba(7, 24, 25, 0.72);
+    border-left-width: 2px;
+    border-left-color: rgb(191, 51, 38);
+}
+
+.state--travel .ps-journey__condition {
+    margin-top: 1px;
+    font-size: 15px;
+}
+
+.state--travel .ps-journey__floor-progress {
+    margin-top: 9px;
+    padding-top: 7px;
+}
+
+.state--travel .ps-journey__floor-track {
+    height: 48px;
+    margin-top: 5px;
+}
+
+.state--travel .ps-journey__dev-tag {
+    left: 13px;
+    bottom: 9px;
+    opacity: 0.52;
+}
+
+.state--travel .ps-journey__bottom {
+    height: 84px;
+    padding: 9px 18px 9px 22px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgba(4, 7, 7, 0.92);
+    border-top-width: 1px;
+    border-top-color: rgba(190, 151, 88, 0.78);
+}
+
+.state--travel .ps-journey__progress-copy {
+    width: 274px;
+    padding-left: 8px;
+    border-left-width: 2px;
+    border-left-color: rgb(191, 51, 38);
+}
+
+.state--travel .ps-journey__phase {
+    font-size: 9px;
+    color: rgb(68, 197, 203);
+}
+
+.state--travel .ps-journey__next {
+    margin-top: 3px;
+    font-size: 14px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    color: rgb(237, 215, 178);
+}
+
+.state--travel .ps-journey__segment-progress {
+    min-width: 390px;
+    margin: 0 18px;
+    padding: 7px 12px 8px 12px;
+    background-color: rgba(3, 5, 5, 0.46);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(190, 151, 88, 0.32);
+    border-bottom-color: rgba(190, 151, 88, 0.32);
+}
+
+.state--travel .ps-journey__segment-key {
+    font-size: 8px;
+    color: rgba(73, 195, 200, 0.82);
+}
+
+.state--travel .ps-journey__progress {
+    height: 17px;
+    margin-top: 5px;
+}
+
+.state--travel .ps-journey__progress .unity-progress-bar__progress {
+    background-color: rgb(55, 179, 184);
+}
+
+.state--travel .ps-journey__speed,
+.state--travel .ps-journey__pause {
+    height: 44px;
+    margin-left: 7px;
+    background-image: none;
+    background-color: rgba(28, 22, 17, 0.94);
+    color: rgb(232, 207, 166);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(190, 151, 88, 0.62);
+    border-right-color: rgba(190, 151, 88, 0.62);
+    border-top-color: rgba(190, 151, 88, 0.62);
+    border-bottom-color: rgba(190, 151, 88, 0.62);
+}
