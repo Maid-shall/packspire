@@ -706,6 +706,7 @@ namespace Packspire
                     break;
                 case CourierResolutionKind.Event:
                 case CourierResolutionKind.Cargo:
+                case CourierResolutionKind.Relay:
                     ShowEvent(arrivalNode);
                     break;
                 case CourierResolutionKind.Delivery:

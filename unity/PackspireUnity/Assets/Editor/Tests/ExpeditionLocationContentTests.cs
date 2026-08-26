@@ -54,5 +54,26 @@ namespace Packspire.Tests
             Assert.That(presentation.dayCost, Is.EqualTo(originalDays));
             Assert.That(presentation.risk, Is.EqualTo(originalRisk));
         }
+
+        [TestCase(ExpeditionNodeKind.Event)]
+        [TestCase(ExpeditionNodeKind.Rest)]
+        [TestCase(ExpeditionNodeKind.Other)]
+        public void AssignedContentIsUsedByTheRuntimePresentation(ExpeditionNodeKind kind)
+        {
+            ExpeditionRoutePlan plan = ExpeditionRoutePlanSystem.GenerateDefault("old_spire");
+            ExpeditionRouteNodePlan node = plan.floors
+                .SelectMany(floor => floor.nodes)
+                .First(candidate => candidate.kind == kind);
+            ExpeditionLocationContentDef content =
+                ExpeditionLocationContentSystem.SelectAndAssign(plan, node, "old_spire");
+
+            CourierRouteNodeDef presentation =
+                ExpeditionJourneySystem.PresentationNode(plan, node);
+
+            Assert.That(presentation.title, Is.EqualTo(content.title));
+            Assert.That(presentation.resolutionTitle, Is.EqualTo(content.resolutionTitle));
+            Assert.That(presentation.resolutionText, Is.EqualTo(content.resolutionText));
+            Assert.That(presentation.condition, Is.EqualTo(content.condition));
+        }
     }
 }

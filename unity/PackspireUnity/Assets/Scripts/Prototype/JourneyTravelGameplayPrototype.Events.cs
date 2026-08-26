@@ -5,7 +5,7 @@ namespace Packspire
         private void ShowEvent(CourierRouteNodeDef node)
         {
             JourneyLocationInteractionDefinition interaction =
-                JourneyLocationInteractionCatalog.For(node);
+                JourneyLocationInteractionCatalog.For(node, arrivalExpeditionNode?.kind);
             SetPhase(Phase.Event);
             walker.SetJourneyWalking(false);
             eventEyebrow.text = interaction.Eyebrow;
@@ -14,13 +14,18 @@ namespace Packspire
                 (string.IsNullOrWhiteSpace(node.condition) ? "" : node.condition);
             eventA.text = interaction.PrimaryButton;
             eventB.text = interaction.SecondaryButton;
+            eventB.EnableInClassList("is-hidden", !interaction.ShowSecondaryButton);
+            eventB.SetEnabled(interaction.ShowSecondaryButton);
         }
 
         private void ResolveEvent(bool primary)
         {
             if (phase != Phase.Event || arrivalNode == null) return;
             JourneyLocationInteractionDefinition interaction =
-                JourneyLocationInteractionCatalog.For(arrivalNode);
+                JourneyLocationInteractionCatalog.For(
+                    arrivalNode,
+                    arrivalExpeditionNode?.kind);
+            if (!primary && !interaction.ShowSecondaryButton) return;
             ResolveRoute(interaction.BuildOutcome(primary));
         }
     }

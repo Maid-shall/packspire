@@ -7,6 +7,7 @@ namespace Packspire
         public string SecondaryButton { get; set; }
         public string PrimaryMessage { get; set; }
         public string SecondaryMessage { get; set; }
+        public bool ShowSecondaryButton { get; set; } = true;
         public bool PrimaryRecoversCargo { get; set; }
         public int PrimaryPerformance { get; set; }
         public int SecondaryPerformance { get; set; }
@@ -52,7 +53,37 @@ namespace Packspire
             SecondaryDayDelta = 1
         };
 
-        public static JourneyLocationInteractionDefinition For(CourierRouteNodeDef node) =>
-            node?.resolution == CourierResolutionKind.Cargo ? Cargo : Event;
+        private static readonly JourneyLocationInteractionDefinition Rest = new()
+        {
+            Eyebrow = "RELAY STOP",
+            PrimaryButton = "中継補給を行って旅程を再開",
+            PrimaryMessage = "中継補給を完了した。",
+            ShowSecondaryButton = false,
+            PrimaryPerformance = 2
+        };
+
+        private static readonly JourneyLocationInteractionDefinition Exploration = new()
+        {
+            Eyebrow = "EXPLORATION",
+            PrimaryButton = "周辺を慎重に調べる",
+            SecondaryButton = "探索を切り上げて進む",
+            PrimaryMessage = "周辺の探索を完了した。",
+            SecondaryMessage = "探索を切り上げ、期限を優先した。",
+            PrimaryPerformance = 2,
+            SecondaryPerformance = 1,
+            SecondaryDayDelta = 1
+        };
+
+        public static JourneyLocationInteractionDefinition For(
+            CourierRouteNodeDef node,
+            ExpeditionNodeKind? nodeKind = null)
+        {
+            if (nodeKind == ExpeditionNodeKind.Rest ||
+                node?.resolution == CourierResolutionKind.Relay)
+                return Rest;
+            if (nodeKind == ExpeditionNodeKind.Other)
+                return Exploration;
+            return node?.resolution == CourierResolutionKind.Cargo ? Cargo : Event;
+        }
     }
 }
