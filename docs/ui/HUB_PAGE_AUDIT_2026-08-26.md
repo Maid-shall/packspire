@@ -19,7 +19,7 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 | 図鑑 | Compendium | PackspireCompendiumView.uxml | PackspireVaultCodexFinal.uss | 現行 | リポジトリ規則で正本が固定され、一覧・詳細の専用表現がある。 |
 | キャラクター | Character | PackspireCharacterView.uxml | PackspireCharacter.uss | 現行 | 既存の配達人一覧・人物画・人物記録の構図を維持し、旧Roster／MisprintCommon依存を外した。 |
 | 荷造り | Pack | PackspirePackingView.uxml | PackspirePacking.uss | 現行 | 6×4配置盤・所持品・3編成の完成構図を維持し、旧ManagementV3／MisprintCommon依存を外した。 |
-| 商店 | Shop | PackspireShopView.uxml | PackspireCommerce.uss | 移行途中 | Reward／GameOver／GameClearと見た目を共有し、拠点固有の主役が弱い。 |
+| 商店 | Shop | PackspireShopView.uxml | PackspireShop.uss | 現行 | 商人・6商品の在庫・商品記録・購入伝票を専用化し、Reward／ResultとのUSS共有を解消した。 |
 | 遠征準備 | Expedition | PackspireExpeditionView.uxml | Route＋ManagementV3等 | 移行途中 | 専用USSがなく、複数世代の共通表現を組み合わせている。 |
 | 役職記録 | Status | PackspireStatusView.uxml | PackspireStatus.uss | 現行 | 人物・役職一覧・詳細・任命状態を1280×720内へ再配置し、旧ManagementV3／status-v2依存を外した。 |
 | 家宝 | Heirloom | PackspireHeirloomView.uxml | PackspireHeirloom.uss | 現行 | 選択家宝を主役に、来歴・成長記録・継承系統を1280×720へ再配置し、旧ManagementV3依存を外した。 |
@@ -32,10 +32,10 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 3. **勢力（完了）**: 使節、4勢力の一覧、選択連動する詳細記録を実画面確認済み。
 4. **キャラクター（完了）**: 既存の完成構図を保ったまま旧Roster／MisprintCommon依存を外し、実画面比較済み。
 5. **荷造り（完了）**: 6×4配置盤・所持品・3編成の構図を保ったまま旧ManagementV3／MisprintCommon依存を外し、実画面比較済み。
-6. **商店**: ラン中Reward／Resultへ影響しない拠点固有セレクタへ分離する。
+6. **商店（完了）**: 商人・6商品の在庫・商品記録・購入伝票を専用USSへ分離し、Reward画面も実画面回帰確認済み。
 7. **遠征準備**: シームレス遠征開始画面との役割重複を整理してから現行化する。
 
-次の実装対象は**商店**とする。
+次の実装対象は**遠征準備**とする。
 
 ## 一画面ごとの完了条件
 

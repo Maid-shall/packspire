@@ -67,7 +67,7 @@ public sealed partial class PackspireUiFoundation {
   shopMerchant=MerchantCatalog.Default;
   EnsureShopSelection();
 
-  shopShell=CloneView("UI/PackspireShopView","ps-shop-screen ps-shop-v3 ps-dark-surface");
+  shopShell=CloneView("UI/PackspireShopView","ps-shop-screen");
   if(shopShell==null){
    Debug.LogError("Shop view could not be created.");
    return;

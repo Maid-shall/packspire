@@ -56,6 +56,10 @@ public sealed partial class PackspireUiFoundation {
   "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
   "UI/PackspireCommerce","UI/PackspireMisprintCommon"
  };
+ static readonly string[] ShopStyleSheets={
+  "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireOrnaments",
+  "UI/PackspireShop"
+ };
  static readonly string[] EventStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireRoute",
   "UI/PackspireMisprintCommon"
@@ -82,7 +86,7 @@ public sealed partial class PackspireUiFoundation {
   ScreenId.GridBoard=>GridBoardStyleSheets,
   ScreenId.Battle=>BattleStyleSheets,
   ScreenId.Reward=>CommerceStyleSheets,
-  ScreenId.Shop=>CommerceStyleSheets,
+  ScreenId.Shop=>ShopStyleSheets,
   ScreenId.GameOver=>CommerceStyleSheets,
   ScreenId.GameClear=>CommerceStyleSheets,
   ScreenId.Event=>EventStyleSheets,
