@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Packspire.Tests
@@ -14,6 +15,49 @@ namespace Packspire.Tests
                 ExpeditionLocationContentSystem.AuditCoverage(plan);
 
             Assert.That(audit.errors, Is.Empty, string.Join("\n", audit.errors));
+        }
+
+        [Test]
+        public void EveryFloorAndLocationKindHasAtLeastTwoPresentations()
+        {
+            foreach (int floorIndex in Enumerable.Range(0, 3))
+            foreach (ExpeditionNodeKind kind in new[]
+                     {
+                         ExpeditionNodeKind.Event,
+                         ExpeditionNodeKind.Rest,
+                         ExpeditionNodeKind.Other
+                     })
+                Assert.That(
+                    ExpeditionLocationContentSystem.All.Count(content =>
+                        content.floorIndex == floorIndex && content.kind == kind),
+                    Is.GreaterThanOrEqualTo(2),
+                    $"Floor {floorIndex + 1} {kind} needs multiple presentations.");
+        }
+
+        [Test]
+        public void AllLocationPresentationsAreReachableAcrossGeneratedRuns()
+        {
+            var selectedIds = new HashSet<string>();
+            for (int runOrdinal = 0; runOrdinal < 64; runOrdinal++)
+            {
+                ExpeditionRoutePlan plan = ExpeditionRoutePlanSystem.GenerateDefault(
+                    "old_spire",
+                    runOrdinal);
+                foreach (ExpeditionRouteNodePlan node in plan.floors
+                             .SelectMany(floor => floor.nodes)
+                             .Where(node => node.kind == ExpeditionNodeKind.Event ||
+                                            node.kind == ExpeditionNodeKind.Rest ||
+                                            node.kind == ExpeditionNodeKind.Other))
+                    selectedIds.Add(
+                        ExpeditionLocationContentSystem.SelectAndAssign(
+                            plan,
+                            node,
+                            "old_spire").id);
+            }
+
+            Assert.That(
+                selectedIds,
+                Is.EquivalentTo(ExpeditionLocationContentSystem.All.Select(content => content.id)));
         }
 
         [Test]
