@@ -137,34 +137,35 @@
 .ps-journey__choice-heading-note { margin-top: 0; font-size: 9px; color: rgb(171, 158, 135); }
 .ps-journey__choice-papers {
     position: absolute;
-    left: 176px;
-    top: 68px;
-    width: 738px;
-    height: 478px;
+    left: 201px;
+    top: 66px;
+    width: 688px;
+    height: 482px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
-.ps-journey__route-paper { position: relative; width: 344px; height: 468px; padding: 0; background-image: resource("Art/JourneyPrototype/Complete/journey-major-route-docket-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: transparent; border-width: 0; color: rgb(47, 35, 27); opacity: .94; transition-property: translate, scale, opacity; transition-duration: .14s; }
-.ps-journey__route-paper:hover { translate: 0 -5px; scale: 1.012; opacity: 1; }
+.ps-journey__route-paper { position: relative; width: 312px; height: 468px; padding: 0; background-image: resource("Art/JourneyPrototype/Complete/journey-major-route-docket-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: transparent; border-width: 0; color: rgb(47, 35, 27); opacity: .94; transition-property: translate, scale, opacity; transition-duration: .14s; }
+.ps-journey__route-paper:hover, .ps-journey__route-paper:focus { translate: 0 -5px; scale: 1.012; opacity: 1; }
 .ps-journey__route-paper:disabled { opacity: .55; }
 .ps-journey__route-paper.is-rejected { opacity: .28; scale: 0.97; }
 .ps-journey__route-paper.is-stamped { translate: 0 -6px; scale: 1.02; opacity: 1; }
-.ps-journey__route-art { position: absolute; left: 40px; top: 42px; width: 264px; height: 126px; -unity-background-scale-mode: scale-and-crop; background-color: rgb(42, 35, 29); border-width: 2px; border-color: rgba(73, 55, 39, .8); }
+.ps-journey__route-art { position: absolute; left: 36px; top: 42px; width: 240px; height: 126px; -unity-background-scale-mode: scale-and-crop; background-color: rgb(42, 35, 29); border-width: 2px; border-color: rgba(73, 55, 39, .8); }
 .route-art--ash { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-far-v1"); }
 .route-art--danger { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-v1"); }
 .route-art--drowned { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-drowned-v1"); }
 .route-art--blackbell { background-image: resource("Art/JourneyPrototype/journey-city-walktest-bg-v1"); }
-.ps-journey__route-index { position: absolute; left: 43px; top: 176px; width: 258px; font-size: 8px; letter-spacing: 2px; color: rgb(43, 108, 111); }
-.ps-journey__route-title { position: absolute; left: 42px; top: 190px; width: 260px; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(48, 34, 25); }
-.ps-journey__route-flavor { position: absolute; left: 46px; top: 226px; width: 252px; height: 46px; white-space: normal; font-size: 9px; -unity-text-align: upper-left; color: rgb(74, 57, 43); }
-.ps-journey__route-stats { position: absolute; left: 45px; top: 281px; width: 254px; height: 111px; flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
-.ps-journey__route-stat { width: 127px; height: 34px; padding: 2px 6px; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .3); }
+.ps-journey__route-index { position: absolute; left: 39px; top: 176px; width: 234px; font-size: 8px; letter-spacing: 2px; color: rgb(43, 108, 111); }
+.ps-journey__route-title { position: absolute; left: 38px; top: 190px; width: 236px; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(48, 34, 25); }
+.ps-journey__route-flavor { position: absolute; left: 42px; top: 226px; width: 228px; height: 46px; white-space: normal; font-size: 9px; -unity-text-align: upper-left; color: rgb(74, 57, 43); }
+.ps-journey__route-stats { position: absolute; left: 41px; top: 281px; width: 230px; height: 111px; flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+.ps-journey__route-stat { width: 115px; height: 34px; padding: 2px 6px; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .3); }
 .ps-journey__route-stat-key { font-size: 7px; letter-spacing: 1px; color: rgb(115, 74, 48); }
 .ps-journey__route-stat-value { margin-top: 0; font-size: 11px; color: rgb(44, 36, 29); }
-.ps-journey__route-action { position: absolute; left: 64px; bottom: 29px; width: 216px; height: 29px; padding-top: 5px; font-size: 10px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(245, 226, 188); background-color: rgb(56, 45, 37); border-width: 1px; border-color: rgb(134, 94, 54); }
+.ps-journey__route-action { position: absolute; left: 58px; bottom: 29px; width: 196px; height: 29px; padding-top: 5px; font-size: 10px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(245, 226, 188); background-color: rgb(56, 45, 37); border-width: 1px; border-color: rgb(134, 94, 54); }
+.ps-journey__route-paper:focus .ps-journey__route-action { color: rgb(255, 239, 202); border-width: 2px; border-color: rgb(213, 151, 73); }
 .ps-journey__route-paper--danger .ps-journey__route-action { background-color: rgb(91, 45, 35); border-color: rgb(154, 68, 49); }
-.ps-journey__route-stamp { position: absolute; right: 44px; bottom: 57px; width: 68px; height: 68px; padding-top: 20px; border-width: 4px; border-color: rgb(139, 34, 27); border-radius: 34px; rotate: 0deg; font-size: 14px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(139, 34, 27); opacity: 0; scale: 1.65; transition-property: opacity, scale, rotate; transition-duration: .12s; }
+.ps-journey__route-stamp { position: absolute; right: 40px; bottom: 57px; width: 68px; height: 68px; padding-top: 20px; border-width: 4px; border-color: rgb(139, 34, 27); border-radius: 34px; rotate: 0deg; font-size: 14px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(139, 34, 27); opacity: 0; scale: 1.65; transition-property: opacity, scale, rotate; transition-duration: .12s; }
 .ps-journey__route-paper.is-stamped .ps-journey__route-stamp { opacity: .82; scale: 1; rotate: -12deg; }
 .ps-journey__choice-divider { width: 34px; height: 468px; justify-content: center; align-items: center; }
 .ps-journey__choice-or { width: 34px; height: 34px; padding-top: 10px; border-width: 1px; border-color: rgba(177, 127, 68, .7); border-radius: 17px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(210, 172, 112); background-color: rgba(13, 12, 11, .96); }
