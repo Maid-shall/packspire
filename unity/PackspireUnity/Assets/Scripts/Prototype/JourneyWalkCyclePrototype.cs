@@ -100,6 +100,7 @@ namespace Packspire
         private float battleMotionClock;
         private float battleMotionDuration;
         private bool battleActive;
+        private bool suspended;
         private BattleMotion battleMotion;
         private int currentFrame = -1;
         private bool walkingRequested = true;
@@ -142,6 +143,7 @@ namespace Packspire
         private void Update()
         {
             HandleTestInput();
+            if (suspended) return;
             if (AvailableFrameCount() == 0)
             {
                 return;
@@ -279,6 +281,11 @@ namespace Packspire
         public void SetJourneySpeedScale(float scale)
         {
             journeySpeedScale = Mathf.Clamp(scale, 0f, 2f);
+        }
+
+        public void SetSuspended(bool value)
+        {
+            suspended = value;
         }
 
         public void SetJourneyWalking(bool walking)

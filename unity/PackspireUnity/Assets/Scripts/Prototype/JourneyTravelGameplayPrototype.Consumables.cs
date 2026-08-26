@@ -9,7 +9,8 @@ namespace Packspire
         private bool CanUseJourneyConsumable(ConsumableContent item)
         {
             if (item == null || phase != Phase.Battle || battle == null ||
-                battleInputLocked || pileOverlayOpen || !realtimeBattleActive) return false;
+                GameplayInputBlocked || battleInputLocked ||
+                !realtimeBattleActive) return false;
             return item.effect switch
             {
                 ConsumableEffectType.Heal => run.hp < run.maxHp,

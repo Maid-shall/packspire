@@ -414,10 +414,17 @@ namespace Packspire
             }
 
             HandleKeyboard();
-            float gameplayDelta = paused || ledgerOpen || transitionActive || pileOverlayOpen ? 0f : Time.deltaTime;
+            float gameplayDelta =
+                !JourneyPausePolicy.IsGameplayBlocked(
+                    paused,
+                    ledgerOpen,
+                    pileOverlayOpen) &&
+                !transitionActive
+                    ? Time.deltaTime
+                    : 0f;
             float travelDelta = gameplayDelta * speedScale;
             UpdateToast(gameplayDelta);
-            UpdateSpeech(Time.deltaTime);
+            UpdateSpeech(gameplayDelta);
 
             if (phase == Phase.Travel)
             {
@@ -480,10 +487,7 @@ namespace Packspire
                 ToggleLedger();
                 return;
             }
-            if (PackspireInput.JourneyPausePressed() &&
-                (phase == Phase.Travel ||
-                 phase == Phase.MiniGame ||
-                 phase == Phase.Battle))
+            if (PackspireInput.JourneyPausePressed() && CanTogglePause())
             {
                 TogglePause();
                 return;
@@ -660,7 +664,8 @@ namespace Packspire
 
         private void SelectChoice(int index)
         {
-            if (choiceLocked || phase != Phase.Choice || index < 0 || index >= choices.Length) return;
+            if (GameplayInputBlocked || choiceLocked || phase != Phase.Choice ||
+                index < 0 || index >= choices.Length) return;
             choiceLocked = true;
             choiceCommitRoutine = StartCoroutine(CommitChoiceRoutine(index));
         }
@@ -941,7 +946,11 @@ namespace Packspire
             float motion = WorldMotionScale();
             walker.SetJourneySpeedScale(motion);
             walker.SetJourneyWalking(motion > .001f);
+            bool suspendPresentation =
+                paused || ledgerOpen || pileOverlayOpen || transitionActive;
+            walker.SetSuspended(suspendPresentation);
             environment.SetWorldMotion(motion);
+            environment.SetSuspended(suspendPresentation);
         }
 
         private void ToggleSpeed()
@@ -954,15 +963,40 @@ namespace Packspire
 
         private void TogglePause()
         {
+            if (!CanTogglePause()) return;
             SetPaused(!paused);
         }
 
         private void SetPaused(bool value)
         {
             paused = value;
-            pauseButton.text = paused ? "再開" : "一時停止";
+            if (pauseButton != null)
+                pauseButton.text = paused ? "再開" : "一時停止";
             RefreshRealtimeTransport();
             ApplyWorldMotion();
+            RefreshPauseSensitiveControls();
+        }
+
+        private bool CanTogglePause() =>
+            JourneyPausePolicy.CanTogglePause(
+                paused,
+                phase == Phase.Travel ||
+                phase == Phase.MiniGame ||
+                phase == Phase.Battle,
+                phase == Phase.Choice && choiceLocked);
+
+        private bool GameplayInputBlocked =>
+            JourneyPausePolicy.IsGameplayBlocked(
+                paused,
+                ledgerOpen,
+                pileOverlayOpen);
+
+        private void RefreshPauseSensitiveControls()
+        {
+            if (phase == Phase.MiniGame)
+                SetMiniGameControlsEnabled(!miniGameResolved);
+            if (phase == Phase.Battle && battle != null)
+                RefreshBattleUi();
         }
 
         private void UpdateSpeech(float delta)
@@ -1166,7 +1200,11 @@ namespace Packspire
             while (elapsed < duration)
             {
                 if (revision != battleRevision || phase != Phase.Battle) yield break;
-                if (!paused && !ledgerOpen && !transitionActive)
+                if (!JourneyPausePolicy.IsGameplayBlocked(
+                        paused,
+                        ledgerOpen,
+                        pileOverlayOpen) &&
+                    !transitionActive)
                     elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }
@@ -1177,7 +1215,10 @@ namespace Packspire
             float elapsed = 0f;
             while (elapsed < duration)
             {
-                if (!paused && !ledgerOpen && !pileOverlayOpen)
+                if (!JourneyPausePolicy.IsGameplayBlocked(
+                        paused,
+                        ledgerOpen,
+                        pileOverlayOpen))
                     elapsed += Time.unscaledDeltaTime;
                 yield return null;
             }

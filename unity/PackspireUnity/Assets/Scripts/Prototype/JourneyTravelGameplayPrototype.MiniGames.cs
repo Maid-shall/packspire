@@ -25,7 +25,7 @@ namespace Packspire
             miniGamePanel.AddToClassList(definition.PresentationClass);
             miniGamePanel.RemoveFromClassList("mini--success");
             miniGamePanel.RemoveFromClassList("mini--failure");
-            miniGameAction.SetEnabled(true);
+            SetMiniGameControlsEnabled(true);
             miniGameLeft.EnableInClassList("is-hidden", false);
             miniGameRight.EnableInClassList("is-hidden", false);
             miniGameLeft.text = "◀";
@@ -97,7 +97,8 @@ namespace Packspire
 
         private void MiniGameAction()
         {
-            if (phase != Phase.MiniGame || miniGameController.IsResolved) return;
+            if (GameplayInputBlocked || phase != Phase.MiniGame ||
+                miniGameController.IsResolved) return;
             miniGameController.Input(JourneyMiniGameInput.Action);
             RefreshMiniGameDynamic(true);
             ConsumeMiniGameOutcome();
@@ -105,7 +106,8 @@ namespace Packspire
 
         private void NudgeBalance(float direction)
         {
-            if (phase != Phase.MiniGame || miniGameController.IsResolved) return;
+            if (GameplayInputBlocked || phase != Phase.MiniGame ||
+                miniGameController.IsResolved) return;
             miniGameController.Input(direction < 0f ? JourneyMiniGameInput.Left : JourneyMiniGameInput.Right);
             RefreshMiniGameDynamic(true);
             ConsumeMiniGameOutcome();
@@ -186,10 +188,18 @@ namespace Packspire
 
         private static string LaneLabel(int lane) => lane == 0 ? "左車線" : lane == 1 ? "中央車線" : "右車線";
 
+        private void SetMiniGameControlsEnabled(bool requested)
+        {
+            bool enabled = requested && !GameplayInputBlocked;
+            miniGameAction?.SetEnabled(enabled);
+            miniGameLeft?.SetEnabled(enabled);
+            miniGameRight?.SetEnabled(enabled);
+        }
+
         private IEnumerator FinishMiniGameRoutine(bool success, string message)
         {
             miniGamePanel.EnableInClassList(success ? "mini--success" : "mini--failure", true);
-            miniGameAction.SetEnabled(false);
+            SetMiniGameControlsEnabled(false);
             miniGameTitle.text = success ? "回収成功" : "回収を見送った";
             miniGameNote.text = message;
             miniGameTimer.text = success ? "RESULT / SECURED" : "RESULT / MISSED";

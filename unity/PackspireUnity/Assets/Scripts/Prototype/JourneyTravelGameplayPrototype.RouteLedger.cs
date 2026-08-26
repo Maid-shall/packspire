@@ -15,6 +15,7 @@ namespace Packspire
             screen.EnableInClassList("ledger--active", ledgerOpen);
             if (ledgerOpen) PopulateLedger();
             ApplyWorldMotion();
+            RefreshPauseSensitiveControls();
         }
 
         private void PopulateLedger()

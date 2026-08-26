@@ -78,7 +78,8 @@ namespace Packspire
 
         private void PlayCard(int index)
         {
-            if (phase != Phase.Battle || battleInputLocked || pileOverlayOpen || battle == null || index >= run.hand.Count) return;
+            if (GameplayInputBlocked || phase != Phase.Battle || battleInputLocked ||
+                battle == null || index >= run.hand.Count) return;
             CardInstance playedCard = run.hand[index];
             if (playedCard.unplayable || playedCard.cost > run.energy) return;
             int attackBuffBeforePlay = run.attackBuff;
@@ -179,7 +180,8 @@ namespace Packspire
 
         private void ResolveDefenseInput(DefenseAction action)
         {
-            if (!defenseActive || defenseResolved || !EnemyActionRequiresReaction()) return;
+            if (GameplayInputBlocked || !defenseActive || defenseResolved ||
+                !EnemyActionRequiresReaction()) return;
             defenseResolved = true;
             defenseAction = action;
             defenseInputTime = defenseClock;

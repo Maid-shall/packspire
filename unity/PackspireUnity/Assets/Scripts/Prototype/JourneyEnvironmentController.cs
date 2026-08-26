@@ -5,8 +5,8 @@ namespace Packspire
 {
     /// <summary>
     /// Lightweight weather presentation built only from SpriteRenderers. Ambient rain,
-    /// mist and local light continue while choices are open; travel-relative motes stop
-    /// with the road so a paused scene never appears to keep scrolling.
+    /// mist and local light continue while choices are open; all ambient presentation
+    /// freezes while the journey is explicitly suspended.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class JourneyEnvironmentController : MonoBehaviour
@@ -40,6 +40,7 @@ namespace Packspire
         private float worldMotion;
         private float environmentClock;
         private bool battleContext;
+        private bool suspended;
         private bool initialized;
 
         public int BiomeIndex => biomeIndex;
@@ -80,6 +81,11 @@ namespace Packspire
             ApplyPaletteAndVisibility();
         }
 
+        public void SetSuspended(bool value)
+        {
+            suspended = value;
+        }
+
         public void SetJourneyProgress(float normalizedProgress)
         {
             float next = Mathf.Clamp01(normalizedProgress);
@@ -98,6 +104,7 @@ namespace Packspire
         private void Update()
         {
             using var performanceScope = PackspirePerformance.JourneyEnvironment.Auto();
+            if (suspended) return;
             AdvanceEnvironment(Time.unscaledDeltaTime);
         }
 

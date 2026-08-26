@@ -23,7 +23,7 @@ namespace Packspire
             AppendRealtimeConsumableStatuses();
             drawPileText.text = run.draw.Count.ToString();
             discardPileText.text = run.discard.Count.ToString();
-            bool commandAvailable = !battleInputLocked && !pileOverlayOpen;
+            bool commandAvailable = !GameplayInputBlocked && !battleInputLocked;
             drawPileButton.SetEnabled(commandAvailable);
             discardPileButton.SetEnabled(commandAvailable);
             consumablePresenter?.Refresh(run, commandAvailable);
@@ -153,7 +153,8 @@ namespace Packspire
 
         private void OpenPileOverlay(bool drawPile)
         {
-            if (phase != Phase.Battle || battle == null || battleInputLocked) return;
+            if (GameplayInputBlocked || phase != Phase.Battle ||
+                battle == null || battleInputLocked) return;
             List<CardInstance> cards = drawPile ? run.draw : run.discard;
             consumablePresenter?.ClearHover();
             pileOverlayOpen = true;

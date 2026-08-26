@@ -40,6 +40,16 @@ namespace Packspire
             ShowToast($"DEV景色確認：{BiomeLabel(biomeIndex)}・標準路");
         }
 
+        public void DevPreviewTransition(int previewBiome)
+        {
+            if (!uiBound) BindUi();
+            int targetBiome = Mathf.Clamp(previewBiome, 0, 2);
+            PlayTransition(
+                targetBiome,
+                JourneyWalkCyclePrototype.RoadProfile.Standard,
+                BiomeLabel(targetBiome));
+        }
+
         public void DevSetPaused(bool value)
         {
             if (!uiBound) BindUi();
