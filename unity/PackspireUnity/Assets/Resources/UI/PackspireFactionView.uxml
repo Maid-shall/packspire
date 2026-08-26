@@ -1,15 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="faction-background" class="ps-layer-background" picking-mode="Ignore">
-        <ui:VisualElement class="ps-mgmt-shade" picking-mode="Ignore" />
+        <ui:VisualElement class="ps-faction-shade" picking-mode="Ignore" />
     </ui:VisualElement>
-    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--faction" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--brush" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-layer-content">
-        <ui:VisualElement name="faction-header" class="ps-mgmt-header">
-            <ui:VisualElement class="ps-misprint-header-copy">
-                <ui:Label text="FACTION / ALLEGIANCE" class="ps-misprint-header-eyebrow" picking-mode="Ignore" />
-                <ui:Label text="配達組合契約" class="ps-misprint-header-title" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-faction-register-mark" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-faction-ledger-spine" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-layer-content ps-faction-layout">
+        <ui:VisualElement name="faction-header" class="ps-faction-header">
+            <ui:VisualElement class="ps-faction-header-copy">
+                <ui:Label text="FACTION / ALLEGIANCE" class="ps-faction-header-eyebrow" picking-mode="Ignore" />
+                <ui:Label text="配達組合契約" class="ps-faction-header-title" picking-mode="Ignore" />
+                <ui:Label text="所属と貢献記録を照合し、各組合との関係を確認する。" class="ps-faction-header-note" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement class="ps-faction-body">

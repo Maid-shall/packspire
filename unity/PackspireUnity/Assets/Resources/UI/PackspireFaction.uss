@@ -1,0 +1,663 @@
+/* Faction presentation isolated from the legacy management cascade.
+ * All dimensions use the 1280 x 720 logical PanelSettings coordinate system.
+ */
+
+.ps-faction-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(226, 204, 169);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-faction-screen .ps-layer-background,
+.ps-faction-screen .ps-faction-shade,
+.ps-faction-screen .ps-faction-layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-faction-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-faction-screen .ps-faction-shade {
+    background-color: rgba(2, 4, 5, 0.28);
+}
+
+.ps-faction-screen .ps-faction-register-mark {
+    position: absolute;
+    right: -28px;
+    bottom: -30px;
+    width: 148px;
+    height: 148px;
+    opacity: 0.13;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-ledger-spine {
+    position: absolute;
+    left: 20px;
+    top: 84px;
+    width: 4px;
+    height: 620px;
+    background-color: rgb(49, 174, 178);
+    opacity: 0.5;
+}
+
+.ps-faction-screen .ps-faction-header {
+    position: absolute;
+    left: 142px;
+    top: 8px;
+    width: 1118px;
+    height: 68px;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+    align-items: center;
+    background-image: none;
+    background-color: rgba(2, 5, 6, 0.22);
+}
+
+.ps-faction-screen .ps-faction-header-copy {
+    flex-grow: 1;
+    min-width: 0;
+    height: 62px;
+    justify-content: center;
+}
+
+.ps-faction-screen .ps-faction-header-eyebrow {
+    height: 15px;
+    margin: 0;
+    padding: 0;
+    color: rgb(70, 188, 190);
+    font-size: 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.ps-faction-screen .ps-faction-header-title {
+    height: 34px;
+    margin: 0;
+    padding: 0;
+    color: rgb(237, 211, 170);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
+}
+
+.ps-faction-screen .ps-faction-header-note {
+    position: absolute;
+    left: 258px;
+    bottom: 7px;
+    margin: 0;
+    color: rgba(203, 184, 154, 0.72);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.ps-faction-screen .ps-faction-body {
+    position: absolute;
+    left: 20px;
+    top: 84px;
+    width: 1240px;
+    height: 620px;
+    min-height: 620px;
+    padding: 0;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-top-row {
+    width: 1240px;
+    height: 372px;
+    min-height: 372px;
+    flex-grow: 0;
+    flex-direction: row;
+    margin: 0;
+}
+
+.ps-faction-screen .ps-faction-emissary-column,
+.ps-faction-screen .ps-faction-col-graph,
+.ps-faction-screen .ps-faction-detail-surface {
+    overflow: hidden;
+    background-image: none;
+    background-color: rgba(2, 5, 6, 0.78);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(198, 160, 98, 0.34);
+    border-right-color: rgba(198, 160, 98, 0.34);
+    border-top-color: rgba(218, 179, 116, 0.5);
+    border-bottom-color: rgba(55, 176, 181, 0.4);
+}
+
+.ps-faction-screen .ps-faction-emissary-column {
+    position: relative;
+    width: 330px;
+    min-width: 330px;
+    height: 372px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.ps-faction-screen .ps-faction-emissary-host {
+    position: absolute;
+    left: 18px;
+    top: 0;
+    width: 292px;
+    height: 330px;
+}
+
+.ps-faction-screen .ps-faction-emissary-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-emissary-study {
+    position: absolute;
+    top: 66px;
+    width: 94px;
+    height: 226px;
+    opacity: 0.09;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-front {
+    left: -14px;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-back {
+    right: -14px;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-image {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-emissary-study-image-back {
+    scale: -1 1;
+}
+
+.ps-faction-screen .ps-faction-emissary-caption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 218px;
+    min-height: 68px;
+    padding: 8px 12px 7px 14px;
+    background-color: rgba(2, 3, 3, 0.9);
+    border-left-width: 2px;
+    border-left-color: rgb(201, 57, 43);
+    border-top-width: 1px;
+    border-top-color: rgba(200, 162, 100, 0.34);
+}
+
+.ps-faction-screen .ps-faction-emissary-eyebrow,
+.ps-faction-screen .ps-faction-emissary-title {
+    margin: 0;
+    color: rgb(64, 183, 186);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-emissary-name {
+    margin: 0;
+    color: rgb(234, 209, 169);
+    font-size: 21px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-faction-screen .ps-faction-col-graph {
+    flex-grow: 1;
+    min-width: 0;
+    width: auto;
+    height: 372px;
+    margin: 0 0 0 12px;
+    padding: 0;
+}
+
+.ps-faction-screen .ps-faction-registry-heading {
+    height: 50px;
+    min-height: 50px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 14px;
+    background-color: rgba(1, 3, 4, 0.86);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(201, 163, 100, 0.38);
+}
+
+.ps-faction-screen .ps-faction-registry-title {
+    margin: 0;
+    color: rgb(235, 210, 170);
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-faction-screen .ps-faction-registry-eyebrow {
+    margin: 0 0 0 14px;
+    color: rgb(64, 183, 186);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-faction-screen .ps-faction-graph-host,
+.ps-faction-screen .ps-faction-graph-nodes {
+    flex-grow: 1;
+    min-height: 0;
+    width: 100%;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-graph-host {
+    padding: 7px 8px 4px 8px;
+}
+
+.ps-faction-screen .ps-faction-graph-nodes {
+    position: relative;
+    flex-direction: column;
+}
+
+.ps-faction-screen .ps-faction-graph-node {
+    position: relative;
+    width: 100%;
+    height: 73px;
+    min-height: 73px;
+    margin: 0 0 5px 0;
+    padding: 7px 12px 7px 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-image: none;
+    background-color: rgba(10, 13, 12, 0.82);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(57, 178, 181, 0.5);
+    border-right-color: rgba(191, 153, 93, 0.24);
+    border-top-color: rgba(191, 153, 93, 0.3);
+    border-bottom-color: rgba(191, 153, 93, 0.22);
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-graph-node:hover,
+.ps-faction-screen .ps-faction-graph-node:focus {
+    background-color: rgba(39, 38, 31, 0.94);
+    border-left-color: rgb(66, 195, 197);
+}
+
+.ps-faction-screen .ps-faction-graph-node.ps-selected {
+    background-image: none;
+    background-color: rgba(55, 38, 26, 0.98);
+    border-left-color: rgb(219, 65, 49);
+    border-top-color: rgba(230, 190, 125, 0.74);
+}
+
+.ps-faction-screen .ps-faction-graph-node.ps-faction-affiliated {
+    border-bottom-color: rgba(218, 177, 111, 0.72);
+}
+
+.ps-faction-screen .ps-faction-preview-undiscovered {
+    opacity: 0.54;
+}
+
+.ps-faction-screen .ps-faction-registry-index {
+    width: 42px;
+    min-width: 42px;
+    margin: 0;
+    color: rgb(208, 65, 49);
+    font-size: 15px;
+    -unity-text-align: middle-center;
+}
+
+.ps-faction-screen .ps-faction-registry-identity {
+    width: 252px;
+    min-width: 252px;
+    height: 100%;
+    padding: 0 7px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ps-faction-screen .ps-faction-graph-emblem {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    margin-right: 9px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-registry-identity-copy {
+    flex-grow: 1;
+    min-width: 0;
+    justify-content: center;
+}
+
+.ps-faction-screen .ps-faction-graph-name {
+    margin: 0 0 1px 0;
+    color: rgb(232, 208, 170);
+    font-size: 16px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
+}
+
+.ps-faction-screen .ps-faction-registry-description {
+    margin: 0;
+    color: rgba(197, 181, 154, 0.72);
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-faction-screen .ps-faction-registry-rank {
+    width: 178px;
+    min-width: 178px;
+    height: 100%;
+    padding: 0 12px;
+    justify-content: center;
+}
+
+.ps-faction-screen .ps-faction-registry-rank-name {
+    margin: 0;
+    color: rgb(224, 201, 166);
+    font-size: 11px;
+}
+
+.ps-faction-screen .ps-faction-registry-progress {
+    width: 100%;
+    height: 4px;
+    min-height: 4px;
+    margin: 5px 0 3px 0;
+    background-color: rgba(224, 199, 158, 0.18);
+}
+
+.ps-faction-screen .ps-faction-registry-progress-fill {
+    height: 100%;
+    background-color: rgb(52, 184, 187);
+}
+
+.ps-faction-screen .ps-faction-registry-reputation {
+    margin: 0;
+    color: rgba(198, 180, 151, 0.66);
+    font-size: 8px;
+}
+
+.ps-faction-screen .ps-faction-registry-effect {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0;
+    color: rgb(205, 187, 158);
+    font-size: 9px;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-registry-next {
+    width: 30px;
+    min-width: 30px;
+    margin: 0;
+    color: rgb(55, 187, 190);
+    font-size: 24px;
+    -unity-text-align: middle-center;
+}
+
+.ps-faction-screen .ps-faction-col-detail {
+    width: 1240px;
+    min-width: 1240px;
+    height: 236px;
+    min-height: 236px;
+    margin-top: 12px;
+}
+
+.ps-faction-screen .ps-faction-detail-surface {
+    width: 1240px;
+    height: 236px;
+    min-height: 236px;
+    padding: 0;
+    flex-direction: row;
+}
+
+.ps-faction-screen .ps-faction-detail-header {
+    width: 322px;
+    min-width: 322px;
+    height: 234px;
+    padding: 18px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(1, 3, 4, 0.76);
+    border-right-width: 1px;
+    border-right-color: rgba(201, 163, 100, 0.36);
+}
+
+.ps-faction-screen .ps-faction-detail-art {
+    width: 104px;
+    min-width: 104px;
+    height: 104px;
+    margin-right: 16px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-faction-screen .ps-faction-detail-identity {
+    flex-grow: 1;
+    min-width: 0;
+    justify-content: center;
+}
+
+.ps-faction-screen .ps-faction-detail-identity .ps-title,
+.ps-faction-screen .ps-faction-detail-name {
+    margin: 0 0 4px 0;
+    color: rgb(236, 211, 171);
+    font-size: 22px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: normal;
+}
+
+.ps-faction-screen .ps-faction-detail-identity .ps-body {
+    margin: 0 0 5px 0;
+    color: rgb(65, 183, 186);
+    font-size: 10px;
+}
+
+.ps-faction-screen .ps-faction-detail-identity .ps-seal-mark {
+    width: 64px;
+    height: 27px;
+    margin-top: 7px;
+    color: rgb(222, 191, 145);
+    font-size: 10px;
+}
+
+.ps-faction-screen .ps-faction-detail-scroll {
+    flex-grow: 1;
+    min-width: 0;
+    height: 234px;
+    padding: 12px 16px 14px 16px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-faction-screen .ps-faction-detail-scroll .unity-scroll-view__content-viewport {
+    overflow: hidden;
+}
+
+.ps-faction-screen .ps-faction-detail-body {
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    min-height: 204px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding-right: 0;
+}
+
+.ps-faction-screen .ps-faction-detail-body.ps-faction-can-change {
+    padding-right: 168px;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section {
+    width: 31.5%;
+    min-width: 31.5%;
+    height: 57px;
+    min-height: 57px;
+    max-height: 57px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 0 1.5% 7px 0;
+    padding: 6px 9px;
+    background-image: none;
+    background-color: rgba(8, 11, 11, 0.68);
+    border-left-width: 1px;
+    border-left-color: rgba(58, 178, 181, 0.56);
+    border-top-width: 1px;
+    border-top-color: rgba(194, 156, 96, 0.22);
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-v6-rule {
+    display: none;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-title {
+    margin: 0 0 2px 0;
+    color: rgb(211, 65, 50);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-section-body {
+    margin: 0;
+    color: rgb(211, 193, 164);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-progress {
+    width: 31.5%;
+    height: 5px;
+    min-height: 5px;
+    margin: -34px 1.5% 0 -33%;
+    background-color: rgba(224, 199, 158, 0.16);
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-progress-fill {
+    height: 100%;
+    background-color: rgb(53, 183, 186);
+}
+
+.ps-faction-screen .ps-faction-relations {
+    width: 64.5%;
+    min-width: 64.5%;
+    min-height: 98px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 0 1.5% 7px 0;
+    padding: 5px 9px;
+    background-color: rgba(8, 11, 11, 0.68);
+    border-left-width: 1px;
+    border-left-color: rgba(199, 58, 44, 0.62);
+}
+
+.ps-faction-screen .ps-faction-relations > .ps-mgmt-section {
+    width: 100%;
+    min-width: 100%;
+    min-height: 26px;
+    height: 26px;
+    max-height: 26px;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-top-width: 0;
+}
+
+.ps-faction-screen .ps-faction-relation-row {
+    min-height: 23px;
+    padding: 2px 5px;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+    border-top-color: rgba(194, 156, 96, 0.18);
+}
+
+.ps-faction-screen .ps-faction-relation-row .ps-typo-item {
+    flex-grow: 1;
+    margin: 0;
+    color: rgb(218, 198, 165);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-relation-row .ps-typo-secondary {
+    margin: 0;
+    color: rgb(66, 182, 185);
+    font-size: 9px;
+}
+
+.ps-faction-screen .ps-faction-relation-kind-hostile {
+    color: rgb(221, 73, 57);
+}
+
+.ps-faction-screen .ps-faction-relation-kind-friendly {
+    color: rgb(69, 190, 192);
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-action {
+    position: absolute;
+    right: 0;
+    bottom: 7px;
+    width: 154px;
+    height: 42px;
+    margin: 0;
+    padding: 7px 10px;
+    background-color: rgba(49, 38, 27, 0.96);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(207, 61, 47);
+    border-right-color: rgba(210, 170, 106, 0.42);
+    border-top-color: rgba(225, 184, 119, 0.58);
+    border-bottom-color: rgba(55, 180, 183, 0.42);
+    color: rgb(235, 210, 170);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-action:hover,
+.ps-faction-screen .ps-faction-detail-body .ps-mgmt-action:focus {
+    background-color: rgba(72, 48, 29, 0.98);
+    border-left-color: rgb(224, 72, 55);
+}
+
+.ps-faction-screen .ps-space-scroll-tail {
+    display: none;
+}
+
+.ps-faction-screen .unity-scroll-view__vertical-scroller {
+    width: 8px;
+}
+
+.ps-faction-screen .unity-scroller__slider {
+    background-color: rgba(195, 157, 96, 0.46);
+}
+
+.ps-faction-screen .ps-empty-state {
+    margin: 18px;
+    padding: 18px;
+    background-color: rgba(8, 10, 10, 0.76);
+    border-left-width: 2px;
+    border-left-color: rgba(62, 179, 181, 0.58);
+}

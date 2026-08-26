@@ -380,6 +380,7 @@ public sealed partial class PackspireUiFoundation {
   body.Add(relations);
 
   if(selected.id!=meta.currentFaction&&discovered){
+   body.AddToClassList("ps-faction-can-change");
    var change=PackspireUiFactory.Button("20Gで所属を変更",()=>{
     if(game.UiChangeFaction(selected.id)){
      ShowToast(selected.name+"へ所属を変更しました");

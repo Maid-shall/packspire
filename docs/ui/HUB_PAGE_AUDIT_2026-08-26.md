@@ -23,19 +23,19 @@ Unityの同期読出しとPanelSettings RenderTextureは黒画像になるが、
 | 遠征準備 | Expedition | PackspireExpeditionView.uxml | Route＋ManagementV3等 | 移行途中 | 専用USSがなく、複数世代の共通表現を組み合わせている。 |
 | 役職記録 | Status | PackspireStatusView.uxml | PackspireStatus.uss | 現行 | 人物・役職一覧・詳細・任命状態を1280×720内へ再配置し、旧ManagementV3／status-v2依存を外した。 |
 | 家宝 | Heirloom | PackspireHeirloomView.uxml | PackspireHeirloom.uss | 現行 | 選択家宝を主役に、来歴・成長記録・継承系統を1280×720へ再配置し、旧ManagementV3依存を外した。 |
-| 勢力 | Faction | PackspireFactionView.uxml | ManagementV3等 | 旧式 | 専用USSがなく、管理画面共通表現へ依存する。 |
+| 勢力 | Faction | PackspireFactionView.uxml | PackspireFaction.uss | 現行 | 使節・4勢力の台帳一覧・選択勢力の詳細を1280×720へ再配置し、旧ManagementV3依存を外した。 |
 
 ## 実装順
 
 1. **役職記録（完了）**: 専用UXML／USS、一覧→詳細の選択連動、現役職／任命候補の状態を実画面確認済み。
 2. **家宝（完了）**: 選択家宝、成長記録、選択モーダルを実画面確認済み。
-3. **勢力**: 街路案内から到達する旧式ページ。関係値と所属を主役にする。
+3. **勢力（完了）**: 使節、4勢力の一覧、選択連動する詳細記録を実画面確認済み。
 4. **キャラクター**: 専用構造を保ち、旧共通USS依存を外す。
 5. **荷造り**: 現行遠征導線との連続性を確認しながら専用USSへ寄せる。
 6. **商店**: ラン中Reward／Resultへ影響しない拠点固有セレクタへ分離する。
 7. **遠征準備**: シームレス遠征開始画面との役割重複を整理してから現行化する。
 
-次の実装対象は**勢力**とする。
+次の実装対象は**キャラクター**とする。
 
 ## 一画面ごとの完了条件
 

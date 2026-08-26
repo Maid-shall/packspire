@@ -34,8 +34,7 @@ public sealed partial class PackspireUiFoundation {
  };
  static readonly string[] FactionStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireManagement",
-  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireManagementV3",
-  "UI/PackspireMisprintCommon"
+  "UI/PackspireMeta","UI/PackspireOrnaments","UI/PackspireFaction"
  };
  static readonly string[] ExpeditionStyleSheets={
   "UI/PackspireRoute","UI/PackspirePolish","UI/PackspirePopDark",
