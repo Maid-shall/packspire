@@ -455,7 +455,7 @@ namespace Packspire
 
         private void HandleKeyboard()
         {
-            if (Input.GetKeyDown(KeyCode.F10))
+            if (PackspireInput.DeveloperTogglePressed())
             {
                 if (usesLiveRun &&
                     PackspireGame.Instance != null &&
@@ -467,18 +467,20 @@ namespace Packspire
                 ReturnToDeveloperMenu();
                 return;
             }
+            bool cancelPressed = PackspireInput.CancelPressed();
+            bool ledgerPressed = PackspireInput.JourneyLedgerPressed();
             if (pileOverlayOpen &&
-                (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
+                (cancelPressed || ledgerPressed))
             {
                 ClosePileOverlay();
                 return;
             }
-            if (ledgerOpen && Input.GetKeyDown(KeyCode.Escape))
+            if (ledgerOpen && cancelPressed)
             {
                 ToggleLedger();
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.Escape) &&
+            if (PackspireInput.JourneyPausePressed() &&
                 (phase == Phase.Travel ||
                  phase == Phase.MiniGame ||
                  phase == Phase.Battle))
@@ -486,23 +488,25 @@ namespace Packspire
                 TogglePause();
                 return;
             }
-            if (!usesLiveRun && Input.GetKeyDown(KeyCode.R))
+            if (!usesLiveRun && PackspireInput.RetryPressed())
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (ledgerPressed)
             {
                 ToggleLedger();
                 return;
             }
             if (ledgerOpen) return;
-            if (phase == Phase.Choice && Input.GetKeyDown(KeyCode.Alpha1)) SelectChoice(0);
-            if (phase == Phase.Choice && Input.GetKeyDown(KeyCode.Alpha2)) SelectChoice(1);
-            if (phase == Phase.MiniGame && Input.GetKeyDown(KeyCode.Space)) MiniGameAction();
-            if (phase == Phase.MiniGame && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))) NudgeBalance(-1f);
-            if (phase == Phase.MiniGame && (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))) NudgeBalance(1f);
-            if (phase == Phase.Battle && defenseActive && Input.GetKeyDown(KeyCode.Space)) ResolveDefenseInput(DefenseAction.Jump);
-            if (phase == Phase.Battle && defenseActive && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) ResolveDefenseInput(DefenseAction.Brace);
+            if (phase == Phase.Choice && PackspireInput.FirstChoicePressed()) SelectChoice(0);
+            if (phase == Phase.Choice && PackspireInput.SecondChoicePressed()) SelectChoice(1);
+            if (phase == Phase.MiniGame && PackspireInput.PrimaryActionPressed()) MiniGameAction();
+            if (phase == Phase.MiniGame && PackspireInput.NavigateLeftPressed()) NudgeBalance(-1f);
+            if (phase == Phase.MiniGame && PackspireInput.NavigateRightPressed()) NudgeBalance(1f);
+            if (phase == Phase.Battle && defenseActive && PackspireInput.JumpReactionPressed())
+                ResolveDefenseInput(DefenseAction.Jump);
+            if (phase == Phase.Battle && defenseActive && PackspireInput.BraceReactionPressed())
+                ResolveDefenseInput(DefenseAction.Brace);
             if (!usesLiveRun && Input.GetKeyDown(KeyCode.F5)) BeginBattle();
             if (!usesLiveRun && Input.GetKeyDown(KeyCode.F6))
             {
@@ -608,6 +612,7 @@ namespace Packspire
             if (choices.Length > 1) BindChoice(1, choices[1]);
             phaseText.text = "ROUTE DECISION";
             nextText.text = "旅の内容と成果を見比べる";
+            choiceA.Focus();
         }
 
         private void ContinueAlongSingleRoute(ExpeditionRouteNodePlan node)
@@ -806,6 +811,7 @@ namespace Packspire
                 : usesLiveRun ? "遠征結果へ" : "DEV SIMULATIONを再開 [R]";
             resultContinue.userData = canContinue;
             terminalActionLocked = false;
+            resultContinue.Focus();
         }
 
         private void ContinueAfterResult()

@@ -609,7 +609,7 @@ namespace Packspire
 
         private void HandleTestInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (PackspireInput.CancelPressed())
             {
                 SetMainUiVisible(true);
                 SceneManager.LoadScene("Main");
@@ -618,7 +618,8 @@ namespace Packspire
 
             // The playable journey presenter owns Space for roadside tasks. Keep the
             // walk/stop shortcut only in the isolated animation comparison scene.
-            if (GetComponent<JourneyTravelGameplayPrototype>() == null && Input.GetKeyDown(KeyCode.Space))
+            if (GetComponent<JourneyTravelGameplayPrototype>() == null &&
+                PackspireInput.PrimaryActionPressed())
             {
                 walkingRequested = !walkingRequested;
             }

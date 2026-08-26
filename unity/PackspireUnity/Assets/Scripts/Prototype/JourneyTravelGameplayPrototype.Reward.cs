@@ -143,6 +143,7 @@ namespace Packspire
             rewardDetailText.text = "候補を選ぶと、ここに効果が表示されます。";
             rewardSelectionNote.text = "未選択";
             rewardConfirmButton.SetEnabled(false);
+            rewardCandidateButtons[0].Focus();
         }
 
         private void SelectJourneyReward(int index)

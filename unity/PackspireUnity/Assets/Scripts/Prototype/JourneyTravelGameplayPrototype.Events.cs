@@ -17,6 +17,7 @@ namespace Packspire
             eventB.text = interaction.SecondaryButton;
             eventB.EnableInClassList("is-hidden", !interaction.ShowSecondaryButton);
             eventB.SetEnabled(interaction.ShowSecondaryButton);
+            eventA.Focus();
         }
 
         private void ResolveEvent(bool primary)

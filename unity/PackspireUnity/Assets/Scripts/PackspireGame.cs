@@ -55,7 +55,8 @@ public partial class PackspireGame : MonoBehaviour {
  }
  void OnDestroy(){if(Instance==this)Instance=null;}
  void Update(){
-  if(PackspireInput.DeveloperTogglePressed())UiToggleDeveloperPanel();
+  if(PackspireInput.DeveloperTogglePressed()&&!seamlessJourneySessionActive)
+   UiToggleDeveloperPanel();
   if(!visualScreenTracked){lastVisualScreen=screen;visualScreenTracked=true;return;}
   if(lastVisualScreen==screen)return;
   var previous=lastVisualScreen;

@@ -28,6 +28,9 @@ namespace Packspire
             public readonly VisualElement Value;
             public readonly Image[] ValueGlyphs;
             public readonly Image BundleCount;
+            public bool Occupied;
+            public bool Imminent;
+            public long Serial = long.MinValue;
 
             public ThreatSlot(VisualElement root)
             {
@@ -53,6 +56,9 @@ namespace Packspire
             public readonly VisualElement Root;
             public readonly Label EnergyCount;
             public readonly Label DrawCount;
+            public bool Occupied;
+            public int EnergyDelta;
+            public int Draws;
 
             public SupplySlot(VisualElement root)
             {
@@ -72,6 +78,8 @@ namespace Packspire
         private readonly VisualElement chainTrack;
         private readonly VisualElement slotsViewport;
         private readonly VisualElement nowMarker;
+        internal int ThreatContentBindCount { get; private set; }
+        internal int SupplyContentBindCount { get; private set; }
 
         public JourneyBattleReelPresenter(
             VisualElement root,
@@ -112,7 +120,6 @@ namespace Packspire
                 new Length(0f, LengthUnit.Pixel),
                 new Length(chainOffset, LengthUnit.Pixel));
 
-            Clear();
             battle.GetUpcomingActions(actionPreviews);
             int threatIndex = 0;
             foreach (RealtimeEnemyActionPreview preview in actionPreviews)
@@ -121,8 +128,12 @@ namespace Packspire
                 if (preview.TimeUntilStart > displayHorizon) continue;
                 ThreatSlot slot = threatSlots[threatIndex++];
                 PlaceThreat(slot, preview.TimeUntilStart, travel);
-                BindThreat(slot, preview);
+                if (!slot.Occupied || slot.Serial != preview.Serial)
+                    BindThreat(slot, preview);
+                UpdateThreatImminence(slot, preview);
             }
+            for (int index = threatIndex; index < threatSlots.Length; index++)
+                ClearThreat(threatSlots[index]);
 
             battle.GetUpcomingSupplyPulses(supplyPreviews, displayHorizon);
             int supplyIndex = 0;
@@ -131,41 +142,22 @@ namespace Packspire
                 if (supplyIndex >= supplySlots.Length) break;
                 SupplySlot slot = supplySlots[supplyIndex++];
                 PlaceSupply(slot, preview.TimeUntil, travel);
-                BindSupply(slot, preview);
+                if (!slot.Occupied ||
+                    slot.EnergyDelta != preview.EnergyDelta ||
+                    slot.Draws != preview.DrawCount)
+                    BindSupply(slot, preview);
             }
+            for (int index = supplyIndex; index < supplySlots.Length; index++)
+                ClearSupply(supplySlots[index]);
         }
 
         public void Clear()
         {
             foreach (ThreatSlot slot in threatSlots)
-            {
-                slot.Root.RemoveFromClassList("slot--occupied");
-                slot.Root.RemoveFromClassList("slot--attack");
-                slot.Root.RemoveFromClassList("slot--reaction-attack");
-                slot.Root.RemoveFromClassList("slot--defense");
-                slot.Root.RemoveFromClassList("slot--energy");
-                slot.Root.RemoveFromClassList("slot--imminent");
-                slot.Root.RemoveFromClassList("slot--with-energy");
-                slot.Root.RemoveFromClassList("slot--bundle");
-                ClearValue(slot);
-                slot.BundleCount.image = null;
-                slot.BundleCount.style.display = DisplayStyle.None;
-                slot.Art.sprite = null;
-                slot.Art.image = null;
-                slot.Root.style.top = 0f;
-            }
+                ClearThreat(slot);
 
             foreach (SupplySlot slot in supplySlots)
-            {
-                slot.Root.RemoveFromClassList("slot--occupied");
-                slot.Root.RemoveFromClassList("slot--energy");
-                slot.Root.RemoveFromClassList("slot--draw");
-                slot.Root.RemoveFromClassList("slot--energy-stack");
-                slot.Root.RemoveFromClassList("slot--draw-stack");
-                slot.EnergyCount.text = string.Empty;
-                slot.DrawCount.text = string.Empty;
-                slot.Root.style.top = 0f;
-            }
+                ClearSupply(slot);
         }
 
         private float MeasureTravel()
@@ -192,6 +184,10 @@ namespace Packspire
 
         private void BindThreat(ThreatSlot slot, RealtimeEnemyActionPreview preview)
         {
+            ClearThreat(slot);
+            slot.Occupied = true;
+            slot.Serial = preview.Serial;
+            ThreatContentBindCount++;
             bool defense = preview.Kind == RealtimeEnemyActionKind.Guard;
             bool reaction = preview.Kind == RealtimeEnemyActionKind.JumpReaction ||
                 preview.Kind == RealtimeEnemyActionKind.BraceReaction;
@@ -199,9 +195,6 @@ namespace Packspire
             slot.Root.EnableInClassList("slot--attack", !defense);
             slot.Root.EnableInClassList("slot--reaction-attack", reaction);
             slot.Root.EnableInClassList("slot--defense", defense);
-            slot.Root.EnableInClassList(
-                "slot--imminent",
-                preview.Telegraphing || preview.TimeUntil <= 1.1d);
             slot.Art.scaleMode = ScaleMode.ScaleAndCrop;
             slot.Art.sprite = actorSprite(preview);
             SetValue(slot, preview.Damage.ToString());
@@ -211,8 +204,13 @@ namespace Packspire
             SetGlyph(slot.BundleCount, preview.HitCount.ToString()[0]);
         }
 
-        private static void BindSupply(SupplySlot slot, RealtimeSupplyPulsePreview preview)
+        private void BindSupply(SupplySlot slot, RealtimeSupplyPulsePreview preview)
         {
+            ClearSupply(slot);
+            slot.Occupied = true;
+            slot.EnergyDelta = preview.EnergyDelta;
+            slot.Draws = preview.DrawCount;
+            SupplyContentBindCount++;
             slot.Root.AddToClassList("slot--occupied");
             slot.Root.EnableInClassList("slot--energy", preview.EnergyDelta > 0);
             slot.Root.EnableInClassList("slot--draw", preview.DrawCount > 0);
@@ -220,6 +218,54 @@ namespace Packspire
             slot.Root.EnableInClassList("slot--draw-stack", preview.DrawCount > 1);
             slot.EnergyCount.text = Amount("エナジー", preview.EnergyDelta);
             slot.DrawCount.text = Amount("手札", preview.DrawCount);
+        }
+
+        private static void UpdateThreatImminence(
+            ThreatSlot slot,
+            RealtimeEnemyActionPreview preview)
+        {
+            bool imminent = preview.Telegraphing || preview.TimeUntil <= 1.1d;
+            if (slot.Imminent == imminent) return;
+            slot.Imminent = imminent;
+            slot.Root.EnableInClassList("slot--imminent", imminent);
+        }
+
+        private static void ClearThreat(ThreatSlot slot)
+        {
+            if (!slot.Occupied) return;
+            slot.Occupied = false;
+            slot.Imminent = false;
+            slot.Serial = long.MinValue;
+            slot.Root.RemoveFromClassList("slot--occupied");
+            slot.Root.RemoveFromClassList("slot--attack");
+            slot.Root.RemoveFromClassList("slot--reaction-attack");
+            slot.Root.RemoveFromClassList("slot--defense");
+            slot.Root.RemoveFromClassList("slot--energy");
+            slot.Root.RemoveFromClassList("slot--imminent");
+            slot.Root.RemoveFromClassList("slot--with-energy");
+            slot.Root.RemoveFromClassList("slot--bundle");
+            ClearValue(slot);
+            slot.BundleCount.image = null;
+            slot.BundleCount.style.display = DisplayStyle.None;
+            slot.Art.sprite = null;
+            slot.Art.image = null;
+            slot.Root.style.top = 0f;
+        }
+
+        private static void ClearSupply(SupplySlot slot)
+        {
+            if (!slot.Occupied) return;
+            slot.Occupied = false;
+            slot.EnergyDelta = 0;
+            slot.Draws = 0;
+            slot.Root.RemoveFromClassList("slot--occupied");
+            slot.Root.RemoveFromClassList("slot--energy");
+            slot.Root.RemoveFromClassList("slot--draw");
+            slot.Root.RemoveFromClassList("slot--energy-stack");
+            slot.Root.RemoveFromClassList("slot--draw-stack");
+            slot.EnergyCount.text = string.Empty;
+            slot.DrawCount.text = string.Empty;
+            slot.Root.style.top = 0f;
         }
 
         private static string Amount(string label, int amount) =>
