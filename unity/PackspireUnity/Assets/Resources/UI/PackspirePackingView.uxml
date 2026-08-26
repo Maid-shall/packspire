@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="packing-background" class="ps-rite-scene-bg" picking-mode="Ignore" />
     <ui:VisualElement class="ps-rite-scene-shade" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-mark ps-misprint-mark--packing" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-register" picking-mode="Ignore" />
-    <ui:VisualElement class="ps-misprint-decor ps-misprint-decor--proof-slash" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-packing-mark" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-packing-register" picking-mode="Ignore" />
+    <ui:VisualElement class="ps-packing-proof-slash" picking-mode="Ignore" />
     <ui:VisualElement name="packing-top" class="ps-rite-top">
         <ui:VisualElement class="ps-rite-brand">
             <ui:VisualElement class="ps-rite-brand-mark" picking-mode="Ignore" />

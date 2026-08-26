@@ -42,8 +42,7 @@ public sealed partial class PackspireUiFoundation {
  };
  static readonly string[] PackingStyleSheets={
   "UI/PackspirePolish","UI/PackspirePopDark","UI/PackspireOrnaments",
-  "UI/PackspireManagementV3","UI/PackspirePacking",
-  "UI/PackspireMisprintCommon"
+  "UI/PackspirePacking"
  };
  static readonly string[] GridBoardStyleSheets={
   "UI/PackspireRoute","UI/PackspireBattle","UI/PackspirePolish",

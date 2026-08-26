@@ -2,12 +2,48 @@
 .ps-rite {
     position: absolute;
     left: 0;
-    right: 0;
     top: 0;
-    bottom: 0;
+    width: 1280px;
+    height: 720px;
     flex-direction: column;
     padding: 12px 14px 10px 14px;
     background-color: rgb(22, 16, 48);
+    color: rgb(225, 202, 164);
+    overflow: hidden;
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-rite .ps-packing-mark {
+    position: absolute;
+    right: 88px;
+    top: 14px;
+    width: 52px;
+    height: 52px;
+    opacity: 0.82;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-packing-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-rite .ps-packing-register {
+    position: absolute;
+    left: -22px;
+    bottom: -24px;
+    width: 132px;
+    height: 132px;
+    opacity: 0.22;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-rite .ps-packing-proof-slash {
+    position: absolute;
+    right: 18px;
+    top: 110px;
+    width: 180px;
+    height: 300px;
+    opacity: 0.16;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-proof-slash-v1");
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .ps-rite-scene-bg {
