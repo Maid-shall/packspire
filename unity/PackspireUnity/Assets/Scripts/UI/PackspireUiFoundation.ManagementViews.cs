@@ -22,7 +22,7 @@ public sealed partial class PackspireUiFoundation {
   string prefix=layout==ManagementLayout.StatusOverview?"status":"compendium";
   string rootClass="ps-mgmt-screen ps-mgmt-layout-"+LayoutClass(layout)+" ps-dark-surface";
   rootClass+=layout==ManagementLayout.StatusOverview
-   ?" ps-management-v3 ps-status-v2"
+   ?" ps-status-screen"
    :" ps-management-v3 ps-codex-v8";
   shell=CloneView(viewPath,rootClass);
   if(shell==null)return false;

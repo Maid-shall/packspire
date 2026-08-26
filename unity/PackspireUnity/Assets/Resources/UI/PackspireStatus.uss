@@ -1,0 +1,621 @@
+/* Status presentation isolated from the legacy management cascade.
+ * All dimensions use the 1280 x 720 logical PanelSettings coordinate system.
+ */
+
+.ps-status-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(226, 204, 169);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-status-screen .ps-status-view {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+}
+
+.ps-status-screen .ps-status-view__background,
+.ps-status-screen .ps-status-view__shade,
+.ps-status-screen .ps-status-view__content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.ps-status-screen .ps-status-view__background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-status-screen .ps-status-view__shade {
+    background-color: rgba(2, 4, 5, 0.24);
+}
+
+.ps-status-screen .ps-status-view__register {
+    position: absolute;
+    right: -28px;
+    bottom: -30px;
+    width: 148px;
+    height: 148px;
+    opacity: 0.13;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-screen .ps-status-view__header {
+    position: absolute;
+    left: 142px;
+    top: 8px;
+    width: 1118px;
+    height: 68px;
+    flex-direction: row;
+    align-items: center;
+    overflow: visible;
+}
+
+.ps-status-screen .ps-status-view__crest {
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    margin-right: 10px;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-icon-role-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-screen .ps-status-view__header-copy {
+    width: 330px;
+    min-width: 330px;
+    height: 62px;
+    justify-content: center;
+}
+
+.ps-status-screen .ps-status-view__header-eyebrow {
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    color: rgb(70, 188, 190);
+    font-size: 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.ps-status-screen .ps-status-view__header-title {
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    color: rgb(235, 207, 164);
+    font-size: 30px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
+}
+
+.ps-status-screen .ps-status-view__header-rule {
+    flex-grow: 1;
+    height: 38px;
+    margin-left: 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: 0.56;
+}
+
+.ps-status-screen .ps-status-view__body {
+    position: absolute;
+    left: 20px;
+    top: 84px;
+    width: 1240px;
+    height: 620px;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.ps-status-screen .ps-status-character-column {
+    width: 288px;
+    min-width: 288px;
+    height: 620px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.ps-status-screen .ps-status-character-surface,
+.ps-status-screen .ps-status-roles-surface,
+.ps-status-screen .ps-status-role-detail-surface {
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+    background-color: rgba(2, 5, 6, 0.78);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(198, 160, 98, 0.34);
+    border-right-color: rgba(198, 160, 98, 0.34);
+    border-top-color: rgba(218, 179, 116, 0.5);
+    border-bottom-color: rgba(55, 176, 181, 0.4);
+}
+
+.ps-status-screen .ps-status-character-surface {
+    height: 620px;
+}
+
+.ps-status-screen .ps-status-view__section-heading {
+    height: 58px;
+    min-height: 58px;
+    padding: 9px 14px 7px 14px;
+    background-color: rgba(1, 3, 4, 0.82);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(198, 160, 98, 0.38);
+}
+
+.ps-status-screen .ps-status-view__section-eyebrow {
+    height: 14px;
+    margin: 0;
+    color: rgb(67, 178, 181);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-status-screen .ps-status-view__section-title {
+    height: 28px;
+    margin: 0;
+    color: rgb(230, 204, 166);
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-status-screen .ps-status-character-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-screen .ps-status-character-host,
+.ps-status-screen .ps-status-character-block {
+    width: 100%;
+    min-width: 100%;
+}
+
+.ps-status-screen .ps-status-character-block {
+    flex-direction: column;
+}
+
+.ps-status-screen .ps-status-character-art {
+    position: relative;
+    width: 100%;
+    height: 296px;
+    min-height: 296px;
+    overflow: hidden;
+    background-color: rgba(4, 8, 9, 0.46);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(201, 164, 102, 0.3);
+}
+
+.ps-status-screen .ps-status-character-art-image {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 100%;
+    height: 294px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-screen .ps-status-character-art-glow {
+    position: absolute;
+    left: 42px;
+    right: 42px;
+    top: 44px;
+    height: 190px;
+    background-color: rgba(42, 156, 159, 0.06);
+}
+
+.ps-status-screen .ps-status-character-art-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 52px;
+    background-color: rgba(2, 5, 6, 0.42);
+}
+
+.ps-status-screen .ps-status-character-summary {
+    padding: 11px 14px 18px 14px;
+    background-color: rgba(1, 3, 4, 0.58);
+}
+
+.ps-status-screen .ps-status-character-name {
+    margin: 0 0 1px 0;
+    padding: 0;
+    color: rgb(239, 215, 178);
+    font-size: 23px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-status-screen .ps-status-character-title {
+    margin: 0 0 9px 0;
+    padding: 0;
+    color: rgba(67, 184, 187, 0.88);
+    font-size: 10px;
+}
+
+.ps-status-screen .ps-status-character-summary .ps-status-field {
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top-width: 1px;
+    border-top-color: rgba(195, 157, 96, 0.2);
+}
+
+.ps-status-screen .ps-status-workspace {
+    flex-grow: 1;
+    min-width: 0;
+    height: 620px;
+    margin-left: 12px;
+}
+
+.ps-status-screen .ps-status-workspace-top {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+}
+
+.ps-status-screen .ps-status-roles-column {
+    width: 300px;
+    min-width: 300px;
+    height: 536px;
+}
+
+.ps-status-screen .ps-status-roles-surface {
+    height: 536px;
+}
+
+.ps-status-screen .ps-status-roles-header {
+    height: 62px;
+    min-height: 62px;
+    padding: 8px 12px;
+    justify-content: center;
+    background-color: rgba(1, 3, 4, 0.84);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(205, 166, 103, 0.38);
+}
+
+.ps-status-screen .ps-status-roles-header .ps-selective-section-head,
+.ps-status-screen .ps-status-roles-header .ps-section-head {
+    margin: 0;
+}
+
+.ps-status-screen .ps-status-roles-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-screen .ps-status-role-ticket {
+    position: relative;
+    width: 100%;
+    height: 94px;
+    min-height: 94px;
+    margin: 0 0 7px 0;
+    padding: 11px 36px 9px 74px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(15, 17, 16, 0.82);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(71, 177, 180, 0.46);
+    border-right-color: rgba(184, 148, 91, 0.22);
+    border-top-color: rgba(184, 148, 91, 0.28);
+    border-bottom-color: rgba(184, 148, 91, 0.22);
+    color: rgb(221, 198, 161);
+}
+
+.ps-status-screen .ps-status-role-ticket:hover,
+.ps-status-screen .ps-status-role-ticket:focus {
+    background-color: rgba(37, 38, 32, 0.94);
+    border-left-color: rgb(76, 201, 202);
+    border-top-color: rgba(225, 186, 121, 0.62);
+}
+
+.ps-status-screen .ps-status-role-ticket.ps-selected {
+    background-color: rgba(49, 34, 25, 0.96);
+    background-image: none;
+    border-left-color: rgb(218, 66, 51);
+    border-top-color: rgba(238, 202, 145, 0.76);
+    color: rgb(26, 22, 18);
+}
+
+.ps-status-screen .ps-status-role-ticket-plate {
+    display: none;
+}
+
+.ps-status-screen .ps-status-role-seal-host {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    width: 56px;
+    height: 64px;
+}
+
+.ps-status-screen .ps-status-role-seal {
+    width: 56px;
+    height: 64px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-screen .ps-status-role-ticket-copy {
+    flex-grow: 1;
+    min-width: 0;
+    justify-content: center;
+}
+
+.ps-status-screen .ps-status-role-ticket-name {
+    margin: 0;
+    padding: 0;
+    color: rgb(232, 208, 171);
+    font-size: 18px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
+}
+
+.ps-status-screen .ps-status-role-ticket-meta {
+    flex-direction: row;
+    margin-top: 4px;
+}
+
+.ps-status-screen .ps-status-role-ticket-kind,
+.ps-status-screen .ps-status-role-ticket-lv {
+    margin: 0 8px 0 0;
+    padding: 0;
+    color: rgba(84, 191, 193, 0.82);
+    font-size: 9px;
+}
+
+.ps-status-screen .ps-status-role-ticket.ps-selected .ps-status-role-ticket-name,
+.ps-status-screen .ps-status-role-ticket.ps-selected .ps-status-role-ticket-kind,
+.ps-status-screen .ps-status-role-ticket.ps-selected .ps-status-role-ticket-lv {
+    color: rgb(245, 220, 180);
+}
+
+.ps-status-screen .ps-status-role-kind-icon {
+    position: absolute;
+    right: 9px;
+    top: 34px;
+    width: 22px;
+    height: 22px;
+    opacity: 0.76;
+}
+
+.ps-status-screen .ps-status-role-equip-seal {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 26px;
+    height: 26px;
+    color: rgb(219, 190, 144);
+    font-size: 11px;
+}
+
+.ps-status-screen .ps-status-role-detail-column {
+    flex-grow: 1;
+    min-width: 0;
+    height: 536px;
+    margin-left: 12px;
+}
+
+.ps-status-screen .ps-status-role-detail-surface {
+    height: 536px;
+}
+
+.ps-status-screen .ps-status-detail-header {
+    height: 178px;
+    min-height: 178px;
+    padding: 12px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(1, 3, 4, 0.86);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(205, 166, 103, 0.38);
+}
+
+.ps-status-screen .ps-status-role-image {
+    width: 152px;
+    min-width: 152px;
+    height: 152px;
+    margin-right: 16px;
+}
+
+.ps-status-screen .ps-status-role-image .ps-mgmt-detail-art-frame,
+.ps-status-screen .ps-status-role-image .ps-mgmt-detail-art-image {
+    width: 152px;
+    height: 152px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-status-screen .ps-status-role-identity {
+    flex-grow: 1;
+    min-width: 0;
+    justify-content: center;
+}
+
+.ps-status-screen .ps-status-role-detail-name {
+    margin: 0;
+    padding: 0;
+    color: rgb(239, 215, 178);
+    font-size: 30px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-status-screen .ps-status-role-detail-meta {
+    margin: 6px 0 0 0;
+    padding: 0;
+    color: rgb(70, 187, 190);
+    font-size: 11px;
+}
+
+.ps-status-screen .ps-status-equipped-seal {
+    width: 72px;
+    height: 28px;
+    margin-top: 12px;
+    color: rgb(223, 192, 145);
+    font-size: 11px;
+}
+
+.ps-status-screen .ps-status-role-detail-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 10px 14px 16px 14px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-status-screen .ps-status-role-detail-body {
+    width: 100%;
+    min-width: 100%;
+}
+
+.ps-status-screen .ps-status-role-detail-body .ps-mgmt-section {
+    margin: 0 0 9px 0;
+    padding: 8px 10px 9px 10px;
+    background-color: rgba(11, 13, 12, 0.66);
+    border-left-width: 2px;
+    border-left-color: rgba(60, 176, 179, 0.62);
+}
+
+.ps-status-screen .ps-status-role-detail-body .ps-mgmt-section-v6-rule {
+    display: none;
+}
+
+.ps-status-screen .ps-status-role-detail-body .ps-mgmt-section-title {
+    margin: 0 0 3px 0;
+    color: rgb(211, 64, 50);
+    font-size: 11px;
+}
+
+.ps-status-screen .ps-status-role-detail-body .ps-mgmt-section-body {
+    margin: 0;
+    color: rgb(218, 198, 167);
+    font-size: 12px;
+    white-space: normal;
+}
+
+.ps-status-screen .ps-status-appoint-action,
+.ps-status-screen .ps-status-branch-choice,
+.ps-status-screen .ps-status-qualification > Button {
+    min-height: 44px;
+    margin: 4px 0;
+    padding: 7px 10px;
+    background-color: rgba(12, 16, 16, 0.9);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(203, 166, 105, 0.42);
+    border-right-color: rgba(203, 166, 105, 0.3);
+    border-top-color: rgba(203, 166, 105, 0.42);
+    border-bottom-color: rgba(55, 178, 181, 0.42);
+    color: rgb(225, 201, 163);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.ps-status-screen .ps-status-appoint-action:hover,
+.ps-status-screen .ps-status-branch-choice:hover,
+.ps-status-screen .ps-status-qualification > Button:hover,
+.ps-status-screen .ps-status-branch-choice.ps-selected,
+.ps-status-screen .ps-status-qualification > Button.ps-selected {
+    background-color: rgba(53, 41, 28, 0.94);
+    border-left-color: rgb(222, 73, 56);
+    color: rgb(244, 218, 177);
+}
+
+.ps-status-screen .ps-status-branch-choices,
+.ps-status-screen .ps-status-qualification {
+    margin-bottom: 8px;
+}
+
+.ps-status-screen .ps-status-appointment {
+    height: 74px;
+    min-height: 74px;
+    margin-top: 10px;
+    padding: 10px 18px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(10, 11, 10, 0.94);
+    background-image: none;
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(188, 49, 39);
+    border-right-color: rgba(204, 166, 104, 0.34);
+    border-top-color: rgba(222, 185, 122, 0.52);
+    border-bottom-color: rgba(61, 175, 179, 0.38);
+}
+
+.ps-status-screen .ps-status-appointment-copy {
+    flex-grow: 1;
+    min-width: 0;
+    justify-content: center;
+}
+
+.ps-status-screen .ps-status-appointment-eyebrow {
+    margin: 0;
+    color: rgb(65, 180, 183);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-status-screen .ps-status-appointment-title {
+    margin: 0;
+    color: rgb(235, 209, 168);
+    font-size: 19px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-status-screen .ps-status-appointment-detail {
+    margin: 1px 0 0 0;
+    color: rgba(218, 196, 160, 0.8);
+    font-size: 10px;
+}
+
+.ps-status-screen .ps-status-appointment-action {
+    width: 102px;
+    min-width: 102px;
+    height: 38px;
+    margin-left: 12px;
+    padding: 8px;
+    color: rgb(32, 25, 19);
+    background-color: rgb(222, 197, 156);
+    border-left-width: 2px;
+    border-left-color: rgb(181, 48, 38);
+    font-size: 13px;
+    -unity-text-align: middle-center;
+}
+
+.ps-status-screen .unity-scroll-view__vertical-scroller {
+    width: 8px;
+}
+
+.ps-status-screen .unity-scroller__slider {
+    background-color: rgba(195, 157, 96, 0.46);
+}
+
+.ps-status-screen .ps-empty-state {
+    margin: 18px;
+    padding: 18px;
+    background-color: rgba(8, 10, 10, 0.76);
+    border-left-width: 2px;
+    border-left-color: rgba(62, 179, 181, 0.58);
+}
