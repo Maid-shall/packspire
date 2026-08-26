@@ -7,14 +7,21 @@ namespace Packspire
         private const string SeamlessJourneyScene = "JourneyAnimationPrototype";
 
         private bool seamlessJourneySessionActive;
+        private bool seamlessJourneyDeveloperSession;
         private bool seamlessJourneyBattleRewardPending;
         private bool seamlessJourneyResumeAfterReward;
+        private JourneySessionSnapshot pendingJourneyRestore;
 
         /// <summary>
         /// True while either a normal expedition or a connected developer session owns
         /// the journey scene. Both paths operate on the PackspireGame RunState.
         /// </summary>
         public bool UiSeamlessJourneySessionActive => seamlessJourneySessionActive;
+        public bool UiSeamlessJourneyDeveloperSession => seamlessJourneyDeveloperSession;
+        public bool UiCanResumeSeamlessJourney =>
+            JourneySessionSaveSystem.CanResume(meta);
+        public string UiSeamlessJourneyResumeSummary =>
+            JourneySessionSaveSystem.Summary(meta);
 
         public bool UiTryGetSeamlessJourneyRun(out RunState journeyRun)
         {
@@ -35,8 +42,15 @@ namespace Packspire
             ExpeditionProgressSystem.Ensure(run, meta);
 
             seamlessJourneySessionActive = true;
+            seamlessJourneyDeveloperSession = false;
             seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
+            pendingJourneyRestore = null;
+            JourneySessionSaveSystem.Capture(
+                meta,
+                run,
+                JourneyResumeStage.Choice);
+            SaveSystem.Save(meta);
             JourneyDeveloperPreviewController.Clear();
             developerPanel = false;
             developerHasReturn = false;
@@ -52,12 +66,66 @@ namespace Packspire
         public void UiFinishSeamlessJourney(ExpeditionEndReason reason)
         {
             if (!seamlessJourneySessionActive || run == null) return;
+            if (seamlessJourneyDeveloperSession)
+            {
+                UiLeaveSeamlessJourneyForDeveloperMenu();
+                return;
+            }
 
             seamlessJourneySessionActive = false;
+            seamlessJourneyDeveloperSession = false;
             seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
+            pendingJourneyRestore = null;
+            JourneySessionSaveSystem.Clear(meta);
             FinishRun(reason);
             SceneManager.LoadScene("Main");
+        }
+
+        public void UiSaveSeamlessJourneyCheckpoint(
+            JourneyResumeStage stage,
+            JourneyBattleRewardOffer rewardOffer = null)
+        {
+            if (!seamlessJourneySessionActive ||
+                seamlessJourneyDeveloperSession ||
+                run == null)
+                return;
+            if (!JourneySessionSaveSystem.Capture(meta, run, stage, rewardOffer)) return;
+            SaveSystem.Save(meta);
+        }
+
+        public void UiResumeSeamlessJourney()
+        {
+            if (!JourneySessionSaveSystem.TryRestore(
+                    meta,
+                    out JourneySessionSnapshot snapshot))
+                return;
+
+            run = snapshot.run;
+            ExpeditionProgressSystem.Ensure(run, meta);
+            battle = null;
+            gridBoard = null;
+            packingAtBase = false;
+            packingAtRelay = false;
+            courierBattleNodeId = courierEventNodeId = courierCargoNodeId = "";
+            seamlessJourneySessionActive = true;
+            seamlessJourneyDeveloperSession = false;
+            seamlessJourneyBattleRewardPending = false;
+            seamlessJourneyResumeAfterReward = false;
+            pendingJourneyRestore = snapshot;
+            JourneyDeveloperPreviewController.Clear();
+            developerPanel = false;
+            developerHasReturn = false;
+            screen = ScreenId.Route;
+            SceneManager.LoadScene(SeamlessJourneyScene);
+        }
+
+        public bool UiConsumeSeamlessJourneyRestore(
+            out JourneySessionSnapshot snapshot)
+        {
+            snapshot = pendingJourneyRestore;
+            pendingJourneyRestore = null;
+            return seamlessJourneySessionActive && snapshot != null;
         }
 
         /// <summary>
@@ -113,8 +181,10 @@ namespace Packspire
             packingAtRelay = false;
             courierBattleNodeId = courierEventNodeId = courierCargoNodeId = "";
             seamlessJourneySessionActive = true;
+            seamlessJourneyDeveloperSession = true;
             seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
+            pendingJourneyRestore = null;
             developerPanel = false;
             developerHasReturn = false;
             screen = ScreenId.Route;
@@ -135,9 +205,27 @@ namespace Packspire
 
         public void UiLeaveSeamlessJourneyForDeveloperMenu()
         {
+            if (!seamlessJourneyDeveloperSession)
+            {
+                seamlessJourneySessionActive = false;
+                seamlessJourneyBattleRewardPending = false;
+                seamlessJourneyResumeAfterReward = false;
+                pendingJourneyRestore = null;
+                run = null;
+                battle = null;
+                gridBoard = null;
+                packingAtBase = false;
+                packingAtRelay = false;
+                screen = ScreenId.Expedition;
+                SceneManager.LoadScene("Main");
+                return;
+            }
+
             seamlessJourneySessionActive = false;
+            seamlessJourneyDeveloperSession = false;
             seamlessJourneyBattleRewardPending = false;
             seamlessJourneyResumeAfterReward = false;
+            pendingJourneyRestore = null;
             run = null;
             battle = null;
             gridBoard = null;

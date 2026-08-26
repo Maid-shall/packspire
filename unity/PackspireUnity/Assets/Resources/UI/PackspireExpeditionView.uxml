@@ -68,8 +68,8 @@
                     <ui:Label name="expedition-depart-reason" class="ps-exp-depart-reason departure-disabled-reason" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:VisualElement class="ps-exp-auth-action-host">
-                    <ui:Label text="BEGIN DISPATCH" class="ps-exp-auth-action-sub" picking-mode="Ignore" />
-                    <ui:Label text="出発手続きを進める" class="ps-exp-auth-action-copy" picking-mode="Ignore" />
+                    <ui:Label name="expedition-auth-action-sub" text="BEGIN DISPATCH" class="ps-exp-auth-action-sub" picking-mode="Ignore" />
+                    <ui:Label name="expedition-auth-action-copy" text="出発手続きを進める" class="ps-exp-auth-action-copy" picking-mode="Ignore" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

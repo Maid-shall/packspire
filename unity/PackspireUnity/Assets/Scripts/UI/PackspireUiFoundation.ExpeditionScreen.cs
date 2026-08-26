@@ -30,6 +30,8 @@ public sealed partial class PackspireUiFoundation {
  Label expeditionAuthDestination;
  Label expeditionAuthCourier;
  Label expeditionAuthLoadout;
+ Label expeditionAuthActionSub;
+ Label expeditionAuthActionCopy;
  float expeditionDestScrollY;
  float expeditionDetailScrollY;
  bool expeditionLayoutAudited;
@@ -88,6 +90,8 @@ public sealed partial class PackspireUiFoundation {
   expeditionAuthDestination=RequireViewElement<Label>(expeditionShell,"expedition-auth-destination");
   expeditionAuthCourier=RequireViewElement<Label>(expeditionShell,"expedition-auth-courier");
   expeditionAuthLoadout=RequireViewElement<Label>(expeditionShell,"expedition-auth-loadout");
+  expeditionAuthActionSub=RequireViewElement<Label>(expeditionShell,"expedition-auth-action-sub");
+  expeditionAuthActionCopy=RequireViewElement<Label>(expeditionShell,"expedition-auth-action-copy");
   expeditionDepartButton=BuildExpeditionDeparturePrimaryButton(meta);
   expeditionDepartFooter.Add(expeditionDepartButton);
   screenRoot.Add(expeditionShell);
@@ -103,7 +107,11 @@ public sealed partial class PackspireUiFoundation {
 }
 
  Button BuildExpeditionDeparturePrimaryButton(MetaSave meta){
-  var button=PackspireUiFactory.PrimaryActionButton("遠征を開始",()=>{
+ var button=PackspireUiFactory.PrimaryActionButton("遠征を開始",()=>{
+   if(game.UiCanResumeSeamlessJourney){
+    game.UiResumeSeamlessJourney();
+    return;
+   }
    if(!IsDungeonUnlocked(meta,selectedDungeonId))return;
    game.UiStartExpedition(selectedDungeonId);
   });
@@ -677,16 +685,32 @@ public sealed partial class PackspireUiFoundation {
  }
 
  void RefreshExpeditionDepart(MetaSave meta){
-  if(expeditionDepartButton==null||expeditionDepartReason==null)return;
+ if(expeditionDepartButton==null||expeditionDepartReason==null)return;
+  bool resumable=game.UiCanResumeSeamlessJourney;
   bool unlocked=IsDungeonUnlocked(meta,selectedDungeonId);
-  var dungeon=GameCatalog.Dungeons.FirstOrDefault(x=>x.id==selectedDungeonId)??GameCatalog.Dungeons[0];
-  var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  var loadout=LoadoutSystem.Active(meta);
+  RunState savedRun=resumable?meta.activeJourney?.run:null;
+  string dungeonId=string.IsNullOrEmpty(savedRun?.dungeon)?selectedDungeonId:savedRun.dungeon;
+  string characterId=string.IsNullOrEmpty(savedRun?.characterId)
+   ?meta.selectedCharacterId
+   :savedRun.characterId;
+  var dungeon=GameCatalog.Dungeons.FirstOrDefault(x=>x.id==dungeonId)??GameCatalog.Dungeons[0];
+  var character=CharacterCatalog.Get(characterId);
+  var loadout=resumable
+   ?meta.loadouts.FirstOrDefault(value=>value.id==savedRun?.loadoutId)??LoadoutSystem.Active(meta)
+   :LoadoutSystem.Active(meta);
   if(expeditionAuthDestination!=null)expeditionAuthDestination.text=dungeon.name;
   if(expeditionAuthCourier!=null)expeditionAuthCourier.text=character.name;
   if(expeditionAuthLoadout!=null)expeditionAuthLoadout.text=loadout.name;
-  expeditionDepartButton.SetEnabled(unlocked);
-  expeditionDepartReason.text=unlocked?"":ExpeditionUnlockHint(meta,dungeon);
+  if(expeditionDepartLabel!=null)
+   expeditionDepartLabel.text=resumable?"遠征へ戻る":"遠征を開始";
+  if(expeditionAuthActionSub!=null)
+   expeditionAuthActionSub.text=resumable?"RESUME DISPATCH":"BEGIN DISPATCH";
+  if(expeditionAuthActionCopy!=null)
+   expeditionAuthActionCopy.text=resumable?"進行中の遠征へ戻る":"出発手続きを進める";
+  expeditionDepartButton.SetEnabled(resumable||unlocked);
+  expeditionDepartReason.text=resumable
+   ?game.UiSeamlessJourneyResumeSummary
+   :unlocked?"":ExpeditionUnlockHint(meta,dungeon);
  }
 }
 }

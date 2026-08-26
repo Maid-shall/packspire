@@ -19,6 +19,7 @@ namespace Packspire
         Boss
     }
 
+    [Serializable]
     public sealed class JourneyBattleRewardCandidate
     {
         public JourneyBattleRewardKind kind;
@@ -29,6 +30,7 @@ namespace Packspire
         public int amount = 1;
     }
 
+    [Serializable]
     public sealed class JourneyBattleRewardOffer
     {
         public JourneyBattleRewardTier tier;

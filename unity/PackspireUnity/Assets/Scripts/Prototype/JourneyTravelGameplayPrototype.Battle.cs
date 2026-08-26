@@ -57,6 +57,7 @@ namespace Packspire
             SetMainEnemyVisible(!playEncounterIntro);
             SyncMainEnemyShadow();
             EnemyDef enemy = encounterProfile.BuildEnemy();
+            SaveJourneyStage(JourneyResumeStage.Battle);
             battle = BattleSystem.Begin(run, enemy, 1f);
             StartRealtimeBattle();
             SetBattlePreviewEnemyCount(1);

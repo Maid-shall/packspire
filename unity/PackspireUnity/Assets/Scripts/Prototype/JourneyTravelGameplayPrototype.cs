@@ -193,6 +193,7 @@ namespace Packspire
         private bool miniGameResolved => miniGameController.IsResolved;
         private bool firstChoicePending = true;
         private bool choiceLocked;
+        private bool terminalActionLocked;
         private bool ledgerOpen;
         private bool defenseActive;
         private bool defenseResolved;
@@ -318,6 +319,14 @@ namespace Packspire
 
             BindUi();
             HideFoundationUi();
+            if (usesLiveRun &&
+                PackspireGame.Instance != null &&
+                PackspireGame.Instance.UiConsumeSeamlessJourneyRestore(
+                    out JourneySessionSnapshot snapshot))
+            {
+                RestoreSavedJourney(snapshot);
+                yield break;
+            }
             if (phaseRevision == revisionAtStart)
             {
                 if (JourneyDeveloperPreviewController.TryApply(this)) { }
@@ -448,6 +457,13 @@ namespace Packspire
         {
             if (Input.GetKeyDown(KeyCode.F10))
             {
+                if (usesLiveRun &&
+                    PackspireGame.Instance != null &&
+                    !PackspireGame.Instance.UiSeamlessJourneyDeveloperSession)
+                {
+                    ShowToast("F10は開発確認所だけで使用できます。");
+                    return;
+                }
                 ReturnToDeveloperMenu();
                 return;
             }
@@ -455,6 +471,19 @@ namespace Packspire
                 (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)))
             {
                 ClosePileOverlay();
+                return;
+            }
+            if (ledgerOpen && Input.GetKeyDown(KeyCode.Escape))
+            {
+                ToggleLedger();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Escape) &&
+                (phase == Phase.Travel ||
+                 phase == Phase.MiniGame ||
+                 phase == Phase.Battle))
+            {
+                TogglePause();
                 return;
             }
             if (!usesLiveRun && Input.GetKeyDown(KeyCode.R))
@@ -549,10 +578,12 @@ namespace Packspire
         private void ShowChoice()
         {
             ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
+            SaveJourneyStage(JourneyResumeStage.Choice);
             choices = ExpeditionJourneySystem.Available(run).ToArray();
             if (choices.Length == 0)
             {
                 bool complete = plan.complete;
+                if (complete) SaveJourneyStage(JourneyResumeStage.Checkpoint);
                 ShowResult(
                     complete ? "EXPEDITION COMPLETE" : "ROUTE INTERRUPTED",
                     complete ? "最深部踏破" : "進行不能",
@@ -658,6 +689,7 @@ namespace Packspire
             RefreshPersistentUi();
             if (run.courierRoute.failed)
             {
+                SaveJourneyStage(JourneyResumeStage.Defeat);
                 ShowResult("EXPEDITION FAILED", "配達期限を超過", message, false);
                 return;
             }
@@ -671,6 +703,7 @@ namespace Packspire
                     plan, expeditionNode, run.dungeon);
             CourierRouteNodeDef node = ExpeditionJourneySystem.PresentationNode(plan, expeditionNode);
             arrivalExpeditionNode = expeditionNode;
+            SaveJourneyStage(JourneyResumeStage.Location);
             SetWorldForRoute(node);
             BeginTravel(RouteTravelDuration + node.dayCost * .65f, node);
         }
@@ -746,6 +779,12 @@ namespace Packspire
             RefreshPersistentUi();
             bool complete = generatedNodePending ? plan.complete : run.courierRoute.complete;
             bool failed = run.courierRoute.failed;
+            SaveJourneyStage(
+                failed
+                    ? JourneyResumeStage.Defeat
+                    : complete
+                        ? JourneyResumeStage.Checkpoint
+                        : JourneyResumeStage.Choice);
             ShowResult(
                 failed ? "EXPEDITION FAILED" : complete ? "EXPEDITION COMPLETE" : "ROUTE CLEARED",
                 failed ? "遠征続行不能" : complete ? "最深部踏破" : arrivalNode?.resolutionTitle ?? "地点を突破",
@@ -766,10 +805,13 @@ namespace Packspire
                 ? "旅程を再開"
                 : usesLiveRun ? "遠征結果へ" : "DEV SIMULATIONを再開 [R]";
             resultContinue.userData = canContinue;
+            terminalActionLocked = false;
         }
 
         private void ContinueAfterResult()
         {
+            if (terminalActionLocked) return;
+            terminalActionLocked = true;
             bool canContinue = resultContinue.userData is bool value && value;
             if (!canContinue)
             {

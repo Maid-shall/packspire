@@ -203,6 +203,7 @@ namespace Packspire
                 realtimeBattleActive = false;
                 realtimeBattle.Finish();
                 SetMainEnemyVisible(false);
+                SaveJourneyStage(JourneyResumeStage.Defeat);
                 ShowResult(
                     "EXPEDITION FAILED",
                     "配送続行不能",
@@ -429,6 +430,7 @@ namespace Packspire
             realtimeBattleActive = false;
             realtimeBattle.Finish();
             SetMainEnemyVisible(false);
+            SaveJourneyStage(JourneyResumeStage.Defeat);
             ShowResult(
                 "EXPEDITION FAILED",
                 "配達続行不能",

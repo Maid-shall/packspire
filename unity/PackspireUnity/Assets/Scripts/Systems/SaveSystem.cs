@@ -5,17 +5,18 @@ using UnityEngine;
 
 namespace Packspire {
 public static class SaveSystem {
- public const int CurrentVersion=19;
- const string Key="packspire_unity_save_v19";
+ public const int CurrentVersion=20;
+ const string Key="packspire_unity_save_v20";
  const string StagingKey=Key+"_staging";
  const string BackupKey=Key+"_backup";
- const string LegacyKey="packspire_unity_save_v18";
+ const string LegacyKey="packspire_unity_save_v19";
+ const string LegacyKeyV18="packspire_unity_save_v18";
  const string LegacyKeyV17="packspire_unity_save_v17";
  const string LegacyKeyV16="packspire_unity_save_v16";
  const string LegacyKeyV1="packspire_unity_save_v1";
 
  public static MetaSave Load(){
-  foreach(var key in new[]{StagingKey,Key,BackupKey,LegacyKey,LegacyKeyV17,LegacyKeyV16,LegacyKeyV1}){
+  foreach(var key in new[]{StagingKey,Key,BackupKey,LegacyKey,LegacyKeyV18,LegacyKeyV17,LegacyKeyV16,LegacyKeyV1}){
    if(!PlayerPrefs.HasKey(key))continue;
    if(TryRead(PlayerPrefs.GetString(key,""),out var save)){
     if(key!=Key)Debug.LogWarning($"PACKSPIRE save recovered from '{key}'.");
@@ -40,7 +41,7 @@ public static class SaveSystem {
  }
 
  public static void Reset(){
-  foreach(var key in new[]{Key,StagingKey,BackupKey,LegacyKey,LegacyKeyV17,LegacyKeyV16,LegacyKeyV1})
+  foreach(var key in new[]{Key,StagingKey,BackupKey,LegacyKey,LegacyKeyV18,LegacyKeyV17,LegacyKeyV16,LegacyKeyV1})
    PlayerPrefs.DeleteKey(key);
   PlayerPrefs.Save();
  }
@@ -71,6 +72,7 @@ public static class SaveSystem {
   if(sourceVersion<17)MigrateTo17(save);
   if(sourceVersion<18)MigrateTo18(save);
   if(sourceVersion<19)MigrateTo19(save);
+  if(sourceVersion<20)MigrateTo20(save);
   NormalizeCurrent(save);
   save.version=CurrentVersion;
   return save;
@@ -96,6 +98,10 @@ public static class SaveSystem {
   RoleFrameworkSystem.MigrateLegacyRole(save);
  }
 
+ static void MigrateTo20(MetaSave save){
+  save.activeJourney=null;
+ }
+
  static void NormalizeCurrent(MetaSave save){
   save.stash??=new List<ItemInstance>();
   save.consumables??=new List<string>();
@@ -109,6 +115,7 @@ public static class SaveSystem {
   save.factionRep??=new List<IdFloat>();
   save.memoryReactions??=new List<ReactionValueState>();
   save.roleBranches??=new List<IdInt>();
+  save.activeJourney=JourneySessionSaveSystem.Normalize(save.activeJourney,save);
   RoleFrameworkSystem.Normalize(save);
 
   string defaultCharacter=PackspireContent.Data.balance.defaultCharacterId;

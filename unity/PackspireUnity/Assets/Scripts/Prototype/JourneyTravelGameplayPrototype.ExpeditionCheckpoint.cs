@@ -22,6 +22,7 @@ namespace Packspire
             ExpeditionCheckpointSummary summary = ExpeditionCheckpointSystem.Build(run);
             if (!summary.IsCheckpoint) return false;
 
+            SaveJourneyStage(JourneyResumeStage.Checkpoint);
             bool canContinue = summary.CanContinue;
             ShowResult(
                 canContinue ? "FLOOR ROUTE SECURED" : "EXPEDITION COMPLETE",
@@ -61,7 +62,8 @@ namespace Packspire
 
         private void ReturnFromExpeditionCheckpoint()
         {
-            if (activeCheckpoint?.CanContinue != true) return;
+            if (terminalActionLocked || activeCheckpoint?.CanContinue != true) return;
+            terminalActionLocked = true;
             if (usesLiveRun && PackspireGame.Instance != null)
             {
                 PackspireGame.Instance.UiFinishSeamlessJourney(

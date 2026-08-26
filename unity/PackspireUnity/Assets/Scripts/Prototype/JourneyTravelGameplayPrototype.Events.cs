@@ -4,6 +4,7 @@ namespace Packspire
     {
         private void ShowEvent(CourierRouteNodeDef node)
         {
+            SaveJourneyStage(JourneyResumeStage.Location);
             JourneyLocationInteractionDefinition interaction =
                 JourneyLocationInteractionCatalog.For(node, arrivalExpeditionNode?.kind);
             SetPhase(Phase.Event);

@@ -92,9 +92,6 @@ namespace Packspire
 
         private void BuildCourierRoute()
         {
-            Debug.LogWarning(
-                "Standalone courier route UI is retired. Expeditions run in the seamless journey scene.");
-
             VisualElement notice = Container("ps-retired-route");
             notice.Add(new Label("配達経路はシームレス遠征へ統合されました。"));
             screenRoot?.Add(notice);

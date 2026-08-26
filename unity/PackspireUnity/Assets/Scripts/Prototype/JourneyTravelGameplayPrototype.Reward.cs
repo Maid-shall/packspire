@@ -65,9 +65,31 @@ namespace Packspire
 
             rewardOffer = JourneyBattleRewardSystem.CreateOffer(run, tier);
             selectedRewardIndex = -1;
+            SaveJourneyStage(JourneyResumeStage.Reward, rewardOffer);
             BindJourneyRewardOffer();
             ClearBattleExitPresentation();
             screen.AddToClassList("reward--open");
+            walker.SetJourneyWalking(false);
+            ApplyWorldMotion();
+        }
+
+        private void RestoreJourneyBattleReward(JourneyBattleRewardOffer savedOffer)
+        {
+            if (savedOffer?.candidates == null || savedOffer.candidates.Length == 0)
+            {
+                ShowChoice();
+                return;
+            }
+
+            rewardOffer = savedOffer;
+            selectedRewardIndex = -1;
+            SetPhase(Phase.Battle);
+            realtimeBattleActive = false;
+            battleInputLocked = true;
+            BindJourneyRewardOffer();
+            ClearBattleExitPresentation();
+            screen.AddToClassList("reward--open");
+            SetMainEnemyVisible(false);
             walker.SetJourneyWalking(false);
             ApplyWorldMotion();
         }
@@ -157,6 +179,10 @@ namespace Packspire
             battle = null;
             screen.RemoveFromClassList("reward--open");
             RefreshPersistentUi();
+            SaveJourneyStage(
+                ExpeditionCheckpointSystem.Build(run).IsCheckpoint
+                    ? JourneyResumeStage.Checkpoint
+                    : JourneyResumeStage.Choice);
             BeginPostBattleRecoveryTravel();
             ShowToast(message);
         }
