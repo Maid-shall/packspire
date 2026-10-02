@@ -47,6 +47,12 @@ namespace Packspire
 
         private void ShowJourneyBattleReward()
         {
+            // A status tick and the attack presentation can both complete victory.
+            // Once opened, preserve this offer and its selection until receipt.
+            if (rewardOffer != null) return;
+            StopRealtimeBattle();
+            battleInputLocked = true;
+            defenseActive = false;
             if (!uiBound) BindUi();
             if (!uiBound || rewardCandidateButtons[0] == null)
             {

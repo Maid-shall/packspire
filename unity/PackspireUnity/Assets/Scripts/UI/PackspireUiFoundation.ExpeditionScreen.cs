@@ -462,8 +462,8 @@ public sealed partial class PackspireUiFoundation {
   if(expeditionCharacterHost==null)return;
   expeditionCharacterHost.Clear();
   var character=CharacterCatalog.Get(meta.selectedCharacterId);
-  expeditionCharacterHost.Add(SelectiveSectionHead("PARTY","出撃キャラクター"));
-  expeditionCharacterHost.Add(BuildExpeditionCharacterBanner(character));
+  expeditionCharacterHost.Add(CharacterPortraitFront(character,"ps-exp-courier-portrait"));
+  expeditionCharacterHost.Add(ExpeditionTextBlock("ps-exp-courier-name",character.name));
   if(expeditionTraitHost!=null){
    expeditionTraitHost.Clear();
    expeditionTraitHost.Add(ExpeditionInfoStack("特性",character.traitText));

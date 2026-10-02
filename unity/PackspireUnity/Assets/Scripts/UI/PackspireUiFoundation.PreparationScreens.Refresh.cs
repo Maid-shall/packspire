@@ -56,6 +56,10 @@ public sealed partial class PackspireUiFoundation {
   }
   stagedRoot?.RemoveFromHierarchy();
 
+  var formula=BackpackSystem.Formula(game.UiRun);
+  RequireViewElement<Label>(stableRoot,"packing-board-size").text=$"{formula.core.width} × {formula.core.height}";
+  stableRoot.EnableInClassList("packing--formulas",packingFormulaBrowserOpen);
+  stableRoot.EnableInClassList("packing--effects",!packingFormulaBrowserOpen);
   packingRootElement=stableRoot;
   packingFilterRowElement=stableFilter;
   packingEquipScrollElement=stableEquip;

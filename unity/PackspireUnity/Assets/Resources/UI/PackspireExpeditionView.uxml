@@ -14,7 +14,7 @@
         </ui:VisualElement>
         <ui:VisualElement class="ps-expedition-body">
             <ui:VisualElement class="ps-expedition-workspace">
-                <ui:VisualElement class="ps-exp-col-art">
+                <ui:VisualElement name="expedition-destination-column" class="ps-exp-col-dest">
                     <ui:VisualElement name="expedition-art-host" class="ps-exp-art-host">
                         <ui:VisualElement name="expedition-art-image" class="ps-exp-art-image-host" />
                         <ui:VisualElement name="expedition-art-lock" class="ps-exp-art-lock" picking-mode="Ignore" />
@@ -23,8 +23,7 @@
                             <ui:Label name="expedition-art-caption-sub" class="ps-exp-art-caption-sub" picking-mode="Ignore" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                </ui:VisualElement>
-                <ui:VisualElement name="expedition-destination-column" class="ps-exp-col-dest">
+
                     <ui:VisualElement class="ps-exp-dest-heading">
                         <ui:Label text="配達先一覧" class="ps-exp-dest-heading-title" picking-mode="Ignore" />
                         <ui:Label text="DESTINATION REGISTRY" class="ps-exp-dest-heading-sub" picking-mode="Ignore" />

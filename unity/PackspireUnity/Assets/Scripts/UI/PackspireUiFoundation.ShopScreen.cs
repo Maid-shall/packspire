@@ -12,13 +12,8 @@ public sealed partial class PackspireUiFoundation {
  ScrollView shopDetailScroll;
  VisualElement shopMerchantScene;
  VisualElement shopMerchantBackdropLayer;
- VisualElement shopMerchantCharacterViewport;
  Image shopMerchantCharacterImage;
- VisualElement shopMerchantDialogueLayer;
  Label shopMerchantDialogue;
- VisualElement shopMerchantCounterLayer;
- VisualElement shopMerchantTransactionLayer;
- VisualElement shopFutureMerchantActionLayer;
  Label shopHeaderGoldLabel;
  Label shopGoldLabel;
  Label shopTotalLabel;
@@ -77,10 +72,9 @@ public sealed partial class PackspireUiFoundation {
   RequireViewElement<VisualElement>(shopShell,"shop-header");
   shopHeaderGoldLabel=RequireViewElement<Label>(shopShell,"shop-header-gold");
   shopDevHintLabel=RequireViewElement<Label>(shopShell,"shop-dev-hint");
-  shopDevHintLabel.style.display=shopPreviewMode?DisplayStyle.Flex:DisplayStyle.None;
+  shopShell.EnableInClassList("ps-shop-live",!shopPreviewMode);
 
-  var merchantCol=RequireViewElement<VisualElement>(shopShell,"shop-merchant-column");
-  BuildShopMerchantSceneShell(merchantCol);
+  BindShopMerchantView();
 
   RequireViewElement<VisualElement>(shopShell,"shop-list-column");
   shopFilterHost=RequireViewElement<VisualElement>(shopShell,"shop-filter-host");
@@ -94,9 +88,7 @@ public sealed partial class PackspireUiFoundation {
   shopDetailHost=RequireViewElement<VisualElement>(shopShell,"shop-detail-host");
   shopDetailScroll=RequireViewElement<ScrollView>(shopShell,"shop-detail-scroll");
   shopDetailScroll.verticalScrollerVisibility=ScrollerVisibility.Auto;
-  var transactionCol=RequireViewElement<VisualElement>(shopShell,"shop-transaction-column");
-  shopMerchantTransactionLayer.RemoveFromHierarchy();
-  transactionCol.Add(shopMerchantTransactionLayer);
+  RequireViewElement<VisualElement>(shopShell,"shop-transaction-column");
   screenRoot.Add(shopShell);
 
   ApplyShopMerchantPresentation();
@@ -107,79 +99,22 @@ public sealed partial class PackspireUiFoundation {
   SetShopDialogue(shopMerchant.idleLine);
  }
 
- void BuildShopMerchantSceneShell(VisualElement merchantCol){
-  shopMerchantScene=Container("ps-shop-merchant-scene");
-  merchantCol.Add(shopMerchantScene);
-
-  shopMerchantBackdropLayer=Container("ps-shop-merchant-backdrop-layer");
-  shopMerchantBackdropLayer.pickingMode=PickingMode.Ignore;
-  shopMerchantScene.Add(shopMerchantBackdropLayer);
-
-  shopMerchantCharacterViewport=Container("ps-shop-merchant-character-viewport");
-  shopMerchantCharacterViewport.pickingMode=PickingMode.Ignore;
-  shopMerchantCharacterImage=new Image{
-   scaleMode=ScaleMode.ScaleToFit,
-   pickingMode=PickingMode.Ignore
-  };
-  shopMerchantCharacterImage.AddToClassList("ps-shop-merchant-character-image");
-  shopMerchantCharacterViewport.Add(shopMerchantCharacterImage);
-  shopMerchantScene.Add(shopMerchantCharacterViewport);
-
-  shopMerchantDialogueLayer=Container("ps-shop-merchant-dialogue-layer");
-  shopMerchantDialogueLayer.pickingMode=PickingMode.Ignore;
-  shopMerchantDialogueLayer.Add(PackspireUiFactory.ManagementV6Art(
-   PackspireUiFactory.ManagementV6Piece.ShopSpeech,
-   "ps-management-v6-bg ps-shop-dialogue-plaque"
-  ));
-  shopMerchantDialogue=new Label(){pickingMode=PickingMode.Ignore};
-  shopMerchantDialogue.AddToClassList("ps-shop-merchant-dialogue");
-  shopMerchantDialogueLayer.Add(shopMerchantDialogue);
-  shopMerchantScene.Add(shopMerchantDialogueLayer);
-
-  shopMerchantCounterLayer=Container("ps-shop-merchant-counter-layer");
-  shopMerchantCounterLayer.pickingMode=PickingMode.Ignore;
-  var counterFace=Container("ps-shop-merchant-counter-face");
-  counterFace.pickingMode=PickingMode.Ignore;
-  var counterTop=Container("ps-shop-merchant-counter-top");
-  counterTop.pickingMode=PickingMode.Ignore;
-  counterFace.Add(counterTop);
-  var counterBody=Container("ps-shop-merchant-counter-body");
-  counterBody.pickingMode=PickingMode.Ignore;
-  counterFace.Add(counterBody);
-  shopMerchantCounterLayer.Add(counterFace);
-  shopMerchantScene.Add(shopMerchantCounterLayer);
-
-  shopMerchantTransactionLayer=Container("ps-shop-merchant-transaction-layer");
-  shopSelectedNameLabel=new Label(){pickingMode=PickingMode.Ignore};
-  shopSelectedNameLabel.AddToClassList("ps-shop-tx-name");
-  shopMerchantTransactionLayer.Add(shopSelectedNameLabel);
-  shopGoldLabel=new Label(){pickingMode=PickingMode.Ignore};
-  shopGoldLabel.AddToClassList("ps-shop-tx-gold");
-  shopMerchantTransactionLayer.Add(shopGoldLabel);
-  shopTotalLabel=new Label(){pickingMode=PickingMode.Ignore};
-  shopTotalLabel.AddToClassList("ps-shop-tx-total");
-  shopMerchantTransactionLayer.Add(shopTotalLabel);
-  shopPurchaseReason=new Label(){pickingMode=PickingMode.Ignore};
-  shopPurchaseReason.AddToClassList("ps-shop-tx-reason");
-  shopMerchantTransactionLayer.Add(shopPurchaseReason);
-  var actions=Container("ps-shop-tx-actions");
-  shopBuyButton=PackspireUiFactory.Button("購入する",TryShopPurchase);
-  shopBuyButton.AddToClassList("ps-primary-action");
-  shopBuyButton.AddToClassList("ps-chrome-action");
-  shopBuyButton.AddToClassList("ps-shop-buy-btn");
-  actions.Add(shopBuyButton);
-  shopLeaveButton=PackspireUiFactory.Button("地図へ戻る",()=>{
+ void BindShopMerchantView(){
+  shopMerchantScene=RequireViewElement<VisualElement>(shopShell,"shop-merchant-scene");
+  shopMerchantBackdropLayer=RequireViewElement<VisualElement>(shopShell,"shop-merchant-backdrop");
+  shopMerchantCharacterImage=RequireViewElement<Image>(shopShell,"shop-merchant-character");
+  shopMerchantDialogue=RequireViewElement<Label>(shopShell,"shop-merchant-dialogue");
+  shopSelectedNameLabel=RequireViewElement<Label>(shopShell,"shop-selected-name");
+  shopGoldLabel=RequireViewElement<Label>(shopShell,"shop-gold");
+  shopTotalLabel=RequireViewElement<Label>(shopShell,"shop-total");
+  shopPurchaseReason=RequireViewElement<Label>(shopShell,"shop-purchase-reason");
+  shopBuyButton=RequireViewElement<Button>(shopShell,"shop-buy");
+  shopBuyButton.clicked+=TryShopPurchase;
+  shopLeaveButton=RequireViewElement<Button>(shopShell,"shop-leave");
+  shopLeaveButton.clicked+=()=>{
    if(shopPreviewMode)CloseShopPreview();
    else game.UiReturnToMap();
-  });
-  shopLeaveButton.AddToClassList("ps-chrome-action");
-  shopLeaveButton.AddToClassList("ps-shop-leave-btn");
-  actions.Add(shopLeaveButton);
-  shopMerchantTransactionLayer.Add(actions);
-  shopFutureMerchantActionLayer=Container("ps-shop-future-merchant-actions");
-  shopFutureMerchantActionLayer.pickingMode=PickingMode.Ignore;
-  shopMerchantTransactionLayer.Add(shopFutureMerchantActionLayer);
-  shopMerchantScene.Add(shopMerchantTransactionLayer);
+  };
  }
 
  void ApplyShopMerchantPresentation(){
@@ -196,43 +131,17 @@ public sealed partial class PackspireUiFoundation {
    shopMerchantBackdropLayer.Add(fallback);
   }
 
-  if(shopMerchantCounterLayer!=null){
-   var artHost=shopMerchantCounterLayer.Q(className:"ps-shop-merchant-counter-art");
-   artHost?.RemoveFromHierarchy();
-   if(!string.IsNullOrEmpty(shopMerchant.counterResource)){
-    var counterTex=PackspireResources.Load<Texture2D>(shopMerchant.counterResource);
-    if(counterTex!=null){
-     var art=Image(counterTex,new Rect(0,0,1,1),"ps-shop-merchant-counter-art",ScaleMode.ScaleAndCrop);
-     shopMerchantCounterLayer.Insert(0,art);
-    }
-   }
-  }
-
   shopMerchantCharacterTex=ResolveShopMerchantCharacter();
   if(shopMerchantCharacterImage!=null){
    shopMerchantCharacterImage.image=shopMerchantCharacterTex;
    shopMerchantCharacterImage.sprite=null;
    shopMerchantCharacterImage.scaleMode=ScaleMode.ScaleToFit;
-   shopMerchantCharacterImage.style.display=shopMerchantCharacterTex!=null?DisplayStyle.Flex:DisplayStyle.None;
+   shopMerchantCharacterImage.EnableInClassList("ps-missing-art",shopMerchantCharacterTex==null);
   }
-  LayoutShopMerchantCharacter();
   if(shopLeaveButton!=null)
    PackspireUiFactory.SetActionLabel(shopLeaveButton,shopPreviewMode?"プレビューを閉じる":"地図へ戻る");
   if(shopDevHintLabel!=null)
-   shopDevHintLabel.style.display=shopPreviewMode?DisplayStyle.Flex:DisplayStyle.None;
- }
-
- void LayoutShopMerchantCharacter(){
-  if(shopMerchantCharacterViewport==null||shopMerchant==null)return;
-  float vh=Mathf.Clamp(shopMerchant.characterViewportHeight,0.55f,0.78f);
-  shopMerchantCharacterViewport.style.top=Length.Percent(2f);
-  shopMerchantCharacterViewport.style.height=Length.Percent(vh*100f);
-  if(shopMerchantCharacterImage==null)return;
-  float scale=Mathf.Max(1f,shopMerchant.characterScale);
-  shopMerchantCharacterImage.style.width=Length.Percent(100f*scale);
-  shopMerchantCharacterImage.style.height=Length.Percent(100f*scale);
-  shopMerchantCharacterImage.style.left=Length.Percent(50f+shopMerchant.characterOffsetX-50f*scale);
-  shopMerchantCharacterImage.style.top=Length.Percent(shopMerchant.characterOffsetY-(scale-1f)*35f);
+   shopShell.EnableInClassList("ps-shop-live",!shopPreviewMode);
  }
 
  Texture2D ResolveShopMerchantCharacter(){
@@ -259,15 +168,9 @@ public sealed partial class PackspireUiFoundation {
   if(shopFilterHost==null)return;
   shopFilterHost.Clear();
   string[] labels={"おすすめ","武器","防具","道具"};
-  var icons=new[]{
-   PackspireUiFactory.ManagementChrome.AllItems,
-   PackspireUiFactory.ManagementChrome.WeaponCategory,
-   PackspireUiFactory.ManagementChrome.ArmorCategory,
-   PackspireUiFactory.ManagementChrome.SupplyCategory
-  };
   for(int i=0;i<labels.Length;i++){
    int index=i;
-   var button=PackspireUiFactory.Button(labels[i],()=>{
+   var button=new Button(()=>{
     if(shopCategoryFilter==index)return;
     shopCategoryFilter=index;
     SaveShopProductScroll();
@@ -276,17 +179,8 @@ public sealed partial class PackspireUiFoundation {
     RefreshShopProductGrid(true);
     RefreshShopDetail();
     RefreshShopPurchaseFooter();
-   });
+   }){text=labels[i]};
    button.AddToClassList("ps-shop-filter");
-   button.Add(PackspireUiFactory.ManagementV6Art(
-    PackspireUiFactory.ManagementV6Piece.ShopCategory,
-    "ps-management-v6-bg ps-shop-filter-plate ps-shop-filter-plate-normal"
-   ));
-   button.Add(PackspireUiFactory.ManagementV6Art(
-    PackspireUiFactory.ManagementV6Piece.ShopCategorySelected,
-    "ps-management-v6-bg ps-shop-filter-plate ps-shop-filter-plate-selected"
-   ));
-   button.Add(PackspireUiFactory.ManagementArt(icons[i],"ps-shop-filter-icon ps-management-filter-medallion"));
    if(i==shopCategoryFilter)button.AddToClassList("ps-selected");
    shopFilterHost.Add(button);
   }
@@ -317,14 +211,6 @@ public sealed partial class PackspireUiFoundation {
    var card=new Button(()=>SelectShopProduct(productId)){userData=productId,tooltip=item.name};
    card.AddToClassList("ps-shop-product-card");
    if(productId==selectedShopId)card.AddToClassList("ps-selected");
-   card.Add(PackspireUiFactory.ManagementV6Art(
-    PackspireUiFactory.ManagementV6Piece.ShopProduct,
-    "ps-management-v6-bg ps-shop-product-plate ps-shop-product-plate-normal"
-   ));
-   card.Add(PackspireUiFactory.ManagementV6Art(
-    PackspireUiFactory.ManagementV6Piece.ShopProductSelected,
-    "ps-management-v6-bg ps-shop-product-plate ps-shop-product-plate-selected"
-   ));
    var art=Container("ps-shop-product-art");
    art.pickingMode=PickingMode.Ignore;
    art.Add(Atlas(game.UiEquipmentArt,ItemUv(productId),"ps-shop-product-image"));
@@ -341,10 +227,6 @@ public sealed partial class PackspireUiFoundation {
    priceLabel.AddToClassList("ps-shop-product-price");
    copy.Add(priceLabel);
    card.Add(copy);
-   card.Add(PackspireUiFactory.ManagementArt(
-    PackspireUiFactory.ManagementChrome.SelectionCorners,
-    "ps-management-selection-corners"
-   ));
    shopProductGrid.Add(card);
   }
   if(restoreScroll)RestoreShopProductScroll();
@@ -377,7 +259,9 @@ public sealed partial class PackspireUiFoundation {
    shopDetailScroll.Add(PackspireUiFactory.EmptyState("商品を選択","左の一覧から品物を選んでください。"));
    return;
   }
-  shopDetailScroll.Add(PackspireUiFactory.Title(item.name));
+  var title=new Label(item.name){pickingMode=PickingMode.Ignore};
+  title.AddToClassList("ps-shop-detail-title");
+  shopDetailScroll.Add(title);
   shopDetailScroll.Add(ShopDetailBlock("ランク / 価格",$"STANDARD　{ShopItemPrice(item):N0}G"));
   var artFrame=Container("ps-shop-detail-art");
   artFrame.pickingMode=PickingMode.Ignore;
@@ -392,8 +276,18 @@ public sealed partial class PackspireUiFoundation {
    shopDetailScroll.Add(ShopDetailBlock("性能",item.description));
   if(!string.IsNullOrEmpty(item.linkRule))
    shopDetailScroll.Add(ShopDetailBlock("LINK効果",item.linkRule));
-  var cardPair=BuildEquipmentCardPairPreview(new ItemInstance(item.id),item,game.UiRun);
-  if(cardPair!=null)shopDetailScroll.Add(cardPair);
+  foreach(var cards in StorageFormulaSystem.ResolveCardIds(item,null,null)
+   .Where(id=>!string.IsNullOrEmpty(id)).GroupBy(id=>id)){
+   if(!GameCatalog.Cards.TryGetValue(cards.Key,out var card))continue;
+   shopDetailScroll.Add(ShopDetailBlock(
+    $"戦闘カード・基本値 / {cards.Count()}枚",
+    $"{card.name}　{card.cost}エナジー\n{card.text}"
+   ));
+  }
+  shopDetailScroll.Add(ShopDetailBlock(
+   $"遠征印 / {DeliverySealSystem.Name(item.sealAttribute)}",
+   DeliverySealSystem.Effect(item.sealAttribute)
+  ));
  }
 
  VisualElement ShopDetailBlock(string title,string body){

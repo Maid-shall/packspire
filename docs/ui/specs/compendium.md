@@ -28,12 +28,12 @@ source.
 | Region | Production source |
 |---|---|
 | Header and category icons | Shared management chrome atlas |
-| Category and index frames | `VaultCodexV4` authored tab frames |
+| Category and index frames | Home material kit, quiet index rows and cyan selection |
 | Item art | Existing equipment artwork through `VaultItemArt` |
 | Occupancy frame | Existing `occupancy-grid` image plus neutral cells |
 | Card | `BuildEquipmentCardFacePreview` |
 | LINK panel | Shared `VaultEffectRecord` with the cyan Vault frame |
-| Acquisition panel | Existing archive flavor frame |
+| Acquisition panel | Quiet archive information surface and gold rules |
 | Page arrow | Existing `round-next` action image |
 
 ## Ownership
@@ -47,3 +47,11 @@ source.
 
 The camera, PanelSettings, and renderer configuration are outside this screen's
 scope.
+
+## Equipment record fit
+
+The specimen summary fills its column instead of retaining the old 55% width.
+The name stays on one line above the wrapped description. The item artwork is
+bounded by the specimen column, with a 250x250 logical image (375x375 capture
+pixels). Occupancy diagrams have a quiet dark background so paper artwork does
+not cover the cells. The index footer also uses a quiet supporting surface.

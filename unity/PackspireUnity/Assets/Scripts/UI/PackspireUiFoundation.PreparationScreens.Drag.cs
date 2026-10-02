@@ -9,6 +9,15 @@ public sealed partial class PackspireUiFoundation {
  void RegisterPackingDrag(VisualElement root){
   root.RegisterCallback<PointerMoveEvent>(OnPackingPointerMove);
   root.RegisterCallback<PointerUpEvent>(OnPackingPointerUp);
+  root.RegisterCallback<PointerDownEvent>(evt=>{
+   if(evt.button!=0||packingDragging||packingFormulaOpen||packingCardsOpen||string.IsNullOrEmpty(selectedPackingUid))return;
+   for(var target=evt.target as VisualElement;target!=null&&target!=root;target=target.parent){
+    if(target is Button||target is Scroller||target.ClassListContains("ps-rite-cell")||target.ClassListContains("ps-rite-equip-tile"))return;
+   }
+   selectedPackingUid="";
+   packingRotation=0;
+   BuildPackingAgain();
+  });
  }
 
  void BindPackingDragSource(VisualElement element,string uid,ActiveStorageFormula formula,bool fromEquipList=false,Vector2Int grip=default){
@@ -49,8 +58,9 @@ public sealed partial class PackspireUiFoundation {
   }
   if(packingDragGhost==null)return;
   var local=packingRootElement.WorldToLocal(evt.position);
-  packingDragGhost.style.left=local.x-36;
-  packingDragGhost.style.top=local.y-36;
+  float side=PackingCellSide();
+  packingDragGhost.style.left=local.x-(packingDragGrip.x+.5f)*side;
+  packingDragGhost.style.top=local.y-(packingDragGrip.y+.5f)*side;
  }
 
  void OnPackingPointerUp(PointerUpEvent evt){
@@ -120,9 +130,18 @@ public sealed partial class PackspireUiFoundation {
   if(item==null)return;
   packingDragGhost=Container("ps-rite-drag-ghost");
   packingDragGhost.pickingMode=PickingMode.Ignore;
-  packingDragGhost.Add(Atlas(game.UiEquipmentArt,ItemUv(item.templateId),"ps-rite-drag-ghost-art"));
+  var shape=BuildShapePreview(item,packingRotation);
+  float side=PackingCellSide();
+  foreach(var cell in shape.Query(className:"ps-rite-shape-cell").ToList()){
+   cell.style.width=side;
+   cell.style.height=side;
+  }
+  packingDragGhost.Add(shape);
+  packingDragGhost.Query<VisualElement>().ForEach(element=>element.pickingMode=PickingMode.Ignore);
   packingRootElement.Add(packingDragGhost);
  }
+
+ float PackingCellSide()=>packingGridElement!=null&&packingGridElement.childCount>0?packingGridElement[0].resolvedStyle.width:1f;
 
  int FindPackingCellAt(Vector2 panelPosition){
   if(packingGridElement==null)return -1;

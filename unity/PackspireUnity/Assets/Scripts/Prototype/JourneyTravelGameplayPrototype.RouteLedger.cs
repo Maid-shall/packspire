@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -223,16 +224,43 @@ namespace Packspire
             };
         }
 
-        private static void ApplyRouteArt(VisualElement art, CourierRouteNodeDef node)
+        private static void ApplyRouteArt(
+            VisualElement art,
+            Image landmark,
+            CourierRouteNodeDef node)
         {
-            string[] classes = { "route-art--ash", "route-art--danger", "route-art--drowned", "route-art--blackbell" };
+            string[] classes =
+            {
+                "route-biome--ash", "route-biome--drowned", "route-biome--blackbell",
+                "route-road--wide", "route-road--standard", "route-road--narrow",
+                "route-landmark--left", "route-landmark--right"
+            };
             foreach (string className in classes) art.RemoveFromClassList(className);
-            string nextClass = node.phase >= 8
-                ? "route-art--blackbell"
-                : node.phase >= 5
-                    ? "route-art--drowned"
-                    : node.risk >= 2 ? "route-art--danger" : "route-art--ash";
-            art.AddToClassList(nextClass);
+
+            int biome = node.phase >= 8 ? 2 : node.phase >= 5 ? 1 : 0;
+            art.AddToClassList(biome switch
+            {
+                2 => "route-biome--blackbell",
+                1 => "route-biome--drowned",
+                _ => "route-biome--ash"
+            });
+            art.AddToClassList(JourneyPresentationConfig.GetRoadProfile(node) switch
+            {
+                JourneyWalkCyclePrototype.RoadProfile.Wide => "route-road--wide",
+                JourneyWalkCyclePrototype.RoadProfile.Narrow => "route-road--narrow",
+                _ => "route-road--standard"
+            });
+            art.AddToClassList(node.lane <= 0
+                ? "route-landmark--left"
+                : "route-landmark--right");
+
+            if (landmark == null) return;
+            landmark.scaleMode = ScaleMode.ScaleToFit;
+            Sprite[] sprites = PackspireResources
+                .LoadAll<Sprite>("Art/JourneyPrototype/Complete/journey-route-landmarks-v1")
+                .OrderBy(sprite => sprite.name, StringComparer.Ordinal)
+                .ToArray();
+            landmark.sprite = sprites.Length > biome ? sprites[biome] : null;
         }
 
         private static string RouteFlavor(CourierRouteNodeDef node)
@@ -260,15 +288,6 @@ namespace Packspire
                 _ => "旅程進行"
             };
         }
-
-        private static string RouteSealLabel(CourierRouteNodeDef node)
-        {
-            if (node.risk >= 2) return "遅延防止印";
-            if (node.dayCost >= 2) return "短縮印";
-            if (node.resolution == CourierResolutionKind.Relay) return "補綴印";
-            return "任意";
-        }
-
 
     }
 }

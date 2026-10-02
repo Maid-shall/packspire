@@ -58,6 +58,8 @@
     top: 8px;
     width: 1118px;
     height: 68px;
+    padding: 0;
+    margin: 0;
     flex-direction: row;
     align-items: center;
     overflow: visible;
@@ -127,6 +129,7 @@
     height: 620px;
     flex-grow: 0;
     flex-shrink: 0;
+    display: none;
 }
 
 .ps-status-screen .ps-status-character-surface,
@@ -260,7 +263,7 @@
     flex-grow: 1;
     min-width: 0;
     height: 620px;
-    margin-left: 12px;
+    margin-left: 0;
 }
 
 .ps-status-screen .ps-status-workspace-top {
@@ -270,9 +273,14 @@
 }
 
 .ps-status-screen .ps-status-roles-column {
-    width: 300px;
-    min-width: 300px;
+    width: 196px;
+    min-width: 196px;
+    max-width: 196px;
+    flex-basis: auto;
+    margin-right: 0;
+    padding-right: 0;
     height: 536px;
+    flex-shrink: 0;
 }
 
 .ps-status-screen .ps-status-roles-surface {
@@ -304,10 +312,10 @@
 .ps-status-screen .ps-status-role-ticket {
     position: relative;
     width: 100%;
-    height: 94px;
-    min-height: 94px;
+    height: 76px;
+    min-height: 76px;
     margin: 0 0 7px 0;
-    padding: 11px 36px 9px 74px;
+    padding: 8px 8px 8px 55px;
     flex-direction: row;
     align-items: center;
     background-color: rgba(15, 17, 16, 0.82);
@@ -343,15 +351,15 @@
 
 .ps-status-screen .ps-status-role-seal-host {
     position: absolute;
-    left: 10px;
+    left: 6px;
     top: 15px;
-    width: 56px;
-    height: 64px;
+    width: 40px;
+    height: 48px;
 }
 
 .ps-status-screen .ps-status-role-seal {
-    width: 56px;
-    height: 64px;
+    width: 40px;
+    height: 48px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -409,10 +417,14 @@
 }
 
 .ps-status-screen .ps-status-role-detail-column {
-    flex-grow: 1;
-    min-width: 0;
+    flex-grow: 0;
+    min-width: 400px;
+    max-width: 400px;
+    flex-basis: auto;
     height: 536px;
     margin-left: 12px;
+    width: 400px;
+    flex-shrink: 0;
 }
 
 .ps-status-screen .ps-status-role-detail-surface {
@@ -420,8 +432,8 @@
 }
 
 .ps-status-screen .ps-status-detail-header {
-    height: 178px;
-    min-height: 178px;
+    height: 96px;
+    min-height: 96px;
     padding: 12px;
     flex-direction: row;
     align-items: center;
@@ -431,16 +443,16 @@
 }
 
 .ps-status-screen .ps-status-role-image {
-    width: 152px;
-    min-width: 152px;
-    height: 152px;
-    margin-right: 16px;
+    width: 80px;
+    min-width: 80px;
+    height: 80px;
+    margin-right: 10px;
 }
 
 .ps-status-screen .ps-status-role-image .ps-mgmt-detail-art-frame,
 .ps-status-screen .ps-status-role-image .ps-mgmt-detail-art-image {
-    width: 152px;
-    height: 152px;
+    width: 80px;
+    height: 80px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -454,7 +466,7 @@
     margin: 0;
     padding: 0;
     color: rgb(239, 215, 178);
-    font-size: 30px;
+    font-size: 25px;
     -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
 }
 
@@ -476,8 +488,9 @@
 .ps-status-screen .ps-status-role-detail-scroll {
     flex-grow: 1;
     min-height: 0;
-    padding: 10px 14px 16px 14px;
+    padding: 8px;
     background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
 }
 
 .ps-status-screen .ps-status-role-detail-body {
@@ -486,8 +499,8 @@
 }
 
 .ps-status-screen .ps-status-role-detail-body .ps-mgmt-section {
-    margin: 0 0 9px 0;
-    padding: 8px 10px 9px 10px;
+    margin: 0 0 5px 0;
+    padding: 5px 8px;
     background-color: rgba(11, 13, 12, 0.66);
     border-left-width: 2px;
     border-left-color: rgba(60, 176, 179, 0.62);
@@ -513,9 +526,9 @@
 .ps-status-screen .ps-status-appoint-action,
 .ps-status-screen .ps-status-branch-choice,
 .ps-status-screen .ps-status-qualification > Button {
-    min-height: 44px;
-    margin: 4px 0;
-    padding: 7px 10px;
+    min-height: 32px;
+    margin: 3px 0;
+    padding: 5px 8px;
     background-color: rgba(12, 16, 16, 0.9);
     border-left-width: 1px;
     border-right-width: 1px;
@@ -540,10 +553,11 @@
     color: rgb(244, 218, 177);
 }
 
-.ps-status-screen .ps-status-branch-choices,
-.ps-status-screen .ps-status-qualification {
-    margin-bottom: 8px;
-}
+.ps-status-screen .ps-status-branch-choices { margin-bottom: 4px; }
+.ps-status-screen .ps-status-qualification { margin-top: 8px; flex-direction: row; align-items: center; justify-content: space-between; }
+.ps-status-screen .ps-status-subheading { font-size: 14px; margin: 5px 0 2px; }
+.ps-status-screen .ps-status-qualification-name { font-size: 12px; white-space: normal; flex-shrink: 1; }
+.ps-status-screen .ps-status-role-detail-scroll > .unity-scroll-view__content-viewport { overflow: hidden; }
 
 .ps-status-screen .ps-status-appointment {
     height: 74px;
@@ -619,3 +633,13 @@
     border-left-width: 2px;
     border-left-color: rgba(62, 179, 181, 0.58);
 }
+
+.ps-status-tree-panel { flex-grow: 1; min-width: 0; height: 536px; margin-left: 12px; padding: 12px; background-color: rgba(3,8,9,.8); }
+.ps-status-tree-title { font-size: 23px; color: rgb(234,209,166); }
+.ps-status-tree-note { font-size: 11px; color: rgb(161,173,160); white-space: normal; margin: 8px 0 18px; }
+.ps-status-role-tree { flex-direction: row; justify-content: space-between; flex-grow: 1; }
+.ps-status-tree-family { width: 24%; padding: 0 4px; border-left-width: 1px; border-left-color: rgba(163,139,90,.5); }
+.ps-status-tree-node { min-height: 54px; margin: 0 0 24px; padding: 5px; font-size: 12px; white-space: normal; background-color: rgb(20,35,35); border-width: 1px; border-color: rgb(90,116,106); color: rgb(228,207,173); }
+.ps-status-tree-node.is-core { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1"); -unity-background-scale-mode: stretch-to-fill; border-color: rgb(176,137,77); }
+.ps-status-tree-node.is-locked { color: rgb(153,150,140); background-color: rgb(22,24,24); }
+.ps-status-tree-node:hover, .ps-status-tree-node.ps-selected { border-color: rgb(81,204,193); }

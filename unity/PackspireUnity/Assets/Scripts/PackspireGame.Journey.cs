@@ -79,6 +79,9 @@ namespace Packspire
             pendingJourneyRestore = null;
             JourneySessionSaveSystem.Clear(meta);
             FinishRun(reason);
+            // The journey already presented its terminal state in the world.
+            // Keep legacy result screens for legacy callers, not a second result hop.
+            UiReturnToHub();
             SceneManager.LoadScene("Main");
         }
 

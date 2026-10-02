@@ -30,8 +30,8 @@ namespace Packspire
 
         private const string PropsResource = "Art/JourneyPrototype/Complete/journey-foreground-props-v1";
         private const string LandmarksResource = "Art/JourneyPrototype/Complete/journey-route-landmarks-v1";
-        private const float RoadsideDistanceFactor = 1.08f;
-        private const float CloseForegroundDistanceFactor = 1.88f;
+        private const float RoadsideDistanceFactor = 1f;
+        private const float CloseForegroundDistanceFactor = 1.08f;
         private const float LandmarkZoneStart = .12f;
         private const float LandmarkZoneEnd = .9f;
         private const float LandmarkQuietMargin = .08f;
@@ -180,6 +180,17 @@ namespace Packspire
                 if (prop.Renderer.transform.position.x >= -12f) continue;
                 Destroy(prop.Renderer.gameObject);
                 activeProps.RemoveAt(index);
+            }
+
+            if (landmarkZoneActive && landmarkRenderer != null && landmarkRenderer.enabled)
+            {
+                landmarkRenderer.transform.position += Vector3.left * distance;
+                if (landmarkRenderer.transform.position.x < -12f)
+                {
+                    landmarkRenderer.enabled = false;
+                    landmarkZoneActive = false;
+                    landmarkScheduled = false;
+                }
             }
 
             if (!allowRoadside || propSprites.Length < 4) return;
@@ -359,19 +370,7 @@ namespace Packspire
 
             if (!landmarkZoneActive || landmarkRenderer == null) return;
 
-            float passage = Mathf.InverseLerp(LandmarkZoneStart, LandmarkZoneEnd, travelProgress);
-            landmarkRenderer.transform.position = new Vector3(
-                Mathf.Lerp(11f, -11f, Mathf.SmoothStep(0f, 1f, passage)),
-                road.LandmarkY,
-                0f);
-
-            if (travelProgress < LandmarkZoneEnd) return;
-            landmarkRenderer.enabled = false;
-            landmarkZoneActive = false;
-            landmarkScheduled = false;
-            roadsideDistanceRemaining = Mathf.Max(
-                roadsideDistanceRemaining,
-                2.5f * JourneyPresentationConfig.BaseTravelSpeed);
+            // Landmark movement shares the road's measured world distance.
         }
 
         private void ShowLandmark()

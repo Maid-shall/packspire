@@ -26,10 +26,58 @@ public sealed partial class PackspireUiFoundation {
   ClearMgmtOverview();
   mgmtOverviewHost.Add(ManagementCharacterOverview(character,meta));
 
+  PopulateStatusRoleTree(meta);
   PopulateStatusHeader();
   PopulateStatusList(learned,meta);
   RefreshStatusDetail(character,meta,learned);
 }
+
+
+ void PopulateStatusRoleTree(MetaSave meta){
+  var tree=screenRoot.Q<VisualElement>("status-role-tree");
+  if(tree==null)return;
+  tree.Clear();
+  foreach(string family in RoleFrameworkSystem.CoreRoleIds){
+   var column=Container("ps-status-tree-family");
+   foreach(var role in GameCatalog.Roles.Values.Where(x=>x.id==family||x.family==family).OrderBy(x=>x.id==family?0:1)){
+    var entry=role;
+    bool core=role.id==family;
+    bool unlocked=core||meta.unlockedRoles.Contains(role.id);
+    var node=PackspireUiFactory.Button(role.name,()=>{
+     if(core){selectedRoleId=entry.id;RefreshStatusScreen();}
+     else RefreshStatusQualificationRecord(entry,meta);
+    });
+    node.AddToClassList("ps-status-tree-node");
+    node.EnableInClassList("is-core",core);
+    node.EnableInClassList("is-locked",!unlocked);
+    node.EnableInClassList("ps-selected",role.id==selectedRoleId||role.id==meta.qualificationSealId);
+    node.tooltip=role.description;
+    column.Add(node);
+   }
+   tree.Add(column);
+  }
+ }
+
+ void RefreshStatusQualificationRecord(RoleDef role,MetaSave meta){
+  ClearMgmtDetailHero();
+  mgmtDetailScroll.Clear();
+  SetMgmtDetailHeroArt(Atlas(game.UiRoleArt,RoleUv(role.id),"ps-mgmt-detail-art-image"));
+  SetMgmtDetailHeroSummary(PackspireUiFactory.Title(role.name),PackspireUiFactory.Body("資格印"),null);
+  var body=Container("ps-status-role-detail-body");
+  body.Add(ManagementSection("効果",role.description));
+  foreach(var recipe in role.unlockRecipes)
+   if(recipe.visibleBeforeUnlock||meta.unlockedRoles.Contains(role.id))
+    body.Add(ManagementSection("解放条件",recipe.hint));
+  bool unlocked=meta.unlockedRoles.Contains(role.id);
+  var equip=PackspireUiFactory.Button(unlocked?"この資格印を装備":"未解放",()=>{
+   game.UiSetQualificationSeal(role.id);
+   RefreshStatusScreen();
+  });
+  equip.SetEnabled(unlocked&&meta.qualificationSealId!=role.id);
+  equip.AddToClassList("ps-status-appoint-action");
+  body.Add(equip);
+  mgmtDetailScroll.Add(body);
+ }
 
  void PopulateStatusHeader(){
   if(mgmtListHeader==null)return;
@@ -94,7 +142,6 @@ public sealed partial class PackspireUiFoundation {
   SetMgmtDetailHeroSummary(nameTitle,metaLine,equipped);
 
   var body=Container("ps-status-role-detail-body");
-  body.Add(ManagementSection("説明",selected.description));
   body.Add(ManagementSection("現在発動中の効果",selected.description,selectedLevel.value<1));
   var appoint=PackspireUiFactory.Button(selected.id==meta.currentRole?"現役職":"この役職を任命",()=>{
    game.UiSetActiveRole(selected.id);
@@ -118,29 +165,22 @@ public sealed partial class PackspireUiFoundation {
    button.EnableInClassList("ps-selected",index==branchIndex);
    branches.Add(button);
   }
-  body.Add(SelectiveSectionHead("BRANCH","役職分岐"));
+  var branchHeading=new Label("役職分岐");
+  branchHeading.AddToClassList("ps-status-subheading");
+  body.Add(branchHeading);
   body.Add(branches);
   var qualification=Container("ps-status-qualification");
-  qualification.Add(SelectiveSectionHead("QUALIFICATION SEAL","資格印（一枠）"));
   var clearQualification=PackspireUiFactory.Button("資格印を外す",()=>{
    game.UiSetQualificationSeal("");
    RefreshStatusScreen();
   });
   clearQualification.EnableInClassList("ps-selected",string.IsNullOrEmpty(meta.qualificationSealId));
   qualification.Add(clearQualification);
-  foreach(var roleId in meta.unlockedRoles.Where(id=>GameCatalog.Roles.ContainsKey(id)&&!RoleFrameworkSystem.CoreRoleIds.Contains(id)).Take(6)){
-   string id=roleId;
-   var option=PackspireUiFactory.Button(GameCatalog.Roles[id].name,()=>{
-    game.UiSetQualificationSeal(id);
-    RefreshStatusScreen();
-   });
-   option.EnableInClassList("ps-selected",meta.qualificationSealId==id);
-   qualification.Add(option);
-  }
+  var sealName=GameCatalog.Roles.TryGetValue(meta.qualificationSealId??"",out var seal)?seal.name:"未装備";
+  var sealLabel=new Label("資格印："+sealName);
+  sealLabel.AddToClassList("ps-status-qualification-name");
+  qualification.Insert(0,sealLabel);
   body.Add(qualification);
-  var tail=Container("ps-space-scroll-tail");
-  tail.pickingMode=PickingMode.Ignore;
-  body.Add(tail);
   mgmtDetailScroll.Add(body);
   mgmtDetailScroll.scrollOffset=Vector2.zero;
   mgmtDetailScroll.schedule.Execute(()=>{
@@ -179,7 +219,8 @@ public sealed partial class PackspireUiFoundation {
   mgmtOverviewHost.Add(ManagementCharacterOverview(character,meta));
   PopulateStatusHeader();
   PopulateStatusList(learned,meta);
- RefreshStatusDetail(character,meta,learned);
+  PopulateStatusRoleTree(meta);
+  RefreshStatusDetail(character,meta,learned);
  }
 
  #endregion

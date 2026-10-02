@@ -24,12 +24,12 @@ namespace Packspire
             MiniGame,
             Event,
             Battle,
+            Checkpoint,
             Result
         }
 
         private const string ViewResource = "UI/PackspireJourneyCompleteView";
         private const string StyleResource = "UI/PackspireJourneyComplete";
-        private const string WalkSheetResource = "Art/UI/CourierRoutePrototype/courier-route-walk-sheet-v1";
         private const string DefaultEncounterProfileResource = "Data/Journey/WardenEncounter";
         private const float DefaultEnemyBattleScale = .66f;
         private const float BattleGroundY = -1.23f;
@@ -41,12 +41,12 @@ namespace Packspire
         private static readonly string[] StateClasses =
         {
             "state--travel", "state--choice", "state--minigame",
-            "state--event", "state--battle", "state--result"
+            "state--event", "state--battle", "state--checkpoint", "state--result"
         };
         private static readonly string[] ResultPresentationClasses =
         {
-            "result--route", "result--checkpoint", "result--defeat",
-            "result--complete", "result--terminal"
+            "result--route", "result--defeat", "result--complete",
+            "result--terminal"
         };
 
         private readonly List<UnityEngine.Object> runtimeAssets = new List<UnityEngine.Object>();
@@ -88,17 +88,8 @@ namespace Packspire
         private Label hpText;
         private Label cargoText;
         private Label sealsText;
-        private Label areaText;
-        private Label weatherText;
-        private Label dayText;
-        private Label conditionText;
-        private Label conditionNoteText;
         private Label phaseText;
         private Label nextText;
-        private Label floorProgressText;
-        private Label segmentOriginText;
-        private Label segmentTargetText;
-        private readonly VisualElement[] floorMarks = new VisualElement[3];
         private Label ledgerSummary;
         private Label ledgerNodeTitle;
         private Label ledgerNodeMeta;
@@ -113,6 +104,8 @@ namespace Packspire
         private Button choiceB;
         private VisualElement choiceAArt;
         private VisualElement choiceBArt;
+        private Image choiceALandmark;
+        private Image choiceBLandmark;
         private Label choiceAIndex;
         private Label choiceATitle;
         private Label choiceAFlavor;
@@ -120,7 +113,6 @@ namespace Packspire
         private Label choiceARisk;
         private Label choiceAEncounter;
         private Label choiceACargo;
-        private Label choiceASeal;
         private Label choiceBIndex;
         private Label choiceBTitle;
         private Label choiceBFlavor;
@@ -128,7 +120,6 @@ namespace Packspire
         private Label choiceBRisk;
         private Label choiceBEncounter;
         private Label choiceBCargo;
-        private Label choiceBSeal;
         private Label eventEyebrow;
         private Label eventTitle;
         private Label eventText;
@@ -205,6 +196,7 @@ namespace Packspire
         private bool firstChoicePending = true;
         private bool choiceLocked;
         private bool terminalActionLocked;
+        private bool preserveBattleWorldForResult;
         private bool ledgerOpen;
         private bool defenseActive;
         private bool defenseResolved;
@@ -428,7 +420,7 @@ namespace Packspire
             float gameplayDelta =
                 !JourneyPausePolicy.IsGameplayBlocked(
                     paused,
-                    ledgerOpen,
+                    ledgerOpen || bagOpen,
                     pileOverlayOpen) &&
                 !transitionActive
                     ? Time.deltaTime
@@ -469,6 +461,7 @@ namespace Packspire
                 else if (!encounterIntroActive) UpdateBattleIdleMotion();
                 UpdateEnemyPoseRecovery(gameplayDelta);
             }
+            UpdateDayClockPresentation();
         }
 
         private void HandleKeyboard()
@@ -487,6 +480,11 @@ namespace Packspire
             }
             bool cancelPressed = PackspireInput.CancelPressed();
             bool ledgerPressed = PackspireInput.JourneyLedgerPressed();
+            if (bagOpen && cancelPressed)
+            {
+                CloseBag();
+                return;
+            }
             if (pileOverlayOpen &&
                 (cancelPressed || ledgerPressed))
             {
@@ -509,10 +507,29 @@ namespace Packspire
             }
             if (ledgerPressed)
             {
+                if (bagOpen) CloseBag();
                 ToggleLedger();
                 return;
             }
             if (ledgerOpen) return;
+            if (!GameplayInputBlocked &&
+                (phase == Phase.Travel || phase == Phase.Checkpoint) &&
+                PackspireInput.JourneyJumpPressed())
+                walker.TryJourneyJump();
+            if (!GameplayInputBlocked &&
+                phase == Phase.Checkpoint &&
+                PackspireInput.JourneyInteractPressed())
+            {
+                ReturnFromExpeditionCheckpoint();
+                return;
+            }
+            if (!GameplayInputBlocked &&
+                phase == Phase.Checkpoint &&
+                PackspireInput.NavigateRightPressed())
+            {
+                ContinueFromExpeditionCheckpoint();
+                return;
+            }
             if (phase == Phase.Choice && PackspireInput.FirstChoicePressed()) SelectChoice(0);
             if (phase == Phase.Choice && PackspireInput.SecondChoicePressed()) SelectChoice(1);
             if (phase == Phase.MiniGame && PackspireInput.PrimaryActionPressed()) MiniGameAction();
@@ -655,8 +672,8 @@ namespace Packspire
             Label risk = first ? choiceARisk : choiceBRisk;
             Label encounter = first ? choiceAEncounter : choiceBEncounter;
             Label cargo = first ? choiceACargo : choiceBCargo;
-            Label seal = first ? choiceASeal : choiceBSeal;
             VisualElement art = first ? choiceAArt : choiceBArt;
+            Image landmark = first ? choiceALandmark : choiceBLandmark;
             button.SetEnabled(node != null);
             title.text = expeditionNode == null ? "---" : ExpeditionJourneySystem.PathTitle(plan, expeditionNode);
             if (node == null) return;
@@ -669,8 +686,7 @@ namespace Packspire
             risk.text = RiskLabel(node.risk);
             encounter.text = ResolutionLabel(node.resolution);
             cargo.text = RouteRewardLabel(node.resolution);
-            seal.text = RouteSealLabel(node);
-            ApplyRouteArt(art, node);
+            ApplyRouteArt(art, landmark, node);
         }
 
         private void SelectChoice(int index)
@@ -748,8 +764,6 @@ namespace Packspire
                 return;
             }
 
-            areaText.text = arrivalNode.title;
-            weatherText.text = BiomeWeather(arrivalNode.phase);
             SetWorldForRoute(arrivalNode);
 
             switch (arrivalNode.resolution)
@@ -816,9 +830,13 @@ namespace Packspire
         private void ShowResult(string eyebrow, string title, string body, bool canContinue)
         {
             ClearExpeditionCheckpointResult();
+            bool defeated =
+                run?.hp <= 0 || run?.courierRoute?.failed == true;
+            preserveBattleWorldForResult =
+                defeated && phase == Phase.Battle;
             SetPhase(Phase.Result);
             SetResultPresentation(
-                run?.hp <= 0 || run?.courierRoute?.failed == true
+                defeated
                     ? "result--defeat"
                     : run?.expeditionPlan?.complete == true
                         ? "result--complete"
@@ -828,13 +846,26 @@ namespace Packspire
             resultScrim?.BringToFront();
             resultPanel?.BringToFront();
             walker.SetJourneyWalking(false);
-            SetMainEnemyVisible(false);
+            if (!preserveBattleWorldForResult)
+                SetMainEnemyVisible(false);
             resultEyebrow.text = eyebrow;
-            resultTitle.text = title;
-            resultText.text = body;
-            resultContinue.text = canContinue
+            resultTitle.text = defeated ? "遠征失敗" : title;
+            if (defeated)
+            {
+                ExpeditionLootTally loot =
+                    ExpeditionCheckpointSystem.CountCurrentLoot(run);
+                resultText.text =
+                    $"保護 {loot.ProtectedCount}　　喪失 {loot.ExposedCount}";
+            }
+            else
+            {
+                resultText.text = body;
+            }
+            resultContinue.text = defeated
+                ? "拠点へ戻る"
+                : canContinue
                 ? "旅程を再開"
-                : usesLiveRun ? "遠征結果へ" : "DEV SIMULATIONを再開 [R]";
+                : usesLiveRun ? "拠点へ戻る" : "DEV SIMULATIONを再開 [R]";
             resultContinue.userData = canContinue;
             terminalActionLocked = false;
             resultContinue.Focus();
@@ -869,13 +900,8 @@ namespace Packspire
             hpBar.highValue = Mathf.Max(1, run.maxHp);
             hpBar.value = Mathf.Clamp(run.hp, 0, run.maxHp);
             hpText.text = $"{run.hp} / {run.maxHp}";
-            cargoText.text = route.recoveredCargoCount.ToString("00");
             sealsText.text = Mathf.Max(0, route.seals?.Sum(seal => seal.charges) ?? 0).ToString("00");
-            ExpeditionDayStage dayStage = ExpeditionProgressSystem.CurrentDayStage(run);
-            dayText.text = $"DAY {route.daysElapsed} / {JourneyDayStageLabel(dayStage)}";
-            conditionText.text = JourneyDayStageLabel(dayStage);
-            conditionNoteText.text = JourneyDayStageNote(run, dayStage);
-            RefreshJourneyContextUi();
+            RefreshTravelHud();
         }
 
         private static string JourneyDayStageLabel(ExpeditionDayStage stage) => stage switch
@@ -886,122 +912,26 @@ namespace Packspire
             _ => "静穏"
         };
 
-        private static string JourneyDayStageNote(RunState activeRun, ExpeditionDayStage stage)
-        {
-            int elapsed = activeRun?.expeditionPlan?.elapsedDays ?? 0;
-            return stage switch
-            {
-                ExpeditionDayStage.Quiet => $"警戒まで {Mathf.Max(0, ExpeditionRoutePlanSystem.AlertStartDay - elapsed)}日",
-                ExpeditionDayStage.Alert => $"追跡まで {Mathf.Max(0, ExpeditionRoutePlanSystem.PursuitStartDay - elapsed)}日",
-                ExpeditionDayStage.Pursuit when activeRun?.expeditionPlan?.fourthDayStageEnabled == true =>
-                    $"異常兆候まで {Mathf.Max(0, ExpeditionRoutePlanSystem.AnomalyStartDay - elapsed)}日",
-                ExpeditionDayStage.Anomaly => "特殊危険域",
-                _ => "高危険・高報酬"
-            };
-        }
-
-        private void RefreshJourneyContextUi()
-        {
-            if (run == null || floorProgressText == null ||
-                segmentOriginText == null || segmentTargetText == null)
-                return;
-
-            ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
-            int floorCount = Mathf.Max(1, plan.floors?.Count ?? 0);
-            int floorIndex = Mathf.Clamp(plan.currentFloorIndex, 0, floorCount - 1);
-            ExpeditionFloorPlan floor = plan.floors?
-                .FirstOrDefault(candidate => candidate?.floorIndex == floorIndex);
-            ExpeditionRouteNodePlan currentNode =
-                ExpeditionRoutePlanSystem.Node(plan, plan.currentNodeId);
-            int routeColumns = Mathf.Max(
-                1,
-                floor?.nodes?
-                    .Where(node => node != null &&
-                                   node.kind != ExpeditionNodeKind.Boss)
-                    .Select(node => node.order + 1)
-                    .DefaultIfEmpty(1)
-                    .Max() ?? 1);
-            int segmentCount = routeColumns + 1;
-            int currentSegment = currentNode == null
-                ? 0
-                : currentNode.kind == ExpeditionNodeKind.Boss
-                    ? segmentCount
-                    : Mathf.Clamp(currentNode.order + 1, 1, routeColumns);
-            floorProgressText.text = plan.complete
-                ? $"全{floorCount}層　踏破完了"
-                : $"第{floorIndex + 1}層　区間 {currentSegment:00} / {segmentCount:00}";
-
-            for (int index = 0; index < floorMarks.Length; index++)
-            {
-                VisualElement mark = floorMarks[index];
-                if (mark == null) continue;
-                ExpeditionFloorPlan markFloor = plan.floors?
-                    .FirstOrDefault(candidate => candidate?.floorIndex == index);
-                bool cleared = markFloor != null &&
-                               !string.IsNullOrEmpty(markFloor.bossNodeId) &&
-                               plan.resolvedNodeIds?.Contains(markFloor.bossNodeId) == true;
-                bool current = index == floorIndex && !plan.complete;
-                mark.EnableInClassList("mark--cleared", cleared);
-                mark.EnableInClassList("mark--current", current);
-                mark.EnableInClassList(
-                    "mark--locked",
-                    !cleared && !current);
-            }
-
-            CourierRouteState route = run.courierRoute;
-            string currentLocation = JourneyLocationLabel(
-                plan,
-                plan.currentNodeId,
-                "配達局");
-            switch (phase)
-            {
-                case Phase.Travel:
-                case Phase.MiniGame:
-                case Phase.Event:
-                    segmentOriginText.text = JourneyLocationLabel(
-                        plan,
-                        route?.travelFromNodeId,
-                        "配達局");
-                    segmentTargetText.text = arrivalNode?.title ?? "最初の分岐";
-                    break;
-                case Phase.Choice:
-                    segmentOriginText.text = currentLocation;
-                    segmentTargetText.text = "次の区間";
-                    break;
-                case Phase.Result:
-                    segmentOriginText.text = currentLocation;
-                    segmentTargetText.text = plan.complete
-                        ? "遠征完了"
-                        : route?.failed == true
-                            ? "遠征終了"
-                            : "次の分岐";
-                    break;
-                default:
-                    segmentOriginText.text = currentLocation;
-                    segmentTargetText.text = "交戦地点";
-                    break;
-            }
-        }
-
-        private static string JourneyLocationLabel(
-            ExpeditionRoutePlan plan,
-            string nodeId,
-            string fallback)
-        {
-            if (string.IsNullOrEmpty(nodeId) || nodeId == "dispatch")
-                return fallback;
-            ExpeditionRouteNodePlan node =
-                ExpeditionRoutePlanSystem.Node(plan, nodeId);
-            return ExpeditionJourneySystem.PresentationNode(plan, node)?.title ??
-                   fallback;
-        }
-
         private void SetPhase(Phase next)
         {
+            Phase previous = phase;
             phase = next;
             phaseRevision++;
             if (next != Phase.Result)
+            {
+                preserveBattleWorldForResult = false;
                 ClearResultPresentation();
+            }
+            if (previous == Phase.Event && next != Phase.Event)
+            {
+                ClearEventPresentation();
+                if (parcelRenderer != null) parcelRenderer.enabled = false;
+            }
+            if (bagOpen &&
+                next != Phase.Travel &&
+                next != Phase.Choice &&
+                next != Phase.Checkpoint)
+                CloseBag();
             scenery.SetActivity(
                 next == Phase.Travel || next == Phase.MiniGame,
                 next == Phase.Travel);
@@ -1012,10 +942,13 @@ namespace Packspire
                 Phase.MiniGame => "state--minigame",
                 Phase.Event => "state--event",
                 Phase.Battle => "state--battle",
+                Phase.Checkpoint => "state--checkpoint",
                 Phase.Result => "state--result",
                 _ => "state--travel"
             });
-            bool enterBattleStage = next == Phase.Battle && !encounterIntroActive;
+            bool enterBattleStage =
+                (next == Phase.Battle && !encounterIntroActive) ||
+                (next == Phase.Result && preserveBattleWorldForResult);
             walker.SetBattleStage(enterBattleStage);
             environment.SetBattleContext(enterBattleStage);
             if (next != Phase.Battle)
@@ -1040,6 +973,12 @@ namespace Packspire
                     if (battlePreviewEnemyShadowRenderers[previewIndex] != null)
                         battlePreviewEnemyShadowRenderers[previewIndex].enabled = false;
                 }
+                if (preserveBattleWorldForResult)
+                {
+                    SetMainEnemyVisible(true);
+                    walker.SetBattleMotion(
+                        JourneyWalkCyclePrototype.BattleMotion.Hit);
+                }
             }
             ApplyWorldMotion();
             if (next != Phase.Travel && speech != null)
@@ -1047,7 +986,6 @@ namespace Packspire
                 speechVisibleClock = 0f;
                 speech.RemoveFromClassList("speech--visible");
             }
-            RefreshJourneyContextUi();
         }
 
         private void SetResultPresentation(string className)
@@ -1066,12 +1004,13 @@ namespace Packspire
 
         private float WorldMotionScale()
         {
-            if (paused || ledgerOpen || transitionActive) return 0f;
+            if (paused || ledgerOpen || bagOpen || transitionActive) return 0f;
             return phase switch
             {
                 Phase.Travel => speedScale,
                 Phase.MiniGame when !miniGameResolved => .5f,
                 Phase.Battle when encounterIntroActive => battleEntryMotionScale,
+                Phase.Checkpoint when checkpointExitActive => 1f,
                 _ => 0f
             };
         }
@@ -1082,7 +1021,8 @@ namespace Packspire
             walker.SetJourneySpeedScale(motion);
             walker.SetJourneyWalking(motion > .001f);
             bool suspendPresentation =
-                paused || ledgerOpen || pileOverlayOpen || transitionActive;
+                paused || ledgerOpen || bagOpen || pileOverlayOpen ||
+                transitionActive;
             walker.SetSuspended(suspendPresentation);
             environment.SetWorldMotion(motion);
             environment.SetSuspended(suspendPresentation);
@@ -1123,7 +1063,7 @@ namespace Packspire
         private bool GameplayInputBlocked =>
             JourneyPausePolicy.IsGameplayBlocked(
                 paused,
-                ledgerOpen,
+                ledgerOpen || bagOpen,
                 pileOverlayOpen);
 
         private void RefreshPauseSensitiveControls()
@@ -1352,7 +1292,7 @@ namespace Packspire
             {
                 if (!JourneyPausePolicy.IsGameplayBlocked(
                         paused,
-                        ledgerOpen,
+                        ledgerOpen || bagOpen,
                         pileOverlayOpen))
                     elapsed += Time.unscaledDeltaTime;
                 yield return null;

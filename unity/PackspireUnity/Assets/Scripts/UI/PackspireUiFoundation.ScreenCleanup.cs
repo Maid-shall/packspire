@@ -32,7 +32,6 @@ public sealed partial class PackspireUiFoundation {
  void ClearFactionReferences(){
   factionShell=null;
   factionGraphHost=null;
-  factionGraphEdges=null;
   factionGraphNodes=null;
   factionEmissaryStudyFront=null;
   factionEmissaryStudyBack=null;
@@ -147,13 +146,8 @@ public sealed partial class PackspireUiFoundation {
   shopDetailScroll=null;
   shopMerchantScene=null;
   shopMerchantBackdropLayer=null;
-  shopMerchantCharacterViewport=null;
   shopMerchantCharacterImage=null;
-  shopMerchantDialogueLayer=null;
   shopMerchantDialogue=null;
-  shopMerchantCounterLayer=null;
-  shopMerchantTransactionLayer=null;
-  shopFutureMerchantActionLayer=null;
   shopHeaderGoldLabel=null;
   shopGoldLabel=null;
   shopTotalLabel=null;

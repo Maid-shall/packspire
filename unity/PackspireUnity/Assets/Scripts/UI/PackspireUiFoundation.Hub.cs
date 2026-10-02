@@ -34,7 +34,7 @@ public sealed partial class PackspireUiFoundation {
  Button hubStreetGuideEntry;
  VisualElement hubStreetGuideModal;
  VisualElement hubStreetGuideDetail;
- ScrollView hubStreetGuideFacilityScroll;
+ VisualElement hubStreetGuideFacilityScroll;
 
  void BuildHub(){
   hubStreetGuideOpen=false;
@@ -292,7 +292,7 @@ public sealed partial class PackspireUiFoundation {
 
  void BindHubStreetGuide(){
   hubStreetGuideModal=RequireViewElement<VisualElement>(hubShell,"hub-street-modal");
-  hubStreetGuideFacilityScroll=RequireViewElement<ScrollView>(hubShell,"hub-street-list");
+  hubStreetGuideFacilityScroll=RequireViewElement<VisualElement>(hubShell,"hub-street-list");
   hubStreetGuideDetail=RequireViewElement<VisualElement>(hubShell,"hub-street-detail");
   hubStreetGuideModal.pickingMode=PickingMode.Ignore;
 
@@ -354,8 +354,13 @@ public sealed partial class PackspireUiFoundation {
    int selectedIndex=index;
    var facility=facilities[index];
    var row=BuildHubChromeMapPin(facility,index==hubStreetGuideSelectedIndex,()=>{
+    CloseHubStreetGuide();
+    EnterHubFacility(facility);
+   });
+   row.AddToClassList("ps-hub-map-node");
+   row.AddToClassList("ps-hub-map-node--"+facility.id);
+   row.RegisterCallback<PointerEnterEvent>(_=>{
     hubStreetGuideSelectedIndex=selectedIndex;
-    PopulateHubStreetGuideList();
     RefreshHubStreetGuideDetail();
    });
    hubStreetGuideFacilityScroll.Add(row);
@@ -384,11 +389,7 @@ public sealed partial class PackspireUiFoundation {
   hubStreetGuideDetail.Add(PackspireUiFactory.Title(facility.label));
   hubStreetGuideDetail.Add(PackspireUiFactory.Body(facility.CategoryLabel+"  "+facility.eyebrow));
   hubStreetGuideDetail.Add(PackspireUiFactory.Body(facility.description));
-  var enter=BuildHubChromePrimary("ここへ向かう",()=>{
-   CloseHubStreetGuide();
-   EnterHubFacility(facility);
-  });
-  hubStreetGuideDetail.Add(enter);
+  hubStreetGuideDetail.Add(PackspireUiFactory.Body("地図上の施設をクリックして移動"));
  }
 
  void OnHubKeyDown(KeyDownEvent evt){

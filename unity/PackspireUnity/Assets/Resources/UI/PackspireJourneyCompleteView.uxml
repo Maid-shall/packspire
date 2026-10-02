@@ -1,69 +1,78 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <ui:VisualElement name="journey-screen" class="ps-journey state--travel">
 
-        <ui:VisualElement class="ps-journey__topbar">
-            <ui:VisualElement class="ps-journey__heading">
-                <ui:Label text="INFERNAL DELIVERY / ROUTE VII" class="ps-journey__eyebrow" />
-                <ui:Label name="journey-destination" text="紫晶の封鐘塔へ" class="ps-journey__destination" />
-            </ui:VisualElement>
-            <ui:VisualElement class="ps-journey__top-status">
-                <ui:Label name="journey-area" text="灰市外縁" class="ps-journey__area" />
-                <ui:Label name="journey-weather" text="煤霧 / 微風" class="ps-journey__weather" />
-                <ui:Label name="journey-day" text="DAY 0 / 15" class="ps-journey__day" />
-                <ui:Button name="journey-ledger-open" text="航路台帳  [TAB]" class="ps-journey__ledger-open" />
-                <ui:Button name="journey-dev-menu" text="DEV MENU  [F10]" class="ps-journey__dev-menu" />
-            </ui:VisualElement>
+        <ui:VisualElement class="ps-journey__topbar ps-journey__topbar--compact">
+            <ui:Button name="journey-ledger-open" text="航路台帳  [TAB]" class="ps-journey__ledger-open" />
+            <ui:Button name="journey-dev-menu" text="DEV MENU  [F10]" class="ps-journey__dev-menu" />
         </ui:VisualElement>
 
         <ui:VisualElement class="ps-journey__rail">
-            <ui:Label text="COURIER / 配達人" class="ps-journey__rail-eyebrow" />
-            <ui:VisualElement class="ps-journey__portrait-frame">
-                <ui:VisualElement class="ps-journey__portrait-crop">
-                    <ui:Image name="journey-portrait" class="ps-journey__portrait" scale-mode="ScaleToFit" />
-                </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__vital-head">
+                <ui:Label text="VITAL / HP" class="ps-journey__rail-eyebrow" />
+                <ui:Label name="journey-hp-text" text="42 / 42" class="ps-journey__metric-value" />
             </ui:VisualElement>
-            <ui:Label name="journey-courier-name" text="ミオ" class="ps-journey__courier-name" />
-            <ui:Label name="journey-role" text="灰印の配達人" class="ps-journey__role" />
-            <ui:VisualElement class="ps-journey__rule" />
-            <ui:Label text="VITAL / 耐久" class="ps-journey__metric-key" />
             <ui:ProgressBar name="journey-hp" low-value="0" high-value="42" value="42" class="ps-journey__hp" />
-            <ui:Label name="journey-hp-text" text="42 / 42" class="ps-journey__metric-value" />
-            <ui:VisualElement class="ps-journey__rail-row">
-                <ui:VisualElement>
-                    <ui:Label text="回収品" class="ps-journey__metric-key" />
-                    <ui:Label name="journey-cargo" text="0" class="ps-journey__rail-number" />
-                </ui:VisualElement>
-                <ui:VisualElement>
-                    <ui:Label text="遠征印" class="ps-journey__metric-key" />
-                    <ui:Label name="journey-seals" text="3" class="ps-journey__rail-number" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement class="ps-journey__risk-block">
-                <ui:Label text="ROUTE STATUS / 旅程" class="ps-journey__metric-key" />
-                <ui:Label name="journey-condition" text="安定" class="ps-journey__condition" />
-                <ui:Label name="journey-condition-note" text="期限まで余裕あり" class="ps-journey__condition-note" />
-            </ui:VisualElement>
-            <ui:VisualElement class="ps-journey__floor-progress">
-                <ui:Label text="FLOOR STAMPS / 踏破印" class="ps-journey__metric-key" />
-                <ui:Label name="journey-floor-progress" text="第1層　区間 00 / 09" class="ps-journey__floor-progress-copy" />
-                <ui:VisualElement class="ps-journey__floor-track">
-                    <ui:VisualElement name="journey-floor-mark-0" class="ps-journey__floor-mark mark--current">
-                        <ui:Label text="I" class="ps-journey__floor-seal" />
-                        <ui:Label text="灰市" class="ps-journey__floor-label" />
-                    </ui:VisualElement>
-                    <ui:VisualElement class="ps-journey__floor-connector" picking-mode="Ignore" />
-                    <ui:VisualElement name="journey-floor-mark-1" class="ps-journey__floor-mark mark--locked">
-                        <ui:Label text="II" class="ps-journey__floor-seal" />
-                        <ui:Label text="書庫" class="ps-journey__floor-label" />
-                    </ui:VisualElement>
-                    <ui:VisualElement class="ps-journey__floor-connector" picking-mode="Ignore" />
-                    <ui:VisualElement name="journey-floor-mark-2" class="ps-journey__floor-mark mark--locked">
-                        <ui:Label text="III" class="ps-journey__floor-seal" />
-                        <ui:Label text="黒鐘" class="ps-journey__floor-label" />
+            <ui:VisualElement name="journey-day-clock" class="ps-journey__day-clock" picking-mode="Ignore">
+                <ui:Label text="EXPEDITION DAY" class="ps-journey__day-clock-title" />
+                <ui:VisualElement class="ps-journey__day-clock-face">
+                    <ui:VisualElement name="journey-day-tick-00" class="ps-journey__day-tick day-tick--00" />
+                    <ui:VisualElement name="journey-day-tick-01" class="ps-journey__day-tick day-tick--01" />
+                    <ui:VisualElement name="journey-day-tick-02" class="ps-journey__day-tick day-tick--02" />
+                    <ui:VisualElement name="journey-day-tick-03" class="ps-journey__day-tick day-tick--03" />
+                    <ui:VisualElement name="journey-day-tick-04" class="ps-journey__day-tick day-tick--04" />
+                    <ui:VisualElement name="journey-day-tick-05" class="ps-journey__day-tick day-tick--05" />
+                    <ui:VisualElement name="journey-day-tick-06" class="ps-journey__day-tick day-tick--06" />
+                    <ui:VisualElement name="journey-day-tick-07" class="ps-journey__day-tick day-tick--07" />
+                    <ui:VisualElement name="journey-day-tick-08" class="ps-journey__day-tick day-tick--08" />
+                    <ui:VisualElement name="journey-day-tick-09" class="ps-journey__day-tick day-tick--09" />
+                    <ui:VisualElement name="journey-day-tick-10" class="ps-journey__day-tick day-tick--10" />
+                    <ui:VisualElement name="journey-day-tick-11" class="ps-journey__day-tick day-tick--11" />
+                    <ui:VisualElement name="journey-day-clock-hand" class="ps-journey__day-clock-hand" />
+                    <ui:VisualElement class="ps-journey__day-clock-pin" />
+                    <ui:VisualElement class="ps-journey__day-clock-copy">
+                        <ui:Label name="journey-day-number" text="0" class="ps-journey__day-number" />
+                        <ui:Label text="日目" class="ps-journey__day-suffix" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__seal-title-row">
+                <ui:Label text="EXPEDITION SEALS / 遠征印" class="ps-journey__rail-eyebrow" />
+                <ui:Label name="journey-seals" text="03" class="ps-journey__seal-total" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__seal-reel">
+                <ui:VisualElement class="ps-journey__seal-cord" picking-mode="Ignore" />
+                <ui:VisualElement name="journey-travel-seal-host" class="ps-journey__travel-seal-host" />
+            </ui:VisualElement>
+            <ui:Button name="journey-bag-open" class="ps-journey__bag-button">
+                <ui:VisualElement class="ps-journey__bag-icon" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__bag-copy" picking-mode="Ignore">
+                    <ui:Label text="戦利品" class="ps-journey__bag-title" />
+                    <ui:Label text="クリックで確認" class="ps-journey__bag-note" />
+                </ui:VisualElement>
+                <ui:Label name="journey-cargo" text="0" class="ps-journey__bag-count" picking-mode="Ignore" />
+            </ui:Button>
             <ui:Label name="journey-dev-tag" text="DEV SIMULATION" class="ps-journey__dev-tag" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-bag-panel" class="ps-journey__bag-panel">
+            <ui:VisualElement class="ps-journey__bag-panel-head">
+                <ui:VisualElement>
+                    <ui:Label text="EXPEDITION BAG" class="ps-journey__panel-eyebrow" />
+                    <ui:Label text="戦利品" class="ps-journey__bag-panel-title" />
+                </ui:VisualElement>
+                <ui:Button name="journey-bag-close" text="閉じる" class="ps-journey__bag-close" />
+            </ui:VisualElement>
+            <ui:Label name="journey-bag-summary" text="回収した戦利品はありません" class="ps-journey__bag-summary" />
+            <ui:VisualElement class="ps-journey__bag-tallies">
+                <ui:VisualElement class="ps-journey__bag-tally tally--protected">
+                    <ui:Label text="保護済み" class="ps-journey__bag-tally-key" />
+                    <ui:Label name="journey-bag-protected" text="0" class="ps-journey__bag-tally-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__bag-tally tally--exposed">
+                    <ui:Label text="未収納" class="ps-journey__bag-tally-key" />
+                    <ui:Label name="journey-bag-exposed" text="0" class="ps-journey__bag-tally-value" />
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="journey-player-battle-hud" class="ps-journey__player-battle-hud">
@@ -270,42 +279,59 @@
         <ui:VisualElement name="journey-choice" class="ps-journey__choice">
             <ui:VisualElement class="ps-journey__choice-scrim" picking-mode="Ignore" />
             <ui:VisualElement class="ps-journey__choice-heading" picking-mode="Ignore">
-                <ui:Label text="MAJOR ROUTE DECISION" class="ps-journey__choice-eyebrow" />
                 <ui:Label name="journey-choice-title" text="次の配達路を選ぶ" class="ps-journey__choice-heading-title" />
                 <ui:Label name="journey-choice-note" text="どちらを選んでも目的地へ到着します。変わるのは旅の内容と成果です。" class="ps-journey__choice-heading-note" />
             </ui:VisualElement>
             <ui:VisualElement class="ps-journey__choice-papers">
                 <ui:Button name="journey-choice-a" class="ps-journey__route-paper">
-                    <ui:VisualElement name="journey-choice-a-art" class="ps-journey__route-art route-art--ash" picking-mode="Ignore" />
+                    <ui:VisualElement name="journey-choice-a-art" class="ps-journey__route-art route-biome--ash route-road--wide route-landmark--left" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--sky" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--far" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--mid" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--street" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--ground" />
+                        <ui:Image name="journey-choice-a-landmark" class="ps-journey__route-landmark" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--foreground" />
+                        <ui:VisualElement class="ps-journey__route-art-shade" />
+                    </ui:VisualElement>
                     <ui:Label name="journey-choice-a-index" text="ROUTE A / RELAY" class="ps-journey__route-index" picking-mode="Ignore" />
                     <ui:Label name="journey-choice-a-title" text="灰市の中継所" class="ps-journey__route-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-duration" picking-mode="Ignore">
+                        <ui:Label text="所要" class="ps-journey__route-duration-key" />
+                        <ui:Label name="journey-choice-a-days" text="2日" class="ps-journey__route-duration-value" />
+                    </ui:VisualElement>
                     <ui:Label name="journey-choice-a-flavor" text="灯りの残る街道を辿り、検札所で荷を整える。" class="ps-journey__route-flavor" picking-mode="Ignore" />
                     <ui:VisualElement class="ps-journey__route-stats" picking-mode="Ignore">
-                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="所要" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-days" text="2日" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="危険" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-risk" text="安全" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="主遭遇" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-encounter" text="中継所" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="成果" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-cargo" text="整備・回復" class="ps-journey__route-stat-value" /></ui:VisualElement>
-                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="推奨印" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-seal" text="短縮印" class="ps-journey__route-stat-value" /></ui:VisualElement>
                     </ui:VisualElement>
                     <ui:Label name="journey-choice-a-action" text="この経路へ押印　[1]" class="ps-journey__route-action" picking-mode="Ignore" />
                     <ui:Label text="承認" class="ps-journey__route-stamp" picking-mode="Ignore" />
                 </ui:Button>
 
-                <ui:VisualElement class="ps-journey__choice-divider" picking-mode="Ignore">
-                    <ui:Label text="OR" class="ps-journey__choice-or" />
-                </ui:VisualElement>
-
                 <ui:Button name="journey-choice-b" class="ps-journey__route-paper ps-journey__route-paper--danger">
-                    <ui:VisualElement name="journey-choice-b-art" class="ps-journey__route-art route-art--danger" picking-mode="Ignore" />
+                    <ui:VisualElement name="journey-choice-b-art" class="ps-journey__route-art route-biome--ash route-road--narrow route-landmark--right" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--sky" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--far" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--mid" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--street" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--ground" />
+                        <ui:Image name="journey-choice-b-landmark" class="ps-journey__route-landmark" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--foreground" />
+                        <ui:VisualElement class="ps-journey__route-art-shade" />
+                    </ui:VisualElement>
                     <ui:Label name="journey-choice-b-index" text="ROUTE B / EVENT" class="ps-journey__route-index" picking-mode="Ignore" />
                     <ui:Label name="journey-choice-b-title" text="崩れ階段" class="ps-journey__route-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-duration" picking-mode="Ignore">
+                        <ui:Label text="所要" class="ps-journey__route-duration-key" />
+                        <ui:Label name="journey-choice-b-days" text="1日" class="ps-journey__route-duration-value" />
+                    </ui:VisualElement>
                     <ui:Label name="journey-choice-b-flavor" text="崩落した近道を抜ける。速いが、足場と荷崩れに注意。" class="ps-journey__route-flavor" picking-mode="Ignore" />
                     <ui:VisualElement class="ps-journey__route-stats" picking-mode="Ignore">
-                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="所要" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-days" text="1日" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="危険" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-risk" text="注意" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="主遭遇" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-encounter" text="路上事件" class="ps-journey__route-stat-value" /></ui:VisualElement>
                         <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="成果" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-cargo" text="不定" class="ps-journey__route-stat-value" /></ui:VisualElement>
-                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="推奨印" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-seal" text="遅延防止印" class="ps-journey__route-stat-value" /></ui:VisualElement>
                     </ui:VisualElement>
                     <ui:Label name="journey-choice-b-action" text="この経路へ押印　[2]" class="ps-journey__route-action" picking-mode="Ignore" />
                     <ui:Label text="承認" class="ps-journey__route-stamp" picking-mode="Ignore" />
@@ -315,15 +341,30 @@
             <ui:Label text="旅程停止中　1 / 2 で選択　F10 開発者メニュー" class="ps-journey__choice-help" picking-mode="Ignore" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="journey-event" class="ps-journey__panel ps-journey__event">
-            <ui:Label name="journey-event-eyebrow" text="ROADSIDE NOTICE" class="ps-journey__panel-eyebrow" />
-            <ui:Label name="journey-event-title" text="封印された小包" class="ps-journey__panel-title" />
-            <ui:VisualElement class="ps-journey__event-body">
+        <ui:VisualElement name="journey-event-scrim" class="ps-journey__event-scrim" picking-mode="Ignore" />
+        <ui:VisualElement name="journey-event" class="ps-journey__event">
+            <ui:VisualElement class="ps-journey__event-visual">
                 <ui:VisualElement name="journey-event-art" class="ps-journey__event-art" />
-                <ui:Label name="journey-event-text" text="宛先の消えた小包が路傍の祭壇に置かれている。" class="ps-journey__event-copy" />
             </ui:VisualElement>
-            <ui:Button name="journey-event-a" text="印を照合して開く" class="ps-journey__event-button ps-journey__event-button--primary" />
-            <ui:Button name="journey-event-b" text="期限を優先して進む" class="ps-journey__event-button" />
+            <ui:VisualElement class="ps-journey__event-content">
+                <ui:Label name="journey-event-eyebrow" text="ROADSIDE NOTICE" class="ps-journey__panel-eyebrow" />
+                <ui:Label name="journey-event-title" text="封印された小包" class="ps-journey__panel-title" />
+                <ui:Label name="journey-event-text" text="宛先の消えた小包が路傍の祭壇に置かれている。" class="ps-journey__event-copy" />
+                <ui:VisualElement class="ps-journey__event-actions">
+                    <ui:Button name="journey-event-a" text="印を照合して開く" class="ps-journey__event-button ps-journey__event-button--primary" />
+                    <ui:Button name="journey-event-b" text="期限を優先して進む" class="ps-journey__event-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-checkpoint" class="ps-journey__checkpoint">
+            <ui:Label name="journey-checkpoint-title" text="第1層　区画突破" class="ps-journey__checkpoint-title" />
+            <ui:VisualElement class="ps-journey__checkpoint-shrine">
+                <ui:VisualElement class="ps-journey__checkpoint-glow" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__checkpoint-art" picking-mode="Ignore" />
+                <ui:Button name="journey-checkpoint-return" text="E　帰還する" class="ps-journey__checkpoint-return" />
+            </ui:VisualElement>
+            <ui:Button name="journey-checkpoint-continue" text="進む　→" class="ps-journey__checkpoint-continue" />
         </ui:VisualElement>
 
         <ui:VisualElement name="journey-minigame" class="ps-journey__panel ps-journey__minigame">
@@ -457,7 +498,6 @@
             <ui:Label name="journey-result-text" text="番人を退け、次の区画へ進める。" class="ps-journey__result-text" />
             <ui:Label name="journey-result-summary" text="" class="ps-journey__result-summary" />
             <ui:VisualElement class="ps-journey__result-actions">
-                <ui:Button name="journey-result-return" text="ここで帰還" class="ps-journey__event-button ps-journey__result-return is-hidden" />
                 <ui:Button name="journey-result-continue" text="旅程を再開" class="ps-journey__event-button ps-journey__event-button--primary ps-journey__result-continue" />
             </ui:VisualElement>
         </ui:VisualElement>
@@ -507,17 +547,12 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement class="ps-journey__bottom">
+        <ui:VisualElement name="journey-bottom" class="ps-journey__bottom">
             <ui:VisualElement class="ps-journey__progress-copy">
                 <ui:Label name="journey-phase" text="MOVING / 灰市外縁" class="ps-journey__phase" />
                 <ui:Label name="journey-next" text="次の判断まで もう少し" class="ps-journey__next" />
             </ui:VisualElement>
             <ui:VisualElement class="ps-journey__segment-progress">
-                <ui:VisualElement class="ps-journey__segment-caption">
-                    <ui:Label name="journey-segment-origin" text="配達局" class="ps-journey__segment-end segment-end--origin" />
-                    <ui:Label text="CURRENT SEGMENT / 現区間" class="ps-journey__segment-key" />
-                    <ui:Label name="journey-segment-target" text="最初の分岐" class="ps-journey__segment-end segment-end--target" />
-                </ui:VisualElement>
                 <ui:ProgressBar name="journey-progress" low-value="0" high-value="100" value="0" class="ps-journey__progress" />
             </ui:VisualElement>
             <ui:VisualElement class="ps-journey__transport">

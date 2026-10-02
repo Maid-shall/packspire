@@ -26,8 +26,11 @@ public static class PackspireInput {
   Input.GetKeyDown(KeyCode.LeftArrow);
  public static bool NavigateRightPressed()=>Input.GetKeyDown(KeyCode.D)||
   Input.GetKeyDown(KeyCode.RightArrow);
- public static bool JumpReactionPressed()=>Input.GetKeyDown(KeyCode.Space)||
+ public static bool JourneyJumpPressed()=>Input.GetKeyDown(KeyCode.Space)||
   Input.GetKeyDown(KeyCode.JoystickButton2);
+ public static bool JourneyInteractPressed()=>Input.GetKeyDown(KeyCode.E)||
+  Input.GetKeyDown(KeyCode.JoystickButton0);
+ public static bool JumpReactionPressed()=>JourneyJumpPressed();
  public static bool BraceReactionPressed()=>
   Input.GetKeyDown(KeyCode.LeftShift)||
   Input.GetKeyDown(KeyCode.RightShift)||

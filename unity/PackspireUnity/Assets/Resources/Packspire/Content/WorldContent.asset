@@ -215,7 +215,7 @@ MonoBehaviour:
     description: "\u906D\u9047\u8A18\u9332\u3068\u672A\u89E3\u660E\u306E\u7D22\u5F15\u3002"
     themeKey: codex
     seal: "\u9332"
-    screen: 13
+    screen: 14
     kind: 1
     hubCard: 1
     unlocked: 1
@@ -243,7 +243,7 @@ MonoBehaviour:
     description: "\u62E0\u70B9\u306E\u5546\u4EBA\u3092\u8A2A\u306D\u308B\u3002"
     themeKey: guild
     seal: "\u5546"
-    screen: 11
+    screen: 12
     kind: 2
     hubCard: 1
     unlocked: 1

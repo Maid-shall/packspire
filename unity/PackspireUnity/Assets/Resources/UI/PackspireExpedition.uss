@@ -137,14 +137,7 @@
     margin-right: 28px;
 }
 
-.ps-exp-col-art{
-    width: 40%;
-    min-width: 340px;
-    flex-shrink: 0;
-    flex-direction: column;
-    min-height: 0;
-    margin-right: 28px;
-}
+
 
 .ps-exp-col-detail{
     width: 37%;
@@ -677,8 +670,8 @@
     height: 64px;
     min-height: 64px;
     padding-right: 64px;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
-    -unity-background-scale-mode: stretch-to-fill;
+    background-image: none;
+    border-bottom-color: rgba(189,151,91,.6);
     background-color: rgba(0, 0, 0, 0);
     border-left-width: 0;
     border-right-width: 0;
@@ -740,14 +733,17 @@
 .ps-expedition-screen .ps-exp-dest-row.ps-selected,
 .ps-expedition-screen .ps-exp-loadout-row.ps-selected{ background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
 
-.ps-expedition-screen .ps-exp-art-host{ background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-bottom-color: rgb(53, 180, 186); }
+
 
 .ps-expedition-screen .ps-exp-section{
     margin-bottom: 7px;
-    padding: 10px 14px;
+    padding: 12px;
     background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
     -unity-background-scale-mode: stretch-to-fill;
     background-color: rgba(0, 0, 0, 0);
+    width: 48%;
+    min-width: 0;
+    margin: 0 2% 12px 0;
 }
 
 .ps-expedition-screen .ps-exp-section .ps-typo-section{ color: rgb(126, 36, 29); }
@@ -781,46 +777,38 @@
     margin-bottom: 6px;
 }
 
-.ps-expedition-screen .ps-exp-col-art{
-    position: relative;
-    width: 47%;
-    min-width: 47%;
-    max-width: 47%;
-    min-height: 0;
-    padding: 0 10px 0 0;
-}
 
-.ps-expedition-screen .ps-exp-art-host{
+
+.ps-expedition-screen .ps-exp-art-host {
     position: relative;
-    min-height: 0;
     width: 100%;
-    height: 100%;
-    background-image: resource("Art/UI/ObsidianMisprintExpedition/route-engraving-v1");
-    -unity-background-scale-mode: scale-to-fit;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 1px;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-right-color: rgba(197, 157, 91, 0.45);
+    height: 174px;
+    min-height: 174px;
+    max-height: 174px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    background-image: none;
+    background-color: rgb(5,10,11);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(53,180,186);
     overflow: hidden;
 }
 
-.ps-expedition-screen .ps-exp-art-image-host,
-.ps-expedition-screen .ps-exp-art-vignette{
-    display: none;
-}
+.ps-expedition-screen .ps-exp-art-image-host { display: flex; position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.ps-expedition-screen .ps-exp-art-image { width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; }
 
 .ps-expedition-screen .ps-exp-art-caption{
     position: absolute;
-    left: 18px;
-    bottom: 12px;
-    width: 230px;
-    min-height: 54px;
-    padding: 8px 12px 7px 14px;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    min-height: 40px;
+    padding: 6px 10px;
     background-color: rgba(1, 3, 3, 0.88);
     border-left-width: 2px;
     border-left-color: rgb(175, 43, 32);
+    right: 0;
 }
 
 .ps-expedition-screen .ps-exp-art-caption-name{
@@ -837,9 +825,9 @@
 }
 
 .ps-expedition-screen .ps-exp-col-dest{
-    width: 24%;
-    min-width: 24%;
-    max-width: 24%;
+    width: 34%;
+    min-width: 34%;
+    max-width: 34%;
     min-height: 0;
     margin: 0;
     padding: 0 9px;
@@ -889,8 +877,8 @@
 
 .ps-expedition-screen .ps-exp-dest-row{
     position: relative;
-    min-height: 53px;
-    height: 53px;
+    min-height: 80px;
+    height: 80px;
     margin: 0 0 4px 0;
     padding: 6px 36px 6px 9px;
     flex-direction: row;
@@ -926,10 +914,10 @@
 }
 
 .ps-expedition-screen .ps-exp-dest-thumb{
-    width: 40px;
-    min-width: 40px;
-    height: 38px;
-    min-height: 38px;
+    width: 64px;
+    min-width: 64px;
+    height: 60px;
+    min-height: 60px;
     margin: 0 8px 0 2px;
 }
 
@@ -956,9 +944,9 @@
 }
 
 .ps-expedition-screen .ps-exp-col-detail{
-    width: 29%;
-    min-width: 29%;
-    max-width: 29%;
+    width: 66%;
+    min-width: 66%;
+    max-width: 66%;
     min-height: 0;
     padding: 0 0 0 11px;
     background-color: rgba(0, 0, 0, 0);
@@ -993,7 +981,9 @@
 
 .ps-expedition-screen .ps-expedition-detail-body{
     min-height: 0;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
 }
 
 .ps-expedition-screen .ps-exp-section{
@@ -1009,11 +999,19 @@
     border-bottom-color: rgba(196, 157, 92, 0.3);
 }
 
-.ps-expedition-screen .character-section,
-.ps-expedition-screen .trait-section,
-.ps-expedition-screen .skill-section{
-    display: none;
-}
+.ps-expedition-screen .destination-section, .ps-expedition-screen .loadout-section { width: 100%; }
+.ps-expedition-screen .destination-section { flex-direction: row; flex-wrap: wrap; }
+.ps-expedition-screen .destination-section > .ps-section-head,
+.ps-expedition-screen .ps-exp-dungeon-name,
+.ps-expedition-screen .ps-exp-dungeon-desc { width: 100%; }
+.ps-expedition-screen .destination-section .ps-exp-info-row { width: 50%; margin-bottom: 5px; }
+.ps-expedition-screen .ps-exp-dungeon-desc { margin-bottom: 10px; }
+.ps-expedition-screen .character-section { width: 48%; margin-right: 2%; height: 158px; flex-direction: row; align-items: center; }
+.ps-expedition-screen .ps-exp-courier-portrait { width: 112px; height: 145px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.ps-expedition-screen .ps-exp-courier-name { font-size: 24px; }
+.ps-expedition-screen .trait-section { width: 50%; height: 158px; justify-content: center; }
+.ps-expedition-screen .ps-exp-info-stack-value { font-size: 14px; }
+.ps-expedition-screen .skill-section { display: none; }
 
 .ps-expedition-screen .ps-section-head .ps-typo-eyebrow{
     color: rgb(43, 176, 184);
@@ -1038,7 +1036,7 @@
 .ps-expedition-screen .ps-exp-info-stack-label,
 .ps-expedition-screen .ps-exp-info-stack-value{
     color: rgb(202, 184, 156);
-    font-size: 9px;
+    font-size: 12px;
 }
 
 .ps-expedition-screen .ps-exp-info-row{

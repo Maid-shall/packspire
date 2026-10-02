@@ -129,6 +129,9 @@ namespace Packspire
         public RealtimeEnemyTimelinePatternContent[] patterns =
             Array.Empty<RealtimeEnemyTimelinePatternContent>();
 
+        // Shared reading room after removal of pointer-dependent slow motion.
+        public const float GlobalTimingScale = 1.25f;
+
         public RealtimeEnemyTimelinePattern[] BuildPatterns(
             float damageMultiplier = 1f,
             int battleSeed = 0)
@@ -147,7 +150,7 @@ namespace Packspire
                 result[index] = pattern.Build(
                     damageMultiplier,
                     catalog,
-                    timingScale,
+                    timingScale * GlobalTimingScale,
                     bindCommands
                         ? (step, stepIndex) => ResolveCommand(
                             pattern.id,

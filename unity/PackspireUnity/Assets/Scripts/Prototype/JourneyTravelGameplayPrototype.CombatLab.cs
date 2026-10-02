@@ -164,7 +164,6 @@ namespace Packspire
             scenery?.ClearAll();
             walker.SetJourneyBiome(biomeIndex);
             environment.SetBiome(biomeIndex);
-            weatherText.text = BiomeWeatherForIndex(biomeIndex);
         }
 
         private void SelectCombatLabEnemy(int index)

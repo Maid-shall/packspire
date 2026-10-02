@@ -78,14 +78,12 @@ public sealed partial class PackspireUiFoundation {
    packingFormulaSection="";
    BuildPackingAgain();
   });
-  var preview=BuildMagicCircleLayers(formula);
-  preview.AddToClassList("ps-rite-circle-preview");
-  preview.pickingMode=PickingMode.Ignore;
-  stage.Add(preview);
-  StartPackingCirclePulse(stage);
-  var stageHint=new Label("核＝形　導線＝色　共鳴＝浮遊　安定＝紋章"){pickingMode=PickingMode.Ignore};
-  stageHint.AddToClassList("ps-rite-formula-stage-hint");
-  stage.Add(stageHint);
+  stage.Add(RiteSectionHead("","収納盤の構成"));
+  stage.Add(RiteMetaLine($"{formula.core.width} × {formula.core.height} マス"));
+  stage.Add(RiteMetaLine(formula.core.description));
+  stage.Add(RiteMetaLine(formula.conduit.description));
+  stage.Add(RiteMetaLine(formula.resonance.description));
+  stage.Add(RiteMetaLine(formula.stability.description));
   body.Add(stage);
 
   panel.Add(body);
@@ -221,11 +219,6 @@ public sealed partial class PackspireUiFoundation {
   int width=formula.core.width,cells=formula.core.width*formula.core.height;
   var grid=Container("ps-rite-grid");
   packingGridElement=grid;
-  // Keep the visual row width identical to the formula's logical width. The old
-  // percentage plus per-cell margins could wrap six logical cells into five.
-  float cellPercent=100f/width;
-  float cellHeight=Mathf.Clamp(560f/Mathf.Max(1,formula.core.height),58f,84f);
-  var plateTex=PackspireResources.Load<Texture2D>("Art/Rite/rite-cell-plate-v1");
   for(int index=0;index<cells;index++){
    int cellIndex=index;
    int cellX=index%width,cellY=index/width;
@@ -236,19 +229,6 @@ public sealed partial class PackspireUiFoundation {
    cell.AddToClassList("ps-rite-cell");
    cell.focusable=true;
    cell.pickingMode=PickingMode.Position;
-   cell.style.width=Length.Percent(cellPercent);
-   cell.style.height=cellHeight;
-   cell.style.marginLeft=0;
-   cell.style.marginRight=0;
-   cell.style.marginTop=0;
-   cell.style.marginBottom=0;
-
-   if(plateTex!=null){
-    var plate=new Image{image=plateTex,scaleMode=ScaleMode.StretchToFill,pickingMode=PickingMode.Ignore};
-    plate.AddToClassList("ps-rite-cell-plate");
-    cell.Add(plate);
-   }
-
    string orbExtra="";
    if(occupant!=null){
     var item=run.inventory.FirstOrDefault(x=>x.uid==occupant.itemUid);
@@ -268,7 +248,7 @@ public sealed partial class PackspireUiFoundation {
     var item=run.inventory.FirstOrDefault(x=>x.uid==occupant.itemUid);
     if(item!=null){
      cell.tooltip=GameCatalog.Items[item.templateId].name;
-      var art=Atlas(game.UiEquipmentArt,ItemUv(item.templateId),"ps-rite-cell-art");
+      var art=VaultItemDisplayArt(item.templateId,"ps-rite-cell-art");
       art.pickingMode=PickingMode.Ignore;
       art.style.rotate=new Rotate(Angle.Degrees(occupant.rotation*90f));
       cell.Add(art);
@@ -287,6 +267,23 @@ public sealed partial class PackspireUiFoundation {
    grid.Add(cell);
   }
   return grid;
+ }
+
+
+ void BindPackingBoardGeometry(VisualElement host,ActiveStorageFormula formula){
+  var grid=packingGridElement;
+  void Resize(){
+   if(host.panel==null||host.contentRect.width<=0||host.contentRect.height<=0)return;
+   float side=Mathf.Floor(Mathf.Min(host.contentRect.width/formula.core.width,host.contentRect.height/formula.core.height));
+   grid.style.width=side*formula.core.width;
+   grid.style.height=side*formula.core.height;
+   foreach(var cell in grid.Children()){
+    cell.style.width=side;
+    cell.style.height=side;
+   }
+  }
+  host.RegisterCallback<GeometryChangedEvent>(_=>Resize());
+  host.RegisterCallback<AttachToPanelEvent>(_=>host.schedule.Execute(Resize));
  }
 
  VisualElement BuildShapePreview(ItemInstance item,int rotation){

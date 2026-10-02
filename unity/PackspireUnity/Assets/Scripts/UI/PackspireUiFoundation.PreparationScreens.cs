@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
 // Packing screen construction and primary layout.
+ bool packingFormulaBrowserOpen;
  void BuildPacking(){
   var run=game.UiRun;
   if(run==null){game.UiNavigate(ScreenId.Hub);return;}
@@ -28,22 +29,14 @@ public sealed partial class PackspireUiFoundation {
    return;
   }
   root.pickingMode=PickingMode.Position;
+  root.EnableInClassList("packing--formulas",packingFormulaBrowserOpen);
+  root.EnableInClassList("packing--effects",!packingFormulaBrowserOpen);
   packingRootElement=root;
   screenRoot.Add(root);
   RequireViewElement<VisualElement>(root,"packing-background");
   RegisterPackingDrag(root);
 
   RequireViewElement<VisualElement>(root,"packing-top");
-  var topActions=RequireViewElement<VisualElement>(root,"packing-top-actions");
-  if(game.UiPackingAtBase){
-   var back=PackspireUiFactory.Button("戻る",()=>{
-    game.UiPackingCapture();
-    packingTemplateCommitted=false;
-    game.UiNavigate(ScreenId.Hub);
-   });
-   back.AddToClassList("ps-rite-chip");
-   topActions.Add(back);
-  }
   RequireViewElement<VisualElement>(root,"packing-body");
 
   // Left: floating equip tray (header + filters pinned above scroll)
@@ -74,7 +67,7 @@ public sealed partial class PackspireUiFoundation {
     badge.AddToClassList("ps-rite-equip-badge");
     tile.Add(badge);
    }
-   tile.Add(Atlas(game.UiEquipmentArt,ItemUv(entry.templateId),"ps-rite-equip-art"));
+   tile.Add(VaultItemDisplayArt(entry.templateId,"ps-rite-equip-art"));
    var name=new Label(def.name){pickingMode=PickingMode.Ignore};
    name.AddToClassList("ps-rite-equip-name");
    tile.Add(name);
@@ -88,12 +81,12 @@ public sealed partial class PackspireUiFoundation {
   var kiln=RequireViewElement<VisualElement>(root,"packing-kiln");
   packingKilnElement=kiln;
   kiln.AddToClassList("ps-rite-core-"+formula.core.id);
-  kiln.Add(BuildMagicCircleLayers(formula));
-  var circle=Container("ps-rite-circle");
+  RequireViewElement<Label>(root,"packing-board-size").text=$"{formula.core.width} × {formula.core.height}";
+  var circle=RequireViewElement<VisualElement>(root,"packing-board-host");
   circle.pickingMode=PickingMode.Position;
   circle.RegisterCallback<ClickEvent>(OnPackingCircleClick);
   circle.Add(BuildRiteGrid(run,formula));
-  kiln.Add(circle);
+  BindPackingBoardGeometry(circle,formula);
   if(!string.IsNullOrEmpty(selectedPackingUid))
    kiln.Add(BuildPackingSelectDock(run,formula));
   var kilnRail=RequireViewElement<VisualElement>(root,"packing-kiln-rail");
@@ -104,18 +97,24 @@ public sealed partial class PackspireUiFoundation {
   var cardsBtn=PackspireUiFactory.Button($"戦闘札・配達印",()=>{packingFormulaOpen=false;packingCardsOpen=true;BuildPackingAgain();});
   cardsBtn.AddToClassList("ps-rite-tool");
   cardsBtn.AddToClassList("ps-rite-tool-primary");
-  cardsBtn.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.CardCheck,"ps-rite-tool-icon"));
   kilnRail.Add(cardsBtn);
-  StartPackingCirclePulse(center);
+
 
   RequireViewElement<VisualElement>(root,"packing-right-shell");
   var right=RequireViewElement<ScrollView>(root,"packing-right-scroll");
   packingRightScrollElement=right;
   right.scrollOffset=new Vector2(0,packingRightScrollY);
-  if(!packingTemplateCommitted){
+  RequireViewElement<Button>(root,"packing-effects-tab").clicked+=()=>{packingFormulaBrowserOpen=false;BuildPackingAgain();};
+  RequireViewElement<Button>(root,"packing-formulas-tab").clicked+=()=>{packingFormulaBrowserOpen=true;BuildPackingAgain();};
+  var courier=CharacterCatalog.Get(game.UiMeta.selectedCharacterId);
+  RequireViewElement<VisualElement>(root,"packing-courier-art").Add(CharacterPortraitFront(courier,"ps-packing-courier-image"));
+  RequireViewElement<Label>(root,"packing-courier-name").text=courier.name;
+  RequireViewElement<Label>(root,"packing-courier-role").text=GameCatalog.Roles.TryGetValue(game.UiMeta.currentRole,out var role)?role.name:"配達員";
+  RequireViewElement<Button>(root,"packing-save").clicked+=()=>{game.UiPackingSave();ShowToast("荷造りを保存しました");};
+  if(packingFormulaBrowserOpen){
    BuildFormulaTemplateBrowser(right);
   } else {
-   right.Add(BuildFormulaTemplateCommitted(formula));
+
    var selected=run.inventory.FirstOrDefault(x=>x.uid==selectedPackingUid);
    if(selected!=null)BuildPackingItemDetail(right,selected,build);
    else BuildPackingOverview(right,run,build);

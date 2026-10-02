@@ -1,5 +1,11 @@
 namespace Packspire
 {
+    internal enum JourneyLocationPresentation
+    {
+        Inline,
+        Overlay
+    }
+
     internal sealed class JourneyLocationInteractionDefinition
     {
         public string Eyebrow { get; set; }
@@ -12,6 +18,8 @@ namespace Packspire
         public int PrimaryPerformance { get; set; }
         public int SecondaryPerformance { get; set; }
         public int SecondaryDayDelta { get; set; }
+        public JourneyLocationPresentation Presentation { get; set; } =
+            JourneyLocationPresentation.Inline;
 
         public CourierLocationOutcome BuildOutcome(bool primary) => new()
         {
@@ -59,7 +67,8 @@ namespace Packspire
             PrimaryButton = "中継補給を行って旅程を再開",
             PrimaryMessage = "中継補給を完了した。",
             ShowSecondaryButton = false,
-            PrimaryPerformance = 2
+            PrimaryPerformance = 2,
+            Presentation = JourneyLocationPresentation.Overlay
         };
 
         private static readonly JourneyLocationInteractionDefinition Exploration = new()

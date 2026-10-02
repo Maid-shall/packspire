@@ -5524,7 +5524,8 @@
     left: 12px;
     top: 10px;
     right: 8px;
-    height: 94px;
+    width: auto;
+    height: 118px;
     padding: 8px 10px;
     background-image: none;
     background-color: rgba(3, 4, 3, 0.72);
@@ -5537,11 +5538,16 @@
 }
 .ps-codex-v8 .ps-codex-item-name {
     margin-top: 2px;
-    font-size: 28px;
+    height: 42px;
+    min-height: 42px;
+    font-size: 26px;
+    white-space: nowrap;
     color: rgb(235, 210, 171);
 }
 .ps-codex-v8 .ps-codex-item-description {
-    font-size: 10px;
+    height: auto;
+    min-height: 35px;
+    font-size: 11px;
     color: rgba(221, 202, 173, 0.78);
 }
 .ps-codex-v8 .ps-codex-item-art {
@@ -5655,8 +5661,8 @@
     width: 48%;
     height: 28px;
     padding: 0 4px;
-    font-size: 11px;
-    color: rgb(76, 52, 38);
+    font-size: 14px;
+    color: rgb(224, 202, 166);
     background-image: none;
 }
 .ps-codex-v8 .ps-codex-card-toggle {
@@ -5721,21 +5727,26 @@
 .ps-codex-v8 .ps-codex-item-hero {
     height: 432px;
     min-height: 432px;
+    max-height: none;
+    flex-shrink: 0;
     background-color: rgb(5, 4, 31);
 }
 .ps-codex-v8 .ps-codex-item-summary {
     background-color: rgba(3, 4, 5, 0.90);
 }
 .ps-codex-v8 .ps-codex-item-art {
-    left: 72px;
-    top: 108px;
-    width: 330px;
-    height: 310px;
+    left: 20px;
+    right: 20px;
+    top: 132px;
+    width: auto;
+    min-width: 0;
+    height: 285px;
+    padding: 0;
 }
 .ps-codex-v8 .ps-codex-item-art > Image,
 .ps-codex-v8 .ps-codex-item-art > .unity-image {
-    width: 286px;
-    height: 286px;
+    width: 250px;
+    height: 250px;
 }
 .ps-codex-v8 .ps-codex-shape-gallery {
     height: 177px;
@@ -5936,14 +5947,13 @@
 }
 
 .ps-codex-v8 .ps-codex-shape-gallery {
-    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    background-color: rgba(6, 12, 13, 0.8);
 }
 
 .ps-codex-v8 .ps-codex-shape-title,
 .ps-codex-v8 .ps-codex-shape-count {
-    color: rgb(61, 44, 32);
+    color: rgb(224, 202, 166);
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
 
@@ -6013,8 +6023,10 @@
 }
 
 .ps-codex-v8 .ps-codex-index-footer {
-    background-image: resource("Art/UI/ObsidianMisprint/hub-order-slip-v1");
-    -unity-background-scale-mode: stretch-to-fill;
+    background-image: none;
+    background-color: rgba(5, 9, 10, 0.9);
+    border-top-width: 1px;
+    border-top-color: rgba(183, 145, 83, 0.48);
 }
 
 .ps-codex-v8 .ps-codex-v10-lore-page {

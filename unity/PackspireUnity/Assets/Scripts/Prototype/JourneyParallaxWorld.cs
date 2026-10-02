@@ -109,7 +109,7 @@ namespace Packspire
                 "Front Props",
                 PackspireResources.Load<Sprite>(ParallaxFrontResource),
                 30,
-                1.35f);
+                1.08f);
             ApplyRoadProfileVisibility();
         }
 

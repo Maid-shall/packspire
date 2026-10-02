@@ -6,7 +6,8 @@ namespace Packspire {
 public enum ItemType { Weapon, Armor, Rune, Supply }
 public enum Element { Fire, Water, Wind, Earth }
 public enum CardType { Attack, Skill, Power }
-public enum ScreenId { Character, Hub, Status, Vault, Heirloom, Faction, Expedition, Pack, Route, GridBoard, Battle, Reward, Shop, Event, Compendium, GameOver, GameClear }
+// Persisted by Unity content assets. Keep values stable when adding screens.
+public enum ScreenId { Character=0, Hub=1, Status=2, Vault=3, Heirloom=4, Faction=5, Expedition=6, Pack=7, Route=8, GridBoard=9, Battle=10, Reward=11, Shop=12, Event=13, Compendium=14, GameOver=15, GameClear=16 }
 
 [Serializable] public struct CellDef { public int x,y; public Element element; public int value; public CellDef(int x,int y,Element e,int value=1){this.x=x;this.y=y;element=e;this.value=value;} }
 [Serializable] public class GrantedCardDef { public string battleCardId; public int count=1; }

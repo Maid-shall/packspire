@@ -17,9 +17,6 @@ namespace Packspire
         private const double RealtimeOpeningEnemyActionDelay =
             RealtimeReelDisplayHorizon + .001d;
         private const double RealtimeActionCommitMargin = 3d;
-        private const float RealtimePlanningSlowScale = .55f;
-        private const float RealtimePlanningNormalScale = 1f;
-        private const float RealtimePlanningScaleTransition = .1f;
         private const float RealtimeNowHoldDuration = .24f;
         private const float RealtimeEnemyImpactHoldDuration = .12f;
         private const int RealtimeHandLimit = 8;
@@ -34,7 +31,6 @@ namespace Packspire
         private bool realtimeBattleActive;
         private int lastSupplyPulseCount;
         private float realtimeTimelineHoldRemaining;
-        private float realtimePlanningScale = RealtimePlanningNormalScale;
         private RealtimeEnemyTimelinePlanner realtimeEnemyTimelinePlanner;
         private JourneyBattleReelPresenter realtimeReelPresenter;
         private int lastAttackBoostDisplaySecond = -1;
@@ -72,7 +68,6 @@ namespace Packspire
                 RealtimeDrawsPerSupplyPulse);
             run.energy = realtimeBattle.Energy;
             realtimeTimelineHoldRemaining = 0f;
-            realtimePlanningScale = RealtimePlanningNormalScale;
             lastAttackBoostDisplaySecond = -1;
             lastGuardBoostDisplaySecond = -1;
             realtimeCombatTiming.Reset(run?.block ?? 0, battle?.enemyBlock ?? 0);
@@ -124,7 +119,6 @@ namespace Packspire
             realtimeBattleActive = false;
             realtimeBattle.Finish();
             realtimeTimelineHoldRemaining = 0f;
-            realtimePlanningScale = RealtimePlanningNormalScale;
             realtimeEnemyTimelinePlanner = null;
             ResetEnemyImpactContactCue();
             consumablePresenter?.ClearHover();
@@ -134,7 +128,6 @@ namespace Packspire
         private float UpdateRealtimeBattle(float delta)
         {
             if (!realtimeBattleActive || battle == null) return 0f;
-            float planningScale = UpdateRealtimePlanningScale(delta);
             if (delta > 0f && realtimeTimelineHoldRemaining > 0f)
             {
                 realtimeTimelineHoldRemaining = Mathf.Max(
@@ -152,7 +145,7 @@ namespace Packspire
             float timelineDelta = 0f;
             if (!shouldPause)
             {
-                timelineDelta = delta * speedScale * planningScale;
+                timelineDelta = delta * speedScale;
                 realtimeBattle.Tick(timelineDelta);
                 realtimeEnemyTimelinePlanner?.EnsureScheduledThrough(
                     realtimeBattle.Time + RealtimeReelDisplayHorizon + RealtimeActionCommitMargin);
@@ -202,7 +195,6 @@ namespace Packspire
                 if (TryCompleteCombatLabMeasurement(false)) return true;
                 realtimeBattleActive = false;
                 realtimeBattle.Finish();
-                SetMainEnemyVisible(false);
                 SaveJourneyStage(JourneyResumeStage.Defeat);
                 ShowResult(
                     "EXPEDITION FAILED",
@@ -253,42 +245,6 @@ namespace Packspire
                 BattleSystem.Draw(run, 1);
             battleLog.text = "補給線を通過。エナジーと手札を補充した。";
             RefreshBattleUi();
-        }
-
-        private float UpdateRealtimePlanningScale(float delta)
-        {
-            float target = PointerIsOverRealtimeHandCard() ||
-                           (consumablePresenter?.IsPointerOverSlot ?? false)
-                ? RealtimePlanningSlowScale
-                : RealtimePlanningNormalScale;
-            if (delta <= 0f) return realtimePlanningScale;
-
-            float range = RealtimePlanningNormalScale - RealtimePlanningSlowScale;
-            float changePerSecond = range / Mathf.Max(.01f, RealtimePlanningScaleTransition);
-            realtimePlanningScale = Mathf.MoveTowards(
-                realtimePlanningScale,
-                target,
-                changePerSecond * delta);
-            return realtimePlanningScale;
-        }
-
-        private bool PointerIsOverRealtimeHandCard()
-        {
-            if (screen?.panel == null) return false;
-
-            Vector2 screenPosition = Input.mousePosition;
-            if (screenPosition.x < 0f || screenPosition.x > Screen.width ||
-                screenPosition.y < 0f || screenPosition.y > Screen.height)
-                return false;
-
-            screenPosition.y = Screen.height - screenPosition.y;
-            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(screen.panel, screenPosition);
-            foreach (Button card in cardButtons)
-            {
-                if (card == null || card.ClassListContains("is-hidden")) continue;
-                if (card.worldBound.Contains(panelPosition)) return true;
-            }
-            return false;
         }
 
         private Sprite RealtimeActionActorSprite(RealtimeEnemyActionPreview action)
@@ -429,7 +385,6 @@ namespace Packspire
 
             realtimeBattleActive = false;
             realtimeBattle.Finish();
-            SetMainEnemyVisible(false);
             SaveJourneyStage(JourneyResumeStage.Defeat);
             ShowResult(
                 "EXPEDITION FAILED",

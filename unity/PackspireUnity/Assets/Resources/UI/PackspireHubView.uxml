@@ -197,7 +197,12 @@
                         <ui:Button name="hub-cat-workbench" text="工房" class="ps-hub-street-guide-cat" />
                         <ui:Button name="hub-cat-archive" text="記録" class="ps-hub-street-guide-cat" />
                     </ui:VisualElement>
-                    <ui:ScrollView name="hub-street-list" class="ps-hub-misprint__modal-list" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+                    <ui:VisualElement class="ps-hub-street-map">
+                        <ui:VisualElement class="ps-hub-street-road ps-hub-street-road--main" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-hub-street-road ps-hub-street-road--cross" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-hub-street-road ps-hub-street-road--upper" picking-mode="Ignore" />
+                        <ui:VisualElement name="hub-street-list" class="ps-hub-misprint__modal-list" />
+                    </ui:VisualElement>
                     <ui:VisualElement name="hub-street-detail" class="ps-hub-misprint__modal-detail" />
                 </ui:VisualElement>
             </ui:VisualElement>

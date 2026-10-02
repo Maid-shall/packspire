@@ -29,6 +29,19 @@ namespace Packspire
         public bool CanContinue => kind == ExpeditionCheckpointKind.FloorCleared;
     }
 
+    public readonly struct ExpeditionLootTally
+    {
+        public ExpeditionLootTally(int protectedCount, int exposedCount)
+        {
+            ProtectedCount = protectedCount;
+            ExposedCount = exposedCount;
+        }
+
+        public int ProtectedCount { get; }
+        public int ExposedCount { get; }
+        public int TotalCount => ProtectedCount + ExposedCount;
+    }
+
     /// <summary>
     /// Builds the read-only information shown after a resolved floor boss.
     /// Finalizing a run remains ExpeditionLootSystem's responsibility.
@@ -63,12 +76,10 @@ namespace Packspire
             summary.currentHp = run.hp;
             summary.maximumHp = run.maxHp;
 
-            CountNewLoot(
-                run,
-                out summary.protectedNewItemCount,
-                out summary.exposedNewItemCount);
-            summary.collectedNewItemCount =
-                summary.protectedNewItemCount + summary.exposedNewItemCount;
+            ExpeditionLootTally loot = CountCurrentLoot(run);
+            summary.protectedNewItemCount = loot.ProtectedCount;
+            summary.exposedNewItemCount = loot.ExposedCount;
+            summary.collectedNewItemCount = loot.TotalCount;
             summary.deliverySealsSpent = (run.courierRoute?.seals ??
                     new List<DeliverySealState>())
                 .Where(seal => seal != null)
@@ -76,13 +87,11 @@ namespace Packspire
             return summary;
         }
 
-        private static void CountNewLoot(
-            RunState run,
-            out int protectedCount,
-            out int exposedCount)
+        public static ExpeditionLootTally CountCurrentLoot(RunState run)
         {
-            protectedCount = 0;
-            exposedCount = 0;
+            if (run == null) return new ExpeditionLootTally(0, 0);
+            int protectedCount = 0;
+            int exposedCount = 0;
             var starting = new HashSet<string>(
                 run.startingItemUids ?? new List<string>());
             var packed = new HashSet<string>((run.placements ?? new List<Placement>())
@@ -101,6 +110,8 @@ namespace Packspire
                 if (packed.Contains(item.uid)) protectedCount++;
                 else exposedCount++;
             }
+
+            return new ExpeditionLootTally(protectedCount, exposedCount);
         }
     }
 }

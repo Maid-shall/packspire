@@ -1,1111 +1,385 @@
-/* Shop presentation isolated from reward/result and legacy management cascades.
- * Geometry uses the 1280 x 720 logical PanelSettings coordinate system.
- */
-.ps-shop-screen{
+/* Merchant, stock, item record and purchase desk share one 1280x720 shell. */
+.ps-shop-screen {
     position: absolute;
     left: 0;
     top: 0;
     width: 1280px;
     height: 720px;
     overflow: hidden;
-    color: rgb(225, 202, 164);
-    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+    color: rgb(234, 211, 176);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
 }
-
 .ps-shop-screen .ps-layer-background,
 .ps-shop-screen .ps-shop-shade,
-.ps-shop-screen .ps-layer-content{
+.ps-shop-screen .ps-layer-content {
     position: absolute;
     left: 0;
     top: 0;
     width: 1280px;
     height: 720px;
 }
-
-.ps-shop-screen .ps-layer-content{
-    flex-direction: column;
-}
-
-.ps-shop-screen .ps-shop-shade{
-    background-color: rgba(6, 8, 14, 0.62);
-}
-
-.ps-shop-screen .ps-shop-mark{
-    position: absolute;
-    right: 88px;
-    top: 14px;
-    width: 52px;
-    height: 52px;
-    opacity: 0.82;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-shop-v1");
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.ps-shop-screen .ps-shop-register{
-    position: absolute;
-    left: -22px;
-    bottom: -24px;
-    width: 132px;
-    height: 132px;
-    opacity: 0.22;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.ps-shop-screen .ps-shop-ledger-decor{
-    position: absolute;
-    left: 0;
-    top: 105px;
-    width: 54px;
-    height: 510px;
-    opacity: 0.16;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-ledger-spine-v1");
-    -unity-background-scale-mode: scale-to-fit;
-}
-
-.ps-shop-screen .ps-shop-header-copy{
-    flex-grow: 1;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    padding-left: 16px;
-}
-
-.ps-shop-screen .ps-shop-header-eyebrow{
-    color: rgb(205, 168, 106);
-    font-size: 11px;
-    margin-bottom: 2px;
-    white-space: nowrap;
-}
-
-.ps-shop-screen .ps-shop-header-title{
-    color: rgb(234, 214, 179);
-    font-size: 28px;
-    white-space: nowrap;
-}
-
-.ps-shop-screen .ps-shop-gold-plaque{
-    width: 152px;
-    height: 42px;
-    margin-right: 16px;
-    align-items: center;
-    justify-content: center;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-gold-plaque .ps-shop-header-gold{
-    color: rgb(45, 34, 25);
-    font-size: 17px;
-}
-
-.ps-shop-screen .ps-shop-filter-plate{
-    position: absolute;
-    left: 4%;
-    top: 0;
-    width: 92%;
-    height: 100%;
-}
-
-.ps-shop-screen .ps-shop-filter-plate-selected{
-    display: none;
-}
-
-.ps-shop-screen .ps-shop-filter.ps-selected .ps-shop-filter-plate-normal{
-    display: none;
-}
-
-.ps-shop-screen .ps-shop-filter.ps-selected .ps-shop-filter-plate-selected{
-    display: flex;
-}
-
-.ps-shop-screen .ps-shop-filter-icon{
-    position: absolute;
-    left: 50%;
-    top: 3px;
-    width: 29px;
-    height: 29px;
-    translate: -15px 0;
-}
-
-.ps-shop-screen{
-    position: relative;
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-}
-
-.ps-shop-header{
-    position: relative;
-    flex-shrink: 0;
-    padding-left: 18px;
-    padding-right: 24px;
-    padding-bottom: 8px;
-}
-
-.ps-shop-body{
-    flex-direction: row;
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 0;
-    padding-left: 18px;
-    padding-right: 24px;
-    padding-bottom: 24px;
-}
-
-.ps-shop-col-list{
-    width: 28%;
-    flex-grow: 0;
-    flex-shrink: 0;
-    min-width: 220px;
-    min-height: 0;
-    flex-direction: column;
-    padding-right: 10px;
-}
-
-.ps-shop-col-detail{
-    width: 32%;
-    flex-grow: 0;
-    flex-shrink: 1;
-    min-width: 240px;
-    min-height: 0;
-    flex-direction: column;
-    padding-right: 10px;
-}
-
-.ps-shop-col-merchant{
-    width: 40%;
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 280px;
-    min-height: 0;
-    flex-direction: column;
-}
-
-.ps-shop-filter-host{
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    margin-bottom: 8px;
-}
-
-.ps-shop-filter{
-    min-width: 54px;
-    margin-right: 4px;
-    margin-bottom: 4px;
-    font-size: 12px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.ps-shop-filter.ps-selected{
-    border-color: rgba(255, 210, 140, 0.8);
-}
-
-.ps-shop-product-scroll{
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 0;
-    background-color: rgba(12, 10, 28, 0.5);
-    padding: 8px;
-}
-
-.ps-shop-product-grid{
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-}
-
-.ps-shop-product-card{
-    width: 76px;
-    min-height: 96px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-    padding: 6px;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(24, 18, 42, 0.88);
-    border-width: 1px;
-    border-color: rgba(140, 120, 180, 0.28);
-}
-
-.ps-shop-product-card.ps-selected{
-    border-color: rgba(255, 210, 140, 0.85);
-    background-color: rgba(48, 36, 72, 0.95);
-}
-
-.ps-shop-product-art{
-    width: 56px;
-    height: 56px;
-    margin-bottom: 4px;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(8, 6, 18, 0.45);
-    flex-shrink: 0;
-}
-
-.ps-shop-product-image{
-    width: 100%;
-    height: 100%;
-}
-
-.ps-shop-product-price{
-    font-size: 12px;
-    color: rgb(255, 220, 160);
-    flex-shrink: 0;
-}
-
-.ps-shop-detail-host{
-    flex-grow: 1;
-    min-height: 0;
-    background-color: rgba(12, 10, 28, 0.55);
-    padding: 10px;
-}
-
-.ps-shop-detail-scroll{
-    flex-grow: 1;
-    min-height: 0;
-}
-
-.ps-shop-detail-art{
-    width: 100%;
-    height: 160px;
-    min-height: 140px;
-    margin-bottom: 10px;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(8, 6, 18, 0.4);
-    flex-shrink: 0;
-}
-
-.ps-shop-detail-image{
-    width: 70%;
-    height: 70%;
-}
-
-+.ps-shop-detail-block{
-    flex-direction: column;
-    flex-shrink: 0;
-    margin-bottom: 10px;
-}
-
-.ps-shop-detail-label{
-    font-size: 13px;
-    color: rgb(255, 200, 140);
-    margin-bottom: 2px;
-    flex-shrink: 0;
-}
-
-.ps-shop-detail-body{
-    font-size: 15px;
-    color: rgb(230, 218, 195);
-    white-space: normal;
-    flex-shrink: 0;
-}
-
-.ps-shop-dev-hint{
-    position: absolute;
-    right: 28px;
-    top: 10px;
-    font-size: 11px;
-    color: rgba(180, 170, 200, 0.7);
-    background-color: rgba(8, 6, 18, 0.45);
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-
-.ps-shop-merchant-scene{
-    position: relative;
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
-    background-color: rgb(12, 10, 24);
-}
-
-.ps-shop-merchant-backdrop-layer{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-}
-
-.ps-shop-merchant-bg,
-.ps-shop-merchant-bg-fallback{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-}
-
-.ps-shop-merchant-bg-fallback{
-    background-color: rgba(28, 20, 48, 0.95);
-}
-
-.ps-shop-merchant-character-viewport{
-    position: absolute;
-    left: 6%;
-    right: 2%;
-    top: 2%;
-    height: 68%;
-    overflow: hidden;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.ps-shop-merchant-character-image{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.ps-shop-merchant-dialogue-layer{
-    position: absolute;
-    left: 8%;
-    right: 8%;
-    bottom: 34%;
-    max-height: 72px;
-    align-items: stretch;
-    justify-content: flex-end;
-}
-
-.ps-shop-merchant-dialogue{
-    flex-shrink: 1;
-    max-height: 72px;
-    min-height: 36px;
-    padding: 8px 12px;
-    font-size: 14px;
-    color: rgb(240, 228, 205);
-    white-space: normal;
-    overflow: hidden;
-    background-color: rgba(8, 6, 18, 0.78);
-    border-width: 1px;
-    border-color: rgba(160, 130, 200, 0.28);
-}
-
-.ps-shop-merchant-counter-layer{
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 35%;
-    overflow: hidden;
-}
-
-.ps-shop-merchant-counter-art{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-}
-
-.ps-shop-merchant-counter-face{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    flex-direction: column;
-}
-
-.ps-shop-merchant-counter-top{
-    flex-shrink: 0;
-    height: 18%;
-    background-color: rgba(92, 68, 42, 0.96);
-    border-top-width: 2px;
-    border-top-color: rgba(210, 170, 110, 0.55);
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(40, 24, 12, 0.7);
-}
-
-.ps-shop-merchant-counter-body{
-    flex-grow: 1;
-    background-color: rgba(48, 34, 22, 0.96);
-    border-top-width: 1px;
-    border-top-color: rgba(140, 100, 60, 0.35);
-}
-
-.ps-shop-merchant-transaction-layer{
-    position: absolute;
-    left: 6%;
-    right: 6%;
-    bottom: 4%;
-    height: 30%;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 8px 10px;
-    background-color: rgba(10, 8, 18, 0.55);
-    border-width: 1px;
-    border-color: rgba(180, 150, 110, 0.28);
-}
-
-.ps-shop-tx-name,
-.ps-shop-tx-gold,
-.ps-shop-tx-total{
-    font-size: 14px;
-    color: rgb(255, 230, 180);
-    margin-bottom: 2px;
-    flex-shrink: 0;
-}
-
-.ps-shop-tx-reason{
-    font-size: 12px;
-    color: rgb(255, 160, 140);
-    min-height: 14px;
-    margin-bottom: 6px;
-    white-space: normal;
-    flex-shrink: 0;
-}
-
-.ps-shop-tx-actions{
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-shrink: 0;
-}
-
-.ps-shop-buy-btn{
-    min-height: 40px;
-    min-width: 140px;
-    margin-right: 8px;
-}
-
-.ps-shop-leave-btn{
-    min-height: 40px;
-}
-
-.ps-shop-future-merchant-actions{
-    flex-shrink: 0;
-    min-height: 0;
-    height: 0;
-    overflow: hidden;
-}
-
-.ps-shop-screen .ps-layer-background{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-ledger-v1");
+.ps-shop-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
     -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(7, 10, 10);
 }
-
-.ps-shop-screen .ps-mgmt-bg{ display: none; }
-
-.ps-shop-screen .ps-mgmt-shade{ background-color: rgba(2, 3, 3, 0.10); }
-
-.ps-shop-screen .ps-shop-header{
-    height: 66px;
-    min-height: 66px;
-    padding-right: 64px;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-long-rule-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+.ps-shop-screen .ps-shop-shade {
+    background-color: rgba(2, 4, 5, 0.44);
 }
-
-.ps-shop-screen .ps-shop-col-merchant{ background-color: rgba(1, 3, 3, 0.20); }
-
-.ps-shop-screen .ps-shop-col-list{ background-color: rgba(1, 3, 3, 0.68); border-left-width: 1px; border-left-color: rgba(205, 168, 106, 0.46); }
-
-.ps-shop-screen .ps-shop-stock-heading{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-product-card{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-.ps-shop-screen .ps-shop-product-card.ps-selected{ background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
-
-.ps-shop-screen .ps-shop-product-plate,
-.ps-shop-screen .ps-management-selection-corners{ display: none; }
-
-.ps-shop-screen .ps-shop-dialogue-plaque,
-.ps-shop-screen .ps-shop-col-detail,
-.ps-shop-screen .ps-shop-detail-block{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.ps-shop-screen .ps-shop-dialogue,
-.ps-shop-screen .ps-shop-detail-body{ color: rgb(41, 34, 27); }
-
-.ps-shop-screen .ps-shop-detail-label{ color: rgb(126, 36, 29); }
-
-.ps-shop-screen .ps-shop-price-paper{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-buy-btn,
-.ps-shop-screen .ps-shop-leave-btn{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(231, 204, 163);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-+.ps-shop-screen .ps-shop-header{
+.ps-shop-screen .ps-layer-content { flex-direction: column; padding: 0; }
+.ps-shop-screen .ps-shop-header {
     height: 72px;
     min-height: 72px;
-    padding: 8px 44px 6px 50px;
-}
-
-.ps-shop-screen .ps-shop-body{
-    padding: 0 26px 22px 28px;
-}
-
-.ps-shop-screen .ps-shop-col-merchant{
-    width: 27%;
-    min-width: 0;
-    padding-right: 12px;
-}
-
-.ps-shop-screen .ps-shop-col-list{
-    width: 25%;
-    min-width: 0;
-    padding: 0 10px;
-}
-
-.ps-shop-screen .ps-shop-col-detail{
-    width: 22%;
-    min-width: 0;
-    padding: 0 10px;
-}
-
-.ps-shop-screen .ps-shop-col-transaction{
-    width: 26%;
-    min-width: 0;
-    padding: 24px 20px 18px;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-result-paper-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-transaction-heading{
-    height: 36px;
-    font-size: 11px;
-    color: rgb(111, 75, 45);
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(104, 72, 44, 0.34);
-}
-
-.ps-shop-screen .ps-shop-merchant-scene{
-    background-color: rgba(2, 3, 3, 0.42);
-}
-
-.ps-shop-screen .ps-shop-merchant-dialogue-layer{
-    left: 8%;
-    right: 8%;
-    top: auto;
-    bottom: 18px;
-    max-height: 88px;
-}
-
-.ps-shop-screen .ps-shop-merchant-dialogue{
-    max-height: 88px;
-    padding: 12px 14px;
-    font-size: 12px;
-    color: rgb(231, 205, 165);
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-.ps-shop-screen .ps-shop-filter-host{
-    height: 40px;
-    min-height: 40px;
-    margin: 0 0 5px;
-    flex-wrap: nowrap;
-}
-
-.ps-shop-screen .ps-shop-filter{
-    flex-grow: 1;
-    min-width: 0;
-    height: 36px;
-    margin: 0 2px 0 0;
-    padding: 0;
-    font-size: 10px;
-}
-
-.ps-shop-screen .ps-shop-stock-heading{
-    height: 42px;
-    min-height: 42px;
-    margin-bottom: 5px;
-}
-
-.ps-shop-screen .ps-shop-stock-heading-text{
-    font-size: 18px;
-}
-
-.ps-shop-screen .ps-shop-product-scroll{
-    padding: 4px 0;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.ps-shop-screen .ps-shop-product-grid{
-    flex-direction: column;
-    flex-wrap: nowrap;
-}
-
-.ps-shop-screen .ps-shop-product-card{
-    width: 100%;
-    height: 88px;
-    min-height: 88px;
-    margin: 0 0 6px;
-    padding: 9px 12px;
     flex-direction: row;
     align-items: center;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-reward-ticket-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-product-card.ps-selected{
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
-}
-
-.ps-shop-screen .ps-shop-product-art{
-    width: 66px;
-    height: 66px;
-    min-width: 66px;
-    margin: 0 10px 0 0;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.ps-shop-screen .ps-shop-product-copy{
-    flex-grow: 1;
-    min-width: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.ps-shop-screen .ps-shop-product-name{
-    width: 100%;
-    height: 22px;
-    min-height: 22px;
-    font-size: 14px;
-    white-space: nowrap;
-    color: rgb(67, 47, 34);
-}
-
-.ps-shop-screen .ps-shop-product-rank{
-    width: 100%;
-    height: 14px;
-    min-height: 14px;
-    margin-top: 2px;
-    font-size: 9px;
-    color: rgba(91, 66, 48, 0.78);
-}
-
-.ps-shop-screen .ps-shop-product-price{
-    width: 100%;
-    height: 18px;
-    min-height: 18px;
-    margin-top: 4px;
-    font-size: 13px;
-    color: rgb(137, 45, 34);
-}
-
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-name,
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-rank{
-    color: rgb(235, 211, 174);
-}
-
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-price{
-    color: rgb(238, 184, 102);
-}
-
-.ps-shop-screen .ps-shop-product-copy{
-    width: auto;
-    height: 100%;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    translate: 0 8px;
-}
-
-.ps-shop-screen .ps-shop-product-name{
-    width: 100%;
-    height: 22px;
-    min-height: 22px;
-    margin: 0;
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-.ps-shop-screen .ps-shop-product-rank{
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: 14px;
-    min-height: 14px;
-    margin: 2px 0 0 0;
-}
-
-.ps-shop-screen .ps-shop-product-price{
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    width: 100%;
-    height: 18px;
-    min-height: 18px;
-    margin: 3px 0 0 0;
-    padding: 0;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    font-size: 13px;
-}
-
-.ps-shop-screen .ps-shop-detail-host{
-    padding: 16px 14px;
-    background-image: none;
-    background-color: rgba(1, 3, 3, 0.38);
-}
-
-.ps-shop-screen .ps-shop-detail-scroll > .unity-scroll-view__content-container > .ps-title{
-    font-size: 22px;
-    color: rgb(231, 205, 165);
-}
-
-.ps-shop-screen .ps-shop-detail-art{
-    height: 210px;
-    min-height: 210px;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.ps-shop-screen .ps-shop-detail-image{
-    width: 90%;
-    height: 90%;
-}
-
-.ps-shop-screen .ps-shop-detail-block{
-    margin-bottom: 7px;
-    padding-bottom: 6px;
-    background-image: none;
-    background-color: rgba(0, 0, 0, 0);
+    padding-left: 120px;
+    padding-right: 112px;
     border-bottom-width: 1px;
-    border-bottom-color: rgba(205, 168, 106, 0.24);
+    border-bottom-color: rgba(191, 151, 87, 0.58);
+    background-color: rgba(3, 6, 7, 0.54);
 }
-
-.ps-shop-screen .ps-shop-detail-label{
-    font-size: 9px;
-    color: rgb(51, 179, 184);
-}
-
-.ps-shop-screen .ps-shop-detail-body{
-    font-size: 12px;
-    color: rgb(221, 204, 178);
-}
-
-.ps-shop-screen .ps-shop-merchant-transaction-layer{
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    width: 100%;
-    height: auto;
+.ps-shop-screen .ps-shop-header-copy {
     flex-grow: 1;
-    margin: 8px 0 0;
-    padding: 18px 12px 12px;
-    justify-content: flex-start;
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-order-ticket-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+    flex-direction: column;
+    justify-content: center;
 }
-
-.ps-shop-screen .ps-shop-price-paper,
-.ps-shop-screen .ps-shop-buy-art,
-.ps-shop-screen .ps-shop-merchant-counter-layer{ display: none; }
-
-+
-.ps-shop-screen .ps-shop-price-paper{
+.ps-shop-screen .ps-shop-header-eyebrow {
+    font-size: 10px;
+    color: rgb(203, 164, 101);
+}
+.ps-shop-screen .ps-shop-header-title {
+    font-size: 27px;
+    color: rgb(241, 221, 184);
+}
+.ps-shop-screen .ps-shop-gold-plaque {
+    width: 114px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border-width: 1px;
+    border-color: rgba(192, 154, 89, 0.7);
+    background-color: rgba(4, 8, 9, 0.88);
+}
+.ps-shop-screen .ps-shop-header-gold {
+    font-size: 18px;
+    color: rgb(243, 212, 151);
+}
+.ps-shop-screen .ps-shop-dev-hint {
+    position: absolute;
+    right: 245px;
+    top: 28px;
+    font-size: 10px;
+    color: rgb(104, 195, 194);
+}
+.ps-shop-screen.ps-shop-live .ps-shop-dev-hint { display: none; }
+.ps-shop-screen .ps-shop-body {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 16px 28px 24px;
+}
+.ps-shop-screen .ps-shop-col-merchant,
+.ps-shop-screen .ps-shop-col-list,
+.ps-shop-screen .ps-shop-col-detail,
+.ps-shop-screen .ps-shop-col-transaction {
+    flex-shrink: 0;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+}
+.ps-shop-screen .ps-shop-col-merchant { width: 300px; margin-right: 8px; }
+.ps-shop-screen .ps-shop-col-list {
+    width: 300px;
+    margin-right: 8px;
+    padding: 12px;
+    background-color: rgba(2, 5, 6, 0.85);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-col-detail {
+    width: 340px;
+    margin-right: 8px;
+    background-color: rgba(2, 5, 6, 0.88);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-col-transaction {
+    width: 260px;
+    padding: 18px 16px;
+    background-color: rgba(2, 5, 6, 0.9);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-merchant-scene {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+    background-color: rgb(16, 11, 28);
+}
+.ps-shop-screen .ps-shop-merchant-backdrop-layer,
+.ps-shop-screen .ps-shop-merchant-bg,
+.ps-shop-screen .ps-shop-merchant-bg-fallback {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    width: auto;
-    height: auto;
 }
-
+.ps-shop-screen .ps-shop-merchant-bg-fallback { background-color: rgb(24, 18, 34); }
+.ps-shop-screen .ps-shop-merchant-character-viewport {
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    top: 4%;
+    height: 80%;
+    overflow: hidden;
+}
+.ps-shop-screen .ps-shop-merchant-character-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.ps-shop-screen .ps-missing-art { display: none; }
+.ps-shop-screen .ps-shop-merchant-dialogue-layer {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 16px;
+    min-height: 52px;
+}
+.ps-shop-screen .ps-shop-merchant-dialogue {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: rgb(238, 218, 181);
+    white-space: normal;
+    background-color: rgba(4, 8, 9, 0.92);
+    border-left-width: 3px;
+    border-left-color: rgb(189, 53, 39);
+}
+.ps-shop-screen .ps-shop-filter-host {
+    height: 38px;
+    min-height: 38px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+}
+.ps-shop-screen .ps-shop-filter {
+    flex-grow: 1;
+    min-width: 0;
+    height: 34px;
+    margin-right: 3px;
+    padding: 0 2px;
+    font-size: 11px;
+    color: rgb(207, 182, 142);
+    background-color: rgba(18, 27, 28, 0.82);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(180, 141, 81, 0.48);
+    -unity-text-align: middle-center;
+}
+.ps-shop-screen .ps-shop-filter.ps-selected {
+    color: rgb(48, 34, 26);
+    background-color: rgb(221, 193, 148);
+    border-bottom-color: rgb(68, 199, 202);
+}
+.ps-shop-screen .ps-shop-stock-heading {
+    height: 36px;
+    min-height: 36px;
+    justify-content: center;
+    padding-left: 5px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(188, 149, 87, 0.58);
+}
+.ps-shop-screen .ps-shop-stock-heading-text {
+    font-size: 18px;
+    color: rgb(239, 216, 178);
+}
+.ps-shop-screen .ps-shop-product-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 5px;
+}
+.ps-shop-screen .ps-shop-product-grid {
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.ps-shop-screen .ps-shop-product-card {
+    width: 100%;
+    height: 76px;
+    min-height: 76px;
+    flex-direction: row;
+    align-items: center;
+    padding: 7px 8px;
+    margin-bottom: 2px;
+    background-color: rgba(13, 19, 19, 0.72);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(160, 125, 75, 0.45);
+}
+.ps-shop-screen .ps-shop-product-card.ps-selected {
+    background-color: rgba(20, 62, 63, 0.72);
+    border-left-width: 3px;
+    border-left-color: rgb(71, 206, 209);
+}
+.ps-shop-screen .ps-shop-product-art {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    margin-right: 10px;
+    background-color: rgba(1, 3, 3, 0.68);
+}
+.ps-shop-screen .ps-shop-product-image {
+    width: 100%;
+    height: 100%;
+}
+.ps-shop-screen .ps-shop-product-copy {
+    flex-grow: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+.ps-shop-screen .ps-shop-product-name {
+    height: 22px;
+    min-height: 22px;
+    font-size: 15px;
+    color: rgb(238, 214, 176);
+    white-space: nowrap;
+}
+.ps-shop-screen .ps-shop-product-rank {
+    height: 15px;
+    min-height: 15px;
+    font-size: 10px;
+    color: rgb(163, 184, 178);
+}
+.ps-shop-screen .ps-shop-product-price {
+    height: 18px;
+    min-height: 18px;
+    font-size: 12px;
+    color: rgb(234, 167, 110);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+}
+.ps-shop-screen .ps-shop-detail-host {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 14px 16px;
+}
+.ps-shop-screen .ps-shop-detail-scroll {
+    flex-grow: 1;
+    min-height: 0;
+}
+.ps-shop-screen .ps-shop-detail-title {
+    min-height: 35px;
+    margin-bottom: 8px;
+    font-size: 23px;
+    color: rgb(239, 216, 177);
+    white-space: normal;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(180, 141, 81, 0.5);
+}
+.ps-shop-screen .ps-shop-detail-art {
+    height: 136px;
+    min-height: 136px;
+    margin: 8px 0 12px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-shop-screen .ps-shop-detail-image {
+    width: 120px;
+    height: 120px;
+}
+.ps-shop-screen .ps-shop-detail-block {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(154, 120, 70, 0.3);
+}
+.ps-shop-screen .ps-shop-detail-label {
+    font-size: 12px;
+    color: rgb(76, 194, 198);
+    padding-left: 0;
+    margin-bottom: 0;
+    border-left-width: 0;
+}
+.ps-shop-screen .ps-shop-detail-body {
+    padding-left: 0;
+    margin-top: 2px;
+    font-size: 13px;
+    color: rgb(228, 208, 179);
+    white-space: normal;
+}
+.ps-shop-screen .ps-shop-transaction-heading {
+    height: 34px;
+    min-height: 34px;
+    font-size: 11px;
+    color: rgb(84, 191, 194);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(178, 140, 80, 0.55);
+}
+.ps-shop-screen .ps-shop-merchant-transaction-layer {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
+    padding-top: 18px;
+}
 .ps-shop-screen .ps-shop-tx-name,
 .ps-shop-screen .ps-shop-tx-gold,
 .ps-shop-screen .ps-shop-tx-total,
-.ps-shop-screen .ps-shop-tx-reason{
-    margin: 0 8px 10px;
+.ps-shop-screen .ps-shop-tx-reason {
+    margin-bottom: 14px;
     font-size: 13px;
+    color: rgb(231, 210, 178);
     white-space: normal;
-    color: rgb(51, 41, 31);
 }
-
-.ps-shop-screen .ps-shop-tx-total{
-    margin-top: 10px;
-    padding-top: 12px;
-    font-size: 19px;
-    color: rgb(132, 39, 30);
+.ps-shop-screen .ps-shop-tx-gold { color: rgb(177, 190, 177); }
+.ps-shop-screen .ps-shop-tx-total {
+    margin-top: 4px;
+    padding-top: 14px;
+    font-size: 20px;
+    color: rgb(242, 199, 130);
     border-top-width: 1px;
-    border-top-color: rgba(105, 70, 43, 0.34);
+    border-top-color: rgba(178, 140, 80, 0.45);
 }
-
-.ps-shop-screen .ps-shop-tx-reason{
+.ps-shop-screen .ps-shop-tx-reason {
     flex-grow: 1;
-    font-size: 10px;
-    color: rgb(121, 43, 34);
-}
-
-.ps-shop-screen .ps-shop-tx-actions{
-    flex-direction: column;
-    align-items: stretch;
-}
-
-.ps-shop-screen .ps-shop-buy-btn,
-.ps-shop-screen .ps-shop-leave-btn{
-    width: 100%;
-    min-width: 0;
-    height: 54px;
-    min-height: 54px;
-    margin: 0 0 8px;
-    padding: 0 14px;
-    font-size: 13px;
-    color: rgb(231, 204, 163);
-    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-}
-
-.ps-shop-screen .ps-shop-tx-actions{
-    width: 100%;
-    height: 104px;
-    min-height: 104px;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.ps-shop-screen .ps-shop-buy-btn,
-.ps-shop-screen .ps-shop-leave-btn{
-    width: 100%;
-    min-width: 0;
-    height: 46px;
-    min-height: 46px;
-    margin: 0 0 5px;
-    padding: 0 10px;
     font-size: 11px;
-    white-space: nowrap;
+    color: rgb(213, 153, 127);
+}
+.ps-shop-screen .ps-shop-tx-actions {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+.ps-shop-screen .ps-shop-buy-btn,
+.ps-shop-screen .ps-shop-leave-btn {
+    width: 100%;
+    height: 45px;
+    min-height: 45px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: rgb(239, 216, 178);
+    background-color: rgb(100, 37, 30);
+    border-width: 1px;
+    border-color: rgb(185, 91, 67);
     -unity-text-align: middle-center;
 }
-
-.ps-shop-screen .ps-layer-background{
-    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
-    -unity-background-scale-mode: scale-and-crop;
-    background-color: rgb(9, 10, 9);
-}
-
-.ps-shop-screen .ps-mgmt-shade{
-    background-color: rgba(2, 3, 3, 0.08);
-}
-
-.ps-shop-screen .ps-misprint-mark,
-.ps-shop-screen .ps-misprint-register,
-.ps-shop-screen .ps-misprint-decor{
-    opacity: 0.04;
-}
-
-.ps-shop-screen .ps-shop-header{
-    background-image: none;
-    background-color: rgba(5, 7, 7, 0.18);
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(190, 151, 88, 0.62);
-}
-
-.ps-shop-screen .ps-misprint-header-title,
-.ps-shop-screen .ps-shop-stock-heading-text{
-    color: rgb(238, 216, 178);
-    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
-}
-
-.ps-shop-screen .ps-shop-filter{
-    color: rgb(62, 188, 193);
-}
-
-.ps-shop-screen .ps-shop-product-price{
-    color: rgb(196, 57, 42);
-}
-
-.ps-shop-screen .ps-shop-col-list,
-.ps-shop-screen .ps-shop-col-detail,
-.ps-shop-screen .ps-shop-col-transaction{
-    background-image: none;
-    background-color: rgba(3, 5, 5, 0.28);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-.ps-shop-screen .ps-shop-detail-label{
-    color: rgb(52, 182, 189);
-}
-
-.ps-shop-screen .ps-shop-product-rank{
-    color: rgb(177, 161, 134);
-}
-
-.ps-shop-screen .ps-shop-product-card{
-    background-image: none;
-    background-color: rgba(5, 7, 7, 0.22);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(183, 145, 83, 0.44);
-}
-
-.ps-shop-screen .ps-shop-product-card.ps-selected{
+.ps-shop-screen .ps-shop-buy-btn {
     background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
     -unity-background-scale-mode: stretch-to-fill;
     background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 2px;
-    border-bottom-color: rgb(58, 196, 202);
+    border-width: 0;
+    color: rgb(30, 23, 17);
 }
-
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-name,
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-rank,
-.ps-shop-screen .ps-shop-product-card.ps-selected .ps-shop-product-price{
-    color: rgb(28, 22, 18);
-    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+.ps-shop-screen .ps-shop-buy-btn:disabled {
+    opacity: 0.65;
+    color: rgb(239, 216, 178);
 }
-
-.ps-shop-screen .ps-shop-product-name{
-    color: rgb(232, 210, 174);
-    font-size: 16px;
+.ps-shop-screen .ps-shop-leave-btn {
+    background-color: rgb(22, 48, 50);
+    border-color: rgb(79, 154, 156);
 }
-
-.ps-shop-screen .ps-shop-detail-host,
-.ps-shop-screen .ps-shop-merchant-transaction-layer{
-    background-image: resource("Art/UI/ObsidianMisprint/hub-mission-briefing-paper-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-}
-
-.ps-shop-screen .ps-shop-detail-host .unity-label,
-.ps-shop-screen .ps-shop-merchant-transaction-layer .unity-label{
-    color: rgb(48, 38, 29);
-    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
-}
-
-.ps-shop-screen .ps-shop-detail-label{
-    color: rgb(133, 43, 32);
-}
-
-.ps-shop-screen .ps-shop-buy-btn,
-.ps-shop-screen .ps-shop-leave-btn{
-    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(29, 23, 18);
-    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
-}
-
 .ps-shop-screen .ps-shop-buy-btn:hover,
-.ps-shop-screen .ps-shop-leave-btn:hover{
-    color: rgb(8, 45, 47);
-}
-
-.ps-shop-screen .ps-shop-dialogue-plaque{
-    background-image: none;
-    background-color: rgba(5, 7, 7, 0.78);
-    border-left-width: 2px;
-    border-left-color: rgb(191, 51, 38);
-}
-
-.ps-shop-screen .ps-shop-mark,
-.ps-shop-screen .ps-shop-register,
-.ps-shop-screen .ps-shop-ledger-decor{
-    opacity: 0.04;
-}
-
-.ps-shop-screen{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1280px;
-    height: 720px;
-}
-
-.ps-shop-screen .ps-layer-content{
-    padding: 0;
-}
-
-.ps-shop-screen .ps-shop-header{
-    padding-left: 120px;
-}
-
-.ps-shop-screen .ps-shop-col-merchant,
-.ps-shop-screen .ps-shop-col-list{
-    margin-right: 19px;
-}
-
-.ps-shop-screen .ps-shop-header-copy{
-    padding-left: 0;
-}
-
-.ps-shop-screen .ps-shop-header-title{
-    color: rgb(238, 216, 178);
-    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
-}
-
-.ps-shop-screen .ps-shop-gold-plaque{
-    flex-shrink: 0;
-    margin-left: auto;
-    margin-right: 110px;
-}
-
-.ps-shop-screen .ps-shop-header-gold{
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    width: auto;
-    height: auto;
-}
+.ps-shop-screen .ps-shop-leave-btn:hover { color: white; }

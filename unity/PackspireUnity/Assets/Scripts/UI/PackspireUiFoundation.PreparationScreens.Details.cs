@@ -17,7 +17,6 @@ public sealed partial class PackspireUiFoundation {
     BuildPackingAgain();
    });
    button.AddToClassList("ps-rite-filter");
-   button.Insert(0,PackspireUiFactory.ManagementArt(icon,"ps-rite-filter-icon ps-management-filter-medallion"));
    if(packingEquipFilter==id)button.AddToClassList("ps-selected");
    row.Add(button);
   }
@@ -50,10 +49,6 @@ public sealed partial class PackspireUiFoundation {
   rotate.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Rotate,"ps-rite-select-icon"));
   rotate.focusable=true;
   dock.Add(rotate);
-  var clear=PackspireUiFactory.Button("選択解除",()=>{selectedPackingUid="";packingRotation=0;BuildPackingAgain();});
-  clear.AddToClassList("ps-rite-select-btn");
-  clear.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Undo,"ps-rite-select-icon"));
-  dock.Add(clear);
   bool placed=run.placements.Any(x=>x.itemUid==selectedPackingUid);
   var remove=PackspireUiFactory.Button("外す",()=>{game.UiPackingRemove(selectedPackingUid);selectedPackingUid="";BuildPackingAgain();});
   remove.AddToClassList("ps-rite-select-btn");
@@ -119,7 +114,7 @@ public sealed partial class PackspireUiFoundation {
   var run=game.UiRun;
   right.Add(RiteSectionHead("03","選択中の術装"));
   var detailCard=Container("ps-rite-detail-card");
-  detailCard.Add(Atlas(game.UiEquipmentArt,ItemUv(selected.templateId),"ps-rite-detail-art"));
+  detailCard.Add(VaultItemDisplayArt(selected.templateId,"ps-rite-detail-art"));
   var detailName=new Label(def.name){pickingMode=PickingMode.Ignore};
   detailName.AddToClassList("ps-rite-detail-name");
   detailCard.Add(detailName);
@@ -187,6 +182,7 @@ public sealed partial class PackspireUiFoundation {
    var decide=PackspireUiFactory.Button("決定",()=>{
     game.UiPackingCapture();
     packingTemplateCommitted=true;
+    packingFormulaBrowserOpen=false;
     packingFormulaOpen=false;
     selectedPackingUid="";
     game.UiOpenPackingLoadout(entry.id);

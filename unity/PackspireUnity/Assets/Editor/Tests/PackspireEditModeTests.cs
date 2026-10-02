@@ -995,7 +995,7 @@ public sealed class PackspireEditModeTests {
   Assert.That(profile.actorId,Is.EqualTo("warden"));
   var patterns=profile.BuildPatterns(battleSeed:17);
   Assert.That(patterns,Has.Length.EqualTo(6));
-  Assert.That(patterns[0].Duration,Is.EqualTo(8d).Within(.0001d));
+  Assert.That(patterns[0].Duration,Is.EqualTo(8d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
   Assert.That(patterns[0].Steps[0].ActionId,Is.EqualTo("warden-normal"));
   Assert.That(patterns[2].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.JumpReaction));
   Assert.That(patterns[3].Steps[1].Kind,Is.EqualTo(RealtimeEnemyActionKind.BraceReaction));
@@ -1063,10 +1063,10 @@ public sealed class PackspireEditModeTests {
 
   var pattern=profile.BuildPatterns(battleSeed:3)[0];
 
-  Assert.That(pattern.Duration,Is.EqualTo(12.5d).Within(.0001d));
-  Assert.That(pattern.Steps[0].ExecuteOffset,Is.EqualTo(2.5d).Within(.0001d));
-  Assert.That(pattern.Steps[0].TelegraphLead,Is.EqualTo(1.25d).Within(.0001d));
-  Assert.That(pattern.Steps[0].HitSpacing,Is.EqualTo(.25d).Within(.0001d));
+  Assert.That(pattern.Duration,Is.EqualTo(12.5d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
+  Assert.That(pattern.Steps[0].ExecuteOffset,Is.EqualTo(2.5d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
+  Assert.That(pattern.Steps[0].TelegraphLead,Is.EqualTo(1.25d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
+  Assert.That(pattern.Steps[0].HitSpacing,Is.EqualTo(.25d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
  Assert.That(pattern.Steps[0].ActionId,Is.EqualTo("enemy-jump"));
  Assert.That(pattern.Steps[0].Damage,Is.EqualTo(7));
  Assert.That(pattern.Steps[0].MotionLane,Is.EqualTo(RealtimeEnemyMotionLane.High));
@@ -1619,11 +1619,11 @@ public sealed class PackspireEditModeTests {
 
   var report=RealtimeEnemyTimelineAudit.Analyze(profile.BuildPatterns(),10d);
 
-  Assert.That(report.cycleDuration,Is.EqualTo(69d).Within(.0001d));
+  Assert.That(report.cycleDuration,Is.EqualTo(69d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
   Assert.That(report.actionCount,Is.EqualTo(17));
   Assert.That(report.totalPotentialDamage,Is.EqualTo(151));
   Assert.That(report.reactionActionCount,Is.EqualTo(6));
-  Assert.That(report.minimumTelegraphLead,Is.EqualTo(.7d).Within(.0001d));
+  Assert.That(report.minimumTelegraphLead,Is.EqualTo(.7d*RealtimeEnemyTimelineProfile.GlobalTimingScale).Within(.0001d));
   Assert.That(report.maximumActionsInWindow,Is.GreaterThan(0));
   Assert.That(report.maximumDamageInWindow,Is.GreaterThanOrEqualTo(12));
  Assert.That(report.maximumQuietSeconds,Is.GreaterThan(0d));
@@ -1771,19 +1771,66 @@ public sealed class PackspireEditModeTests {
  }
 
  [Test]
- public void JourneyTravelHud_SeparatesExpeditionAndSegmentContext(){
+ public void JourneyTravelHud_UsesHpSealReelBagAndCompactProgress(){
   var view=AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.VisualTreeAsset>(
    "Assets/Resources/UI/PackspireJourneyCompleteView.uxml");
   Assert.That(view,Is.Not.Null);
   UnityEngine.UIElements.TemplateContainer root=view.CloneTree();
 
-  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-floor-progress"),Is.Not.Null);
-  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-0"),Is.Not.Null);
-  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-1"),Is.Not.Null);
-  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-floor-mark-2"),Is.Not.Null);
-  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-origin"),Is.Not.Null);
-  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-target"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("journey-hp"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-day-clock"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-day-number"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-day-clock-hand"),Is.Not.Null);
+  Assert.That(root.Query<UnityEngine.UIElements.VisualElement>(
+   className:"ps-journey__day-tick").ToList().Count,Is.EqualTo(12));
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-travel-seal-host"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Button>("journey-bag-open"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-bag-panel"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.VisualElement>("journey-bottom"),Is.Not.Null);
   Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("journey-progress"),Is.Not.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-origin"),Is.Null);
+  Assert.That(root.Q<UnityEngine.UIElements.Label>("journey-segment-target"),Is.Null);
+ }
+
+ [Test]
+ public void JourneyDayClock_InterpolatesCommittedDaysAcrossTravel(){
+  JourneyDayClockSample start=JourneyDayClockSystem.Sample(10,2,0f,true);
+  JourneyDayClockSample firstHalf=JourneyDayClockSystem.Sample(10,2,.25f,true);
+  JourneyDayClockSample nextDay=JourneyDayClockSystem.Sample(10,2,.5f,true);
+  JourneyDayClockSample secondHalf=JourneyDayClockSystem.Sample(10,2,.75f,true);
+  JourneyDayClockSample arrived=JourneyDayClockSystem.Sample(10,2,1f,true);
+  JourneyDayClockSample idle=JourneyDayClockSystem.Sample(10,2,.25f,false);
+
+  Assert.That(start.Day,Is.EqualTo(8));
+  Assert.That(start.Progress,Is.Zero.Within(.001f));
+  Assert.That(firstHalf.Day,Is.EqualTo(8));
+  Assert.That(firstHalf.Progress,Is.EqualTo(.5f).Within(.001f));
+  Assert.That(nextDay.Day,Is.EqualTo(9));
+  Assert.That(nextDay.Progress,Is.Zero.Within(.001f));
+  Assert.That(secondHalf.Day,Is.EqualTo(9));
+  Assert.That(secondHalf.Progress,Is.EqualTo(.5f).Within(.001f));
+  Assert.That(arrived.Day,Is.EqualTo(10));
+  Assert.That(arrived.Progress,Is.Zero.Within(.001f));
+  Assert.That(idle.Day,Is.EqualTo(10));
+  Assert.That(idle.Progress,Is.Zero.Within(.001f));
+ }
+
+ [Test]
+ public void JourneyRouteCards_PresentDurationOutsideComparisonGrid(){
+  var view=AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.VisualTreeAsset>(
+   "Assets/Resources/UI/PackspireJourneyCompleteView.uxml");
+  UnityEngine.UIElements.TemplateContainer root=view.CloneTree();
+  UnityEngine.UIElements.Label daysA=
+   root.Q<UnityEngine.UIElements.Label>("journey-choice-a-days");
+  UnityEngine.UIElements.Label daysB=
+   root.Q<UnityEngine.UIElements.Label>("journey-choice-b-days");
+
+  Assert.That(daysA.parent.ClassListContains("ps-journey__route-duration"),Is.True);
+  Assert.That(daysB.parent.ClassListContains("ps-journey__route-duration"),Is.True);
+  Assert.That(daysA.parent.parent.Q<UnityEngine.UIElements.VisualElement>(
+   className:"ps-journey__route-stats").Contains(daysA),Is.False);
+  Assert.That(daysB.parent.parent.Q<UnityEngine.UIElements.VisualElement>(
+   className:"ps-journey__route-stats").Contains(daysB),Is.False);
  }
 
  [Test]

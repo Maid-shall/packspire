@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -6,14 +7,22 @@ namespace Packspire
     public sealed partial class JourneyTravelGameplayPrototype
     {
         private Label resultSummary;
-        private Button resultReturn;
         private ExpeditionCheckpointSummary activeCheckpoint;
+        private VisualElement checkpointRoot;
+        private Label checkpointTitle;
+        private Button checkpointReturn;
+        private Button checkpointContinue;
+        private bool checkpointExitActive;
 
         private void BindExpeditionCheckpointUi(VisualElement root)
         {
             resultSummary = root.Q<Label>("journey-result-summary");
-            resultReturn = root.Q<Button>("journey-result-return");
-            resultReturn.clicked += ReturnFromExpeditionCheckpoint;
+            checkpointRoot = root.Q<VisualElement>("journey-checkpoint");
+            checkpointTitle = root.Q<Label>("journey-checkpoint-title");
+            checkpointReturn = root.Q<Button>("journey-checkpoint-return");
+            checkpointContinue = root.Q<Button>("journey-checkpoint-continue");
+            checkpointReturn.clicked += ReturnFromExpeditionCheckpoint;
+            checkpointContinue.clicked += ContinueFromExpeditionCheckpoint;
             ClearExpeditionCheckpointResult();
         }
 
@@ -23,34 +32,33 @@ namespace Packspire
             if (!summary.IsCheckpoint) return false;
 
             SaveJourneyStage(JourneyResumeStage.Checkpoint);
-            bool canContinue = summary.CanContinue;
-            ShowResult(
-                canContinue ? "FLOOR ROUTE SECURED" : "EXPEDITION COMPLETE",
-                canContinue
-                    ? $"第{summary.clearedFloorNumber}層を踏破"
-                    : "最深部踏破",
-                canContinue
-                    ? "帰還して戦利品を確定するか、次の階層へ進みます。"
-                    : "三つの階層を踏破しました。全戦利品を持ち帰ります。",
-                canContinue);
-
             activeCheckpoint = summary;
-            SetResultPresentation(
-                canContinue
-                    ? "result--checkpoint"
-                    : "result--complete");
-            resultSummary.text =
-                $"経過 {summary.elapsedDays}日　経路 {summary.resolvedRouteNodeCount}地点　" +
-                $"戦闘 {summary.battlesWon}回\n" +
-                $"回収 {summary.collectedNewItemCount}　印使用 {summary.deliverySealsSpent}　" +
-                $"HP {summary.currentHp}/{summary.maximumHp}\n" +
-                $"保護済み戦利品 {summary.protectedNewItemCount}　" +
-                $"未収納戦利品 {summary.exposedNewItemCount}";
-            resultSummary.RemoveFromClassList("is-hidden");
-            resultReturn.EnableInClassList("is-hidden", !canContinue);
-            if (canContinue)
-                resultContinue.text = $"第{summary.clearedFloorNumber + 1}層へ進む";
+            if (summary.CanContinue)
+            {
+                ShowExpeditionCheckpoint(summary);
+                return true;
+            }
+
+            ShowResult(
+                "EXPEDITION COMPLETE",
+                "遠征完了",
+                $"全戦利品を確定　保護 {summary.protectedNewItemCount}　未収納 {summary.exposedNewItemCount}",
+                false);
             return true;
+        }
+
+        private void ShowExpeditionCheckpoint(ExpeditionCheckpointSummary summary)
+        {
+            SetPhase(Phase.Checkpoint);
+            terminalActionLocked = false;
+            checkpointExitActive = false;
+            screen.RemoveFromClassList("checkpoint--leaving");
+            checkpointTitle.text =
+                $"第{summary.clearedFloorNumber}層　区画突破";
+            checkpointReturn.SetEnabled(true);
+            checkpointContinue.SetEnabled(true);
+            checkpointRoot.BringToFront();
+            checkpointReturn.Focus();
         }
 
         private void ClearExpeditionCheckpointResult()
@@ -61,7 +69,34 @@ namespace Packspire
                 resultSummary.text = string.Empty;
                 resultSummary.AddToClassList("is-hidden");
             }
-            resultReturn?.AddToClassList("is-hidden");
+            checkpointExitActive = false;
+            screen?.RemoveFromClassList("checkpoint--leaving");
+        }
+
+        private void ContinueFromExpeditionCheckpoint()
+        {
+            if (terminalActionLocked || activeCheckpoint?.CanContinue != true)
+                return;
+            terminalActionLocked = true;
+            StartCoroutine(ContinueFromExpeditionCheckpointRoutine());
+        }
+
+        private IEnumerator ContinueFromExpeditionCheckpointRoutine()
+        {
+            checkpointExitActive = true;
+            screen.AddToClassList("checkpoint--leaving");
+            checkpointReturn.SetEnabled(false);
+            checkpointContinue.SetEnabled(false);
+            ApplyWorldMotion();
+            yield return WaitForJourneySeconds(.8f);
+
+            checkpointExitActive = false;
+            screen.RemoveFromClassList("checkpoint--leaving");
+            activeCheckpoint = null;
+            arrivalExpeditionNode = null;
+            arrivalNode = null;
+            terminalActionLocked = false;
+            ShowChoice();
         }
 
         private void ReturnFromExpeditionCheckpoint()

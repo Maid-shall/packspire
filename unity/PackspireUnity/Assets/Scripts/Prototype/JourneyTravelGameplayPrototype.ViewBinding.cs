@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Packspire
@@ -58,19 +57,9 @@ namespace Packspire
             hpText = root.Q<Label>("journey-hp-text");
             cargoText = root.Q<Label>("journey-cargo");
             sealsText = root.Q<Label>("journey-seals");
-            areaText = root.Q<Label>("journey-area");
-            weatherText = root.Q<Label>("journey-weather");
-            dayText = root.Q<Label>("journey-day");
-            conditionText = root.Q<Label>("journey-condition");
-            conditionNoteText = root.Q<Label>("journey-condition-note");
             phaseText = root.Q<Label>("journey-phase");
             nextText = root.Q<Label>("journey-next");
-            floorProgressText = root.Q<Label>("journey-floor-progress");
-            segmentOriginText = root.Q<Label>("journey-segment-origin");
-            segmentTargetText = root.Q<Label>("journey-segment-target");
-            for (int floorIndex = 0; floorIndex < floorMarks.Length; floorIndex++)
-                floorMarks[floorIndex] =
-                    root.Q<VisualElement>($"journey-floor-mark-{floorIndex}");
+            BindTravelHudUi(root);
             ledgerSummary = root.Q<Label>("journey-ledger-summary");
             ledgerNodeTitle = root.Q<Label>("journey-ledger-node-title");
             ledgerNodeMeta = root.Q<Label>("journey-ledger-node-meta");
@@ -85,6 +74,8 @@ namespace Packspire
             choiceB = root.Q<Button>("journey-choice-b");
             choiceAArt = root.Q<VisualElement>("journey-choice-a-art");
             choiceBArt = root.Q<VisualElement>("journey-choice-b-art");
+            choiceALandmark = root.Q<Image>("journey-choice-a-landmark");
+            choiceBLandmark = root.Q<Image>("journey-choice-b-landmark");
             choiceAIndex = root.Q<Label>("journey-choice-a-index");
             choiceATitle = root.Q<Label>("journey-choice-a-title");
             choiceAFlavor = root.Q<Label>("journey-choice-a-flavor");
@@ -92,7 +83,6 @@ namespace Packspire
             choiceARisk = root.Q<Label>("journey-choice-a-risk");
             choiceAEncounter = root.Q<Label>("journey-choice-a-encounter");
             choiceACargo = root.Q<Label>("journey-choice-a-cargo");
-            choiceASeal = root.Q<Label>("journey-choice-a-seal");
             choiceBIndex = root.Q<Label>("journey-choice-b-index");
             choiceBTitle = root.Q<Label>("journey-choice-b-title");
             choiceBFlavor = root.Q<Label>("journey-choice-b-flavor");
@@ -100,12 +90,12 @@ namespace Packspire
             choiceBRisk = root.Q<Label>("journey-choice-b-risk");
             choiceBEncounter = root.Q<Label>("journey-choice-b-encounter");
             choiceBCargo = root.Q<Label>("journey-choice-b-cargo");
-            choiceBSeal = root.Q<Label>("journey-choice-b-seal");
             eventEyebrow = root.Q<Label>("journey-event-eyebrow");
             eventTitle = root.Q<Label>("journey-event-title");
             eventText = root.Q<Label>("journey-event-text");
             eventA = root.Q<Button>("journey-event-a");
             eventB = root.Q<Button>("journey-event-b");
+            BindEventUi(root);
             miniGameEyebrow = root.Q<Label>("journey-minigame-eyebrow");
             miniGameTitle = root.Q<Label>("journey-minigame-title");
             miniGameNote = root.Q<Label>("journey-minigame-note");
@@ -196,14 +186,6 @@ namespace Packspire
             resultContinue.clicked += ContinueAfterResult;
             speedButton.clicked += ToggleSpeed;
             pauseButton.clicked += TogglePause;
-
-            Texture2D walkSheet = PackspireResources.Load<Texture2D>(WalkSheetResource);
-            if (walkSheet != null)
-            {
-                Image portrait = root.Q<Image>("journey-portrait");
-                portrait.image = walkSheet;
-                portrait.uv = new Rect(0f, 0f, 1f / 6f, 1f);
-            }
 
             RefreshPersistentUi();
             uiBound = true;

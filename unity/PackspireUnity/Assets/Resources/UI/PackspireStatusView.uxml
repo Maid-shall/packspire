@@ -42,6 +42,11 @@
                                 <ui:ScrollView name="status-detail-scroll" class="ps-mgmt-detail-scroll ps-status-role-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
                             </ui:VisualElement>
                         </ui:VisualElement>
+                        <ui:VisualElement class="ps-status-tree-panel">
+                            <ui:Label text="役職系統・資格印" class="ps-status-tree-title" />
+                            <ui:Label text="全系統を表示。記録を選ぶと詳細・解放条件を確認できます。" class="ps-status-tree-note" />
+                            <ui:VisualElement name="status-role-tree" class="ps-status-role-tree" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="status-appointment" class="ps-status-appointment">
                         <ui:VisualElement class="ps-status-appointment-copy">

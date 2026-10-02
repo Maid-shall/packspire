@@ -18,6 +18,11 @@ public sealed class PackingViewContractTests {
   Assert.That(root.Q<VisualElement>("packing-equip-grid"),Is.Not.Null);
   Assert.That(root.Q<VisualElement>("packing-center"),Is.Not.Null);
   Assert.That(root.Q<VisualElement>("packing-kiln"),Is.Not.Null);
+  Assert.That(root.Q<VisualElement>("packing-board-host"),Is.Not.Null);
+  Assert.That(root.Q<Label>("packing-board-size"),Is.Not.Null);
+  Assert.That(root.Q<Button>("packing-effects-tab"),Is.Not.Null);
+  Assert.That(root.Q<Button>("packing-formulas-tab"),Is.Not.Null);
+  Assert.That(root.Q<Button>("packing-save"),Is.Not.Null);
   Assert.That(root.Q<VisualElement>("packing-right-shell"),Is.Not.Null);
   Assert.That(root.Q<ScrollView>("packing-right-scroll"),Is.Not.Null);
   Assert.That(root.Q<VisualElement>(className:"ps-misprint-mark"),Is.Null);

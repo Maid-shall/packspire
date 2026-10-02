@@ -24,6 +24,9 @@ public sealed class StatusViewContractTests {
   Assert.That(roles,Is.Not.Null);
   Assert.That(detail,Is.Not.Null);
   Assert.That(appointment,Is.Not.Null);
+  var tree=root.Q<VisualElement>("status-role-tree");
+  Assert.That(tree,Is.Not.Null);
+  Assert.That(tree.parent.parent,Is.SameAs(detail.parent));
 
   var workspaceTop=roles.parent;
   Assert.That(workspaceTop,Is.SameAs(detail.parent));

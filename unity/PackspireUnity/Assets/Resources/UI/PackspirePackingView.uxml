@@ -10,7 +10,7 @@
             <ui:VisualElement class="ps-rite-top-title">
                 <ui:Label text="PACKSPIRE / PACKING / LOADOUT" class="ps-rite-top-eyebrow" picking-mode="Ignore" />
                 <ui:Label text="荷造り" class="ps-rite-top-name" picking-mode="Ignore" />
-                <ui:Label text="術式を構築し、荷物を整えます。" class="ps-rite-top-sub" picking-mode="Ignore" />
+                <ui:Label text="装備を配置し、遠征の効果とリンクを確認します。" class="ps-rite-top-sub" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="packing-top-actions" class="ps-rite-top-actions" />
@@ -31,16 +31,28 @@
         </ui:VisualElement>
         <ui:VisualElement name="packing-center" class="ps-rite-center">
             <ui:VisualElement class="ps-rite-board-heading">
-                <ui:Label text="術式収納盤" class="ps-rite-board-heading-title" picking-mode="Ignore" />
-                <ui:Label text="6 × 4" class="ps-rite-board-heading-size" picking-mode="Ignore" />
+                <ui:Label text="収納盤" class="ps-rite-board-heading-title" picking-mode="Ignore" />
+                <ui:Label name="packing-board-size" text="6 × 4" class="ps-rite-board-heading-size" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:VisualElement class="ps-rite-kiln-row">
-                <ui:VisualElement name="packing-kiln" class="ps-rite-kiln" />
+                <ui:VisualElement name="packing-kiln" class="ps-rite-kiln"><ui:VisualElement name="packing-board-host" class="ps-rite-circle" /></ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="packing-kiln-rail" class="ps-rite-kiln-rail" />
         </ui:VisualElement>
         <ui:VisualElement name="packing-right-shell" class="ps-rite-right-shell">
+            <ui:VisualElement class="ps-packing-tabs">
+                <ui:Button name="packing-effects-tab" text="配達員・効果" class="ps-packing-tab" />
+                <ui:Button name="packing-formulas-tab" text="術式" class="ps-packing-tab" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-packing-courier">
+                <ui:VisualElement name="packing-courier-art" class="ps-packing-courier-art" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-packing-courier-copy">
+                    <ui:Label name="packing-courier-name" class="ps-packing-courier-name" />
+                    <ui:Label name="packing-courier-role" class="ps-rite-meta" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:ScrollView name="packing-right-scroll" class="ps-rite-right" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+            <ui:Button name="packing-save" text="荷造りを保存" class="ps-rite-save" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

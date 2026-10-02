@@ -16,13 +16,7 @@
     background-color: rgba(7, 8, 9, .92);
     border-bottom-width: 2px; border-bottom-color: rgba(161, 111, 51, .72);
 }
-.ps-journey__heading { width: 560px; }
 .ps-journey__eyebrow, .ps-journey__panel-eyebrow, .ps-journey__battle-eyebrow { font-size: 9px; letter-spacing: 2px; color: rgb(67, 196, 203); }
-.ps-journey__destination { margin-top: 2px; font-size: 23px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(243, 221, 176); }
-.ps-journey__top-status { height: 48px; flex-direction: row; align-items: center; }
-.ps-journey__area { font-size: 16px; margin-right: 24px; color: rgb(228, 201, 151); }
-.ps-journey__weather { font-size: 11px; margin-right: 24px; color: rgb(118, 184, 187); }
-.ps-journey__day { min-width: 120px; padding: 7px 10px; font-size: 13px; -unity-text-align: middle-center; color: rgb(246, 205, 119); background-color: rgba(66, 37, 25, .84); border-width: 1px; border-color: rgba(189, 131, 66, .7); }
 .ps-journey__dev-menu { width: 112px; height: 34px; margin-left: 10px; font-size: 10px; letter-spacing: 1px; color: rgb(112, 211, 211); background-color: rgba(15, 35, 37, .92); border-width: 1px; border-color: rgba(68, 192, 199, .72); }
 .ps-journey__ledger-open { width: 116px; height: 34px; margin-left: 10px; font-size: 10px; color: rgb(234, 207, 163); background-color: rgba(48, 34, 25, .94); border-width: 1px; border-color: rgba(181, 125, 63, .72); }
 
@@ -32,13 +26,7 @@
     background-color: rgba(6, 7, 8, .96);
     border-right-width: 2px; border-right-color: rgba(142, 91, 45, .72);
 }
-.ps-journey__rail-eyebrow, .ps-journey__metric-key { font-size: 8px; letter-spacing: 1px; color: rgb(68, 192, 199); }
-.ps-journey__portrait-frame { width: 116px; height: 136px; margin: 8px 23px 5px 23px; background-image: resource("Art/UI/HubDD/portrait-frame-vertical"); -unity-background-scale-mode: stretch-to-fill; padding: 9px; }
-.ps-journey__portrait-crop { width: 98px; height: 118px; overflow: hidden; }
-.ps-journey__portrait { width: 98px; height: 118px; }
-.ps-journey__courier-name { font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(242, 219, 174); }
-.ps-journey__role { font-size: 10px; -unity-text-align: middle-center; color: rgb(179, 128, 78); }
-.ps-journey__rule { height: 2px; margin: 9px 0; background-color: rgba(181, 124, 61, .54); }
+.ps-journey__rail-eyebrow { font-size: 8px; letter-spacing: 1px; color: rgb(68, 192, 199); }
 .ps-journey__hp, .ps-journey__enemy-hp, .ps-journey__progress, .ps-journey__minigame-meter { height: 16px; margin-top: 5px; }
 .ps-journey__hp .unity-progress-bar__background, .ps-journey__enemy-hp .unity-progress-bar__background, .ps-journey__progress .unity-progress-bar__background, .ps-journey__minigame-meter .unity-progress-bar__background { background-color: rgba(18, 16, 14, .86); border-width: 1px; border-color: rgba(176, 129, 68, .55); }
 .ps-journey__hp .unity-progress-bar__progress, .ps-journey__enemy-hp .unity-progress-bar__progress { background-color: rgb(151, 49, 39); }
@@ -46,34 +34,6 @@
 .ps-journey__minigame-meter .unity-progress-bar__progress { background-color: rgb(63, 180, 189); }
 .ps-journey__hp .unity-progress-bar__title, .ps-journey__enemy-hp .unity-progress-bar__title, .ps-journey__progress .unity-progress-bar__title, .ps-journey__minigame-meter .unity-progress-bar__title { display: none; }
 .ps-journey__metric-value { font-size: 13px; -unity-text-align: upper-right; color: rgb(235, 210, 169); }
-.ps-journey__rail-row { margin-top: 12px; flex-direction: row; justify-content: space-between; }
-.ps-journey__rail-row > VisualElement { width: 72px; }
-.ps-journey__rail-number { margin-top: 2px; font-size: 25px; color: rgb(238, 202, 128); }
-.ps-journey__risk-block { margin-top: 13px; padding: 8px 9px; background-color: rgba(42, 30, 23, .7); border-left-width: 3px; border-left-color: rgb(182, 113, 50); }
-.ps-journey__condition { margin-top: 3px; font-size: 17px; color: rgb(231, 190, 112); }
-.ps-journey__condition-note { font-size: 9px; color: rgb(169, 151, 127); }
-.ps-journey__floor-progress { margin-top: 14px; padding-top: 10px; border-top-width: 1px; border-top-color: rgba(181, 124, 61, .42); }
-.ps-journey__floor-progress-copy { margin-top: 3px; font-size: 10px; color: rgb(226, 202, 158); }
-.ps-journey__floor-track { height: 51px; margin-top: 7px; flex-direction: row; align-items: flex-start; justify-content: center; }
-.ps-journey__floor-mark { width: 40px; align-items: center; opacity: .38; }
-.ps-journey__floor-seal {
-    width: 29px; height: 29px;
-    padding-top: 5px;
-    -unity-text-align: upper-center;
-    font-size: 10px; -unity-font-style: bold;
-    color: rgb(143, 131, 111);
-    background-color: rgba(27, 25, 22, .88);
-    border-width: 1px; border-color: rgba(143, 131, 111, .52);
-    border-radius: 15px;
-}
-.ps-journey__floor-label { margin-top: 3px; font-size: 8px; -unity-text-align: middle-center; color: rgb(143, 131, 111); }
-.ps-journey__floor-connector { width: 10px; height: 1px; margin-top: 14px; background-color: rgba(143, 131, 111, .42); }
-.ps-journey__floor-mark.mark--current { opacity: 1; }
-.ps-journey__floor-mark.mark--current .ps-journey__floor-seal { color: rgb(249, 216, 141); background-color: rgba(76, 46, 27, .94); border-width: 2px; border-color: rgb(196, 132, 61); }
-.ps-journey__floor-mark.mark--current .ps-journey__floor-label { color: rgb(238, 203, 137); }
-.ps-journey__floor-mark.mark--cleared { opacity: .78; }
-.ps-journey__floor-mark.mark--cleared .ps-journey__floor-seal { color: rgb(99, 210, 212); background-color: rgba(13, 45, 47, .9); border-color: rgba(71, 192, 198, .9); }
-.ps-journey__floor-mark.mark--cleared .ps-journey__floor-label { color: rgb(113, 191, 191); }
 .ps-journey__dev-tag { position: absolute; left: 18px; bottom: 18px; font-size: 8px; letter-spacing: 1px; color: rgba(97, 194, 198, .76); }
 
 .ps-journey__bottom {
@@ -87,11 +47,6 @@
 .ps-journey__phase { font-size: 10px; letter-spacing: 1px; color: rgb(68, 197, 203); }
 .ps-journey__next { margin-top: 3px; font-size: 12px; color: rgb(229, 207, 168); }
 .ps-journey__segment-progress { flex-grow: 1; min-width: 430px; margin: 0 22px; }
-.ps-journey__segment-caption { height: 17px; flex-direction: row; align-items: center; justify-content: space-between; }
-.ps-journey__segment-key { font-size: 7px; letter-spacing: 1px; color: rgba(71, 194, 199, .72); }
-.ps-journey__segment-end { width: 195px; font-size: 9px; color: rgb(188, 169, 138); white-space: nowrap; overflow: hidden; }
-.segment-end--origin { -unity-text-align: middle-left; }
-.segment-end--target { -unity-text-align: middle-right; color: rgb(235, 199, 128); }
 .ps-journey__progress { width: 100%; min-width: 0; height: 14px; margin: 4px 0 0 0; }
 .ps-journey__transport { width: 154px; flex-direction: row; align-items: center; justify-content: flex-end; }
 .ps-journey__speed, .ps-journey__pause { height: 40px; margin-left: 8px; color: rgb(237, 211, 165); background-color: rgba(42, 28, 20, .9); border-width: 1px; border-color: rgba(186, 125, 59, .7); }
@@ -113,8 +68,8 @@
     position: absolute;
     left: 190px;
     right: 0;
-    top: 64px;
-    bottom: 92px;
+    top: 0;
+    bottom: 0;
     display: none;
     align-items: center;
     overflow: hidden;
@@ -125,57 +80,68 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(3, 5, 6, .82);
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-top-color: rgba(188, 129, 59, .48);
-    border-bottom-color: rgba(188, 129, 59, .48);
+    background-color: rgba(2, 4, 5, .72);
 }
-.ps-journey__choice-heading { position: absolute; left: 0; right: 0; top: 9px; align-items: center; }
-.ps-journey__choice-eyebrow { font-size: 9px; letter-spacing: 3px; color: rgb(67, 196, 203); }
-.ps-journey__choice-heading-title { margin-top: 0; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(244, 222, 181); }
-.ps-journey__choice-heading-note { margin-top: 0; font-size: 9px; color: rgb(171, 158, 135); }
+.ps-journey__choice-heading { position: absolute; left: 215px; top: 37px; width: 660px; height: 62px; align-items: center; border-bottom-width: 1px; border-bottom-color: rgba(191, 132, 65, .68); }
+.ps-journey__choice-heading-title { font-size: 22px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; color: rgb(239, 214, 172); }
+.ps-journey__choice-heading-note { margin-top: 2px; font-size: 9px; color: rgb(180, 160, 128); }
 .ps-journey__choice-papers {
     position: absolute;
-    left: 201px;
-    top: 66px;
-    width: 688px;
-    height: 482px;
+    left: 180px;
+    top: 112px;
+    width: 740px;
+    height: 500px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
-.ps-journey__route-paper { position: relative; width: 312px; height: 468px; padding: 0; background-image: resource("Art/JourneyPrototype/Complete/journey-major-route-docket-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: transparent; border-width: 0; color: rgb(47, 35, 27); opacity: .94; transition-property: translate, scale, opacity; transition-duration: .14s; }
-.ps-journey__route-paper:hover, .ps-journey__route-paper:focus { translate: 0 -5px; scale: 1.012; opacity: 1; }
+.ps-journey__route-paper { position: relative; width: 330px; height: 500px; padding: 0; background-image: resource("Art/JourneyPrototype/Complete/journey-major-route-docket-v1"); -unity-background-scale-mode: stretch-to-fill; background-color: transparent; border-width: 0; color: rgb(52, 38, 28); opacity: .96; overflow: visible; transition-property: translate, scale, opacity; transition-duration: .14s; }
+.ps-journey__route-paper:hover, .ps-journey__route-paper:focus { translate: 0 -4px; scale: 1.012; opacity: 1; }
 .ps-journey__route-paper:disabled { opacity: .55; }
 .ps-journey__route-paper.is-rejected { opacity: .28; scale: 0.97; }
-.ps-journey__route-paper.is-stamped { translate: 0 -6px; scale: 1.02; opacity: 1; }
-.ps-journey__route-art { position: absolute; left: 36px; top: 42px; width: 240px; height: 126px; -unity-background-scale-mode: scale-and-crop; background-color: rgb(42, 35, 29); border-width: 2px; border-color: rgba(73, 55, 39, .8); }
-.route-art--ash { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-far-v1"); }
-.route-art--danger { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-v1"); }
-.route-art--drowned { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-drowned-v1"); }
-.route-art--blackbell { background-image: resource("Art/JourneyPrototype/journey-city-walktest-bg-v1"); }
-.ps-journey__route-index { position: absolute; left: 39px; top: 176px; width: 234px; font-size: 8px; letter-spacing: 2px; color: rgb(43, 108, 111); }
-.ps-journey__route-title { position: absolute; left: 38px; top: 190px; width: 236px; font-size: 20px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(48, 34, 25); }
-.ps-journey__route-flavor { position: absolute; left: 42px; top: 226px; width: 228px; height: 46px; white-space: normal; font-size: 9px; -unity-text-align: upper-left; color: rgb(74, 57, 43); }
-.ps-journey__route-stats { position: absolute; left: 41px; top: 281px; width: 230px; height: 111px; flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
-.ps-journey__route-stat { width: 115px; height: 34px; padding: 2px 6px; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .3); }
-.ps-journey__route-stat-key { font-size: 7px; letter-spacing: 1px; color: rgb(115, 74, 48); }
-.ps-journey__route-stat-value { margin-top: 0; font-size: 11px; color: rgb(44, 36, 29); }
-.ps-journey__route-action { position: absolute; left: 58px; bottom: 29px; width: 196px; height: 29px; padding-top: 5px; font-size: 10px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(245, 226, 188); background-color: rgb(56, 45, 37); border-width: 1px; border-color: rgb(134, 94, 54); }
-.ps-journey__route-paper:focus .ps-journey__route-action { color: rgb(255, 239, 202); border-width: 2px; border-color: rgb(213, 151, 73); }
-.ps-journey__route-paper--danger .ps-journey__route-action { background-color: rgb(91, 45, 35); border-color: rgb(154, 68, 49); }
-.ps-journey__route-stamp { position: absolute; right: 40px; bottom: 57px; width: 68px; height: 68px; padding-top: 20px; border-width: 4px; border-color: rgb(139, 34, 27); border-radius: 34px; rotate: 0deg; font-size: 14px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(139, 34, 27); opacity: 0; scale: 1.65; transition-property: opacity, scale, rotate; transition-duration: .12s; }
+.ps-journey__route-paper.is-stamped { translate: 0 -5px; scale: 1.014; opacity: 1; }
+.ps-journey__route-art { position: absolute; left: 40px; top: 57px; width: 250px; height: 105px; overflow: hidden; background-color: rgb(12, 14, 15); }
+.ps-journey__route-layer { position: absolute; left: 0; right: 0; top: 0; bottom: 0; -unity-background-scale-mode: scale-and-crop; }
+.ps-journey__route-layer--sky { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-sky-day-v1"); }
+.ps-journey__route-layer--far { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-far-silhouette-a-v1"); }
+.ps-journey__route-layer--mid { left: -24px; right: -24px; background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-mid-architecture-a-v1"); }
+.ps-journey__route-layer--street { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-streetback-a-v1"); }
+.ps-journey__route-layer--ground { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-ground-standard-tile-v3"); }
+.ps-journey__route-layer--foreground { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-front-v1"); opacity: .44; }
+.route-road--wide .ps-journey__route-layer--mid { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-mid-wide-a-v1"); }
+.route-road--wide .ps-journey__route-layer--street { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-streetback-wide-a-v1"); }
+.route-road--wide .ps-journey__route-layer--ground { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-ground-wide-tile-v2"); }
+.route-road--narrow .ps-journey__route-layer--mid { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-mid-narrow-a-v1"); }
+.route-road--narrow .ps-journey__route-layer--street { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-streetback-narrow-a-v1"); }
+.route-biome--drowned .ps-journey__route-layer--sky { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-sky-dusk-v1"); }
+.route-biome--drowned .ps-journey__route-layer--far { background-image: resource("Art/JourneyPrototype/Backgrounds/Drowned/drowned-far-silhouette-v1"); }
+.route-biome--drowned .ps-journey__route-layer--mid { background-image: resource("Art/JourneyPrototype/Parallax/journey-parallax-mid-drowned-v1"); }
+.route-biome--blackbell .ps-journey__route-layer--sky { background-image: resource("Art/JourneyPrototype/Backgrounds/Ash/ash-sky-night-v1"); }
+.route-biome--blackbell .ps-journey__route-layer--far { background-image: resource("Art/JourneyPrototype/Backgrounds/BlackBell/black-bell-far-silhouette-v1"); }
+.route-biome--blackbell .ps-journey__route-layer--mid { background-image: resource("Art/JourneyPrototype/Backgrounds/BlackBell/black-bell-mid-architecture-v1"); }
+.route-landmark--left .ps-journey__route-layer--mid { translate: -19px 0; }
+.route-landmark--right .ps-journey__route-layer--mid { translate: 19px 0; }
+.ps-journey__route-landmark { position: absolute; left: 194px; bottom: -2px; width: 88px; height: 113px; opacity: .9; }
+.route-landmark--left .ps-journey__route-landmark { left: 18px; }
+.ps-journey__route-art-shade { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(3, 5, 6, .28); }
+.ps-journey__route-index { position: absolute; left: 47px; top: 150px; width: 236px; font-size: 9px; letter-spacing: 1px; color: rgb(91, 204, 208); }
+.ps-journey__route-title { position: absolute; left: 42px; top: 168px; width: 246px; font-size: 21px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(49, 35, 25); }
+.ps-journey__route-flavor { position: absolute; left: 47px; top: 267px; width: 236px; height: 42px; white-space: normal; font-size: 11px; color: rgb(76, 57, 42); }
+.ps-journey__route-duration { position: absolute; left: 47px; top: 238px; width: 236px; height: 25px; padding-left: 7px; padding-right: 7px; flex-direction: row; align-items: center; justify-content: space-between; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .28); }
+.ps-journey__route-duration-key { font-size: 10px; letter-spacing: 1px; color: rgb(115, 74, 48); }
+.ps-journey__route-duration-value { font-size: 13px; -unity-font-style: bold; color: rgb(46, 36, 28); }
+.ps-journey__route-paper--danger .ps-journey__route-duration-value { color: rgb(150, 49, 37); }
+.ps-journey__route-stats { position: absolute; left: 48px; top: 316px; width: 234px; height: 81px; flex-direction: column; }
+.ps-journey__route-stat { width: 234px; height: 27px; padding-left: 7px; padding-right: 7px; flex-direction: row; align-items: center; justify-content: space-between; border-bottom-width: 1px; border-bottom-color: rgba(92, 66, 44, .24); }
+.ps-journey__route-stat-key { font-size: 10px; letter-spacing: 1px; color: rgb(115, 74, 48); }
+.ps-journey__route-stat-value { font-size: 12px; color: rgb(44, 36, 29); }
+.ps-journey__route-action { position: absolute; left: 60px; bottom: 8px; width: 210px; height: 37px; padding-top: 8px; font-size: 12px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(245, 226, 188); background-color: rgb(31, 88, 91); border-width: 1px; border-color: rgb(151, 103, 53); }
+.ps-journey__route-paper--danger .ps-journey__route-action { background-color: rgb(112, 45, 35); border-color: rgb(156, 68, 49); }
+.ps-journey__route-paper:hover .ps-journey__route-action, .ps-journey__route-paper:focus .ps-journey__route-action { color: rgb(255, 235, 196); background-color: rgb(38, 105, 108); border-width: 2px; border-color: rgb(205, 151, 76); }
+.ps-journey__route-paper--danger:hover .ps-journey__route-action, .ps-journey__route-paper--danger:focus .ps-journey__route-action { background-color: rgb(133, 47, 35); border-color: rgb(205, 113, 71); }
+.ps-journey__route-stamp { position: absolute; right: 44px; bottom: 60px; width: 68px; height: 68px; padding-top: 20px; border-width: 3px; border-color: rgb(151, 46, 33); border-radius: 34px; rotate: 0deg; font-size: 14px; -unity-font-style: bold; -unity-text-align: upper-center; color: rgb(151, 46, 33); opacity: 0; scale: 1.65; transition-property: opacity, scale, rotate; transition-duration: .12s; }
 .ps-journey__route-paper.is-stamped .ps-journey__route-stamp { opacity: .82; scale: 1; rotate: -12deg; }
-.ps-journey__choice-divider { width: 34px; height: 468px; justify-content: center; align-items: center; }
-.ps-journey__choice-or { width: 34px; height: 34px; padding-top: 10px; border-width: 1px; border-color: rgba(177, 127, 68, .7); border-radius: 17px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(210, 172, 112); background-color: rgba(13, 12, 11, .96); }
-.ps-journey__choice-help { position: absolute; left: 0; right: 0; bottom: 4px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(126, 124, 117); }
-.ps-journey__event { width: 440px; }
-.ps-journey__event-body { margin-top: 12px; height: 145px; flex-direction: row; }
-.ps-journey__event-art { width: 148px; height: 132px; margin-right: 14px; background-image: resource("Art/UI/CourierRoutePrototype/courier-route-confirm-envelope-v1"); -unity-background-scale-mode: scale-to-fit; }
-.ps-journey__event-copy { flex-grow: 1; white-space: normal; font-size: 13px; color: rgb(207, 194, 170); }
-.ps-journey__event-button { height: 42px; margin-top: 8px; font-size: 13px; color: rgb(219, 201, 167); background-color: rgba(29, 28, 27, .96); border-width: 1px; border-color: rgba(140, 121, 89, .75); }
-.ps-journey__event-button--primary { background-color: rgba(66, 38, 23, .96); border-color: rgb(191, 127, 57); color: rgb(248, 218, 161); }
+.ps-journey__choice-help { position: absolute; left: 0; right: 0; bottom: 5px; font-size: 8px; letter-spacing: 1px; -unity-text-align: upper-center; color: rgb(137, 133, 122); }
 .ps-journey__minigame { right: 118px; top: 322px; width: 610px; padding: 18px 22px 16px 22px; }
 .ps-journey__minigame-head, .ps-journey__minigame-stakes, .ps-journey__mini-scale { flex-direction: row; justify-content: space-between; align-items: center; }
 .ps-journey__minigame-objective-row { height: 31px; margin-top: 8px; padding: 5px 8px; flex-direction: row; justify-content: space-between; background-color: rgba(20, 44, 43, .86); border-left-width: 3px; border-left-color: rgb(63, 180, 189); }
@@ -222,10 +188,7 @@
 .ps-journey__result-text { margin: 14px 0 8px 0; white-space: normal; color: rgb(205, 192, 169); }
 .ps-journey__result-summary { min-height: 46px; margin-top: 4px; padding: 9px 11px; white-space: normal; font-size: 12px; color: rgb(225, 207, 171); background-color: rgba(7, 20, 21, .76); border-left-width: 3px; border-left-color: rgb(62, 178, 185); }
 .ps-journey__result-actions { margin-top: 8px; flex-direction: row; justify-content: flex-end; }
-.ps-journey__result-return { width: 170px; margin-right: 10px; }
 .ps-journey__result-continue { width: 210px; }
-.result--checkpoint .ps-journey__result { left: 415px; top: 126px; width: 640px; }
-.result--checkpoint .ps-journey__result-summary { min-height: 72px; }
 .result--defeat .ps-journey__result-scrim, .result--complete .ps-journey__result-scrim, .result--terminal .ps-journey__result-scrim { left: 0; top: 0; bottom: 0; background-color: rgba(2, 3, 4, .86); }
 .result--defeat .ps-journey__result, .result--complete .ps-journey__result, .result--terminal .ps-journey__result { left: 350px; top: 156px; width: 580px; }
 .result--defeat .ps-journey__result { border-left-color: rgb(163, 55, 44); }
@@ -802,7 +765,7 @@
 .ps-journey__pile-card { position: relative; width: 156px; min-width: 156px; height: 218px; min-height: 218px; margin-right: 10px; padding: 0; background-color: rgba(0, 0, 0, 0); border-width: 0; }
 .ps-journey__pile-empty { position: absolute; left: 48px; right: 48px; top: 170px; height: 60px; font-size: 16px; -unity-text-align: middle-center; color: rgb(197, 181, 153); }
 
-.ps-journey__speech { position: absolute; left: 288px; top: 260px; max-width: 250px; padding: 7px 12px; font-size: 11px; white-space: normal; color: rgb(39, 32, 27); background-color: rgba(240, 220, 181, .94); border-width: 1px; border-color: rgb(102, 73, 47); opacity: 0; transition-property: opacity, translate; transition-duration: .18s; translate: 0 6px; }
+.ps-journey__speech { position: absolute; left: 288px; top: 230px; max-width: 400px; padding: 12px 18px; font-size: 22px; white-space: normal; color: rgb(39, 32, 27); background-color: rgba(240, 220, 181, .96); border-width: 1px; border-color: rgb(102, 73, 47); opacity: 0; transition-property: opacity, translate; transition-duration: .18s; translate: 0 6px; }
 .ps-journey__speech.speech--visible { opacity: 1; translate: 0 0; }
 .ps-journey__damage-popup { position: absolute; right: 190px; top: 226px; width: 100px; font-size: 34px; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(255, 100, 70); opacity: 0; translate: 0 10px; transition-property: opacity, translate; transition-duration: .08s; }
 .ps-journey__damage-popup.fx--visible { opacity: 1; translate: 0 -14px; }
@@ -1156,7 +1119,7 @@
     border-top-color: rgb(69, 75, 76);
     border-bottom-color: rgb(69, 75, 76);
     color: rgb(236, 230, 214);
-    transition-property: background-color, border-color, translate;
+    transition-property: background-color, border-color;
     transition-duration: .1s;
 }
 .ps-journey__reward-candidate:hover {
@@ -1165,7 +1128,6 @@
     border-right-color: rgb(139, 113, 75);
     border-top-color: rgb(139, 113, 75);
     border-bottom-color: rgb(139, 113, 75);
-    translate: 0 -2px;
 }
 .ps-journey__reward-candidate.is-selected {
     background-color: rgb(45, 39, 30);
@@ -1249,174 +1211,647 @@
 .reward--open .ps-journey__battle-start {
     opacity: 0;
 }
-+/* Travel record rail and current-segment docket.
-   These restyle existing information only; travel rules remain unchanged. */
-.state--travel .ps-journey__rail {
-    padding: 14px 12px 14px 12px;
-    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
-    -unity-background-scale-mode: scale-and-crop;
-    background-color: rgba(4, 7, 7, 0.93);
-    border-right-width: 1px;
-    border-right-color: rgba(190, 151, 88, 0.72);
+
+/* Compact expedition HUD. Persistent information is limited to HP, seals and bag. */
+.ps-journey__topbar.ps-journey__topbar--compact {
+    left: 984px;
+    right: 14px;
+    top: 12px;
+    width: 282px;
+    height: 36px;
+    padding: 0;
+    flex-direction: row;
+    justify-content: flex-end;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 0;
 }
 
-.state--travel .ps-journey__rail-eyebrow {
-    height: 19px;
-    padding-left: 7px;
+.ps-journey__topbar--compact .ps-journey__ledger-open,
+.ps-journey__topbar--compact .ps-journey__dev-menu {
+    height: 34px;
+    margin: 0 0 0 8px;
+}
+
+.ps-journey__rail {
+    left: 16px;
+    top: 16px;
+    width: 174px;
+    height: 688px;
+    padding: 14px 12px;
+    overflow: visible;
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgba(4, 7, 7, .9);
+    border-width: 1px;
+    border-color: rgba(190, 151, 88, .64);
+    border-radius: 2px;
+}
+
+.ps-journey__vital-head,
+.ps-journey__seal-title-row {
+    height: 22px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps-journey__rail-eyebrow {
     font-size: 8px;
     letter-spacing: 1px;
-    color: rgb(62, 192, 198);
-    border-left-width: 2px;
-    border-left-color: rgb(191, 51, 38);
+    color: rgb(75, 194, 199);
 }
 
-.state--travel .ps-journey__portrait-frame {
-    width: 112px;
-    height: 130px;
-    margin: 6px 27px 4px 27px;
-    padding: 8px;
+.ps-journey__metric-value {
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(238, 214, 177);
 }
 
-.state--travel .ps-journey__portrait-crop,
-.state--travel .ps-journey__portrait {
-    width: 96px;
-    height: 114px;
-}
-
-.state--travel .ps-journey__courier-name {
-    font-size: 19px;
-}
-
-.state--travel .ps-journey__rule {
-    height: 1px;
-    margin: 7px 0;
-    background-color: rgba(190, 151, 88, 0.58);
-}
-
-.state--travel .ps-journey__metric-key {
-    color: rgb(79, 188, 192);
-}
-
-.state--travel .ps-journey__hp {
+.ps-journey__rail .ps-journey__hp {
     height: 14px;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
-.state--travel .ps-journey__rail-row {
-    margin-top: 9px;
-    padding: 7px 8px 5px 8px;
-    background-color: rgba(3, 5, 5, 0.42);
+.ps-journey__day-clock {
+    height: 118px;
+    margin-top: 8px;
+    align-items: center;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-top-color: rgba(190, 151, 88, 0.35);
-    border-bottom-color: rgba(190, 151, 88, 0.35);
+    border-top-color: rgba(190, 151, 88, .3);
+    border-bottom-color: rgba(190, 151, 88, .3);
+}
+.ps-journey__day-clock-title {
+    height: 18px;
+    padding-top: 5px;
+    font-size: 7px;
+    letter-spacing: 2px;
+    color: rgba(224, 199, 157, .78);
+}
+.ps-journey__day-clock-face {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    margin-top: 2px;
+    background-color: rgba(4, 8, 9, .88);
+    border-width: 2px;
+    border-color: rgba(177, 132, 72, .84);
+    border-radius: 44px;
+}
+.ps-journey__day-tick {
+    position: absolute;
+    width: 4px;
+    height: 10px;
+    background-color: rgba(119, 105, 84, .45);
+    border-radius: 2px;
+}
+.ps-journey__day-tick.tick--filled { background-color: rgb(64, 192, 198); }
+.day-stage--alert .ps-journey__day-tick.tick--filled { background-color: rgb(218, 170, 77); }
+.day-stage--pursuit .ps-journey__day-tick.tick--filled { background-color: rgb(195, 72, 52); }
+.day-stage--anomaly .ps-journey__day-tick.tick--filled { background-color: rgb(178, 92, 176); }
+.day-tick--00 { left: 40px; top: 3px; }
+.day-tick--01 { left: 59px; top: 8px; rotate: 30deg; }
+.day-tick--02 { left: 73px; top: 22px; rotate: 60deg; }
+.day-tick--03 { left: 78px; top: 40px; rotate: 90deg; }
+.day-tick--04 { left: 73px; top: 59px; rotate: 120deg; }
+.day-tick--05 { left: 59px; top: 73px; rotate: 150deg; }
+.day-tick--06 { left: 40px; top: 78px; rotate: 180deg; }
+.day-tick--07 { left: 21px; top: 73px; rotate: 210deg; }
+.day-tick--08 { left: 7px; top: 59px; rotate: 240deg; }
+.day-tick--09 { left: 2px; top: 40px; rotate: 270deg; }
+.day-tick--10 { left: 7px; top: 22px; rotate: 300deg; }
+.day-tick--11 { left: 21px; top: 8px; rotate: 330deg; }
+.ps-journey__day-clock-hand {
+    position: absolute;
+    left: 42px;
+    top: 12px;
+    width: 2px;
+    height: 32px;
+    transform-origin: 50% 100%;
+    background-color: rgb(235, 201, 124);
+}
+.ps-journey__day-clock-pin {
+    position: absolute;
+    left: 39px;
+    top: 39px;
+    width: 8px;
+    height: 8px;
+    background-color: rgb(226, 187, 103);
+    border-radius: 4px;
+}
+.ps-journey__day-clock-copy {
+    position: absolute;
+    left: 18px;
+    top: 48px;
+    width: 52px;
+    height: 24px;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+}
+.ps-journey__day-number {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(239, 219, 181);
+}
+.ps-journey__day-suffix {
+    margin: 0 0 2px 2px;
+    font-size: 8px;
+    color: rgb(193, 173, 139);
 }
 
-.state--travel .ps-journey__rail-row > VisualElement {
-    width: 68px;
-}
-
-.state--travel .ps-journey__rail-number {
-    margin-top: 0;
-    font-size: 23px;
-}
-
-.state--travel .ps-journey__risk-block {
+.ps-journey__seal-title-row {
     margin-top: 9px;
-    padding: 7px 8px;
-    background-color: rgba(7, 24, 25, 0.72);
-    border-left-width: 2px;
-    border-left-color: rgb(191, 51, 38);
+    padding-top: 6px;
+    border-top-width: 1px;
+    border-top-color: rgba(190, 151, 88, .38);
 }
 
-.state--travel .ps-journey__condition {
-    margin-top: 1px;
-    font-size: 15px;
+.ps-journey__seal-total {
+    min-width: 28px;
+    font-size: 14px;
+    -unity-text-align: middle-right;
+    color: rgb(238, 202, 128);
 }
 
-.state--travel .ps-journey__floor-progress {
-    margin-top: 9px;
-    padding-top: 7px;
+.ps-journey__seal-reel {
+    position: relative;
+    height: 300px;
+    margin-top: 6px;
+    overflow: visible;
 }
 
-.state--travel .ps-journey__floor-track {
-    height: 48px;
-    margin-top: 5px;
+.ps-journey__seal-cord {
+    position: absolute;
+    left: 23px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: rgba(174, 133, 79, .58);
+    border-left-width: 1px;
+    border-left-color: rgba(34, 22, 15, .9);
 }
 
-.state--travel .ps-journey__dev-tag {
+.ps-journey__travel-seal-host {
+    position: absolute;
+    left: 0;
+    right: -4px;
+    top: 5px;
+    flex-direction: column;
+}
+
+.ps-journey__travel-seal {
+    position: relative;
+    width: 150px;
+    height: 64px;
+    margin: 0 0 7px 0;
+    padding: 7px 7px 6px 48px;
+    align-items: flex-start;
+    justify-content: center;
+    color: rgb(231, 211, 176);
+    background-color: rgba(11, 14, 14, .88);
+    border-width: 1px;
+    border-color: rgba(157, 117, 67, .7);
+    border-left-width: 3px;
+    border-left-color: rgb(177, 61, 45);
+}
+
+.ps-journey__travel-seal:hover {
+    translate: 3px 0;
+    border-color: rgb(220, 169, 91);
+    background-color: rgba(28, 24, 20, .96);
+}
+
+.ps-journey__travel-seal:disabled {
+    opacity: .44;
+}
+
+.ps-journey__travel-seal-mark {
+    position: absolute;
+    left: 4px;
+    top: 13px;
+    width: 34px;
+    height: 34px;
+    padding-top: 6px;
+    font-size: 12px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    color: rgb(248, 219, 164);
+    background-color: rgba(126, 35, 27, .96);
+    border-width: 2px;
+    border-color: rgb(194, 88, 57);
+    border-radius: 17px;
+}
+
+.ps-journey__travel-seal.seal--delay .ps-journey__travel-seal-mark {
+    background-color: rgba(22, 85, 91, .96);
+    border-color: rgb(73, 181, 188);
+}
+
+.ps-journey__travel-seal.seal--refill .ps-journey__travel-seal-mark {
+    background-color: rgba(90, 70, 35, .96);
+    border-color: rgb(205, 166, 83);
+}
+
+.ps-journey__travel-seal-name {
+    width: 91px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: rgb(239, 216, 178);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ps-journey__travel-seal-charges {
+    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgb(85, 200, 203);
+}
+
+.ps-journey__bag-button {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 34px;
+    height: 58px;
+    margin: 0;
+    padding: 6px 8px;
+    flex-direction: row;
+    align-items: center;
+    color: rgb(232, 211, 177);
+    background-color: rgba(17, 18, 18, .94);
+    border-width: 1px;
+    border-color: rgba(177, 132, 72, .72);
+}
+
+.ps-journey__bag-button:hover {
+    border-color: rgb(220, 169, 91);
+    background-color: rgba(31, 27, 22, .97);
+}
+
+.ps-journey__bag-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-confirm-envelope-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-journey__bag-copy {
+    flex-grow: 1;
+    margin-left: 7px;
+}
+
+.ps-journey__bag-title { font-size: 12px; color: rgb(235, 214, 179); }
+.ps-journey__bag-note { font-size: 7px; color: rgb(109, 181, 184); }
+.ps-journey__bag-count {
+    min-width: 25px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: rgb(239, 195, 108);
+}
+
+.ps-journey__dev-tag {
     left: 13px;
     bottom: 9px;
-    opacity: 0.52;
+    opacity: .5;
 }
 
-.state--travel .ps-journey__bottom {
-    height: 84px;
-    padding: 9px 18px 9px 22px;
+.ps-journey__bag-panel {
+    position: absolute;
+    left: 202px;
+    top: 390px;
+    width: 310px;
+    min-height: 168px;
+    padding: 14px 16px;
+    display: none;
+    background-color: rgba(8, 10, 10, .97);
+    border-width: 1px;
+    border-left-width: 3px;
+    border-color: rgba(183, 138, 76, .82);
+    border-left-color: rgb(65, 187, 192);
+}
+.ps-journey__bag-panel.bag--open { display: flex; }
+.ps-journey__bag-panel-head { flex-direction: row; justify-content: space-between; }
+.ps-journey__bag-panel-title {
+    margin-top: 2px;
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    color: rgb(241, 219, 178);
+}
+.ps-journey__bag-close {
+    width: 72px;
+    height: 30px;
+    color: rgb(224, 203, 169);
+    background-color: rgba(32, 28, 23, .95);
+    border-width: 1px;
+    border-color: rgba(174, 130, 72, .72);
+}
+.ps-journey__bag-summary { margin-top: 9px; font-size: 11px; color: rgb(190, 180, 158); }
+.ps-journey__bag-tallies { margin-top: 11px; flex-direction: row; }
+.ps-journey__bag-tally {
+    width: 132px;
+    height: 54px;
+    margin-right: 8px;
+    padding: 7px 9px;
+    background-color: rgba(12, 28, 29, .82);
+    border-left-width: 3px;
+    border-left-color: rgb(67, 184, 190);
+}
+.ps-journey__bag-tally.tally--exposed {
+    background-color: rgba(38, 18, 16, .84);
+    border-left-color: rgb(178, 64, 48);
+}
+.ps-journey__bag-tally-key { font-size: 8px; color: rgb(156, 191, 189); }
+.ps-journey__bag-tally-value { margin-top: 1px; font-size: 20px; color: rgb(225, 210, 178); }
+
+.ps-journey__bottom {
+    left: 738px;
+    right: 18px;
+    bottom: 14px;
+    width: 524px;
+    height: 54px;
+    padding: 7px 8px 7px 12px;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(5, 7, 7, .84);
+    border-width: 1px;
+    border-color: rgba(172, 132, 75, .58);
+}
+.state--travel .ps-journey__bottom { display: flex; }
+.ps-journey__progress-copy { width: 176px; padding-left: 0; }
+.ps-journey__phase { display: none; }
+.ps-journey__next { margin-top: 0; font-size: 10px; color: rgb(220, 204, 175); }
+.ps-journey__segment-progress { width: 190px; min-width: 0; margin: 0 8px; }
+.ps-journey__progress { width: 190px; height: 9px; margin: 0; }
+.ps-journey__progress .unity-progress-bar__progress { background-color: rgb(62, 181, 187); }
+.ps-journey__transport { width: 120px; }
+.ps-journey__speed, .ps-journey__pause {
+    height: 36px;
+    margin-left: 6px;
+    background-color: rgba(27, 23, 19, .94);
+}
+.ps-journey__speed { width: 44px; font-size: 13px; }
+.ps-journey__pause { width: 70px; font-size: 9px; }
+
+/* Location interactions: small choices stay in the world; facilities use a full overlay. */
+.ps-journey__event-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    background-color: rgba(2, 4, 5, .68);
+}
+
+.ps-journey__event {
+    position: absolute;
+    display: none;
+    background-color: rgba(8, 10, 10, .97);
+    border-width: 1px;
+    border-color: rgba(185, 138, 73, .82);
+}
+
+.state--event .ps-journey__event { display: flex; }
+.ps-journey__event-visual { display: none; }
+.ps-journey__event-content { flex-grow: 1; }
+.ps-journey__event-copy {
+    margin-top: 12px;
+    white-space: normal;
+    font-size: 12px;
+    color: rgb(207, 194, 170);
+}
+.ps-journey__event-actions { margin-top: 14px; }
+.ps-journey__event-button {
+    height: 40px;
+    margin-top: 7px;
+    padding: 0 14px;
+    font-size: 12px;
+    -unity-text-align: middle-left;
+    color: rgb(219, 201, 167);
+    background-color: rgba(25, 25, 24, .96);
+    border-width: 1px;
+    border-color: rgba(140, 121, 89, .75);
+}
+.ps-journey__event-button:hover {
+    translate: 3px 0;
+    border-color: rgb(206, 157, 83);
+}
+.ps-journey__event-button--primary {
+    background-color: rgba(66, 38, 23, .96);
+    border-color: rgb(191, 127, 57);
+    color: rgb(248, 218, 161);
+}
+
+.event--inline .ps-journey__event {
+    right: 54px;
+    top: 224px;
+    width: 392px;
+    min-height: 260px;
+    padding: 18px 20px;
+    border-left-width: 3px;
+    border-left-color: rgb(184, 61, 43);
+}
+.event--inline .ps-journey__event-content { width: 100%; }
+
+.event--overlay .ps-journey__event-scrim { display: flex; }
+.event--overlay .ps-journey__event {
+    left: 92px;
+    right: 92px;
+    top: 76px;
+    bottom: 72px;
+    width: auto;
+    padding: 0;
+    flex-direction: row;
     background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
     -unity-background-scale-mode: scale-and-crop;
-    background-color: rgba(4, 7, 7, 0.92);
-    border-top-width: 1px;
-    border-top-color: rgba(190, 151, 88, 0.78);
 }
-
-.state--travel .ps-journey__progress-copy {
-    width: 274px;
-    padding-left: 8px;
-    border-left-width: 2px;
-    border-left-color: rgb(191, 51, 38);
-}
-
-.state--travel .ps-journey__phase {
-    font-size: 9px;
-    color: rgb(68, 197, 203);
-}
-
-.state--travel .ps-journey__next {
-    margin-top: 3px;
-    font-size: 14px;
-    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
-    color: rgb(237, 215, 178);
-}
-
-.state--travel .ps-journey__segment-progress {
-    min-width: 390px;
-    margin: 0 18px;
-    padding: 7px 12px 8px 12px;
-    background-color: rgba(3, 5, 5, 0.46);
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-top-color: rgba(190, 151, 88, 0.32);
-    border-bottom-color: rgba(190, 151, 88, 0.32);
-}
-
-.state--travel .ps-journey__segment-key {
-    font-size: 8px;
-    color: rgba(73, 195, 200, 0.82);
-}
-
-.state--travel .ps-journey__progress {
-    height: 17px;
-    margin-top: 5px;
-}
-
-.state--travel .ps-journey__progress .unity-progress-bar__progress {
-    background-color: rgb(55, 179, 184);
-}
-
-.state--travel .ps-journey__speed,
-.state--travel .ps-journey__pause {
-    height: 44px;
-    margin-left: 7px;
-    background-image: none;
-    background-color: rgba(28, 22, 17, 0.94);
-    color: rgb(232, 207, 166);
-    border-left-width: 1px;
+.event--overlay .ps-journey__event-visual {
+    display: flex;
+    flex-basis: 0;
+    flex-grow: 36;
+    min-width: 0;
+    padding: 26px;
+    background-color: rgba(18, 13, 11, .74);
     border-right-width: 1px;
+    border-right-color: rgba(188, 140, 74, .7);
+}
+.event--overlay .ps-journey__event-art {
+    flex-grow: 1;
+    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-confirm-envelope-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+.event--overlay .ps-journey__event-content {
+    flex-basis: 0;
+    flex-grow: 64;
+    min-width: 0;
+    padding: 54px 56px 42px 56px;
+    justify-content: center;
+}
+.event--overlay .ps-journey__panel-title { font-size: 30px; }
+.event--overlay .ps-journey__event-copy {
+    margin-top: 18px;
+    font-size: 14px;
+}
+.event--overlay .ps-journey__event-actions {
+    width: 100%;
+    max-width: 390px;
+    margin-top: 22px;
+}
+.event--overlay .ps-journey__event-button {
+    height: 44px;
+    font-size: 13px;
+}
+.event--overlay .ps-journey__rail,
+.event--overlay .ps-journey__topbar,
+.event--overlay .ps-journey__bottom { display: none; }
+
+/* Boss checkpoint remains a physical decision point in the journey scene. */
+.ps-journey__checkpoint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+}
+.state--checkpoint .ps-journey__checkpoint { display: flex; }
+.ps-journey__checkpoint-title {
+    position: absolute;
+    left: 430px;
+    top: 48px;
+    width: 420px;
+    height: 40px;
+    font-size: 18px;
+    letter-spacing: 4px;
+    -unity-text-align: middle-center;
+    color: rgb(237, 216, 179);
+    background-color: rgba(7, 9, 9, .72);
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(190, 151, 88, 0.62);
-    border-right-color: rgba(190, 151, 88, 0.62);
-    border-top-color: rgba(190, 151, 88, 0.62);
-    border-bottom-color: rgba(190, 151, 88, 0.62);
+    border-top-color: rgba(194, 147, 78, .7);
+    border-bottom-color: rgba(194, 147, 78, .48);
+}
+.ps-journey__checkpoint-shrine {
+    position: absolute;
+    left: 710px;
+    top: 150px;
+    width: 270px;
+    height: 440px;
+    align-items: center;
+}
+.ps-journey__checkpoint-glow {
+    position: absolute;
+    left: 35px;
+    right: 35px;
+    top: 24px;
+    bottom: 66px;
+    background-color: rgba(76, 178, 188, .13);
+    border-width: 2px;
+    border-color: rgba(87, 201, 207, .58);
+    border-radius: 104px 104px 10px 10px;
+}
+.ps-journey__checkpoint-art {
+    width: 224px;
+    height: 310px;
+    margin-top: 38px;
+    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-relay-stamp-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+.ps-journey__checkpoint-return {
+    width: 178px;
+    height: 42px;
+    margin-top: -20px;
+    font-size: 13px;
+    color: rgb(241, 218, 176);
+    background-color: rgba(10, 13, 13, .96);
+    border-width: 1px;
+    border-color: rgb(69, 183, 190);
+}
+.ps-journey__checkpoint-return:hover {
+    border-color: rgb(112, 221, 223);
+    background-color: rgba(13, 40, 42, .97);
+}
+.ps-journey__checkpoint-continue {
+    position: absolute;
+    right: 72px;
+    top: 466px;
+    width: 154px;
+    height: 42px;
+    font-size: 14px;
+    color: rgb(237, 215, 177);
+    background-color: rgba(8, 10, 10, .78);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(190, 143, 76, .72);
+}
+.ps-journey__checkpoint-continue:hover { translate: 7px 0; color: rgb(255, 230, 177); }
+.checkpoint--leaving .ps-journey__checkpoint-return,
+.checkpoint--leaving .ps-journey__checkpoint-continue { opacity: 0; }
+.state--checkpoint .ps-journey__bottom { display: none; }
+
+/* Defeat and expedition completion are short overlays over the existing scene. */
+.state--result .ps-journey__rail,
+.state--result .ps-journey__topbar,
+.state--result .ps-journey__bottom { display: none; }
+.result--defeat .ps-journey__result-scrim {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(2, 3, 4, .34);
+}
+.result--defeat .ps-journey__result {
+    left: 270px;
+    top: 270px;
+    width: 740px;
+    min-height: 178px;
+    padding: 18px 28px;
+    align-items: center;
+    background-image: none;
+    background-color: rgba(7, 8, 9, .88);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgba(171, 65, 50, .76);
+    border-bottom-color: rgba(171, 65, 50, .76);
+}
+.result--defeat .ps-journey__panel-eyebrow,
+.result--defeat .ps-journey__result-rule,
+.result--defeat .ps-journey__result-summary { display: none; }
+.result--defeat .ps-journey__panel-title {
+    margin-top: 0;
+    font-size: 32px;
+    letter-spacing: 7px;
+    -unity-text-align: middle-center;
+    color: rgb(239, 205, 171);
+}
+.result--defeat .ps-journey__result-text {
+    margin: 8px 0 2px 0;
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    color: rgb(217, 194, 166);
+}
+.result--defeat .ps-journey__result-actions {
+    width: 210px;
+    margin-top: 8px;
+}
+.result--defeat .ps-journey__result-continue {
+    width: 210px;
+    height: 38px;
+    margin-top: 0;
+    -unity-text-align: middle-center;
+}
+.result--complete .ps-journey__result-scrim {
+    background-color: rgba(2, 3, 4, .46);
+}
+.result--complete .ps-journey__result {
+    left: 330px;
+    top: 238px;
+    width: 620px;
 }

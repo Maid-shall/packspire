@@ -35,7 +35,6 @@ namespace Packspire
             walker.SetJourneyBiome(biomeIndex);
             walker.SetRoadProfile(JourneyWalkCyclePrototype.RoadProfile.Standard);
             environment.SetBiome(biomeIndex);
-            weatherText.text = BiomeWeatherForIndex(biomeIndex);
             BeginTravel(OpeningTravelDuration, null);
             ShowToast($"DEV景色確認：{BiomeLabel(biomeIndex)}・標準路");
         }

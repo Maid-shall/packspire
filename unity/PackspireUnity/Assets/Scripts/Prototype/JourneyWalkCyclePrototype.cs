@@ -20,6 +20,8 @@ namespace Packspire
         private const string MiniBattleResource = "Art/JourneyPrototype/Complete/journey-mio-battle-sheet-v2";
         private const int MiniFrameCount = 6;
         private const int MiniBattleFrameCount = 5;
+        private const float JourneyJumpDuration = .58f;
+        private const float JourneyJumpHeight = .62f;
 
         private enum PlaybackProfile
         {
@@ -99,6 +101,7 @@ namespace Packspire
         private float battleCompositionScale = 1f;
         private float battleMotionClock;
         private float battleMotionDuration;
+        private float journeyJumpClock = -1f;
         private bool battleActive;
         private bool suspended;
         private BattleMotion battleMotion;
@@ -150,6 +153,12 @@ namespace Packspire
             }
 
             float delta = Time.deltaTime;
+            if (journeyJumpClock >= 0f)
+            {
+                journeyJumpClock += delta;
+                if (journeyJumpClock >= JourneyJumpDuration)
+                    journeyJumpClock = -1f;
+            }
             if (battleActive)
             {
                 battleMotionClock += delta;
@@ -297,6 +306,15 @@ namespace Packspire
                 // residual velocity here made foreground props drift under stationary UI.
                 currentTravelSpeed = 0f;
             }
+        }
+
+        public bool TryJourneyJump()
+        {
+            if (battleActive || suspended || journeyJumpClock >= 0f)
+                return false;
+            journeyJumpClock = 0f;
+            ApplyProgrammaticMotion();
+            return true;
         }
 
         public float BattleStageLift => battleStageLift;
@@ -555,6 +573,19 @@ namespace Packspire
             float baseScale = (UsesMiniCourier ? 1.06f : 1f) *
                               (battleActive ? battleCompositionScale : 1f);
             float tilt = -forwardTiltDegrees * assisted;
+            float journeyJumpArc = !battleActive && journeyJumpClock >= 0f
+                ? Mathf.Sin(
+                    Mathf.Clamp01(journeyJumpClock / JourneyJumpDuration) *
+                    Mathf.PI)
+                : 0f;
+
+            if (journeyJumpArc > 0f)
+            {
+                lift += journeyJumpArc * JourneyJumpHeight;
+                tilt -= journeyJumpArc * 1.4f;
+                scaleX -= journeyJumpArc * .012f;
+                scaleY += journeyJumpArc * .018f;
+            }
 
             if (battleActive)
             {
@@ -604,13 +635,18 @@ namespace Packspire
 
             float shadowWidth = (UsesMiniCourier ? 1.35f : 1.65f) *
                                 (battleActive ? battleCompositionScale : 1f);
-            float shadowCompression = Mathf.Lerp(1f, 0.78f, lift01 * assisted);
+            float shadowCompression =
+                Mathf.Lerp(1f, 0.78f, lift01 * assisted) *
+                Mathf.Lerp(1f, .64f, journeyJumpArc);
             shadowRenderer.transform.localScale = new Vector3(
                 shadowWidth * shadowCompression,
                 0.32f * shadowCompression,
                 1f);
             Color shadowColor = shadowRenderer.color;
-            shadowColor.a = Mathf.Lerp(0.48f, 0.31f, lift01 * assisted);
+            shadowColor.a = Mathf.Lerp(
+                Mathf.Lerp(0.48f, 0.31f, lift01 * assisted),
+                .22f,
+                journeyJumpArc);
             shadowRenderer.color = shadowColor;
         }
 
