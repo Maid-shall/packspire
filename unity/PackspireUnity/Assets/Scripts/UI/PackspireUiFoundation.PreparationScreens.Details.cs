@@ -2,64 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 namespace Packspire {
 public sealed partial class PackspireUiFoundation {
-// Packing selection, formula details, traits, links, and helper components.
- VisualElement BuildPackingFilterRow(){
-  var row=Container("ps-rite-filters");
-  void AddFilter(string id,string label,PackspireUiFactory.ManagementChrome icon){
-   var button=PackspireUiFactory.Button(label,()=>{
-    if(packingEquipFilter!=id){
-     packingEquipFilter=id;
-     packingEquipScrollY=0;
-    }
-    BuildPackingAgain();
-   });
-   button.AddToClassList("ps-rite-filter");
-   if(packingEquipFilter==id)button.AddToClassList("ps-selected");
-   row.Add(button);
-  }
-  AddFilter("","全部",PackspireUiFactory.ManagementChrome.AllItems);
-  AddFilter("weapon","武器",PackspireUiFactory.ManagementChrome.WeaponCategory);
-  AddFilter("armor","防具",PackspireUiFactory.ManagementChrome.ArmorCategory);
-  AddFilter("rune","ルーン",PackspireUiFactory.ManagementChrome.SupplyCategory);
-  AddFilter("supply","道具",PackspireUiFactory.ManagementChrome.SupplyCategory);
-  return row;
- }
-
  bool PackingFilterMatch(ItemType type)=>packingEquipFilter switch{
-  "weapon"=>type==ItemType.Weapon,
-  "armor"=>type==ItemType.Armor,
-  "rune"=>type==ItemType.Rune,
-  "supply"=>type==ItemType.Supply,
-  _=>true,
+  "weapon"=>type==ItemType.Weapon,"armor"=>type==ItemType.Armor,
+  "rune"=>type==ItemType.Rune,"supply"=>type==ItemType.Supply,_=>true,
  };
-
- VisualElement BuildPackingSelectDock(RunState run,ActiveStorageFormula formula){
-  var dock=Container("ps-rite-select-dock");
-  dock.pickingMode=PickingMode.Position;
-  DressRiteFrame(dock);
-  var caption=new Label("AUX"){pickingMode=PickingMode.Ignore};
-  caption.AddToClassList("ps-rite-select-caption");
-  dock.Add(caption);
-  var rotate=PackspireUiFactory.Button($"回転\n{packingRotation*90}°",()=>RotateSelectedPacking(formula));
-  rotate.AddToClassList("ps-rite-select-btn");
-  rotate.AddToClassList("ps-rite-select-btn-primary");
-  rotate.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Rotate,"ps-rite-select-icon"));
-  rotate.focusable=true;
-  dock.Add(rotate);
-  bool placed=run.placements.Any(x=>x.itemUid==selectedPackingUid);
-  var remove=PackspireUiFactory.Button("外す",()=>{game.UiPackingRemove(selectedPackingUid);selectedPackingUid="";BuildPackingAgain();});
-  remove.AddToClassList("ps-rite-select-btn");
-  remove.AddToClassList("ps-rite-select-btn-danger");
-  remove.Insert(0,PackspireUiFactory.SystemIcon(PackspireUiFactory.PopIcon.Remove,"ps-rite-select-icon"));
-  remove.SetEnabled(placed);
-  dock.Add(remove);
-  dock.BringToFront();
-  return dock;
- }
-
  void RotateSelectedPacking(ActiveStorageFormula formula){
   if(string.IsNullOrEmpty(selectedPackingUid)||game.UiRun==null)return;
   int next=StorageFormulaSystem.NextRotation(formula.core.rotation,packingRotation);
@@ -108,55 +56,8 @@ public sealed partial class PackspireUiFoundation {
   return false;
  }
 
- void BuildPackingItemDetail(VisualElement right,ItemInstance selected,DeckBuildResult build){
-  StorageFormulaSystem.EnsureItemRolled(selected);
-  var def=GameCatalog.Items[selected.templateId];
-  var run=game.UiRun;
-  right.Add(RiteSectionHead("03","選択中の術装"));
-  var detailCard=Container("ps-rite-detail-card");
-  detailCard.Add(VaultItemDisplayArt(selected.templateId,"ps-rite-detail-art"));
-  var detailName=new Label(def.name){pickingMode=PickingMode.Ignore};
-  detailName.AddToClassList("ps-rite-detail-name");
-  detailCard.Add(detailName);
-  var detailDesc=new Label(def.description){pickingMode=PickingMode.Ignore};
-  detailDesc.AddToClassList("ps-rite-detail-desc");
-  detailCard.Add(detailDesc);
-  right.Add(detailCard);
-  right.Add(RiteSectionHead("","形状"));
-  right.Add(BuildShapePreview(selected,packingRotation));
-  string elements=string.Join(" · ",def.cells.Select((cell,i)=>ElementLabel(selected.colors!=null&&i<selected.colors.Count?selected.colors[i]:cell.element)));
-  right.Add(RiteMetaLine($"属性  {elements}"));
-  AddPackingSealContribution(right,run,build,selected);
-  AddPackingLinkLines(right,run,build,selected);
- }
-
- void BuildPackingOverview(VisualElement right,RunState run,DeckBuildResult build){
-  right.Add(RiteSectionHead("03","発動効果"));
-  AddPackingDeliverySealLines(right,run,build);
-  AddPackingLinkLines(right,run,build,null);
-  if(build.stability!=null&&build.stability.runaway)
-   right.Add(RiteEffectCard("安定式", "過負荷", "暴走状態です。安定式を見直してください。", true));
- }
-
- VisualElement BuildFormulaTemplateCard(ActiveStorageFormula formula)=>BuildFormulaTemplateCommitted(formula);
 
  void BuildFormulaTemplateBrowser(VisualElement right){
-  var head=Container("ps-rite-template-head");
-  head.Add(RiteSectionHead("02","術式テンプレート"));
-  var add=PackspireUiFactory.Button("新規追加",()=>{
-   game.UiPackingCapture();
-   packingCardsOpen=false;
-   packingFormulaSection="";
-   packingTemplateCommitted=false;
-   game.UiPackingCreateLoadout();
-   packingFormulaOpen=true;
-   selectedPackingUid="";
-   BuildPackingAgain();
-  });
-  add.AddToClassList("ps-rite-template-edit");
-  head.Add(add);
-  right.Add(head);
-
   var meta=game.UiMeta;
   if(meta?.loadouts==null||meta.loadouts.Count==0){
    right.Add(RiteEmptyNote("テンプレートがありません\n「新規追加」から作成できます"));
@@ -181,7 +82,6 @@ public sealed partial class PackspireUiFoundation {
    var actions=Container("ps-rite-template-actions");
    var decide=PackspireUiFactory.Button("決定",()=>{
     game.UiPackingCapture();
-    packingTemplateCommitted=true;
     packingFormulaBrowserOpen=false;
     packingFormulaOpen=false;
     selectedPackingUid="";
@@ -193,7 +93,7 @@ public sealed partial class PackspireUiFoundation {
    var edit=PackspireUiFactory.Button("編集",()=>{
     game.UiPackingCapture();
     game.UiOpenPackingLoadout(entry.id);
-    packingTemplateCommitted=false;
+    packingFormulaBrowserOpen=false;
     packingFormulaSection="";
     packingFormulaOpen=true;
     selectedPackingUid="";
@@ -206,231 +106,159 @@ public sealed partial class PackspireUiFoundation {
   }
  }
 
- VisualElement BuildFormulaTemplateCommitted(ActiveStorageFormula formula){
-  var card=Container("ps-rite-template");
-  var head=Container("ps-rite-template-head");
-  head.Add(RiteSectionHead("02","使用中の術式"));
-  var headActions=Container("ps-rite-template-actions");
-  var change=PackspireUiFactory.Button("一覧",()=>{
-   game.UiPackingCapture();
-   packingTemplateCommitted=false;
-   packingFormulaOpen=false;
-   BuildPackingAgain();
-  });
-  change.AddToClassList("ps-rite-template-edit");
-  headActions.Add(change);
-  var edit=PackspireUiFactory.Button("編集",()=>{
-   packingCardsOpen=false;
-   packingFormulaSection="";
-   packingFormulaOpen=true;
-   BuildPackingAgain();
-  });
-  edit.AddToClassList("ps-rite-template-edit");
-  headActions.Add(edit);
-  head.Add(headActions);
-  card.Add(head);
 
-  var loadoutName=game.UiMeta?.loadouts?.FirstOrDefault(x=>x.id==game.UiMeta.selectedLoadoutId)?.name??"無名の術式";
-  var name=new Label(loadoutName){pickingMode=PickingMode.Ignore};
-  name.AddToClassList("ps-rite-template-list-name");
-  card.Add(name);
-  var sub=new Label($"{formula.core.name} · {formula.conduit.name} · {formula.resonance.name} · {formula.stability.name}"){pickingMode=PickingMode.Ignore};
-  sub.AddToClassList("ps-rite-template-list-sub");
-  card.Add(sub);
+ void CloseFormulaPopup(){
+  packingFormulaOpen=false;packingFormulaSection="";
+  game.UiPackingCapture();BuildPackingAgain();
+ }
 
-  var save=PackspireUiFactory.Button(game.UiPackingAtBase?"この術式を保存":"保存して進む",()=>{
-   game.UiPackingSave();
-   if(game.UiPackingAtBase){
-    ShowToast("術式プリセットを保存しました");
-    BuildPackingAgain();
+ sealed class PackingEffectRow {
+  public string title,detail,kind="LINK";
+  public string[] uids;
+  public bool active=true;
+ }
+ List<PackingEffectRow> PackingEffectRows(RunState run,DeckBuildResult build){
+  var result=new List<PackingEffectRow>();
+  var formula=build.formula;
+  foreach(var a in run.placements)
+  foreach(var b in run.placements.Where(x=>string.CompareOrdinal(x.itemUid,a.itemUid)>0&&BackpackSystem.Adjacent(run,a,x))){
+   var ia=run.inventory.First(x=>x.uid==a.itemUid);
+   var ib=run.inventory.First(x=>x.uid==b.itemUid);
+   foreach(var rule in formula.resonance.links.Where(x=>LinkPairMatches(x,ia,ib))){
+    result.Add(new PackingEffectRow{
+     title=PackingItemName(ia)+" × "+PackingItemName(ib),uids=new[]{ia.uid,ib.uid},
+     detail=PackingScopedLinkDetail(rule,ia,ib)
+    });
    }
-  });
-  save.AddToClassList("ps-rite-save");
-  save.AddToClassList("ps-rite-template-save");
-  card.Add(save);
-  return card;
+  }
+  // Card replacement is applied once per host/rule, not once per neighboring copy.
+  foreach(var hostPlacement in run.placements){
+   var host=run.inventory.First(x=>x.uid==hostPlacement.itemUid);
+   foreach(var upgrade in formula.resonance.upgrades.Where(x=>x.hostTemplate==host.templateId)){
+    var neighbors=run.placements.Where(x=>x.itemUid!=host.uid&&BackpackSystem.Adjacent(run,hostPlacement,x))
+     .Select(x=>run.inventory.First(i=>i.uid==x.itemUid)).Where(x=>x.templateId==upgrade.neighborTemplate).ToList();
+    if(neighbors.Count==0)continue;
+    bool emitted=build.candidates.Any(x=>x.sourceItemUid==host.uid&&x.id==upgrade.toCardId);
+    var card=GameCatalog.Cards.TryGetValue(upgrade.toCardId,out var definition)?definition.name:upgrade.toCardId;
+    result.Add(new PackingEffectRow{
+     title=PackingItemName(host)+" → "+card,kind="札変化",active=emitted,
+     uids=new[]{host.uid}.Concat(neighbors.Select(x=>x.uid)).ToArray(),
+     detail=PackingItemName(neighbors[0])+"の隣接"+(neighbors.Count>1?$"（{neighbors.Count}箇所、変化は1回）":"")+
+      (emitted?"":" ／ 現在の生成札には含まれません")
+    });
+   }
+  }
+  return result;
  }
-
- void CloseFormulaPopup(bool commitTemplate){
-  packingFormulaOpen=false;
-  packingFormulaSection="";
-  if(commitTemplate)packingTemplateCommitted=true;
-  game.UiPackingCapture();
-  BuildPackingAgain();
+ static string PackingItemName(ItemInstance item)=>GameCatalog.Items[item.templateId].name;
+ string PackingScopedLinkDetail(ResonanceLinkDef rule,ItemInstance a,ItemInstance b){
+  if(!string.IsNullOrEmpty(rule.templateB)){
+   var sourceA=a.templateId==rule.templateA?a:b;
+   var sourceB=a.templateId==rule.templateB?a:b;
+   var parts=new List<string>();
+   if(rule.damageBonus>0)parts.Add(PackingItemName(sourceA)+$"の攻撃札 +{rule.damageBonus}");
+   if(rule.blockBonus>0)parts.Add(PackingItemName(sourceB)+$"の防御札 +{rule.blockBonus}");
+   if(rule.costReduce>0)parts.Add($"両装備の札 コスト −{rule.costReduce}");
+   return string.Join(" ／ ",parts);
+  }
+  var target=rule.typeB.HasValue
+   ?(GameCatalog.Items[a.templateId].type==rule.typeB.Value?a:b)
+   :(a.templateId==rule.templateA?b:a);
+  return PackingItemName(target)+"の札: "+LinkEffectLabel(rule);
  }
+ void RefreshPackingEffects(RunState run,DeckBuildResult build){
+  var selected=run.inventory.FirstOrDefault(x=>x.uid==selectedPackingUid);
+  var rows=PackingEffectRows(run,build);
+  var root=packingRootElement;
+  var shape=RequireViewElement<VisualElement>(root,"packing-selected-shape");
+  shape.Clear();packingRightScrollElement.Clear();
+  bool placed=selected!=null&&run.placements.Any(x=>x.itemUid==selected.uid);
+  RequireViewElement<Label>(root,"packing-selected-name").text=selected==null?"装備を選択":PackingItemName(selected);
+  RequireViewElement<Label>(root,"packing-selected-status").text=selected==null?"一覧か盤上の装備をクリック":$"{(placed?"配置中":"未配置")} ／ {GameCatalog.Items[selected.templateId].cells.Length}マス";
+  var description=RequireViewElement<Label>(root,"packing-selected-description");
+  description.text=selected==null?"":GameCatalog.Items[selected.templateId].description;
+  description.tooltip=description.text;
+  RequireViewElement<Label>(root,"packing-selected-rotation").text=selected==null?"":$"{packingRotation*90}° ／ {RotationLabel(build.formula.core.rotation)}";
+  RequireViewElement<Button>(root,"packing-rotate").SetEnabled(selected!=null);
+  RequireViewElement<Button>(root,"packing-remove").SetEnabled(placed);
+  if(selected!=null){
+   shape.Add(BuildShapePreview(selected,packingRotation));
+   var placement=run.placements.FirstOrDefault(x=>x.itemUid==selected.uid);
+   if(placement!=null){
+    foreach(var pair in BackpackSystem.Analyze(selected,placement,run).matches.Where(x=>x.Value>0))
+     packingRightScrollElement.Add(RiteEffectCard(ElementLabel(pair.Key)+$"一致 +{pair.Value}","寄与",DeliverySealSystem.Name(pair.Key)+"の回数に寄与",true));
+   }
+   var related=rows.Where(x=>x.uids.Contains(selected.uid)).ToList();
+   foreach(var row in related)packingRightScrollElement.Add(PackingEffectView(row));
+   foreach(var rule in build.formula.resonance.links){
+    if(!PackingRuleRelevant(rule,selected))continue;
+    if(placed&&run.placements.Any(x=>x.itemUid!=selected.uid&&BackpackSystem.Adjacent(run,placement,x)&&LinkPairMatches(rule,selected,run.inventory.First(i=>i.uid==x.itemUid))))continue;
+    packingRightScrollElement.Add(RiteEffectCard(PackingInactiveTitle(rule,selected),"未成立",PackingInactiveDetail(rule,selected),false));
+   }
+   if(packingRightScrollElement.childCount==0)packingRightScrollElement.Add(RiteEmptyNote("この装備の関連効果はありません"));
+  }else packingRightScrollElement.Add(RiteEmptyNote("選択すると、形状とその装備に関係する効果を確認できます。全体の結果は下に表示します。"));
 
- VisualElement BuildFormulaTemplateRow(string kind,string value){
-  var row=Container("ps-rite-template-row");
-  var kindLabel=new Label(kind){pickingMode=PickingMode.Ignore};
-  kindLabel.AddToClassList("ps-rite-template-kind");
-  var valueLabel=new Label(value){pickingMode=PickingMode.Ignore};
-  valueLabel.AddToClassList("ps-rite-template-value");
-  row.Add(kindLabel);
-  row.Add(valueLabel);
-  return row;
- }
-
- void AddPackingDeliverySealLines(VisualElement right,RunState run,DeckBuildResult build){
-  right.Add(RiteSectionHead("","配達印"));
+  packingLinksScrollElement.Clear();
+  foreach(var row in rows)packingLinksScrollElement.Add(PackingEffectView(row));
+  if(build.stability.runaway)packingLinksScrollElement.Add(RiteEffectCard("安定式","過負荷","現在の生成札には過負荷の補正が適用されています。",true));
+  if(rows.Count==0&&!build.stability.runaway)packingLinksScrollElement.Add(RiteEmptyNote("成立中のLINK・札変化はありません"));
+  RequireViewElement<Label>(root,"packing-link-summary").text=$"LINK {rows.Count(x=>x.kind=="LINK")}箇所 ／ 札変化 {rows.Count(x=>x.kind=="札変化")} ／ 生成札 {build.candidates.Count}";
+  packingColorsScrollElement.Clear();
   var seals=PackingDeliverySeals(run,build);
-  foreach(var seal in seals)
-   right.Add(RiteEffectCard(
-    seal.name,
-    $"{seal.source}  /  {seal.charges}回",
-    $"{seal.text}  [{seal.target}]",
-    seal.charges>0));
-  if(seals.Count==0)right.Add(RiteEmptyNote("現在使用できる配達印はありません。"));
- }
-
- void AddPackingSealContribution(VisualElement right,RunState run,DeckBuildResult build,ItemInstance focus){
-  right.Add(RiteSectionHead("","配達印への寄与"));
-  var placement=run.placements.FirstOrDefault(value=>value.itemUid==focus.uid);
-  if(placement==null){
-   right.Add(RiteEmptyNote("術式へ配置すると、色一致が配達印の使用回数になります。"));
-   return;
+  foreach(Element element in System.Enum.GetValues(typeof(Element))){
+   build.colors.TryGetValue(element,out int matches);
+   var seal=seals.FirstOrDefault(x=>x.key=="color-"+element.ToString().ToLowerInvariant());
+   int charges=seal?.charges??0,max=seal?.maxCharges??0;
+   var card=RiteEffectCard(ElementLabel(element)+$"一致 {matches}マス",charges>0?$"{charges}回":"0回",
+    DeliverySealSystem.Name(element)+(max>0?$" ／ 残り{charges}/{max}回":" ／ 未成立")+"\n"+DeliverySealSystem.Effect(element),matches>0);
+   card.RegisterCallback<PointerEnterEvent>(_=>HighlightPackingColor(element));
+   card.RegisterCallback<PointerLeaveEvent>(_=>HighlightPackingItems(System.Array.Empty<string>()));
+   packingColorsScrollElement.Add(card);
   }
-  var analysis=BackpackSystem.Analyze(focus,placement,run);
-  int lines=0;
-  foreach(var pair in analysis.matches.Where(value=>value.Value>0)){
-   int charges=DeliverySealSystem.Charges(pair.Key,build.colors);
-   right.Add(RiteEffectCard(
-    DeliverySealSystem.Name(pair.Key),
-    $"{ElementLabel(pair.Key)}一致 +{pair.Value}",
-    $"術式全体で {charges}回使用可能。{DeliverySealSystem.Effect(pair.Key)}",
-    charges>0));
-   lines++;
+  RequireViewElement<Label>(root,"packing-color-summary").text=$"色一致 {build.colors.Values.Sum()}マス ／ 配達印 {seals.Sum(x=>x.charges)}回";
+ }
+ bool PackingRuleRelevant(ResonanceLinkDef rule,ItemInstance focus)=>focus.templateId==rule.templateA||focus.templateId==rule.templateB||
+  (rule.typeB.HasValue&&GameCatalog.Items[focus.templateId].type==rule.typeB.Value)||(!rule.typeB.HasValue&&string.IsNullOrEmpty(rule.templateB));
+ string PackingInactiveTitle(ResonanceLinkDef rule,ItemInstance focus){
+  string a=GameCatalog.Items.TryGetValue(rule.templateA??"",out var def)?def.name:"装備";
+  string b=GameCatalog.Items.TryGetValue(rule.templateB??"",out var other)?other.name:rule.typeB.HasValue?PackingTypeLabel(rule.typeB.Value):"隣の装備";
+  return a+" × "+b;
+ }
+ string PackingInactiveDetail(ResonanceLinkDef rule,ItemInstance focus)=>"隣接すると "+LinkEffectLabel(rule);
+ static string PackingTypeLabel(ItemType type)=>type switch{ItemType.Weapon=>"武器",ItemType.Armor=>"防具",ItemType.Rune=>"ルーン",_=>"道具"};
+ VisualElement PackingEffectView(PackingEffectRow row){
+  var view=RiteEffectCard(row.title,row.kind,row.detail,row.active);
+  view.userData=row.uids;
+  view.RegisterCallback<PointerEnterEvent>(_=>HighlightPackingItems(row.uids));
+  view.RegisterCallback<PointerLeaveEvent>(_=>HighlightPackingItems(System.Array.Empty<string>()));
+  view.RegisterCallback<ClickEvent>(evt=>{
+   var item=game.UiRun.inventory.FirstOrDefault(x=>x.uid==row.uids[0]);
+   if(item==null)return;
+   selectedPackingUid=item.uid;
+   packingRotation=game.UiRun.placements.FirstOrDefault(x=>x.itemUid==item.uid)?.rotation??0;
+   packingRightScrollY=0;BuildPackingAgain();evt.StopPropagation();
+  });
+  return view;
+ }
+ void HighlightPackingItems(IEnumerable<string> uids){
+  if(packingGridElement==null||game.UiRun==null)return;
+  var indices=new HashSet<int>();
+  foreach(var p in game.UiRun.placements.Where(x=>uids.Contains(x.itemUid))){
+   var item=game.UiRun.inventory.First(x=>x.uid==p.itemUid);
+   foreach(var pos in BackpackSystem.Analyze(item,p,game.UiRun).cells)indices.Add(pos.y*BackpackSystem.GridWidth(game.UiRun)+pos.x);
   }
-  if(lines==0)right.Add(RiteEmptyNote("この配置から得られる色一致はありません。"));
+  foreach(var child in packingGridElement.Children())
+   if(child.userData is int index)child.EnableInClassList("ps-related",indices.Contains(index));
  }
-
- void AddPackingLinkLines(VisualElement right,RunState run,DeckBuildResult build,ItemInstance focus){
-  right.Add(RiteSectionHead("","隣接 LINK"));
-  var formula=build.formula.core!=null?build.formula:BackpackSystem.Formula(run);
-  var links=formula.resonance.links??System.Array.Empty<ResonanceLinkDef>();
-  var upgrades=formula.resonance.upgrades??System.Array.Empty<ResonanceUpgradeDef>();
-  if(links.Length==0&&upgrades.Length==0){
-   right.Add(RiteEmptyNote("この共鳴式には隣接LINKがありません"));
-   return;
+ void HighlightPackingColor(Element element){
+  if(packingGridElement==null||game.UiRun==null)return;
+  foreach(var child in packingGridElement.Children()){
+   if(child.userData is not int index)continue;
+   var placement=PlacementAt(game.UiRun,index);
+   child.EnableInClassList("ps-related",placement!=null&&CellElementAt(game.UiRun,placement,index)==element&&StorageFormulaSystem.BoardAt(BackpackSystem.Formula(game.UiRun).core,index)==element);
   }
-
-  Placement focusPlacement=focus!=null?run.placements.FirstOrDefault(x=>x.itemUid==focus.uid):null;
-  int lines=0;
-
-  foreach(var link in links){
-   if(focus!=null&&!LinkOwnedBy(link,focus))continue;
-   bool active=focus!=null
-    ?IsLinkActiveBeside(run,focus,focusPlacement,link)
-    :IsLinkActiveAnywhere(run,link);
-   if(focus==null&&!active)continue;
-   string state=active?"発動中":"未発動";
-   right.Add(RiteEffectCard(link.label,state,LinkEffectLabel(link),active));
-   lines++;
-  }
-
-  foreach(var upgrade in upgrades){
-   // カード変化は host（効果を受ける側）のリンクとしてだけ表示する
-   if(focus!=null&&focus.templateId!=upgrade.hostTemplate)continue;
-   bool active=focus!=null
-    ?IsUpgradeActiveBeside(run,focus,focusPlacement,upgrade)
-    :IsUpgradeActiveAnywhere(run,upgrade);
-   if(focus==null&&!active)continue;
-   string toName=GameCatalog.Cards.TryGetValue(upgrade.toCardId,out var card)?card.name:upgrade.toCardId;
-   string hostName=GameCatalog.Items.TryGetValue(upgrade.hostTemplate,out var host)?host.name:upgrade.hostTemplate;
-   string neighborName=GameCatalog.Items.TryGetValue(upgrade.neighborTemplate,out var neighbor)?neighbor.name:upgrade.neighborTemplate;
-   string state=active?"発動中":"未発動";
-   right.Add(RiteEffectCard($"カード変化  {hostName} × {neighborName}",state,$"→ {toName}",active));
-   lines++;
-  }
-
-  if(lines==0)right.Add(RiteEmptyNote(focus!=null?"この装備が持つ隣接LINKはありません":"発動中の隣接LINKはありません"));
  }
 
- /// <summary>
- /// LINKの「効果持ち」だけに表示する。
- /// 固有ペア（剣×盾）は双方。templateA×種別／何でも（熾火×武器、結晶×装備）は templateA のみ。
- /// </summary>
- bool LinkOwnedBy(ResonanceLinkDef link,ItemInstance item){
-  if(!string.IsNullOrEmpty(link.templateA)&&!string.IsNullOrEmpty(link.templateB))
-   return item.templateId==link.templateA||item.templateId==link.templateB;
-  if(!string.IsNullOrEmpty(link.templateA))
-   return item.templateId==link.templateA;
-  return false;
- }
-
- bool IsLinkActiveBeside(RunState run,ItemInstance focus,Placement placement,ResonanceLinkDef link){
-  if(placement==null)return false;
-  foreach(var other in run.placements.Where(x=>x.itemUid!=focus.uid&&BackpackSystem.Adjacent(run,placement,x))){
-   var neighbor=run.inventory.FirstOrDefault(x=>x.uid==other.itemUid);
-   if(neighbor!=null&&LinkPairMatches(link,focus,neighbor))return true;
-  }
-  return false;
- }
-
- bool IsLinkActiveAnywhere(RunState run,ResonanceLinkDef link){
-  foreach(var a in run.placements)
-  foreach(var b in run.placements.Where(x=>string.CompareOrdinal(x.itemUid,a.itemUid)>0&&BackpackSystem.Adjacent(run,a,x))){
-   var ia=run.inventory.FirstOrDefault(x=>x.uid==a.itemUid);
-   var ib=run.inventory.FirstOrDefault(x=>x.uid==b.itemUid);
-   if(ia!=null&&ib!=null&&LinkPairMatches(link,ia,ib))return true;
-  }
-  return false;
- }
-
- bool IsUpgradeActiveBeside(RunState run,ItemInstance focus,Placement placement,ResonanceUpgradeDef upgrade){
-  if(placement==null)return false;
-  foreach(var other in run.placements.Where(x=>x.itemUid!=focus.uid&&BackpackSystem.Adjacent(run,placement,x))){
-   var neighbor=run.inventory.FirstOrDefault(x=>x.uid==other.itemUid);
-   if(neighbor!=null&&UpgradePairMatches(upgrade,focus.templateId,neighbor.templateId))return true;
-  }
-  return false;
- }
-
- bool IsUpgradeActiveAnywhere(RunState run,ResonanceUpgradeDef upgrade){
-  foreach(var a in run.placements)
-  foreach(var b in run.placements.Where(x=>string.CompareOrdinal(x.itemUid,a.itemUid)>0&&BackpackSystem.Adjacent(run,a,x))){
-   var ia=run.inventory.FirstOrDefault(x=>x.uid==a.itemUid);
-   var ib=run.inventory.FirstOrDefault(x=>x.uid==b.itemUid);
-   if(ia!=null&&ib!=null&&UpgradePairMatches(upgrade,ia.templateId,ib.templateId))return true;
-  }
-  return false;
- }
-
- Label RiteStatusLine(string text,bool active){
-  var label=new Label(text){pickingMode=PickingMode.Ignore};
-  label.AddToClassList("ps-rite-status");
-  if(active)label.AddToClassList("ps-rite-status-active");
-  return label;
- }
-
- void DressRiteFrame(VisualElement panel){
-  if(panel==null)return;
-  panel.Add(RiteTick("ps-rite-tick-tl"));
-  panel.Add(RiteTick("ps-rite-tick-tr"));
-  panel.Add(RiteTick("ps-rite-tick-bl"));
-  panel.Add(RiteTick("ps-rite-tick-br"));
- }
-
- VisualElement RiteTick(string cornerClass){
-  var tick=Container("ps-rite-tick "+cornerClass);
-  tick.pickingMode=PickingMode.Ignore;
-  return tick;
- }
-
- VisualElement RiteSectionHead(string index,string title){
-  var head=Container("ps-rite-panel-head");
-  if(!string.IsNullOrEmpty(index)){
-   var idx=new Label(index){pickingMode=PickingMode.Ignore};
-   idx.AddToClassList("ps-rite-panel-index");
-   head.Add(idx);
-  }
-  var lab=new Label(title){pickingMode=PickingMode.Ignore};
-  lab.AddToClassList("ps-rite-panel-title");
-  head.Add(lab);
-  var rule=Container("ps-rite-panel-rule");
-  rule.pickingMode=PickingMode.Ignore;
-  head.Add(rule);
-  return head;
- }
 
  VisualElement RiteEffectCard(string title,string state,string detail,bool active){
   var card=Container("ps-rite-effect");
@@ -458,10 +286,26 @@ public sealed partial class PackspireUiFoundation {
   return label;
  }
 
- VisualElement RiteMetaLine(string text){
-  var label=new Label(text){pickingMode=PickingMode.Ignore};
-  label.AddToClassList("ps-rite-meta");
-  return label;
+
+
+ bool IsLinkActiveAnywhere(RunState run,ResonanceLinkDef link){
+  foreach(var a in run.placements)
+  foreach(var b in run.placements.Where(x=>string.CompareOrdinal(x.itemUid,a.itemUid)>0&&BackpackSystem.Adjacent(run,a,x))){
+   var ia=run.inventory.FirstOrDefault(x=>x.uid==a.itemUid);
+   var ib=run.inventory.FirstOrDefault(x=>x.uid==b.itemUid);
+   if(ia!=null&&ib!=null&&LinkPairMatches(link,ia,ib))return true;
+  }
+  return false;
+ }
+
+ bool IsUpgradeActiveAnywhere(RunState run,ResonanceUpgradeDef upgrade){
+  foreach(var a in run.placements)
+  foreach(var b in run.placements.Where(x=>string.CompareOrdinal(x.itemUid,a.itemUid)>0&&BackpackSystem.Adjacent(run,a,x))){
+   var ia=run.inventory.FirstOrDefault(x=>x.uid==a.itemUid);
+   var ib=run.inventory.FirstOrDefault(x=>x.uid==b.itemUid);
+   if(ia!=null&&ib!=null&&UpgradePairMatches(upgrade,ia.templateId,ib.templateId))return true;
+  }
+  return false;
  }
 
  bool LinkPairMatches(ResonanceLinkDef link,ItemInstance a,ItemInstance b){
@@ -489,42 +333,11 @@ public sealed partial class PackspireUiFoundation {
   return parts.Count==0?"効果あり":string.Join("　",parts);
  }
 
- VisualElement BuildPackingSealCounters(RunState run,DeckBuildResult build){
-  var bar=Container("ps-rite-seal-bar");
-  foreach(var seal in PackingDeliverySeals(run,build))
-   bar.Add(PackingSealChip(seal));
-  return bar;
- }
 
  List<DeliverySealState> PackingDeliverySeals(RunState run,DeckBuildResult build){
   var current=run?.courierRoute?.seals;
-  return current==null
-   ?DeliverySealSystem.Build(run,game.UiMeta,build.colors)
-   :DeliverySealSystem.Refresh(current,run,game.UiMeta,build.colors).Where(seal=>seal.available).ToList();
+  var all=current==null?DeliverySealSystem.Build(run,game.UiMeta,build.colors):DeliverySealSystem.Refresh(current,run,game.UiMeta,build.colors);
+  return all.Where(x=>x.available&&!x.roleSignature).ToList();
  }
-
- VisualElement PackingSealChip(DeliverySealState seal){
-  var chip=Container("ps-rite-seal-chip");
-  chip.AddToClassList("ps-seal-"+seal.target.ToLowerInvariant());
-  Texture2D orbTex=null;
-  Element element;
-  if(seal.key.StartsWith("color-")&&System.Enum.TryParse(seal.key.Substring(6),true,out element))
-   orbTex=RiteOrbTexture(element);
-  if(orbTex!=null){
-   var orb=new Image{image=orbTex,scaleMode=ScaleMode.ScaleToFit,pickingMode=PickingMode.Ignore};
-   orb.AddToClassList("ps-rite-seal-orb");
-   orb.AddToClassList("ps-rite-orb-live");
-   chip.Add(orb);
-  } else {
-   var orb=Container("ps-rite-seal-orb");
-   orb.pickingMode=PickingMode.Ignore;
-   chip.Add(orb);
-  }
-  var value=new Label($"{seal.name} ×{seal.charges}"){pickingMode=PickingMode.Ignore};
-  value.AddToClassList("ps-rite-seal-value");
-  chip.Add(value);
-  return chip;
- }
-
 }
 }

@@ -136,6 +136,9 @@ public sealed partial class PackspireUiFoundation {
   packingPopupElement=null;
   packingEquipScrollElement=null;
   packingRightScrollElement=null;
+  packingBoardScrollElement=null;
+  packingLinksScrollElement=null;
+  packingColorsScrollElement=null;
  }
 
  void ClearShopReferences(){

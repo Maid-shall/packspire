@@ -79,6 +79,7 @@ public sealed partial class PackspireUiFoundation {
  void HandleNavInput(){
   if(!uiReady||game==null||!ShouldShowNavHud())return;
   if(PackspireInput.CancelPressed()){
+   if(game.UiScreen==ScreenId.Pack&&TryHandlePackingCancel())return;
    if(TryCloseHeirloomPickerFromInput())return;
    NavGoBack();
   }
@@ -138,9 +139,11 @@ public sealed partial class PackspireUiFoundation {
   }
   navHudRoot.pickingMode=PickingMode.Ignore;
   bool vaultOwnsBack=game.UiScreen==ScreenId.Vault&&vaultFixedBackButton!=null;
-  navBackButton.style.display=vaultOwnsBack?DisplayStyle.None:DisplayStyle.Flex;
+  bool packingOwnsBack=game.UiScreen==ScreenId.Pack&&packingRootElement!=null;
+  navBackButton.style.display=vaultOwnsBack||packingOwnsBack?DisplayStyle.None:DisplayStyle.Flex;
   navBackButton.SetEnabled(navBackStack.Count>0);
   vaultFixedBackButton?.SetEnabled(navBackStack.Count>0);
+  if(packingOwnsBack)packingRootElement.Q<Button>("packing-back")?.SetEnabled(navBackStack.Count>0);
   foreach(var child in navMenuDrawer.Children()){
    if(child is not Button item||item.userData is not ScreenId id)continue;
    bool current=id==game.UiScreen;

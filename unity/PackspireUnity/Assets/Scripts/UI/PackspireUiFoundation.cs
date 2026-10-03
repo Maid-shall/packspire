@@ -29,7 +29,6 @@ public sealed partial class PackspireUiFoundation : MonoBehaviour {
  int packingRotation;
  bool packingFormulaOpen,packingCardsOpen;
  string packingFormulaSection="";
- bool packingTemplateCommitted;
  string packingDragUid="";
  string packingEquipFilter="";
  bool packingDragging,packingTapWasSelected,packingDragFromList;

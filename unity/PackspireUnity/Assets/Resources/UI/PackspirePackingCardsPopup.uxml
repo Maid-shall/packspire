@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="ps-rite-popup ps-packing-preserve-selection">
+        <ui:VisualElement class="ps-rite-popup-header">
+            <ui:Label name="packing-cards-title" class="ps-rite-top-name" />
+            <ui:Button name="packing-cards-close" text="閉じる" class="ps-packing-action" />
+        </ui:VisualElement>
+        <ui:Label text="装備由来の札と色一致による配達印です。人物・役職の基本札と固有印は含めません。" class="ps-rite-meta" />
+        <ui:VisualElement class="ps-rite-deck-split">
+            <ui:VisualElement class="ps-rite-deck-col">
+                <ui:Label text="戦闘札 — 現在の配置結果" class="ps-rite-deck-col-title" />
+                <ui:ScrollView name="packing-cards-combat" class="ps-rite-deck-col-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-rite-deck-col">
+                <ui:Label text="色一致の配達印" class="ps-rite-deck-col-title" />
+                <ui:ScrollView name="packing-cards-seals" class="ps-rite-deck-col-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -7,47 +7,13 @@ namespace Packspire {
 public sealed partial class PackspireUiFoundation {
 // Packing formula/card popups and rite-grid previews.
  VisualElement BuildFormulaPopup(RunState run,ActiveStorageFormula formula){
-  var overlay=Container("ps-rite-popup-overlay");
-  overlay.pickingMode=PickingMode.Position;
-  overlay.RegisterCallback<ClickEvent>(evt=>{
-   if(evt.target!=overlay)return;
-   CloseFormulaPopup(true);
-  });
-
-  var panel=Container("ps-rite-popup");
-  panel.AddToClassList("ps-rite-popup-formula");
-  panel.pickingMode=PickingMode.Position;
-  panel.RegisterCallback<ClickEvent>(evt=>evt.StopPropagation());
-
-  DressRiteFrame(panel);
-  var header=Container("ps-rite-popup-header");
-  var headerTitle=Container("ps-rite-popup-title-block");
-  var headerEye=new Label("FORMULA  /  PRESET"){pickingMode=PickingMode.Ignore};
-  headerEye.AddToClassList("ps-rite-top-eyebrow");
-  headerTitle.Add(headerEye);
-  var headerName=new Label("魔法術式"){pickingMode=PickingMode.Ignore};
-  headerName.AddToClassList("ps-rite-top-name");
-  headerTitle.Add(headerName);
-  header.Add(headerTitle);
-  var close=PackspireUiFactory.Button("閉じる",()=>CloseFormulaPopup(true));
-  close.AddToClassList("ps-rite-chip");
-  header.Add(close);
-  panel.Add(header);
-
-  var nameRow=Container("ps-rite-formula-name");
-  var nameLabel=new Label("術式名"){pickingMode=PickingMode.Ignore};
-  nameLabel.AddToClassList("ps-rite-formula-name-label");
-  nameRow.Add(nameLabel);
-  var currentName=game.UiMeta?.loadouts?.FirstOrDefault(x=>x.id==game.UiMeta.selectedLoadoutId)?.name??"新規術式";
-  var nameField=new TextField{value=currentName};
-  nameField.AddToClassList("ps-rite-formula-name-field");
-  nameField.RegisterValueChangedCallback(evt=>game.UiPackingRenameLoadout(evt.newValue));
-  nameRow.Add(nameField);
-  panel.Add(nameRow);
-
-  var body=Container("ps-rite-formula-body");
-  var rail=Container("ps-rite-formula-rail");
-  rail.RegisterCallback<ClickEvent>(evt=>evt.StopPropagation());
+  var overlay=CloneView("UI/PackspirePackingFormulaPopup","ps-rite-popup-overlay");
+  overlay.RegisterCallback<ClickEvent>(evt=>{if(evt.target==overlay)CloseFormulaPopup();});
+  RequireViewElement<Button>(overlay,"packing-formula-close").clicked+=CloseFormulaPopup;
+  var field=RequireViewElement<TextField>(overlay,"packing-formula-name");
+  field.SetValueWithoutNotify(game.UiMeta.loadouts.FirstOrDefault(x=>x.id==game.UiMeta.selectedLoadoutId)?.name??"新規術式");
+  field.RegisterValueChangedCallback(evt=>game.UiPackingRenameLoadout(evt.newValue));
+  var rail=RequireViewElement<ScrollView>(overlay,"packing-formula-components");
   rail.Add(BuildFormulaAccordion(
    "core","収納核",formula.core.name,formula.core.description,
    StorageFormulaCatalog.Cores.Values.Select(x=>(x.id,x.name,x.description)),
@@ -68,26 +34,12 @@ public sealed partial class PackspireUiFoundation {
    StorageFormulaCatalog.Stabilities.Values.Select(x=>(x.id,x.name,x.description)),
    id=>{game.UiPackingSetStability(id);BuildPackingAgain();},
    formula.stability.id));
-  body.Add(rail);
 
-  var stage=Container("ps-rite-formula-stage");
-  stage.pickingMode=PickingMode.Position;
-  stage.RegisterCallback<ClickEvent>(evt=>{
-   evt.StopPropagation();
-   if(string.IsNullOrEmpty(packingFormulaSection))return;
-   packingFormulaSection="";
-   BuildPackingAgain();
-  });
-  stage.Add(RiteSectionHead("","収納盤の構成"));
-  stage.Add(RiteMetaLine($"{formula.core.width} × {formula.core.height} マス"));
-  stage.Add(RiteMetaLine(formula.core.description));
-  stage.Add(RiteMetaLine(formula.conduit.description));
-  stage.Add(RiteMetaLine(formula.resonance.description));
-  stage.Add(RiteMetaLine(formula.stability.description));
-  body.Add(stage);
-
-  panel.Add(body);
-  overlay.Add(panel);
+  RequireViewElement<Label>(overlay,"packing-formula-dimensions").text=$"{formula.core.width} × {formula.core.height} ／ {RotationLabel(formula.core.rotation)}";
+  RequireViewElement<Label>(overlay,"packing-formula-core").text=formula.core.description;
+  RequireViewElement<Label>(overlay,"packing-formula-conduit").text=formula.conduit.description;
+  RequireViewElement<Label>(overlay,"packing-formula-resonance").text=formula.resonance.description;
+  RequireViewElement<Label>(overlay,"packing-formula-stability").text=formula.stability.description;
   return overlay;
  }
 
@@ -143,147 +95,127 @@ public sealed partial class PackspireUiFoundation {
  }
 
  VisualElement BuildCardsPopup(RunState run,DeckBuildResult build){
-  var overlay=Container("ps-rite-popup-overlay");
-  overlay.pickingMode=PickingMode.Position;
-  overlay.RegisterCallback<ClickEvent>(evt=>{
-   if(evt.target==overlay){packingCardsOpen=false;BuildPackingAgain();}
-  });
-
-  var panel=Container("ps-rite-popup");
-  panel.AddToClassList("ps-rite-popup-cards");
-  panel.pickingMode=PickingMode.Position;
-  panel.RegisterCallback<ClickEvent>(evt=>evt.StopPropagation());
-  DressRiteFrame(panel);
-
+  var overlay=CloneView("UI/PackspirePackingCardsPopup","ps-rite-popup-overlay");
+  overlay.RegisterCallback<ClickEvent>(evt=>{if(evt.target==overlay){packingCardsOpen=false;BuildPackingAgain();}});
+  RequireViewElement<Button>(overlay,"packing-cards-close").clicked+=()=>{packingCardsOpen=false;BuildPackingAgain();};
   var seals=PackingDeliverySeals(run,build);
-  var header=Container("ps-rite-popup-header");
-  var headerTitle=Container("ps-rite-popup-title-block");
-  var headerEye=new Label("DECK  /  COMBAT + DELIVERY SEALS"){pickingMode=PickingMode.Ignore};
-  headerEye.AddToClassList("ps-rite-top-eyebrow");
-  headerTitle.Add(headerEye);
-  var headerName=new Label($"戦闘札 {build.candidates.Count} / 配達印 {seals.Sum(value=>value.maxCharges)}"){pickingMode=PickingMode.Ignore};
-  headerName.AddToClassList("ps-rite-top-name");
-  headerTitle.Add(headerName);
-  header.Add(headerTitle);
-  var close=PackspireUiFactory.Button("閉じる",()=>{packingCardsOpen=false;BuildPackingAgain();});
-  close.AddToClassList("ps-rite-chip");
-  header.Add(close);
-  panel.Add(header);
-  panel.Add(RiteMetaLine("装備配置は二つの準備を同時に決めます。隣接LINKは戦闘札を強化し、色一致は航路で使う配達印になります。"));
-
-  var split=Container("ps-rite-deck-split");
-  var combatCol=Container("ps-rite-deck-col");
-  var combatHead=new Label("戦闘札"){pickingMode=PickingMode.Ignore};
-  combatHead.AddToClassList("ps-rite-deck-col-title");
-  combatCol.Add(combatHead);
-  var combatScroll=new ScrollView(ScrollViewMode.Vertical);
-  combatScroll.AddToClassList("ps-rite-deck-col-scroll");
-  var combatCards=Container("ps-rite-cards");
+  RequireViewElement<Label>(overlay,"packing-cards-title").text=$"装備札 {build.candidates.Count} ／ 配達印 {seals.Sum(x=>x.charges)}回";
+  var combat=RequireViewElement<ScrollView>(overlay,"packing-cards-combat");
   foreach(var card in build.candidates){
-   var cardView=Container("ps-rite-card");
-   cardView.AddToClassList("ps-selected");
-   cardView.Add(new Label($"◆ {card.name}  {card.cost}EN\n{card.text}"){pickingMode=PickingMode.Ignore});
-   combatCards.Add(cardView);
+   var stats=new List<string>();
+   if(card.damage>0)stats.Add($"攻撃 {card.damage}");
+   if(card.block>0)stats.Add($"防御 {card.block}");
+   if(card.heal>0)stats.Add($"回復 {card.heal}");
+   string detail=card.source+"\n"+(stats.Count>0?"現在: "+string.Join(" ／ ",stats)+"\n基礎効果: ":"")+card.text;
+   combat.Add(RiteEffectCard(card.name,$"{card.cost}EN",detail,true));
   }
-  if(build.candidates.Count==0)combatCards.Add(PackspireUiFactory.Body("装備を術式へ配置すると戦闘札が追加されます。"));
-  combatScroll.Add(combatCards);
-  combatCol.Add(combatScroll);
-  split.Add(combatCol);
-
-  var sealCol=Container("ps-rite-deck-col");
-  sealCol.AddToClassList("ps-rite-deck-col-seals");
-  var sealHead=new Label("配達印"){pickingMode=PickingMode.Ignore};
-  sealHead.AddToClassList("ps-rite-deck-col-title");
-  sealCol.Add(sealHead);
-  var sealScroll=new ScrollView(ScrollViewMode.Vertical);
-  sealScroll.AddToClassList("ps-rite-deck-col-scroll");
-  var sealCards=Container("ps-rite-cards");
-  foreach(var seal in seals){
-   var sealView=Container("ps-rite-card");
-   sealView.AddToClassList("ps-rite-card-seal");
-   if(seal.roleSignature)sealView.AddToClassList("ps-role-signature");
-   sealView.Add(new Label($"◆ {seal.name}  ×{seal.maxCharges}\n{seal.source} / {seal.text}"){pickingMode=PickingMode.Ignore});
-   sealCards.Add(sealView);
-  }
-  if(seals.Count==0)sealCards.Add(PackspireUiFactory.Body("色を一致させると配達印が追加されます。"));
-  sealScroll.Add(sealCards);
-  sealCol.Add(sealScroll);
-  split.Add(sealCol);
-
-  panel.Add(split);
-  overlay.Add(panel);
+  if(build.candidates.Count==0)combat.Add(RiteEmptyNote("装備を盤へ配置すると戦闘札が追加されます。"));
+  var sealList=RequireViewElement<ScrollView>(overlay,"packing-cards-seals");
+  foreach(var seal in seals)sealList.Add(RiteEffectCard(seal.name,$"残り{seal.charges}/{seal.maxCharges}回",seal.source+" ／ "+seal.text,true));
+  if(seals.Count==0)sealList.Add(RiteEmptyNote("盤と装備の色を一致させると配達印が追加されます。"));
   return overlay;
  }
 
  VisualElement BuildRiteGrid(RunState run,ActiveStorageFormula formula){
-  int width=formula.core.width,cells=formula.core.width*formula.core.height;
+  int width=formula.core.width,cells=formula.core.CellCount;
   var grid=Container("ps-rite-grid");
   packingGridElement=grid;
+  grid.RegisterCallback<CustomStyleResolvedEvent>(_=>ResizePackingBoard());
   for(int index=0;index<cells;index++){
    int cellIndex=index;
-   int cellX=index%width,cellY=index/width;
    var occupant=PlacementAt(run,index);
-   var boardElement=StorageFormulaSystem.BoardAt(formula.core,index);
-   var cell=new VisualElement();
-   cell.userData=cellIndex;
+   var cell=new VisualElement{userData=index,focusable=true};
    cell.AddToClassList("ps-rite-cell");
-   cell.focusable=true;
-   cell.pickingMode=PickingMode.Position;
-   string orbExtra="";
+   var element=StorageFormulaSystem.BoardAt(formula.core,index);
+   var color=occupant!=null?CellElementAt(run,occupant,index):null;
+   cell.Add(BuildRiteOrb(element,color.HasValue?(color.Value==element?"ps-rite-orb-match":"ps-rite-orb-miss"):""));
    if(occupant!=null){
     var item=run.inventory.FirstOrDefault(x=>x.uid==occupant.itemUid);
     if(item!=null){
-     var elementColor=CellElementAt(run,occupant,index);
-     bool match=elementColor.HasValue&&elementColor.Value==boardElement;
-     orbExtra=match?"ps-rite-orb-match":"ps-rite-orb-miss";
+     cell.AddToClassList("ps-occupied");
+     cell.EnableInClassList("ps-selected",item.uid==selectedPackingUid);
+     cell.tooltip=$"{GameCatalog.Items[item.templateId].name} ／ 盤:{ElementLabel(element)}";
+     BindPackingDragSource(cell,item.uid,formula,false,new Vector2Int(index%width-occupant.anchor%width,index/width-occupant.anchor/width));
     }
-   }
-   var orbWrap=BuildRiteOrb(boardElement,orbExtra);
-   orbWrap.pickingMode=PickingMode.Ignore;
-   if(occupant==null)orbWrap.AddToClassList("ps-rite-orb-wrap-open");
-   else orbWrap.AddToClassList("ps-rite-orb-wrap-placed");
-   cell.Add(orbWrap);
-
-   if(occupant!=null){
-    var item=run.inventory.FirstOrDefault(x=>x.uid==occupant.itemUid);
-    if(item!=null){
-     cell.tooltip=GameCatalog.Items[item.templateId].name;
-      var art=VaultItemDisplayArt(item.templateId,"ps-rite-cell-art");
-      art.pickingMode=PickingMode.Ignore;
-      art.style.rotate=new Rotate(Angle.Degrees(occupant.rotation*90f));
-      cell.Add(art);
-      if(item.uid==selectedPackingUid)cell.AddToClassList("ps-selected");
-      int anchorX=occupant.anchor%width,anchorY=occupant.anchor/width;
-      var grip=new Vector2Int(cellX-anchorX,cellY-anchorY);
-      BindPackingDragSource(cell,item.uid,formula,false,grip);
-    }
-   } else {
+   }else{
+    cell.tooltip="盤の属性: "+ElementLabel(element);
     cell.RegisterCallback<ClickEvent>(_=>{
-     if(packingDragging||packingFormulaOpen||packingCardsOpen||string.IsNullOrEmpty(selectedPackingUid))return;
+     if(packingDragging||packingFormulaOpen||packingCardsOpen||packingFormulaBrowserOpen||string.IsNullOrEmpty(selectedPackingUid))return;
      if(!game.UiPackingPlace(selectedPackingUid,cellIndex,packingRotation))ShowToast("そこには置けません");
      BuildPackingAgain();
     });
    }
    grid.Add(cell);
   }
+  foreach(var placement in run.placements){
+   var item=run.inventory.FirstOrDefault(x=>x.uid==placement.itemUid);
+   if(item==null)continue;
+   var visual=Container("ps-rite-board-item");
+   visual.userData=placement;
+   visual.pickingMode=PickingMode.Ignore;
+   var art=VaultItemDisplayArt(item.templateId,"ps-rite-board-item-art");
+   art.pickingMode=PickingMode.Ignore;
+   visual.Add(art);
+   visual.Query<VisualElement>().ForEach(x=>x.pickingMode=PickingMode.Ignore);
+   grid.Add(visual);
+  }
+  // Item colors remain readable above the single equipment image.
+  for(int index=0;index<cells;index++){
+   var occupant=PlacementAt(run,index);
+   var color=occupant!=null?CellElementAt(run,occupant,index):null;
+   if(!color.HasValue)continue;
+   var layer=Container("ps-rite-cell-color-layer");
+   layer.userData=new Vector2Int(index%width,index/width);
+   layer.pickingMode=PickingMode.Ignore;
+   var mark=new Label("◆"){pickingMode=PickingMode.Ignore};
+   mark.AddToClassList("ps-rite-cell-color");
+   mark.AddToClassList("ps-element-"+color.Value.ToString().ToLowerInvariant());
+   mark.tooltip="装備の属性: "+ElementLabel(color.Value);
+   layer.Add(mark);grid.Add(layer);
+  }
   return grid;
  }
 
-
- void BindPackingBoardGeometry(VisualElement host,ActiveStorageFormula formula){
+ void ResizePackingBoard(){
+  if(packingGridElement==null||game.UiRun==null||packingBoardScrollElement==null)return;
+  var formula=BackpackSystem.Formula(game.UiRun);
+  var core=formula.core;
   var grid=packingGridElement;
-  void Resize(){
-   if(host.panel==null||host.contentRect.width<=0||host.contentRect.height<=0)return;
-   float side=Mathf.Floor(Mathf.Min(host.contentRect.width/formula.core.width,host.contentRect.height/formula.core.height));
-   grid.style.width=side*formula.core.width;
-   grid.style.height=side*formula.core.height;
-   foreach(var cell in grid.Children()){
-    cell.style.width=side;
-    cell.style.height=side;
+  if(!grid.customStyle.TryGetValue(new CustomStyleProperty<float>("--packing-cell-side"),out var natural))return;
+  grid.customStyle.TryGetValue(new CustomStyleProperty<float>("--packing-min-cell-side"),out var minimum);
+  float side=Mathf.Max(minimum,Mathf.Floor(natural*packingZoom));
+  grid.style.width=side*core.width;
+  grid.style.height=side*core.height;
+  var viewport=packingBoardScrollElement.contentViewport;
+  float frameX=packingKilnElement.resolvedStyle.paddingLeft+packingKilnElement.resolvedStyle.paddingRight;
+  float frameY=packingKilnElement.resolvedStyle.paddingTop+packingKilnElement.resolvedStyle.paddingBottom;
+  packingRootElement.EnableInClassList("packing--board-overflow-x",side*core.width+frameX>viewport.contentRect.width);
+  packingRootElement.EnableInClassList("packing--board-overflow-y",side*core.height+frameY>viewport.contentRect.height);
+  foreach(var child in grid.Children()){
+   if(child.userData is int){
+    child.style.width=side;child.style.height=side;
+   }else if(child.userData is Placement placement){
+    var item=game.UiRun.inventory.FirstOrDefault(x=>x.uid==placement.itemUid);
+    if(item==null)continue;
+    var layout=BackpackSystem.Layout(GameCatalog.Items[item.templateId],placement.rotation,item);
+    int w=layout.Max(x=>x.pos.x)+1,h=layout.Max(x=>x.pos.y)+1;
+    child.style.left=(placement.anchor%core.width)*side;
+    child.style.top=(placement.anchor/core.width)*side;
+    child.style.width=w*side;child.style.height=h*side;
+    // The image is drawn once in the rotated bounding box, not repeated in every cell.
+    bool quarter=placement.rotation%2!=0;
+    float artWidth=(quarter?h:w)*side,artHeight=(quarter?w:h)*side;
+    var art=child[0];
+    art.style.width=artWidth;art.style.height=artHeight;
+    art.style.left=(w*side-artWidth)/2;
+    art.style.top=(h*side-artHeight)/2;
+    art.style.rotate=new Rotate(Angle.Degrees(placement.rotation*90));
+   }else if(child.userData is Vector2Int position){
+    child.style.left=position.x*side;child.style.top=position.y*side;
+    child.style.width=side;child.style.height=side;
    }
   }
-  host.RegisterCallback<GeometryChangedEvent>(_=>Resize());
-  host.RegisterCallback<AttachToPanelEvent>(_=>host.schedule.Execute(Resize));
+  RequireViewElement<Label>(packingRootElement,"packing-zoom-value").text=$"{Mathf.RoundToInt(side/natural*100)}%";
  }
 
  VisualElement BuildShapePreview(ItemInstance item,int rotation){
