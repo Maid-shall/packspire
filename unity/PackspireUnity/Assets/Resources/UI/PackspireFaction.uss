@@ -1,0 +1,50 @@
+/* Faction: membership takes precedence over the other affiliations. */
+.ps-faction-screen { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; overflow: hidden; color: rgb(228,207,170); -unity-font-definition: resource("Fonts/KleeOne-SemiBold"); }
+.ps-faction-screen .ps-layer-background, .ps-faction-shade, .ps-faction-layout { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.ps-faction-screen .ps-layer-background { background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1"); -unity-background-scale-mode: scale-and-crop; }
+.ps-faction-shade { background-color: rgba(2,5,6,.64); }
+.ps-faction-header { position: absolute; left: 145px; top: 12px; right: 120px; height: 66px; border-bottom-width: 1px; border-bottom-color: rgba(193,152,86,.6); }
+.ps-faction-header-eyebrow { font-size: 10px; color: rgb(65,191,190); }
+.ps-faction-header-title { font-size: 30px; -unity-font-definition: resource("Fonts/NotoSerifJP-VF"); }
+.ps-faction-membership { position: absolute; left: 28px; top: 98px; bottom: 24px; width: 410px; background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1"); -unity-background-scale-mode: stretch-to-fill; overflow: hidden; }
+.ps-faction-membership-eyebrow { position: absolute; left: 130px; top: 36px; font-size: 14px; color: rgb(58,45,32); }
+.ps-faction-membership-emblem { position: absolute; left: 28px; top: 55px; width: 88px; height: 88px; }
+.ps-faction-membership-emblem-image { width: 88px; height: 88px; }
+.ps-faction-membership-name { position: absolute; left: 130px; top: 65px; width: 248px; font-size: 26px; color: rgb(43,33,25); white-space: normal; }
+.ps-faction-membership-rank { position: absolute; left: 130px; top: 112px; width: 242px; font-size: 13px; color: rgb(58,68,57); }
+.ps-faction-emissary-study { display: none; }
+.ps-faction-emissary-host { position: absolute; left: 52px; right: 40px; top: 160px; bottom: 106px; }
+.ps-faction-emissary-image { width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit; }
+.ps-faction-emissary-caption { position: absolute; left: 42px; right: 35px; bottom: 70px; }
+.ps-faction-emissary-name { font-size: 23px; color: rgb(46,33,24); }
+.ps-faction-emissary-title { font-size: 12px; color: rgb(80,58,39); }
+.ps-faction-col-graph { width: auto; min-width: 0; max-width: none; margin: 0; padding: 0; border-right-width: 0; position: absolute; left: 468px; right: 24px; top: 98px; height: 126px; }
+.ps-faction-registry-title { height: 28px; font-size: 16px; }
+.ps-faction-graph-host { flex-grow: 1; }
+.ps-faction-graph-nodes { flex-direction: row; justify-content: space-between; }
+.ps-faction-screen .ps-faction-graph-node { position: relative; left: auto; top: auto; right: auto; bottom: auto; border-radius: 0; align-items: stretch; flex-shrink: 0; width: 24%; height: 88px; margin: 0; padding: 7px; background-color: rgb(15,25,26); border-width: 1px; border-color: rgb(76,82,72); }
+.ps-faction-screen .ps-faction-graph-node.ps-selected { border-color: rgb(64,193,188); background-color: rgb(25,47,47); }
+.ps-faction-screen .ps-faction-graph-node.ps-faction-affiliated { border-bottom-width: 3px; border-bottom-color: rgb(211,171,92); }
+.ps-faction-registry-identity { flex-direction: row; align-items: center; }
+.ps-faction-screen .ps-faction-graph-emblem { width: 49px; height: 58px; flex-shrink: 0; }
+.ps-faction-screen .ps-faction-graph-name { max-width: none; font-size: 14px; white-space: normal; }
+.ps-faction-registry-identity-copy { flex-grow: 1; min-width: 0; }
+.ps-faction-registry-index, .ps-faction-registry-description, .ps-faction-registry-rank, .ps-faction-registry-effect, .ps-faction-registry-next { display: none; }
+.ps-faction-detail-surface { position: absolute; left: 468px; right: 24px; top: 240px; bottom: 24px; padding: 18px; background-color: rgba(6,12,13,.9); border-top-width: 1px; border-top-color: rgb(177,140,82); overflow: hidden; }
+.ps-faction-detail-header { height: 90px; flex-shrink: 0; flex-direction: row; margin-bottom: 12px; }
+.ps-faction-detail-art { width: 80px; height: 80px; margin-right: 15px; }
+.ps-faction-detail-name { font-size: 27px; }
+.ps-faction-detail-identity { flex-grow: 1; }
+.ps-faction-detail-scroll { flex-grow: 1; flex-shrink: 1; min-height: 0; overflow: hidden; }
+.ps-faction-detail-scroll .unity-scroll-view__content-container { padding-right: 10px; }
+.ps-faction-detail-body .ps-mgmt-section { padding: 6px 0; margin-bottom: 7px; }
+.ps-faction-detail-body .ps-mgmt-section-title { font-size: 12px; color: rgb(61,180,177); }
+.ps-faction-detail-body .ps-mgmt-section-body { font-size: 14px; white-space: normal; color: rgb(212,195,162); }
+.ps-faction-detail-body .ps-mgmt-section-v6-rule { display: none; }
+.ps-faction-relation-row { flex-direction: row; justify-content: space-between; padding: 7px; border-bottom-width: 1px; border-bottom-color: rgba(140,116,77,.4); }
+.ps-faction-relation-kind-hostile { color: rgb(211,114,90); }
+.ps-faction-relation-kind-friendly { color: rgb(93,200,174); }
+.ps-faction-screen .ps-progress { height: 6px; min-height: 6px; max-height: 6px; margin: 8px 0; background-color: rgb(30,38,38); }
+.ps-faction-screen .ps-progress-fill { height: 100%; background-color: rgb(65,173,166); }
+.ps-faction-screen .ps-seal-mark { font-size: 12px; color: rgb(229,170,94); }
+.ps-faction-screen .ps-action-secondary { height: 38px; margin-top: 10px; }

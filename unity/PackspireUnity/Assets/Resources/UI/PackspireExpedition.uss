@@ -1,0 +1,1208 @@
+/* Expedition preparation presentation isolated from in-run route and legacy management cascades.
+ * Geometry uses the 1280 x 720 logical PanelSettings coordinate system.
+ */
+
+.ps-expedition-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(225, 202, 164);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-expedition-screen .ps-layer-background,
+.ps-expedition-screen .ps-expedition-shade,
+.ps-expedition-screen .ps-layer-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-expedition-screen .ps-layer-content {
+    flex-direction: column;
+    padding: 0;
+}
+
+.ps-expedition-screen .ps-expedition-shade {
+    background-color: rgba(6, 8, 14, 0.62);
+}
+
+.ps-expedition-screen .ps-expedition-mark {
+    position: absolute;
+    right: 88px;
+    top: 14px;
+    width: 52px;
+    height: 52px;
+    opacity: 0.82;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-icon-expedition-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-expedition-screen .ps-expedition-register {
+    position: absolute;
+    left: -22px;
+    bottom: -24px;
+    width: 132px;
+    height: 132px;
+    opacity: 0.22;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-expedition-screen .ps-expedition-route-decor {
+    position: absolute;
+    left: 46px;
+    bottom: 62px;
+    width: 170px;
+    height: 112px;
+    opacity: 0.16;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-route-arrow-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-expedition-screen .ps-expedition-header-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding-left: 16px;
+}
+
+.ps-expedition-screen .ps-expedition-header-eyebrow {
+    color: rgb(205, 168, 106);
+    font-size: 11px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.ps-expedition-screen .ps-expedition-header-title {
+    color: rgb(234, 214, 179);
+    font-size: 28px;
+    white-space: nowrap;
+}
+
+.ps-expedition-screen .ps-exp-header {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    height: 64px;
+    min-height: 64px;
+    padding-left: 40px;
+    padding-right: 64px;
+    padding-top: 18px;
+}
+
+.ps-expedition-screen{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.ps-exp-header{
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.ps-expedition-body{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 8px 40px 28px 40px;
+}
+
+.ps-exp-col-dest{
+    width: 23%;
+    min-width: 220px;
+    max-width: 28%;
+    flex-shrink: 0;
+    flex-direction: column;
+    min-height: 0;
+    margin-right: 28px;
+}
+
+
+
+.ps-exp-col-detail{
+    width: 37%;
+    min-width: 340px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ps-expedition-detail-column{
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ps-expedition-detail-scroll{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-expedition-detail-body{
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-bottom: 8px;
+}
+
+.ps-expedition-departure-footer{
+    position: relative;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 14px;
+    padding-bottom: 4px;
+    margin-top: 0;
+    background-color: rgba(10, 14, 24, 0.28);
+}
+
+.ps-exp-depart-reason{
+    font-size: 14px;
+    color: rgb(186, 110, 100);
+    margin-bottom: 8px;
+    min-height: 0;
+    white-space: normal;
+}
+
+.ps-expedition-departure-footer .ps-pop-primary.ps-exp-depart-primary,
+.ps-exp-depart-primary{
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ps-expedition-departure-footer .ps-pop-primary.ps-exp-depart-primary:hover,
+.ps-exp-depart-primary:hover{
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-exp-dest-heading{
+    margin-bottom: 12px;
+    padding-left: 2px;
+}
+
+.ps-exp-dest-frame{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.ps-exp-dest-scroll{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding: 4px 2px;
+}
+
+.ps-exp-dest-list{
+    flex-direction: column;
+}
+
+.ps-exp-dest-row{
+    height: 84px;
+    min-height: 84px;
+    max-height: 84px;
+    margin-bottom: 20px;
+}
+
+.ps-exp-dest-row.ps-exp-dest-locked{
+    opacity: 0.78;
+}
+
+.ps-exp-dest-thumb{
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin-right: 12px;
+    margin-left: 6px;
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgba(8, 8, 14, 0.35);
+}
+
+.ps-exp-dest-copy{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ps-exp-dest-name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-exp-dest-sub{
+    margin-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ps-exp-dest-state{
+    margin-left: 6px;
+    min-width: 40px;
+    -unity-text-align: middle-right;
+}
+
+.ps-exp-art-host{
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    position: relative;
+}
+
+.ps-exp-art-image-host{
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+}
+
+.ps-exp-art-image{
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-exp-art-vignette{
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    background-color: rgba(4, 6, 12, 0.16);
+}
+
+.ps-exp-art-lock{
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(8, 6, 14, 0.62);
+    padding: 16px;
+    flex-direction: column;
+}
+
+.ps-exp-art-lock-title{
+    font-size: 20px;
+    color: rgb(236, 226, 208);
+    margin-bottom: 8px;
+    -unity-font-style: bold;
+}
+
+.ps-exp-art-caption{
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    padding: 28px 18px 18px 18px;
+    background-color: rgba(6, 8, 14, 0.58);
+    flex-direction: column;
+}
+
+.ps-exp-art-caption-name{
+    font-size: 18px;
+    color: rgb(236, 226, 208);
+    -unity-font-style: bold;
+}
+
+.ps-exp-art-caption-sub{
+    font-size: 13px;
+    color: rgb(168, 158, 178);
+    margin-top: 4px;
+    white-space: normal;
+}
+
+.ps-exp-info-mark{
+    display: none;
+}
+
+.ps-exp-diff-pips{
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.ps-exp-diff-pip{
+    font-size: 14px;
+    color: rgba(120, 100, 110, 0.55);
+    margin-right: 4px;
+}
+
+.ps-exp-diff-pip-on{
+    color: rgb(186, 82, 82);
+}
+
+.ps-exp-character-portrait-frame{
+    width: 100%;
+    height: 160px;
+    min-height: 140px;
+    max-height: 180px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-exp-character-banner{
+    position: relative;
+    width: 100%;
+    height: 156px;
+    min-height: 156px;
+    max-height: 156px;
+    margin-top: 4px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: rgba(8, 10, 16, 0.88);
+}
+
+.ps-exp-character-art-clip{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.ps-exp-character-art-image{
+    position: absolute;
+    opacity: 0.96;
+    background-image: none;
+}
+
+.ps-exp-character-veil-bottom{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 58%;
+    background-color: rgba(6, 8, 14, 0.62);
+}
+
+.ps-exp-character-banner-copy{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    height: 56%;
+    justify-content: flex-end;
+    padding-left: 20px;
+    padding-right: 16px;
+    padding-bottom: 14px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.ps-exp-character-trait-block,
+.ps-exp-character-skill-block{
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.ps-exp-character-name{
+    font-size: 28px;
+    color: rgb(236, 226, 208);
+    white-space: normal;
+    margin-bottom: 4px;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(6, 8, 14, 0.92);
+}
+
+.ps-exp-character-title{
+    font-size: 15px;
+    color: rgb(188, 178, 198);
+    white-space: normal;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(6, 8, 14, 0.85);
+}
+
+.ps-exp-skill-icons{
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.ps-exp-skill-icon{
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    margin-right: 8px;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    background-image: none;
+    background-color: rgba(28, 28, 40, 0.7);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(122, 98, 68, 0.45);
+    border-right-color: rgba(122, 98, 68, 0.45);
+    border-top-color: rgba(122, 98, 68, 0.45);
+    border-bottom-color: rgba(122, 98, 68, 0.45);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.ps-exp-skill-icon-glyph{
+    font-size: 13px;
+    color: rgb(220, 210, 192);
+    -unity-text-align: middle-center;
+}
+
+.ps-exp-loadout-list{
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.ps-exp-loadout-row{
+    height: 56px;
+    min-height: 56px;
+    max-height: 56px;
+    margin-bottom: 4px;
+}
+
+.ps-exp-loadout-copy{
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    margin-left: 8px;
+}
+
+.ps-exp-loadout-name{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-exp-loadout-sub{
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-exp-loadout-edit{
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.ps-exp-loadout-summary{
+    flex-direction: column;
+}
+
+.ps-expedition-detail-body,
+.ps-exp-detail-body{
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-stack{
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.ps-exp-info-stack-label{
+    font-size: 15px;
+    color: rgb(168, 158, 178);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.ps-exp-info-stack-value{
+    font-size: 17px;
+    color: rgb(220, 210, 192);
+    white-space: normal;
+}
+
+.ps-exp-section{
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 28px;
+}
+
+.ps-exp-dungeon-name{
+    font-size: 28px;
+    color: rgb(236, 226, 208);
+    white-space: normal;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    -unity-font-style: bold;
+}
+
+.ps-exp-dungeon-desc{
+    font-size: 17px;
+    color: rgb(210, 200, 185);
+    white-space: normal;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-row{
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 12px;
+    min-height: 24px;
+}
+
+.ps-exp-info-label{
+    width: 96px;
+    min-width: 96px;
+    font-size: 13px;
+    color: rgb(168, 158, 178);
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.ps-exp-info-value{
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 16px;
+    color: rgb(236, 226, 208);
+    white-space: normal;
+}
+
+.ps-exp-loadout-detail{
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-exp-loadout-detail-heading{
+    font-size: 16px;
+    color: rgb(236, 226, 208);
+    white-space: normal;
+    margin-bottom: 8px;
+    -unity-font-style: bold;
+}
+
+.ps-exp-loadout-edit{
+    flex-shrink: 0;
+    margin-top: 4px;
+    margin-bottom: 0;
+    align-self: flex-start;
+}
+
+.ps-expedition-screen .ps-layer-background{
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-route-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-expedition-screen .ps-mgmt-bg{ display: none; }
+
+.ps-expedition-screen .ps-expedition-shade{ background-color: rgba(2, 3, 3, 0.12); }
+
+.ps-expedition-screen .ps-exp-header{
+    height: 64px;
+    min-height: 64px;
+    padding-right: 64px;
+    background-image: none;
+    border-bottom-color: rgba(189,151,91,.6);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-expedition-body{ padding: 8px 20px 12px 20px; }
+
+.ps-expedition-screen .ps-exp-dest-heading{
+    height: 44px;
+    padding: 6px 12px;
+    color: rgb(232, 203, 161);
+    font-size: 24px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-section-a-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-expedition-screen .ps-exp-dest-frame,
+.ps-expedition-screen .ps-expedition-detail-column{
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    background-color: rgba(2, 4, 4, 0.72);
+    border-left-width: 1px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(205, 168, 106, 0.48);
+    border-bottom-color: rgba(205, 168, 106, 0.48);
+}
+
+.ps-expedition-screen .ps-exp-detail-scroll{
+    min-height: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.ps-expedition-screen .ps-exp-depart-footer{
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-row,
+.ps-expedition-screen .ps-exp-loadout-row{
+    min-height: 62px;
+    margin-bottom: 7px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-row.ps-selected,
+.ps-expedition-screen .ps-exp-loadout-row.ps-selected{ background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1"); }
+
+
+
+.ps-expedition-screen .ps-exp-section{
+    margin-bottom: 7px;
+    padding: 12px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-dossier-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    width: 48%;
+    min-width: 0;
+    margin: 0 2% 12px 0;
+}
+
+.ps-expedition-screen .ps-exp-section .ps-typo-section{ color: rgb(126, 36, 29); }
+
+.ps-expedition-screen .ps-exp-section .ps-typo-body,
+.ps-expedition-screen .ps-exp-section .ps-typo-secondary{ color: rgb(42, 35, 27); }
+
+.ps-expedition-screen .ps-exp-depart-primary{
+    min-height: 54px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-confirm-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(231, 204, 164);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-expedition-body{
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 0 18px 10px 18px;
+}
+
+.ps-expedition-screen .ps-expedition-workspace{
+    min-height: 0;
+    flex-grow: 1;
+    flex-direction: row;
+    margin-bottom: 6px;
+}
+
+
+
+.ps-expedition-screen .ps-exp-art-host {
+    position: relative;
+    width: 100%;
+    height: 174px;
+    min-height: 174px;
+    max-height: 174px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+    background-image: none;
+    background-color: rgb(5,10,11);
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(53,180,186);
+    overflow: hidden;
+}
+
+.ps-expedition-screen .ps-exp-art-image-host { display: flex; position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.ps-expedition-screen .ps-exp-art-image { width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop; }
+
+.ps-expedition-screen .ps-exp-art-caption{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    min-height: 40px;
+    padding: 6px 10px;
+    background-color: rgba(1, 3, 3, 0.88);
+    border-left-width: 2px;
+    border-left-color: rgb(175, 43, 32);
+    right: 0;
+}
+
+.ps-expedition-screen .ps-exp-art-caption-name{
+    color: rgb(231, 207, 168);
+    font-size: 18px;
+}
+
+.ps-expedition-screen .ps-exp-art-caption-sub{
+    color: rgba(198, 181, 153, 0.72);
+    font-size: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-expedition-screen .ps-exp-col-dest{
+    width: 34%;
+    min-width: 34%;
+    max-width: 34%;
+    min-height: 0;
+    margin: 0;
+    padding: 0 9px;
+    border-right-width: 1px;
+    border-right-color: rgba(197, 157, 91, 0.4);
+}
+
+.ps-expedition-screen .ps-exp-dest-heading{
+    min-height: 42px;
+    height: 42px;
+    padding: 3px 6px 5px 6px;
+    flex-direction: column;
+    justify-content: center;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 157, 91, 0.52);
+}
+
+.ps-expedition-screen .ps-exp-dest-heading-title{
+    color: rgb(231, 207, 168);
+    font-size: 17px;
+}
+
+.ps-expedition-screen .ps-exp-dest-heading-sub,
+.ps-expedition-screen .ps-exp-detail-heading-sub{
+    color: rgb(45, 176, 183);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-dest-frame{
+    min-height: 0;
+    flex-grow: 1;
+    padding: 5px 0 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-scroll,
+.ps-expedition-screen .ps-exp-dest-list{
+    min-height: 0;
+    flex-grow: 1;
+}
+
+.ps-expedition-screen .ps-exp-dest-row{
+    position: relative;
+    min-height: 80px;
+    height: 80px;
+    margin: 0 0 4px 0;
+    padding: 6px 36px 6px 9px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/destination-ticket-standard-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-dest-row.ps-selected{
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/destination-ticket-selected-v1");
+}
+
+.ps-expedition-screen .ps-exp-dest-row:hover{
+    -unity-background-image-tint-color: rgb(244, 224, 190);
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-list-item-mark,
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-gem{
+    display: none;
+}
+
+.ps-expedition-screen .ps-exp-dest-index{
+    width: 28px;
+    min-width: 28px;
+    color: rgb(121, 49, 38);
+    font-size: 17px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-dest-thumb{
+    width: 64px;
+    min-width: 64px;
+    height: 60px;
+    min-height: 60px;
+    margin: 0 8px 0 2px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-copy{
+    min-width: 0;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-name{
+    color: rgb(54, 39, 29);
+    font-size: 13px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row .ps-pop-list-row-sub{
+    color: rgba(85, 57, 38, 0.76);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-exp-dest-index,
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-pop-list-row-name,
+.ps-expedition-screen .ps-exp-dest-row.ps-selected .ps-pop-list-row-sub{
+    color: rgb(35, 22, 17);
+}
+
+.ps-expedition-screen .ps-exp-col-detail{
+    width: 66%;
+    min-width: 66%;
+    max-width: 66%;
+    min-height: 0;
+    padding: 0 0 0 11px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-detail-heading{
+    height: 24px;
+    color: rgb(231, 207, 168);
+    font-size: 16px;
+}
+
+.ps-expedition-screen .ps-exp-detail-heading-sub{
+    height: 16px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 157, 91, 0.52);
+}
+
+.ps-expedition-screen .ps-expedition-detail-scroll{
+    min-height: 0;
+    flex-grow: 1;
+    padding: 5px 5px 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-expedition-detail-body{
+    min-height: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.ps-expedition-screen .ps-exp-section{
+    margin: 0 0 5px 0;
+    padding: 8px 10px;
+    background-image: none;
+    background-color: rgba(2, 4, 4, 0.5);
+    border-left-width: 1px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(196, 157, 92, 0.42);
+    border-bottom-color: rgba(196, 157, 92, 0.3);
+}
+
+.ps-expedition-screen .destination-section, .ps-expedition-screen .loadout-section { width: 100%; }
+.ps-expedition-screen .destination-section { flex-direction: row; flex-wrap: wrap; }
+.ps-expedition-screen .destination-section > .ps-section-head,
+.ps-expedition-screen .ps-exp-dungeon-name,
+.ps-expedition-screen .ps-exp-dungeon-desc { width: 100%; }
+.ps-expedition-screen .destination-section .ps-exp-info-row { width: 50%; margin-bottom: 5px; }
+.ps-expedition-screen .ps-exp-dungeon-desc { margin-bottom: 10px; }
+.ps-expedition-screen .character-section { width: 48%; margin-right: 2%; height: 158px; flex-direction: row; align-items: center; }
+.ps-expedition-screen .ps-exp-courier-portrait { width: 112px; height: 145px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; }
+.ps-expedition-screen .ps-exp-courier-name { font-size: 24px; }
+.ps-expedition-screen .trait-section { width: 50%; height: 158px; justify-content: center; }
+.ps-expedition-screen .ps-exp-info-stack-value { font-size: 14px; }
+.ps-expedition-screen .skill-section { display: none; }
+
+.ps-expedition-screen .ps-section-head .ps-typo-eyebrow{
+    color: rgb(43, 176, 184);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-section .ps-typo-section,
+.ps-expedition-screen .ps-exp-dungeon-name,
+.ps-expedition-screen .ps-exp-loadout-detail-heading{
+    color: rgb(229, 204, 164);
+}
+
+.ps-expedition-screen .ps-exp-dungeon-name{
+    margin: 6px 0 4px 0;
+    font-size: 22px;
+}
+
+.ps-expedition-screen .ps-exp-section .ps-typo-body,
+.ps-expedition-screen .ps-exp-section .ps-typo-secondary,
+.ps-expedition-screen .ps-exp-info-label,
+.ps-expedition-screen .ps-exp-info-value,
+.ps-expedition-screen .ps-exp-info-stack-label,
+.ps-expedition-screen .ps-exp-info-stack-value{
+    color: rgb(202, 184, 156);
+    font-size: 12px;
+}
+
+.ps-expedition-screen .ps-exp-info-row{
+    min-height: 23px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(198, 158, 91, 0.24);
+}
+
+.ps-expedition-screen .ps-exp-loadout-row{
+    min-height: 42px;
+    margin-bottom: 3px;
+    padding: 5px 9px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-list-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.ps-expedition-screen .ps-exp-loadout-row.ps-selected{
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-surface-selected-row-v1");
+}
+
+.ps-expedition-screen .ps-exp-loadout-edit{
+    min-height: 34px;
+    margin-top: 5px;
+}
+
+.ps-expedition-screen .ps-expedition-departure-footer{
+    position: relative;
+    width: 100%;
+    height: 145px;
+    min-height: 145px;
+    max-height: 145px;
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 26px 17px 24px;
+    background-image: resource("Art/UI/ObsidianMisprintExpedition/dispatch-authorization-wide-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon{
+    width: 8%;
+    min-width: 8%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon-title{
+    color: rgb(243, 222, 182);
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-auth-ribbon-sub{
+    color: rgba(243, 222, 182, 0.72);
+    font-size: 6px;
+    -unity-text-align: middle-center;
+}
+
+.ps-expedition-screen .ps-exp-auth-copy{
+    width: 16%;
+    min-width: 0;
+    height: 72%;
+    justify-content: center;
+    padding: 0 12px;
+}
+
+.ps-expedition-screen .ps-exp-auth-label{
+    color: rgba(126, 61, 45, 0.72);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-auth-value{
+    color: rgb(58, 40, 29);
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ps-expedition-screen .ps-exp-auth-destination{
+    font-size: 20px;
+}
+
+.ps-expedition-screen .ps-exp-depart-reason{
+    color: rgb(142, 44, 34);
+    font-size: 7px;
+    white-space: normal;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-host{
+    width: 44%;
+    height: 100%;
+    padding: 0 24px 0 292px;
+    justify-content: center;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-sub{
+    color: rgba(133, 52, 40, 0.72);
+    font-size: 8px;
+}
+
+.ps-expedition-screen .ps-exp-auth-action-copy{
+    color: rgb(129, 42, 33);
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary{
+    position: absolute;
+    right: 22px;
+    top: 20px;
+    width: 39%;
+    height: 104px;
+    min-height: 104px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary .ps-pop-button-plate,
+.ps-expedition-screen .ps-exp-depart-primary .ps-pop-primary-label{
+    display: none;
+}
+
+.ps-expedition-screen .ps-exp-depart-primary:hover{
+    background-color: rgba(152, 50, 39, 0.08);
+}
+
+
+.ps-expedition-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-expedition-screen .ps-layer-content {
+    padding: 0;
+}
+
+.ps-expedition-screen .ps-expedition-mark,
+.ps-expedition-screen .ps-expedition-register,
+.ps-expedition-screen .ps-expedition-route-decor {
+    opacity: 0.04;
+}
+
+.ps-expedition-screen .ps-exp-header {
+    padding-left: 120px;
+}
+
+.ps-expedition-screen .ps-expedition-header-copy {
+    padding-left: 0;
+}
+
+.ps-expedition-screen .ps-expedition-header-title {
+    color: rgb(238, 216, 178);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.88);
+}

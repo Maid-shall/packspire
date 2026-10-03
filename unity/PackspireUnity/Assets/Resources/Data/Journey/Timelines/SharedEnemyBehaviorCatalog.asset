@@ -1,0 +1,1109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ae630dc4df4eb38c12687e29e6a945, type: 3}
+  m_Name: SharedEnemyBehaviorCatalog
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.RealtimeEnemyBehaviorCatalog
+  actions: []
+  patterns:
+  - id: timing-p01
+    role: 3
+    duration: 8
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p02
+    role: 0
+    duration: 9
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p03
+    role: 2
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+    - executeOffset: 6.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p04
+    role: 2
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.2
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+  - id: timing-p05
+    role: 3
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 2
+      damage: 0
+      telegraphLead: 0.6
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p06
+    role: 0
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5
+      actionId:
+      kind: 2
+      damage: 0
+      telegraphLead: 0.6
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p07
+    role: 2
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 3
+      hitSpacing: 0.22
+    - executeOffset: 7
+      actionId:
+      kind: 2
+      damage: 0
+      telegraphLead: 0.6
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p08
+    role: 2
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId:
+    cooldownSeconds: 0
+    maxConsecutive: 2
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 9
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p09
+    role: 3
+    duration: 9
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p10
+    role: 0
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 6.2
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p11
+    role: 0
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p12
+    role: 0
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+    - executeOffset: 6.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p13
+    role: 0
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+  - id: timing-p14
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 9.2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p15
+    role: 3
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 2
+      damage: 0
+      telegraphLead: 0.6
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p16
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p17
+    role: 3
+    duration: 9
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p18
+    role: 0
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 6.2
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p19
+    role: 0
+    duration: 10
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p20
+    role: 0
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+    - executeOffset: 6.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p21
+    role: 0
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+  - id: timing-p22
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 9.2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p23
+    role: 3
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2
+      actionId:
+      kind: 2
+      damage: 0
+      telegraphLead: 0.6
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p24
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p25
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.2
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p26
+    role: 0
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 3
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.2
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p27
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p28
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p29
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 6.2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p30
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 6.2
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p31
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+    - executeOffset: 6.2
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10.2
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p32
+    role: 0
+    duration: 13
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.8
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.25
+    - executeOffset: 6.2
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10.2
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p33
+    role: 2
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.3
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.3
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.22
+    - executeOffset: 8.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p34
+    role: 2
+    duration: 11
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.3
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.3
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 2
+      hitSpacing: 0.22
+    - executeOffset: 8.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p35
+    role: 2
+    duration: 12.5
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.5
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 3
+      hitSpacing: 0.2
+  - id: timing-p36
+    role: 2
+    duration: 12.5
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 8.5
+      actionId:
+      kind: 1
+      damage: 0
+      telegraphLead: 0.85
+      hitCount: 3
+      hitSpacing: 0.2
+  - id: timing-p37
+    role: 4
+    duration: 14
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 9
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 12
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p38
+    role: 4
+    duration: 14
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 2.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 5.8
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 9
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 12
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p39
+    role: 4
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.5
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7.3
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10.2
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+  - id: timing-p40
+    role: 4
+    duration: 12
+    baseWeight: 1
+    cooldownGroupId: reaction
+    cooldownSeconds: 4
+    maxConsecutive: 1
+    maximumUsesPerBattle: 0
+    previousPatternWeights: []
+    steps:
+    - executeOffset: 1.5
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 4.5
+      actionId:
+      kind: 4
+      damage: 0
+      telegraphLead: 1.1
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 7.3
+      actionId:
+      kind: 0
+      damage: 0
+      telegraphLead: 0.7
+      hitCount: 1
+      hitSpacing: 0.15
+    - executeOffset: 10.2
+      actionId:
+      kind: 3
+      damage: 0
+      telegraphLead: 1
+      hitCount: 1
+      hitSpacing: 0.15

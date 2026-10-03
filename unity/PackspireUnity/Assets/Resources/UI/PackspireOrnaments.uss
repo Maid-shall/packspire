@@ -1,0 +1,1197 @@
+/* Packspire Pop-Dark UI System V2
+   Decoration communicates hierarchy: authored art is used only for page identity,
+   important boundaries and decisive actions. Ordinary content remains open. */
+
+.ps-system-icon,
+.ps-system-ornament {
+    flex-shrink: 0;
+}
+
+.ps-system-icon {
+    width: 34px;
+    height: 34px;
+    opacity: 1;
+}
+
+.ps-system-ornament {
+    position: absolute;
+    opacity: 1;
+}
+
+.ps-system-ornament-title {
+    height: 34px;
+}
+
+.ps-system-ornament-section {
+    height: 22px;
+}
+
+.ps-system-ornament-vertical {
+    width: 22px;
+}
+
+.ps-system-ornament-corner {
+    width: 140px;
+    height: 140px;
+}
+
+/* Page identity: icon + title copy + one authored baseline. */
+.ps-chrome-brand {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    min-height: 76px;
+    padding-left: 4px;
+    padding-bottom: 20px;
+    margin-bottom: 4px;
+}
+
+.ps-chrome-brand-icon {
+    width: 54px;
+    height: 54px;
+    margin-right: 10px;
+}
+
+.ps-chrome-brand-copy {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.ps-chrome-brand-stroke {
+    left: 0;
+    bottom: 0;
+    width: 520px;
+    max-width: 70%;
+    height: 28px;
+    opacity: 0.96;
+}
+
+.ps-chrome-section {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    min-height: 34px;
+    margin-top: 14px;
+    margin-bottom: 9px;
+}
+
+.ps-chrome-section-copy {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-shrink: 0;
+    padding-right: 12px;
+}
+
+.ps-chrome-section-stroke {
+    position: relative;
+    flex-grow: 1;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: 22px;
+    opacity: 0.90;
+}
+
+.ps-page-heading {
+    position: relative;
+    min-height: 70px;
+    padding-bottom: 24px;
+    margin-bottom: 10px;
+}
+
+.ps-page-heading-stroke {
+    left: -4px;
+    bottom: 0;
+    width: 420px;
+    max-width: 86%;
+    height: 27px;
+    opacity: 0.94;
+}
+
+/* Small reusable icon-title, used when a page needs a compact local identity. */
+.ps-icon-title {
+    flex-direction: row;
+    align-items: center;
+    min-height: 56px;
+}
+
+.ps-icon-title-mark {
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.ps-icon-title-image {
+    width: 46px;
+    height: 46px;
+}
+
+.ps-icon-title-copy {
+    flex-direction: column;
+}
+
+.ps-icon-title-eyebrow {
+    font-size: 10px;
+    color: rgb(91, 201, 210);
+    letter-spacing: 1px;
+}
+
+.ps-icon-title-name {
+    font-size: 22px;
+    color: rgb(248, 225, 172);
+}
+
+/* Management screens: open columns with only local guides. */
+.ps-mgmt-screen .ps-layer-content,
+.ps-shop-screen .ps-layer-content,
+.ps-reward-screen .ps-layer-content {
+    padding-left: 34px;
+    padding-right: 34px;
+    padding-top: 18px;
+    padding-bottom: 26px;
+}
+
+.ps-mgmt-header,
+.ps-shop-header {
+    min-height: 78px;
+    flex-shrink: 0;
+}
+
+.ps-status-character-column,
+.ps-status-roles-column,
+.ps-vault-inventory-column,
+.ps-codex-index-column,
+.ps-shop-col-list,
+.ps-reward-col-candidates,
+.ps-roster-col-reel,
+.ps-heirloom-col-portrait,
+.ps-faction-col-graph,
+.ps-exp-col-dest {
+    position: relative;
+}
+
+.ps-mgmt-column-boundary,
+.ps-shop-column-boundary,
+.ps-reward-column-boundary,
+.ps-rite-column-boundary,
+.ps-roster-column-boundary,
+.ps-heirloom-column-boundary,
+.ps-faction-column-boundary,
+.ps-exp-column-boundary {
+    right: -14px;
+    top: 5%;
+    height: 90%;
+    width: 26px;
+    opacity: 0.86;
+}
+
+.ps-status-role-detail-surface,
+.ps-vault-item-detail-surface,
+.ps-codex-record-surface,
+.ps-shop-detail-host,
+.ps-reward-col-detail,
+.ps-rite-right-shell,
+.ps-roster-col-detail,
+.ps-heirloom-col-growth,
+.ps-faction-detail-surface,
+.ps-expedition-detail-column,
+.ps-result-col-summary {
+    position: relative;
+    overflow: hidden;
+    background-color: rgba(5, 6, 15, 0.70);
+    border-left-width: 2px;
+    border-left-color: rgba(93, 217, 226, 0.72);
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-mgmt-open-corner,
+.ps-shop-detail-corner,
+.ps-reward-detail-corner,
+.ps-rite-detail-corner,
+.ps-roster-detail-corner,
+.ps-heirloom-detail-corner,
+.ps-faction-detail-corner,
+.ps-exp-detail-corner,
+.ps-result-detail-corner {
+    right: -16px;
+    bottom: -18px;
+    width: 132px;
+    height: 132px;
+    opacity: 0.82;
+}
+
+.ps-mgmt-section {
+    position: relative;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 6px 6px 12px 13px;
+    margin-bottom: 4px;
+}
+
+.ps-mgmt-section-title,
+.ps-shop-detail-label,
+.ps-reward-detail-label {
+    border-left-width: 2px;
+    border-left-color: rgba(244, 70, 133, 0.78);
+    padding-left: 9px;
+    margin-bottom: 5px;
+}
+
+.ps-mgmt-section-body,
+.ps-shop-detail-body,
+.ps-reward-detail-body {
+    padding-left: 11px;
+}
+
+.ps-status-role-ticket,
+.ps-mgmt-list-row,
+.ps-mgmt-reel-row {
+    position: relative;
+    overflow: visible;
+}
+
+.ps-status-role-kind-icon {
+    width: 34px;
+    height: 34px;
+    margin-left: 6px;
+    margin-right: 4px;
+    opacity: 1;
+}
+
+.ps-vault-grid-card,
+.ps-shop-product-card,
+.ps-reward-candidate-row {
+    position: relative;
+    overflow: visible;
+    border-top-color: rgba(244, 70, 133, 0.30);
+    border-right-color: rgba(93, 217, 226, 0.22);
+    border-bottom-color: rgba(93, 217, 226, 0.16);
+    border-left-color: rgba(244, 70, 133, 0.42);
+}
+
+.ps-vault-grid-card:hover,
+.ps-shop-product-card:hover,
+.ps-reward-candidate-row:hover {
+    background-color: rgba(41, 15, 54, 0.78);
+    border-left-color: rgb(244, 70, 133);
+    border-bottom-color: rgba(93, 217, 226, 0.66);
+}
+
+.ps-vault-grid-card.ps-selected,
+.ps-shop-product-card.ps-selected,
+.ps-reward-candidate-row.ps-selected {
+    border-left-width: 3px;
+    border-left-color: rgb(244, 70, 133);
+    border-bottom-color: rgb(93, 217, 226);
+    background-color: rgba(59, 18, 70, 0.88);
+}
+
+/* Hub: a three-zone stage, with branded facility rail and an open briefing note. */
+.ps-hub-v4 {
+    -unity-font-definition: resource("Fonts/KaiseiDecol-Regular");
+}
+
+.ps-hub-v4-shade-left {
+    width: 25%;
+    background-color: rgba(4, 5, 12, 0.72);
+}
+
+.ps-hub-v4-shade-center {
+    left: 23%;
+    width: 49%;
+    background-color: rgba(8, 5, 19, 0.08);
+}
+
+.ps-hub-v4-shade-right {
+    width: 31%;
+    background-color: rgba(4, 5, 12, 0.16);
+}
+
+.ps-hub-nav-watermark {
+    position: absolute;
+    left: 1.5%;
+    top: 28%;
+    width: 20%;
+    height: 40%;
+    opacity: 0.07;
+}
+
+.ps-hub-v4-columns {
+    padding-left: 34px;
+    padding-right: 36px;
+    padding-top: 26px;
+    padding-bottom: 30px;
+}
+
+.ps-hub-col-nav {
+    position: relative;
+    width: 24%;
+    min-width: 23%;
+    max-width: 25%;
+    margin-right: 28px;
+    overflow: visible;
+}
+
+.ps-hub-nav-boundary {
+    right: -22px;
+    top: 3%;
+    width: 29px;
+    height: 94%;
+    opacity: 0.94;
+}
+
+.ps-hub-nav-header {
+    margin-left: 8px;
+    margin-bottom: 12px;
+}
+
+.ps-hub-nav-eyebrow {
+    color: rgb(91, 201, 210);
+}
+
+.ps-hub-nav-title {
+    color: rgb(248, 225, 172);
+    font-size: 25px;
+}
+
+.ps-hub-nav-row {
+    position: relative;
+    min-height: 68px;
+    max-height: 76px;
+    padding-left: 4px;
+    padding-right: 10px;
+    overflow: visible;
+}
+
+.ps-hub-nav-row:hover {
+    background-color: rgba(39, 14, 49, 0.66);
+    border-left-width: 2px;
+    border-left-color: rgb(244, 70, 133);
+}
+
+.ps-hub-nav-accent {
+    width: 4px;
+    height: 40px;
+    margin-right: 6px;
+    background-color: rgba(93, 217, 226, 0.52);
+}
+
+.ps-hub-nav-row:hover .ps-hub-nav-accent {
+    background-color: rgb(93, 217, 226);
+}
+
+.ps-hub-nav-seal {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    margin-right: 10px;
+    background-color: rgba(6, 4, 16, 0.58);
+    border-left-width: 2px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(244, 70, 133, 0.72);
+    border-bottom-color: rgba(93, 217, 226, 0.55);
+}
+
+.ps-hub-nav-icon {
+    width: 54px;
+    height: 54px;
+}
+
+.ps-hub-nav-name {
+    font-size: 18px;
+    color: rgb(248, 225, 172);
+}
+
+.ps-hub-nav-desc {
+    color: rgb(178, 165, 191);
+}
+
+.ps-hub-nav-rule {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 74%;
+    height: 22px;
+    margin-left: 56px;
+    margin-top: -7px;
+    margin-bottom: -7px;
+    opacity: 0.88;
+}
+
+.ps-hub-character-ground {
+    left: 16%;
+    right: 16%;
+    height: 22px;
+    background-color: rgba(2, 3, 9, 0.48);
+    border-top-width: 1px;
+    border-top-color: rgba(93, 217, 226, 0.20);
+}
+
+.ps-hub-col-briefing {
+    width: 27%;
+    min-width: 25%;
+}
+
+.ps-hub-gold-chip {
+    flex-direction: row;
+    align-items: center;
+    min-height: 40px;
+    padding-left: 8px;
+    padding-right: 12px;
+    background-color: rgba(5, 6, 14, 0.66);
+    border-left-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(247, 184, 85, 0.58);
+}
+
+.ps-hub-gold-icon {
+    width: 38px;
+    height: 38px;
+    margin-right: 5px;
+}
+
+.ps-hub-briefing-board {
+    position: relative;
+    width: 94%;
+    max-width: 330px;
+    min-height: 310px;
+    padding: 18px 18px 24px 20px;
+    background-color: rgba(4, 5, 14, 0.78);
+    border-left-width: 0;
+    overflow: hidden;
+}
+
+.ps-hub-briefing-boundary {
+    left: -13px;
+    top: 2%;
+    width: 25px;
+    height: 96%;
+    opacity: 0.92;
+}
+
+.ps-hub-briefing-corner {
+    right: -18px;
+    bottom: -18px;
+    width: 126px;
+    height: 126px;
+    opacity: 0.88;
+}
+
+.ps-hub-briefing-eyebrow {
+    color: rgb(91, 201, 210);
+}
+
+.ps-hub-briefing-title {
+    color: rgb(248, 225, 172);
+    font-size: 19px;
+}
+
+.ps-hub-briefing-item {
+    position: relative;
+    min-height: 66px;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-bottom-width: 0;
+}
+
+.ps-hub-briefing-item-rule {
+    left: 44px;
+    right: 0;
+    bottom: -6px;
+    width: auto;
+    height: 18px;
+    opacity: 0.76;
+}
+
+.ps-hub-briefing-mark {
+    width: 45px;
+    height: 45px;
+    margin-right: 8px;
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-hub-briefing-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.ps-hub-briefing-item-title {
+    color: rgb(248, 225, 172);
+    font-size: 14px;
+}
+
+.ps-hub-briefing-link {
+    border-bottom-color: rgba(93, 217, 226, 0.46);
+}
+
+/* Hub v5 — dedicated home artwork. Keep facility emblems, replace generic chrome. */
+.ps-hub-v4-shade-left {
+    width: 27%;
+    background-color: rgba(3, 3, 12, 0.78);
+}
+
+.ps-hub-v4-shade-center {
+    left: 25%;
+    width: 48%;
+    background-color: rgba(8, 5, 19, 0.06);
+}
+
+.ps-hub-v4-shade-right {
+    width: 29%;
+    background-color: rgba(3, 3, 12, 0.09);
+}
+
+.ps-hub-v4-columns {
+    padding-left: 38px;
+    padding-right: 30px;
+    padding-top: 18px;
+    padding-bottom: 24px;
+}
+
+.ps-hub-col-nav {
+    width: 25%;
+    min-width: 25%;
+    max-width: 25%;
+    margin-right: 24px;
+    overflow: visible;
+}
+
+.ps-hub-nav-header {
+    min-height: 76px;
+    max-height: 82px;
+    margin: 0 0 2px 2px;
+    padding: 0;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.ps-hub-home-logo {
+    width: 248px;
+    height: 78px;
+    flex-shrink: 0;
+}
+
+.ps-hub-nav-boundary {
+    position: absolute;
+    right: -18px;
+    top: 4%;
+    width: 27px;
+    height: 91%;
+    opacity: 1;
+}
+
+.ps-hub-nav-surface {
+    margin-bottom: 2px;
+}
+
+.ps-hub-nav-scroll {
+    overflow: visible;
+}
+
+.ps-hub-nav-row {
+    position: relative;
+    min-height: 76px;
+    max-height: 82px;
+    margin: 0 0 1px 0;
+    padding: 8px 20px 8px 12px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: visible;
+}
+
+.ps-hub-nav-row:hover {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+}
+
+.ps-hub-home-frame-stack {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-hub-home-frame {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.ps-hub-home-frame-normal {
+    opacity: 0.9;
+}
+
+.ps-hub-home-frame-hover,
+.ps-hub-home-frame-selected,
+.ps-hub-home-frame-disabled {
+    opacity: 0;
+}
+
+.ps-hub-nav-row:hover .ps-hub-home-frame-normal,
+.ps-hub-street-entry:hover .ps-hub-home-frame-normal {
+    opacity: 0;
+}
+
+.ps-hub-nav-row:hover .ps-hub-home-frame-hover,
+.ps-hub-street-entry:hover .ps-hub-home-frame-hover {
+    opacity: 1;
+}
+
+.ps-hub-nav-row.ps-current .ps-hub-home-frame-normal {
+    opacity: 0;
+}
+
+.ps-hub-nav-row.ps-current .ps-hub-home-frame-selected {
+    opacity: 1;
+}
+
+.ps-hub-nav-row.ps-locked .ps-hub-home-frame-normal {
+    opacity: 0;
+}
+
+.ps-hub-nav-row.ps-locked .ps-hub-home-frame-disabled {
+    opacity: 0.72;
+}
+
+.ps-hub-nav-seal {
+    width: 68px;
+    height: 68px;
+    min-width: 68px;
+    min-height: 68px;
+    margin-right: 11px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-nav-icon {
+    width: 66px;
+    height: 66px;
+}
+
+.ps-hub-nav-copy {
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.ps-hub-v4 .ps-hub-nav-row .ps-hub-nav-name {
+    font-size: 20px;
+    color: rgb(255, 246, 222);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 0;
+    opacity: 1;
+}
+
+.ps-hub-v4 .ps-hub-nav-row .ps-hub-nav-desc {
+    font-size: 12px;
+    color: rgb(242, 228, 238);
+    -unity-text-outline-width: 0;
+    opacity: 1;
+}
+
+.ps-hub-v4 .ps-hub-guide-footer {
+    min-height: 112px;
+    max-height: 116px;
+    padding: 4px 14px 0 14px;
+    border-top-width: 0;
+    align-items: flex-start;
+}
+
+.ps-hub-v4 .ps-hub-street-entry {
+    position: relative;
+    width: 74%;
+    min-width: 240px;
+    max-width: 270px;
+    min-height: 106px;
+    height: 106px;
+    align-self: flex-start;
+    padding: 0;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-frame,
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-face {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-face {
+    padding: 18px 25px 16px 42px;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-glow {
+    opacity: 0;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-emblem {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-emblem-text {
+    color: rgb(255, 218, 145);
+    font-size: 10px;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-title {
+    color: rgb(255, 246, 222);
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-outline-width: 0;
+}
+
+.ps-hub-v4 .ps-hub-street-entry .ps-hub-chrome-sub {
+    color: rgb(242, 228, 238);
+    font-size: 11px;
+    -unity-text-outline-width: 0;
+}
+
+.ps-hub-col-character {
+    width: 47%;
+    max-width: 48%;
+    margin-right: 8px;
+    padding-left: 0;
+}
+
+.ps-hub-character-host {
+    margin-top: 0;
+}
+
+.ps-hub-character-portrait-frame {
+    width: 88%;
+}
+
+.ps-hub-character-ground {
+    left: 24%;
+    right: 24%;
+    bottom: 1%;
+    height: 18px;
+    background-color: rgba(2, 2, 10, 0.46);
+    border-top-color: rgba(244, 70, 133, 0.24);
+}
+
+.ps-hub-col-briefing {
+    width: 27%;
+    min-width: 27%;
+    max-width: 27%;
+    padding-top: 4px;
+    padding-right: 0;
+    overflow: visible;
+}
+
+.ps-hub-gold-chip {
+    position: relative;
+    width: 178px;
+    min-height: 43px;
+    height: 43px;
+    padding: 5px 19px 5px 20px;
+    margin-right: 3px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: visible;
+}
+
+.ps-hub-gold-frame {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 1;
+}
+
+.ps-hub-gold-icon {
+    width: 31px;
+    height: 31px;
+    margin-left: 6px;
+    margin-right: 4px;
+}
+
+.ps-hub-gold-label {
+    font-size: 14px;
+    color: rgb(255, 227, 166);
+    -unity-font-style: bold;
+}
+
+.ps-hub-briefing-spacer {
+    height: 43px;
+    min-height: 43px;
+    max-height: 43px;
+}
+
+.ps-hub-briefing-board {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    min-height: 410px;
+    align-self: flex-end;
+    padding: 0 8px 105px 26px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: visible;
+}
+
+.ps-hub-briefing-corner {
+    position: absolute;
+    left: -17px;
+    bottom: -8px;
+    width: 158px;
+    height: 140px;
+    opacity: 1;
+}
+
+.ps-hub-briefing-panel {
+    position: absolute;
+    left: -76px;
+    right: -4px;
+    top: 45px;
+    bottom: -8px;
+    opacity: 1;
+}
+
+.ps-hub-briefing-header {
+    position: relative;
+    min-height: 95px;
+    margin-bottom: 4px;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+}
+
+.ps-hub-objective-crest {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 132px;
+    height: 73px;
+    margin-left: -66px;
+    opacity: 1;
+}
+
+.ps-hub-briefing-title {
+    font-size: 21px;
+    color: rgb(255, 226, 178);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 2px;
+}
+
+.ps-hub-briefing-host {
+    flex-grow: 0;
+}
+
+.ps-hub-briefing-item {
+    position: relative;
+    min-height: 82px;
+    margin-bottom: 3px;
+    padding: 6px 0 17px 0;
+    border-bottom-width: 0;
+    align-items: center;
+    overflow: visible;
+}
+
+.ps-hub-briefing-mark {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    margin: 0 8px 0 0;
+    background-color: rgba(3, 2, 12, 0.20);
+}
+
+.ps-hub-briefing-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.ps-hub-v4 .ps-hub-briefing-item .ps-hub-briefing-item-title {
+    font-size: 16px;
+    color: rgb(255, 246, 222);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 0;
+    opacity: 1;
+}
+
+.ps-hub-v4 .ps-hub-briefing-item .ps-hub-briefing-item-body {
+    font-size: 12px;
+    color: rgb(242, 228, 238);
+    -unity-text-outline-width: 0;
+    opacity: 1;
+}
+
+.ps-hub-briefing-link {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    margin-left: 2px;
+    padding: 0;
+    color: rgb(247, 98, 146);
+    font-size: 22px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-hub-briefing-link:hover {
+    color: rgb(93, 217, 226);
+    border-bottom-width: 0;
+}
+
+.ps-hub-briefing-item-rule {
+    position: absolute;
+    left: 54px;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 16px;
+    opacity: 0.96;
+}
+
+/* Packing: explicit tool language without enclosing the ritual circle. */
+.ps-rite-brand-mark {
+    width: 62px;
+    height: 62px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps-rite-brand-icon {
+    width: 58px;
+    height: 58px;
+}
+
+.ps-rite-left,
+.ps-rite-right-shell {
+    position: relative;
+    overflow: hidden;
+}
+
+.ps-rite-column-boundary {
+    right: -10px;
+}
+
+.ps-rite-detail-corner {
+    right: -12px;
+    bottom: -14px;
+}
+
+.ps-rite-filter,
+.ps-shop-filter,
+.ps-mgmt-filter,
+.ps-rite-select-btn,
+.ps-rite-tool {
+    position: relative;
+}
+
+.ps-rite-filter,
+.ps-shop-filter,
+.ps-mgmt-filter {
+    padding-left: 31px;
+}
+
+.ps-rite-filter-icon,
+.ps-shop-filter-icon,
+.ps-mgmt-filter-icon {
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    width: 25px;
+    height: 25px;
+    translate: 0 -12px;
+}
+
+.ps-rite-filter.ps-selected .ps-rite-filter-icon,
+.ps-shop-filter.ps-selected .ps-shop-filter-icon {
+    opacity: 1;
+}
+
+.ps-rite-tool {
+    padding-left: 44px;
+}
+
+.ps-rite-tool-icon {
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    translate: 0 -17px;
+}
+
+.ps-rite-select-btn {
+    padding-left: 32px;
+}
+
+.ps-rite-select-icon {
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    translate: 0 -14px;
+}
+
+/* Shop and rewards: product rail, open description, character/shop counter remain distinct. */
+.ps-shop-column-boundary,
+.ps-reward-column-boundary {
+    right: -12px;
+}
+
+.ps-shop-detail-host {
+    padding-left: 18px;
+}
+
+.ps-shop-filter {
+    min-height: 38px;
+}
+
+.ps-shop-product-price {
+    background-color: rgba(93, 18, 60, 0.92);
+    border-left-width: 2px;
+    border-left-color: rgb(247, 184, 85);
+    color: rgb(255, 230, 157);
+}
+
+.ps-shop-merchant-dialogue-layer {
+    border-left-color: rgba(244, 70, 133, 0.80);
+    background-color: rgba(4, 5, 14, 0.84);
+}
+
+.ps-reward-header {
+    position: relative;
+    min-height: 98px;
+    padding-left: 72px;
+    border-bottom-width: 0;
+}
+
+.ps-reward-header-icon {
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 62px;
+    height: 62px;
+}
+
+.ps-reward-col-detail {
+    padding-left: 20px;
+}
+
+.ps-reward-detail-corner {
+    right: -16px;
+    bottom: -18px;
+}
+
+/* Three-part action plates preserve authored end caps. Only their quiet center expands. */
+.ps-pop-primary,
+.ps-pop-secondary,
+.ps-pop-danger {
+    position: relative;
+    overflow: visible;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-pop-button-plate {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: row;
+    align-items: stretch;
+    overflow: visible;
+}
+
+.ps-pop-button-cap,
+.ps-pop-button-center {
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.ps-pop-button-cap {
+    width: 40px;
+}
+
+.ps-pop-button-center {
+    flex-grow: 1;
+    min-width: 24px;
+}
+
+.ps-pop-secondary .ps-pop-button-cap,
+.ps-pop-danger .ps-pop-button-cap {
+    width: 30px;
+}
+
+.ps-pop-primary:hover .ps-pop-button-cap,
+.ps-pop-primary:hover .ps-pop-button-center,
+.ps-pop-secondary:hover .ps-pop-button-cap,
+.ps-pop-secondary:hover .ps-pop-button-center {
+    opacity: 1;
+}
+
+.ps-pop-primary:active .ps-pop-button-cap,
+.ps-pop-primary:active .ps-pop-button-center,
+.ps-pop-secondary:active .ps-pop-button-cap,
+.ps-pop-secondary:active .ps-pop-button-center {
+    opacity: 0.82;
+}
+
+.ps-pop-primary:disabled .ps-pop-button-cap,
+.ps-pop-primary:disabled .ps-pop-button-center,
+.ps-pop-secondary:disabled .ps-pop-button-cap,
+.ps-pop-secondary:disabled .ps-pop-button-center {
+    opacity: 0.42;
+}
+
+.ps-pop-danger .ps-pop-button-cap,
+.ps-pop-danger .ps-pop-button-center {
+    opacity: 0.88;
+}
+
+.ps-pop-primary-label,
+.ps-pop-secondary-label,
+.ps-pop-danger-label {
+    position: relative;
+}

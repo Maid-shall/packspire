@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13fb108550594f21b049a73194dd1e60, type: 3}
+  m_Name: AshBellWatchman
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyDefinition
+  enemyId: ash_bell_watchman
+  displayName: "\u7070\u9418\u306E\u5DE1\u8996\u5175"
+  tier: 1
+  maximumHealth: 32
+  legacyTurnDamages: 07000000060000000800000009000000
+  origin: 1
+  regionId: ash_outskirts
+  lineage: {fileID: 11400000, guid: da28a0a3ac7b4fada4aac87af9441362, type: 2}
+  regionalBehaviorProfile: {fileID: 11400000, guid: a49be8a4d1231044885159424644b5a5, type: 2}
+  regionalDamageMultiplier: 1
+  fallbackSpriteResource: Art/JourneyPrototype/Enemies/ash-bell-watchman-v1
+  battleSheetResource: 
+  orderedBattlePoseNames: []
+  battleFormation: 0
+  battleTargetHeight: 4.6
+  battleScale: 0.29948

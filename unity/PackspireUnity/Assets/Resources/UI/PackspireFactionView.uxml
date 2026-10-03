@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="faction-background" class="ps-layer-background" picking-mode="Ignore"><ui:VisualElement class="ps-faction-shade" picking-mode="Ignore" /></ui:VisualElement>
+    <ui:VisualElement class="ps-faction-layout">
+        <ui:VisualElement name="faction-header" class="ps-faction-header">
+            <ui:Label text="FACTION / ALLEGIANCE" class="ps-faction-header-eyebrow" />
+            <ui:Label text="配達組合" class="ps-faction-header-title" />
+        </ui:VisualElement>
+        <ui:VisualElement class="ps-faction-membership">
+            <ui:Label text="あなたの所属" class="ps-faction-membership-eyebrow" />
+            <ui:VisualElement name="faction-membership-emblem" class="ps-faction-membership-emblem" />
+            <ui:Label name="faction-membership-name" class="ps-faction-membership-name" />
+            <ui:Label name="faction-membership-rank" class="ps-faction-membership-rank" />
+            <ui:VisualElement name="faction-emissary-study-front" class="ps-faction-emissary-study" />
+            <ui:VisualElement name="faction-emissary-study-back" class="ps-faction-emissary-study" />
+            <ui:VisualElement name="faction-emissary-host" class="ps-faction-emissary-host" />
+            <ui:VisualElement class="ps-faction-emissary-caption">
+                <ui:Label name="faction-emissary-name" class="ps-faction-emissary-name" />
+                <ui:Label name="faction-emissary-title" class="ps-faction-emissary-title" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="faction-graph-column" class="ps-faction-col-graph">
+            <ui:Label text="組合との関係" class="ps-faction-registry-title" />
+            <ui:VisualElement name="faction-graph-host" class="ps-faction-graph-host"><ui:VisualElement name="faction-graph-nodes" class="ps-faction-graph-nodes" /></ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="faction-detail-surface" class="ps-faction-detail-surface">
+            <ui:VisualElement name="faction-detail-header" class="ps-faction-detail-header" />
+            <ui:ScrollView name="faction-detail-scroll" class="ps-faction-detail-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="ps-rite-popup ps-packing-preserve-selection">
+        <ui:VisualElement class="ps-rite-popup-header">
+            <ui:Label text="盤の構成" class="ps-rite-top-name" />
+            <ui:Button name="packing-formula-close" text="閉じる" class="ps-packing-action" />
+        </ui:VisualElement>
+        <ui:TextField name="packing-formula-name" label="術式名" class="ps-rite-formula-name-field" />
+        <ui:VisualElement class="ps-rite-formula-body">
+            <ui:ScrollView name="packing-formula-components" class="ps-rite-formula-rail" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden" />
+            <ui:VisualElement class="ps-rite-formula-stage">
+                <ui:Label text="収納盤の構成" class="ps-rite-panel-title" />
+                <ui:Label name="packing-formula-dimensions" class="ps-rite-meta" />
+                <ui:Label name="packing-formula-core" class="ps-rite-meta" />
+                <ui:Label name="packing-formula-conduit" class="ps-rite-meta" />
+                <ui:Label name="packing-formula-resonance" class="ps-rite-meta" />
+                <ui:Label name="packing-formula-stability" class="ps-rite-meta" />
+                <ui:Label text="盤の寸法・宝石・回転制限は収納核に従います。" class="ps-rite-meta" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

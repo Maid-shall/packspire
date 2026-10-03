@@ -1,0 +1,385 @@
+/* Merchant, stock, item record and purchase desk share one 1280x720 shell. */
+.ps-shop-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(234, 211, 176);
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+.ps-shop-screen .ps-layer-background,
+.ps-shop-screen .ps-shop-shade,
+.ps-shop-screen .ps-layer-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+.ps-shop-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-misprint-background-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(7, 10, 10);
+}
+.ps-shop-screen .ps-shop-shade {
+    background-color: rgba(2, 4, 5, 0.44);
+}
+.ps-shop-screen .ps-layer-content { flex-direction: column; padding: 0; }
+.ps-shop-screen .ps-shop-header {
+    height: 72px;
+    min-height: 72px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 120px;
+    padding-right: 112px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(191, 151, 87, 0.58);
+    background-color: rgba(3, 6, 7, 0.54);
+}
+.ps-shop-screen .ps-shop-header-copy {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+.ps-shop-screen .ps-shop-header-eyebrow {
+    font-size: 10px;
+    color: rgb(203, 164, 101);
+}
+.ps-shop-screen .ps-shop-header-title {
+    font-size: 27px;
+    color: rgb(241, 221, 184);
+}
+.ps-shop-screen .ps-shop-gold-plaque {
+    width: 114px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border-width: 1px;
+    border-color: rgba(192, 154, 89, 0.7);
+    background-color: rgba(4, 8, 9, 0.88);
+}
+.ps-shop-screen .ps-shop-header-gold {
+    font-size: 18px;
+    color: rgb(243, 212, 151);
+}
+.ps-shop-screen .ps-shop-dev-hint {
+    position: absolute;
+    right: 245px;
+    top: 28px;
+    font-size: 10px;
+    color: rgb(104, 195, 194);
+}
+.ps-shop-screen.ps-shop-live .ps-shop-dev-hint { display: none; }
+.ps-shop-screen .ps-shop-body {
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: row;
+    padding: 16px 28px 24px;
+}
+.ps-shop-screen .ps-shop-col-merchant,
+.ps-shop-screen .ps-shop-col-list,
+.ps-shop-screen .ps-shop-col-detail,
+.ps-shop-screen .ps-shop-col-transaction {
+    flex-shrink: 0;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+}
+.ps-shop-screen .ps-shop-col-merchant { width: 300px; margin-right: 8px; }
+.ps-shop-screen .ps-shop-col-list {
+    width: 300px;
+    margin-right: 8px;
+    padding: 12px;
+    background-color: rgba(2, 5, 6, 0.85);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-col-detail {
+    width: 340px;
+    margin-right: 8px;
+    background-color: rgba(2, 5, 6, 0.88);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-col-transaction {
+    width: 260px;
+    padding: 18px 16px;
+    background-color: rgba(2, 5, 6, 0.9);
+    border-width: 1px;
+    border-color: rgba(162, 125, 73, 0.53);
+}
+.ps-shop-screen .ps-shop-merchant-scene {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+    background-color: rgb(16, 11, 28);
+}
+.ps-shop-screen .ps-shop-merchant-backdrop-layer,
+.ps-shop-screen .ps-shop-merchant-bg,
+.ps-shop-screen .ps-shop-merchant-bg-fallback {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.ps-shop-screen .ps-shop-merchant-bg-fallback { background-color: rgb(24, 18, 34); }
+.ps-shop-screen .ps-shop-merchant-character-viewport {
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    top: 4%;
+    height: 80%;
+    overflow: hidden;
+}
+.ps-shop-screen .ps-shop-merchant-character-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.ps-shop-screen .ps-missing-art { display: none; }
+.ps-shop-screen .ps-shop-merchant-dialogue-layer {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 16px;
+    min-height: 52px;
+}
+.ps-shop-screen .ps-shop-merchant-dialogue {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: rgb(238, 218, 181);
+    white-space: normal;
+    background-color: rgba(4, 8, 9, 0.92);
+    border-left-width: 3px;
+    border-left-color: rgb(189, 53, 39);
+}
+.ps-shop-screen .ps-shop-filter-host {
+    height: 38px;
+    min-height: 38px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+}
+.ps-shop-screen .ps-shop-filter {
+    flex-grow: 1;
+    min-width: 0;
+    height: 34px;
+    margin-right: 3px;
+    padding: 0 2px;
+    font-size: 11px;
+    color: rgb(207, 182, 142);
+    background-color: rgba(18, 27, 28, 0.82);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(180, 141, 81, 0.48);
+    -unity-text-align: middle-center;
+}
+.ps-shop-screen .ps-shop-filter.ps-selected {
+    color: rgb(48, 34, 26);
+    background-color: rgb(221, 193, 148);
+    border-bottom-color: rgb(68, 199, 202);
+}
+.ps-shop-screen .ps-shop-stock-heading {
+    height: 36px;
+    min-height: 36px;
+    justify-content: center;
+    padding-left: 5px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(188, 149, 87, 0.58);
+}
+.ps-shop-screen .ps-shop-stock-heading-text {
+    font-size: 18px;
+    color: rgb(239, 216, 178);
+}
+.ps-shop-screen .ps-shop-product-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 5px;
+}
+.ps-shop-screen .ps-shop-product-grid {
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.ps-shop-screen .ps-shop-product-card {
+    width: 100%;
+    height: 76px;
+    min-height: 76px;
+    flex-direction: row;
+    align-items: center;
+    padding: 7px 8px;
+    margin-bottom: 2px;
+    background-color: rgba(13, 19, 19, 0.72);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(160, 125, 75, 0.45);
+}
+.ps-shop-screen .ps-shop-product-card.ps-selected {
+    background-color: rgba(20, 62, 63, 0.72);
+    border-left-width: 3px;
+    border-left-color: rgb(71, 206, 209);
+}
+.ps-shop-screen .ps-shop-product-art {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    margin-right: 10px;
+    background-color: rgba(1, 3, 3, 0.68);
+}
+.ps-shop-screen .ps-shop-product-image {
+    width: 100%;
+    height: 100%;
+}
+.ps-shop-screen .ps-shop-product-copy {
+    flex-grow: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+.ps-shop-screen .ps-shop-product-name {
+    height: 22px;
+    min-height: 22px;
+    font-size: 15px;
+    color: rgb(238, 214, 176);
+    white-space: nowrap;
+}
+.ps-shop-screen .ps-shop-product-rank {
+    height: 15px;
+    min-height: 15px;
+    font-size: 10px;
+    color: rgb(163, 184, 178);
+}
+.ps-shop-screen .ps-shop-product-price {
+    height: 18px;
+    min-height: 18px;
+    font-size: 12px;
+    color: rgb(234, 167, 110);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+}
+.ps-shop-screen .ps-shop-detail-host {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 14px 16px;
+}
+.ps-shop-screen .ps-shop-detail-scroll {
+    flex-grow: 1;
+    min-height: 0;
+}
+.ps-shop-screen .ps-shop-detail-title {
+    min-height: 35px;
+    margin-bottom: 8px;
+    font-size: 23px;
+    color: rgb(239, 216, 177);
+    white-space: normal;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(180, 141, 81, 0.5);
+}
+.ps-shop-screen .ps-shop-detail-art {
+    height: 136px;
+    min-height: 136px;
+    margin: 8px 0 12px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+}
+.ps-shop-screen .ps-shop-detail-image {
+    width: 120px;
+    height: 120px;
+}
+.ps-shop-screen .ps-shop-detail-block {
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(154, 120, 70, 0.3);
+}
+.ps-shop-screen .ps-shop-detail-label {
+    font-size: 12px;
+    color: rgb(76, 194, 198);
+    padding-left: 0;
+    margin-bottom: 0;
+    border-left-width: 0;
+}
+.ps-shop-screen .ps-shop-detail-body {
+    padding-left: 0;
+    margin-top: 2px;
+    font-size: 13px;
+    color: rgb(228, 208, 179);
+    white-space: normal;
+}
+.ps-shop-screen .ps-shop-transaction-heading {
+    height: 34px;
+    min-height: 34px;
+    font-size: 11px;
+    color: rgb(84, 191, 194);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(178, 140, 80, 0.55);
+}
+.ps-shop-screen .ps-shop-merchant-transaction-layer {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
+    padding-top: 18px;
+}
+.ps-shop-screen .ps-shop-tx-name,
+.ps-shop-screen .ps-shop-tx-gold,
+.ps-shop-screen .ps-shop-tx-total,
+.ps-shop-screen .ps-shop-tx-reason {
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: rgb(231, 210, 178);
+    white-space: normal;
+}
+.ps-shop-screen .ps-shop-tx-gold { color: rgb(177, 190, 177); }
+.ps-shop-screen .ps-shop-tx-total {
+    margin-top: 4px;
+    padding-top: 14px;
+    font-size: 20px;
+    color: rgb(242, 199, 130);
+    border-top-width: 1px;
+    border-top-color: rgba(178, 140, 80, 0.45);
+}
+.ps-shop-screen .ps-shop-tx-reason {
+    flex-grow: 1;
+    font-size: 11px;
+    color: rgb(213, 153, 127);
+}
+.ps-shop-screen .ps-shop-tx-actions {
+    flex-direction: column;
+    flex-shrink: 0;
+}
+.ps-shop-screen .ps-shop-buy-btn,
+.ps-shop-screen .ps-shop-leave-btn {
+    width: 100%;
+    height: 45px;
+    min-height: 45px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: rgb(239, 216, 178);
+    background-color: rgb(100, 37, 30);
+    border-width: 1px;
+    border-color: rgb(185, 91, 67);
+    -unity-text-align: middle-center;
+}
+.ps-shop-screen .ps-shop-buy-btn {
+    background-image: resource("Art/UI/ObsidianMisprint/hub-nav-selected-paper-v1");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    color: rgb(30, 23, 17);
+}
+.ps-shop-screen .ps-shop-buy-btn:disabled {
+    opacity: 0.65;
+    color: rgb(239, 216, 178);
+}
+.ps-shop-screen .ps-shop-leave-btn {
+    background-color: rgb(22, 48, 50);
+    border-color: rgb(79, 154, 156);
+}
+.ps-shop-screen .ps-shop-buy-btn:hover,
+.ps-shop-screen .ps-shop-leave-btn:hover { color: white; }

@@ -1,0 +1,713 @@
+/* Heirloom presentation isolated from the legacy management cascade.
+ * All dimensions use the 1280 x 720 logical PanelSettings coordinate system.
+ */
+
+.ps-heirloom-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    color: rgb(226, 204, 169);
+    -unity-font-definition: resource("Fonts/KleeOne-SemiBold");
+}
+
+.ps-heirloom-screen .ps-layer-background,
+.ps-heirloom-screen .ps-heirloom-shade,
+.ps-heirloom-screen .ps-heirloom-layout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-heirloom-screen .ps-layer-background {
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.ps-heirloom-screen .ps-heirloom-shade {
+    background-color: rgba(2, 4, 5, 0.28);
+}
+
+.ps-heirloom-screen .ps-heirloom-register-mark {
+    position: absolute;
+    right: -28px;
+    bottom: -30px;
+    width: 148px;
+    height: 148px;
+    opacity: 0.13;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-decor-registration-corner-v1");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-ledger-spine {
+    position: absolute;
+    left: 20px;
+    top: 84px;
+    width: 4px;
+    height: 620px;
+    background-color: rgb(49, 174, 178);
+    opacity: 0.5;
+}
+
+.ps-heirloom-screen .ps-heirloom-header {
+    position: absolute;
+    left: 142px;
+    top: 8px;
+    width: 1118px;
+    height: 68px;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+    align-items: center;
+    background-image: none;
+    background-color: rgba(2, 5, 6, 0.22);
+    overflow: visible;
+}
+
+.ps-heirloom-screen .ps-heirloom-header-copy {
+    flex-grow: 1;
+    min-width: 0;
+    height: 62px;
+    justify-content: center;
+}
+
+.ps-heirloom-screen .ps-heirloom-header-eyebrow {
+    height: 15px;
+    margin: 0;
+    padding: 0;
+    color: rgb(70, 188, 190);
+    font-size: 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.ps-heirloom-screen .ps-heirloom-header-title {
+    height: 34px;
+    margin: 0;
+    padding: 0;
+    color: rgb(237, 211, 170);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+    white-space: nowrap;
+}
+
+.ps-heirloom-screen .ps-heirloom-header-note {
+    position: absolute;
+    left: 258px;
+    bottom: 7px;
+    margin: 0;
+    color: rgba(203, 184, 154, 0.72);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-host {
+    width: 156px;
+    min-width: 156px;
+    height: 58px;
+    margin-right: 6px;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot {
+    position: relative;
+    width: 156px;
+    height: 58px;
+    margin: 0;
+    padding: 4px 42px 4px 8px;
+    background-image: none;
+    background-color: rgba(9, 12, 12, 0.92);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(55, 182, 185);
+    border-right-color: rgba(202, 164, 102, 0.34);
+    border-top-color: rgba(220, 181, 118, 0.5);
+    border-bottom-color: rgba(202, 164, 102, 0.28);
+}
+
+.ps-heirloom-screen .ps-heirloom-slot:hover,
+.ps-heirloom-screen .ps-heirloom-slot:focus {
+    background-color: rgba(48, 39, 27, 0.96);
+    border-left-color: rgb(222, 72, 54);
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-art,
+.ps-heirloom-screen .ps-heirloom-slot-image {
+    width: 92px;
+    height: 48px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-glyph {
+    width: 92px;
+    height: 48px;
+    color: rgb(69, 190, 192);
+    font-size: 28px;
+    -unity-text-align: middle-center;
+}
+
+.ps-heirloom-screen .ps-heirloom-slot-crest {
+    position: absolute;
+    right: 8px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
+}
+
+.ps-heirloom-screen .ps-heirloom-body {
+    position: absolute;
+    left: 20px;
+    top: 84px;
+    width: 1240px;
+    height: 620px;
+    flex-direction: row;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.ps-heirloom-screen .ps-heirloom-col-portrait,
+.ps-heirloom-screen .ps-heirloom-col-growth {
+    height: 620px;
+    overflow: hidden;
+    background-image: none;
+    background-color: rgba(2, 5, 6, 0.78);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(198, 160, 98, 0.34);
+    border-right-color: rgba(198, 160, 98, 0.34);
+    border-top-color: rgba(218, 179, 116, 0.5);
+    border-bottom-color: rgba(55, 176, 181, 0.4);
+}
+
+.ps-heirloom-screen .ps-heirloom-col-portrait {
+    width: 430px;
+    min-width: 430px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-col-growth {
+    flex-grow: 1;
+    min-width: 0;
+    margin-left: 12px;
+}
+
+.ps-heirloom-screen .ps-heirloom-object-stage {
+    position: relative;
+    height: 58px;
+    min-height: 58px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 14px;
+    background-color: rgba(1, 3, 4, 0.86);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(200, 162, 99, 0.38);
+}
+
+.ps-heirloom-screen .ps-heirloom-object-target {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(55, 184, 187);
+    border-right-color: rgba(55, 184, 187, 0.44);
+    border-top-color: rgba(55, 184, 187, 0.44);
+    border-bottom-color: rgba(55, 184, 187, 0.44);
+    background-color: rgba(30, 129, 132, 0.08);
+}
+
+.ps-heirloom-screen .ps-heirloom-object-caption {
+    margin: 0;
+    color: rgb(68, 185, 188);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-host {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 10px 16px 8px 16px;
+    align-items: stretch;
+    background-color: rgba(5, 8, 8, 0.38);
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-art {
+    position: relative;
+    width: 100%;
+    height: 214px;
+    min-height: 214px;
+    overflow: hidden;
+    background-color: rgba(1, 3, 4, 0.56);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(60, 177, 180, 0.4);
+}
+
+.ps-heirloom-screen .ps-heirloom-portrait-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 214px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row {
+    height: 50px;
+    min-height: 50px;
+    margin-top: 8px;
+    padding: 0 8px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(13, 15, 13, 0.74);
+    border-left-width: 2px;
+    border-left-color: rgb(201, 56, 43);
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row .ps-title {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0;
+    color: rgb(238, 213, 174);
+    font-size: 22px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-name-row .ps-pop-icon,
+.ps-heirloom-screen .ps-heirloom-name-row .ps-icon {
+    width: 34px;
+    height: 34px;
+}
+
+.ps-heirloom-screen .ps-heirloom-stat {
+    min-height: 31px;
+    margin-top: 4px;
+    padding: 5px 9px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(4, 7, 7, 0.58);
+    border-left-width: 1px;
+    border-left-color: rgba(55, 178, 181, 0.5);
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-label {
+    width: 144px;
+    min-width: 144px;
+    margin: 0;
+    color: rgb(70, 185, 188);
+    font-size: 10px;
+}
+
+.ps-heirloom-screen .ps-heirloom-stat-value {
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0;
+    color: rgb(222, 201, 168);
+    font-size: 11px;
+    -unity-text-align: middle-right;
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-label {
+    height: 47px;
+    min-height: 47px;
+    padding: 7px 14px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(1, 3, 4, 0.9);
+    border-top-width: 1px;
+    border-top-color: rgba(201, 163, 100, 0.36);
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-title {
+    flex-grow: 1;
+    margin: 0;
+    color: rgb(228, 202, 163);
+    font-size: 13px;
+}
+
+.ps-heirloom-screen .ps-heirloom-provenance-en {
+    margin: 0;
+    color: rgba(62, 181, 184, 0.8);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-head {
+    height: 72px;
+    min-height: 72px;
+    padding: 10px 14px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(1, 3, 4, 0.88);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(205, 166, 103, 0.4);
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-copy {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-title {
+    margin: 0;
+    color: rgb(237, 211, 170);
+    font-size: 22px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-dossier-en,
+.ps-heirloom-screen .ps-heirloom-generation-label {
+    margin: 0;
+    color: rgb(69, 184, 187);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-heirloom-screen .ps-heirloom-generation {
+    width: 112px;
+    min-width: 112px;
+    height: 48px;
+    padding: 5px 10px;
+    align-items: flex-end;
+    border-left-width: 1px;
+    border-left-color: rgba(202, 165, 103, 0.48);
+}
+
+.ps-heirloom-screen .ps-heirloom-generation-value {
+    margin: 0;
+    color: rgb(230, 202, 158);
+    font-size: 20px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 10px 14px 16px 14px;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body {
+    width: 100%;
+    min-width: 100%;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body > .ps-chrome-section {
+    min-height: 34px;
+    margin: 7px 0 5px 0;
+    padding: 5px 10px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(1, 3, 4, 0.76);
+    border-left-width: 2px;
+    border-left-color: rgb(205, 58, 44);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(197, 159, 98, 0.26);
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-en {
+    margin: 0 12px 0 0;
+    color: rgb(64, 183, 186);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.ps-heirloom-screen .ps-heirloom-growth-body .ps-chrome-section-jp {
+    margin: 0;
+    color: rgb(230, 205, 167);
+    font-size: 13px;
+    -unity-font-definition: resource("Fonts/NotoSerifJP-VF");
+}
+
+.ps-heirloom-screen .ps-heirloom-board-section,
+.ps-heirloom-screen .ps-heirloom-progress,
+.ps-heirloom-screen .ps-heirloom-history {
+    width: 100%;
+    min-height: 58px;
+    margin-bottom: 6px;
+    padding: 9px 12px;
+    background-image: none;
+    background-color: rgba(9, 12, 12, 0.72);
+    border-left-width: 1px;
+    border-left-color: rgba(57, 176, 179, 0.58);
+    border-top-width: 1px;
+    border-top-color: rgba(199, 160, 98, 0.22);
+}
+
+.ps-heirloom-screen .ps-heirloom-board-title {
+    margin: 0 0 3px 0;
+    color: rgb(228, 204, 167);
+    font-size: 12px;
+}
+
+.ps-heirloom-screen .ps-heirloom-board-body {
+    margin: 0;
+    color: rgba(197, 182, 157, 0.82);
+    font-size: 10px;
+    white-space: normal;
+}
+
+.ps-heirloom-screen .ps-heirloom-progress-track {
+    height: 8px;
+    min-height: 8px;
+    margin: 5px 0;
+    background-color: rgba(2, 4, 4, 0.84);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(193, 155, 94, 0.32);
+    border-right-color: rgba(193, 155, 94, 0.32);
+    border-top-color: rgba(193, 155, 94, 0.32);
+    border-bottom-color: rgba(193, 155, 94, 0.32);
+}
+
+.ps-heirloom-screen .ps-heirloom-progress-fill {
+    height: 100%;
+    background-color: rgb(52, 184, 187);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate {
+    width: 100%;
+    min-height: 66px;
+    margin-bottom: 6px;
+    padding: 7px 10px;
+    flex-direction: row;
+    align-items: center;
+    background-image: none;
+    background-color: rgba(9, 12, 12, 0.68);
+    border-left-width: 1px;
+    border-left-color: rgba(195, 158, 98, 0.36);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(55, 176, 179, 0.24);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate-silhouette {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(2, 4, 4, 0.82);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(62, 181, 184, 0.42);
+    border-right-color: rgba(62, 181, 184, 0.42);
+    border-top-color: rgba(62, 181, 184, 0.42);
+    border-bottom-color: rgba(62, 181, 184, 0.42);
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate-copy {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-candidate-lock {
+    color: rgba(215, 188, 146, 0.54);
+    font-size: 14px;
+}
+
+.ps-heirloom-screen .ps-heirloom-locked {
+    opacity: 0.56;
+}
+
+.ps-heirloom-screen .ps-heirloom-scar-list {
+    width: 100%;
+}
+
+.ps-heirloom-screen .ps-heirloom-scar-row {
+    width: 100%;
+    min-height: 36px;
+    margin-bottom: 4px;
+    padding: 6px 10px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(9, 12, 12, 0.66);
+    border-left-width: 2px;
+    border-left-color: rgba(196, 55, 42, 0.72);
+}
+
+.ps-heirloom-screen .ps-heirloom-scar-type {
+    flex-grow: 1;
+    margin: 0;
+    color: rgb(224, 197, 156);
+    font-size: 11px;
+}
+
+.ps-heirloom-screen .ps-heirloom-scar-detail {
+    margin: 0;
+    color: rgba(66, 183, 186, 0.86);
+    font-size: 10px;
+}
+
+.ps-heirloom-screen .unity-scroll-view__vertical-scroller {
+    width: 8px;
+}
+
+.ps-heirloom-screen .unity-scroller__slider {
+    background-color: rgba(195, 157, 96, 0.46);
+}
+
+.ps-heirloom-screen .ps-empty-state {
+    margin: 18px;
+    padding: 18px;
+    background-color: rgba(8, 10, 10, 0.76);
+    border-left-width: 2px;
+    border-left-color: rgba(62, 179, 181, 0.58);
+}
+
+.ps-heirloom-screen .ps-heirloom-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+}
+
+.ps-heirloom-screen .ps-heirloom-modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1280px;
+    height: 720px;
+    margin: 0;
+    padding: 0;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.82);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker {
+    position: absolute;
+    left: 214px;
+    top: 68px;
+    width: 852px;
+    height: 584px;
+    padding: 18px;
+    background-image: resource("Art/UI/ObsidianMisprintShared/misprint-background-archive-v1");
+    -unity-background-scale-mode: scale-and-crop;
+    background-color: rgb(6, 9, 9);
+    border-left-width: 2px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(57, 185, 188);
+    border-right-color: rgba(218, 178, 113, 0.54);
+    border-top-color: rgba(218, 178, 113, 0.7);
+    border-bottom-color: rgba(218, 178, 113, 0.4);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker > .ps-chrome-brand {
+    height: 54px;
+    min-height: 54px;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-scroll {
+    flex-grow: 1;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 10px;
+    background-color: rgba(1, 3, 4, 0.62);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-scroll .unity-scroll-view__content-viewport,
+.ps-heirloom-screen .ps-heirloom-growth-scroll .unity-scroll-view__content-viewport {
+    overflow: hidden;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-grid {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-card {
+    position: relative;
+    width: 150px;
+    min-width: 150px;
+    height: 178px;
+    min-height: 178px;
+    margin: 5px;
+    padding: 8px;
+    background-image: none;
+    background-color: rgba(11, 14, 13, 0.92);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(58, 181, 184, 0.44);
+    border-right-color: rgba(194, 157, 97, 0.32);
+    border-top-color: rgba(194, 157, 97, 0.42);
+    border-bottom-color: rgba(194, 157, 97, 0.32);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-card:hover,
+.ps-heirloom-screen .ps-heirloom-picker-card:focus {
+    background-color: rgba(47, 39, 28, 0.96);
+    border-left-color: rgb(58, 190, 192);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-card.ps-selected {
+    background-image: none;
+    background-color: rgba(62, 42, 27, 0.98);
+    border-left-width: 2px;
+    border-left-color: rgb(220, 65, 49);
+    border-top-color: rgb(225, 185, 119);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-art,
+.ps-heirloom-screen .ps-heirloom-picker-image {
+    width: 132px;
+    height: 108px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-name {
+    margin: 5px 0 0 0;
+    color: rgb(233, 209, 170);
+    font-size: 12px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-sub {
+    margin: 2px 0 0 0;
+    color: rgb(67, 184, 187);
+    font-size: 9px;
+    -unity-text-align: middle-center;
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-footer {
+    height: 54px;
+    min-height: 54px;
+    padding-top: 10px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    border-top-width: 1px;
+    border-top-color: rgba(203, 164, 101, 0.36);
+}
+
+.ps-heirloom-screen .ps-heirloom-picker-footer .ps-chrome-action {
+    width: 146px;
+    height: 38px;
+    margin-left: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+}

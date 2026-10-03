@@ -1,0 +1,144 @@
+using System.Linq;
+using UnityEngine;
+
+namespace Packspire
+{
+    public sealed partial class JourneyTravelGameplayPrototype
+    {
+        public void DevBeginBattle()
+        {
+            DevBeginBattle(null);
+        }
+
+        public void DevBeginBattle(string encounterId)
+        {
+            if (!uiBound)
+            {
+                BindUi();
+            }
+            if (!string.IsNullOrWhiteSpace(encounterId))
+            {
+                JourneyBattleEncounterProfile profile =
+                    JourneyEncounterSelectionSystem.ResolveByEncounterId(encounterId);
+                if (profile == null)
+                    throw new System.ArgumentException(nameof(encounterId));
+                ApplyEncounterProfile(profile);
+            }
+            BeginBattle();
+        }
+
+        public void DevPreviewScenery(int previewBiome)
+        {
+            if (!uiBound) BindUi();
+            biomeIndex = Mathf.Clamp(previewBiome, 0, 2);
+            scenery?.ClearAll();
+            walker.SetJourneyBiome(biomeIndex);
+            walker.SetRoadProfile(JourneyWalkCyclePrototype.RoadProfile.Standard);
+            environment.SetBiome(biomeIndex);
+            BeginTravel(OpeningTravelDuration, null);
+            ShowToast($"DEV景色確認：{BiomeLabel(biomeIndex)}・標準路");
+        }
+
+        public void DevPreviewTransition(int previewBiome)
+        {
+            if (!uiBound) BindUi();
+            int targetBiome = Mathf.Clamp(previewBiome, 0, 2);
+            PlayTransition(
+                targetBiome,
+                JourneyWalkCyclePrototype.RoadProfile.Standard,
+                BiomeLabel(targetBiome));
+        }
+
+        public void DevSetPaused(bool value)
+        {
+            if (!uiBound) BindUi();
+            SetPaused(value);
+        }
+
+        public void DevSkipEncounterIntro()
+        {
+            if (encounterRoutine != null)
+            {
+                StopCoroutine(encounterRoutine);
+                encounterRoutine = null;
+            }
+            if (phase != Phase.Battle) return;
+            CompleteBattleEntry(!screen.ClassListContains("battle--layout-preview"));
+        }
+
+        public void DevPreviewBattleEntry(float elapsed)
+        {
+            if (!uiBound) BindUi();
+            if (phase != Phase.Battle || !encounterIntroActive)
+                BeginBattle();
+            SetPaused(true);
+            ApplyBattleEntryFrame(
+                JourneyBattleEntrySequence.Sample(
+                    elapsed,
+                    battleEntryStartingMotionScale));
+        }
+
+        public void DevPreviewBattleExit(float elapsed)
+        {
+            if (!uiBound) BindUi();
+            if (phase != Phase.Battle) BeginBattle();
+            if (encounterIntroActive) CompleteBattleEntry(false);
+            SetPaused(true);
+            PrepareBattleExitPresentation();
+            ApplyBattleExitFrame(JourneyBattleExitSequence.Sample(elapsed));
+        }
+
+        public void DevBeginMiniGame()
+        {
+            if (!uiBound) BindUi();
+            BeginMiniGame();
+        }
+
+        public void DevShowMiniGame(int index)
+        {
+            if (!uiBound) BindUi();
+            MiniGameKind[] all =
+            {
+                MiniGameKind.StampTiming,
+                MiniGameKind.CargoBalance,
+                MiniGameKind.AddressLabel,
+                MiniGameKind.WaxMatch,
+                MiniGameKind.RoadDodge,
+                MiniGameKind.RainCover
+            };
+            BeginMiniGame(all[Mathf.Clamp(index, 0, all.Length - 1)]);
+        }
+
+        public void DevShowChoice()
+        {
+            if (!uiBound) BindUi();
+            firstChoicePending = false;
+            ShowChoice();
+        }
+
+        public void DevToggleLedger()
+        {
+            if (!uiBound) BindUi();
+            ToggleLedger();
+        }
+
+        public bool DevUseFirstSeal()
+        {
+            if (!uiBound) BindUi();
+            DeliverySealState seal = run.courierRoute.seals?.FirstOrDefault(value => value.available && value.charges > 0);
+            if (seal == null) return false;
+            int before = seal.charges;
+            selectedSealKey = seal.key;
+            PopulateSealBox();
+            ApplySelectedSeal();
+            return seal.charges < before;
+        }
+
+        public void DevShowEvent()
+        {
+            if (!uiBound) BindUi();
+            arrivalNode = CourierRouteSystem.Node("broken_stair");
+            ShowEvent(arrivalNode);
+        }
+    }
+}

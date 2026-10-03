@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c1cd70e65b4f5b9a51cf2e98c31191, type: 3}
+  m_Name: AshFurnaceBailiffEncounter
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyBattleEncounterProfile
+  encounterId: ash_furnace_bailiff_elite
+  dungeonIds: []
+  minimumFloor: 1
+  maximumFloor: 1
+  minimumDayStage: 0
+  maximumDayStage: 3
+  minimumLane: 0
+  maximumLane: 2
+  allowNormalBattle: 1
+  allowBossBattle: 0
+  selectionWeight: 1
+  enemyDefinition: {fileID: 11400000, guid: fed7ecb2a5df48eab71dc782c143d3eb, type: 2}
+  enemyVariant: {fileID: 11400000, guid: 77ff18f5a3124d468e257325383fe2a5, type: 2}
+  behaviorProfile: {fileID: 0}
+  enemyId:
+  displayName:
+  tier: 1
+  maximumHealth: 1
+  legacyTurnDamages:
+  timeline: {fileID: 0}
+  fallbackSpriteResource:
+  battleSheetResource:
+  orderedBattlePoseNames: []
+

@@ -1,0 +1,630 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="journey-screen" class="ps-journey state--travel">
+
+        <ui:VisualElement class="ps-journey__topbar ps-journey__topbar--compact">
+            <ui:Button name="journey-ledger-open" text="航路台帳  [TAB]" class="ps-journey__ledger-open" />
+            <ui:Button name="journey-dev-menu" text="DEV MENU  [F10]" class="ps-journey__dev-menu" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="ps-journey__rail">
+            <ui:VisualElement class="ps-journey__vital-head">
+                <ui:Label text="VITAL / HP" class="ps-journey__rail-eyebrow" />
+                <ui:Label name="journey-hp-text" text="42 / 42" class="ps-journey__metric-value" />
+            </ui:VisualElement>
+            <ui:ProgressBar name="journey-hp" low-value="0" high-value="42" value="42" class="ps-journey__hp" />
+            <ui:VisualElement name="journey-day-clock" class="ps-journey__day-clock" picking-mode="Ignore">
+                <ui:Label text="EXPEDITION DAY" class="ps-journey__day-clock-title" />
+                <ui:VisualElement class="ps-journey__day-clock-face">
+                    <ui:VisualElement name="journey-day-tick-00" class="ps-journey__day-tick day-tick--00" />
+                    <ui:VisualElement name="journey-day-tick-01" class="ps-journey__day-tick day-tick--01" />
+                    <ui:VisualElement name="journey-day-tick-02" class="ps-journey__day-tick day-tick--02" />
+                    <ui:VisualElement name="journey-day-tick-03" class="ps-journey__day-tick day-tick--03" />
+                    <ui:VisualElement name="journey-day-tick-04" class="ps-journey__day-tick day-tick--04" />
+                    <ui:VisualElement name="journey-day-tick-05" class="ps-journey__day-tick day-tick--05" />
+                    <ui:VisualElement name="journey-day-tick-06" class="ps-journey__day-tick day-tick--06" />
+                    <ui:VisualElement name="journey-day-tick-07" class="ps-journey__day-tick day-tick--07" />
+                    <ui:VisualElement name="journey-day-tick-08" class="ps-journey__day-tick day-tick--08" />
+                    <ui:VisualElement name="journey-day-tick-09" class="ps-journey__day-tick day-tick--09" />
+                    <ui:VisualElement name="journey-day-tick-10" class="ps-journey__day-tick day-tick--10" />
+                    <ui:VisualElement name="journey-day-tick-11" class="ps-journey__day-tick day-tick--11" />
+                    <ui:VisualElement name="journey-day-clock-hand" class="ps-journey__day-clock-hand" />
+                    <ui:VisualElement class="ps-journey__day-clock-pin" />
+                    <ui:VisualElement class="ps-journey__day-clock-copy">
+                        <ui:Label name="journey-day-number" text="0" class="ps-journey__day-number" />
+                        <ui:Label text="日目" class="ps-journey__day-suffix" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__seal-title-row">
+                <ui:Label text="EXPEDITION SEALS / 遠征印" class="ps-journey__rail-eyebrow" />
+                <ui:Label name="journey-seals" text="03" class="ps-journey__seal-total" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__seal-reel">
+                <ui:VisualElement class="ps-journey__seal-cord" picking-mode="Ignore" />
+                <ui:VisualElement name="journey-travel-seal-host" class="ps-journey__travel-seal-host" />
+            </ui:VisualElement>
+            <ui:Button name="journey-bag-open" class="ps-journey__bag-button">
+                <ui:VisualElement class="ps-journey__bag-icon" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__bag-copy" picking-mode="Ignore">
+                    <ui:Label text="戦利品" class="ps-journey__bag-title" />
+                    <ui:Label text="クリックで確認" class="ps-journey__bag-note" />
+                </ui:VisualElement>
+                <ui:Label name="journey-cargo" text="0" class="ps-journey__bag-count" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Label name="journey-dev-tag" text="DEV SIMULATION" class="ps-journey__dev-tag" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-bag-panel" class="ps-journey__bag-panel">
+            <ui:VisualElement class="ps-journey__bag-panel-head">
+                <ui:VisualElement>
+                    <ui:Label text="EXPEDITION BAG" class="ps-journey__panel-eyebrow" />
+                    <ui:Label text="戦利品" class="ps-journey__bag-panel-title" />
+                </ui:VisualElement>
+                <ui:Button name="journey-bag-close" text="閉じる" class="ps-journey__bag-close" />
+            </ui:VisualElement>
+            <ui:Label name="journey-bag-summary" text="回収した戦利品はありません" class="ps-journey__bag-summary" />
+            <ui:VisualElement class="ps-journey__bag-tallies">
+                <ui:VisualElement class="ps-journey__bag-tally tally--protected">
+                    <ui:Label text="保護済み" class="ps-journey__bag-tally-key" />
+                    <ui:Label name="journey-bag-protected" text="0" class="ps-journey__bag-tally-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__bag-tally tally--exposed">
+                    <ui:Label text="未収納" class="ps-journey__bag-tally-key" />
+                    <ui:Label name="journey-bag-exposed" text="0" class="ps-journey__bag-tally-value" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-player-battle-hud" class="ps-journey__player-battle-hud">
+            <ui:VisualElement class="ps-journey__vitals-shadow" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__vitals-paper">
+                <ui:VisualElement class="ps-journey__vitals-title-row">
+                    <ui:Label text="ミオ" class="ps-journey__player-battle-name" />
+                    <ui:Label text="COURIER" class="ps-journey__vitals-kind" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__vitals-rule" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__vitals-row">
+                    <ui:VisualElement class="ps-journey__vitals-meter">
+                        <ui:VisualElement name="journey-battle-player-hp-bar" class="ps-journey__player-battle-hp">
+                            <ui:VisualElement name="journey-battle-player-hp-fill" class="ps-journey__player-battle-hp-fill" picking-mode="Ignore">
+                                <ui:VisualElement class="ps-journey__hp-fill-sheen" picking-mode="Ignore" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label text="VITAL" class="ps-journey__vitals-caption" picking-mode="Ignore" />
+                        <ui:Label name="journey-battle-player-hp" text="42 / 42" class="ps-journey__player-battle-hp-text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-battle-player-block-badge" class="ps-journey__block-effect is-hidden" tooltip="現在のブロック">
+                    <ui:VisualElement class="ps-journey__block-overlay" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__block-seal" picking-mode="Ignore">
+                        <ui:Label name="journey-battle-player-block" text="0" class="ps-journey__player-battle-block" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="journey-player-statuses" class="ps-journey__status-row status-row--player" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-enemy-huds" class="ps-journey__enemy-huds">
+            <ui:VisualElement name="journey-enemy-slot-0" class="ps-journey__enemy-hud enemy-slot--front">
+                <ui:VisualElement class="ps-journey__enemy-docket-shadow" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__enemy-docket">
+                    <ui:VisualElement class="ps-journey__enemy-title-row">
+                        <ui:Label name="journey-enemy-name-0" text="封鐘の番人" class="ps-journey__enemy-name" />
+                        <ui:Label text="HOSTILE" class="ps-journey__vitals-kind" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-journey__vitals-rule" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__enemy-vitals-row">
+                        <ui:VisualElement class="ps-journey__enemy-meter">
+                            <ui:VisualElement class="ps-journey__enemy-hp">
+                                <ui:VisualElement name="journey-enemy-hp-fill-0" class="ps-journey__enemy-hp-fill" picking-mode="Ignore">
+                                    <ui:VisualElement class="ps-journey__hp-fill-sheen" picking-mode="Ignore" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:Label text="VITAL" class="ps-journey__vitals-caption" picking-mode="Ignore" />
+                            <ui:Label name="journey-enemy-hp-text-0" text="36 / 36" class="ps-journey__enemy-hp-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="journey-enemy-block-badge-0" class="ps-journey__block-effect is-hidden" tooltip="敵のブロック">
+                            <ui:VisualElement class="ps-journey__block-overlay" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-journey__block-seal" picking-mode="Ignore">
+                                <ui:Label name="journey-enemy-block-0" text="0" class="ps-journey__enemy-block" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-enemy-statuses-0" class="ps-journey__status-row status-row--enemy" />
+            </ui:VisualElement>
+            <ui:VisualElement name="journey-enemy-slot-1" class="ps-journey__enemy-hud enemy-slot--middle is-hidden">
+                <ui:VisualElement class="ps-journey__enemy-docket-shadow" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__enemy-docket">
+                    <ui:VisualElement class="ps-journey__enemy-title-row">
+                        <ui:Label name="journey-enemy-name-1" text="灰路の追跡者" class="ps-journey__enemy-name" />
+                        <ui:Label text="HOSTILE" class="ps-journey__vitals-kind" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-journey__vitals-rule" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__enemy-vitals-row">
+                        <ui:VisualElement class="ps-journey__enemy-meter">
+                            <ui:VisualElement class="ps-journey__enemy-hp">
+                                <ui:VisualElement name="journey-enemy-hp-fill-1" class="ps-journey__enemy-hp-fill" picking-mode="Ignore">
+                                    <ui:VisualElement class="ps-journey__hp-fill-sheen" picking-mode="Ignore" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:Label text="VITAL" class="ps-journey__vitals-caption" picking-mode="Ignore" />
+                            <ui:Label name="journey-enemy-hp-text-1" text="18 / 24" class="ps-journey__enemy-hp-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="journey-enemy-block-badge-1" class="ps-journey__block-effect is-hidden" tooltip="敵のブロック">
+                            <ui:VisualElement class="ps-journey__block-overlay" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-journey__block-seal" picking-mode="Ignore">
+                                <ui:Label name="journey-enemy-block-1" text="0" class="ps-journey__enemy-block" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-enemy-statuses-1" class="ps-journey__status-row status-row--enemy" />
+            </ui:VisualElement>
+            <ui:VisualElement name="journey-enemy-slot-2" class="ps-journey__enemy-hud enemy-slot--rear is-hidden">
+                <ui:VisualElement class="ps-journey__enemy-docket-shadow" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__enemy-docket">
+                    <ui:VisualElement class="ps-journey__enemy-title-row">
+                        <ui:Label name="journey-enemy-name-2" text="鐘楼の射手" class="ps-journey__enemy-name" />
+                        <ui:Label text="HOSTILE" class="ps-journey__vitals-kind" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="ps-journey__vitals-rule" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__enemy-vitals-row">
+                        <ui:VisualElement class="ps-journey__enemy-meter">
+                            <ui:VisualElement class="ps-journey__enemy-hp">
+                                <ui:VisualElement name="journey-enemy-hp-fill-2" class="ps-journey__enemy-hp-fill" picking-mode="Ignore">
+                                    <ui:VisualElement class="ps-journey__hp-fill-sheen" picking-mode="Ignore" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:Label text="VITAL" class="ps-journey__vitals-caption" picking-mode="Ignore" />
+                            <ui:Label name="journey-enemy-hp-text-2" text="14 / 18" class="ps-journey__enemy-hp-text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="journey-enemy-block-badge-2" class="ps-journey__block-effect is-hidden" tooltip="敵のブロック">
+                            <ui:VisualElement class="ps-journey__block-overlay" picking-mode="Ignore" />
+                            <ui:VisualElement class="ps-journey__block-seal" picking-mode="Ignore">
+                                <ui:Label name="journey-enemy-block-2" text="0" class="ps-journey__enemy-block" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-enemy-statuses-2" class="ps-journey__status-row status-row--enemy" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-threat-reel" class="ps-journey__threat-reel">
+            <ui:VisualElement class="ps-journey__reel-backing" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__reel-shell">
+                <ui:VisualElement class="ps-journey__reel-pulley ps-journey__reel-pulley--top" picking-mode="Ignore" />
+                <ui:VisualElement class="ps-journey__reel-chain" picking-mode="Ignore">
+                    <ui:VisualElement name="journey-reel-chain-track" class="ps-journey__reel-chain-track">
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                        <ui:VisualElement class="ps-journey__reel-chain-tile" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-reel-slots" class="ps-journey__reel-slots" picking-mode="Ignore">
+                    <ui:VisualElement name="journey-threat-slot-9" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-8" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-7" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-6" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-5" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-4" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-3" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-2" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-1" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-threat-slot-0" class="ps-journey__reel-slot"><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--far" /><ui:VisualElement class="ps-journey__reel-card-back ps-journey__reel-card-back--near" /><ui:VisualElement class="ps-journey__reel-card-front"><ui:VisualElement class="ps-journey__reel-card-content"><ui:Image class="ps-journey__reel-card-art" /><ui:VisualElement class="ps-journey__reel-card-icon" /><ui:VisualElement class="ps-journey__reel-card-value"><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--0" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--1" /><ui:Image class="ps-journey__reel-value-glyph ps-journey__reel-value-glyph--2" /></ui:VisualElement></ui:VisualElement><ui:VisualElement class="ps-journey__reel-bundle-band"><ui:Image class="ps-journey__reel-bundle-count" /></ui:VisualElement></ui:VisualElement></ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-0" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-1" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-2" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="journey-supply-slot-3" class="ps-journey__reel-resource-slot">
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--energy">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--energy"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-energy-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__reel-resource-lane ps-journey__reel-resource-lane--draw">
+                            <ui:VisualElement class="ps-journey__reel-resource-rule" />
+                            <ui:VisualElement class="ps-journey__reel-resource-token ps-journey__reel-resource-token--draw"><ui:VisualElement class="ps-journey__reel-resource-mark" /><ui:Label class="ps-journey__reel-resource-count ps-journey__reel-resource-draw-count" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reel-pulley ps-journey__reel-pulley--bottom" picking-mode="Ignore" />
+                <ui:VisualElement name="journey-reel-now" class="ps-journey__reel-now" picking-mode="Ignore">
+                    <ui:Label text="NOW" />
+                    <ui:VisualElement class="ps-journey__reel-now-arrow" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__battle-transport">
+                <ui:Button name="journey-battle-pause" text="Ⅱ" class="ps-journey__battle-pause" />
+                <ui:Button name="journey-battle-speed" text="×1" class="ps-journey__battle-speed" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-choice" class="ps-journey__choice">
+            <ui:VisualElement class="ps-journey__choice-scrim" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__choice-heading" picking-mode="Ignore">
+                <ui:Label name="journey-choice-title" text="次の配達路を選ぶ" class="ps-journey__choice-heading-title" />
+                <ui:Label name="journey-choice-note" text="どちらを選んでも目的地へ到着します。変わるのは旅の内容と成果です。" class="ps-journey__choice-heading-note" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__choice-papers">
+                <ui:Button name="journey-choice-a" class="ps-journey__route-paper">
+                    <ui:VisualElement name="journey-choice-a-art" class="ps-journey__route-art route-biome--ash route-road--wide route-landmark--left" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--sky" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--far" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--mid" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--street" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--ground" />
+                        <ui:Image name="journey-choice-a-landmark" class="ps-journey__route-landmark" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--foreground" />
+                        <ui:VisualElement class="ps-journey__route-art-shade" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-a-index" text="ROUTE A / RELAY" class="ps-journey__route-index" picking-mode="Ignore" />
+                    <ui:Label name="journey-choice-a-title" text="灰市の中継所" class="ps-journey__route-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-duration" picking-mode="Ignore">
+                        <ui:Label text="所要" class="ps-journey__route-duration-key" />
+                        <ui:Label name="journey-choice-a-days" text="2日" class="ps-journey__route-duration-value" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-a-flavor" text="灯りの残る街道を辿り、検札所で荷を整える。" class="ps-journey__route-flavor" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-stats" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="危険" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-risk" text="安全" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="主遭遇" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-encounter" text="中継所" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="成果" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-a-cargo" text="整備・回復" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-a-action" text="この経路へ押印　[1]" class="ps-journey__route-action" picking-mode="Ignore" />
+                    <ui:Label text="承認" class="ps-journey__route-stamp" picking-mode="Ignore" />
+                </ui:Button>
+
+                <ui:Button name="journey-choice-b" class="ps-journey__route-paper ps-journey__route-paper--danger">
+                    <ui:VisualElement name="journey-choice-b-art" class="ps-journey__route-art route-biome--ash route-road--narrow route-landmark--right" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--sky" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--far" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--mid" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--street" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--ground" />
+                        <ui:Image name="journey-choice-b-landmark" class="ps-journey__route-landmark" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__route-layer ps-journey__route-layer--foreground" />
+                        <ui:VisualElement class="ps-journey__route-art-shade" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-b-index" text="ROUTE B / EVENT" class="ps-journey__route-index" picking-mode="Ignore" />
+                    <ui:Label name="journey-choice-b-title" text="崩れ階段" class="ps-journey__route-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-duration" picking-mode="Ignore">
+                        <ui:Label text="所要" class="ps-journey__route-duration-key" />
+                        <ui:Label name="journey-choice-b-days" text="1日" class="ps-journey__route-duration-value" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-b-flavor" text="崩落した近道を抜ける。速いが、足場と荷崩れに注意。" class="ps-journey__route-flavor" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__route-stats" picking-mode="Ignore">
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="危険" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-risk" text="注意" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="主遭遇" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-encounter" text="路上事件" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                        <ui:VisualElement class="ps-journey__route-stat"><ui:Label text="成果" class="ps-journey__route-stat-key" /><ui:Label name="journey-choice-b-cargo" text="不定" class="ps-journey__route-stat-value" /></ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label name="journey-choice-b-action" text="この経路へ押印　[2]" class="ps-journey__route-action" picking-mode="Ignore" />
+                    <ui:Label text="承認" class="ps-journey__route-stamp" picking-mode="Ignore" />
+                </ui:Button>
+            </ui:VisualElement>
+
+            <ui:Label text="旅程停止中　1 / 2 で選択　F10 開発者メニュー" class="ps-journey__choice-help" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-event-scrim" class="ps-journey__event-scrim" picking-mode="Ignore" />
+        <ui:VisualElement name="journey-event" class="ps-journey__event">
+            <ui:VisualElement class="ps-journey__event-visual">
+                <ui:VisualElement name="journey-event-art" class="ps-journey__event-art" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__event-content">
+                <ui:Label name="journey-event-eyebrow" text="ROADSIDE NOTICE" class="ps-journey__panel-eyebrow" />
+                <ui:Label name="journey-event-title" text="封印された小包" class="ps-journey__panel-title" />
+                <ui:Label name="journey-event-text" text="宛先の消えた小包が路傍の祭壇に置かれている。" class="ps-journey__event-copy" />
+                <ui:VisualElement class="ps-journey__event-actions">
+                    <ui:Button name="journey-event-a" text="印を照合して開く" class="ps-journey__event-button ps-journey__event-button--primary" />
+                    <ui:Button name="journey-event-b" text="期限を優先して進む" class="ps-journey__event-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-checkpoint" class="ps-journey__checkpoint" picking-mode="Ignore">
+            <ui:Label name="journey-checkpoint-title" text="第1層　区画突破" class="ps-journey__checkpoint-title" />
+            <ui:Button name="journey-checkpoint-return" tooltip="祠から帰還する [E]" class="ps-journey__checkpoint-shrine ps-journey__checkpoint-return">
+                <ui:VisualElement name="journey-checkpoint-art" class="ps-journey__checkpoint-art" picking-mode="Ignore" />
+                <ui:Label text="E　帰還する" class="ps-journey__checkpoint-caption" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="journey-checkpoint-continue" text="進む　→" class="ps-journey__checkpoint-continue" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-minigame" class="ps-journey__panel ps-journey__minigame">
+            <ui:VisualElement class="ps-journey__minigame-head">
+                <ui:Label name="journey-minigame-eyebrow" text="ROADSIDE TASK" class="ps-journey__panel-eyebrow" />
+                <ui:Label name="journey-minigame-timer" text="残り 7.0秒" class="ps-journey__minigame-timer" />
+            </ui:VisualElement>
+            <ui:Label name="journey-minigame-title" text="落とし物を引き寄せろ" class="ps-journey__panel-title" />
+            <ui:Label name="journey-minigame-note" text="黄色い区間で受取印を押す" class="ps-journey__panel-note" />
+            <ui:VisualElement class="ps-journey__minigame-objective-row">
+                <ui:Label name="journey-minigame-objective" text="成功条件：中央帯でSPACE" class="ps-journey__minigame-objective" />
+                <ui:Label name="journey-minigame-step" text="STEP 0 / 1" class="ps-journey__minigame-step" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__minigame-stakes">
+                <ui:Label name="journey-minigame-reward" text="成功　未整理荷物 +1" class="ps-journey__mini-reward" />
+                <ui:Label name="journey-minigame-risk" text="失敗　見送るだけ" class="ps-journey__mini-risk" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__mini-track">
+                <ui:VisualElement class="ps-journey__mini-zone ps-journey__mini-zone--good" />
+                <ui:VisualElement class="ps-journey__mini-zone ps-journey__mini-zone--perfect" />
+                <ui:VisualElement name="journey-minigame-hazard" class="ps-journey__mini-hazard" />
+                <ui:VisualElement name="journey-minigame-needle" class="ps-journey__mini-needle" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__mini-scale">
+                <ui:Label text="LEFT / EARLY" />
+                <ui:Label text="STABLE / PERFECT" class="ps-journey__mini-scale-center" />
+                <ui:Label text="RIGHT / LATE" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__minigame-actions">
+                <ui:Button name="journey-minigame-left" text="◀" class="ps-journey__mini-side" />
+                <ui:Button name="journey-minigame-action" text="受取印を押す  [SPACE]" class="ps-journey__mini-action" />
+                <ui:Button name="journey-minigame-right" text="▶" class="ps-journey__mini-side" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Label name="journey-speech" text="この先、鐘の音が近い……" class="ps-journey__speech" picking-mode="Ignore" />
+        <ui:Label name="journey-damage-popup" text="-8" class="ps-journey__damage-popup" picking-mode="Ignore" />
+        <ui:Label name="journey-encounter-banner" text="INTERCEPTION" class="ps-journey__encounter-banner" picking-mode="Ignore" />
+
+        <ui:VisualElement name="journey-battle" class="ps-journey__battle">
+            <ui:VisualElement class="ps-journey__battle-divider" picking-mode="Ignore" />
+            <ui:Label name="journey-battle-log" text="封鐘の番人が配達路を塞いだ。" class="ps-journey__battle-log" />
+
+            <ui:VisualElement class="ps-journey__battle-left-controls">
+                <ui:VisualElement class="ps-journey__energy-docket">
+                    <ui:Label name="journey-energy" text="3 / 3" class="ps-journey__energy" />
+                    <ui:Label text="ENERGY" class="ps-journey__energy-key" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__pile-panel">
+                    <ui:Button name="journey-draw-pile-button" class="ps-journey__pile-button pile-button--draw" tooltip="山札を確認">
+                        <ui:VisualElement class="ps-journey__pile-icon" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-copy" picking-mode="Ignore">
+                            <ui:Label name="journey-draw-pile" text="12" class="ps-journey__pile-count" picking-mode="Ignore" />
+                            <ui:Label text="山札" class="ps-journey__pile-label" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button name="journey-discard-pile-button" class="ps-journey__pile-button pile-button--discard" tooltip="捨札を確認">
+                        <ui:VisualElement class="ps-journey__pile-icon" picking-mode="Ignore" />
+                        <ui:VisualElement class="ps-journey__pile-copy" picking-mode="Ignore">
+                            <ui:Label name="journey-discard-pile" text="0" class="ps-journey__pile-count" picking-mode="Ignore" />
+                            <ui:Label text="捨札" class="ps-journey__pile-label" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement name="journey-consumables" class="ps-journey__consumables">
+                    <ui:Label text="補給具" class="ps-journey__consumable-heading" picking-mode="Ignore" />
+                    <ui:VisualElement class="ps-journey__consumable-grid">
+                        <ui:Button name="journey-consumable-0" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-0" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-0" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-1" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-1" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-1" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-2" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-2" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-2" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:Button name="journey-consumable-3" class="ps-journey__consumable-slot">
+                            <ui:VisualElement name="journey-consumable-icon-3" class="ps-journey__consumable-icon" picking-mode="Ignore" />
+                            <ui:Label name="journey-consumable-count-3" class="ps-journey__consumable-count" picking-mode="Ignore" />
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="journey-hand-scroll" class="ps-journey__hand-scroll ps-battle-screen">
+                <ui:VisualElement class="ps-journey__hand">
+                    <ui:Button name="journey-card-0" class="ps-journey__card" />
+                    <ui:Button name="journey-card-1" class="ps-journey__card" />
+                    <ui:Button name="journey-card-2" class="ps-journey__card" />
+                    <ui:Button name="journey-card-3" class="ps-journey__card" />
+                    <ui:Button name="journey-card-4" class="ps-journey__card" />
+                    <ui:Button name="journey-card-5" class="ps-journey__card" />
+                    <ui:Button name="journey-card-6" class="ps-journey__card" />
+                    <ui:Button name="journey-card-7" class="ps-journey__card" />
+                    <ui:Button name="journey-card-8" class="ps-journey__card" />
+                    <ui:Button name="journey-card-9" class="ps-journey__card" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="journey-consumable-detail" class="ps-journey__consumable-detail" picking-mode="Ignore">
+                <ui:Label name="journey-consumable-detail-name" text="補給具" class="ps-journey__consumable-detail-name" picking-mode="Ignore" />
+                <ui:Label name="journey-consumable-detail-effect" text="効果" class="ps-journey__consumable-detail-effect" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-pile-overlay" class="ps-journey__pile-overlay">
+            <ui:Button name="journey-pile-scrim" class="ps-journey__pile-scrim" />
+            <ui:VisualElement class="ps-journey__pile-sheet">
+                <ui:VisualElement class="ps-journey__pile-sheet-head">
+                    <ui:VisualElement>
+                        <ui:Label name="journey-pile-title" text="山札" class="ps-journey__pile-title" />
+                        <ui:Label name="journey-pile-summary" text="次に引くカードから表示" class="ps-journey__pile-summary" />
+                    </ui:VisualElement>
+                    <ui:Button name="journey-pile-close" text="閉じる" class="ps-journey__pile-close" />
+                </ui:VisualElement>
+                <ui:ScrollView name="journey-pile-card-scroll" class="ps-journey__pile-card-scroll ps-battle-screen" mode="Horizontal" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Hidden">
+                    <ui:VisualElement name="journey-pile-card-host" class="ps-journey__pile-card-host" />
+                </ui:ScrollView>
+                <ui:Label name="journey-pile-empty" text="カードはありません" class="ps-journey__pile-empty" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-result-scrim" class="ps-journey__result-scrim" picking-mode="Ignore" />
+        <ui:VisualElement name="journey-result" class="ps-journey__panel ps-journey__result">
+            <ui:Label name="journey-result-eyebrow" text="ROUTE CLEARED" class="ps-journey__panel-eyebrow" />
+            <ui:Label name="journey-result-title" text="配達路を確保" class="ps-journey__panel-title" />
+            <ui:VisualElement class="ps-journey__result-rule" picking-mode="Ignore" />
+            <ui:Label name="journey-result-text" text="番人を退け、次の区画へ進める。" class="ps-journey__result-text" />
+            <ui:Label name="journey-result-summary" text="" class="ps-journey__result-summary" />
+            <ui:VisualElement class="ps-journey__result-actions">
+                <ui:Button name="journey-result-continue" text="旅程を再開" class="ps-journey__event-button ps-journey__event-button--primary ps-journey__result-continue" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-ledger" class="ps-journey__ledger">
+            <ui:VisualElement class="ps-journey__ledger-scrim" />
+            <ui:VisualElement class="ps-journey__ledger-sheet">
+                <ui:VisualElement class="ps-journey__ledger-header">
+                    <ui:VisualElement>
+                        <ui:Label text="INFERNAL DELIVERY LEDGER / CIRCLE VII" class="ps-journey__ledger-eyebrow" />
+                        <ui:Label text="航路台帳" class="ps-journey__ledger-title" />
+                        <ui:Label name="journey-ledger-summary" text="現在地と、この先の主要経路を確認します。" class="ps-journey__ledger-summary" />
+                    </ui:VisualElement>
+                    <ui:Button name="journey-ledger-close" text="閉じる  [TAB]" class="ps-journey__ledger-close" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="ps-journey__ledger-content">
+                    <ui:VisualElement class="ps-journey__ledger-map">
+                        <ui:VisualElement class="ps-journey__ledger-map-head">
+                            <ui:Label text="ROUTE CHART" class="ps-journey__ledger-section-title" />
+                            <ui:Label text="選択した経路は再合流し、最終目的地へ到着します" class="ps-journey__ledger-map-note" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="journey-ledger-phases" class="ps-journey__ledger-phases" />
+                        <ui:VisualElement class="ps-journey__ledger-detail">
+                            <ui:VisualElement class="ps-journey__ledger-detail-main">
+                                <ui:Label name="journey-ledger-node-title" text="現在地" class="ps-journey__ledger-node-title" />
+                                <ui:Label name="journey-ledger-node-meta" text="PHASE 0 / 出発地点" class="ps-journey__ledger-node-meta" />
+                            </ui:VisualElement>
+                            <ui:Label name="journey-ledger-node-body" text="航路上の地点を選ぶと詳細を確認できます。" class="ps-journey__ledger-node-body" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="ps-journey__seal-box">
+                        <ui:Label text="DELIVERY SEALS" class="ps-journey__ledger-eyebrow" />
+                        <ui:Label text="配達印箱" class="ps-journey__seal-box-title" />
+                        <ui:Label name="journey-seal-timing" text="大分岐の確定前に使用できます" class="ps-journey__seal-timing" />
+                        <ui:ScrollView class="ps-journey__seal-scroll" mode="Vertical" vertical-scroller-visibility="Auto" horizontal-scroller-visibility="Hidden">
+                            <ui:VisualElement name="journey-seal-host" class="ps-journey__seal-host" />
+                        </ui:ScrollView>
+                        <ui:VisualElement class="ps-journey__seal-detail">
+                            <ui:Label name="journey-seal-detail-name" text="印を選択" class="ps-journey__seal-detail-name" />
+                            <ui:Label name="journey-seal-detail-effect" text="印を選ぶと効果と使用可能なタイミングを確認できます。" class="ps-journey__seal-detail-effect" />
+                            <ui:Button name="journey-seal-apply" text="この印を押す" class="ps-journey__seal-apply" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-bottom" class="ps-journey__bottom">
+            <ui:VisualElement class="ps-journey__progress-copy">
+                <ui:Label name="journey-phase" text="MOVING / 灰市外縁" class="ps-journey__phase" />
+                <ui:Label name="journey-next" text="次の判断まで もう少し" class="ps-journey__next" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__segment-progress">
+                <ui:ProgressBar name="journey-progress" low-value="0" high-value="100" value="0" class="ps-journey__progress" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__transport">
+                <ui:Button name="journey-speed" text="×1" class="ps-journey__speed" />
+                <ui:Button name="journey-pause" text="一時停止" class="ps-journey__pause" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="journey-combat-lab" class="ps-journey__combat-lab">
+            <ui:VisualElement class="ps-journey__combat-lab-head">
+                <ui:VisualElement>
+                    <ui:Label text="COMBAT LAB / 戦闘確認所" class="ps-journey__combat-lab-title" />
+                    <ui:Label text="表示比較と、同条件5戦の実戦計測を行います" class="ps-journey__combat-lab-note" />
+                </ui:VisualElement>
+                <ui:Button name="journey-combat-lab-close" text="開発者メニューへ  [F10]" class="ps-journey__combat-lab-close" />
+            </ui:VisualElement>
+            <ui:VisualElement class="ps-journey__combat-lab-controls">
+                <ui:DropdownField name="journey-combat-lab-background" label="背景" class="ps-journey__combat-lab-field" />
+                <ui:DropdownField name="journey-combat-lab-enemy" label="敵" class="ps-journey__combat-lab-field ps-journey__combat-lab-field--enemy" />
+                <ui:DropdownField name="journey-combat-lab-attack" label="攻撃 / タイミング" class="ps-journey__combat-lab-field ps-journey__combat-lab-field--attack" />
+                <ui:Button name="journey-combat-lab-play" text="予兆を再生" class="ps-journey__combat-lab-play" />
+            </ui:VisualElement>
+            <ui:Label name="journey-combat-lab-status" text="背景・敵・攻撃を選んで再生" class="ps-journey__combat-lab-status" />
+            <ui:VisualElement class="ps-journey__combat-lab-measurement">
+                <ui:Button name="journey-combat-lab-measure" text="実戦計測を開始" class="ps-journey__combat-lab-measure" />
+                <ui:Button name="journey-combat-lab-clear" text="記録を消去" class="ps-journey__combat-lab-clear" />
+                <ui:Label name="journey-combat-lab-summary" text="計測記録なし" class="ps-journey__combat-lab-summary" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+
+        <ui:VisualElement name="journey-reward-overlay" class="ps-journey__reward-overlay">
+            <ui:VisualElement class="ps-journey__reward-scrim" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__reward-popup">
+                <ui:VisualElement class="ps-journey__reward-header">
+                    <ui:Label name="journey-reward-tier" text="BATTLE REWARD" class="ps-journey__reward-tier" />
+                    <ui:Label text="戦果を選択" class="ps-journey__reward-title" />
+                    <ui:Label text="持ち帰るものをひとつ選んでください" class="ps-journey__reward-subtitle" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reward-candidates">
+                    <ui:Button name="journey-reward-candidate-0" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-0" text="CONSUMABLE" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-0" text="候補A" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-0" text="消耗品" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                    <ui:Button name="journey-reward-candidate-1" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-1" text="EXPEDITION" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-1" text="候補B" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-1" text="遠征資源" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                    <ui:Button name="journey-reward-candidate-2" class="ps-journey__reward-candidate">
+                        <ui:Label name="journey-reward-kind-2" text="EQUIPMENT" class="ps-journey__reward-kind" />
+                        <ui:Label name="journey-reward-name-2" text="候補C" class="ps-journey__reward-name" />
+                        <ui:Label name="journey-reward-meta-2" text="装備" class="ps-journey__reward-meta" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement class="ps-journey__reward-detail">
+                    <ui:VisualElement class="ps-journey__reward-detail-copy">
+                        <ui:Label name="journey-reward-detail-name" text="戦果をひとつ選ぶ" class="ps-journey__reward-detail-name" />
+                        <ui:Label name="journey-reward-detail-text" text="候補を選ぶと、ここに効果が表示されます。" class="ps-journey__reward-detail-text" />
+                    </ui:VisualElement>
+                    <ui:Label name="journey-reward-selection-note" text="未選択" class="ps-journey__reward-selection-note" />
+                    <ui:Button name="journey-reward-confirm" text="これを受領する" class="ps-journey__reward-confirm" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label name="journey-toast" text="" picking-mode="Ignore" class="ps-journey__toast" />
+        <ui:VisualElement name="journey-transition" class="ps-journey__transition" picking-mode="Ignore">
+            <ui:VisualElement class="ps-journey__transition-wash" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--far" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--mid" picking-mode="Ignore" />
+            <ui:VisualElement class="ps-journey__transition-fog ps-journey__transition-fog--near" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="journey-battle-start" text="BATTLE START" class="ps-journey__battle-start" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

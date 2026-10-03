@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4db130cf69e42fabddc68da70dd13a5, type: 3}
+  m_Name: WardenBattlePresentation
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyBattlePresentationProfile
+  idlePoseName: journey-warden-battle-idle
+  highAnticipationPoseName: journey-warden-battle-high-anticipation
+  highImpactPoseName: journey-warden-battle-high-impact
+  lowAnticipationPoseName: journey-warden-battle-low-anticipation
+  lowImpactPoseName: journey-warden-battle-low-impact
+  hitPoseName: journey-warden-battle-hit
+  highRecoveryPoseName: 
+  lowRecoveryPoseName: 
+  highTimingCueAnchor: {x: 0.42, y: 0.79}
+  lowTimingCueAnchor: {x: 0.83, y: 0.48}
+  highImpactContactAnchor: {x: 0.1, y: 0.145}
+  lowImpactContactAnchor: {x: 0.52, y: 0.14}
+  timingCueScale: 1
+  timingCueBackdropOpacity: 0.58
+  timingCueRingOpacity: 0.95
+  impactSparkScale: 0.34

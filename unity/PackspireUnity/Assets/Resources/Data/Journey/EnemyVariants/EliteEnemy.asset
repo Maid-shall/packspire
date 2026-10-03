@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac434851475d428db3386483eb14203e, type: 3}
+  m_Name: EliteEnemy
+  m_EditorClassIdentifier: Packspire.Runtime::Packspire.JourneyEnemyVariantDefinition
+  variantId: elite
+  populationClass: 2
+  tierOffset: 2
+  healthMultiplier: 1.5
+  damageMultiplier: 1.25
+  displayNamePrefix:
+  displayNameSuffix:
