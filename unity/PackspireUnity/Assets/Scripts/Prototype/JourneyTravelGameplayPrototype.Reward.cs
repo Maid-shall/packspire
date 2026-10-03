@@ -62,7 +62,8 @@ namespace Packspire
 
             JourneyBattleRewardTier tier = JourneyBattleRewardSystem.ResolveTier(
                 encounterProfile.PopulationClass,
-                arrivalNode?.risk ?? 0);
+                arrivalNode?.risk ?? 0,
+                arrivalExpeditionNode?.kind);
 
             if (usesLiveRun && PackspireGame.Instance != null)
                 PackspireGame.Instance.UiResolveSeamlessJourneyBattleVictory();
@@ -205,20 +206,37 @@ namespace Packspire
             travelDuration = PostBattleRecoveryDuration;
             miniGameOffered = false;
             routeProgress.value = 100f;
+            PrepareCheckpointApproach();
             SetPhase(Phase.Travel);
             phaseText.text = "MOVING / 戦闘地点を離脱";
             nextText.text = "戦利品を収め、次の判断地点へ";
+            if (checkpointApproach != null)
+            {
+                phaseText.text = "MOVING / 帰還祠へ";
+                nextText.text = "帰還祠で、帰還か続行を選べます";
+            }
         }
 
         private void UpdatePostBattleRecovery(float delta)
         {
             if (delta <= 0f) return;
             travelClock += delta;
-            float progress = Mathf.Clamp01(travelClock / PostBattleRecoveryDuration);
-            nextText.text = progress < .55f
-                ? "戦利品を収め、戦闘地点を離脱中"
-                : "次の判断地点を確認中";
-            if (progress < 1f) return;
+            if (checkpointApproach != null)
+            {
+                ApplyWorldMotion();
+                if (!checkpointApproach.HasArrived) return;
+                // Let the walk pose settle before revealing the two actions.
+                checkpointArrivalHold += delta;
+                if (checkpointArrivalHold < .18f) return;
+            }
+            else
+            {
+                float progress = Mathf.Clamp01(travelClock / PostBattleRecoveryDuration);
+                nextText.text = progress < .55f
+                    ? "戦利品を収め、戦闘地点を離脱中"
+                    : "次の判断地点を確認中";
+                if (progress < 1f) return;
+            }
 
             postBattleRecoveryActive = false;
             if (!TryShowExpeditionCheckpoint())

@@ -914,6 +914,8 @@ namespace Packspire
 
         private void SetPhase(Phase next)
         {
+            if (next != Phase.Travel && next != Phase.Checkpoint)
+                ClearCheckpointApproach();
             Phase previous = phase;
             phase = next;
             phaseRevision++;
@@ -1007,6 +1009,8 @@ namespace Packspire
             if (paused || ledgerOpen || bagOpen || transitionActive) return 0f;
             return phase switch
             {
+                Phase.Travel when checkpointApproach != null && postBattleRecoveryActive =>
+                    checkpointApproach.MotionScale(speedScale),
                 Phase.Travel => speedScale,
                 Phase.MiniGame when !miniGameResolved => .5f,
                 Phase.Battle when encounterIntroActive => battleEntryMotionScale,
@@ -1301,6 +1305,7 @@ namespace Packspire
 
         private void OnDestroy()
         {
+            if (walker != null) walker.WorldAdvanced -= AdvanceCheckpointScenery;
             RestoreFoundationUi();
             if (scenery != null) scenery.ClearAll();
             foreach (UnityEngine.Object asset in runtimeAssets)

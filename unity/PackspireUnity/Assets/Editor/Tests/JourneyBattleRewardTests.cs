@@ -26,6 +26,31 @@ namespace Packspire.Tests
         }
 
         [Test]
+        public void AuthoredBossNodeKeepsBossRewardsWithCommonStatVariant()
+        {
+            var profile = JourneyEncounterSelectionSystem.ResolveByEncounterId("warden");
+            Assert.That(profile, Is.Not.Null);
+            var tier = JourneyBattleRewardSystem.ResolveTier(
+                profile.PopulationClass, 3, ExpeditionNodeKind.Boss);
+            Assert.That(tier, Is.EqualTo(JourneyBattleRewardTier.Boss));
+            var offer = JourneyBattleRewardSystem.CreateOffer(NewRun(), tier, new Random(1208));
+            Assert.That(offer.equipmentOffered, Is.True);
+            Assert.That(offer.candidates[0].amount, Is.EqualTo(3));
+        }
+
+        [TestCase(JourneyEnemyPopulationClass.Common, 1, JourneyBattleRewardTier.Normal)]
+        [TestCase(JourneyEnemyPopulationClass.Common, 3, JourneyBattleRewardTier.Danger)]
+        [TestCase(JourneyEnemyPopulationClass.Elite, 1, JourneyBattleRewardTier.Elite)]
+        [TestCase(JourneyEnemyPopulationClass.Boss, 1, JourneyBattleRewardTier.Boss)]
+        public void BattleNodesKeepTheirExistingRewardClassification(
+            JourneyEnemyPopulationClass population, int risk, JourneyBattleRewardTier expected)
+        {
+            Assert.That(JourneyBattleRewardSystem.ResolveTier(population, risk, ExpeditionNodeKind.Battle),
+                Is.EqualTo(expected));
+            Assert.That(JourneyBattleRewardSystem.ResolveTier(population, risk), Is.EqualTo(expected));
+        }
+
+        [Test]
         public void ThirdOfferPityForcesEquipmentCandidate()
         {
             var run = NewRun();

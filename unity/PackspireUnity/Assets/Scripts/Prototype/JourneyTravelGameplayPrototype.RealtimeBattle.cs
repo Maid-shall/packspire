@@ -209,8 +209,12 @@ namespace Packspire
             if (battle.enemyHp <= 0)
             {
                 RefreshBattleUi();
-                SetMainEnemyVisible(false);
-                CompleteJourneyBattleVictory();
+                // A status-effect kill must use the same exit as a card hit.
+                // Opening the reward immediately skipped the defeat/clear beats.
+                if (battlePresentationRoutine != null)
+                    StopCoroutine(battlePresentationRoutine);
+                battlePresentationRoutine = StartCoroutine(
+                    JourneyBattleVictoryPresentationRoutine(battleRevision));
                 return true;
             }
 

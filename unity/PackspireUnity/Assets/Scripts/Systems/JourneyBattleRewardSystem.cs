@@ -64,9 +64,13 @@ namespace Packspire
 
         public static JourneyBattleRewardTier ResolveTier(
             JourneyEnemyPopulationClass populationClass,
-            int routeRisk)
+            int routeRisk,
+            ExpeditionNodeKind? nodeKind = null)
         {
-            if (populationClass == JourneyEnemyPopulationClass.Boss)
+            // A floor boss may reuse a common enemy's numeric variant. The route
+            // role still owns the already agreed boss reward, not its stat rank.
+            if (nodeKind == ExpeditionNodeKind.Boss ||
+                populationClass == JourneyEnemyPopulationClass.Boss)
                 return JourneyBattleRewardTier.Boss;
             if (populationClass == JourneyEnemyPopulationClass.Elite)
                 return JourneyBattleRewardTier.Elite;

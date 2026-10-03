@@ -1682,7 +1682,7 @@
 }
 .event--overlay .ps-journey__event-art {
     flex-grow: 1;
-    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-confirm-envelope-v1");
+    background-image: resource("Art/JourneyPrototype/Complete/journey-rest-supplies");
     -unity-background-scale-mode: scale-to-fit;
 }
 .event--overlay .ps-journey__event-content {
@@ -1719,7 +1719,8 @@
     bottom: 0;
     display: none;
 }
-.state--checkpoint .ps-journey__checkpoint { display: flex; }
+.state--checkpoint .ps-journey__checkpoint,
+.checkpoint--approaching .ps-journey__checkpoint { display: flex; }
 .ps-journey__checkpoint-title {
     position: absolute;
     left: 430px;
@@ -1738,48 +1739,46 @@
 }
 .ps-journey__checkpoint-shrine {
     position: absolute;
-    left: 710px;
-    top: 150px;
+    left: 570px;
+    top: 184px;
     width: 270px;
-    height: 440px;
+    height: 455px;
     align-items: center;
 }
-.ps-journey__checkpoint-glow {
-    position: absolute;
-    left: 35px;
-    right: 35px;
-    top: 24px;
-    bottom: 66px;
-    background-color: rgba(76, 178, 188, .13);
-    border-width: 2px;
-    border-color: rgba(87, 201, 207, .58);
-    border-radius: 104px 104px 10px 10px;
+.ps-journey__checkpoint-return {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
 }
 .ps-journey__checkpoint-art {
-    width: 224px;
-    height: 310px;
-    margin-top: 38px;
-    background-image: resource("Art/UI/CourierRoutePrototype/courier-route-node-relay-stamp-v1");
+    width: 270px;
+    height: 405px;
+    flex-shrink: 0;
+    background-image: resource("Art/JourneyPrototype/Complete/journey-return-shrine");
     -unity-background-scale-mode: scale-to-fit;
 }
-.ps-journey__checkpoint-return {
+.ps-journey__checkpoint-caption {
     width: 178px;
     height: 42px;
-    margin-top: -20px;
+    flex-shrink: 0;
+    margin-top: 6px;
     font-size: 13px;
+    -unity-text-align: middle-center;
     color: rgb(241, 218, 176);
     background-color: rgba(10, 13, 13, .96);
     border-width: 1px;
-    border-color: rgb(69, 183, 190);
+    border-color: rgba(190, 143, 76, .72);
 }
-.ps-journey__checkpoint-return:hover {
+.ps-journey__checkpoint-return:hover .ps-journey__checkpoint-caption,
+.ps-journey__checkpoint-return:focus .ps-journey__checkpoint-caption {
     border-color: rgb(112, 221, 223);
     background-color: rgba(13, 40, 42, .97);
 }
 .ps-journey__checkpoint-continue {
     position: absolute;
     right: 72px;
-    top: 466px;
+    top: 595px;
     width: 154px;
     height: 42px;
     font-size: 14px;
@@ -1790,8 +1789,12 @@
     border-bottom-color: rgba(190, 143, 76, .72);
 }
 .ps-journey__checkpoint-continue:hover { translate: 7px 0; color: rgb(255, 230, 177); }
-.checkpoint--leaving .ps-journey__checkpoint-return,
-.checkpoint--leaving .ps-journey__checkpoint-continue { opacity: 0; }
+.checkpoint--approaching .ps-journey__checkpoint-title,
+.checkpoint--approaching .ps-journey__checkpoint-caption,
+.checkpoint--approaching .ps-journey__checkpoint-continue,
+.checkpoint--leaving .ps-journey__checkpoint-title,
+.checkpoint--leaving .ps-journey__checkpoint-caption,
+.checkpoint--leaving .ps-journey__checkpoint-continue { visibility: hidden; }
 .state--checkpoint .ps-journey__bottom { display: none; }
 
 /* Defeat and expedition completion are short overlays over the existing scene. */

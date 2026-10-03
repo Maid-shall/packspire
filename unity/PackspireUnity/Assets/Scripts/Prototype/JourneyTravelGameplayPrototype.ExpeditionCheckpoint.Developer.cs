@@ -7,6 +7,7 @@ namespace Packspire
         public bool DevShowExpeditionCheckpoint(int floorIndex = 0)
         {
             if (!uiBound) BindUi();
+            ClearCheckpointApproach();
             ExpeditionRoutePlan plan = ExpeditionProgressSystem.Ensure(run);
             if (plan.floors == null || plan.floors.Count == 0) return false;
 

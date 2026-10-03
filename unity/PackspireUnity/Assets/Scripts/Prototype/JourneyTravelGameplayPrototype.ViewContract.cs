@@ -84,6 +84,7 @@ namespace Packspire
                 .Require<Button>("journey-event-b")
                 .Require<VisualElement>("journey-checkpoint")
                 .Require<Label>("journey-checkpoint-title")
+                .Require<VisualElement>("journey-checkpoint-art")
                 .Require<Button>("journey-checkpoint-return")
                 .Require<Button>("journey-checkpoint-continue")
                 .Require<Label>("journey-minigame-eyebrow")

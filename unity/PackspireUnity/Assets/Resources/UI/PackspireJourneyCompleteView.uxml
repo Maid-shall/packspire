@@ -357,13 +357,12 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement name="journey-checkpoint" class="ps-journey__checkpoint">
+        <ui:VisualElement name="journey-checkpoint" class="ps-journey__checkpoint" picking-mode="Ignore">
             <ui:Label name="journey-checkpoint-title" text="第1層　区画突破" class="ps-journey__checkpoint-title" />
-            <ui:VisualElement class="ps-journey__checkpoint-shrine">
-                <ui:VisualElement class="ps-journey__checkpoint-glow" picking-mode="Ignore" />
-                <ui:VisualElement class="ps-journey__checkpoint-art" picking-mode="Ignore" />
-                <ui:Button name="journey-checkpoint-return" text="E　帰還する" class="ps-journey__checkpoint-return" />
-            </ui:VisualElement>
+            <ui:Button name="journey-checkpoint-return" tooltip="祠から帰還する [E]" class="ps-journey__checkpoint-shrine ps-journey__checkpoint-return">
+                <ui:VisualElement name="journey-checkpoint-art" class="ps-journey__checkpoint-art" picking-mode="Ignore" />
+                <ui:Label text="E　帰還する" class="ps-journey__checkpoint-caption" picking-mode="Ignore" />
+            </ui:Button>
             <ui:Button name="journey-checkpoint-continue" text="進む　→" class="ps-journey__checkpoint-continue" />
         </ui:VisualElement>
 

@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Packspire.Tests
@@ -70,10 +72,71 @@ namespace Packspire.Tests
             VisualElement root = asset.CloneTree();
 
             Assert.That(root.Q<VisualElement>("journey-checkpoint"), Is.Not.Null);
+            Assert.That(root.Q("journey-checkpoint").pickingMode, Is.EqualTo(PickingMode.Ignore));
             Assert.That(root.Q<Label>("journey-checkpoint-title"), Is.Not.Null);
             Assert.That(root.Q<Button>("journey-checkpoint-return"), Is.Not.Null);
+            var shrine = root.Q<VisualElement>("journey-checkpoint-art");
+            Assert.That(shrine, Is.Not.Null);
+            Assert.That(shrine.parent, Is.SameAs(root.Q<Button>("journey-checkpoint-return")));
+            Assert.That(shrine.pickingMode, Is.EqualTo(PickingMode.Ignore));
+            Assert.That(root.Q(className: "ps-journey__checkpoint-glow"), Is.Null);
             Assert.That(root.Q<Button>("journey-checkpoint-continue"), Is.Not.Null);
             Assert.That(root.Q<Button>("journey-result-return"), Is.Null);
+        }
+
+        [Test]
+        public void ApproachAdvancesOnlyByActualWorldDistance()
+        {
+            var approach = new JourneyCheckpointApproach(3.75f);
+            approach.Advance(1.25f);
+            Assert.That(approach.Offset, Is.EqualTo(2.5f).Within(.0001f));
+            Assert.That(approach.HasArrived, Is.False);
+            approach.Advance(0f);
+            approach.Advance(-1f);
+            Assert.That(approach.Offset, Is.EqualTo(2.5f).Within(.0001f));
+        }
+
+        [Test]
+        public void ApproachPreservesTheRoadsLastStepWithoutSnapping()
+        {
+            var approach = new JourneyCheckpointApproach(3f);
+            approach.Advance(3.015f);
+            Assert.That(approach.HasArrived, Is.True);
+            Assert.That(approach.Offset, Is.EqualTo(-.015f).Within(.0001f));
+            Assert.That(approach.MotionScale(1f), Is.Zero);
+        }
+
+        [TestCase(1f)]
+        [TestCase(2f)]
+        public void ApproachBrakesAndStopsAtBothTravelSpeeds(float speed)
+        {
+            var approach = new JourneyCheckpointApproach(3.75f);
+            float initial = approach.MotionScale(speed);
+            approach.Advance(3.5f);
+            Assert.That(initial, Is.EqualTo(speed));
+            Assert.That(approach.MotionScale(speed), Is.LessThan(initial).And.GreaterThan(0f));
+            approach.Advance(.25f);
+            Assert.That(approach.MotionScale(speed), Is.Zero);
+        }
+
+        [TestCase("journey-return-shrine", 1024, 1536)]
+        [TestCase("journey-rest-supplies", 1254, 1254)]
+        public void InteractionArtPreservesSourceDimensionsAndTransparency(
+            string name, int width, int height)
+        {
+            string resource = "Art/JourneyPrototype/Complete/" + name;
+            Texture2D texture = PackspireResources.Load<Texture2D>(resource);
+            Assert.That(texture, Is.Not.Null);
+            Assert.That(texture.width, Is.EqualTo(width));
+            Assert.That(texture.height, Is.EqualTo(height));
+
+            var importer = AssetImporter.GetAtPath(
+                "Assets/Resources/" + resource + ".png") as TextureImporter;
+            Assert.That(importer, Is.Not.Null);
+            Assert.That(importer.DoesSourceTextureHaveAlpha(), Is.True);
+            Assert.That(importer.alphaIsTransparency, Is.True);
+            Assert.That(importer.npotScale, Is.EqualTo(TextureImporterNPOTScale.None));
+            Assert.That(importer.mipmapEnabled, Is.False);
         }
 
         private static RunState BuildRunAtResolvedBoss(int floorIndex, bool complete)
